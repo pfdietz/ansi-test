@@ -447,3 +447,6 @@
 	 unless (string= result expected-result)
 	 collect (list d result expected-result)))
   nil)
+
+;;; To add: more tests for high dimensional arrays, including arrays with
+;;; element types
