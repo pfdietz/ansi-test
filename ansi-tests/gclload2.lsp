@@ -59,3 +59,4 @@
 
 ;;; Tests of system construction
 (load "features.lsp")
+(load "disassemble.lsp")

@@ -80,6 +80,9 @@ Results: ~A~%" expected-number form n results))))
   "Like EQUALP, but guaranteed to return T for true."
   (apply #'values (mapcar #'notnot (multiple-value-list (equalp x y)))))
 
+(defun string=t (x y)
+  (notnot-mv (string= x y)))
+
 (defun =t (x &rest args)
   "Like =, but guaranteed to return T for true."
   (apply #'values (mapcar #'notnot (multiple-value-list (apply #'=  x args)))))
