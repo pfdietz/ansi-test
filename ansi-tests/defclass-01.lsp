@@ -662,3 +662,40 @@
      *class-21-s1-initvar-1*
      *class-21-s1-initvar-2*))
   11 y 11 21)
+
+;;; Documentation strings
+
+(defclass class-22 ()
+  ((s1 :documentation "This is slot s1 in class class-22")))
+
+(deftest class-22.1
+  (notnot-mv (typep (make-instance 'class-22) 'class-22))
+  t)
+
+;;; We can't portably get at the docstring of slots
+
+(defclass class-23 ()
+  (s1 s2 s3)
+  (:documentation "This is class-23 in ansi-tests"))
+
+(deftest class-23.1
+  (notnot-mv (typep (make-instance 'class-23) 'class-23))
+  t)
+
+(deftest class-23.2
+  (let ((doc (documentation 'class-23 'type)))
+    (or (null doc)
+	(equalt doc "This is class-23 in ansi-tests")))
+  t)
+
+(deftest class-23.3
+  (let ((doc (documentation (find-class 'class-23) 'type)))
+    (or (null doc)
+	(equalt doc "This is class-23 in ansi-tests")))
+  t)
+
+(deftest class-23.4
+  (let ((doc (documentation (find-class 'class-23) t)))
+    (or (null doc)
+	(equalt doc "This is class-23 in ansi-tests")))
+  t)
