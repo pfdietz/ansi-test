@@ -998,3 +998,41 @@
 		     -12))))
   -12)
 
+;;; cmucl (2003-10-12) "Invalid number of arguments: 2"
+(deftest misc.80
+  (funcall
+   (compile nil
+	    '(lambda (b c)
+	       (declare (notinline > logior imagpart))
+	       (declare (optimize (speed 0) (debug 0)))
+	       (labels ((%f16 ()
+			      (imagpart
+			       (block b3
+				 (logeqv (logior -122516 (if (> -1 0) (return-from b3 c) b))
+					 (return-from %f16 32186310))))))
+		 (lognor (%f16) b))))
+   -123886 -1656)
+  57385)
+
+;;; cmucl (2003-10-12) "NIL is not of type C::REF"
+(deftest misc.81
+  (funcall
+   (compile nil '(lambda (b)
+		   (block b7
+		     (let ((v3 (return-from b7 b)))
+		       (unwind-protect b)))))
+   17)
+  17)
+
+;;; cmucl (2003-10-12) "The assertion C::SUCC failed"
+(deftest misc.82
+  (funcall
+   (compile nil '(lambda (c)
+		   (labels ((%f15 ()
+				  (* (unwind-protect c)
+				     (max -5726369
+					  (return-from %f15 3099206)))))
+		     c)))
+   0)
+  0)
+
