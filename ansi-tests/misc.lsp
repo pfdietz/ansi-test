@@ -4934,6 +4934,31 @@ Broken at C::WT-C-INLINE-LOC.
    1 2 3)
   0)
 
+(deftest misc.292a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (optimize (speed 2) (space 0) (safety 3) (debug 1)
+			  (compilation-speed 2)))
+       (apply (constantly 0)
+	      a
+	      0
+	      (catch 'ct6
+		(apply (constantly 0)
+		       0
+		       0
+		       (let* ((v1
+			       (let ((*s7* 0))
+				 b)))
+			 0)
+		       0
+		       nil))
+	      0
+	      nil)))
+   1 2)
+  0)
+
 ;;; failed AVER: "(NOT (MEMQ PUSH END-STACK))"
 
 (deftest misc.293
@@ -4951,3 +4976,95 @@ Broken at C::WT-C-INLINE-LOC.
 	 0)))
    1)
   0)
+
+;;; failed AVER: "(SUBSETP START START-STACK)"
+
+(deftest misc.294
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline /=))
+       (declare (optimize (speed 2) (space 0) (safety 1)
+			  (debug 0)(compilation-speed 1)))
+         (catch 'ct1
+           (flet ((%f1 (f1-1 f1-2 f1-3)
+                    (throw 'ct1
+                      (if (/= 0) 0 (multiple-value-prog1
+				    0 (throw 'ct1 a) c)))))
+             (let ((*s3* (%f1 a a 0)))
+               0)))))
+   1 2 3)
+  0)
+
+;;;  The value NIL is not of type SB-C::IR2-BLOCK.
+
+(deftest misc.295
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -2858 1050811) a))
+       (declare (type (integer -419372 1395833) b))
+       (declare (type (integer -4717708 795706) c))
+       (declare (ignorable a b c))
+       (declare
+	(optimize (speed 1)
+		  (space 0)
+		  (safety 2)
+		  (debug 1)
+		  (compilation-speed 2)))
+       (multiple-value-prog1
+	(the integer
+	  (catch 'ct8
+	    (catch 'ct5
+	      (catch 'ct7
+		(flet ((%f3 (f3-1 f3-2 &optional (f3-3 a) (f3-4 c)) b))
+		  (labels ((%f13 (f13-1 f13-2 f13-3)
+				 (let* ((*s4*
+					 (return-from %f13
+					   (flet ((%f18 (f18-1 f18-2)
+                                                        (apply #'%f3
+                                                               (progv nil nil f13-2)
+                                                               (list (%f3 -460 f18-1 10095 352819651)))))
+					     (flet ((%f5 ()
+							 (funcall #'%f3
+								  f13-2
+								  (flet ((%f14 (f14-1 f14-2 &optional (f14-3 f13-2) (f14-4 -15))
+									       160080387))
+								    -196377)
+								  (isqrt
+								   (abs
+								    (if	(/= 117 (%f18 -14 -46574))
+									(return-from
+									    %f13
+									  (ignore-errors
+									    (flet ((%f12 (f12-1 f12-2 &optional (f12-3 740148786)
+												(f12-4 -20)
+												(f12-5 -35261))
+											 f12-3))
+									      (%f3
+									       (%f3 b (%f12 c b f13-3 f13-1 -1124))
+									       0
+									       -1003264058
+									       f13-1))))
+                                                                      (block b3 (labels ((%f15 () f13-2))  -4858377)))))
+								  (%f3 793 f13-2 f13-3 a))))
+					       f13-3)))))
+				   (* -420793
+				      (%f3 (%f3 f13-1 f13-3 f13-3 f13-2) 0 8604 f13-1)))))
+		    (lognor
+		     (progv nil nil
+		       (if (< -16 c)
+			   15867134
+			 (-
+			  (throw 'ct5
+				 (prog1 7
+				   (floor
+				    (max (%f13 -4862 -888 -53824112) a -17974 1540006)
+				    (min -74 -473379)))))))
+		     (progv nil nil (prog1 b 22 c a)))))))))
+	(catch 'ct1 (throw 'ct1 0))
+	0)))
+   794801 211700 -1246335)
+  7)
