@@ -99,3 +99,7 @@ Got:      0
   some of the arguments have declared types, or are given as constants in the form
   to be compiled.  This will exercise type-sensitive and context sensitive parts
   of the compiler (and compiler macros).
+
+30. Add more pathname equality tests to equal.lsp
+
+31. Add tests for GENTEMP
