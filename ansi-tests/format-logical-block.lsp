@@ -107,6 +107,21 @@
   (signals-error-always (format nil "~@<~@;~A~;bar~A~:>" '(X) '(Y)) error)
   t t)
 
+(deftest format.logical-block.error.25
+  (signals-error-always (format nil "1~<X~<Y~:>Z~>2" nil nil nil) error)
+  t t)
+
+;;; "an error is also signaled if the ~<...~:;...~> form of ~<...~> is used
+;;; in the same format string with ~W, ~_, ~<...~:>, ~I, or ~:T."
+
+(deftest format.logical-block.error.26
+  (signals-error-always (format nil "~<~:;~>~<~:>" nil nil nil) error)
+  t t)
+
+(deftest format.logical-block.error.27
+  (signals-error-always (format nil "~<~:>~<~:;~>" nil nil nil) error)
+  t t)
+
 ;;; Non-error tests
 
 (def-pprint-test format.logical-block.1
