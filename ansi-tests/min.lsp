@@ -19,6 +19,14 @@
 	collect x)
   nil)
 
+(deftest min.error.3
+  (loop for x in *mini-universe*
+	unless (or (realp x)
+		   (eq (classify-error** `(classify-error (min 0 ',x)))
+		       'type-error))
+	collect x)
+  nil)
+
 (deftest min.1
   (loop for n in *reals*
 	when (or (not (eql (min n) n))

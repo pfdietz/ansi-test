@@ -9,3 +9,5 @@
 (load "number-comparison.lsp")
 (load "max.lsp")
 (load "min.lsp")
+(load "minusp.lsp")
+(load "plusp.lsp")
