@@ -165,6 +165,60 @@
     (reduce #'+ a :end 3))
   6)
 
+;;; Specialized vectors
+
+(deftest reduce-array.20
+  (do-special-integer-vectors
+   (v #(1 0 0 1 1 0) nil)
+   (assert (eql (reduce #'+ v) 3)))
+  nil)
+
+(deftest reduce-array.21
+  (do-special-integer-vectors
+   (v #(1 0 0 1 1 0) nil)
+   (assert (equal (reduce #'cons v :from-end t :initial-value nil)
+		  '(1 0 0 1 1 0))))
+  nil)
+
+(deftest reduce-array.22
+  (do-special-integer-vectors
+   (v #(1 2 3 4 5 6 7) nil)
+   (assert (eql (reduce #'+ v) 28))
+   (assert (eql (reduce #'+ v :from-end t) 28))
+   (assert (eql (reduce #'+ v :start 1) 27))
+   (assert (eql (reduce #'+ v :initial-value 10) 38))
+   (assert (eql (reduce #'+ v :end 6) 21)))
+  nil)
+
+(deftest reduce-array.23
+  (let* ((len 10)
+	 (expected (* 1/2 (1+ len) len)))
+    (loop for etype in '(short-float single-float double-float long-float)
+	  for vals = (loop for i from 1 to len collect (coerce i etype))
+	  for vec = (make-array len :initial-contents vals :element-type etype)
+	  for result = (reduce #'+ vec)
+	  unless (= result (coerce expected etype))
+	  collect (list etype vals vec result)))
+  nil)
+
+(deftest reduce-array.24
+  (let* ((len 10)
+	 (expected (* 1/2 (1+ len) len)))
+    (loop for cetype in '(short-float single-float double-float long-float)
+	  for etype = `(complex ,cetype)
+	  for vals = (loop for i from 1 to len collect (complex (coerce i cetype)
+								(coerce (- i) cetype)))
+	  for vec = (make-array len :initial-contents vals :element-type etype)
+	  for result = (reduce #'+ vec)
+	  unless (= result (complex (coerce expected cetype) (coerce (- expected) cetype)))
+	  collect (list etype vals vec result)))
+  nil)
+
+(deftest reduce-array.25
+  (do-special-integer-vectors
+   (v (vector 0 most-positive-fixnum 0 most-positive-fixnum 0) nil)
+   (assert (eql (reduce #'+ v) (* 2 most-positive-fixnum))))
+  nil)
 
 ;;;;;;;;
 

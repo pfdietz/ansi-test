@@ -992,3 +992,56 @@ the condition to go uncaught if it cannot be classified."
 			    :fill ,fill :adjust ,adjust
 			    :base ,base :displace ,displace)))
 		 ,@forms))))))))
+
+(defun make-special-integer-vector (contents &key fill adjust displace (etype 'integer))
+  (let* ((len (length contents))
+	 (min (reduce #'min contents))
+	 (max (reduce #'max contents))
+	 (len2 (if fill (+ len 4) len)))
+    (unless (and (typep min etype)
+		 (typep max etype))
+      (setq etype `(integer ,min ,max)))
+    (if displace
+	(let ((s0 (make-array (+ len2 5)
+			      :initial-contents
+			      (concatenate 'list
+					   (make-list 2 :initial-element
+						      (if (typep 0 etype) 0 min))
+					   contents
+					   (make-list (if fill 7 3)
+						      :initial-element
+						      (if (typep 1 etype) 1 max)))
+			      :element-type etype)))
+	  (make-array len2 :element-type etype
+		      :adjustable adjust
+		      :fill-pointer (if fill len nil)
+		      :displaced-to s0
+		      :displaced-index-offset 2))
+      (make-array len2 :element-type etype
+		  :initial-contents
+		  (if fill (concatenate 'list
+					contents
+					(make-list 4 :initial-element
+						   (if (typep 2 etype) 2 (floor (+ min max) 2))))
+		    contents)
+		  :fill-pointer (if fill len nil)
+		  :adjustable adjust))))
+
+(defmacro do-special-integer-vectors ((var vec-form &optional ret-form) &body forms)
+  (let ((vector (gensym))
+	(fill (gensym "FILL"))
+	(adjust (gensym "ADJUST"))
+	(etype (gensym "ETYPE"))
+	(displace (gensym "DISPLACE")))
+    `(let ((,vector ,vec-form))
+       (dolist (,fill '(nil t) ,ret-form)
+	 (dolist (,adjust '(nil t))
+	   (dolist (,etype ',(append (loop for i from 1 to 32 collect `(unsigned-byte ,i))
+				     (loop for i from 2 to 32 collect `(signed-byte ,i))
+				     '(integer)))
+	     (dolist (,displace '(nil t))
+	       (let ((,var (make-special-integer-vector
+			    ,vector
+			    :fill ,fill :adjust ,adjust
+			    :etype ,etype :displace ,displace)))
+		 ,@forms))))))))

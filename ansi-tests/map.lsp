@@ -269,6 +269,73 @@
 
 ;;; FIXME: Add tests for building strings of other character types
 
+;;; Special vector types
+
+(deftest map.specialized-vector.1
+  (do-special-integer-vectors
+   (v #(0 1 1 0 0 1) nil)
+   (assert (equal (map 'list #'list v v) '((0 0) (1 1) (1 1) (0 0) (0 0) (1 1)))))
+  nil)
+
+(deftest map.specialized-vector.2
+  (do-special-integer-vectors
+   (v #(1 2 3 4 5 6 7) nil)
+   (assert (equal (map 'list #'identity v) '(1 2 3 4 5 6 7))))
+  nil)
+
+(deftest map.specialized-vector.3
+  (do-special-integer-vectors
+   (v #(-1 -2 -3 -4 -5 -6 -7) nil)
+   (assert (equal (map 'list #'- v) '(1 2 3 4 5 6 7))))
+  nil)
+
+(deftest map.specialized-vector.4
+  (loop for i from 1 to 40
+	for type = `(unsigned-byte ,i)
+	for bound = (ash 1 i)
+	for len = 10
+	for vals = (loop repeat len collect (random i))
+	for result = (map `(vector ,type) #'identity vals)
+	unless (and (= (length result) len)
+		    (every #'eql vals result))
+	collect (list i vals result))
+  nil)
+
+(deftest map.specialized-vector.5
+  (loop for i from 1 to 40
+	for type = `(signed-byte ,i)
+	for bound = (ash 1 i)
+	for len = 10
+	for vals = (loop repeat len collect (- (random i) (/ bound 2)))
+	for result = (map `(vector ,type) #'identity vals)
+	unless (and (= (length result) len)
+		    (every #'eql vals result))
+	collect (list i vals result))
+  nil)
+
+(deftest map.specialized-vector.6
+  (loop for type in '(short-float single-float long-float double-float)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (coerce i type))
+	for result = (map `(vector ,type) #'identity vals)
+	unless (and (= (length result) len)
+		    (every #'eql vals result))
+	collect (list i vals result))
+  nil)
+
+(deftest map.specialized-vector.7
+  (loop for etype in '(short-float single-float long-float double-float
+		       integer rational)
+	for type = `(complex ,etype)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (complex (coerce i etype)
+							      (coerce (- i) etype)))
+	for result = (map `(vector ,type) #'identity vals)
+	unless (and (= (length result) len)
+		    (every #'eql vals result))
+	collect (list i vals result))
+  nil)
+
 ;;; Order of evaluation tests
 
 (deftest map.order.1

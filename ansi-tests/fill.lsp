@@ -568,3 +568,32 @@
    (assert (eq s (fill s #\x  :start 1 :end 4)))
    (assert (string= s "axxxe")))
   nil)
+
+;;; Specialized vector tests
+
+(deftest fill.specialized-vectors.1
+  (do-special-integer-vectors
+   (v #(0 1 1 0 1) nil)
+   (let ((etype (array-element-type v)))
+     (assert (eq v (fill v 0)))
+     (assert (equal (array-element-type v) etype)))
+   (assert (equalp v #(0 0 0 0 0))))
+  nil)
+
+(deftest fill.specialized-vectors.2
+  (do-special-integer-vectors
+   (v #(0 -1 1 0 -1) nil)
+   (let ((etype (array-element-type v)))
+     (assert (eq v (fill v 1)))
+     (assert (equal (array-element-type v) etype)))
+   (assert (equalp v #(1 1 1 1 1))))
+  nil)
+
+(deftest fill.specialized-vectors.3
+  (do-special-integer-vectors
+   (v #(1 1 1 1 0) nil)
+   (let ((etype (array-element-type v)))
+     (assert (eq v (fill v 0 :start 1 :end 3)))
+     (assert (equal (array-element-type v) etype)))
+   (assert (equalp v #(1 0 0 1 0))))
+  nil)

@@ -379,6 +379,55 @@
    (assert (char= (elt s 4) #\e)))
   nil)
 
+;;; Specialized integer vectors
+
+(deftest elt.special-vectors.1
+  (do-special-integer-vectors
+   (v #(1 1 0 1 0 1) nil)
+   (assert (= (elt v 0) 1))
+   (assert (= (elt v 1) 1))
+   (assert (= (elt v 2) 0))
+   (assert (= (elt v 3) 1))
+   (assert (= (elt v 4) 0))
+   (assert (= (elt v 5) 1)))
+  nil)
+
+(deftest elt.special-vectors.2
+  (do-special-integer-vectors
+   (v #(1 2 0 -1 0 3) nil)
+   (assert (= (elt v 0) 1))
+   (assert (= (elt v 1) 2))
+   (assert (= (elt v 2) 0))
+   (assert (= (elt v 3) -1))
+   (assert (= (elt v 4) 0))
+   (assert (= (elt v 5) 3)))
+  nil)
+
+(deftest elt.special-vectors.3
+  (loop for type in '(short-float single-float long-float double-float)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (coerce i type))
+	for vec = (make-array len :element-type type :initial-contents vals)
+	unless (loop for i below len always (eql (elt vec i)
+						 (coerce (1+ i) type)))
+	collect (list type vals vec))
+  nil)
+
+(deftest elt.special-vectors.4
+  (loop for etype in '(short-float single-float long-float double-float
+				   integer rational)
+	for type = `(complex ,etype)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (complex (coerce i etype)
+							      (coerce (- i) etype)))
+	for vec = (make-array len :element-type type :initial-contents vals)
+	unless (loop for i below len always (eql (elt vec i)
+						 (elt vals i)))
+	collect (list type vals vec))
+  nil)
+
+
+
 ;;; Error tests
 
 (deftest elt.error.1

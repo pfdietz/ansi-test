@@ -361,6 +361,95 @@
   8
   #*11111100)
 
+;;; Other specialized vectors
+
+(deftest map-into.specialized-vector.1
+  (do-special-integer-vectors
+   (v #(1 2 3 4) nil)
+   (let ((result (list nil nil nil nil)))
+     (assert (eq (map-into result #'identity v) result))
+     (assert (equal result '(1 2 3 4)))))
+  nil)
+
+(deftest map-into.specialized-vector.2
+  (do-special-integer-vectors
+   (v #(1 2 3) nil)
+   (let ((result (list nil nil nil nil)))
+     (assert (eq (map-into result #'identity v) result))
+     (assert (equal result '(1 2 3 nil)))))
+  nil)
+
+(deftest map-into.specialized-vector.3
+  (do-special-integer-vectors
+   (v #(1 1 0 1 1) nil)
+   (let ((result (list nil nil nil nil)))
+     (assert (eq (map-into result #'identity v) result))
+     (assert (equal result '(1 1 0 1)))))
+  nil)
+
+(deftest map-into.specialized-vector.4
+  (do-special-integer-vectors
+   (v #(1 2 1 2 2) nil)
+   (let ((v2 #(2 1 2 2 1)))
+     (assert (eq (map-into v #'identity v2) v))
+     (assert (equalp v #(2 1 2 2 1)))))
+  nil)
+
+(deftest map-into.specialized-vector.5
+  (let ((len 10))
+    (loop for etype in '(short-float single-float double-float long-float)
+	  for vals = (loop for i below len collect (coerce i etype))
+	  for vec = (make-array len :initial-contents vals :element-type etype)
+	  for target = (loop repeat len collect nil)
+	  for result = (map-into target #'identity vec)
+	  unless (and (eq target result)
+		      (= (length result) len)
+		      (= (length vec) len)
+		      (equal vals result))
+	  collect (list etype vals vec result)))
+  nil)
+
+(deftest map-into.specialized-vector.6
+  (let ((len 10))
+    (loop for cetype in '(short-float single-float double-float long-float)
+	  for etype = `(complex ,cetype)
+	  for vals = (loop for i from 1 to len collect (complex (coerce i cetype)
+								(coerce (- i) cetype)))
+	  for vec = (make-array len :initial-contents vals :element-type etype)
+	  for target = (loop repeat len collect nil)
+	  for result = (map-into target #'identity vec)
+	  unless (and (eq target result)
+		      (= (length result) len)
+		      (= (length vec) len)
+		      (equal vals result))
+	  collect (list etype vals vec result)))
+  nil)
+
+(deftest map-into.specialized-vector.7
+  (let ((len 10))
+    (loop for etype in '(short-float single-float double-float long-float)
+	  for vals = (loop for i below len collect (coerce i etype))
+	  for target = (make-array len :initial-contents vals :element-type etype)
+	  for result = (map-into target #'identity vals)
+	  unless (and (eq target result)
+		      (= (length result) len)
+		      (every #'= result vals))
+	  collect (list etype vals result)))
+  nil)
+
+(deftest map-into.specialized-vector.8
+  (let ((len 10))
+    (loop for cetype in '(short-float single-float double-float long-float)
+	  for etype = `(complex ,cetype)
+	  for vals = (loop for i from 1 to len collect (complex (coerce i cetype)
+								(coerce (- i) cetype)))
+	  for target = (make-array len :initial-contents vals :element-type etype)
+	  for result = (map-into target #'identity vals)
+	  unless (and (eq target result)
+		      (= (length result) len)
+		      (every #'= result vals))
+	  collect (list etype vals result)))
+  nil)
 
 ;;; Error cases
 

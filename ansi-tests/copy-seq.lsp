@@ -170,6 +170,56 @@
      (assert (equal (array-element-type s) (array-element-type s2)))))
   nil)
 
+;;; Specialized vector tests
+
+(deftest copy-seq.21
+  (let ((v0 #(1 1 0 1 1 2)))
+    (do-special-integer-vectors
+     (v v0 nil)
+     (let ((v2 (copy-seq v)))
+       (assert (typep v2 'simple-array))
+       (assert (equalp v v2))
+       (assert (equalp v v0))
+       (assert (equal (array-element-type v) (array-element-type v2))))))
+  nil)
+
+(deftest copy-seq.22
+  (let ((v0 #(-1 1 1 0 1 -1 0)))
+    (do-special-integer-vectors
+     (v v0 nil)
+     (let ((v2 (copy-seq v)))
+       (assert (typep v2 'simple-array))
+       (assert (equalp v v2))
+       (assert (equalp v v0))
+       (assert (equal (array-element-type v) (array-element-type v2))))))
+  nil)
+
+(deftest copy-seq.23
+  (loop for type in '(short-float single-float long-float double-float)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (coerce i type))
+	for vec = (make-array len :element-type type :initial-contents vals)
+	for result = (copy-seq vec)
+	unless (and (= (length result) len)
+		    (equal (array-element-type vec) (array-element-type result))
+		    (equalp vec result))
+	collect (list type vals result))
+  nil)
+
+(deftest copy-seq.24
+  (loop for etype in '(short-float single-float long-float double-float)
+	for type = `(complex ,etype)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (complex (coerce i etype)
+							      (coerce (- i) etype)))
+	for vec = (make-array len :element-type type :initial-contents vals)
+	for result = (copy-seq vec)
+	unless (and (= (length result) len)
+		    (equal (array-element-type vec) (array-element-type result))
+		    (equalp vec result))
+	collect (list type vals result))
+  nil)
+
 ;;; Order of evaluation test
 
 (deftest copy-seq.order.1

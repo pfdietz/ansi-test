@@ -177,6 +177,52 @@
   (equalp (make-sequence 'string 5) (make-string 5))
   t)
 
+(deftest make-sequence.27
+  (let ((len 10))
+    (loop for i from 1 to 40
+	  for etype = `(unsigned-byte ,i)
+	  for type = `(vector ,etype)
+	  for vec = (make-sequence type len :initial-element 0)
+	  unless (and (typep vec type)
+		      (loop for i below len always (eql (elt vec i) 0)))
+	  collect (list i etype type vec)))
+  nil)
+
+(deftest make-sequence.28
+  (let ((len 10))
+    (loop for i from 1 to 40
+	  for etype = `(signed-byte ,i)
+	  for type = `(vector ,etype)
+	  for vec = (make-sequence type len :initial-element 0)
+	  unless (and (typep vec type)
+		      (loop for i below len always (eql (elt vec i) 0)))
+	  collect (list i etype type vec)))
+  nil)
+
+(deftest make-sequence.29
+  (let ((len 10))
+    (loop for etype in '(short-float single-float double-float long-float)
+	  for type = `(vector ,etype)
+	  for elem = (coerce 1 etype)
+	  for vec = (make-sequence type len :initial-element elem)
+	  unless (and (typep vec type)
+		      (loop for i below len always (eql (elt vec i) elem)))
+	  collect (list etype type vec)))
+  nil)
+
+(deftest make-sequence.30
+  (let ((len 10))
+    (loop for cetype in '(short-float single-float double-float long-float
+				      integer rational)
+	  for etype = `(complex ,cetype)
+	  for type = `(vector ,etype)
+	  for elem = (complex (coerce 1 cetype) (coerce -1 cetype))
+	  for vec = (make-sequence type len :initial-element elem)
+	  unless (and (typep vec type)
+		      (loop for i below len always (eql (elt vec i) elem)))
+	  collect (list etype type vec)))
+  nil)
+
 ;;; Keyword tests
 
 (deftest make-sequence.allow-other-keys.1

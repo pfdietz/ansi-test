@@ -310,6 +310,52 @@
 	 :start 2 :from-end 'yes)
   4)
 
+;;; Other specialized vectors
+
+(deftest count.special-vector.1
+  (do-special-integer-vectors
+   (v #(0 1 1 0 1 1 1 0 1 1 1 1 0) nil)
+   (assert (eql (count 0 v) 4))
+   (assert (eql (count 1 v) 9))
+   (assert (eql (count 2 v) 0))
+   (assert (eql (count 0 v :start 2) 3))
+   (assert (eql (count 1 v :end 11) 8)))
+  nil)
+
+(deftest count.special-vector.2
+  (do-special-integer-vectors
+   (v #(1 2 3 4 5 6 7) nil)
+   (assert (eql (count 0 v) 0))
+   (assert (eql (count 1 v) 1))
+   (assert (eql (count 2 v) 1))
+   (assert (eql (count 3 v) 1))
+   (assert (eql (count 4 v) 1))
+   (assert (eql (count 5 v) 1))
+   (assert (eql (count 6 v) 1))
+   (assert (eql (count 7 v) 1)))
+  nil)
+
+(deftest count.special-vector.3
+  (loop for etype in '(short-float single-float double-float long-float)
+	for vals = (loop for e in '(0 1 2 1 3 1 4 5 6 0)
+			 collect (coerce e etype))
+	for vec = (make-array (length vals) :element-type etype :initial-contents vals)
+	for result = (count (coerce 1 etype) vec)
+	unless (= result 3)
+	collect (list etype vals vec result))
+  nil)
+
+(deftest count.special-vector.4
+  (loop for cetype in '(short-float single-float double-float long-float rational integer)
+	for etype = `(complex ,cetype)
+	for vals = (loop for e in '(4 1 2 1 3 1 4 5 6 6)
+			 collect (complex 0 (coerce e cetype)))
+	for vec = (make-array (length vals) :element-type etype :initial-contents vals)
+	for result = (count (complex 0 (coerce 1 cetype)) vec)
+	unless (= result 3)
+	collect (list etype vals vec result))
+  nil)
+
 
 
 ;;; Tests on bit vectors

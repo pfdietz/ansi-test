@@ -179,6 +179,50 @@
 		    (assert (string= s2 (subseq s0 i j)))))))
   nil)
 
+;;; Other specialized vectors
+
+(deftest subseq.specialized-vector.1
+  (let* ((v0 #(1 0 1 1 0 1 1 0))
+	 (len (length v0)))
+    (do-special-integer-vectors
+     (v (copy-seq v0) nil)
+     (loop for i from 0 below len
+	   for v1 = (subseq v i)
+	   do (assert (typep v1 'simple-array))
+	   do (assert (equalp (subseq v i) (subseq v0 i)))
+	   do (loop for j from i to len
+		    for v2 = (subseq v i j)
+		    do (assert (typep v2 'simple-array))
+		    (assert (equalp v2 (subseq v0 i j)))))))
+  nil)
+
+(deftest subseq.specialized-vector.2
+  (loop for type in '(short-float single-float long-float double-float)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (coerce i type))
+	for vec = (make-array len :element-type type :initial-contents vals)
+	for result = (subseq vec 1 9)
+	unless (and (= (length result) 8)
+		    (equal (array-element-type vec) (array-element-type result))
+		    (equalp result (apply #'vector (subseq vals 1 9))))
+	collect (list type vals result))
+  nil)
+
+(deftest subseq.specialized-vector.3
+  (loop for etype in '(short-float single-float long-float double-float
+				   integer rational)
+	for type = `(complex ,etype)
+	for len = 10
+	for vals = (loop for i from 1 to len collect (complex (coerce i etype)
+							      (coerce (- i) etype)))
+	for vec = (make-array len :element-type type :initial-contents vals)
+	for result = (subseq vec 1 9)
+	unless (and (= (length result) 8)
+		    (equal (array-element-type vec) (array-element-type result))
+		    (equalp result (apply #'vector (subseq vals 1 9))))
+	collect (list type vals result))
+  nil)
+
 ;;; Tests on bit vectors
 
 (deftest subseq-bit-vector.1
