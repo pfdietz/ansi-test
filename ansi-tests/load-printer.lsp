@@ -9,3 +9,5 @@
 
 (load "copy-pprint-dispatch.lsp")
 
+(load "print-integers.lsp")
+
