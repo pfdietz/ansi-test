@@ -4367,3 +4367,41 @@
          (logand b (* 227 b))))
    551173513)
   545263625)
+
+(deftest misc.262
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 515644 54674673) a))
+       (declare (optimize (speed 3) (space 2) (safety 3)
+			  (debug 0) (compilation-speed 1)))
+       (mask-field (byte 0 0) (* 613783109 a))))
+   28831407)
+  0)
+
+(deftest misc.263
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 862944 60462138) a))
+       (declare (optimize (speed 3) (space 3) (safety 0)
+			  (debug 1) (compilation-speed 1)))
+       (logandc2 0 (* a 18094747))))
+   36157847)
+  0)
+
+(deftest misc.264
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 896520522 1249309734) a))
+       (declare (optimize (speed 3) (space 3) (safety 1)
+			  (debug 1) (compilation-speed 2)))
+       (lognand 0 (* a 1381212086))))
+   1202966173)
+  -1)
+
+
