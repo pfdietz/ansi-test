@@ -197,3 +197,7 @@
 (deftest handler-case.27
   (handler-case (error "foo") (error ()))
   nil)
+
+(deftest handler-case.28
+  (handler-case (error "foo") (error () (declare (optimize speed))))
+  nil)
