@@ -139,3 +139,17 @@
        (null (symbol-package s2))
        (string= (symbol-name s1)
 		(symbol-name s2))))
+
+(defun make-random-cons-tree (size)
+  (if (<= size 1)
+      (rcase
+       (5 nil)
+       (1 (random 1000))
+       (1 (random 1000.0))
+       (2 (random-from-seq #(a b c d e f g |1| |2| |.|))))
+    (let ((s1 (1+ (random (1- size)))))
+      (cons (make-random-cons-tree s1)
+	    (make-random-cons-tree (- size s1))))))
+
+       
+       
