@@ -31,6 +31,38 @@
     y)
   (3 4 1 5 6 2 7))
 
+
+;;; Order of evaluation tests
+
+(deftest remove-duplicates.order.1
+  (let ((i 0) a b c d e f)
+    (values
+     (remove-duplicates
+      (progn (setf a (incf i)) (list 1 2 3 1 3 1 2 4))
+      :from-end (progn (setf b (incf i)) nil)
+      :start (progn (setf c (incf i)) 0)
+      :end (progn (setf d (incf i)) nil)
+      :key (progn (setf e (incf i)) #'identity)
+      :test (progn (setf f (incf i)) #'=)
+      )
+     i a b c d e f))
+  (3 1 2 4) 6 1 2 3 4 5 6)
+
+(deftest remove-duplicates.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (remove-duplicates
+      (progn (setf a (incf i)) (list 1 2 3 1 3 1 2 4))
+      :test-not (progn (setf b (incf i)) #'/=)
+      :key (progn (setf c (incf i)) #'identity)
+      :end (progn (setf d (incf i)) nil)
+      :start (progn (setf e (incf i)) 0)
+      :from-end (progn (setf f (incf i)) nil)
+      )
+     i a b c d e f))
+  (3 1 2 4) 6 1 2 3 4 5 6)
+ 
+
 ;;; Keyword tests
 
 (deftest remove-duplicates.allow-other-keys.1
@@ -114,6 +146,36 @@
   (delete-duplicates (list 1 2 3 4 2 7 8 1 5) :from-end t :from-end nil)
   (1 2 3 4 7 8 5))
 
+;;; Order of evaluation tests
+
+(deftest delete-duplicates.order.1
+  (let ((i 0) a b c d e f)
+    (values
+     (delete-duplicates
+      (progn (setf a (incf i)) (list 1 2 3 1 3 1 2 4))
+      :from-end (progn (setf b (incf i)) nil)
+      :start (progn (setf c (incf i)) 0)
+      :end (progn (setf d (incf i)) nil)
+      :key (progn (setf e (incf i)) #'identity)
+      :test (progn (setf f (incf i)) #'=)
+      )
+     i a b c d e f))
+  (3 1 2 4) 6 1 2 3 4 5 6)
+
+(deftest delete-duplicates.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (delete-duplicates
+      (progn (setf a (incf i)) (list 1 2 3 1 3 1 2 4))
+      :test-not (progn (setf b (incf i)) #'/=)
+      :key (progn (setf c (incf i)) #'identity)
+      :end (progn (setf d (incf i)) nil)
+      :start (progn (setf e (incf i)) 0)
+      :from-end (progn (setf f (incf i)) nil)
+      )
+     i a b c d e f))
+  (3 1 2 4) 6 1 2 3 4 5 6)
+ 
 ;;; Error cases
 
 (deftest remove-duplicates.error.1

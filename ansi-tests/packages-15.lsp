@@ -9,20 +9,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; use-package
 
-(deftest use-package-1
+(deftest use-package.1
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
     (let* ((pg (make-package "G" :use nil))
 	   (ph (make-package "H" :use nil))
-	   (sym1 (intern "FOO" pg)))
+	   (sym1 (intern "FOO" pg))
+	   (i 0) x y)
       (and
        (eqt (export sym1 pg) t)
        (null (package-used-by-list pg))
        (null (package-used-by-list ph))
        (null (package-use-list pg))
        (null (package-use-list ph))
-       (eqt (use-package pg ph) t)  ;; "H" will use "G"
+       (eqt (use-package (progn (setf x (incf i)) pg)
+			 (progn (setf y (incf i)) ph))
+	    t)  ;; "H" will use "G"
+       (eql i 2) (eql x 1) (eql y 2)
        (multiple-value-bind (sym2 access)
 	   (find-symbol "FOO" ph)
 	 (and
@@ -36,7 +40,7 @@
        (null (find-symbol "FOO" ph)))))
   t)
 
-(deftest use-package-2
+(deftest use-package.2
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -63,7 +67,7 @@
        (null (find-symbol "FOO" ph)))))
   t)
 
-(deftest use-package-3
+(deftest use-package.3
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -90,7 +94,7 @@
        (null (find-symbol "FOO" ph)))))
   t)
 
-(deftest use-package-4
+(deftest use-package.4
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -120,7 +124,7 @@
 
 ;; use lists of packages
 
-(deftest use-package-5
+(deftest use-package.5
   (let ((pkgs '("H" "G1" "G2" "G3"))
 	(vars '("FOO1" "FOO2" "FOO3")))
     (dolist (p pkgs)
@@ -152,7 +156,7 @@
 
 ;; Circular package use
 
-(deftest use-package-6
+(deftest use-package.6
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")

@@ -131,3 +131,6 @@
      x y z w))
   0 #*00010 3 1 2 3)
 
+(deftest bit.error.1
+  (classify-error (bit))
+  program-error)

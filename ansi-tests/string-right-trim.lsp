@@ -141,6 +141,15 @@
   (string-right-trim "abc" (copy-seq "abcabcabc"))
   "")
 
+(deftest string-right-trim.order.1
+  (let ((i 0) x y)
+    (values
+     (string-right-trim (progn (setf x (incf i)) " ")
+		       (progn (setf y (incf i))
+			      (copy-seq "   abc d e f  ")))
+     i x y))
+  "   abc d e f" 2 1 2)
+
 ;;; Error cases
 
 (deftest string-right-trim.error.1

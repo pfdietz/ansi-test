@@ -10,34 +10,34 @@
 ;;; list-all-packages
 
 ;; list-all-packages returns a list
-(deftest list-all-packages-1
-    (numberp (ignore-errors (list-length (list-all-packages))))
+(deftest list-all-packages.1
+  (numberp (ignore-errors (list-length (list-all-packages))))
   t)
 
 ;; The required packages are present
-(deftest list-all-packages-2
-    (subsetp
-     (list (find-package "CL")
-	   (find-package "CL-USER")
-	   (find-package "KEYWORD")
-	   (find-package "A")
-	   (find-package "RT")
-	   (find-package "CL-TEST")
-	   (find-package "B"))
-     (list-all-packages))
+(deftest list-all-packages.2
+  (subsetp
+   (list (find-package "CL")
+	 (find-package "CL-USER")
+	 (find-package "KEYWORD")
+	 (find-package "A")
+	 (find-package "RT")
+	 (find-package "CL-TEST")
+	 (find-package "B"))
+   (list-all-packages))
   t)
 
 ;; The list returned has only packages in it
-(deftest list-all-packages-3
-    (notnot-mv (every #'packagep (list-all-packages)))
+(deftest list-all-packages.3
+  (notnot-mv (every #'packagep (list-all-packages)))
   t)
 
 ;; It returns a list of the same packages each time it is called
-(deftest list-all-packages-4
-    (let ((p1 (list-all-packages))
-	  (p2 (list-all-packages)))
-      (and (subsetp p1 p2)
-	   (subsetp p2 p1)))
+(deftest list-all-packages.4
+  (let ((p1 (list-all-packages))
+	(p2 (list-all-packages)))
+    (and (subsetp p1 p2)
+	 (subsetp p2 p1)))
   t)
 
 (deftest list-all-packages.error.1
@@ -48,62 +48,62 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-name
 
-(deftest package-name-1
-    (ignore-errors (package-name "A"))
+(deftest package-name.1
+  (ignore-errors (package-name "A"))
   "A")
 
-(deftest package-name-2
-    (ignore-errors (package-name #\A))
+(deftest package-name.2
+  (ignore-errors (package-name #\A))
   "A")
 
-(deftest package-name-3
-    (ignore-errors (package-name "Q"))
+(deftest package-name.3
+  (ignore-errors (package-name "Q"))
   "A")
 
-(deftest package-name-4
-    (ignore-errors (package-name #\Q))
+(deftest package-name.4
+  (ignore-errors (package-name #\Q))
   "A")
 
-(deftest package-name-5
+(deftest package-name.5
   (notnot-mv (member (classify-error (package-name "NOT-THERE"))
 		     '(type-error package-error)))
   t)
 
-(deftest package-name-6
+(deftest package-name.6
   (notnot-mv (member (classify-error (package-name #\*))
 		     '(type-error package-error)))
   t)
 
-(deftest package-name-6a
+(deftest package-name.6a
   (notnot-mv (member (classify-error (locally (package-name #\*) t))
 		     '(type-error package-error)))
   t)
 
-(deftest package-name-7
+(deftest package-name.7
   (package-name "CL")
   "COMMON-LISP")
 
-(deftest package-name-8
+(deftest package-name.8
   (package-name "COMMON-LISP")
   "COMMON-LISP")
 
-(deftest package-name-9
+(deftest package-name.9
   (package-name "COMMON-LISP-USER")
   "COMMON-LISP-USER")
 
-(deftest package-name-10
+(deftest package-name.10
   (package-name "CL-USER")
   "COMMON-LISP-USER")
 
-(deftest package-name-11
+(deftest package-name.11
   (package-name "KEYWORD")
   "KEYWORD")
 
-(deftest package-name-12
+(deftest package-name.12
   (package-name (find-package "CL"))
   "COMMON-LISP")
 
-(deftest package-name-13
+(deftest package-name.13
   (let* ((p (make-package "TEMP1"))
 	 (pname1 (package-name p)))
     (rename-package "TEMP1" "TEMP2")
@@ -113,7 +113,7 @@
   ("TEMP1" "TEMP2" nil))
 
 ;; (find-package (package-name p)) == p for any package p
-(deftest package-name-14
+(deftest package-name.14
   (loop
    for p in (list-all-packages) count
    (not
@@ -124,7 +124,7 @@
 
 ;; package-name applied to a package's name
 ;; should return an equal string
-(deftest package-name-15
+(deftest package-name.15
   (loop
    for p in (list-all-packages) count
    (not (equal (package-name p)
@@ -142,38 +142,38 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-nicknames
 
-(deftest package-nicknames-1
-    (ignore-errors (package-nicknames "A"))
+(deftest package-nicknames.1
+  (ignore-errors (package-nicknames "A"))
   ("Q"))
 
-(deftest package-nicknames-2
+(deftest package-nicknames.2
   (ignore-errors (package-nicknames #\A))
   ("Q"))
 
-(deftest package-nicknames-3
+(deftest package-nicknames.3
   (ignore-errors (package-nicknames ':|A|))
   ("Q"))
 
-(deftest package-nicknames-4
+(deftest package-nicknames.4
   (ignore-errors (package-nicknames "B"))
   nil)
 
-(deftest package-nicknames-5
+(deftest package-nicknames.5
   (ignore-errors (package-nicknames #\B))
   nil)
 
-(deftest package-nicknames-6
+(deftest package-nicknames.6
   (ignore-errors (package-nicknames '#:|B|))
   nil)
 
-(deftest package-nicknames-7
+(deftest package-nicknames.7
   (ignore-errors
     (subsetp '("CL")
 	     (package-nicknames "COMMON-LISP")
 	     :test #'string=))
   t)
 
-(deftest package-nicknames-8
+(deftest package-nicknames.8
   (ignore-errors
     (notnot
      (subsetp '("CL-USER")
@@ -181,19 +181,19 @@
 	      :test #'string=)))
   t)
 
-(deftest package-nicknames-9
+(deftest package-nicknames.9
   (classify-error (package-nicknames 10))
   type-error)
 
-(deftest package-nicknames-9a
+(deftest package-nicknames.9a
   (classify-error (locally (package-nicknames 10) t))
   type-error)
 
-(deftest package-nicknames-10
+(deftest package-nicknames.10
   (ignore-errors (package-nicknames (find-package "A")))
   ("Q"))
 
-(deftest package-nicknames-11
+(deftest package-nicknames.11
   (notnot-mv (member (classify-error (package-nicknames "NOT-A-PACKAGE-NAME"))
 		     '(type-error package-error)))
   t)
@@ -201,7 +201,7 @@
 
 ;; (find-package n) == p for each n in (package-nicknames p),
 ;; for any package p
-(deftest package-nicknames-12
+(deftest package-nicknames.12
   (loop
    for p in (list-all-packages) sum
    (loop

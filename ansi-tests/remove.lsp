@@ -366,6 +366,185 @@
   (delete 0 (copy-seq #*11111) :count -1)
   #*11111)
 
+;;; Order of evaluation tests
+
+(deftest remove.order.1
+  (let ((i 0) a b c d e f g h)
+    (values
+     (remove
+      (progn (setf a (incf i)) 'a)
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :from-end (progn (setf c (incf i)) t)
+      :count (progn (setf d (incf i)) 1)
+      :key (progn (setf e (incf i)) #'identity)
+      :test (progn (setf f (incf i)) #'eq)
+      :start (progn (setf g (incf i)) 0)
+      :end (progn (setf h (incf i)) nil))
+     i a b c d e f g h))
+  (a b c d f) 8 1 2 3 4 5 6 7 8)
+
+(deftest remove.order.2
+  (let ((i 0) a b c d e f g h)
+    (values
+     (remove
+      (progn (setf a (incf i)) 'a)
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :end (progn (setf c (incf i)) nil)
+      :start (progn (setf d (incf i)) 0)
+      :test-not (progn (setf e (incf i)) (complement #'eq))
+      :key (progn (setf f (incf i)) #'identity)
+      :count (progn (setf g (incf i)) 1)
+      :from-end (progn (setf h (incf i)) t)
+      )
+     i a b c d e f g h))
+  (a b c d f) 8 1 2 3 4 5 6 7 8)
+
+(deftest delete.order.1
+  (let ((i 0) a b c d e f g h)
+    (values
+     (delete
+      (progn (setf a (incf i)) 'a)
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :from-end (progn (setf c (incf i)) t)
+      :count (progn (setf d (incf i)) 1)
+      :key (progn (setf e (incf i)) #'identity)
+      :test (progn (setf f (incf i)) #'eq)
+      :start (progn (setf g (incf i)) 0)
+      :end (progn (setf h (incf i)) nil))
+     i a b c d e f g h))
+  (a b c d f) 8 1 2 3 4 5 6 7 8)
+
+(deftest delete.order.2
+  (let ((i 0) a b c d e f g h)
+    (values
+     (delete
+      (progn (setf a (incf i)) 'a)
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :end (progn (setf c (incf i)) nil)
+      :start (progn (setf d (incf i)) 0)
+      :test-not (progn (setf e (incf i)) (complement #'eq))
+      :key (progn (setf f (incf i)) #'identity)
+      :count (progn (setf g (incf i)) 1)
+      :from-end (progn (setf h (incf i)) t)
+      )
+     i a b c d e f g h))
+  (a b c d f) 8 1 2 3 4 5 6 7 8)
+
+(deftest remove-if.order.1
+  (let ((i 0) a b c d e f g)
+    (values
+     (remove-if
+      (progn (setf a (incf i)) #'(lambda (x) (eq x 'a)))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :from-end (progn (setf c (incf i)) t)
+      :count (progn (setf d (incf i)) 1)
+      :key (progn (setf e (incf i)) #'identity)
+      :start (progn (setf f (incf i)) 0)
+      :end (progn (setf g (incf i)) nil))
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
+
+(deftest remove-if.order.2
+  (let ((i 0) a b c d e f g)
+    (values
+     (remove-if
+      (progn (setf a (incf i)) #'(lambda (x) (eq x 'a)))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :end (progn (setf c (incf i)) nil)
+      :start (progn (setf d (incf i)) 0)
+      :key (progn (setf e (incf i)) #'identity)
+      :count (progn (setf f (incf i)) 1)
+      :from-end (progn (setf g (incf i)) t)
+      )
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
+
+(deftest delete-if.order.1
+  (let ((i 0) a b c d e f g)
+    (values
+     (delete-if
+      (progn (setf a (incf i)) #'(lambda (x) (eq x 'a)))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :from-end (progn (setf c (incf i)) t)
+      :count (progn (setf d (incf i)) 1)
+      :key (progn (setf e (incf i)) #'identity)
+      :start (progn (setf f (incf i)) 0)
+      :end (progn (setf g (incf i)) nil))
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
+
+(deftest delete-if.order.2
+  (let ((i 0) a b c d e f g)
+    (values
+     (delete-if
+      (progn (setf a (incf i)) #'(lambda (x) (eq x 'a)))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :end (progn (setf c (incf i)) nil)
+      :start (progn (setf d (incf i)) 0)
+      :key (progn (setf e (incf i)) #'identity)
+      :count (progn (setf f (incf i)) 1)
+      :from-end (progn (setf g (incf i)) t)
+      )
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
+
+(deftest remove-if-not.order.1
+  (let ((i 0) a b c d e f g)
+    (values
+     (remove-if-not
+      (progn (setf a (incf i)) #'(lambda (x) (not (eq x 'a))))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :from-end (progn (setf c (incf i)) t)
+      :count (progn (setf d (incf i)) 1)
+      :key (progn (setf e (incf i)) #'identity)
+      :start (progn (setf f (incf i)) 0)
+      :end (progn (setf g (incf i)) nil))
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
+
+(deftest remove-if-not.order.2
+  (let ((i 0) a b c d e f g)
+    (values
+     (remove-if-not
+      (progn (setf a (incf i)) #'(lambda (x) (not (eq x 'a))))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :end (progn (setf c (incf i)) nil)
+      :start (progn (setf d (incf i)) 0)
+      :key (progn (setf e (incf i)) #'identity)
+      :count (progn (setf f (incf i)) 1)
+      :from-end (progn (setf g (incf i)) t)
+      )
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
+
+(deftest delete-if-not.order.1
+  (let ((i 0) a b c d e f g)
+    (values
+     (delete-if-not
+      (progn (setf a (incf i)) #'(lambda (x) (not (eq x 'a))))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :from-end (progn (setf c (incf i)) t)
+      :count (progn (setf d (incf i)) 1)
+      :key (progn (setf e (incf i)) #'identity)
+      :start (progn (setf f (incf i)) 0)
+      :end (progn (setf g (incf i)) nil))
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
+
+(deftest delete-if-not.order.2
+  (let ((i 0) a b c d e f g)
+    (values
+     (delete-if-not
+      (progn (setf a (incf i)) #'(lambda (x) (not (eq x 'a))))
+      (progn (setf b (incf i)) (list 'a 'b 'c 'd 'a 'f))
+      :end (progn (setf c (incf i)) nil)
+      :start (progn (setf d (incf i)) 0)
+      :key (progn (setf e (incf i)) #'identity)
+      :count (progn (setf f (incf i)) 1)
+      :from-end (progn (setf g (incf i)) t)
+      )
+     i a b c d e f g))
+  (a b c d f) 7 1 2 3 4 5 6 7)
 
 ;;; Randomized tests
 

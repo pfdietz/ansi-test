@@ -9,16 +9,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; intern
 
-(deftest intern-1
+(deftest intern.1
   (progn
     (safely-delete-package "TEMP1")
-    (let ((p (make-package "TEMP1")))
+    (let ((p (make-package "TEMP1"))
+	  (i 0) x y)
       (multiple-value-bind* (sym1 status1)
 	  (find-symbol "FOO" p)
-	(intern "FOO" p)
+	(intern (progn (setf x (incf i)) "FOO")
+		(progn (setf y (incf i)) p))
 	(multiple-value-bind* (sym2 status2)
 	    (find-symbol "FOO" p)
-	  (and (null sym1)
+	  (and (eql i 2)
+	       (eql x 1)
+	       (eql y 2)
+	       (null sym1)
 	       (null status1)
 	       (string= (symbol-name sym2) "FOO")
 	       (eqt (symbol-package sym2) p)
@@ -26,7 +31,7 @@
 	       (progn (delete-package p) t))))))
   t)
 
-(deftest intern-2
+(deftest intern.2
   (progn
     (safely-delete-package "TEMP1")
     (let ((p (make-package "TEMP1")))

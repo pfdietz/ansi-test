@@ -323,3 +323,9 @@
   (notnot-mv (typep (vector 1 2 3) '(simple-vector *)))
   t)
 
+(deftest vector.order.1
+  (let ((i 0) a b c)
+    (values
+     (vector (setf a (incf i)) (setf b (incf i)) (setf c (incf i)))
+     i a b c))
+  #(1 2 3) 3 1 2 3)

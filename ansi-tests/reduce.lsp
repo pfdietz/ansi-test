@@ -376,6 +376,45 @@
     (reduce #'+ s :start 2 :end 4))
   2)
 
+;;; Order of evaluation tests
+
+(deftest reduce.order.1
+  (let ((i 0) x y)
+    (values
+     (reduce (progn (setf x (incf i)) #'cons)
+	     (progn (setf y (incf i)) '(a b c)))
+     i x y))
+   ((a . b) . c) 2 1 2)
+
+(deftest reduce.order.2
+  (let ((i 0) a b c d e f g)
+    (values
+     (reduce (progn (setf a (incf i)) #'cons)
+	     (progn (setf b (incf i)) '(a b c d e f))
+	     :from-end (progn (setf c (incf i)) t)
+	     :initial-value (progn (setf d (incf i)) 'nil)
+	     :start (progn (setf e (incf i)) 1)
+	     :end (progn (setf f (incf i)) 4)
+	     :key (progn (setf g (incf i)) #'identity)
+	     )
+     i a b c d e f g))
+  (b c d) 7 1 2 3 4 5 6 7)
+
+(deftest reduce.order.3
+  (let ((i 0) a b c d e f g)
+    (values
+     (reduce (progn (setf a (incf i)) #'cons)
+	     (progn (setf b (incf i)) '(a b c d e f))
+	     :key (progn (setf c (incf i)) #'identity)
+	     :end (progn (setf d (incf i)) 4)
+	     :start (progn (setf e (incf i)) 1)
+	     :initial-value (progn (setf f (incf i)) 'nil)
+	     :from-end (progn (setf g (incf i)) t)
+	     )
+     i a b c d e f g))
+  (b c d) 7 1 2 3 4 5 6 7)
+
+
 ;;; Keyword tests
 
 (deftest reduce.allow-other-keys.1

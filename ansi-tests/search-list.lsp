@@ -198,4 +198,38 @@
   (classify-error (search "a" "a" 1 2))
   program-error)
 
+;;; Order of evaluation
 
+(deftest search.order.1
+  (let ((i 0) a b c d e f g h j)
+    (values
+     (search
+      (progn (setf a (incf i)) '(nil a b nil))
+      (progn (setf b (incf i)) '(z z z a a b b z z z))
+      :from-end (progn (setf c (incf i)) t)
+      :start1 (progn (setf d (incf i)) 1)
+      :end1 (progn (setf e (incf i)) 3)
+      :start2 (progn (setf f (incf i)) 1)
+      :end2 (progn (setf g (incf i)) 8)
+      :key (progn (setf h (incf i)) #'identity)
+      :test (progn (setf j (incf i)) #'eq)
+      )
+     i a b c d e f g h j))
+  4 9 1 2 3 4 5 6 7 8 9)
+
+(deftest search.order.2
+  (let ((i 0) a b c d e f g h j)
+    (values
+     (search
+      (progn (setf a (incf i)) '(nil a b nil))
+      (progn (setf b (incf i)) '(z z z a a b b z z z))
+      :test-not (progn (setf c (incf i)) (complement #'eq))
+      :key (progn (setf d (incf i)) #'identity)
+      :end2 (progn (setf e (incf i)) 8)
+      :start2 (progn (setf f (incf i)) 1)
+      :end1 (progn (setf g (incf i)) 3)
+      :start1 (progn (setf h (incf i)) 1)
+      :from-end (progn (setf j (incf i)) t)
+      )
+     i a b c d e f g h j))
+  4 9 1 2 3 4 5 6 7 8 9)

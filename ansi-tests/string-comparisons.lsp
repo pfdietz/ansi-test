@@ -75,6 +75,420 @@
 	collect (not (string= "ab" "xyab" :start2 i :end2 nil)))
   (t t nil t))
 
+;;; Order of evaluation
+
+(deftest string=.order.1
+  (let ((i 0) x y)
+    (values
+     (string= (progn (setf x (incf i)) "abc")
+	      (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string=.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string= (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :start1 (progn (setf c (incf i)) 0)
+	      :start2 (progn (setf d (incf i)) 0)
+	      :end1 (progn (setf e (incf i)) nil)
+	      :end2 (progn (setf f (incf i)) nil)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string=.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string= (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :end2 (progn (setf c (incf i)) nil)
+	      :end1 (progn (setf d (incf i)) nil)
+	      :start2 (progn (setf e (incf i)) 0)
+	      :start1 (progn (setf f (incf i)) 0)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string<=.order.1
+  (let ((i 0) x y)
+    (values
+     (string<= (progn (setf x (incf i)) "abf")
+	       (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string<=.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string<= (progn (setf a (incf i)) "abf")
+	       (progn (setf b (incf i)) "abd")
+	       :start1 (progn (setf c (incf i)) 0)
+	       :start2 (progn (setf d (incf i)) 0)
+	       :end1 (progn (setf e (incf i)) nil)
+	       :end2 (progn (setf f (incf i)) nil)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string<=.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string<= (progn (setf a (incf i)) "abf")
+	       (progn (setf b (incf i)) "abd")
+	       :end2 (progn (setf c (incf i)) nil)
+	       :end1 (progn (setf d (incf i)) nil)
+	       :start2 (progn (setf e (incf i)) 0)
+	       :start1 (progn (setf f (incf i)) 0)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string<.order.1
+  (let ((i 0) x y)
+    (values
+     (string< (progn (setf x (incf i)) "abf")
+	      (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string<.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string< (progn (setf a (incf i)) "abf")
+	      (progn (setf b (incf i)) "abd")
+	      :start1 (progn (setf c (incf i)) 0)
+	      :start2 (progn (setf d (incf i)) 0)
+	      :end1 (progn (setf e (incf i)) nil)
+	      :end2 (progn (setf f (incf i)) nil)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string<.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string< (progn (setf a (incf i)) "abf")
+	      (progn (setf b (incf i)) "abd")
+	      :end2 (progn (setf c (incf i)) nil)
+	      :end1 (progn (setf d (incf i)) nil)
+	      :start2 (progn (setf e (incf i)) 0)
+	      :start1 (progn (setf f (incf i)) 0)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+
+(deftest string/=.order.1
+  (let ((i 0) x y)
+    (values
+     (string/= (progn (setf x (incf i)) "abc")
+	       (progn (setf y (incf i)) "abc"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string/=.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string/= (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abc")
+	       :start1 (progn (setf c (incf i)) 0)
+	       :start2 (progn (setf d (incf i)) 0)
+	       :end1 (progn (setf e (incf i)) nil)
+	       :end2 (progn (setf f (incf i)) nil)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string/=.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string/= (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abc")
+	       :end2 (progn (setf c (incf i)) nil)
+	       :end1 (progn (setf d (incf i)) nil)
+	       :start2 (progn (setf e (incf i)) 0)
+	       :start1 (progn (setf f (incf i)) 0)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string>=.order.1
+  (let ((i 0) x y)
+    (values
+     (string<= (progn (setf x (incf i)) "abf")
+	       (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string>=.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string>= (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abd")
+	       :start1 (progn (setf c (incf i)) 0)
+	       :start2 (progn (setf d (incf i)) 0)
+	       :end1 (progn (setf e (incf i)) nil)
+	       :end2 (progn (setf f (incf i)) nil)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string>=.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string>= (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abd")
+	       :end2 (progn (setf c (incf i)) nil)
+	       :end1 (progn (setf d (incf i)) nil)
+	       :start2 (progn (setf e (incf i)) 0)
+	       :start1 (progn (setf f (incf i)) 0)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string>.order.1
+  (let ((i 0) x y)
+    (values
+     (string> (progn (setf x (incf i)) "abc")
+	      (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string>.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string> (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :start1 (progn (setf c (incf i)) 0)
+	      :start2 (progn (setf d (incf i)) 0)
+	      :end1 (progn (setf e (incf i)) nil)
+	      :end2 (progn (setf f (incf i)) nil)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string>.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string> (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :end2 (progn (setf c (incf i)) nil)
+	      :end1 (progn (setf d (incf i)) nil)
+	      :start2 (progn (setf e (incf i)) 0)
+	      :start1 (progn (setf f (incf i)) 0)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+
+(deftest string-equal.order.1
+  (let ((i 0) x y)
+    (values
+     (string-equal (progn (setf x (incf i)) "abc")
+	      (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string-equal.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string-equal (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :start1 (progn (setf c (incf i)) 0)
+	      :start2 (progn (setf d (incf i)) 0)
+	      :end1 (progn (setf e (incf i)) nil)
+	      :end2 (progn (setf f (incf i)) nil)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-equal.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string-equal (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :end2 (progn (setf c (incf i)) nil)
+	      :end1 (progn (setf d (incf i)) nil)
+	      :start2 (progn (setf e (incf i)) 0)
+	      :start1 (progn (setf f (incf i)) 0)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-not-greaterp.order.1
+  (let ((i 0) x y)
+    (values
+     (string-not-greaterp (progn (setf x (incf i)) "abf")
+		       (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string-not-greaterp.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string-not-greaterp (progn (setf a (incf i)) "abf")
+	       (progn (setf b (incf i)) "abd")
+	       :start1 (progn (setf c (incf i)) 0)
+	       :start2 (progn (setf d (incf i)) 0)
+	       :end1 (progn (setf e (incf i)) nil)
+	       :end2 (progn (setf f (incf i)) nil)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-not-greaterp.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string-not-greaterp (progn (setf a (incf i)) "abf")
+	       (progn (setf b (incf i)) "abd")
+	       :end2 (progn (setf c (incf i)) nil)
+	       :end1 (progn (setf d (incf i)) nil)
+	       :start2 (progn (setf e (incf i)) 0)
+	       :start1 (progn (setf f (incf i)) 0)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-lessp.order.1
+  (let ((i 0) x y)
+    (values
+     (string-lessp (progn (setf x (incf i)) "abf")
+	      (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string-lessp.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string-lessp (progn (setf a (incf i)) "abf")
+	      (progn (setf b (incf i)) "abd")
+	      :start1 (progn (setf c (incf i)) 0)
+	      :start2 (progn (setf d (incf i)) 0)
+	      :end1 (progn (setf e (incf i)) nil)
+	      :end2 (progn (setf f (incf i)) nil)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-lessp.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string-lessp (progn (setf a (incf i)) "abf")
+	      (progn (setf b (incf i)) "abd")
+	      :end2 (progn (setf c (incf i)) nil)
+	      :end1 (progn (setf d (incf i)) nil)
+	      :start2 (progn (setf e (incf i)) 0)
+	      :start1 (progn (setf f (incf i)) 0)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+
+(deftest string-not-equal.order.1
+  (let ((i 0) x y)
+    (values
+     (string-not-equal (progn (setf x (incf i)) "abc")
+	       (progn (setf y (incf i)) "abc"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string-not-equal.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string-not-equal (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abc")
+	       :start1 (progn (setf c (incf i)) 0)
+	       :start2 (progn (setf d (incf i)) 0)
+	       :end1 (progn (setf e (incf i)) nil)
+	       :end2 (progn (setf f (incf i)) nil)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-not-equal.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string-not-equal (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abc")
+	       :end2 (progn (setf c (incf i)) nil)
+	       :end1 (progn (setf d (incf i)) nil)
+	       :start2 (progn (setf e (incf i)) 0)
+	       :start1 (progn (setf f (incf i)) 0)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-not-lessp.order.1
+  (let ((i 0) x y)
+    (values
+     (string-not-lessp (progn (setf x (incf i)) "abc")
+		       (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string-not-lessp.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string-not-lessp (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abd")
+	       :start1 (progn (setf c (incf i)) 0)
+	       :start2 (progn (setf d (incf i)) 0)
+	       :end1 (progn (setf e (incf i)) nil)
+	       :end2 (progn (setf f (incf i)) nil)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-not-lessp.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string-not-lessp (progn (setf a (incf i)) "abc")
+	       (progn (setf b (incf i)) "abd")
+	       :end2 (progn (setf c (incf i)) nil)
+	       :end1 (progn (setf d (incf i)) nil)
+	       :start2 (progn (setf e (incf i)) 0)
+	       :start1 (progn (setf f (incf i)) 0)
+	       )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-greaterp.order.1
+  (let ((i 0) x y)
+    (values
+     (string-greaterp (progn (setf x (incf i)) "abc")
+	      (progn (setf y (incf i)) "abd"))
+     i x y))
+  nil 2 1 2)
+
+(deftest string-greaterp.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (string-greaterp (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :start1 (progn (setf c (incf i)) 0)
+	      :start2 (progn (setf d (incf i)) 0)
+	      :end1 (progn (setf e (incf i)) nil)
+	      :end2 (progn (setf f (incf i)) nil)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+(deftest string-greaterp.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (string-greaterp (progn (setf a (incf i)) "abc")
+	      (progn (setf b (incf i)) "abd")
+	      :end2 (progn (setf c (incf i)) nil)
+	      :end1 (progn (setf d (incf i)) nil)
+	      :start2 (progn (setf e (incf i)) 0)
+	      :start1 (progn (setf f (incf i)) 0)
+	      )
+     i a b c d e f))
+  nil 6 1 2 3 4 5 6)
+
+
 ;;; Random tests (of all the string comparson functions)
 
 (deftest random-string-comparison-tests

@@ -11,7 +11,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; packagep, typep * 'package
 
-(deftest packagep-1
+(deftest packagep.1
   (loop
    for x in *universe* count
    (unless (eqt (not (packagep x))
@@ -22,9 +22,9 @@
 	   t))
   0)
 
-;; *package* is always a package
+;;; *package* is always a package
 
-(deftest packagep-2
+(deftest packagep.2
   (not-mv (packagep *package*))
   nil)
 
@@ -39,24 +39,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-error
 
-(deftest package-error-1
+(deftest package-error.1
   (not
    (typep (make-condition 'package-error :package "CL")
 	  'package-error))
   nil)
 
-(deftest package-error-2
+(deftest package-error.2
   (not
    (typep (make-condition 'package-error
 			  :package (find-package "CL"))
 	  'package-error))
   nil)
 
-(deftest package-error-3
+(deftest package-error.3
   (subtypep* 'package-error 'error)
   t t)
 
-(deftest package-error-4
+(deftest package-error.4
    (not
     (typep (make-condition 'package-error
 			   :package (find-package '#:|CL|))
@@ -66,40 +66,32 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-error-package
 
-(deftest package-error-package-1
-    (handler-case
-	(eqt (find-package (package-error-package
-			    (make-condition 'package-error
-					    :package "CL")))
-	     (find-package "CL"))
-      (error (c) c))
+(deftest package-error-package.1
+  (eqt (find-package (package-error-package
+		      (make-condition 'package-error
+				      :package "CL")))
+       (find-package "CL"))
   t)
 
-(deftest package-error-package-2
-    (handler-case 
-	(eqt (find-package (package-error-package
-			   (make-condition 'package-error
-			     :package (find-package "CL"))))
-	    (find-package "CL"))
-      (error (c) c))
+(deftest package-error-package.2
+  (eqt (find-package (package-error-package
+		      (make-condition 'package-error
+				      :package (find-package "CL"))))
+       (find-package "CL"))
   t)
 
-(deftest package-error-package-3
-    (handler-case
-	(eqt (find-package (package-error-package
-			   (make-condition 'package-error
-			     :package '#:|CL|)))
-	    (find-package "CL"))
-      (error (c) c))
+(deftest package-error-package.3
+  (eqt (find-package (package-error-package
+		      (make-condition 'package-error
+				      :package '#:|CL|)))
+       (find-package "CL"))
   t)
 
-(deftest package-error-package-4
-    (handler-case
-	(eqt (find-package (package-error-package
-			   (make-condition 'package-error
-			     :package #\A)))
-	    (find-package "A"))
-      (error (c) c))
+(deftest package-error-package.4
+  (eqt (find-package (package-error-package
+		      (make-condition 'package-error
+				      :package #\A)))
+       (find-package "A"))
   t)
 
 (deftest package-error-package.error.1

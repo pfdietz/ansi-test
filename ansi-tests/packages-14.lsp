@@ -10,24 +10,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; unuse-package
 
-(deftest unuse-package-1
+(deftest unuse-package.1
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
     (let* ((pg (make-package "G" :use nil))
-	   (ph (make-package "H" :use '("G"))))
+	   (ph (make-package "H" :use '("G")))
+	   (i 0) x y)
       (prog1
 	  (and
 	   (equal (package-use-list ph) (list pg))
 	   (equal (package-used-by-list pg) (list ph))
-	   (unuse-package pg ph)
+	   (unuse-package (progn (setf x (incf i)) pg)
+			  (progn (setf y (incf i)) ph))
+	   (eql i 2) (eql x 1) (eql y 2)
 	   (equal (package-use-list ph) nil)
 	   (null (package-used-by-list pg)))
 	(safely-delete-package "H")
 	(safely-delete-package "G"))))
   t)
 
-(deftest unuse-package-2
+(deftest unuse-package.2
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -44,7 +47,7 @@
 	(safely-delete-package "G"))))
   t)  
 
-(deftest unuse-package-3
+(deftest unuse-package.3
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -61,7 +64,7 @@
 	(safely-delete-package "G"))))
   t)
 
-(deftest unuse-package-4
+(deftest unuse-package.4
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -78,7 +81,7 @@
 	(safely-delete-package "G"))))
   t)
 
-(deftest unuse-package-5
+(deftest unuse-package.5
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -95,7 +98,7 @@
 	(safely-delete-package "G"))))
   t)  
 
-(deftest unuse-package-6
+(deftest unuse-package.6
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -112,7 +115,7 @@
 	(safely-delete-package "G"))))
   t)
 
-(deftest unuse-package-7
+(deftest unuse-package.7
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -129,7 +132,7 @@
 	(safely-delete-package "G"))))
   t)
 
-(deftest unuse-package-8
+(deftest unuse-package.8
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -148,7 +151,7 @@
 
 ;; Now test with multiple packages
 
-(deftest unuse-package-9
+(deftest unuse-package.9
   (progn
     (dolist (p '("H1" "H2" "G1" "G2" "G3"))
       (safely-delete-package p))

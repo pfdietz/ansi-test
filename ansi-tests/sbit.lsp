@@ -68,3 +68,28 @@
      (aref a 5 5)
      (sbit a 5 5)))
   0 0 1 1 1)
+
+(deftest sbit.order.1
+  (let ((i 0) a b)
+    (values
+     (sbit (progn (setf a (incf i)) #*001001)
+	   (progn (setf b (incf i)) 1))
+     i a b))
+  0 2 1 2)
+
+(deftest sbit.order.2
+  (let ((i 0) a b c
+	(v (copy-seq #*001001)))
+    (values
+     (setf (sbit (progn (setf a (incf i)) v)
+		 (progn (setf b (incf i)) 1))
+	   (progn (setf c (incf i)) 1))
+     v i a b c))
+  1 #*011001 3 1 2 3)
+
+(deftest sbit.error.1
+  (classify-error (sbit))
+  program-error)
+
+  
+  

@@ -677,7 +677,7 @@ the condition to go uncaught if it cannot be classified."
 
 (declaim (special *subtype-table*))
 
-(defun types-6-body ()
+(defun types.6-body ()
   (loop
       for p in *subtype-table*
       for tp = (car p)
@@ -690,14 +690,14 @@ the condition to go uncaught if it cannot be classified."
 (defparameter *supertype-table* nil)
 (declaim (special *subtype-table*))
 
-(defun types-9-body ()
+(defun types.9-body ()
   (let ((tp-list (append '(keyword atom list)
 			 (loop for p in *subtype-table* collect (car p))))
 	(result-list))
     (setf tp-list (remove-duplicates tp-list))
     ;; TP-LIST is now a list of unique CL type names
     ;; Store it in *TYPE-LIST* so we can inspect it later if this test
-    ;; fails.  The variable is also used in test TYPES-9A
+    ;; fails.  The variable is also used in test TYPES.9A
     (setf *type-list* tp-list)
     ;; Compute all pairwise SUBTYPEP relationships among
     ;; the elements of *TYPE-LIST*.
@@ -714,7 +714,7 @@ the condition to go uncaught if it cannot be classified."
 		      (pushnew x (gethash y subs))
 		      (pushnew y (gethash x sups))))))
       ;; Store the supertype relations for later inspection
-      ;; and use in test TYPES-9A
+      ;; and use in test TYPES.9A
       (setf *supertype-table* sups)
       ;; Check that the relation we just computed is transitive.
       ;; Return a list of triples on which transitivity fails.
@@ -734,15 +734,15 @@ the condition to go uncaught if it cannot be classified."
       
       result-list)))
 
-;;; TYPES-9-BODY returns a list of triples (T1 T2 T3)
+;;; TYPES.9-BODY returns a list of triples (T1 T2 T3)
 ;;; where (AND (SUBTYPEP T1 T2) (SUBTYPEP T2 T3) (NOT (SUBTYPEP T1 T3)))
 ;;;  (and where SUBTYPEP succeeds in each case, returning true as its
 ;;;   second return value.)
 
-(defun types-9a-body ()
+(defun types.9a-body ()
   (cond
    ((not (and *type-list* *supertype-table*))
-    (format nil "Run test type-9 first~%")
+    (format nil "Run test type.9 first~%")
     nil)
    (t
     (loop

@@ -13,7 +13,7 @@
 ;; The use-list is implementation dependent, so
 ;; we don't examine it here.
 ;; Try several ways of specifying the package name.
-(deftest defpackage-1
+(deftest defpackage.1
   (loop
    for n in '("H" #:|H| #\H) count
    (not
@@ -34,7 +34,7 @@
 ;; Test :nicknames option
 ;; Do not check use-list, because it is implementation dependent
 ;; Try several ways of specifying a nickname.
-(deftest defpackage-2
+(deftest defpackage.2
   (loop
    for n in '("I" #:|I| #\I) count
    (not
@@ -58,7 +58,7 @@
 
 ;; Test defpackage with documentation option
 ;; Do not check use-list, because it is implementation dependent
-(deftest defpackage-3
+(deftest defpackage.3
   (progn
     (safely-delete-package "H")
     (ignore-errors
@@ -81,7 +81,7 @@
 
 ;; Check use argument
 ;; Try several ways of specifying the package to be used
-(deftest defpackage-4
+(deftest defpackage.4
   (loop
    for n in '("A" :|A| #\A) count
    (not
@@ -103,7 +103,7 @@
   0)
 
 ;; Test defpackage shadow option, and null use
-(deftest defpackage-5
+(deftest defpackage.5
   (progn
     (safely-delete-package "H")
     (ignore-errors
@@ -131,7 +131,7 @@
 
 ;; Test defpackage shadow and null use, with several ways
 ;; of specifying the name of the shadowed symbol
-(deftest defpackage-6
+(deftest defpackage.6
   (loop
    for s in '(:|f| #\f)
    collect
@@ -164,7 +164,7 @@
 
 ;; Testing defpackage with shadowing-import-from.
 ;; Test several ways of specifying the symbol name
-(deftest defpackage-7
+(deftest defpackage.7
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -211,7 +211,7 @@
 ;; Test for each way of specifying the imported symbol name,
 ;;  and for each way of specifying the package name from which
 ;;   the symbol is imported
-(deftest defpackage-8
+(deftest defpackage.8
     (progn
       (safely-delete-package "H")
       (safely-delete-package "G")
@@ -256,7 +256,7 @@
 
 ;; Test defpackage with export option
 
-(deftest defpackage-9
+(deftest defpackage.9
   (progn
     (loop
      for n in '("Z" #:|Z| #\Z)
@@ -292,7 +292,7 @@
 
 ;; Test defpackage with the intern option
 
-(deftest defpackage-10
+(deftest defpackage.10
   (progn
     (loop
      for n in '("Z" #:|Z| #\Z)
@@ -328,7 +328,7 @@
 
 ;; Test defpackage with size
 
-(deftest defpackage-11
+(deftest defpackage.11
   (ignore-errors
     (safely-delete-package "H")
     (let ((p (ignore-errors
@@ -345,7 +345,7 @@
 	(zerop (num-symbols-in-package p))))))
   (t t t t t t t))
 
-(deftest defpackage-12
+(deftest defpackage.12
   (ignore-errors
     (safely-delete-package "H")
     (let ((p (ignore-errors
@@ -365,7 +365,7 @@
 ;; defpackage error handling
 
 ;; Repeated size field should cause a program-error
-(deftest defpackage-13
+(deftest defpackage.13
   (progn
     (safely-delete-package "H")
     (classify-error
@@ -373,7 +373,7 @@
   program-error)
 
 ;; Repeated documentation field should cause a program-error
-(deftest defpackage-14
+(deftest defpackage.14
   (progn
     (safely-delete-package "H")
     (classify-error
@@ -385,7 +385,7 @@
 ;; When a nickname refers to an existing package or nickname,
 ;; signal a package-error
 
-(deftest defpackage-15
+(deftest defpackage.15
   (progn
     (safely-delete-package "H")
     (classify-error
@@ -393,7 +393,7 @@
 	      (:nicknames "A")))))
   package-error)
 
-(deftest defpackage-16
+(deftest defpackage.16
   (progn
     (safely-delete-package "H")
     (classify-error
@@ -405,7 +405,7 @@
 ;; must be disjoint, or a package-error is signalled.
 
 ;; :shadow and :shadowing-import-from
-(deftest defpackage-17
+(deftest defpackage.17
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -417,7 +417,7 @@
   program-error)
 
 ;; :shadow and :import-from
-(deftest defpackage-18
+(deftest defpackage.18
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -429,7 +429,7 @@
   program-error)
 
 ;; :shadow and :intern
-(deftest defpackage-19
+(deftest defpackage.19
   (progn
     (safely-delete-package "H")
     (classify-error
@@ -439,7 +439,7 @@
   program-error)
 
 ;; :shadowing-import-from and :import-from
-(deftest defpackage-20
+(deftest defpackage.20
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -451,7 +451,7 @@
   program-error)
 
 ;; :shadowing-import-from and :intern
-(deftest defpackage-21
+(deftest defpackage.21
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -463,7 +463,7 @@
   program-error)
 
 ;; :import-from and :intern
-(deftest defpackage-22
+(deftest defpackage.22
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -476,7 +476,7 @@
 
 ;; Names given to :export and :intern must be disjoint,
 ;;  otherwise signal a program-error
-(deftest defpackage-23
+(deftest defpackage.23
   (progn
     (safely-delete-package "H")
     (classify-error
@@ -487,7 +487,7 @@
 
 ;; :shadowing-import-from signals a correctable package-error
 ;;  if the symbol is not accessible in the named package
-(deftest defpackage-24
+(deftest defpackage.24
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -500,7 +500,7 @@
 ;; :import-from signals a correctable package-error if a symbol with
 ;; the indicated name is not accessible in the package indicated
 
-(deftest defpackage-25
+(deftest defpackage.25
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -511,7 +511,7 @@
 
 ;; A big test that combines all the options to defpackage
 
-(deftest defpackage-26
+(deftest defpackage.26
   (ignore-errors
     (flet
 	((%do-it%

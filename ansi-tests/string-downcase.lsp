@@ -80,6 +80,26 @@
    ("abcde" "abcdE"))
   "ABCDE")
 
+(deftest string-downcase.order.1
+  (let ((i 0) a b c (s (copy-seq "ABCDEF")))
+    (values
+     (string-downcase
+      (progn (setf a (incf i)) s)
+      :start (progn (setf b (incf i)) 1)
+      :end   (progn (setf c (incf i)) 4))
+     i a b c))
+  "AbcdEF" 3 1 2 3)
+
+(deftest string-downcase.order.2
+  (let ((i 0) a b c (s (copy-seq "ABCDEF")))
+    (values
+     (string-downcase
+      (progn (setf a (incf i)) s)
+      :end   (progn (setf b (incf i)) 4)
+      :start (progn (setf c (incf i)) 1))
+     i a b c))
+  "AbcdEF" 3 1 2 3)
+
 ;;; Error cases
 
 (deftest string-downcase.error.1

@@ -78,6 +78,23 @@
   (not-mv (some 'null '(1 2 3 nil 5)))
   nil)
 
+(deftest some.order.1
+  (let ((i 0) x y)
+    (values
+     (some (progn (setf x (incf i)) #'null)
+	   (progn (setf y (incf i)) '(a b c d)))
+     i x y))
+  nil 2 1 2)
+
+(deftest some.order.2
+  (let ((i 0) x y z)
+    (values
+     (some (progn (setf x (incf i)) #'eq)
+	   (progn (setf y (incf i)) '(a b c d))
+	   (progn (setf z (incf i)) '(e f g h)))
+     i x y z))
+  nil 3 1 2 3)
+
 
 (deftest some.error.1
   (classify-error (some 1 '(a b c)))

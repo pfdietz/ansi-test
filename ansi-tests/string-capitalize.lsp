@@ -84,6 +84,26 @@
    ("ABCDEF" "ABCDEF"))
   "ABCDEF")
 
+(deftest string-capitalize.order.1
+  (let ((i 0) a b c (s (copy-seq "abcdef")))
+    (values
+     (string-capitalize
+      (progn (setf a (incf i)) s)
+      :start (progn (setf b (incf i)) 1)
+      :end   (progn (setf c (incf i)) 4))
+     i a b c))
+  "aBcdef" 3 1 2 3)
+
+(deftest string-capitalize.order.2
+  (let ((i 0) a b c (s (copy-seq "abcdef")))
+    (values
+     (string-capitalize
+      (progn (setf a (incf i)) s)
+      :end   (progn (setf b (incf i)) 4)
+      :start (progn (setf c (incf i)) 1))
+     i a b c))
+  "aBcdef" 3 1 2 3)
+
 ;;; Error cases
 
 (deftest string-capitalize.error.1

@@ -84,6 +84,26 @@
     (loop for i from 0 to 23 collect (row-major-aref a i)))
   (a b c d e f g h i j k l m n o p q r s t u v w x))
 
+(deftest row-major-aref.order.1
+  (let ((i 0) x y)
+    (values
+     (row-major-aref
+      (progn (setf x (incf i)) #(a b c d e f))
+      (progn (setf y (incf i)) 2))
+     i x y))
+  c 2 1 2)
+
+(deftest row-major-aref.order.2
+  (let ((i 0) x y z
+	(a (copy-seq #(a b c d e f))))
+    (values
+     (setf
+      (row-major-aref
+       (progn (setf x (incf i)) a)
+       (progn (setf y (incf i)) 2))
+      (progn (setf z (incf i)) 'w))
+     a i x y z))
+  w #(a b w d e f) 3 1 2 3)
 
 ;;; Error tests
 

@@ -444,6 +444,32 @@
 	  (position-if-not (complement #'digit-char-p) a :from-end t))))
   nil 0 nil 4)
 
+(deftest position-if-not.order.1
+  (let ((i 0) a b c d e f)
+    (values
+     (position-if-not
+      (progn (setf a (incf i)) (complement #'zerop))
+      (progn (setf b (incf i)) '(3 1 8 2 1 2 3 4))
+      :from-end (setf c (incf i))
+      :start (progn (setf d (incf i)) 1)
+      :end (progn (setf e (incf i)) 6)
+      :key (progn (setf f (incf i)) #'1-))
+     i a b c d e f))
+  4 6 1 2 3 4 5 6)
+
+(deftest position-if-not.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (position-if-not
+      (progn (setf a (incf i)) (complement #'zerop))
+      (progn (setf b (incf i)) '(3 1 8 2 1 2 3 4))
+      :key (progn (setf c (incf i)) #'1-)
+      :end (progn (setf d (incf i)) 6)
+      :start (progn (setf e (incf i)) 1)
+      :from-end (setf f (incf i)))
+     i a b c d e f))
+  4 6 1 2 3 4 5 6)
+
 ;;; Keyword tests
 
 (deftest position-if-not.allow-other-keys.1

@@ -9,17 +9,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rename-package
 
-(deftest rename-package-1
+(deftest rename-package.1
   (block nil
     (safely-delete-package "TEST1")
     (safely-delete-package "TEST2")
-    (let ((p (make-package "TEST1")))
+    (let ((p (make-package "TEST1"))
+	  (i 0) x y)
       (unless (packagep p) (return nil))
-      (let ((p2 (rename-package "TEST1" "TEST2")))
+      (let ((p2 (rename-package (progn (setf x (incf i)) "TEST1")
+				(progn (setf y (incf i)) "TEST2"))))
 	(unless (packagep p2)
 	  (safely-delete-package p)
 	  (return p2))
 	(unless (and (eqt p p2)
+		     (eql i 2)
+		     (eql x 1)
+		     (eql y 2)
 		     (equal (package-name p2) "TEST2"))
 	  (safely-delete-package p)
 	  (safely-delete-package p2)
@@ -28,7 +33,7 @@
 	t)))
   t)
 
-(deftest rename-package-2
+(deftest rename-package.2
   (block nil
     (safely-delete-package "TEST1")
     (safely-delete-package "TEST2")
@@ -54,7 +59,7 @@
 	t)))
   t)
 
-(deftest rename-package-3
+(deftest rename-package.3
   (block nil
     (safely-delete-package "TEST1")
     (safely-delete-package "TEST2")
@@ -81,7 +86,7 @@
 	t)))
   t)
 
-(deftest rename-package-4
+(deftest rename-package.4
   (block nil
     (safely-delete-package "G")
     (safely-delete-package "TEST2")
@@ -104,7 +109,7 @@
 	t)))
   t)
 
-(deftest rename-package-5
+(deftest rename-package.5
   (block nil
     (safely-delete-package "TEST1")
     (safely-delete-package "G")
@@ -127,7 +132,7 @@
 	t)))
   t)
 
-(deftest rename-package-6
+(deftest rename-package.6
   (block nil
     (safely-delete-package '|TEST1|)
     (safely-delete-package '|TEST2|)

@@ -9,16 +9,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; export
 
-(deftest export-1
+(deftest export.1
   (let ((return-value nil))
     (safely-delete-package "TEST1")
     (let ((p (make-package "TEST1")))
-      (let ((sym (intern "FOO" p)))
-	(setf return-value (export sym p))
+      (let ((sym (intern "FOO" p))
+	    (i 0) x y)
+	(setf return-value (export (progn (setf x (incf i)) sym)
+				   (progn (setf y (incf i)) p)))
 	(multiple-value-bind* (sym2 status)
 	    (find-symbol "FOO" p)
 	  (prog1
 	      (and sym2
+		   (eql i 2)
+		   (eql x 1)
+		   (eql y 2)
 		   (eqt (symbol-package sym2) p)
 		   (string= (symbol-name sym2) "FOO")
 		   (eqt sym sym2)
@@ -27,7 +32,7 @@
     return-value)
   t)
 
-(deftest export-2
+(deftest export.2
   (progn
     (safely-delete-package "TEST1")
     (let ((p (make-package "TEST1")))
@@ -44,7 +49,7 @@
 	    (delete-package p))))))
   t)
 
-(deftest export-3
+(deftest export.3
   (handler-case
    (progn
      (safely-delete-package "F")
@@ -61,7 +66,7 @@
 ;; should signal a correctable package-error asking the
 ;; user whether the symbol should be imported.
 ;;
-(deftest export-4
+(deftest export.4
   (handler-case
    (export 'b::bar "A")
    (package-error () 'package-error)
@@ -73,7 +78,7 @@
 ;; from a package that is used by another package that
 ;; is exporting a symbol with the same name.
 ;;
-(deftest export-5
+(deftest export.5
   (progn
     (safely-delete-package "TEST1")
     (safely-delete-package "TEST2")
@@ -86,7 +91,7 @@
 	   (handler-case
 	    (export sym "TEST1")
 	    (error (c)
-		   (format t "Caught error in EXPORT-5: ~A~%" c)
+		   (format t "Caught error in EXPORT.5: ~A~%" c)
 		   'caught)))
 	 (error (c) c))
       (delete-package "TEST2")

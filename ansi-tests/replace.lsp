@@ -586,6 +586,42 @@
   t
   "aabcef")
 
+;;; Order of evaluation tests
+
+(deftest replace.order.1
+  (let ((i 0) a b)
+    (values
+     (replace (progn (setf a (incf i)) (list 'a 'b 'c))
+	      (progn (setf b (incf i)) (list 'e 'f)))
+     i a b))
+  (e f c) 2 1 2)
+
+(deftest replace.order.2
+  (let ((i 0) a b c d e f)
+    (values
+     (replace (progn (setf a (incf i)) (list 'a 'b 'c))
+	      (progn (setf b (incf i)) (list 'e 'f))
+	      :start1 (progn (setf c (incf i)) 1)
+	      :end1 (progn (setf d (incf i)) 3)
+	      :start2 (progn (setf e (incf i)) 0)
+	      :end2 (progn (setf f (incf i)) 2)
+	      )
+     i a b c d e f))
+  (a e f) 6 1 2 3 4 5 6)
+
+(deftest replace.order.3
+  (let ((i 0) a b c d e f)
+    (values
+     (replace (progn (setf a (incf i)) (list 'a 'b 'c))
+	      (progn (setf b (incf i)) (list 'e 'f))
+	      :end2 (progn (setf c (incf i)) 2)
+	      :start2 (progn (setf d (incf i)) 0)
+	      :end1 (progn (setf e (incf i)) 3)
+	      :start1 (progn (setf f (incf i)) 1)
+	      )
+     i a b c d e f))
+  (a e f) 6 1 2 3 4 5 6)
+
 ;;; Keyword tests
 
 (deftest replace.allow-other-keys.1

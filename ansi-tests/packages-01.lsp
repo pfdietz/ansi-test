@@ -9,71 +9,79 @@
 ;; Test find-symbol, with the various combinations of
 ;; package designators
 
-(deftest find-symbol-1
+(deftest find-symbol.1
   (find-symbol "aBmAchb1c")
   nil nil)
 
-(deftest find-symbol-2
+(deftest find-symbol.2
   (find-symbol "aBmAchb1c" "CL")
   nil nil)
 
-(deftest find-symbol-3
+(deftest find-symbol.3
   (find-symbol "aBmAchb1c" "COMMON-LISP")
   nil nil)
 
-(deftest find-symbol-4
+(deftest find-symbol.4
   (find-symbol "aBmAchb1c" "KEYWORD")
   nil nil)
 
-(deftest find-symbol-5
+(deftest find-symbol.5
   (find-symbol "aBmAchb1c" "COMMON-LISP-USER")
   nil nil)
 
-(deftest find-symbol-6
+(deftest find-symbol.6
   (find-symbol "CAR" "CL")
   car :external)
 
-(deftest find-symbol-7
+(deftest find-symbol.7
   (find-symbol "CAR" "COMMON-LISP")
   car :external)
 
-(deftest find-symbol-8
+(deftest find-symbol.8
   (values (find-symbol "CAR" "COMMON-LISP-USER"))
   car #| :inherited |# )
 
-(deftest find-symbol-9
+(deftest find-symbol.9
   (find-symbol "CAR" "CL-TEST")
   car :inherited)
 
-(deftest find-symbol-10
+(deftest find-symbol.10
   (find-symbol "TEST" "KEYWORD")
   :test :external)
 
-(deftest find-symbol-11
-  (find-symbol "FIND-SYMBOL-11" "CL-TEST")
-  find-symbol-11 :internal)
+(deftest find-symbol.11
+  (find-symbol "FIND-SYMBOL.11" "CL-TEST")
+  find-symbol.11 :internal)
 
-(deftest find-symbol-12
+(deftest find-symbol.12
   (find-symbol "FOO" #\A)
   A::FOO :external)
 
-(deftest find-symbol-13
+(deftest find-symbol.13
   (progn
     (intern "X" (find-package "A"))
     (find-symbol "X" #\A))
   A::X :internal)
 
-(deftest find-symbol-14
+(deftest find-symbol.14
   (find-symbol "FOO" #\B)
   A::FOO :inherited)
 
-(deftest find-symbol-15
+(deftest find-symbol.15
   (find-symbol "FOO" "B")
   A::FOO :inherited)
 
-(deftest find-symbol-16
+(deftest find-symbol.16
   (find-symbol "FOO" (find-package "B"))
   A::FOO :inherited)
+
+(deftest find-symbol.order.1
+  (let ((i 0) x y)
+    (values
+     (find-symbol (progn (setf x (incf i)) "CAR")
+		  (progn (setf y (incf i)) "COMMON-LISP"))
+     i x y))
+  car 2 1 2)
 
 (deftest find-symbol.error.1
   (classify-error (find-symbol))

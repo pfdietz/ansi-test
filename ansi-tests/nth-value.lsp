@@ -27,8 +27,10 @@
   (nth-value 100 'a)
   nil)
 
-
-
-
-
-
+(deftest nth-value.order.1
+  (let ((i 0) x y)
+    (values
+     (nth-value (progn (setf x (incf i)) 3)
+		(progn (setf y (incf i)) (values 'a 'b 'c 'd 'e 'f 'g)))
+     i x y))
+  d 2 1 2)

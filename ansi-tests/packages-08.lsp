@@ -10,7 +10,7 @@
 
 ;; check return value of delete-package, and check
 ;; that package-name is nil on the deleted package object
-(deftest delete-package-1
+(deftest delete-package.1
   (progn
     (safely-delete-package :test1)
     (let ((p (make-package :test1 :use nil)))
@@ -20,7 +20,7 @@
        (package-name p))))
   (t t nil))
 
-(deftest delete-package-2
+(deftest delete-package.2
   (progn
     (safely-delete-package :test1)
     (let ((p (make-package :test1 :use nil)))
@@ -31,7 +31,7 @@
   (t t nil))
 
 ;; Check that deletion of different package designators works
-(deftest delete-package-3
+(deftest delete-package.3
   (progn
     (safely-delete-package "X")
     (make-package "X")
@@ -40,7 +40,7 @@
      (error (c) c)))
   t)
 
-(deftest delete-package-4
+(deftest delete-package.4
   (progn
     (safely-delete-package "X")
     (make-package "X")
@@ -52,9 +52,9 @@
 ;;; PFD 10/14/02 -- These tests are broken again.  I suspect
 ;;;   some sort of interaction with the test harness.
 
-;;; PFD 01-18-03  This test is working, but suspicious.
+;;; PFD 01.18.03  This test is working, but suspicious.
 
-(deftest delete-package-5
+(deftest delete-package.5
   (prog (P1 S1 P2 S2 P3)
 	(safely-delete-package "P3")
 	(safely-delete-package "P2")
@@ -116,15 +116,15 @@
   t)
 
 ;; deletion of a nonexistent package should cause a continuable
-;; package-error  (same comments for delete-package-5 apply
+;; package-error  (same comments for delete-package.5 apply
 ;; here as well)
 
 ;;; PFD 10/14/02 -- These tests are broken again.  I suspect
 ;;;   some sort of interaction with the test harness.
 
-;;; PFD 01-18-03  This test is working, but suspicious.
+;;; PFD 01.18.03  This test is working, but suspicious.
 
-(deftest delete-package-6
+(deftest delete-package.6
   (progn
     (safely-delete-package "TEST-20)")
     (handler-bind ((package-error

@@ -10,15 +10,15 @@
 
 (declaim (optimize (safety 3)))
 
-(deftest boolean-type-1
+(deftest boolean-type.1
   (notnot-mv (typep nil 'boolean))
   t)
 
-(deftest boolean-type-2
+(deftest boolean-type.2
   (notnot-mv (typep t 'boolean))
   t)
 
-(deftest boolean-type-3
+(deftest boolean-type.3
   (check-type-predicate 'is-t-or-nil 'boolean)
   0)
 
@@ -30,7 +30,7 @@
 
 
 
-(deftest types-3
+(deftest types.3
   (loop
    for (t1 t2) in *subtype-table*
    for m1 = (check-subtypep t1 t2 t t)
@@ -51,7 +51,7 @@
 ;;; incorrectly that certain subtype relationships that are
 ;;; not specified in the spec cannot occur.
 #|
-(defun types-4-body ()
+(defun types.4-body ()
   (let ((parent-table (make-hash-table :test #'equal))
 	(types nil))
     (loop
@@ -90,20 +90,20 @@
 		   (t 0)))))
     ))
 
-(deftest types-4
-  (types-4-body)
+(deftest types.4
+  (types.4-body)
   0)
 |#
 
-(deftest types-6
-  (types-6-body)
+(deftest types.6
+  (types.6-body)
   nil)
 
 (declaim (special *disjoint-types-list*))
 
 ;;; Check that the disjoint types really are disjoint
 
-(deftest types-7b
+(deftest types.7b
   (loop for e on *disjoint-types-list*
 	for tp1 = (first e)
 	append
@@ -111,7 +111,7 @@
 	      append (classes-are-disjoint tp1 tp2)))
   nil)
 
-(deftest types-7c
+(deftest types.7c
   (loop for e on *disjoint-types-list2*
 	for list1 = (first e)
 	append
@@ -122,7 +122,7 @@
 			  (classes-are-disjoint tp1 tp2)))))
   nil)
 
-(deftest types-8
+(deftest types.8
   (loop
    for tp in *disjoint-types-list* count
    (cond
@@ -135,18 +135,18 @@
 (declaim (special *type-list* *supertype-table*))
 
 ;;;
-;;; TYPES-9 checks the transitivity of SUBTYPEP on pairs of types
+;;; TYPES.9 checks the transitivity of SUBTYPEP on pairs of types
 ;;; occuring in *SUBTYPE-TABLE*, as well as the types KEYWORD, ATOM,
 ;;; and LIST (the relationships given in *SUBTYPE-TABLE* are not used
 ;;; here.)
 ;;;
 
-(deftest types-9
-  (types-9-body)
+(deftest types.9
+  (types.9-body)
   nil)
 
 ;;;
-;;; TYPES-9A takes the supertype relationship computed by test TYPE-9
+;;; TYPES.9A takes the supertype relationship computed by test TYPE.9
 ;;; and checks that TYPEP respects it for all elements of *UNIVERSE*.
 ;;; That is, if T1 and T2 are two types, and X is an element of *UNIVERSE*,
 ;;; then if (SUBTYPEP T1) then (TYPEP X T1) implies (TYPEP X T2).
@@ -154,11 +154,11 @@
 ;;; The function prints error messages when this fails, and returns the
 ;;; number of occurences of failure.
 ;;;
-;;; Test TYPES-9 must be run before this test.
+;;; Test TYPES.9 must be run before this test.
 ;;;
 
-(deftest types-9a
-  (types-9a-body)
+(deftest types.9a
+  (types.9a-body)
   0)
 
 
@@ -227,27 +227,27 @@
   `(and (array ,type ,size)
 	(satisfies even-size-p)))
 
-(deftest deftype-1
+(deftest deftype.1
   (typep 1 '(even-array integer (10)))
   nil)
 
-(deftest deftype-2
+(deftest deftype.2
   (typep nil '(even-array t (*)))
   nil)
 
-(deftest deftype-3
+(deftest deftype.3
   (notnot-mv (typep (make-array '(10)) '(even-array t (*))))
   t)
 
-(deftest deftype-4
+(deftest deftype.4
   (typep (make-array '(5)) '(even-array t (*)))
   nil)
 
-(deftest deftype-5
+(deftest deftype.5
   (notnot-mv (typep (make-string 10) '(even-array character (*))))
   t)
 
-(deftest deftype-6
+(deftest deftype.6
   (notnot-mv
    (typep (make-array '(3 5 6) :element-type '(unsigned-byte 8))
 	  '(even-array (unsigned-byte 8))))

@@ -7,14 +7,16 @@
 
 (deftest vector-push-extend.1
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(a b c d e))))
+		       :initial-contents '(a b c d e)))
+	(i 0) x y)
     (values
      (fill-pointer a)
-     (vector-push-extend 'x a)
+     (vector-push-extend (progn (setf x (incf i)) 'x)
+			 (progn (setf y (incf i)) a))
      (fill-pointer a)
-     a))
-  2 2 3 #(a b x))
-
+     a
+     i x y))
+  2 2 3 #(a b x) 2 1 2)
 
 (deftest vector-push-extend.2
   (let ((a (make-array '(5) :fill-pointer 5
@@ -43,14 +45,18 @@
   (let ((a (make-array '(5) :fill-pointer 5
 		       :adjustable t
 		       :initial-contents "abcde"
-		       :element-type 'base-char)))
+		       :element-type 'base-char))
+	(i 0) x y z)
     (values
      (fill-pointer a)
-     (vector-push-extend #\x a 1)
+     (vector-push-extend (progn (setf x (incf i)) #\x)
+			 (progn (setf y (incf i)) a)
+			 (progn (setf z (incf i)) 1))
      (fill-pointer a)
      (<= (array-total-size a) 5)
-     a))
-  5 5 6 nil "abcdex")
+     a
+     i x y z))
+  5 5 6 nil "abcdex" 3 1 2 3)
 
 (deftest vector-push-extend.5
   (let ((a (make-array '(5) :fill-pointer 2

@@ -12,25 +12,29 @@
 
 ;; Simple unintern of an internal symbol, package explicitly
 ;; given as a package object
-(deftest unintern-1
+(deftest unintern.1
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((p (make-package "H")))
+	(let ((p (make-package "H"))
+	      (i 0) x y)
 	  (intern "FOO" p)
-	  (multiple-value-bind* (sym access)
-	      (find-symbol "FOO" p)
-	    (and
-	     (eqt access :internal)
-	     (unintern sym p)
-	     (null (symbol-package sym))
-	     (not (find-symbol "FOO" p)))))
+	  (multiple-value-bind*
+	   (sym access)
+	   (find-symbol "FOO" p)
+	   (and
+	    (eqt access :internal)
+	    (unintern (progn (setf x (incf i)) sym)
+		      (progn (setf y (incf i)) p))
+	    (eql i 2) (eql x 1) (eql y 2)
+	    (null (symbol-package sym))
+	    (not (find-symbol "FOO" p)))))
       (safely-delete-package "H")))
   t)
 
 ;; Simple unintern, package taken from the *PACKAGES*
 ;; special variable (should this have unwind protect?)
-(deftest unintern-2
+(deftest unintern.2
   (progn
     (safely-delete-package "H")
     (prog1
@@ -48,7 +52,7 @@
   t)
 
 ;; Simple unintern, package given as string
-(deftest unintern-3
+(deftest unintern.3
   (progn
     (safely-delete-package "H")
     (prog1
@@ -65,7 +69,7 @@
   t)
 
 ;; Simple unintern, package given as symbol
-(deftest unintern-4
+(deftest unintern.4
   (progn
     (safely-delete-package "H")
     (prog1
@@ -82,7 +86,7 @@
   t)
 
 ;; Simple unintern, package given as character
-(deftest unintern-5
+(deftest unintern.5
   (handler-case
    (progn
      (safely-delete-package "H")
@@ -105,7 +109,7 @@
 
 ;; Unintern an external symbol that is also inherited
 
-(deftest unintern-6
+(deftest unintern.6
   (handler-case
    (progn
      (safely-delete-package "H")
@@ -135,7 +139,7 @@
 
 ;; unintern a symbol that is shadowing another symbol
 
-(deftest unintern-7
+(deftest unintern.7
     (block failed
       (safely-delete-package "H")
       (safely-delete-package "G")
@@ -164,7 +168,7 @@
 
 ;; Error situation: when the symbol is uninterned, creates
 ;; a name conflict from two used packages
-(deftest unintern-8
+(deftest unintern.8
   (block failed
     (safely-delete-package "H")
     (safely-delete-package "G1")
@@ -200,7 +204,7 @@
 ;; Now, inherit the same symbol through two intermediate
 ;; packages.  No error should occur when the shadowing
 ;; is removed
-(deftest unintern-9
+(deftest unintern.9
   (block failed
     (safely-delete-package "H")
     (safely-delete-package "G1")

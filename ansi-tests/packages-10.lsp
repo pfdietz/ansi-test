@@ -9,65 +9,53 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; with-package-iterator
 
-(deftest with-package-iterator-1
-    (with-package-iterator-internal (list (find-package "COMMON-LISP-USER")))
+(deftest with-package-iterator.1
+  (with-package-iterator-internal (list (find-package "COMMON-LISP-USER")))
   t)
 
-(deftest with-package-iterator-2
-    (with-package-iterator-external (list (find-package "COMMON-LISP-USER")))
+(deftest with-package-iterator.2
+  (with-package-iterator-external (list (find-package "COMMON-LISP-USER")))
   t)
 
-(deftest with-package-iterator-3
-    (with-package-iterator-inherited (list (find-package "COMMON-LISP-USER")))
+(deftest with-package-iterator.3
+  (with-package-iterator-inherited (list (find-package "COMMON-LISP-USER")))
   t)
 
-(deftest with-package-iterator-4
-    (with-package-iterator-all (list (find-package "COMMON-LISP-USER")))
+(deftest with-package-iterator.4
+  (with-package-iterator-all (list (find-package "COMMON-LISP-USER")))
   t)
 
 ;;; Should test on some packages containing shadowed symbols,
 ;;; multiple inheritance
 
-(deftest with-package-iterator-5
-    (handler-case
-	(with-package-iterator-all '("A"))
-      (error (c) c))
+(deftest with-package-iterator.5
+  (with-package-iterator-all '("A"))
   t)
 
-(deftest with-package-iterator-6
-    (handler-case
-	(with-package-iterator-all '(#:|A|))
-      (error (c) c))
+(deftest with-package-iterator.6
+  (with-package-iterator-all '(#:|A|))
   t)
 
-(deftest with-package-iterator-7
-    (handler-case
-	(with-package-iterator-all '(#\A))
-      (error (c) c))
+(deftest with-package-iterator.7
+  (with-package-iterator-all '(#\A))
   t)
 
-(deftest with-package-iterator-8
-    (handler-case
-	(with-package-iterator-internal (list (find-package "A")))
-      (error (c) c))
+(deftest with-package-iterator.8
+  (with-package-iterator-internal (list (find-package "A")))
   t)
 
-(deftest with-package-iterator-9
-    (handler-case
-	(with-package-iterator-external (list (find-package "A")))
-      (error (c) c))
+(deftest with-package-iterator.9
+  (with-package-iterator-external (list (find-package "A")))
   t)
 
-(deftest with-package-iterator-10
-    (handler-case
-	(with-package-iterator-inherited (list (find-package "A")))
-      (error (c) c))
+(deftest with-package-iterator.10
+  (with-package-iterator-inherited (list (find-package "A")))
   t)
 
 ;;; Check that if no access symbols are provided, a program error is
 ;;; raised
 #|
-(deftest with-package-iterator-11
+(deftest with-package-iterator.11
     (handler-case
 	(progn
 	  (test-with-package-iterator (list (find-package "COMMON-LISP-USER")))
@@ -88,7 +76,7 @@
 ;;; PFD 01-18-03:  I should rewrite this to use CLASSIFY-ERROR, which
 ;;;  uses EVAL to avoid that problem.
 
-(deftest with-package-iterator-11
+(deftest with-package-iterator.11
   (handler-case (macroexpand-1
 		 '(with-package-iterator (x "COMMON-LISP-USER")))
 		(program-error () t)
@@ -96,44 +84,38 @@
   t)
 
 ;;; Apply to all packages
-(deftest with-package-iterator-12
-  (handler-case
-   (loop
-    for p in (list-all-packages) count
-	      (handler-case
-	       (progn
-		 (format t "Package ~S~%" p)
-		 (not (with-package-iterator-internal (list p))))
-	       (error (c)
-		      (format "Error ~S on package ~A~%" c p)
-		      t)))
-   (error (c) c))
+(deftest with-package-iterator.12
+  (loop
+   for p in (list-all-packages) count
+   (handler-case
+    (progn
+      (format t "Package ~S~%" p)
+      (not (with-package-iterator-internal (list p))))
+    (error (c)
+	   (format "Error ~S on package ~A~%" c p)
+	   t)))
   0)
 
-(deftest with-package-iterator-13
-  (handler-case
-   (loop
-    for p in (list-all-packages) count
-    (handler-case
-     (progn
-       (format t "Package ~S~%" p)
-       (not (with-package-iterator-external (list p))))
-     (error (c)
-	    (format "Error ~S on package ~A~%" c p)
-	    t)))
-   (error (c) c))
+(deftest with-package-iterator.13
+  (loop
+   for p in (list-all-packages) count
+   (handler-case
+    (progn
+      (format t "Package ~S~%" p)
+      (not (with-package-iterator-external (list p))))
+    (error (c)
+	   (format "Error ~S on package ~A~%" c p)
+	   t)))
   0)
 
-(deftest with-package-iterator-14
-  (handler-case
-   (loop
-    for p in (list-all-packages) count
-    (handler-case
-     (progn
-       (format t "Package ~S~%" p)
-       (not (with-package-iterator-inherited (list p))))
-     (error (c)
-	    (format t "Error ~S on package ~S~%" c p)
-	    t)))
-   (condition (c) c))
+(deftest with-package-iterator.14
+  (loop
+   for p in (list-all-packages) count
+   (handler-case
+    (progn
+      (format t "Package ~S~%" p)
+      (not (with-package-iterator-inherited (list p))))
+    (error (c)
+	   (format t "Error ~S on package ~S~%" c p)
+	   t)))
   0)

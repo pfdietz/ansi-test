@@ -9,7 +9,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; shadow
 
-(deftest shadow-1
+(deftest shadow.1
   (prog1
       (progn
 	(safely-delete-package "TEST5")
@@ -50,7 +50,7 @@
    t
    "A" "TEST5" :internal))
 
-(deftest shadow-2
+(deftest shadow.2
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -88,7 +88,7 @@
 
 ;; shadow in which the package is given
 ;; by a character
-(deftest shadow-3
+(deftest shadow.3
   (progn
     (safely-delete-package "H")
     (safely-delete-package "G")
@@ -126,7 +126,7 @@
 
 
 ;; shadow on an existing internal symbol returns the existing symbol
-(deftest shadow-4
+(deftest shadow.4
   (prog1
       (handler-case
        (progn
@@ -146,7 +146,7 @@
 
 
 ;; shadow of an existing shadowed symbol returns the symbol
-(deftest shadow-5
+(deftest shadow.5
   (prog1
       (handler-case
        (progn
@@ -169,7 +169,7 @@
 
 ;; Shadow several names simultaneously
 
-(deftest shadow-6
+(deftest shadow.6
   (prog1
       (handler-case
        (progn
@@ -197,13 +197,14 @@
   ("X" :internal "Y" :internal "Z" :internal 3))
 
 ;; Same, but shadow character string designators
-(deftest shadow-7
+(deftest shadow.7
   (prog1
       (handler-case
-       (progn
+       (let ((i 0) x y)
 	 (safely-delete-package :G)
 	 (make-package :G)
-	 (shadow '(#\X #\Y) :G)
+	 (shadow (progn (setf x (incf i)) '(#\X #\Y))
+		 (progn (setf y (incf i)) :G))
 	 (let ((results
 		(append (multiple-value-list
 			 (find-symbol "X" :G))
@@ -211,6 +212,7 @@
 			 (find-symbol "Y" :G))
 			nil)))
 	   (list
+	    i x y
 	    (symbol-name (first results))
 	    (second results)
 	    (symbol-name (third results))
@@ -218,7 +220,7 @@
 	    (length (package-shadowing-symbols :G)))))
        (error (c) c))
     (safely-delete-package :G))
-  ("X" :internal "Y" :internal 2))
+  (2 1 2 "X" :internal "Y" :internal 2))
 
 (deftest shadow.error.1
   (classify-error (shadow))

@@ -638,6 +638,36 @@
 	    :from-end t)
   4)
 
+(deftest position.order.1
+  (let ((i 0) a b c d e f g)
+    (values
+     (position
+      (progn (setf a (incf i)) 0)
+      (progn (setf b (incf i)) '(3 1 8 2 1 2 3 4))
+      :from-end (setf c (incf i))
+      :start (progn (setf d (incf i)) 1)
+      :end (progn (setf e (incf i)) 6)
+      :key (progn (setf f (incf i)) #'1-)
+      :test (progn (setf g (incf i)) #'=)
+      )
+     i a b c d e f g))
+  4 7 1 2 3 4 5 6 7)
+
+(deftest position.order.2
+  (let ((i 0) a b c d e f g)
+    (values
+     (position
+      (progn (setf a (incf i)) 0)
+      (progn (setf b (incf i)) '(3 1 8 2 1 2 3 4))
+      :test-not (progn (setf c (incf i)) #'/=)
+      :key (progn (setf d (incf i)) #'1-)
+      :end (progn (setf e (incf i)) 6)
+      :start (progn (setf f (incf i)) 1)
+      :from-end (setf g (incf i))
+      )
+     i a b c d e f g))
+  4 7 1 2 3 4 5 6 7)
+
 ;;; Keyword tests
 
 (deftest position.allow-other-keys.1

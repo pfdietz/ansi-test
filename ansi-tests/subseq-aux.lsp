@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(defun subseq-list-4-body ()
+(defun subseq-list.4-body ()
   (block done
     (let ((x (loop for i from 0 to 19 collect i)))
       (loop
@@ -18,7 +18,7 @@
 	   (unless (eqlt e k) (return-from done nil)))))))
     t))
 
-(defun subseq-list-5-body ()
+(defun subseq-list.5-body ()
   (block done
     (let ((x (loop for i from 0 to 29 collect i)))
       (loop
@@ -28,7 +28,7 @@
 	 (return-from done nil))))
     t))
 
-(defun subseq-list-6-body ()
+(defun subseq-list.6-body ()
   (let* ((x (make-list 100))
 	 (z (loop for e on x collect e))
 	 (y (subseq x 0)))
@@ -43,7 +43,7 @@
        (return nil))
      finally (return t))))
 
-(defun subseq-vector-1-body ()
+(defun subseq-vector.1-body ()
   (block nil
   (let* ((x (make-sequence 'vector 10 :initial-element 'a))
 	 (y (subseq x 4 8)))
@@ -61,7 +61,7 @@
      (not (not (every #'(lambda (e) (eqt e 'b)) x)))
      6))))
 
-(defun subseq-vector-2-body ()
+(defun subseq-vector.2-body ()
   (block nil
   (let* ((x (make-sequence '(vector fixnum) 10 :initial-element 1))
 	 (y (subseq x 4 8)))
@@ -79,7 +79,7 @@
      (not (not (every #'(lambda (e) (eqlt e 2)) x)))
      6))))
 
-(defun subseq-vector-3-body ()
+(defun subseq-vector.3-body ()
   (block nil
   (let* ((x (make-sequence '(vector single-float) 10 :initial-element 1.0))
 	 (y (subseq x 4 8)))
@@ -97,7 +97,7 @@
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
 
-(defun subseq-vector-4-body ()
+(defun subseq-vector.4-body ()
   (block nil
   (let* ((x (make-sequence '(vector double-float) 10 :initial-element 1.0d0))
 	 (y (subseq x 4 8)))
@@ -115,7 +115,7 @@
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
 
-(defun subseq-vector-5-body ()
+(defun subseq-vector.5-body ()
   (block nil
   (let* ((x (make-sequence '(vector short-float) 10 :initial-element 1.0s0))
 	 (y (subseq x 4 8)))
@@ -133,7 +133,7 @@
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
 
-(defun subseq-vector-6-body ()
+(defun subseq-vector.6-body ()
   (block nil
   (let* ((x (make-sequence '(vector long-float) 10 :initial-element 1.0l0))
 	 (y (subseq x 4 8)))
@@ -151,7 +151,7 @@
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
 
-(defun subseq-string-1-body ()
+(defun subseq-string.1-body ()
   (let* ((s1 "abcdefgh")
 	 (len (length s1)))
     (loop for start from 0 below len
@@ -161,7 +161,7 @@
 				 collect (aref s1 i))
 			   'string)))))
 
-(defun subseq-string-2-body ()
+(defun subseq-string.2-body ()
   (let* ((s1 "abcdefgh")
 	 (len (length s1)))
     (loop for start from 0 below len
@@ -173,7 +173,7 @@
 				       collect (aref s1 i))
 				 'string))))))
 
-(defun subseq-string-3-body ()
+(defun subseq-string.3-body ()
   (let* ((s1 (make-array '(10) :initial-contents "abcdefghij"
 			 :fill-pointer 8
 			 :element-type 'character))
@@ -194,7 +194,7 @@
 			  (coerce (loop for i from start below end
 					collect (aref s1 i))
 				  'string)))))))
-(defun subseq-bit-vector-1-body ()
+(defun subseq-bit-vector.1-body ()
   (let* ((s1 #*11001000)
 	 (len (length s1)))
     (loop for start from 0 below len
@@ -204,7 +204,7 @@
 				collect (aref s1 i))
 			  'bit-vector)))))
 
-(defun subseq-bit-vector-2-body ()
+(defun subseq-bit-vector.2-body ()
   (let* ((s1 #*01101011)
 	 (len (length s1)))
     (loop for start from 0 below len
@@ -216,7 +216,7 @@
 				      collect (aref s1 i))
 				'bit-vector))))))
 
-(defun subseq-bit-vector-3-body ()
+(defun subseq-bit-vector.3-body ()
   (let* ((s1 (make-array '(10) :initial-contents #*1101100110
 			 :fill-pointer 8
 			 :element-type 'bit))

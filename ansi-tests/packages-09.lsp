@@ -12,7 +12,7 @@
 ;; Test basic make-package, using string, symbol and character
 ;;    package-designators
 
-(deftest make-package-1
+(deftest make-package.1
   (progn
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1"))))
@@ -24,7 +24,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-2
+(deftest make-package.2
   (progn
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1|))))
@@ -36,7 +36,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-3
+(deftest make-package.3
   (progn
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X))))
@@ -50,7 +50,7 @@
 
 ;; Same, but with a null :use list
 
-(deftest make-package-4
+(deftest make-package.4
   (progn
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use nil))))
@@ -63,7 +63,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-5
+(deftest make-package.5
   (progn
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use nil))))
@@ -76,7 +76,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-6
+(deftest make-package.6
   (progn
     (safely-delete-package #\X)
     (let ((p (make-package #\X)))
@@ -91,7 +91,7 @@
 
 ;; Same, but use the A package
 
-(deftest make-package-7
+(deftest make-package.7
   (progn
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '("A")))))
@@ -104,7 +104,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-7a
+(deftest make-package.7a
   (progn
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '(#:|A|)))))
@@ -117,7 +117,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-7b
+(deftest make-package.7b
   (progn
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '(#\A)))))
@@ -130,7 +130,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-8
+(deftest make-package.8
   (progn
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '("A")))))
@@ -143,7 +143,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-8a
+(deftest make-package.8a
   (progn
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '(#:|A|)))))
@@ -156,7 +156,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-8b
+(deftest make-package.8b
   (progn
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '(#\A)))))
@@ -169,7 +169,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-9
+(deftest make-package.9
   (progn
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '("A")))))
@@ -182,7 +182,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-9a
+(deftest make-package.9a
   (progn
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '(#:|A|)))))
@@ -195,7 +195,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-9b
+(deftest make-package.9b
   (progn
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '(#\A)))))
@@ -210,7 +210,7 @@
 
 ;; make-package with nicknames
 
-(deftest make-package-10
+(deftest make-package.10
   (progn
     (safely-delete-package "TEST1")
     (let ((p (make-package "TEST1" :nicknames '("F"))))
@@ -222,7 +222,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-11
+(deftest make-package.11
   (progn
     (safely-delete-package '#:|TEST1|)
     (let ((p (make-package '#:|TEST1| :nicknames '(#:|G|))))
@@ -234,7 +234,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-12
+(deftest make-package.12
   (progn
     (safely-delete-package '#:|TEST1|)
     (let ((p (make-package '#:|TEST1| :nicknames '(#\G))))
@@ -246,7 +246,7 @@
 	(safely-delete-package p))))
   t)
 
-(deftest make-package-13
+(deftest make-package.13
   (progn
     (safely-delete-package #\X)
     (let ((p (make-package #\X :nicknames '("F" #\G #:|H|))))

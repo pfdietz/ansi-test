@@ -9,7 +9,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; in-package
 
-(deftest in-package-1
+(deftest in-package.1
   (let ((*package* *package*))
     (declare (special *package*))
     (let ((p2 (in-package "A")))
@@ -17,7 +17,7 @@
 	   (eqt *package* p2))))
   t)
 
-(deftest in-package-2
+(deftest in-package.2
   (let ((*package* *package*))
     (declare (special *package*))
     (let ((p2 (in-package |A|)))
@@ -25,7 +25,7 @@
 	   (eqt *package* p2))))
   t)
 
-(deftest in-package-3
+(deftest in-package.3
   (let ((*package* *package*))
     (declare (special *package*))
     (let ((p2 (in-package :|A|)))
@@ -33,7 +33,7 @@
 	   (eqt *package* p2))))
   t)
 
-(deftest in-package-4
+(deftest in-package.4
   (let ((*package* *package*))
     (declare (special *package*))
     (let ((p2 (in-package #\A)))
@@ -41,7 +41,7 @@
 	   (eqt *package* p2))))
   t)
 
-(deftest in-package-5
+(deftest in-package.5
   (let ((*package* *package*))
     (declare (special *package*))
     (safely-delete-package "H")

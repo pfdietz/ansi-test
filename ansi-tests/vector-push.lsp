@@ -7,13 +7,15 @@
 
 (deftest vector-push.1
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(a b c d e))))
+		       :initial-contents '(a b c d e)))
+	(i 0) x y)
     (values
      (fill-pointer a)
-     (vector-push 'x a)
+     (vector-push (progn (setf x (incf i)) 'x)
+		  (progn (setf y (incf i)) a))
      (fill-pointer a)
-     a))
-  2 2 3 #(a b x))
+     a i x y))
+  2 2 3 #(a b x) 2 1 2)
 
 
 (deftest vector-push.2

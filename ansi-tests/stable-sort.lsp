@@ -91,6 +91,26 @@
     (stable-sort a #'char<))
   "00111")
 
+;;; Order of evaluation tests
+
+(deftest stable-sort.order.1
+  (let ((i 0) x y)
+    (values
+     (stable-sort (progn (setf x (incf i)) (list 1 7 3 2))
+		  (progn (setf y (incf i)) #'<))
+     i x y))
+  (1 2 3 7) 2 1 2)
+
+(deftest stable-sort.order.2
+  (let ((i 0) x y z)
+    (values
+     (stable-sort (progn (setf x (incf i)) (list 1 7 3 2))
+		  (progn (setf y (incf i)) #'<)
+		  :key (progn (setf z (incf i)) #'-))
+     i x y z))
+  (7 3 2 1) 3 1 2 3)
+
+
 ;;; Error cases
 
 (deftest stable-sort.error.1
