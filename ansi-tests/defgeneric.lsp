@@ -193,6 +193,19 @@
      (funcall fn 'x :foo 'a)))
   program-error)
 
+;;;
+
+(deftest defgeneric.error.22
+  (progn
+    (defgeneric defgeneric-error-fn.22 (x))
+    (defmethod defgeneric-error-fn.22 ((x t)) nil)
+    (handler-case
+     (eval '(defgeneric defgeneric-error-fn.22 (x y)))
+     (error () :good)))
+  :good)
+
+
+
 
 ;;; Non error cases
 
@@ -644,18 +657,19 @@
     (funcall fn 'a))
   a)
 
-(defclass substandard-method (standard-method) ())
-
-(deftest defgeneric.27
-  (let ((fn (eval '(defgeneric defgeneric.fun.27 (x y)
-		     (:method-class substandard-method)
-		     (:method ((x number) (y number)) (+ x y))
-		     (:method ((x string) (y string))
-			      (concatenate 'string x y))))))
-    (values
-     (funcall fn 1 2)
-     (funcall fn "1" "2")))
-  3 "12")
+(when (subtypep (class-of (find-class 'standard-method))
+		'standard-class)
+  (defclass substandard-method (standard-method) ())
+  (deftest defgeneric.27
+    (let ((fn (eval '(defgeneric defgeneric.fun.27 (x y)
+		       (:method-class substandard-method)
+		       (:method ((x number) (y number)) (+ x y))
+		       (:method ((x string) (y string))
+				(concatenate 'string x y))))))
+      (values
+       (funcall fn 1 2)
+       (funcall fn "1" "2")))
+    3 "12"))
 
 (deftest defgeneric.28
   (let ((fn (eval '(defgeneric defgeneric.fun.28 (x &key)
@@ -710,4 +724,31 @@
        (funcall fn x :bar 'b :foo 'a))))
   nil a nil a a)
 
-  
+(when (subtypep (class-of (find-class 'standard-generic-function))
+		'standard-class)
+  (defclass substandard-generic-function (standard-generic-function) ())
+  (deftest defgeneric.30
+    (let ((fn
+	   (eval '(defgeneric defgeneric.fun.29 (x)
+		    (:generic-function-class substandard-generic-function)
+		    (:method ((x symbol)) 1)
+		    (:method ((x integer)) 2)))))
+      (values
+       (typep* fn 'substandard-generic-function)
+       (typep* fn 'standard-generic-function)
+       (typep* fn 'generic-function)
+       (typep* fn 'function)
+       (funcall fn 'a)
+       (funcall fn 1)
+       (defgeneric.fun.29 'x)
+       (defgeneric.fun.29 12345678901234567890)))
+    t t t t 1 2 1 2))
+
+(deftest defgeneric.31
+  (progn
+    (defgeneric defgeneric.fun.31 (x) (:method ((x t)) t))
+    (defgeneric defgeneric.fun.31 (x y) (:method ((x t) (y t)) (list x y)))
+    (defgeneric.fun.31 'a 'b))
+  (a b))
+
+
