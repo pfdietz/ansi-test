@@ -9379,3 +9379,40 @@ Broken at C::WT-MAKE-CLOSURE.
 		   (truncate (prog1 0 a (+ a a)))))
    7695)
   0 0)
+
+;;; COMPILE-FORM: unsupported special operator LET*
+;;; Associated with 'THE' operator
+
+(deftest misc.508
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -57853147 -2) a))
+			(declare (ignorable a))
+			(declare (optimize (debug 2) (space 1) (compilation-speed 3)
+					   (safety 1) (speed 2)))
+			(the integer
+			  (mask-field (byte 2 29)
+				      (ash (multiple-value-setq (a) -51781613)
+					   (min 1 a))))))
+	-29324754))
+  1610612736)
+
+(deftest misc.509
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -38984312 657) a))
+			(declare (ignorable a))
+			(declare (optimize (debug 1) (compilation-speed 1) (speed 1)
+					   (safety 2) (space 3)))
+			(the integer
+			  (if (> a -27907941364)
+			      116871
+			    (cl:handler-case
+			     (multiple-value-setq (a)
+			       -34832621))))))
+	-26788929))
+  116871)
