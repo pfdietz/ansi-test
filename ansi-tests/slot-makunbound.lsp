@@ -39,7 +39,28 @@
 	collect slot-name)
   nil)
 
+;;; Order of evaluation test(s)
 
+(deftest slot-makunbound.order.1
+  (let ((obj (make-instance 'slot-makunbound-class-01))
+	(i 0) x y)
+    (values
+     (eqt (slot-makunbound (progn (setf x (incf i)) obj)
+			   (progn (setf y (incf i)) 'a))
+	  obj)
+     i x y))
+  t 2 1 2)
+
+(deftest slot-makunbound.order.2
+  (let ((obj (make-instance 'slot-makunbound-class-01))
+	(i 0) x y)
+    (setf (slot-value obj 'a) t)
+    (values
+     (eqt (slot-makunbound (progn (setf x (incf i)) obj)
+			   (progn (setf y (incf i)) 'a))
+	  obj)
+     i x y))
+  t 2 1 2)
 
 ;;; Error cases
 

@@ -117,7 +117,7 @@
 ;;; (after all, they are objects, and they have slots)
 
 (define-condition slot-exists-p-condition-01 ()
-  (a b c))
+  ((a) (b) (c)))
 
 (deftest slot-exists-p.15
   (let ((obj (make-condition 'slot-exists-p-condition-01)))
@@ -125,13 +125,40 @@
   (t t t nil))
 
 (define-condition slot-exists-p-condition-02 (slot-exists-p-condition-01)
-  (a d e))
+  ((a) (d) (e)))
 
 (deftest slot-exists-p.16
   (let ((obj (make-condition 'slot-exists-p-condition-02)))
     (map-slot-exists-p* obj (list 'a 'b 'c 'd 'e (gensym))))
   (t t t t t nil))
 
+;;; Order of evaluation tests
+
+(deftest slot-exists-p.order.1
+  (let ((i 0) x y)
+    (values
+     (slot-exists-p (progn (setf x (incf i)) 'a)
+		    (progn (setf y (incf i)) (gensym)))
+     i x y))
+  nil 2 1 2)
+
+(deftest slot-exists-p.order.2
+  (let ((obj (allocate-instance (find-class 'slot-exists-p-class-01)))
+	(i 0) x y)
+    (values
+     (notnot (slot-exists-p (progn (setf x (incf i)) obj)
+			    (progn (setf y (incf i)) 'a)))
+     i x y))
+  t 2 1 2)
+
+(deftest slot-exists-p.order.3
+  (let ((obj (allocate-instance (find-class 'slot-exists-p-class-01)))
+	(i 0) x y)
+    (values
+     (notnot (slot-exists-p (progn (setf x (incf i)) obj)
+			    (progn (setf y (incf i)) 'b)))
+     i x y))
+  t 2 1 2)
 
 ;;; Errors tests
 

@@ -37,6 +37,17 @@
     (slot-boundp obj 'c))
   nil)
 
+;;; Argument order test(s)
+
+(deftest slot-boundp.order.1
+  (let ((obj (make-instance 'slot-boundp-class-01))
+	(i 0) x y)
+    (values
+     (slot-boundp (progn (setf x (incf i)) obj)
+		  (progn (setf y (incf i)) 'a))
+     i x y))
+  nil 2 1 2)
+
 ;;; Error tests
 
 (deftest slot-boundp.error.1

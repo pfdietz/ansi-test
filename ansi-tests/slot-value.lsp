@@ -79,6 +79,28 @@
 	  collect name))
   nil)
 
+;;; Order of evaluation test(s)
+
+(deftest slot-value.order.1
+  (let ((obj (make-instance 'slot-value-class-01))
+	(i 0) x y)
+    (values
+     (setf (slot-value obj 'a) t)
+     (slot-value (progn (setf x (incf i)) obj)
+		 (progn (setf y (incf i)) 'a))
+     i x y))
+  t t 2 1 2)
+
+(deftest slot-value.order.2
+  (let ((obj (make-instance 'slot-value-class-01))
+	(i 0) x y)
+    (values
+     (setf (slot-value (progn (setf x (incf i)) obj)
+		       (progn (setf y (incf i)) 'b))
+	   t)
+     (slot-value obj 'b)
+     i x y))
+  t t 2 1 2)
 
 ;;; Error tests
 
