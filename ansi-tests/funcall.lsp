@@ -32,10 +32,12 @@
   (funcall #'(lambda (x y) (cons x y)) 'a 'b)
   (a . b))
 
+(defun xcons (x y) (cons x y))
+
 (deftest funcall.7
-  (flet ((cons (x y) (list y x)))
-    (values (funcall 'cons 1 2)
-	    (funcall #'cons 1 2)))
+  (flet ((xcons (x y) (list y x)))
+    (values (funcall 'xcons 1 2)
+	    (funcall #'xcons 1 2)))
   (1 . 2)
   (2 1))
 
