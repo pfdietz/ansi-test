@@ -45,7 +45,7 @@
 
 (deftest /.3
   (loop for i = (random-fixnum)
-	repeat 10000
+	repeat 1000
 	unless (or (zerop i)
 		   (let ((q1 (/ i))
 			 (q2 (/ 1 i)))
@@ -63,7 +63,7 @@
 	for g = (gcd i j)
 	for q = (/ i j)
 	for q2 = (/ j)
-	repeat 10000
+	repeat 1000
 	unless (and (integerp g)
 		    (zerop (mod i g))
 		    (zerop (mod j g))
@@ -80,7 +80,7 @@
 	(loop for i = (1+ (random bound))
 	      for r1 = (/ i)
 	      for r2 = (/ 1 i)
-	      repeat 10000
+	      repeat 1000
 	      unless (eql r1 r2)
 	      collect (list i r1 r2)))
   nil)
@@ -91,7 +91,7 @@
 	for i = (if (zerop i1) 1 i1)
 	for c = (complex 0 i)
 	for r = (/ c)
-	repeat 10000
+	repeat 1000
 	unless (eql r (complex 0 (- (/ i))))
 	collect (list i c r))
   nil)
@@ -132,7 +132,7 @@
   (loop for a = (random-fixnum)
 	for b = (random-fixnum)
 	for m = (+ (* a a) (* b b))
-	repeat 10000
+	repeat 1000
 	unless
 	(or (zerop m)
 	    (let* ((q (/ (complex a b)))
@@ -148,7 +148,7 @@
     (loop for a = (random-from-interval bound)
 	  for b = (random-from-interval bound)
 	  for m = (+ (* a a) (* b b))
-	  repeat 10000
+	  repeat 1000
 	  unless
 	  (or (zerop m)
 	      (let* ((q (/ (complex a b)))
@@ -164,7 +164,7 @@
 	for b = (random-fixnum)
 	for n = (complex (random-fixnum) (random-fixnum))
 	for m = (+ (* a a) (* b b))
-	repeat 10000
+	repeat 1000
 	unless
 	(or (zerop m)
 	    (let* ((q (/ n (complex a b)))

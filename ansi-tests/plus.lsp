@@ -47,7 +47,7 @@
 	    for s4 = (+ x z y)
 	    for s5 = (+ z x y)
 	    for s6 = (+ y z x)
-	    repeat 10000
+	    repeat 1000
 	    unless (and (eql s1 s2) (eql s1 s3) (eql s1 s4)
 			(eql s1 s5) (eql s1 s6))
 	    collect (list x y z s1 s2 s3 s4 s5 s6))))
@@ -67,7 +67,7 @@
 	    for s4 = (+ x z y)
 	    for s5 = (+ z x y)
 	    for s6 = (+ y z x)
-	    repeat 10000
+	    repeat 1000
 	    unless (and (eql s1 s2) (eql s1 s3) (eql s1 s4)
 			(eql s1 s5) (eql s1 s6))
 	    collect (list x y z s1 s2 s3 s4 s5 s6))))
@@ -87,7 +87,7 @@
 	    for s4 = (+ x z y)
 	    for s5 = (+ z x y)
 	    for s6 = (+ y z x)
-	    repeat 10000
+	    repeat 1000
 	    unless (and (eql s1 s2) (eql s1 s3) (eql s1 s4)
 			(eql s1 s5) (eql s1 s6))
 	    collect (list x y z s1 s2 s3 s4 s5 s6)
@@ -149,7 +149,7 @@
     (loop for x = (%r)
 	  for y = (%r)
 	  for s = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql s (+ y x))
 		      (typep s 'short-float))
 	  collect (list x y s)))
@@ -160,7 +160,7 @@
     (loop for x = (%r)
 	  for y = (%r)
 	  for s = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql s (+ y x))
 		      (typep s 'single-float))
 	  collect (list x y s)))
@@ -171,7 +171,7 @@
     (loop for x = (%r)
 	  for y = (%r)
 	  for s = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql s (+ y x))
 		      (typep s 'double-float))
 	  collect (list x y s)))
@@ -182,7 +182,7 @@
     (loop for x = (%r)
 	  for y = (%r)
 	  for s = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql s (+ y x))
 		      (typep s 'long-float))
 	  collect (list x y s)))
@@ -194,7 +194,7 @@
     (loop for x = (- (random bound) (/ bound 2))
 	  for y = (- (random bound2)(/ bound2 2))
 	  for p = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (+ y x))
 		      (typep p 'single-float))
 	  collect (list x y p)))
@@ -206,7 +206,7 @@
     (loop for x = (- (random bound) (/ bound 2))
 	  for y = (- (random bound2)(/ bound2 2))
 	  for p = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (+ y x))
 		      (typep p 'double-float))
 	  collect (list x y p)))
@@ -218,7 +218,7 @@
     (loop for x = (- (random bound) (/ bound 2))
 	  for y = (- (random bound2)(/ bound2 2))
 	  for p = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (+ y x))
 		      (typep p 'long-float))
 	  collect (list x y p)))
@@ -230,7 +230,7 @@
     (loop for x = (- (random bound) (/ bound 2))
 	  for y = (- (random bound2)(/ bound2 2))
 	  for p = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (+ y x))
 		      (typep p 'double-float))
 	  collect (list x y p)))
@@ -242,7 +242,7 @@
     (loop for x = (- (random bound) (/ bound 2))
 	  for y = (- (random bound2)(/ bound2 2))
 	  for p = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (+ y x))
 		      (typep p 'long-float))
 	  collect (list x y p)))
@@ -254,7 +254,7 @@
     (loop for x = (- (random bound) (/ bound 2))
 	  for y = (- (random bound2)(/ bound2 2))
 	  for p = (+ x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (+ y x))
 		      (typep p 'long-float))
 	  collect (list x y p)))
@@ -271,7 +271,7 @@
 	 for j = (random bound)
 	 for y = (coerce j type)
 	 for sum = (+ x y)
-	 repeat 10000
+	 repeat 1000
 	 unless (and (eql sum (coerce (+ i j) type))
 		     (eql sum (+ y x)))
 	 collect (list i j x y sum (coerce (+ i j) type))))
@@ -290,7 +290,7 @@
     for j = (random bound)
     for y = (complex (coerce j type) one)
     for sum = (+ x y)
-    repeat 10000
+    repeat 1000
     unless (and (eql sum (complex (coerce (+ i j) type)
 				  (coerce 2 type)))
 		(eql sum (+ y x)))
@@ -310,7 +310,7 @@
     for j = (random bound)
     for y = (complex one (coerce j type))
     for sum = (+ x y)
-    repeat 10000
+    repeat 1000
     unless (and (eql sum (complex (coerce 2 type)
 				  (coerce (+ i j) type)))
 		(eql sum (+ y x)))

@@ -23,4 +23,12 @@
    (psetq x (mod y x)
 	  y x)))
 
+(defun my-lcm (x y)
+  (when (< x 0) (setf x (- x)))
+  (when (< y 0) (setf y (- y)))
+  (if (or (= x 0) (= y 0))
+      0
+    (/ (* x y) (my-gcd x y))))
+
+
   

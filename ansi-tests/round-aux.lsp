@@ -12,7 +12,7 @@
 	for vals = (multiple-value-list (round n d))
 	for (q r) = vals
 	for n2 = (+ (* q d) r)
-	repeat 10
+	repeat 1000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
 		    (= n n2)
@@ -30,7 +30,7 @@
 	for vals = (multiple-value-list (round n d))
 	for (q r) = vals
 	for n2 = (+ (* q d) r)
-	repeat 10
+	repeat 1000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
 		    (<= (- (/ d 2)) r (/ d 2))
@@ -44,7 +44,7 @@
 	for vals = (multiple-value-list (round n))
 	for (q r) = vals
 	for n2 = (+ q r)
-	repeat 10
+	repeat 1000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
 		    (= n n2)
@@ -61,7 +61,7 @@
 	for vals = (multiple-value-list (round n))
 	for (q r) = vals
 	for n2 = (+ q r)
-	repeat 10
+	repeat 1000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
 		    (rationalp r)
@@ -82,7 +82,7 @@
 	for vals = (multiple-value-list (round n d))
 	for (q r) = vals
 	for n2 = (+ (* q d) r)
-	repeat 10
+	repeat 1000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
 		    (rationalp r)
@@ -102,7 +102,7 @@
 	for vals = (multiple-value-list (round n d))
 	for (q r) = vals
 	for n2 = (+ (* q d) r)
-	repeat 10
+	repeat 1000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
 		    (rationalp r)

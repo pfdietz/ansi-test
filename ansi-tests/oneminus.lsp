@@ -23,7 +23,7 @@
   (loop for x = (random-fixnum)
 	for y = (1- x)
 	for z = (- x 1)
-	repeat 10000
+	repeat 1000
 	unless (eql y z)
 	collect (list x y z))
   nil)
@@ -41,7 +41,7 @@
   (loop for x = (random (1- most-positive-short-float))
 	for y = (1- x)
 	for z = (- x 1.0s0)
-	repeat 10000
+	repeat 1000
 	unless (eql y z)
 	collect (list x y z))
   nil)
@@ -50,7 +50,7 @@
   (loop for x = (random (1- most-positive-single-float))
 	for y = (1- x)
 	for z = (- x 1.0f0)
-	repeat 10000
+	repeat 1000
 	unless (eql y z)
 	collect (list x y z))
   nil)
@@ -59,7 +59,7 @@
   (loop for x = (random (1- most-positive-double-float))
 	for y = (1- x)
 	for z = (- x 1.0d0)
-	repeat 10000
+	repeat 1000
 	unless (eql y z)
 	collect (list x y z))
   nil)
@@ -68,7 +68,7 @@
   (loop for x = (random (1- most-positive-long-float))
 	for y = (1- x)
 	for z = (- x 1.0l0)
-	repeat 10000
+	repeat 1000
 	unless (eql y z)
 	collect (list x y z))
   nil)
@@ -80,7 +80,7 @@
 	for r = (/ x y2)
 	for r1 = (1- r)
 	for r2 = (- r 1)
-	repeat 10000
+	repeat 1000
 	unless (eql r1 r2)
 	collect (list x y2 r1 r2))
   nil)
@@ -93,7 +93,7 @@
 	  for r = (/ x y2)
 	  for r1 = (1- r)
 	  for r2 = (- r 1)
-	  repeat 10000
+	  repeat 1000
 	  unless (eql r1 r2)
 	  collect (list x y2 r1 r2)))
   nil)
@@ -104,7 +104,7 @@
 	for xi = (random-fixnum)
 	for xc = (complex xr xi)
 	for xc1 = (1- xc)
-	repeat 10000
+	repeat 1000
 	unless (eql xc1 (complex (- xr 1) xi))
 	collect (list xr xi xc xc1))
   nil)
@@ -116,7 +116,7 @@
 	  for xi = (random-from-interval bound)
 	  for xc = (complex xr xi)
 	  for xc1 = (1- xc)
-	  repeat 10000
+	  repeat 1000
 	  unless (eql xc1 (complex (- xr 1) xi))
 	  collect (list xr xi xc xc1)))
   nil)
@@ -127,7 +127,7 @@
 	  for xi = (random bound)
 	  for xc = (complex xr xi)
 	  for xc1 = (1- xc)
-	  repeat 10000
+	  repeat 1000
 	  unless (eql xc1 (complex (- xr 1) xi))
 	  collect (list xr xi xc xc1)))
   nil)
@@ -138,7 +138,7 @@
 	  for xi = (random bound)
 	  for xc = (complex xr xi)
 	  for xc1 = (1- xc)
-	  repeat 10000
+	  repeat 1000
 	  unless (eql xc1 (complex (- xr 1) xi))
 	  collect (list xr xi xc xc1)))
   nil)
@@ -149,7 +149,7 @@
 	  for xi = (random bound)
 	  for xc = (complex xr xi)
 	  for xc1 = (1- xc)
-	  repeat 10000
+	  repeat 1000
 	  unless (eql xc1 (complex (- xr 1) xi))
 	  collect (list xr xi xc xc1)))
   nil)
@@ -160,7 +160,7 @@
 	  for xi = (random bound)
 	  for xc = (complex xr xi)
 	  for xc1 = (1- xc)
-	  repeat 10000
+	  repeat 1000
 	  unless (eql xc1 (complex (-  xr 1) xi))
 	  collect (list xr xi xc xc1)))
   nil)

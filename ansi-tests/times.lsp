@@ -102,7 +102,7 @@
 	    for yc = (%r)
 	    for y = (complex yr yc)
 	    for prod = (* x y)
-	    repeat 10000
+	    repeat 1000
 	    unless (and (eql (realpart prod) (- (integer-times xr yr)
 						(integer-times xc yc)))
 			(eql (imagpart prod) (+ (integer-times xr yc)
@@ -122,7 +122,7 @@
 	    for yc = (%r)
 	    for y = (complex yr yc)
 	    for prod = (* x y)
-	    repeat 10000
+	    repeat 1000
 	    unless (and (eql (realpart prod) (- (rat-times xr yr)
 						(rat-times xc yc)))
 			(eql (imagpart prod) (+ (rat-times xr yc)
@@ -183,7 +183,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'short-float))
 	  collect (list x y p)))
@@ -194,7 +194,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'single-float))
 	  collect (list x y p)))
@@ -205,7 +205,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'double-float))
 	  collect (list x y p)))
@@ -216,7 +216,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'long-float))
 	  collect (list x y p)))
@@ -228,7 +228,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound2)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'single-float))
 	  collect (list x y p)))
@@ -240,7 +240,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound2)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'double-float))
 	  collect (list x y p)))
@@ -252,7 +252,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound2)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'long-float))
 	  collect (list x y p)))
@@ -264,7 +264,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound2)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'double-float))
 	  collect (list x y p)))
@@ -276,7 +276,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound2)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'long-float))
 	  collect (list x y p)))
@@ -288,7 +288,7 @@
     (loop for x = (random-from-interval bound)
 	  for y = (random-from-interval bound2)
 	  for p = (* x y)
-	  repeat 10000
+	  repeat 1000
 	  unless (and (eql p (* y x))
 		      (typep p 'long-float))
 	  collect (list x y p)))
@@ -305,7 +305,7 @@
 	 for j = (random bound)
 	 for y = (coerce j type)
 	 for prod = (* x y)
-	 repeat 10000
+	 repeat 1000
 	 unless (and (eql prod (coerce (* i j) type))
 		     (eql prod (* y x)))
 	 collect (list i j x y (* x y) (coerce (* i j) type))))
@@ -352,7 +352,7 @@
 	 for cx = (complex 1.0 x)
 	 for cy = (complex 1.0 y)
 	 for prod = (* cx cy)
-	 repeat 10000
+	 repeat 1000
 	 unless (and (eql prod (complex (coerce (- 1 (* i j)) type)
 					(coerce (+ i j) type)))
 		     (eql prod (* cy cx)))

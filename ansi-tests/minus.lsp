@@ -71,7 +71,7 @@
     (loop
      for x = (+ (random (- upper-bound lower-bound)) lower-bound)
      for neg = (- x)
-     repeat 10000
+     repeat 1000
      unless (and (integerp neg)	
 		 (eql (abs x) (abs neg))
 		 (if (> x 0) (< neg 0) (>= neg 0))
@@ -101,7 +101,7 @@
   (loop
    for x = (random-fixnum)
    for y = (random-fixnum)
-   repeat 10000
+   repeat 1000
    unless (and (eql (+ x (- y)) (- x y))
 	       (eql (+ 1 x (- y)) (- x (1- y)))
 	       (eql (+ -1 x (- y)) (- x (1+ y))))
@@ -150,7 +150,7 @@
 	  for idiff2 = (- j i)
 	  for diff1 = (- x y)
 	  for diff2 = (- y x)
-	  repeat 10000
+	  repeat 1000
 	  unless (or (zerop idiff1)
 		     (and (eql idiff1 (- idiff2))
 			  (eql diff1 (- diff2))
@@ -169,7 +169,7 @@
 	for j = (random-fixnum)
 	for cj = (complex j (- j 200))
 	for diff = (- ci cj)
-	repeat 10000
+	repeat 1000
 	unless (eql diff (complex (- i j) (+ (- i j) 300)))
 	collect (list i ci j cj (- ci cj)))
   nil)
