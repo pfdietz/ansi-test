@@ -156,6 +156,7 @@
    (eval
     '(let ((obj (make-instance 'change-class-class-01a))
 	   (new-class (find-class 'change-class-class-01b)))
+       (declare (optimize (safety 3)))
        (eqt obj (change-class obj new-class :nonsense t))))
    (error () :expected-error))
   :expected-error)
@@ -417,6 +418,11 @@
   t
   (t nil nil)
   123)
+
+;;
+;; This next test seems to fail everywhere, but I don't understand why.
+;; Much gratitude if someone can explain what's wrong here.
+;;
 
 (deftest change-class.6.3
   (let* ((class (find-class 'change-class-class-06))
