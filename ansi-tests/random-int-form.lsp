@@ -52,6 +52,8 @@
 
 (declaim (special *s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
 
+(defparameter *loop-random-int-form-period* 2000)
+
 (defun loop-random-int-forms (&optional (size 200) (nvars 3))
   (unless (boundp '$x) (setq $x nil))
   (unless (boundp '$y) (setq $y nil))
@@ -60,7 +62,9 @@
    do
    (format t "~6D | " i)
    (finish-output *standard-output*)
-   (let ((x (test-random-integer-forms size nvars 2000)))
+   (let ((x (test-random-integer-forms
+	     size nvars *loop-random-int-form-period*
+	     :index (* (1- i) *loop-random-int-form-period*))))
      (when x
        (setq $x (append $x x))
        (setq x (prune-results x))
@@ -92,7 +96,9 @@
   (type t))
 
 (defun test-random-integer-forms
-  (size nvars n &optional (*random-state* (make-random-state t)))
+  (size nvars n &key ((:random-state *random-state*) (make-random-state t))
+	(file-prefix "b")
+	(index 0))
 
   "Generate random integer forms of size SIZE with NVARS variables.
    Do this N times, returning all those on which a discrepancy
@@ -112,7 +118,10 @@
 	     ;; #+sbcl (print "Do gc...")
 	     ;; #+sbcl (sb-ext::gc :full t)
 	     (prin1 i) (princ " ") (finish-output *standard-output*))
-	nconc (let ((result (test-random-integer-form size nvars)))
+	nconc (let ((result (test-random-integer-form
+			     size nvars
+			     :index (+ index i)
+			     :file-prefix file-prefix)))
 		(when result
 		  (let ((*print-readably* t))
 		    (format t "~%~A~%" (format nil "~S" (car result)))
@@ -120,8 +129,9 @@
 		result)))
 
 (defun test-random-integer-form
-  (size nvars &aux (vars (subseq '(a b c d e f g h i j k l m
-				     n o p q r s u v w x y z) 0 nvars)))
+  (size nvars &key (index 0) (file-prefix "b")
+	&aux (vars (subseq '(a b c d e f g h i j k l m
+			       n o p q r s u v w x y z) 0 nvars)))
   (let* ((var-ranges (mapcar #'make-random-integer-range vars))
 	 (var-types (mapcar #'(lambda (range)
 				(let ((lo (car range))
@@ -149,14 +159,21 @@
 	 (opt-decls-1 (make-random-optimize-settings))
 	 (opt-decls-2 (make-random-optimize-settings)))
     (when *print-immediately*
-      (print `(:vars ,vars
- 		     :var-types ,var-types
-		     :vals-list ,vals-list
-		     :decls1 ,opt-decls-1
-		     :decls2 ,opt-decls-2
-		     :form ,form))
-      (finish-output)
-      ;; (cl-user::gc)
+      (with-open-file
+       (s (format nil "~A~A.lsp" file-prefix index)
+	  :direction :output :if-exists :error)
+       (print `(defparameter *x*
+		 '(:vars ,vars
+		      :var-types ,var-types
+		      :vals-list ,vals-list
+		      :decls1 ,opt-decls-1
+		      :decls2 ,opt-decls-2
+		      :form ,form))
+	      s)
+       (print '(load "c.lsp") s)
+       (finish-output s))
+       ;; (cl-user::gc)
+       (make-list 1000000) ;; try to trigger a gc
       )
     (test-int-form form vars var-types vals-list opt-decls-1 opt-decls-2)))
 
@@ -370,6 +387,18 @@
 	  (let ((e1 (make-random-integer-form leftsize))
 		(e2 (make-random-integer-form rightsize)))
 	    `(,op ,e1 ,e2)))))
+
+     ;; boole
+     (4
+      (let* ((op (random-from-seq
+		  #(boole-1 boole-2 boole-and boole-andc1 boole-andc2
+		    boole-c1 boole-c2 boole-clr boole-eqv boole-ior boole-nand
+		    boole-nor boole-orc1 boole-orc2 boole-set boole-xor))))
+	(destructuring-bind (leftsize rightsize)
+	    (random-partition (- size 2) 2)
+	  (let ((e1 (make-random-integer-form leftsize))
+		(e2 (make-random-integer-form rightsize)))
+	    `(boole ,op ,e1 ,e2)))))	    
 
      ;; n-ary ops
      (30
@@ -814,9 +843,8 @@
 					      :decls2 opt-decls-2
 					      :compiler-condition
 					      (with-output-to-string
-						(*standard-output*)
-						(let ((*print-escape* t))
-						  (prin1 c)))))))))
+						(s)
+						(prin1 c s))))))))
 	     (let ((start-time (get-universal-time)))
 	       (prog1
 		   (if *compile-using-defun*
@@ -863,15 +891,19 @@
 		    (identity ;; multiple-value-list
 		     (apply unoptimized-compiled-fn vals))
 		    ((or error serious-condition)
-		     (c) (declare (ignore c))
-			   (%eval-error :unoptimized-form-error))))
+		     (c)
+		     (%eval-error (list :unoptimized-form-error
+					(with-output-to-string
+					  (s) (prin1 c s)))))))
 		  (opt-result
 		   (cl:handler-case
 		    (identity ;; multiple-value-list
 		     (apply optimized-compiled-fn vals))
 		    ((or error serious-condition)
-		     (c) (declare (ignore c))
-			   (%eval-error :optimized-form-error)))))
+		     (c)
+		     (%eval-error (list :optimized-form-error
+					(with-output-to-string
+					  (s) (prin1 c s))))))))
 	      (if (equal opt-result unopt-result)
 		  nil
 		(progn
@@ -993,6 +1025,14 @@
 		       (eql (caar args) 'tagbody))
 	    (mapc try-fn args))
 	  (prune-fn form try-fn))
+
+	 ((boole)
+	  (try (second args))
+	  (try (third args))
+	  (prune (second args)
+		 #'(lambda (form) (try `(boole ,(first args) ,form ,(third args)))))
+	  (prune (third args)
+		 #'(lambda (form) (try `(boole ,(first args) ,(second args) ,form)))))
 
 	 ((unwind-protect prog1 multiple-value-prog1)
 	  (try (first args))
