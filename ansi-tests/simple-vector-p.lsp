@@ -63,9 +63,9 @@
 ;;; Error tests
 
 (deftest simple-vector-p.error.1
-  (classify-error (simple-vector-p))
-  program-error)
+  (signals-error (simple-vector-p) program-error)
+  t)
 
 (deftest simple-vector-p.error.2
-  (classify-error (simple-vector-p #(a b) nil))
-  program-error)
+  (signals-error (simple-vector-p #(a b) nil) program-error)
+  t)

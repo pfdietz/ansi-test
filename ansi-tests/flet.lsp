@@ -375,14 +375,14 @@
 
 (deftest flet.49
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(classify-error (flet ((,s () 'a)) (,s)))
+	for form = `(ignore-errors (flet ((,s () 'a)) (,s)))
 	unless (eq (eval form) 'a)
 	collect s)
   nil)
 
 (deftest flet.50
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(classify-error (flet ((,s () 'a))
+	for form = `(ignore-errors (flet ((,s () 'a))
 				      (declare (ftype (function () symbol)
 						      ,s))
 				      (,s)))
@@ -393,7 +393,7 @@
 ;;; Binding SETF functions of certain COMMON-LISP symbols
 (deftest flet.51
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(classify-error
+	for form = `(ignore-errors
 		     (flet (((setf ,s) (&rest args)
 			     (declare (ignore args))
 			     'a))

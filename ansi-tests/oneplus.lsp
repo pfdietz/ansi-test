@@ -8,16 +8,16 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest 1+.error.1
-  (classify-error (1+))
-  program-error)
+  (signals-error (1+) program-error)
+  t)
 
 (deftest 1+.error.2
-  (classify-error (1+ 0 0))
-  program-error)
+  (signals-error (1+ 0 0) program-error)
+  t)
 
 (deftest 1+.error.3
-  (classify-error (1+ 0 nil nil))
-  program-error)
+  (signals-error (1+ 0 nil nil) program-error)
+  t)
 
 (deftest 1+.1
   (loop for x = (random-fixnum)

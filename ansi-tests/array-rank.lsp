@@ -37,9 +37,8 @@
 
 (deftest array-rank.error.3
   (loop for e in *mini-universe*
-	when (and (not (typep e 'array))
-		  (not (eq (classify-error** `(array-rank ',e))
-			   'type-error)))
+	unless (or (typep e 'array)
+		   (eval `(signals-error (array-rank ',e) type-error)))
 	collect e)
   nil)
 

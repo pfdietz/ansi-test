@@ -45,13 +45,11 @@
   t)
 
 (deftest array-total-size.error.3
-  (let (why)
-    (loop for e in *mini-universe*
-	  when (and (not (typep e 'array))
-		    (not (eql (setq why 
-				    (classify-error** `(array-total-size ',e)))
-			      'type-error)))
-	collect (list e why)))
+  (loop for e in *mini-universe*
+	unless (or (typep e 'array)
+		   (eval `(signals-error (array-total-size ',e)
+					 type-error)))
+	collect e)
   nil)
 
 (deftest array-total-size.error.4

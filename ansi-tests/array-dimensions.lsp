@@ -51,13 +51,11 @@
   t)
 
 (deftest array-dimensions.error.3
-  (let (why)
-    (loop for e in *mini-universe*
-	  unless (or (typep e 'array)
-		     (eq 'type-error
-			 (setq why (classify-error**
-				    `(array-dimensions ',e)))))
-	  collect (list e why)))
+  (loop for e in *mini-universe*
+	unless (or (typep e 'array)
+		   (eval `(signals-error (array-dimensions ',e)
+					 type-error)))
+	collect e)
   nil)
 
 (deftest array-dimensions.error.4

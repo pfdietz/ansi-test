@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest ensure-generic-function.1
-  (subtypep* (classify-error (ensure-generic-function 'car)) 'error)
-  t t)
+  (signals-error (ensure-generic-function 'car) error)
+  t)
 
 (deftest ensure-generic-function.2
-  (subtypep* (classify-error (ensure-generic-function 'defclass)) 'error)
-  t t)
+  (signals-error (ensure-generic-function 'defclass) error)
+  t)
 
 (deftest ensure-generic-function.3
-  (subtypep* (classify-error (ensure-generic-function 'tagbody)) 'error)
-  t t)
+  (signals-error (ensure-generic-function 'tagbody) error)
+  t)
 
 (deftest ensure-generic-function.4
   (let ((f 'egf-fun-4))
@@ -51,17 +51,17 @@
      (notnot-mv (eval `(defmethod ,f ((a t)(b t)(c t)) (list a b c))))
      ;; Test of incongruent generic function lambda list when no
      ;; methods exist
-     (subtypep*
-      (classify-error** `(ensure-generic-function ',f :lambda-list '(x y)))
-      'error)))
+     (eval
+      `(signals-error (ensure-generic-function ',f :lambda-list '(x y))
+		      error))))
   nil t t t)
 
 ;;; Many more tests are needed for other combinations of keyword parameters
 
 (deftest ensure-generic-function.error.1
-  (classify-error (ensure-generic-function))
-  program-error)
+  (signals-error (ensure-generic-function) program-error)
+  t)
 
 (deftest ensure-generic-function.error.2
-  (classify-error (ensure-generic-function (gensym) :lambda-list))
-  program-error)
+  (signals-error (ensure-generic-function (gensym) :lambda-list) program-error)
+  t)

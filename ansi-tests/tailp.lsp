@@ -37,16 +37,16 @@
   nil)
 
 (deftest tailp.error.5
-  (classify-error (tailp))
-  program-error)
+  (signals-error (tailp) program-error)
+  t)
 
 (deftest tailp.error.6
-  (classify-error (tailp nil))
-  program-error)
+  (signals-error (tailp nil) program-error)
+  t)
 
 (deftest tailp.error.7
-  (classify-error (tailp nil nil nil))
-  program-error)
+  (signals-error (tailp nil nil nil) program-error)
+  t)
 
 ;; Test that tailp does not modify its arguments
 
