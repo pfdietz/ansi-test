@@ -2156,7 +2156,7 @@
     nil
     '(lambda (a)
      (labels ((%f6 (f6-1 f6-2)
-		   (handler-case
+		   (cl:handler-case
 		    (labels ((%f2 nil (logior a)))
 		      (if (eql (%f2) (%f2))
 			  2829254 -10723))
