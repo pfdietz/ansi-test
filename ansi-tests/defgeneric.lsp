@@ -690,3 +690,24 @@
 
   (x nil) (x c))
 
+(defclass defgeneric.29.class.1 () ())
+(defclass defgeneric.29.class.2 () ())
+(defclass defgeneric.29.class.3
+  (defgeneric.29.class.1 defgeneric.29.class.2)
+  ())
+
+(deftest defgeneric.29
+  (let ((fn
+	 (eval '(defgeneric defgeneric.fun.29 (x &key)
+		  (:method ((x defgeneric.29.class.1) &key foo) foo)
+		  (:method ((x defgeneric.29.class.2) &key bar) bar)))))
+    (let ((x (make-instance 'defgeneric.29.class.3)))
+      (values
+       (funcall fn x)
+       (funcall fn x :foo 'a)
+       (funcall fn x :bar 'b)
+       (funcall fn x :foo 'a :bar 'b)
+       (funcall fn x :bar 'b :foo 'a))))
+  nil a nil a a)
+
+  
