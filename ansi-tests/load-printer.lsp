@@ -28,3 +28,4 @@
 (load "pprint-dispatch.lsp")
 (load "pprint-fill.lsp")
 (load "pprint-linear.lsp")
+(load "pprint-tabular.lsp")
