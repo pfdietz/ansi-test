@@ -11,3 +11,5 @@
 #-lispworks (load "subtypep-cons.lsp")
 (load "subtypep-member.lsp")
 (load "subtypep-eql.lsp")
+(load "subtypep-array.lsp")
+

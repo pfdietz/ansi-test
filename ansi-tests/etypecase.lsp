@@ -52,3 +52,10 @@
 (deftest etypecase.11
   (etypecase 1 (integer) (t 'a))
   nil)
+
+(deftest etypecase.12
+  (etypecase 'a
+    (number 'bad)
+    (#.(find-class 'symbol nil) 'good))
+  good)
+

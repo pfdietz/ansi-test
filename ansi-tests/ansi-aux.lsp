@@ -1419,3 +1419,10 @@ the condition to go uncaught if it cannot be classified."
 (defun frob-simple-warning (c expected-fmt &rest expected-args)
   (and (typep c 'simple-warning)
        (apply #'frob-simple-condition c expected-fmt expected-args)))
+
+(defparameter *array-element-types*
+  '(t (integer 0 0)
+      bit (unsigned-byte 8) (unsigned-byte 16)
+      (unsigned-byte 32) float short-float
+      single-float double-float long-float
+      nil character base-char symbol boolean null))

@@ -78,3 +78,11 @@
 ;;; (deftest ctypecase.error.1
 ;;;  (classify-error (ctypecase))
 ;;;  program-error)
+
+
+(deftest ctypecase.13
+  (ctypecase 'a
+	     (number 'bad)
+	     (#.(find-class 'symbol nil) 'good))
+  good)
+

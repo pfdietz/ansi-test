@@ -89,6 +89,50 @@
       (error "an error"))))
   good)
 
+(deftest handler-bind.13
+  (handler-bind
+   ((error #'(lambda (c) (declare (ignore c))
+	       (throw 'done 'good))))
+   (catch 'done
+     (error "an error")))
+  good)
+
+(deftest handler-bind.14
+  (catch 'done
+    (handler-bind
+     ((symbol #'identity)  ;; can never succeed
+      (error #'(lambda (c) (declare (ignore c))
+		 (throw 'done 'good))))
+     (error "an error")))
+  good)
+
+(deftest handler-bind.15
+  (catch 'done
+    (handler-bind
+     ((t #'(lambda (c) (declare (ignore c))
+	     (throw 'done 'good))))
+     (error "an error")))
+  good)
+
+(deftest handler-bind.16
+  (catch 'done
+    (handler-bind
+     (((not error) #'identity)
+      (error
+       #'(lambda (c) (declare (ignore c))
+	   (throw 'done 'good))))
+     (error "an error")))
+  good)
+
+(deftest handler-bind.17
+  (catch 'done
+    (handler-bind
+     ((#.(find-class 'error)
+	 #'(lambda (c) (declare (ignore c))
+	     (throw 'done 'good))))
+     (error "an error")))
+  good)
+
 ;;; More handler-bind tests elsewhere
 
 

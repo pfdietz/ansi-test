@@ -64,3 +64,9 @@
 (deftest typecase.14
   (typecase 1 (symbol 'a) (otherwise))
   nil)
+
+(deftest typecase.15
+  (typecase 'a
+    (number 'bad)
+    (#.(find-class 'symbol nil) 'good))
+  good)
