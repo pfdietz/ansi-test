@@ -40,7 +40,7 @@
   (let (result)
     (values
      (with-output-to-string
-       (*standard-input*)
+       (*standard-output*)
        (setq result (multiple-value-list (fresh-line))))
      result))
   "" (nil))

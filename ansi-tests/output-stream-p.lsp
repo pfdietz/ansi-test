@@ -37,6 +37,6 @@
 (deftest output-stream-p.error.3
   (loop for x in *mini-universe*
 	unless (or (typep x 'stream)
-		   (eval `(signals-error (output-stream-p ',x) 'type-error)))
+		   (eval `(signals-error (output-stream-p ',x) type-error)))
 	collect x)
   nil)
