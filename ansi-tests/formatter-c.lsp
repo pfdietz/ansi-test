@@ -63,7 +63,8 @@
 	      (list s ignored n))))
      collect it))
   nil)
-(deftest format.c.2a
+
+(deftest formatter.c.2a
   (let ((fn (formatter "~:C")))
     (loop
      with count = 0
