@@ -8788,3 +8788,37 @@ Broken at C::WT-MAKE-CLOSURE.
    -26179151369)
   -24004952244)
 
+;;; gcl 18 Dec 2004
+;;; Doesn't cause an error, unless -Werror is added to gcc flags
+;;; gazonk0.c: In function `L1':
+;;; gazonk0.c:5257: warning: assignment makes integer from pointer without a cast
+
+(deftest misc.462
+  (funcall
+   (compile nil '(lambda (a b)
+		   (declare (type (integer -2726808666112 -26532) a))
+		   (declare (type (integer 182701814 171137312256) b))
+		   (declare (ignorable a b))
+		   (declare (optimize (compilation-speed 3) (safety 0)
+				      (speed 3) (space 3) (debug 3)))
+		   (ash (let* ((v8 (cons 0 0))) 0) (min 15 a))))
+   -1982565461868 46279989780)
+  0)
+
+;;; gazonk0.c: In function `L1':
+;;; gazonk0.c:5262: warning: assignment makes integer from pointer without a cast
+(deftest misc.463
+  (funcall
+   (compile nil '(lambda (a b)
+		   (declare (type (integer 0 0) a))
+		   (declare (type (integer -160364747008 264742845184) b))
+		   (declare (ignorable a b))
+		   (declare (optimize (debug 0) (safety 0)
+				      (compilation-speed 2) (space 0)
+				      (speed 1)))
+		   (ash (multiple-value-setq (a) 0) (min 97 13027666096))))
+   0 34670845086)
+  0)
+
+    
+
