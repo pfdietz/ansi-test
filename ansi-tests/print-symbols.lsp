@@ -588,29 +588,43 @@
    (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
      (when (find-package pkg-name)
        (delete-package pkg-name))
-     (prog1
-	 (let* ((pkg (make-package pkg-name))
-		(*package* (find-package "CL-TEST"))
-		(s (intern "ABC" pkg)))
-	   (write-to-string s :case :upcase :readably nil :escape t))
-       ;; (delete-package pkg)
-       )))
-  "PRINT-SYMBOL-TEST-PACKAGE::ABC")
+     (let ((pkg (make-package pkg-name)))
+       (multiple-value-prog1
+	(let* ((*package* (find-package "CL-TEST"))
+	       (s (intern "ABC" pkg)))
+	  (values
+	   (write-to-string s :case :upcase :readably nil :escape t)
+	   (let ((*package* pkg))
+	     (write-to-string s :case :upcase :readably nil :escape t))
+	   (let ((*package* pkg))
+	     (write-to-string s :case :downcase :readably nil :escape t))
+	   ))
+	;; (delete-package pkg)
+	))))
+  "PRINT-SYMBOL-TEST-PACKAGE::ABC"
+  "ABC"
+  "abc")
 
 
 (deftest print.symbol.prefix.6
+  (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
+    (when (find-package pkg-name)
+      (delete-package pkg-name))
+    (let ((pkg (make-package pkg-name)))
+      (prog1
+	  (with-standard-io-syntax
+	   (let* ((*package* pkg)
+		  (s (intern "X" pkg)))
+	     (write-to-string s :case :upcase :readably nil))
+	   ;; (delete-package pkg)
+	   ))))
+  "X")
+
+(deftest print.symbol.prefix.6a
   (with-standard-io-syntax
-   (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
-     (when (find-package pkg-name)
-       (delete-package pkg-name))
-     (prog1
-	 (let* ((pkg (make-package pkg-name))
-		(*package* pkg)
-		(s (intern "ABC" pkg)))
-	   (write-to-string s :case :upcase :readably nil :escape t))
-       ;; (delete-package pkg)
-       )))
-  "ABC")
+   (let ((*package* (find-package "CL-TEST")))
+     (write-to-string 'x :case :upcase :readably nil)))
+  "X")
 
 (deftest print.symbol.prefix.7
   (with-standard-io-syntax
@@ -681,11 +695,4 @@
        ;; (delete-package pkg)
        )))
   ":X")
-
-
-
-
-
-
-
 
