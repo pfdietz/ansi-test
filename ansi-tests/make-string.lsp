@@ -76,6 +76,14 @@
 	 ))
   t)
 
+(deftest make-string.10
+  (let ((s (make-string 0 :element-type nil)))
+    (values
+     (notnot (stringp s))
+     (eqlt (length s) 0)
+     (equalt s "")))
+  t t t)
+
 ;;; Keyword tests
 ;
 (deftest make-string.allow-other-keys.1
