@@ -409,10 +409,15 @@
 (defclass class-15 ()
   ((s1 :initarg :allow-other-keys :reader s1)))
 
-(deftest class-15.1
-  (let ((c (make-instance 'class-15)))
-    (s1 c))
-  nil)
+;;; Dicussion on comp.lang.lisp convinced me this test was bogus.
+;;; The default value of :allow-other-keys specified in 7.1.2 is not
+;;; the same as the default value forms, specified by :default-initargs,
+;;; that are used to produce the defaulted initialization argument list.
+
+;;; (deftest class-15.1
+;;;  (let ((c (make-instance 'class-15)))
+;;;    (s1 c))
+;;;  nil)
 
 (deftest class-15.2
   (let ((c (make-instance 'class-15 :allow-other-keys nil)))
@@ -691,6 +696,8 @@
 
 ;;; We can't portably get at the docstring of slots
 
+;;;
+
 (defclass class-23 ()
   (s1 s2 s3)
   (:documentation "This is class-23 in ansi-tests"))
@@ -716,3 +723,64 @@
     (or (null doc)
 	(equalt doc "This is class-23 in ansi-tests")))
   t)
+
+;;;
+
+(defclass class-24 ()
+  ((s1 :initarg :allow-other-keys :reader s1))
+  (:default-initargs :allow-other-keys t))
+
+(deftest class-24.1
+  (s1 (make-instance 'class-24))
+  t)
+
+(deftest class-24.2
+  (s1 (make-instance 'class-24 :nonsense t))
+  t)
+
+(deftest class-24.3
+  (s1 (make-instance 'class-24 :allow-other-keys nil))
+  nil)
+
+(deftest class-24.4
+  (s1 (make-instance 'class-24 :allow-other-keys 'a :foo t))
+  a)
+
+;;;
+
+(defclass class-25 ()
+  ((s1 :initarg :allow-other-keys :reader s1))
+  (:default-initargs :allow-other-keys nil))
+
+(deftest class-25.1
+  (s1 (make-instance 'class-25))
+  nil)
+
+(deftest class-25.2
+  (s1 (make-instance 'class-25 :allow-other-keys t))
+  t)
+
+(deftest class-25.3
+  (s1 (make-instance 'class-25 :allow-other-keys t :foo nil))
+  t)
+
+(deftest class-25.4
+  (s1 (make-instance 'class-25 :allow-other-keys t :allow-other-keys nil))
+  t)
+
+(deftest class-25.5
+  (s1 (make-instance 'class-25 :allow-other-keys t :allow-other-keys nil
+		     :foo t))
+  t)
+
+(deftest class-25.6
+  (s1 (make-instance 'class-25 :allow-other-keys 'foo :allow-other-keys 'bar))
+  foo)
+
+
+
+
+
+
+
+  
