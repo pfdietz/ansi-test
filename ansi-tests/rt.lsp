@@ -71,11 +71,9 @@
        (list* (name ,var) (form ,var) (vals ,var)))))
 
 (defun pending-tests ()
-  (do ((l (cdr *entries*) (cdr l))
-       (r nil))
-      ((null l) (nreverse r))
-    (when (pend (car l))
-      (push (name (car l)) r))))
+  (loop for entry in (cdr *entries*)
+	when (and (pend entry) (not (has-disabled-note entry)))
+	collect (name entry)))
 
 (defun rem-all-tests ()
   (setq *entries* (list nil))
