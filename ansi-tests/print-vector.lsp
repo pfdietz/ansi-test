@@ -252,7 +252,9 @@
 	when (vectorp v)
 	nconc
 	(loop repeat 10
-	      nconc (randomly-check-readability v :test #'equalp)))
+	      nconc (randomly-check-readability
+		     v :test #'equalp
+		     :can-fail (not (subtypep t (array-element-type v))))))
   nil)
 
 (deftest print.vector.random.2
@@ -262,7 +264,8 @@
 			    :initial-contents '(1 3 2 0))
 	nconc
 	(loop repeat 10
-	      nconc (randomly-check-readability v :test #'equalp)))
+	      nconc (randomly-check-readability v :test #'equalp
+						:can-fail t)))
   nil)
 
 (deftest print.vector.random.3
@@ -272,7 +275,8 @@
 			    :initial-contents '(-1 1 0 -2))
 	nconc
 	(loop repeat 10
-	      nconc (randomly-check-readability v :test #'equalp)))
+	      nconc (randomly-check-readability v :test #'equalp
+						:can-fail t)))
   nil)
 
 ;;; *print-length* checks

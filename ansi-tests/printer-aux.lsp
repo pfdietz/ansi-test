@@ -23,6 +23,7 @@
 ;;; argument TEST is used to compared the reread object and obj.
 
 (defun randomly-check-readability (obj &key
+				       (can-fail nil)
 				       (test #'equal)
 				       (readable t)
 				       (escape nil escape-p)
@@ -51,10 +52,17 @@
 	 (readcase (random-from-seq #(:upcase :downcase :preserve :invert)))
 	 )
      (setf (readtable-case *readtable*) readcase)
-     (let* ((str (with-output-to-string (s) (write obj :stream s)))
+     (let* ((str (handler-case
+		  (with-output-to-string (s) (write obj :stream s))
+		  (print-not-readable
+		   ()
+		   (if can-fail
+		       (return-from randomly-check-readability nil)
+		     ":print-not-readable-error"))))
 	    (obj2 (let ((*read-base* *print-base*))
 		    (handler-case
-		     (let ((*readtable* (if *print-readably* (copy-readtable nil)
+		     (let ((*readtable* (if *print-readably*
+					    (copy-readtable nil)
 					  *readtable*)))
 		       (read-from-string str))
 		     (reader-error () :error)))))
