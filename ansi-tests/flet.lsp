@@ -380,3 +380,13 @@
 ;;;   (flet ((%f (&key (a :good) &allow-other-keys) a))
 ;;;     (%f 10 20)))
 ;;;  :good)
+
+
+(deftest flet.45
+  (flet ((nil () 'a)) (nil))
+  a)
+
+(deftest flet.46
+  (flet ((t () 'b)) (t))
+  b)
+

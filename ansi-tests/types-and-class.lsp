@@ -257,7 +257,27 @@
 	collect sym)
   nil)
 
+;;; Confirm that all standard generic functions are instances of
+;;; the class standard-generic-function.
 
+(deftest all-standard-generic-functions-are-instances-of-that-class
+  (loop for sym in *cl-standard-generic-function-symbols*
+	for fun = (and (fboundp sym) (symbol-function sym))
+	unless (and (typep fun 'generic-function)
+		    (typep fun 'standard-generic-function))
+	collect (list sym fun))
+  nil)
+
+
+;;; Canonical metaobjects are in the right classes
+
+(deftest structure-object-is-in-structure-class
+  (notnot-mv (typep (find-class 'structure-object) 'structure-class))
+  t)
+
+(deftest standard-object-is-in-standard-class
+  (notnot-mv (typep (find-class 'standard-object) 'standard-class))
+  t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
