@@ -11,3 +11,4 @@
 (load "min.lsp")
 (load "minusp.lsp")
 (load "plusp.lsp")
+(load "zerop.lsp")
