@@ -22,3 +22,4 @@
 (load "slot-value.lsp")
 (load "method-qualifiers.lsp")
 (load "no-applicable-method.lsp")
+(load "no-next-method.lsp")

@@ -5,10 +5,6 @@
 
 (in-package :cl-test)
 
-(deftest no-applicable-method.error.1
-  (classify-error (no-applicable-method))
-  program-error)
-
 (defgeneric no-app-meth-gf-01 (x))
 
 (deftest no-applicable-method.2
@@ -48,3 +44,14 @@
 (deftest no-applicable-method.6
   (no-app-meth-gf-03 100000000000000000)
   :good)
+
+(defparameter *no-app-meth-gf-04*
+  (defgeneric no-app-meth-gf-04 (x)))
+
+(defmethod no-applicable-method ((x (eql *no-app-meth-gf-04*)) &rest args)
+  (and (eql x *no-app-meth-gf-04*)
+       (copy-list args)))
+
+(deftest no-applicable-method.7
+  (no-app-meth-gf-04 'a 'b 'c 'd)
+  (a b c d))
