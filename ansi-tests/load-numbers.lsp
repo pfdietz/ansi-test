@@ -31,6 +31,10 @@
 (load "acos.lsp")
 (load "atan.lsp")
 
+(load "sinh.lsp")
+(load "cosh.lsp")
+
+
 (load "times.lsp")
 (load "plus.lsp")
 (load "minus.lsp")
