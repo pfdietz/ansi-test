@@ -53,6 +53,8 @@
   nil)
 |#
 
+;;; Test that setting the pprint dispatch of a symbol causes
+;;; the printing to change, and that it can be unset.
 (deftest pprint-dispatch.3
   (my-with-standard-io-syntax
    (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
@@ -70,6 +72,8 @@
 	(write-to-string '|X|)))))
   "X" nil "ABC" nil "X")
        
+;;; Test that setting the pprint dispatch of a symbol causes
+;;; the printing to change for any real weight, and that it can be unset.
 (deftest pprint-dispatch.4
   (my-with-standard-io-syntax
    (loop for v1 in (remove-if-not #'realp *universe*)
@@ -92,6 +96,8 @@
 	 collect v1))
   nil)
   
+;;; Test that setting the pprint dispatch of a symbol causes
+;;; the printing to change, and that it can be unset with any real weight
 (deftest pprint-dispatch.5
   (my-with-standard-io-syntax
    (loop for v1 in (remove-if-not #'realp *universe*)
@@ -114,6 +120,8 @@
 	 collect v1))
   nil)
 
+;;; Check that specifying the pprint-dispatch table argument to set-pprint-dispatch
+;;; causes that table to be changed, not *print-pprint-dispatch*.
 (deftest pprint-dispatch.6
   (my-with-standard-io-syntax
    (let ((other-ppd-table (copy-pprint-dispatch nil))
@@ -135,3 +143,55 @@
 	(set-pprint-dispatch '(eql |X|) nil)
 	(write-to-string '|X|)))))
   "X" nil "X" "ABC" nil "ABC" nil "X")
+
+;;; Test that the default weight of set-pprint-dispatch is 0
+
+(deftest pprint-dispatch.7
+  (my-with-standard-io-syntax
+   (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
+	 (*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t))
+     (let ((f #'(lambda (stream obj)
+		  (declare (ignore obj))
+		  (write "ABC" :stream stream)))
+	   (g #'(lambda (stream obj)
+		  (declare (ignore obj))
+		  (write "DEF" :stream stream))))
+       (values
+	(write-to-string '|X|)
+	(set-pprint-dispatch '(eql |X|) f)
+	(write-to-string '|X|)
+	(set-pprint-dispatch '(member |X| |Y|) g .0001)
+	(write-to-string '|X|)
+	(write-to-string '|Y|)))))
+  "X" nil "ABC" nil "DEF" "DEF")
+
+(deftest pprint-dispatch.8
+  (my-with-standard-io-syntax
+   (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
+	 (*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t))
+     (let ((f #'(lambda (stream obj)
+		  (declare (ignore obj))
+		  (write "ABC" :stream stream)))
+	   (g #'(lambda (stream obj)
+		  (declare (ignore obj))
+		  (write "DEF" :stream stream))))
+       (values
+	(write-to-string '|X|)
+	(set-pprint-dispatch '(eql |X|) f)
+	(write-to-string '|X|)
+	(set-pprint-dispatch '(member |X| |Y|) g -.0001)
+	(write-to-string '|X|)
+	(write-to-string '|Y|)))))
+  "X" nil "ABC" nil "ABC" "DEF")
+
+
+
+
+			     
+
+	
+	
