@@ -296,6 +296,72 @@
 	  collect (list x y p)))
   nil)
 
+(deftest *.24
+  (loop
+   for type in '(short-float single-float double-float long-float)
+   for bits in '(13 24 50 50)
+   for bound = (ash 1 (floor bits 2))
+   nconc
+   (loop for i = (random bound)
+	 for x = (coerce i type)
+	 for j = (random bound)
+	 for y = (coerce j type)
+	 for prod = (* x y)
+	 repeat 10000
+	 unless (and (eql prod (coerce (* i j) type))
+		     (eql prod (* y x)))
+	 collect (list i j x y (* x y) (coerce (* i j) type))))
+  nil)
+
+(deftest *.25
+  (loop
+   for type in '(short-float single-float double-float long-float)
+   for bits in '(13 24 50 50)
+   for bound = (ash 1 (- bits 2))
+   when (= (float-radix (coerce 1.0 type)) 2)
+   nconc
+   (loop for i = (random bound)
+	 for x = (coerce i type)
+	 for j = (* i 2)
+	 for y = (coerce j type)
+	 repeat 1000
+	 unless (eql (* 2 x) y)
+	 collect (list i j x (* 2 x) y)))
+  nil)
+
+;;; Shows a compiler bug in sbcl/cmucl
+(deftest *.26
+  (eqlt (funcall (compile nil
+			  '(lambda (x y)
+			     (declare (type (single-float -10.0 10.0) x)
+				      (type (double-float -1.0d100 1.0d100) y))
+			     (* x y)))
+		 1.0f0 1.0d0)
+	1.0d0)
+  t)
+
+(deftest *.27
+  (loop
+   for type in '(short-float single-float double-float long-float)
+   for bits in '(13 24 50 50)
+   for bound = (ash 1 (floor bits 2))
+   nconc
+   (loop for i = (random bound)
+	 for x = (coerce i type)
+	 for j = (random bound)
+	 for y = (coerce j type)
+	 for one = (coerce 1.0 type)
+	 for cx = (complex 1.0 x)
+	 for cy = (complex 1.0 y)
+	 for prod = (* cx cy)
+	 repeat 10000
+	 unless (and (eql prod (complex (coerce (- 1 (* i j)) type)
+					(coerce (+ i j) type)))
+		     (eql prod (* cy cx)))
+	 collect (list i j x y (* cx cy))))
+  nil)
+
+
 (deftest times.order.1
   (let ((i 0) x y)
     (values
