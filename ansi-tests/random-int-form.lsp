@@ -406,21 +406,37 @@
 
 (defun make-optimized-lambda-form (form vars var-types)
   `(lambda ,vars
+     #|
      (declare ,@(mapcar #'(lambda (tp var)
 			    `(type ,tp ,var))
 			var-types vars)
 	      (ignorable ,@vars)
 	      (optimize #+cmu (extensions:inhibit-warnings 3)
 			(speed 3) (safety 1) (debug 1)))
+     |#
+     ,@(mapcar #'(lambda (tp var) `(declare (type ,tp ,var)))
+	       var-types vars)
+     (declare (ignorable ,@vars))
+     #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+     (declare (optimize (speed 3)))
+     (declare (optimize (safety 1)))
+     (declare (optimize (debug 1)))
      ,form))
 
 (defun make-unoptimized-lambda-form (form vars var-types)
   (declare (ignore var-types))
   `(lambda ,vars
+     #|
      (declare (notinline ,@(fn-symbols-in-form form))
 	      (optimize #+cmu (extensions:inhibit-warnings 3)
 			(safety 3) (speed 0) (debug 3))
 	      (ignorable ,@vars))
+     |#
+     (declare (notinline ,@(fn-symbols-in-form form)))
+     #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+     (declare (optimize (safety 3)))
+     (declare (optimize (speed 0)))
+     (declare (optimize (debug 0)))
      ,form))
 
 (defun test-int-form (form vars var-types vals-list)
