@@ -10,4 +10,7 @@
 (load "define-symbol-macro.lsp")
 (load "defmacro.lsp")
 (load "the.lsp")
+(load "symbol-macrolet.lsp")
+(load "locally.lsp")
+
 
