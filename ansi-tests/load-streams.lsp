@@ -31,3 +31,8 @@
 (load "stream-external-format.lsp")
 (load "with-open-file.lsp")
 (load "listen.lsp")
+(load "clear-input.lsp")
+(load "finish-output.lsp")
+(load "force-output.lsp")
+(load "clear-output.lsp")
+
