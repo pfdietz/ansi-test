@@ -9,6 +9,7 @@
 ;;; Tests of data and control flow
 
 (load "places.lsp")
+(load "call-arguments-limit.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
 (load "fboundp.lsp")
@@ -19,6 +20,7 @@
 (load "functionp.lsp")
 (load "labels.lsp")
 (load "lambda-list-keywords.lsp")
+(load "lambda-parameters-limit.lsp")
 (load "macrolet.lsp")
 
 ;;; Tests of conses
