@@ -34,3 +34,4 @@
 (load "pprint-exit-if-list-exhausted.lsp")
 (load "pprint-newline.lsp")
 (load "pprint-tab.lsp")
+(load "print-unreadable-object.lsp")
