@@ -12,6 +12,9 @@
 ;;; Tests of iteration forms
 (load "load-iteration.lsp")
 
+;;; Tests of objects
+(load "load-objects.lsp")
+
 ;;; Tests of conditions
 (load "load-conditions.lsp")
 

@@ -58,10 +58,12 @@
   program-error)
 
 (deftest defclass.error.9
-  (classify-error
-   (defclass defclass-error-9 ()
-     (foo bar)
-     (#:unknown-class-option nil)))
+  (let ((option (gentemp "UNKNOWN-OPTION" (symbol-package :foo))))
+    (eval
+     `(classify-error
+       (defclass defclass-error-9 ()
+	 (foo bar)
+	 (,option nil)))))
   program-error)
 
 

@@ -192,11 +192,11 @@
 	   when (slot-boundp instance slot)
 	   collect (list 'is-bound slot))
      (loop for slot in slot-names
-	   (unless (equal (multiple-value-list
+	   unless (equal (multiple-value-list
 			   (notnot-mv (slot-exists-p instance slot)))
 			  '(t))
-	     (list 'does-not-exist slot)))
-     (let ((bad-slot #:foo))
+	   collect (list 'does-not-exist slot))
+     (let ((bad-slot '#:foo))
        (when (slot-exists-p instance bad-slot)
 	 (list (list 'should-not-exist bad-slot))))
      )))
