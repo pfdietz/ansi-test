@@ -143,3 +143,10 @@ condition itself on other errors."
 
 (defun is-eq-p (x) #'(lambda (y) (eq x y)))
 (defun is-not-eq-p (x) #'(lambda (y) (not (eq x y))))
+
+(defun char-invertcase (c)
+  (if (upper-case-p c) (char-downcase c)
+    (char-upcase c)))
+
+(defun string-invertcase (s)
+  (map 'string #'char-invertcase s))
