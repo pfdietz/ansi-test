@@ -8772,3 +8772,19 @@ Broken at C::WT-MAKE-CLOSURE.
 		   0))))
    50395193)
   0)
+
+;;; gcl 16 Dec 2004
+;;; Error possibly related to type propagation
+
+(deftest misc.461
+  (funcall
+   (compile nil '(lambda (a)
+		   (declare (type (integer -26657952320 0) a))
+		   (declare (optimize (compilation-speed 0) (space 3) (speed 3)
+				      (safety 0) (debug 2)))
+		   (- a
+		      (ash -1 (min 31 (- a)))
+		      -26715477)))
+   -26179151369)
+  -24004952244)
+
