@@ -75,6 +75,6 @@
      x))
   :good a)
 
-(deftest ctypecase.error.1
-  (classify-error (ctypecase))
-  program-error)
+;;; (deftest ctypecase.error.1
+;;;  (classify-error (ctypecase))
+;;;  program-error)

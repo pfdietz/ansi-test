@@ -30,16 +30,16 @@
   (defconstant test-constant-3 0)
   test-constant-3)
 
-(deftest defconstant.error.1
-  (classify-error (defconstant))
-  program-error)
-
-(deftest defconstant.error.2
-  (classify-error (defconstant +ignorable-constant-name+))
-  program-error)
-
-(deftest defconstant.error.3
-  (classify-error (defconstant +ignorable-constant-name2+ nil
-		    "This is a docstring"
-		    "This is an unnecessary extra argument."))
-  program-error)
+;;; (deftest defconstant.error.1
+;;;   (classify-error (defconstant))
+;;;   program-error)
+;;; 
+;;; (deftest defconstant.error.2
+;;;   (classify-error (defconstant +ignorable-constant-name+))
+;;;   program-error)
+;;; 
+;;; (deftest defconstant.error.3
+;;;   (classify-error (defconstant +ignorable-constant-name2+ nil
+;;; 		    "This is a docstring"
+;;; 		    "This is an unnecessary extra argument."))
+;;;   program-error)

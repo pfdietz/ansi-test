@@ -63,3 +63,11 @@
       (block done (mapcar #'%f '(good bad bad))))
     'bad)
   good)
+
+#|
+(deftest return.error.1
+  (classify-error
+   (block nil
+     (return 'a 'b)))
+  program-error)
+|#

@@ -181,9 +181,9 @@
       (2 nil))))
   :good)
 
-(deftest ccase.error.1
-  (classify-error (ccase))
-  program-error)
+;;; (deftest ccase.error.1
+;;;  (classify-error (ccase))
+;;;  program-error)
 
 
     

@@ -97,3 +97,12 @@
 (deftest destructuring-bind.error.4
   (classify-error (destructuring-bind (a . b) 'x (list a b)))
   program-error)
+
+(deftest destructuring-bind.error.5
+  (classify-error (destructuring-bind))
+  program-error)
+
+(deftest destructuring-bind.error.6
+  (classify-error (destructuring-bind x))
+  program-error)
+

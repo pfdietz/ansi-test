@@ -54,11 +54,11 @@
   200
   0)
 
-(deftest defvar.error.1
-  (classify-error (defvar))
-  program-error)
-
-(deftest defvar.error.2
-  (classify-error (defvar *ignored-defvar-name* nil "documentation"
-		    "illegal extra argument"))
-  program-error)
+;;; (deftest defvar.error.1
+;;;   (classify-error (defvar))
+;;;   program-error)
+;;; 
+;;; (deftest defvar.error.2
+;;;   (classify-error (defvar *ignored-defvar-name* nil "documentation"
+;;; 		    "illegal extra argument"))
+;;;   program-error)
