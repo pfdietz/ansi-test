@@ -403,3 +403,14 @@
      (funcall g nil)
      (funcall f)))
   nil a nil nil)
+
+;;; Error tests
+
+(deftest copy-structure.error.1
+  (classify-error (copy-structure))
+  program-error)
+
+(deftest copy-structure.error.2
+  (classify-error (copy-structure (make-s-2) nil))
+  program-error)
+

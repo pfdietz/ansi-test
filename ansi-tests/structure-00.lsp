@@ -10,7 +10,7 @@
   ;; (declare (type (or string symbol character) structure-name)
   ;;  (type fixnum n))
   (assert (typep structure-name '(or string symbol character)))
-  (assert (typep n 'fixnum))
+  ;; (assert (typep n 'fixnum))
   (setf structure-name (string structure-name))
   (intern (concatenate 'string
 	    structure-name
@@ -285,12 +285,21 @@ do the defstruct."
        ;; Test that the predicate exists
        ,@(when p-fn
 	   `((deftest ,(make-struct-test-name name 2)
-	       (and (fboundp (quote ,p-fn))
-		    (functionp (function ,p-fn))
-		    (symbol-function (quote ,p-fn))
-		    (notnot (funcall #',p-fn (,make-fn)))
-		    (notnot (,p-fn (,make-fn))))
-	       t)))
+	       (let ((s (,make-fn)))
+		 (and (fboundp (quote ,p-fn))
+		      (functionp (function ,p-fn))
+		      (symbol-function (quote ,p-fn))
+		      (notnot (funcall #',p-fn s))
+		      (notnot (,p-fn s))
+		      ))
+	       t)
+	     (deftest ,(make-struct-test-name name "ERROR.1")
+	       (classify-error (,p-fn))
+	       program-error)
+	     (deftest ,(make-struct-test-name name "ERROR.2")
+	       (classify-error (,p-fn (,make-fn) nil))
+	       program-error)
+	     ))
 
        ;; Test that the elements of *universe* are not
        ;; of this type
@@ -317,14 +326,39 @@ do the defstruct."
 		   (list* (intern (string slot-name) "KEYWORD")
 			  (list 'quote initval)
 			  inits))
-	     (push `(and (eqlt (quote ,initval)
-			       (,field-fn ,var))
-			 (eqlt (quote ,initval)
-			       (funcall #',field-fn ,var)))
+	     (push `(and 
+		     (eqlt (quote ,initval)
+			   (,field-fn ,var))
+		     (eqlt (quote ,initval)
+			   (funcall #',field-fn ,var)))
 		   tests))
 	    `(let ((,var (,make-fn . ,inits)))
 	       (and ,@tests t)))
 	 t)
+
+       (deftest ,(make-struct-test-name name "ERROR.3")
+	 (remove nil
+		 (list
+		  ,@(loop
+		     for (slot-name . initval) in initial-value-alist
+		     for field-fn in field-fns
+		     collect
+		     `(let ((x (classify-error (,field-fn))))
+			(unless (eqt x 'program-error)
+			  (list ',slot-name ',field-fn x))))))
+	 nil)
+
+       (deftest ,(make-struct-test-name name "ERROR.4")
+	 (remove nil
+		 (list
+		  ,@(loop
+		     for (slot-name . initval) in initial-value-alist
+		     for field-fn in field-fns
+		     collect
+		     `(let ((x (classify-error (,field-fn (,make-fn) nil))))
+			(unless (eqt x 'program-error)
+			  (list ',slot-name ',field-fn x))))))
+	 nil)
 
        ;; Check that two invocations return different structures
        (deftest ,(make-struct-test-name name 6)
@@ -357,7 +391,14 @@ do the defstruct."
 		    (functionp (function ,copy-fn))
 		    (symbol-function (quote ,copy-fn))
 		    t)
-	       t)))
+	       t)
+	     (deftest ,(make-struct-test-name name "ERROR.5")
+	       (classify-error (,copy-fn))
+	       program-error)
+	     (deftest ,(make-struct-test-name name "ERROR.6")
+	       (classify-error (,copy-fn (,make-fn) nil))
+	       program-error)
+	     ))	     
 
        ;; Check that the copy function properly copies fields
        ,@(when copy-fn

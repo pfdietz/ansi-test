@@ -61,4 +61,8 @@
   (notnot (constantp ''(((foo)))))
   t)
 
+(deftest constantp.10
+  (notnot (constantp 'pi))
+  t)
+
 
