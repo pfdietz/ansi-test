@@ -763,3 +763,16 @@
 		   (truncate (max (round a) c) (* (* a a) a))))
    -10 1000)
   -1 0)
+
+(deftest misc.57
+  (funcall
+   (compile nil '(lambda (a b c)
+                         (declare (type (integer -1907 58388940297) a)
+                                  (type (integer -646968358 294016) b)
+                                  (type (integer -708435313 89383896) c)
+                                  (optimize (speed 3) (safety 1) (debug 1)))
+                         (let ((v6 (abs (min a (signum c)))))
+                              (if (ceiling v6 (max 77 v6)) b 2))))
+   50005747335 -363030456 17382819)
+  -363030456)
+
