@@ -15,6 +15,8 @@
 (load "gclload1.lsp")
 (load "gclload2.lsp")
 
+(setq rt::*compile-tests* t)
+
 #+allegro
 (progn
   (rt:disable-note :nil-vectors-are-strings)
@@ -25,3 +27,6 @@
 
 (in-package :cl-test)
 (time (regression-test:do-tests))
+
+#+allegro :exit
+#+(or cmucl sbcl gcl) (quit)

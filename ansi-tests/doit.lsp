@@ -25,3 +25,6 @@
 
 (in-package :cl-test)
 (time (regression-test:do-tests))
+
+#+allegro (cl-user::exit)
+#+(or cmucl sbcl gcl armedbear) (cl-user::quit)

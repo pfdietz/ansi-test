@@ -23,6 +23,7 @@
      #:defnote
      #:my-aref
      #:*catch-errors*
+     #:disable-note
      )))
 
 (in-package :regression-test)
