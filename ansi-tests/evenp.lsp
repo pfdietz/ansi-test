@@ -62,4 +62,18 @@
 	  collect x))
   nil)
 
-			
+(deftest evenp.5
+  (notnot-mv (evenp 0))
+  t)
+
+(deftest evenp.6
+  (evenp 1)
+  nil)
+
+(deftest evenp.7
+  (notnot-mv (evenp 100000000000000000000000000000000))
+  t)
+
+(deftest evenp.8
+  (evenp 100000000000000000000000000000001)
+  nil)

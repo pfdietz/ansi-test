@@ -62,4 +62,20 @@
 	  collect x))
   nil)
 
+(deftest oddp.5
+  (notnot-mv (oddp 1))
+  t)
+
+(deftest oddp.6
+  (oddp 0)
+  nil)
+
+(deftest oddp.7
+  (notnot-mv (oddp 100000000000000000000000000000001))
+  t)
+
+(deftest oddp.8
+  (oddp 100000000000000000000000000000000)
+  nil)
+
 			
