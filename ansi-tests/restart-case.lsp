@@ -186,5 +186,61 @@
       (foo () 'good))))
   good)
 
+(deftest restart-case.26
+  (let ((c2 (make-condition 'error))
+	(c1 (make-condition 'error)))
+    (handler-bind
+     ((error #'(lambda (c) (invoke-restart (find-restart 'foo c)))))
+     (restart-case
+      (restart-case
+       (signal (progn (signal c2) c1))
+       (foo () 'bad))
+      (foo () 'good))))
+  good)
 
+(deftest restart-case.27
+  (let ((c2 (make-condition 'error)))
+    (handler-bind
+     ((error #'(lambda (c) (invoke-restart (find-restart 'foo c)))))
+     (restart-case
+      (restart-case
+       (cerror "Boo!" (signal c2))
+       (foo () 'bad))
+      (foo () 'good))))
+  good)
+
+(deftest restart-case.28
+  (let ((c2 (make-condition 'warning)))
+    (handler-bind
+     ((warning #'(lambda (c) (invoke-restart (find-restart 'foo c)))))
+     (restart-case
+      (restart-case
+       (warn "Boo!" (signal c2))
+       (foo () 'bad))
+      (foo () 'good))))
+  good)
+
+(deftest restart-case.29
+  (macrolet ((%m (&rest args) (cons 'error args)))
+    (let ((c2 (make-condition 'error)))
+      (handler-bind
+       ((error #'(lambda (c) (invoke-restart (find-restart 'foo c)))))
+       (restart-case
+	(restart-case
+	 (%m "Boo!" (signal c2))
+	 (foo () 'bad))
+	(foo () 'good)))))
+  good)
+
+(deftest restart-case.30
+  (symbol-macrolet ((%m (error "Boo!" (signal c2))))
+    (let ((c2 (make-condition 'error)))
+      (handler-bind
+       ((error #'(lambda (c) (invoke-restart (find-restart 'foo c)))))
+       (restart-case
+	(restart-case
+	 %m
+	 (foo () 'bad))
+	(foo () 'good)))))
+  good)
 
