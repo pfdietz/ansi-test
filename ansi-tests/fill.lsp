@@ -238,9 +238,179 @@
   t
   "zzzzz")
 
+(deftest fill.string.5
+  (let* ((s1 "aaaaaaaa")
+	 (len (length s1)))
+    (loop for start from 0 to (1- len)
+	  always
+	  (loop for end from (1+ start) to len
+		always
+		(let* ((s2 (copy-seq s1))
+		       (s3 (fill s2 #\z :start start :end end)))
+		  (and (eqt s2 s3)
+		       (string= s3
+				(substitute-if #\z (constantly t) s1
+					       :start start :end end))
+		       t)))))
+  t)
 
+(deftest fill.string.6
+  (let* ((s1 "aaaaaaaa")
+	 (len (length s1)))
+    (loop for start from 0 to (1- len)
+	  always
+	  (let* ((s2 (copy-seq s1))
+		 (s3 (fill s2 #\z :start start)))
+	    (and (eqt s2 s3)
+		 (string= s3
+			  (substitute-if #\z (constantly t) s1
+					 :start start))
+		 t))))
+  t)
 
+(deftest fill.string.7
+  (let* ((s1 "aaaaaaaa")
+	 (len (length s1)))
+    (loop for start from 0 to (1- len)
+	  always
+	  (let* ((s2 (copy-seq s1))
+		 (s3 (fill s2 #\z :end nil :start start)))
+	    (and (eqt s2 s3)
+		 (string= s3
+			  (substitute-if #\z (constantly t) s1
+					 :end nil :start start))
+		 t))))
+  t)
 
+(deftest fill.string.8
+  (let* ((s1 "aaaaaaaa")
+	 (len (length s1)))
+    (loop for end from 1 to len
+	  always
+	  (let* ((s2 (copy-seq s1))
+		 (s3 (fill s2 #\z :end end)))
+	    (and (eqt s2 s3)
+		 (string= s3
+			  (substitute-if #\z (constantly t) s1
+					 :end end))
+		 t))))
+  t)
 
-	
-  
+(deftest fill.string.9
+  (let* ((s1 (make-array '(8) :element-type 'character
+			 :initial-element #\a
+			 :fill-pointer 4))
+	 (s2 (fill s1 #\a)))
+    (and (eqt s1 s2)
+	 (coerce (loop for i from 0 to 7 collect (aref s2 i))
+		 'string)))
+  "aaaazzzz")
+
+(deftest fill.string.10
+  (let* ((s1 (make-array '(8) :element-type 'base-char
+			 :initial-element #\a
+			 :fill-pointer 4))
+	 (s2 (fill s1 #\a)))
+    (and (eqt s1 s2)
+	 (coerce (loop for i from 0 to 7 collect (aref s2 i))
+		 'base-string)))
+  "aaaazzzz")
+
+;;; Tests for bit vectors
+
+(deftest fill.bit-vector.1
+  (let* ((s1 (copy-seq #*01100))
+	 (s2 (fill s1 0)))
+    (values (eqt s1 s2) s2))
+  t
+  #*00000)
+
+(deftest fill.bit-vector.2
+  (let* ((s1 (copy-seq #*00100))
+	 (s2 (fill s1 1 :start 0 :end 1)))
+    (values (eqt s1 s2) s2))
+  t
+  #*10100)
+
+(deftest fill.bit-vector.3
+  (let* ((s1 (copy-seq #*00010))
+	 (s2 (fill s1 1 :end 2)))
+    (values (eqt s1 s2) s2))
+  t
+  #*11010)
+
+(deftest fill.bit-vector.4
+  (let* ((s1 (copy-seq #*00111))
+	 (s2 (fill s1 0 :end nil)))
+    (values (eqt s1 s2) s2))
+  t
+  #*00000)
+
+(deftest fill.bit-vector.5
+  (let* ((s1 #*00000000)
+	 (len (length s1)))
+    (loop for start from 0 to (1- len)
+	  always
+	  (loop for end from (1+ start) to len
+		always
+		(let* ((s2 (copy-seq s1))
+		       (s3 (fill s2 1 :start start :end end)))
+		  (and (eqt s2 s3)
+		       (equalp s3
+			       (substitute-if 1 (constantly t) s1
+					      :start start :end end))
+		       t)))))
+  t)
+
+(deftest fill.bit-vector.6
+  (let* ((s1 #*11111111)
+	 (len (length s1)))
+    (loop for start from 0 to (1- len)
+	  always
+	  (let* ((s2 (copy-seq s1))
+		 (s3 (fill s2 0 :start start)))
+	    (and (eqt s2 s3)
+		 (equalp s3
+			 (substitute-if 0 (constantly t) s1
+					:start start))
+		 t))))
+  t)
+
+(deftest fill.bit-vector.7
+  (let* ((s1 #*00000000)
+	 (len (length s1)))
+    (loop for start from 0 to (1- len)
+	  always
+	  (let* ((s2 (copy-seq s1))
+		 (s3 (fill s2 1 :end nil :start start)))
+	    (and (eqt s2 s3)
+		 (equalp s3
+			 (substitute-if 1 (constantly t) s1
+					:end nil :start start))
+		 t))))
+  t)
+
+(deftest fill.bit-vector.8
+  (let* ((s1 #*11111111)
+	 (len (length s1)))
+    (loop for end from 1 to len
+	  always
+	  (let* ((s2 (copy-seq s1))
+		 (s3 (fill s2 0 :end end)))
+	    (and (eqt s2 s3)
+		 (equalp s3
+			 (substitute-if 0 (constantly t) s1
+					:end end))
+		 t))))
+  t)
+
+(deftest fill.bit-vector.9
+  (let* ((s1 (make-array '(8) :element-type 'bit
+			 :initial-element 0
+			 :fill-pointer 4))
+	 (s2 (fill s1 1)))
+    (and (eqt s1 s2)
+	 (coerce (loop for i from 0 to 7 collect (aref s2 i))
+		 'bit-vector)))
+  #*11110000)
+
