@@ -36,15 +36,17 @@
 (deftest pathname-match-p.5
   (let ((pn1 (make-pathname :directory '(:relative :wild)))
 	(pn2 (make-pathname :directory nil)))
-    (pathname-match-p pn1 pn2))
+    (and (wild-pathname-p pn1)
+	 (not (pathname-directory pn2))
+	 (not (pathname-match-p pn1 pn2))))
   nil)
 
 (deftest pathname-match-p.6
   (let ((pn1 (make-pathname :version :wild))
 	(pn2 (make-pathname)))
     (and (wild-pathname-p pn1)
-	 (not (wild-pathname-p pn2))
-	 (pathname-match-p pn1 pn2)))
+	 (not (pathname-version pn2))
+	 (not (pathname-match-p pn1 pn2))))
   nil)
 
 ;;; Here are error tests
