@@ -16,3 +16,4 @@
 (load "print-characters.lsp")
 (load "print-symbols.lsp")
 (load "print-strings.lsp")
+(load "print-cons.lsp")
