@@ -8,6 +8,9 @@
 (eval-when (load eval compile)
   (compile-and-load "random-int-form.lsp"))
 
+(defvar *print-random-type-prop-input* nil)
+(defparameter *random-type-prop-result* nil)
+
 (defgeneric make-random-type-containing (val)
   (:documentation
    "Given a value, generate a random type that contains that value."))
@@ -41,10 +44,11 @@
 			    for tp in param-types
 			    when x
 			    collect `(type ,tp ,p)))
-	  (result2 (multiple-value-list (apply operator vals)))
-	  (result-type (if (and enclosing-the (integerp (car result2)))
-			   (make-random-type-containing (car result2))
+	  (rval (apply operator vals))
+	  (result-type (if (and enclosing-the (integerp rval))
+			   (make-random-type-containing rval)
 			 t))
+	  (upgraded-result-type (upgraded-array-element-type `(eql ,rval)))
 	  (expr `(,operator ,@(loop for x in is-var?
 				    for v in vals
 				    for p in param-names
@@ -55,41 +59,59 @@
 						 (1 p))
 					      v))))
 	  (form
-	   `(lambda ,params
+	   `(lambda (r ,@params)
 	      (declare (optimize speed (safety 1))
+		       (type (simple-array ,upgraded-result-type nil) r)
 		       ,@ type-decls)
-	      ,(if enclosing-the `(the ,result-type ,expr) expr)))
-	  (param-vals (loop for x in is-var?
-			    for v in vals
-			    when x collect v))
-	  (fn (cl:handler-bind
-	       (#+sbcl (sb-ext::compiler-note #'muffle-warning)
-		       (warning #'muffle-warning))
-	       (compile nil form)))
-	  (result1 (multiple-value-list (apply fn param-vals))))
-     (unless (equal result1 result2)
-       (return (list :form form
-		     :vals vals
-		     :result1 result1
-		     :result2 result2))))))
+	      (setf (aref r)
+		    ,(if enclosing-the `(the ,result-type ,expr) expr))
+	      (values))))
+     (when *print-random-type-prop-input*
+       (let ((*print-pretty* t)
+	     (*print-case* :downcase))
+	 (print (list :form form :vals vals))))
+     (finish-output)
+     (let* ((param-vals (loop for x in is-var?
+			      for v in vals
+			      when x collect v))
+	    (fn (cl:handler-bind
+		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
+			 (warning #'muffle-warning))
+		 (compile nil form)))
+	    (r (make-array nil :element-type upgraded-result-type))
+	    (result (progn (apply fn r param-vals) (aref r))))
+       (setq *random-type-prop-result*
+	     (list :upgraded-result-type upgraded-result-type
+		   :form form
+		   :vals vals
+		   :result result
+		   :rval rval))
+       (unless (equal result rval)
+	 (return *random-type-prop-result*))))))
 
 (defmethod make-random-type-containing ((val integer))
   (rcase
-   (1 (random-from-seq '(t number real rational)))
+   (2 (let ((tp (random-from-seq '(t number real rational))))
+	(if #-allegro (coin) #+allegro nil
+	    (find-class tp) tp)))
    (1 (random-from-seq '(integer signed-byte)))
-   (1 `(eql ,val))
-   (1 (rcase (1 `(member ,(make-random-integer) ,val))
-	     (1 `(member ,val ,(make-random-integer)))))
-   (2 (let ((lo (abs (make-random-integer))))
+   #- allegro (1 (find-class 'integer))
+   (2 `(eql ,val))
+   (2 (let* ((n1 (random 4))
+	     (n2 (random 4))
+	     (l1 (loop repeat n1 collect (make-random-integer)))
+	     (l2 (loop repeat n2 collect (make-random-integer))))
+	`(member ,@l1 ,val ,@l2)))
+   (4 (let ((lo (abs (make-random-integer))))
 	`(integer ,(- val lo))))
-   (2 (let ((lo (abs (make-random-integer))))
+   (4 (let ((lo (abs (make-random-integer))))
 	`(integer ,(- val lo) *)))
-   (2 (let ((hi (abs (make-random-integer))))
+   (4 (let ((hi (abs (make-random-integer))))
 	`(integer * ,(+ val hi))))
-   (4 (let ((lo (abs (make-random-integer)))
+   (8 (let ((lo (abs (make-random-integer)))
 	    (hi (abs (make-random-integer))))
 	`(integer ,(- val lo) ,(+ val hi))))
-   (1 (if (>= val 0) `unsigned-byte
+   (2 (if (>= val 0) `unsigned-byte
 	(make-random-type-containing val)))))
 
 
