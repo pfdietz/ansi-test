@@ -5975,6 +5975,29 @@ Broken at C::WT-C-INLINE-LOC.
    2)
   0)
 
+(deftest misc.320b
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -690191 -454473) a))
+       (declare (type (integer -459197 -62) b))
+       (declare (type (integer 445621505781 8489194559765) c))
+       (declare (ignorable a b c))
+       (declare
+	(optimize (speed 1)
+		  (space 0)
+		  (safety 2)
+		  (debug 3)
+		  (compilation-speed 3)))
+       (elt '(3327764 3386241)
+	    (min 1
+		 (max 0
+		      (reduce #'(lambda (lmv6 lmv5) (mod 0 (min -86 0)))
+			      (list 0 0)))))))
+   -512398 -156405 1140919327630)
+  3327764)  
+
 ;;; ecl
 ;;; Wrong value
 
@@ -6657,3 +6680,29 @@ Broken at C::WT-C-INLINE-LOC.
       done)
     c)
   :good)
+
+;;; sbcl bugs (0.8.10.4)
+
+;;; failed AVER: "(SUBSETP END END-STACK)"
+(deftest misc.361
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline boole values denominator list))
+       (declare
+	(optimize (speed 2)
+		  (space 0)
+		  (safety 1)
+		  (debug 0)
+		  (compilation-speed 2)))
+       (catch 'ct6
+	 (progv
+	     '(*s8*)
+	     (list 0)
+	   (let ((v9 (ignore-errors (throw 'ct6 0))))
+	     (denominator
+	      (progv nil nil (values (boole boole-and 0 v9)))))))))
+   1 2 3)
+  0)
+
