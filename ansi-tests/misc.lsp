@@ -6812,3 +6812,23 @@ Broken at C::WT-C-INLINE-LOC.
                  0))
   0)
 
+;;; OpenMCL/darwin bug (12 May 2004)
+(deftest misc.365
+  (let* ((fn1
+	  '(lambda (a b c)
+	     (declare (type (integer -2 21) a))
+	     (declare (type (integer -5651364356 4324101092) b))
+	     (declare (type (integer -30766087 28182568) c))
+	     (declare (ignorable a b c))
+	     (declare (optimize (speed 3) (space 1) (safety 3) (debug 0) (compilation-speed 1)))
+	     (coerce (logxor b -1) 'integer)))
+	 (fn2
+	  '(lambda (a b c)
+	     (declare (notinline logxor coerce))
+	     (declare (optimize (speed 3) (space 0) (safety 3) (debug 2) (compilation-speed 2)))
+	     (coerce (logxor b -1) 'integer)))
+	 (vals '(9 -328421075 -6406890))
+	 (v1 (apply (compile nil fn1) vals))
+	 (v2 (apply (compile nil fn2) vals)))
+    (if (eql v1 v2) :good (list v1 v2)))
+  :good)
