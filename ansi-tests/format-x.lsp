@@ -162,7 +162,7 @@
 		       (loop for i from (if (< i 0) 2 1) below len
 			     always (if (= (mod (- len i) ci+1) 0)
 					(eql (elt s2 i) commachar)
-				      (find (elt s2 i) "0123456789ABCDEF")))))
+				      (find (elt s2 i) "0123456789ABCDEF" :test #'char-equal)))))
 	 collect (list x i commachar s1 s2)))
   nil)
 
