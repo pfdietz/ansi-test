@@ -9,6 +9,12 @@
   (cond
    ((subtypep* 'fixnum type)
     (random most-positive-fixnum))
+   ((and (listp type)
+	 (eql (car type) 'integer)
+	 (integerp (cadr type))
+	 (integerp (caddr type))
+	 (null (cdddr type)))
+    (+ (cadr type) (random (- (1+ (caddr type)) (cadr type)))))
    ((subtypep* '(integer 0 255) type)
     (random 255))
    ((subtypep* '(integer 0 7) type)
@@ -131,7 +137,12 @@
 
 (defun make-random-rd-params (maxlen)
   "Generate random paramaters for remove/delete/etc. functions."
-  (let* ((element-type t)
+  (let* ((element-type
+	  (rcase
+	   (2 t)
+	   (1 'bit)
+	   (1 '(integer 0 2))
+	   (1 'symbol)))
 	 (type-select (random 7))
 	 (type
 	  (case type-select

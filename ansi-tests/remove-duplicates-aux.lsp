@@ -86,7 +86,7 @@
 			 seq1 arg-list))
 	   (seq2r (apply #'my-remove-duplicates seq2 arg-list)))
       (cond
-       ((and pure (not (equalp seq seq1))) :fail1)
-       ((and pure (not (equalp seq seq2))) :fail2)
-       ((not (equalp seq1r seq2r)) :fail3)
+       ((and pure (not (equalp seq seq1))) (list :fail1 seq seq1r seq2r arg-list))
+       ((and pure (not (equalp seq seq2))) (list :fail2 seq seq1r seq2r arg-list))
+       ((not (equalp seq1r seq2r)) (list :fail3 seq seq1r seq2r arg-list))
        (t t)))))

@@ -5,17 +5,22 @@
 
 (in-package :cl-test)
 
+(compile-and-load "remove-aux.lsp")
 (compile-and-load "remove-duplicates-aux.lsp")
 
 (deftest random-remove-duplicates
-  (loop for i from 1 to 5000
-	always (random-test-remove-dups 20))
-  t)
+  (loop for result = (random-test-remove-dups (1+ (random 20)))
+	repeat 1000
+	unless (eq result t)
+	collect result)
+  nil)
 
 (deftest random-delete-duplicates
-  (loop for i from 1 to 5000
-	always (random-test-remove-dups 20 nil))
-  t)
+  (loop for result = (random-test-remove-dups (1+ (random 20)) nil)
+	repeat 1000
+	unless (eq result t)
+	collect result)
+  nil)
 
 ;;; Look for :KEY NIL bugs
 
