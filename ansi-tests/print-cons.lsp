@@ -59,6 +59,22 @@
    10)
   nil)
 
+;; random circular cons graphs
+(deftest print.cons.random.2
+  (loop repeat 50
+	nconc
+	(let* ((n 50)
+	       (conses (apply #'vector
+			      (loop repeat n collect (cons nil nil)))))
+	  (loop for x across conses
+		for j = (random n)
+		for k = (random n)
+		do (setf (car x) (elt conses j)
+			 (cdr x) (elt conses k)))
+	  (randomly-check-readability (elt conses 0) :test #'is-similar
+				      :circle t)))
+  nil)
+
 ;;; Printing with *print-length*
 
 (deftest print.cons.length.1
@@ -137,3 +153,5 @@
 		    :case :downcase :level 1
 		    :readably nil :pretty nil))
   "(# #*1101 \"abc\")")
+
+
