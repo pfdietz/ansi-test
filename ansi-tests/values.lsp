@@ -36,6 +36,17 @@
   (values 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
 
+(deftest values.20
+  (let (a b c d e f)
+    (setf (values a (values b c) (values d) (values e f)) (values 0 1 2 3 4 5 6))
+    (list a b c d e f))
+  (0 1 nil 2 3 nil))
+
+(deftest values.21
+  (let (a b c d e f)
+    (setf (values a (values b c) (values d) (values e f)) (values 0 1 2 3 4 5 6)))
+  0 1 2 3)
+
 (deftest values.A
   (values (values 1 2) (values 3 4 5) (values) (values 10))
   1 3 nil 10)
