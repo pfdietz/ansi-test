@@ -132,3 +132,37 @@
   (sort (loop for (nil . v) being the hash-values of *loop.6.hash.5* collect v)
 	#'symbol<)
   (a2 b2 c2))
+
+(deftest loop.6.19
+  (loop for nil being the hash-values of *loop.6.hash.5* count t)
+  3)
+
+(deftest loop.6.20
+  (loop for nil being the hash-keys of *loop.6.hash.5* count t)
+  3)
+
+(deftest loop.6.21
+  (loop for v being the hash-values of *loop.6.hash.5* using (hash-key nil) count t)
+  3)
+
+(deftest loop.6.22
+  (loop for k being the hash-keys of *loop.6.hash.5* using (hash-value nil) count t)
+  3)
+
+(deftest loop.6.23
+  (loop for v fixnum being the hash-values of *loop.6.hash.1* sum v)
+  6)
+
+(deftest loop.6.24
+  (loop for v of-type fixnum being the hash-values of *loop.6.hash.1* sum v)
+  6)
+
+
+(deftest loop.6.25
+  (loop for k fixnum being the hash-keys of *loop.6.hash.5* sum k)
+  6)
+
+(deftest loop.6.26
+  (loop for k of-type fixnum being the hash-keys of *loop.6.hash.5* sum k)
+  6)
+
