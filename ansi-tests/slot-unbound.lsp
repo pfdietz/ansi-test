@@ -34,11 +34,11 @@
   (slot-unbound-class-01 b))
 
 (defmethod slot-unbound ((class t) (obj slot-unbound-class-01)
-			 (slot-nake (eql 'e)))
+			 (slot-name (eql 'e)))
   (values))
 
 (defmethod slot-unbound ((class t) (obj slot-unbound-class-01)
-			 (slot-nake (eql 'f)))
+			 (slot-name (eql 'f)))
   (values 1 2 3))
 
 (deftest slot-unbound.3
