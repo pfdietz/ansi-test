@@ -19,6 +19,7 @@
 (load "defparameter.lsp")
 (load "defvar.lsp")
 (load "destructuring-bind.lsp")
+(load "equal.lsp")
 (load "eql.lsp")
 (load "fboundp.lsp")
 (load "flet.lsp")
