@@ -557,14 +557,15 @@
 
 (deftest print.symbol.prefix.1
   (with-standard-io-syntax
-   (let ((s (write-to-string (make-symbol "ABC") :gensym t :case :upcase)))
+   (let ((s (write-to-string (make-symbol "ABC") :gensym t :case :upcase :escape t :readably nil)))
      (if (string= s "#:ABC") t s)))
   t)
 
 (deftest print.symbol.prefix.2
   (with-standard-io-syntax
-   (let ((s (write-to-string (make-symbol "ABC") :gensym nil :case :upcase)))
+   (let ((s (write-to-string (make-symbol "ABC") :gensym nil :case :upcase :readably nil)))
      (if (string= s "ABC") t s)))
   t)
+
 
 			    
