@@ -65,4 +65,13 @@
   (notnot-mv (constantp 'pi))
   t)
 
+(deftest constantp.order.1
+  (let ((i 0) x y)
+    (values
+     (notnot (constantp (progn (setf x (incf i)) 1)
+			(progn (setf y (incf i)) nil)))
+     i x y))
+  t 2 1 2)
+
+  
 

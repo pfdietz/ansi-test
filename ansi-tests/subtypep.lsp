@@ -247,6 +247,42 @@
    '(integer 0 15))
   nil)
 
+(deftest subtypep.integer.28
+  (check-equivalence
+   '(and integer (not (eql 10)))
+   '(or (integer * 9) (integer 11 *)))
+  nil)
+
+(deftest subtypep.integer.29
+  (check-equivalence
+   '(and integer (not (integer 1 10)))
+   '(or (integer * 0) (integer 11 *)))
+  nil)
+
+(deftest subtypep.integer.30
+  (check-equivalence
+   '(and (integer -100 100) (not (integer 1 10)))
+   '(or (integer -100 0) (integer 11 100)))
+  nil)
+
+(deftest subtypep.integer.31
+  (check-equivalence
+   '(and integer (real 4 10))
+   '(integer 4 10))
+  nil)
+
+(deftest subtypep.integer.32
+  (check-equivalence
+   '(and (integer 4 *) (real * 10))
+   '(integer 4 10))
+  nil)
+
+(deftest subtypep.integer.33
+  (check-equivalence
+   '(and (integer * 10) (real 4))
+   '(integer 4 10))
+  nil)
+
 ;;;;;;;
 
 (deftest subtypep.float.1
@@ -415,6 +451,37 @@
 			   (long-float 1.0l0 3.0l0))
 		     '(long-float 1.0l0 2.0l0))
   nil)
+
+
+;;; SUBTYPEP on rational types
+
+(deftest subtypep.rational.1
+  (subtypep* '(rational 10 *) 'rational)
+  t t)
+
+(deftest subtypep.rational.2
+  (subtypep* '(rational 10) 'rational)
+  t t)
+
+(deftest subtypep.rational.3
+  (subtypep* '(rational * 10) 'rational)
+  t t)
+
+(deftest subtypep.rational.4
+  (subtypep '(rational 10 20) 'rational)
+  t t)
+
+(deftest subtypep.rational.5
+  (subtypep '(rational (10) 20) 'rational)
+  t t)
+
+(deftest subtypep.rational.6
+  (subtypep '(rational 10 (20)) 'rational)
+  t t)
+
+(deftest subtypep.rational.7
+  (subtypep '(rational (10) (20)) 'rational)
+  t t)
 
 
 
