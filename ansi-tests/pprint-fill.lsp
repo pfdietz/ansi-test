@@ -133,3 +133,22 @@
 ;;; 
 (def-pprint-fill-test pprint-fill.14 ((let ((x (list 'CL-USER::|A|))) (list x x)))
   "(#1=(A) #1#)" :circle t)
+
+;;; Error tests
+
+(deftest pprint-fill.error.1
+  (signals-error (pprint-fill) program-error)
+  t)
+
+(deftest pprint-fill.error.2
+  (signals-error (pprint-fill *standard-output*) program-error)
+  t)
+
+(deftest pprint-fill.error.3
+  (signals-error (pprint-fill *standard-output* nil t t t) program-error)
+  t)
+
+
+
+
+
