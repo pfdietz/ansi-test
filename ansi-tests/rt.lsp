@@ -256,13 +256,14 @@
 		  (length (vals entry))
 		  (vals entry))
 	  (handler-case
-	   (let ((s (format nil "Actual value~P: ~
+	   (let ((st (format nil "Actual value~P: ~
                       ~{~S~^~%~15t~}.~%"
 			    (length r) r)))
-	     (format t "~A" s))
-	   (error () #+gcl (format t "Actual value: #<error during printing>~%")
-		     #-gcl (format t "Actual value~P: #<error during printing>~%"))
-	   )))))
+	     (format s "~A" st))
+	   (error () #+gcl (format s "Actual value: #<error during printing>~%")
+		     #-gcl (format s "Actual value~P: #<error during printing>~%")))
+	  (finish-output s)
+	  ))))
   (when (not (pend entry)) *test*))
 
 (defun expanded-eval (form)
@@ -326,11 +327,14 @@
              of ~A tests total.~%"
           (count t (the list (cdr *entries*)) :key #'pend)
 	  (length (cdr *entries*)))
+  (finish-output s)
   (dolist (entry (cdr *entries*))
     (when (and (pend entry)
 	       (not (has-disabled-note entry)))
       (format s "~@[~<~%~:; ~:@(~S~)~>~]"
-	      (do-entry entry s))))
+	      (do-entry entry s))
+      (finish-output s)
+      ))
   (let ((pending (pending-tests))
 	(expected-table (make-hash-table :test #'equal)))
     (dolist (ex *expected-failures*)
