@@ -10025,3 +10025,34 @@ Broken at C::WT-MAKE-CLOSURE.
 	  (bv2 (copy-seq #*1)))
       `(lambda () (eq ,bv1 ,bv2)))))
   nil)
+
+;;; Lispworks personal edition 4.3 (x86 linux)
+;;; Error: In PLUSP of (#C(1123113 -260528)) arguments should be of type REAL.
+
+(deftest misc.543
+  (funcall
+   (compile
+    nil
+    '(lambda (p1)
+        (declare (optimize speed (safety 1))
+		 ; (type (simple-array t nil) r)
+		 (type (integer 2493220 2495515) p1))
+	(* p1 #c(1123113 -260528))))
+   2493726)
+  #C(2800736089038 -649685447328))
+
+;;; gcl
+
+(deftest misc.544
+  (let ((n -1.0l0))
+    (notnot-mv
+     (complexp
+      (funcall
+       (compile
+	nil
+	`(lambda (p1)
+	   (declare (optimize speed (safety 1))
+		    (type (long-float ,n 0.0l0) p1))
+	   (sqrt p1)))
+	 n))))
+  t)
