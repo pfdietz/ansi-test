@@ -57,3 +57,28 @@
   :notes (:nil-vectors-are-strings)
   (notnot-mv (stringp (make-array '(37) :element-type nil)))
   t)
+
+(deftest stringp.11
+  (notnot (stringp (make-array 4 :element-type 'base-char
+			       :fill-pointer 2
+			       :initial-contents '(#\a #\b #\c #\d))))
+  t)
+
+(deftest stringp.12
+  (notnot (stringp (make-array 4 :element-type 'base-char
+			       :adjustable t
+			       :initial-contents '(#\a #\b #\c #\d))))
+  t)
+
+(deftest stringp.13
+  (notnot (stringp (make-array 4 :element-type 'character
+			       :fill-pointer 2
+			       :initial-contents '(#\a #\b #\c #\d))))
+  t)
+
+(deftest stringp.14
+  (notnot (stringp (make-array 4 :element-type 'character
+			       :adjustable t
+			       :initial-contents '(#\a #\b #\c #\d))))
+  t)
+
