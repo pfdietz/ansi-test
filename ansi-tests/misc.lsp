@@ -6145,6 +6145,68 @@ Broken at C::WT-C-INLINE-LOC.
    -12715609319989 -582329850697)
   12715609319989)
 
+(deftest misc.331
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -777352478 239900) a))
+       (declare (type (integer -63500163479 -8671) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 3) (space 0) (safety 0) (debug 2)
+			  (compilation-speed 3)))
+       (if (if (>= 0) t t) (setq b -25319949896) b)))
+   0 -10000)
+  -25319949896)
+
+;;; Debugger invoked on condition of type TYPE-ERROR:
+;;;   The value 0 is not of type org.armedbear.lisp.Symbol@80f563d8.
+(deftest misc.332
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (notinline max logorc1 numerator rem))
+       (declare (optimize (speed 3) (space 1) (safety 1) (debug 1)
+			  (compilation-speed 2)))
+       (rem (progn (tagbody (numerator (logorc1 0 (go tag5)))
+			    tag5)
+		   0)
+	    (max 93 0))))
+   -801 17641908)
+  0)
+
+;;; Debugger invoked on condition of type TYPE-ERROR:
+;;;   The value #<THREAD @ #x15c40eb> is not of type org.armedbear.lisp.Symbol@80f563d8.
+
+(deftest misc.333
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (notinline logxor))
+       (declare (optimize (speed 3) (space 0) (safety 0) (debug 3)
+			  (compilation-speed 3)))
+       (logxor (progn (tagbody (let* ((*s4* (progn (go 1) 0))) 0)
+			       1)
+		      0)))))
+  0)
+
+;;; Debugger invoked on condition of type PROGRAM-ERROR:
+;;;  Wrong number of arguments for EXPT.
+(deftest misc.334
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 1892675246514 8763564964618) a))
+       (declare (type (integer -1353 -456) b))
+       (declare (type (integer 2010840649 2119165101) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 3) (space 2) (safety 0) (debug 2)
+			  (compilation-speed 1)))
+       (+ (block b6 (expt (return-from b6 b) 0)))))
+   3966745735633 -1123 2030094113)
+  -1123)
 
 
-    
