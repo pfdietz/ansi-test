@@ -21,3 +21,33 @@
 	 (invoke-debugger cnd)))
    'bad)
   good)
+
+(deftest invoke-debugger.error.1
+  (classify-error (invoke-debugger))
+  program-error)
+
+(deftest invoke-debugger.error.2
+  (classify-error (invoke-debugger (make-condition 'simple-error) nil))
+  program-error)
+
+;;; If the debugger hook function expects the wrong number
+;;; of arguments, a program-error should be thrown in safe code
+;;; This error is thrown 'prior to entry to the standard debugger'.
+
+(deftest invoke-debugger.error.3
+  (classify-error
+   (let ((*debugger-hook* #'(lambda () nil)))
+     (invoke-debugger (make-condition 'simple-error))))
+  program-error)
+
+(deftest invoke-debugger.error.4
+  (classify-error
+   (let ((*debugger-hook* #'(lambda (c) c)))
+     (invoke-debugger (make-condition 'simple-error))))
+  program-error)
+
+(deftest invoke-debugger.error.5
+  (classify-error
+   (let ((*debugger-hook* #'(lambda (c hook x) (list c hook x))))
+     (invoke-debugger (make-condition 'simple-error))))
+  program-error)
