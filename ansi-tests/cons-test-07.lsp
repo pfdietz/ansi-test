@@ -30,7 +30,7 @@
 	(let ((result (nconc x y)))
 	  (and
 	   (check-scaffold-copy y ycopy)
-	   (eq (cdddr x) y)
+	   (eqt (cdddr x) y)
 	   result))))
   (a b c d e f))
 
@@ -38,7 +38,7 @@
     (let ((x (list 'a 'b 'c)))
       (nconc x x)
       (and
-       (eq (cdddr x) x)
+       (eqt (cdddr x) x)
        (null (list-length x))))
   t)
 
@@ -48,9 +48,9 @@
 	  (z (list 'i 'j 'k)))
       (let ((result (nconc x y z 'foo)))
 	(and
-	 (eq (nthcdr 3 x) y)
-	 (eq (nthcdr 5 y) z)
-	 (eq (nthcdr 3 z) 'foo)
+	 (eqt (nthcdr 3 x) y)
+	 (eqt (nthcdr 5 y) z)
+	 (eqt (nthcdr 3 z) 'foo)
 	 result)))
   (a b c d e f g h i j k . foo))
 
@@ -119,7 +119,7 @@
 	(and
 	 (check-scaffold-copy x xcopy)
 	 (check-scaffold-copy y ycopy)
-	 (eq (cdddr result) y)
+	 (eqt (cdddr result) y)
 	 result)))
   (c b a d e f))
 

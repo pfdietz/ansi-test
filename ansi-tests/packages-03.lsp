@@ -108,7 +108,7 @@
    (not
     (let ((name (package-name p)))
       (and (stringp name)
-	   (eq (find-package name) p)))))
+	   (eqt (find-package name) p)))))
   0)
 
 ;; package-name applied to a package's name
@@ -183,5 +183,5 @@
     for nk in (package-nicknames p) count
 	 (not
 	  (and (stringp nk)
-	       (eq p (find-package nk))))))
+	       (eqt p (find-package nk))))))
   0)

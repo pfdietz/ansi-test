@@ -93,7 +93,7 @@
 		   (equal (package-name P3) "P3"))
 	(return 'fail1))
 
-      (unless (eq (symbol-package S1) P1)
+      (unless (eqt (symbol-package S1) P1)
 	(return 'fail2))
       (unless (equal (prin1-to-string S1) "P1:S1")
 	(return 'fail3))

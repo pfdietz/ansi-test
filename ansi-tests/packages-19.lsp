@@ -20,15 +20,15 @@
     (do-symbols (s "KEYWORD" t)
       (multiple-value-bind (s2 access)
 	  (find-symbol (symbol-name s) "KEYWORD")
-	(unless (and (eq s s2)
-		     (eq access :external))
+	(unless (and (eqt s s2)
+		     (eqt access :external))
 	  (return (list s2 access)))))
   t)
 
 ;; Every keyword evaluates to itself
 (deftest keyword-3
     (do-symbols (s "KEYWORD" t)
-      (unless (eq s (eval s))
+      (unless (eqt s (eval s))
 	(return (list s (eval s)))))
   t)
 

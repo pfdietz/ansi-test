@@ -231,7 +231,7 @@
 				    :test #'(lambda (a b)
 						    (<= (abs (- a b)) 1)))))
       (and
-       (not (eq result 'failed))
+       (not (eqt result 'failed))
        (sort
 	(sublis
 	 '((2 . 1) (5 . 4) (11 . 10) (45 . 44) (102 . 101))
@@ -251,7 +251,7 @@
 	  (setf y (* y y))))
     (not (not
 	  (or
-	   (eq x y)  ;; if bignums are eq, the test is worthless
+	   (eqt x y)  ;; if bignums are eq, the test is worthless
 	   (eql (length
 		 (union-with-check
 		  (list x) (list x)))

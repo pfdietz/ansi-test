@@ -322,7 +322,7 @@
 	   (y (copy-list '(3 y c q z a 18)))
 	   (result (nintersection-with-check xc y)))
       (and
-       (not (eq result 'failed))
+       (not (eqt result 'failed))
        (+
 	(loop
 	    for e in x count
@@ -343,7 +343,7 @@
 	   (y (copy-list '(a a a b b b)))
 	   (result (nintersection-with-check x y)))
       (and
-       (not (eq result 'failed))
+       (not (eqt result 'failed))
        (member 'a result)
        (not (member 'b result))))
   t)
@@ -394,7 +394,7 @@
 	     (nintersection-with-check
 	      (loop for i from 0 to 1000 by 3 collect i)
 	      (loop for i from 0 to 1000 by 7 collect i))))
-	(if (eq result 'failed) () result))
+	(if (eqt result 'failed) () result))
       #'<)
      (loop for i from 0 to 1000 by 21 collect i))))
   t)
@@ -410,7 +410,7 @@
 	      :test #'(lambda (a b)
 			(and (eql a b)
 			     (= (mod a 3) 0))))))
-	(if (eq result 'failed) () result))
+	(if (eqt result 'failed) () result))
       #'<)
      (loop
 	 for i from 0 to 999 by (* 3 5 7) collect i))))
@@ -427,7 +427,7 @@
     (let ((x (shuffle (loop for j from 1 to size collect (random maxelem state))))
 	  (y (shuffle (loop for j from 1 to size collect (random maxelem state)))))
       (let ((z (nintersection-with-check (copy-list x) y)))
-	(when (eq z 'failed) (return (values x y z)))
+	(when (eqt z 'failed) (return (values x y z)))
 	(let ((is-good (is-intersection x y z)))
 	  (unless is-good (return (values x y z)))))))
   nil))

@@ -80,11 +80,11 @@
 
 ;; Make produces unique items
 (deftest structure-1-11
-    (eq (make-s-1) (make-s-1))
+    (eqt (make-s-1) (make-s-1))
   nil)
 
 (deftest structure-1-12
-    (eq (make-s-1 :foo 'a :bar 'b)
+    (eqt (make-s-1 :foo 'a :bar 'b)
 	(make-s-1 :foo 'a :bar 'b))
   nil)
 
@@ -99,5 +99,5 @@
   t)
 
 (deftest structure-1-15
-    (subtypep 's-1 'structure-object)
+    (subtypep* 's-1 'structure-object)
   t t)

@@ -1,4 +1,4 @@
-;-*- Mode:     Lisp -*-
+();-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:04:56 1998
 ;;;; Contains: Package test code, part 12
@@ -22,7 +22,7 @@
 	    (multiple-value-bind (sym access)
 		(find-symbol "FOO" p)
 	      (and
-	       (eq access :internal)
+	       (eqt access :internal)
 	       (unintern sym p)
 	       (null (symbol-package sym))
 	       (not (find-symbol "FOO" p)))))
@@ -42,7 +42,7 @@
 	    (multiple-value-bind (sym access)
 		(find-symbol "FOO")
 	      (and
-	       (eq access :internal)
+	       (eqt access :internal)
 	       (unintern sym)
 	       (null (symbol-package sym))
 	       (not (find-symbol "FOO")))))
@@ -60,7 +60,7 @@
 	    (multiple-value-bind (sym access)
 		(find-symbol "FOO" p)
 	      (and
-	       (eq access :internal)
+	       (eqt access :internal)
 	       (unintern sym "H")
 	       (null (symbol-package sym))
 	       (not (find-symbol "FOO" p)))))
@@ -78,7 +78,7 @@
 	    (multiple-value-bind (sym access)
 		(find-symbol "FOO" p)
 	      (and
-	       (eq access :internal)
+	       (eqt access :internal)
 	       (unintern sym '#:|H|)
 	       (null (symbol-package sym))
 	       (not (find-symbol "FOO" p)))))
@@ -97,7 +97,7 @@
 		(multiple-value-bind (sym access)
 		    (find-symbol "FOO" p)
 		  (and
-		   (eq access :internal)
+		   (eqt access :internal)
 		   (unintern sym #\H)
 		   (null (symbol-package sym))
 		   (not (find-symbol "FOO" p)))))
@@ -124,17 +124,17 @@
 	  (multiple-value-bind (sym1 access1)
 	      (find-symbol "FOO" "H")
 	    (and sym1
-		 (eq access1 :external)
+		 (eqt access1 :external)
 		 (equal "FOO" (symbol-name sym1))
-		 (eq (find-package "G")
+		 (eqt (find-package "G")
 		     (symbol-package sym1))
 		 (unintern sym1 "H")
 		 (multiple-value-bind (sym2 access2)
 		     (find-symbol "FOO" "H")
-		   (and (eq sym1 sym2)
-			(eq (symbol-package sym1)
+		   (and (eqt sym1 sym2)
+			(eqt (symbol-package sym1)
 			    (find-package "G"))
-			(eq access2 :inherited))))))
+			(eqt access2 :inherited))))))
       (error (c) c))
   t)
 
@@ -155,86 +155,86 @@
 	    (find-symbol "FOO" ph)
 	  (and
 	   sym1
-	   (eq (symbol-package sym1) ph)
-	   (eq access1 :internal)
+	   (eqt (symbol-package sym1) ph)
+	   (eqt access1 :internal)
 	   (equal (list sym1) (package-shadowing-symbols ph))
 	   (unintern sym1 ph)
 	   (multiple-value-bind (sym2 access2)
 	       (find-symbol "FOO" ph)
-	     (and (not (eq sym1 sym2))
-		  (eq access2 :inherited)
+	     (and (not (eqt sym1 sym2))
+		  (eqt access2 :inherited)
 		  (null (symbol-package sym1))
-		  (eq (symbol-package sym2) pg)))))))
+		  (eqt (symbol-package sym2) pg)))))))
   t)
 
 ;; Error situation: when the symbol is uninterned, creates
 ;; a name conflict from two used packages
 (deftest unintern-8
-    (block failed
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G1"))
-      (ignore-errors (delete-package "G2"))
-      (let* ((pg1 (make-package "G1"))
-	     (pg2 (make-package "G2"))
-	     (ph (make-package "H" :use (list pg1 pg2))))
-	(handler-case
-	   (shadow "FOO" ph)
-	   (error (c) (return-from failed (list :shadow-error c))))
-	(let ((gsym1 (intern "FOO" pg1))
-	      (gsym2 (intern "FOO" pg2)))
-	  (export gsym1 pg1)
-	  (export gsym2 pg2)
-	  (multiple-value-bind (sym1 access1)
-	      (find-symbol "FOO" ph)
-	    (and
-	     (equal (list sym1) (package-shadowing-symbols ph))
-	     (not (eq sym1 gsym1))
-	     (not (eq sym1 gsym2))
-	     (eq (symbol-package sym1) ph)
-	     (eq access1 :internal)
-	     (equal (symbol-name sym1) "FOO")
-	     (handler-case
-		 (progn
-		   (unintern sym1 ph)
-		   nil)
-	       (error (c) 
-		 (format t "Properly threw an error: ~S~%" c)
-		 t)))))))
+  (block failed
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G1"))
+    (ignore-errors (delete-package "G2"))
+    (let* ((pg1 (make-package "G1"))
+	   (pg2 (make-package "G2"))
+	   (ph (make-package "H" :use (list pg1 pg2))))
+      (handler-case
+       (shadow "FOO" ph)
+       (error (c) (return-from failed (list :shadow-error c))))
+      (let ((gsym1 (intern "FOO" pg1))
+	    (gsym2 (intern "FOO" pg2)))
+	(export gsym1 pg1)
+	(export gsym2 pg2)
+	(multiple-value-bind (sym1 access1)
+	    (find-symbol "FOO" ph)
+	  (and
+	   (equal (list sym1) (package-shadowing-symbols ph))
+	   (not (eqt sym1 gsym1))
+	   (not (eqt sym1 gsym2))
+	   (eqt (symbol-package sym1) ph)
+	   (eqt access1 :internal)
+	   (equal (symbol-name sym1) "FOO")
+	   (handler-case
+	    (progn
+	      (unintern sym1 ph)
+	      nil)
+	    (error (c) 
+		   (format t "Properly threw an error: ~S~%" c)
+		   t)))))))
   t)
 
 ;; Now, inherit the same symbol through two intermediate
 ;; packages.  No error should occur when the shadowing
 ;; is removed
 (deftest unintern-9
-    (block failed
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G1"))
-      (ignore-errors (delete-package "G2"))
-      (ignore-errors (delete-package "G3"))
-      (let* ((pg3 (make-package "G3"))
-	     (pg1 (make-package "G1" :use (list pg3)))
-	     (pg2 (make-package "G2" :use (list pg3)))
-	     (ph  (make-package "H"  :use (list pg1 pg2))))
-	(handler-case
-	   (shadow "FOO" ph)
-	   (error (c) (return-from failed (list :shadow-error c))))
-	(let ((gsym (intern "FOO" pg3)))
-	  (export gsym pg3)
-	  (export gsym pg1)
-	  (export gsym pg2)
-	  (multiple-value-bind (sym access)
-	      (find-symbol "FOO" ph)
-	    (and
-	     (equal (list sym) (package-shadowing-symbols ph))
-	     (not (eq sym gsym))
-	     (equal (symbol-name sym) "FOO")
-	     (equal (symbol-package sym) ph)
-	     (eq access :internal)
-	     (handler-case
-		 (and (unintern sym ph)
-		      (multiple-value-bind (sym2 access2)
-			  (find-symbol "FOO" ph)
-			(and (eq gsym sym2)
-			     (eq access2 :inherited))))
-	       (error (c) c)))))))
+  (block failed
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G1"))
+    (ignore-errors (delete-package "G2"))
+    (ignore-errors (delete-package "G3"))
+    (let* ((pg3 (make-package "G3"))
+	   (pg1 (make-package "G1" :use (list pg3)))
+	   (pg2 (make-package "G2" :use (list pg3)))
+	   (ph  (make-package "H"  :use (list pg1 pg2))))
+      (handler-case
+       (shadow "FOO" ph)
+       (error (c) (return-from failed (list :shadow-error c))))
+      (let ((gsym (intern "FOO" pg3)))
+	(export gsym pg3)
+	(export gsym pg1)
+	(export gsym pg2)
+	(multiple-value-bind (sym access)
+	    (find-symbol "FOO" ph)
+	  (and
+	   (equal (list sym) (package-shadowing-symbols ph))
+	   (not (eqt sym gsym))
+	   (equal (symbol-name sym) "FOO")
+	   (equal (symbol-package sym) ph)
+	   (eqt access :internal)
+	   (handler-case
+	    (and (unintern sym ph)
+		 (multiple-value-bind (sym2 access2)
+		     (find-symbol "FOO" ph)
+		   (and (eqt gsym sym2)
+			(eqt access2 :inherited))))
+	    (error (c) c)))))))
   t)

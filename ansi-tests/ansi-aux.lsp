@@ -8,6 +8,12 @@
 
 (declaim (optimize (safety 3)))
 
+(defun eqt (x y)
+  "Function like EQ, but guaranteed to return T for true."
+  (if (eq x y) t nil))
+
+(defun notnot (x) (not (not x)))
+
 (defun make-int-list (n)
   (loop for i from 0 to (1- n) collect i))
 
@@ -178,8 +184,8 @@ the condition to go uncaught if it cannot be classified."
 (defun nextdigit (c)
   (cadr (member c '(#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))))
 
-(defun is-eq-p (x) #'(lambda (y) (eq x y)))
-(defun is-not-eq-p (x) #'(lambda (y) (not (eq x y))))
+(defun is-eq-p (x) #'(lambda (y) (eqt x y)))
+(defun is-not-eq-p (x) #'(lambda (y) (not (eqt x y))))
 
 (defun char-invertcase (c)
   (if (upper-case-p c) (char-downcase c)

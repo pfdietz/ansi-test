@@ -6,15 +6,15 @@
 (in-package :cl-test)
 
 (deftest string.1
-  (subtypep 'string 'array)
+  (subtypep* 'string 'array)
   t t)
 
 (deftest string.2
-  (subtypep 'string 'vector)
+  (subtypep* 'string 'vector)
   t t)
 
 (deftest string.3
-  (subtypep 'string 'sequence)
+  (subtypep* 'string 'sequence)
   t t)
 
 (deftest string.4
@@ -41,75 +41,75 @@
 ;;; Tests of base-string
 
 (deftest base-string.1
-  (subtypep 'base-string 'string)
+  (subtypep* 'base-string 'string)
   t t)
 
 (deftest base-string.2
-  (subtypep 'base-string 'vector)
+  (subtypep* 'base-string 'vector)
   t t)
 
 (deftest base-string.3
-  (subtypep 'base-string 'array)
+  (subtypep* 'base-string 'array)
   t t)
 
 (deftest base-string.4
-  (subtypep 'base-string 'sequence)
+  (subtypep* 'base-string 'sequence)
   t t)
 
 ;;; Tests of simple-string
 
 (deftest simple-string.1
-  (subtypep 'simple-string 'string)
+  (subtypep* 'simple-string 'string)
   t t)
 
 (deftest simple-string.2
-  (subtypep 'simple-string 'vector)
+  (subtypep* 'simple-string 'vector)
   t t)
 
 (deftest simple-string.3
-  (subtypep 'simple-string 'simple-array)
+  (subtypep* 'simple-string 'simple-array)
   t t)
 
 (deftest simple-string.4
-  (subtypep 'simple-string 'array)
+  (subtypep* 'simple-string 'array)
   t t)
 
 (deftest simple-string.5
-  (subtypep 'simple-string 'sequence)
+  (subtypep* 'simple-string 'sequence)
   t t)
 
 ;;; Tests for simple-base-string
 
 (deftest simple-base-string.1
-  (subtypep 'simple-base-string 'string)
+  (subtypep* 'simple-base-string 'string)
   t t)
 
 (deftest simple-base-string.2
-  (subtypep 'simple-base-string 'vector)
+  (subtypep* 'simple-base-string 'vector)
   t t)
 
 (deftest simple-base-string.3
-  (subtypep 'simple-base-string 'simple-array)
+  (subtypep* 'simple-base-string 'simple-array)
   t t)
 
 (deftest simple-base-string.4
-  (subtypep 'simple-base-string 'array)
+  (subtypep* 'simple-base-string 'array)
   t t)
 
 (deftest simple-base-string.5
-  (subtypep 'simple-base-string 'sequence)
+  (subtypep* 'simple-base-string 'sequence)
   t t)
 
 (deftest simple-base-string.6
-  (subtypep 'simple-base-string 'base-string)
+  (subtypep* 'simple-base-string 'base-string)
   t t)
 
 (deftest simple-base-string.7
-  (subtypep 'simple-base-string 'simple-string)
+  (subtypep* 'simple-base-string 'simple-string)
   t t)
 
 (deftest simple-base-string.8
-  (subtypep 'simple-base-string 'simple-vector)
+  (subtypep* 'simple-base-string 'simple-vector)
   nil t)
 
 ;;; Tests for simple-string-p

@@ -57,33 +57,33 @@
 (deftest compile.3
   (let ((x (list 'a 'b))
 	(y (list 'a 'b)))
-    (and (not (eq x y))
-	 (funcall (compile nil `(lambda () (eq ',x ',y))))))
+    (and (not (eqt x y))
+	 (funcall (compile nil `(lambda () (eqt ',x ',y))))))
   nil)
 
 (deftest compile.4
   (let ((x (copy-seq "abc"))
 	(y (copy-seq "abc")))
-    (and (not (eq x y))
-	 (funcall (compile nil `(lambda () (eq ,x ,y))))))
+    (and (not (eqt x y))
+	 (funcall (compile nil `(lambda () (eqt ,x ,y))))))
   nil)
 
 (deftest compile.5
   (let ((x (copy-seq "abc")))
-    (funcall (compile nil `(lambda () (eq ,x ,x)))))
+    (funcall (compile nil `(lambda () (eqt ,x ,x)))))
   t)
 
 (deftest compile.6
   (let ((x (copy-seq "abc")))
-    (funcall (compile nil `(lambda () (eq ',x ',x)))))
+    (funcall (compile nil `(lambda () (eqt ',x ',x)))))
   t)
 
 (deftest compile.7
   (let ((x (copy-seq "abc")))
-    (eq x (funcall (compile nil `(lambda () ,x)))))
+    (eqt x (funcall (compile nil `(lambda () ,x)))))
   t)
 
 (deftest compile.8
   (let ((x (list 'a 'b)))
-    (eq x (funcall (compile nil `(lambda () ',x)))))
+    (eqt x (funcall (compile nil `(lambda () ',x)))))
   t)

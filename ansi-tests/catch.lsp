@@ -27,7 +27,7 @@
 (deftest catch.6
   (let ((tag1 (1+ most-positive-fixnum))
 	(tag2 (1+ most-positive-fixnum)))
-    (if (eq tag1 tag2)
+    (if (eqt tag1 tag2)
 	'good
       (catch tag1
 	(catch tag2 (throw tag1 'good))

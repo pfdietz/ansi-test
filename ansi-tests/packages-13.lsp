@@ -13,24 +13,24 @@
     (let ((*package* *package*))
       (declare (special *package*))
       (let ((p2 (in-package "A")))
-	(and (eq p2 (find-package "A"))
-	     (eq *package* p2))))
+	(and (eqt p2 (find-package "A"))
+	     (eqt *package* p2))))
   t)
 
 (deftest in-package-2
     (let ((*package* *package*))
       (declare (special *package*))
       (let ((p2 (in-package |A|)))
-	(and (eq p2 (find-package "A"))
-	     (eq *package* p2))))
+	(and (eqt p2 (find-package "A"))
+	     (eqt *package* p2))))
   t)
 
 (deftest in-package-3
     (let ((*package* *package*))
       (declare (special *package*))
       (let ((p2 (in-package :|A|)))
-	(and (eq p2 (find-package "A"))
-	     (eq *package* p2))))
+	(and (eqt p2 (find-package "A"))
+	     (eqt *package* p2))))
   t)
 
 (deftest in-package-4
@@ -38,8 +38,8 @@
       (declare (special *package*))
       (handler-case
 	  (let ((p2 (in-package #\A)))
-	    (and (eq p2 (find-package "A"))
-		 (eq *package* p2)))
+	    (and (eqt p2 (find-package "A"))
+		 (eqt *package* p2)))
 	(error (c) c)))
   t)
 

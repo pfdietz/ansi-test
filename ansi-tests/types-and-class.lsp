@@ -23,7 +23,7 @@
   t)
 
 (defun is-t-or-nil (e)
-  (or (eq e t) (eq e nil)))
+  (or (eqt e t) (eqt e nil)))
 
 (deftest boolean-type-3
     (check-type-predicate 'is-t-or-nil 'boolean)
@@ -144,7 +144,7 @@
 	 (reader-error parse-error)
 	 (reader-error stream-error)
 	 )))
-  (when (subtypep 'character 'base-char)
+  (when (subtypep* 'character 'base-char)
     (setq table
 	  (append
 	   '((character base-char)
@@ -160,7 +160,7 @@
 	 (let ((t1 (first pair))
 	       (t2 (second pair)))
 	   (cond
-	    ((not (subtypep t1 t2))
+	    ((not (subtypep* t1 t2))
 	     (format t "~%~S not a subtype of ~S" t1 t2)
 	     t)
 	    (t nil))))
@@ -199,14 +199,14 @@
 	    (loop
 		for tp2 in types sum
 		  (cond
-		   ((and (not (eq tp tp2))
-			 (not (eq tp2 'standard-object))
-			 (not (eq tp2 'structure-object))
+		   ((and (not (eqt tp tp2))
+			 (not (eqt tp2 'standard-object))
+			 (not (eqt tp2 'structure-object))
 			 (not (member tp2 parents))
-			 (subtypep tp tp2)
+			 (subtypep* tp tp2)
 			 (not (and (member tp +float-types+)
 				   (member tp2 +float-types+)))
-			 (not (and (eq tp2 'structure-object)
+			 (not (and (eqt tp2 'structure-object)
 				   (member 'standard-object parents))))
 		    (format t "~%Improper subtype: ~S of ~S"
 			    tp tp2)
@@ -229,7 +229,7 @@
 	(let ((tp (car p)))
 	  (cond
 	   ((and (not (member tp '(sequence cons list t)))
-		 (not (subtypep tp 'atom)))
+		 (not (subtypep* tp 'atom)))
 	    (format t "~%Not an atomic type: ~S" tp)
 	    t)))))
 
@@ -246,16 +246,16 @@
     (loop
 	for tp in *disjoint-types-list* sum
 	  (loop for tp2 in *disjoint-types-list* count
-		(and (not (eq tp tp2))
-		     (subtypep tp tp2))))
+		(and (not (eqt tp tp2))
+		     (subtypep* tp tp2))))
   0)
 
 (deftest types-8
     (loop
 	for tp in *disjoint-types-list* count
 	  (cond
-	   ((and (not (eq tp 'cons))
-		 (not (subtypep tp 'atom)))
+	   ((and (not (eqt tp 'cons))
+		 (not (subtypep* tp 'atom)))
 	    (format t "~%Should be atomic, but isn't: ~S" tp)
 	    t)))
   0)
@@ -276,7 +276,7 @@
 	    (loop
 		for y in tp-list do
 		  (multiple-value-bind (result good)
-		      (subtypep x y)
+		      (subtypep* x y)
 		    (declare (ignore good))
 		    (when result
 		      (pushnew x (gethash y subs))
@@ -291,7 +291,7 @@
 		    (loop
 			for t2 in sup-list do
 			  (multiple-value-bind (result good)
-			      (subtypep t1 t2)
+			      (subtypep* t1 t2)
 			    (when (and good (not result))
 			      (pushnew (list t1 x t2) result-list
 				       :test #'equal)))))))

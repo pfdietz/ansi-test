@@ -60,7 +60,7 @@
     (setf *mapc-6-var* nil)
     (let ((result (mapc 'mapc-6-fun x)))
       (and (check-scaffold-copy x xcopy)
-	   (eq result x)
+	   (eqt result x)
 	   *mapc-6-var*)))
   (h g f e d c b a))
 
@@ -161,7 +161,7 @@
        (loop
 	 for e1 on x
 	 and e2 on result
-	    count (or (eq e1 e2) (not (eql (car e1) (car e2)))))))
+	    count (or (eqt e1 e2) (not (eql (car e1) (car e2)))))))
   0)
 
 (deftest mapcan-4
@@ -246,7 +246,7 @@
 		  x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result x)
+       (eqt result x)
        a))
    ((c) (b c) (a b c)))
 
@@ -263,7 +263,7 @@
 			       a)))
 		 x y)))
       (and
-       (eq result x)
+       (eqt result x)
        (check-scaffold-copy x xcopy)
        (check-scaffold-copy y ycopy)
        a))
@@ -283,7 +283,7 @@
 			       a)))
 		 x y)))
       (and
-       (eq result x)
+       (eqt result x)
        (check-scaffold-copy x xcopy)
        (check-scaffold-copy y ycopy)
        a))
@@ -303,7 +303,7 @@
 			       a)))
 		 x y)))
       (and
-       (eq result x)
+       (eqt result x)
        (check-scaffold-copy x xcopy)
        (check-scaffold-copy y ycopy)
        a))

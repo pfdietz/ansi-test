@@ -59,10 +59,10 @@
      for e on x
      and f on y
      and g in z do
-     (when (or (not (eq g e))
+     (when (or (not (eqt g e))
 	       (not (eql (car e) (car f)))
 	       (car e)
-	       (eq e f))
+	       (eqt e f))
        (return nil))
      finally (return t))))
 
@@ -117,23 +117,23 @@
   (block nil
   (let* ((x (make-sequence 'vector 10 :initial-element 'a))
 	 (y (subseq x 4 8)))
-    (unless (every #'(lambda (e) (eq e 'a)) x)
+    (unless (every #'(lambda (e) (eqt e 'a)) x)
       (return 1))
-    (unless (every #'(lambda (e) (eq e 'a)) y)
+    (unless (every #'(lambda (e) (eqt e 'a)) y)
       (return 2))
     (unless (eql (length x) 10) (return 3))
     (unless (eql (length y) 4)  (return 4))
     (loop for i from 0 to 9 do (setf (aref x i) 'b))
-    (unless (every #'(lambda (e) (eq e 'a)) y)
+    (unless (every #'(lambda (e) (eqt e 'a)) y)
       (return 5))
     (loop for i from 0 to 3 do (setf (aref y i) 'c))
     (or
-     (not (not (every #'(lambda (e) (eq e 'b)) x)))
+     (not (not (every #'(lambda (e) (eqt e 'b)) x)))
      6))))
 
 (deftest subseq-vector-1
-    (subseq-vector-1-body)
-  t) 
+  (subseq-vector-1-body)
+  t)
 
 (defun subseq-vector-2-body ()
   (block nil

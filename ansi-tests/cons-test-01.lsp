@@ -138,7 +138,7 @@
 (deftest cons-eq-equal
     (let ((x (cons 'a 'b))
 	  (y (cons 'a 'b)))
-      (and (not (eq x y))
+      (and (not (eqt x y))
 	   (equal x y)
 	   t))
   t)
@@ -328,20 +328,20 @@
 (deftest rplaca-1
     (let ((x (cons 'a 'b)))
       (let ((y x))
-	(and (eq (rplaca x 'c) y)
-	     (eq x y)
-	     (eq (car x) 'c)
-	     (eq (cdr x) 'b)
+	(and (eqt (rplaca x 'c) y)
+	     (eqt x y)
+	     (eqt (car x) 'c)
+	     (eqt (cdr x) 'b)
 	     t)))
   t)
 
 (deftest rplacd-1
     (let ((x (cons 'a 'b)))
       (let ((y x))
-	(and (eq (rplacd x 'd) y)
-	     (eq x y)
-	     (eq (car x) 'a)
-	     (eq (cdr x) 'd)
+	(and (eqt (rplacd x 'd) y)
+	     (eqt x y)
+	     (eqt (car x) 'a)
+	     (eqt (cdr x) 'd)
 	     t)))
   t)
 

@@ -28,7 +28,7 @@
 	 (zerop
 	  (loop
 	      for a on x and b on result count
-		(eq a b)))
+		(eqt a b)))
 	 result)))
     (error (c) c))
   (a b c d e f))
@@ -99,7 +99,7 @@
 	     (loop
 		 for c1 on x
 		 for c2 on result
-		 count (eq c1 c2)))))
+		 count (eqt c1 c2)))))
   0)
 	       
 
@@ -141,7 +141,7 @@
     (loop
 	for x in *universe*
 	count (and (not (listp x))
-		   (not (eq 'type-error
+		   (not (eqt 'type-error
 			    (catch-type-error (ldiff x x)))))))
 
 (deftest ldiff-12
@@ -216,7 +216,7 @@
   (loop
       for x in *universe*
       count (and (not (listp x))
-		 (eq 'type-error
+		 (eqt 'type-error
 		     (catch-type-error (tailp x x))))))
 
 (deftest tailp-7

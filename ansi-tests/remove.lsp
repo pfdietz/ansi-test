@@ -310,7 +310,7 @@
 (deftest remove-if-list.2
   (let* ((orig '(a b c a b d a c b a e))
 	 (x (copy-seq orig))
-	 (y (remove-if #'(lambda (y) (eq y 'a)) x :key nil)))
+	 (y (remove-if #'(lambda (y) (eqt y 'a)) x :key nil)))
     (and (equalp orig x) y))
   (b c b d c b e))
 
@@ -324,7 +324,7 @@
 (deftest remove-if-not-list.2
   (let* ((orig '(a b c a b d a c b a e))
 	 (x (copy-seq orig))
-	 (y (remove-if-not #'(lambda (y) (not (eq y 'a))) x :key nil)))
+	 (y (remove-if-not #'(lambda (y) (not (eqt y 'a))) x :key nil)))
     (and (equalp orig x) y))
   (b c b d c b e))
 
@@ -338,7 +338,7 @@
 (deftest delete-if-list.2
   (let* ((orig '(a b c a b d a c b a e))
 	 (x (copy-seq orig))
-	 (y (delete-if #'(lambda (y) (eq y 'a)) x :key nil)))
+	 (y (delete-if #'(lambda (y) (eqt y 'a)) x :key nil)))
     y)
   (b c b d c b e))
 
@@ -352,7 +352,7 @@
 (deftest delete-if-not-list.2
   (let* ((orig '(a b c a b d a c b a e))
 	 (x (copy-seq orig))
-	 (y (delete-if-not #'(lambda (y) (not (eq y 'a))) x :key nil)))
+	 (y (delete-if-not #'(lambda (y) (not (eqt y 'a))) x :key nil)))
     y)
   (b c b d c b e))
 

@@ -47,69 +47,61 @@
   |a| 3)
 
 (deftest read-symbol-3
-    (multiple-value-bind (s n)
-	(ignore-errors (read-from-string "#:abc"))
-      (and (symbolp s)
-	   (eql n 5)
-	   (not (symbol-package s))
-	   (string-equal (symbol-name s) "abc")))
-  t)
+  (multiple-value-bind (s n)
+      (ignore-errors (read-from-string "#:abc"))
+    (not
+     (and (symbolp s)
+	  (eql n 5)
+	  (not (symbol-package s))
+	  (string-equal (symbol-name s) "abc"))))
+  nil)
 
 (deftest read-symbol-4
-    (multiple-value-bind (s n)
-	(ignore-errors (read-from-string "#:|abc|"))
-      (and (symbolp s)
-	   (eql n 7)
-	   (not (symbol-package s))
-	   (string= (symbol-name s) "abc")))
-  t)
+  (multiple-value-bind (s n)
+      (ignore-errors (read-from-string "#:|abc|"))
+    (not
+     (and (symbolp s)
+	  (eql n 7)
+	  (not (symbol-package s))
+	  (string= (symbol-name s) "abc"))))
+  nil)
 
 (deftest read-symbol-5
-    (multiple-value-bind (s n)
-	(ignore-errors (read-from-string "#:||"))
-      (if (not (symbolp s))
-	  s
-	(and (eql n 4)
-	     (not (symbol-package s))
-	     (string= (symbol-name s) ""))))
+  (multiple-value-bind (s n)
+      (ignore-errors (read-from-string "#:||"))
+    (if (not (symbolp s))
+	s
+      (not (not
+	    (and (eql n 4)
+		 (not (symbol-package s))
+		 (string= (symbol-name s) ""))))))
   t)
 
 (deftest read-symbol-6
-    (let ((str "cl-test::abcd0123"))
-      (multiple-value-bind (s n)
-	  (ignore-errors (read-from-string str))
-	(if (not (symbolp s))
-	    s
-	  (and (eql n (length str))
-	       (eq (symbol-package s) (find-package :cl-test))
-	       (string-equal (symbol-name s)
-			     "abcd0123")))))
+  (let ((str "cl-test::abcd0123"))
+    (multiple-value-bind (s n)
+	(ignore-errors (read-from-string str))
+      (if (not (symbolp s))
+	  s
+	(not (not
+	      (and (eql n (length str))
+		   (eqt (symbol-package s) (find-package :cl-test))
+		   (string-equal (symbol-name s)
+				 "abcd0123")))))))
   t)
 
 (deftest read-symbol-7
-    (multiple-value-bind (s n)
-	(ignore-errors (read-from-string ":ABCD"))
-      (if (not (symbolp s))
-	  s
-	(and (eql n 5)
-	     (eq (symbol-package s) (find-package "KEYWORD"))
-	     (string-equal (symbol-name s)
-			   "ABCD"))))
+  (multiple-value-bind (s n)
+      (ignore-errors (read-from-string ":ABCD"))
+    (if (not (symbolp s))
+	s
+      (not (not
+	    (and (eql n 5)
+		 (eqt (symbol-package s) (find-package "KEYWORD"))
+		 (string-equal (symbol-name s)
+			       "ABCD"))))))
   t)
 	     
-#|
-(deftest read-symbol-8
-    (multiple-value-bind (s n)
-	(ignore-errors (read-from-string "::ABCD"))
-      (if (not (symbolp s))
-	  s
-	(and (eql n 6)
-	     (eq (symbol-package s) (find-package "KEYWORD"))
-	     (string-equal (symbol-name s)
-			   "ABCD"))))
-  t)
-|#
-
 (defun read-symbol-9-body (natoms maxlen)
   (let* ((chars (concatenate 'string
 		  "abcdefghijklmnopqrstuvwxyz"
@@ -149,15 +141,16 @@
   0)
 
 (deftest read-symbol-10
-    (handler-case
-	(equal (symbol-name
-		(read-from-string
-		 (with-output-to-string (s)
-		   (write (make-symbol ":")
-			  :readably t
-			  :stream s))))
-	       ":")
-      (error (c) c))
+  (handler-case
+   (not (not
+	 (equal (symbol-name
+		 (read-from-string
+		  (with-output-to-string (s)
+					 (write (make-symbol ":")
+						:readably t
+						:stream s))))
+		":")))
+   (error (c) c))
   t)
 
   

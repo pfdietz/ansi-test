@@ -8,25 +8,25 @@
 (deftest nstring-capitalize.1
   (let* ((s (copy-seq "abCd"))
 	 (s2 (nstring-capitalize s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "Abcd")
 
 (deftest nstring-capitalize.2
   (let* ((s (copy-seq "0adA2Cdd3wXy"))
 	 (s2 (nstring-capitalize s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "0ada2cdd3wxy")
 
 (deftest nstring-capitalize.3
   (let* ((s (copy-seq "1a"))
 	 (s2 (nstring-capitalize s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "1a")
 
 (deftest nstring-capitalize.4
   (let* ((s (copy-seq "a1a"))
 	 (s2 (nstring-capitalize s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "A1a")
 
 (deftest nstring-capitalize.7

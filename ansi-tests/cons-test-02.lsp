@@ -17,10 +17,10 @@
   (cond
    ((consp x)
     (and (consp y)
-	 (not (eq x y))
+	 (not (eqt x y))
 	 (check-cons-copy (car x) (car y))
 	 (check-cons-copy (cdr x) (cdr y))))
-   ((eq x y) t)
+   ((eqt x y) t)
    (t nil)))
 
 ;; Try copy-tree on a tree containing elements of various kinds
@@ -55,7 +55,7 @@
 	   (apply #'sublis al a
 		  `(,@(when test `(:test ,test))
 		    ,@(when test-not `(:test-not ,test-not))
-		    ,@(unless (eq key 'no-key) `(:key ,key))))))
+		    ,@(unless (eqt key 'no-key) `(:key ,key))))))
       (and
        (check-scaffold-copy a acopy)
        (check-scaffold-copy al alcopy)
@@ -131,7 +131,7 @@
 	 (apply #'sublis (copy-tree al) (copy-tree a)
 		`(,@(when test `(:test ,test))
 		    ,@(when test-not `(:test-not ,test-not))
-		    ,@(unless (eq key 'no-key) `(:key ,key))))))
+		    ,@(unless (eqt key 'no-key) `(:key ,key))))))
     as))
 
 
@@ -215,7 +215,7 @@
 	(treecopy (make-scaffold-copy tree)))
     (let ((result
 	   (apply #'subst new old tree
-		  `(,@(unless (eq key 'no-key) `(:key ,key))
+		  `(,@(unless (eqt key 'no-key) `(:key ,key))
 		    ,@(when test `(:test ,test))
 		    ,@(when test-not `(:test-not ,test-not))))))
       (and (check-scaffold-copy new newcopy)
@@ -296,7 +296,7 @@
 	(treecopy (make-scaffold-copy tree)))
     (let ((result
 	   (apply #'subst-if new pred tree
-		  (unless (eq key 'no-key) `(:key ,key)))))
+		  (unless (eqt key 'no-key) `(:key ,key)))))
       (and (check-scaffold-copy new newcopy)
 	   (check-scaffold-copy pred predcopy)
 	   (check-scaffold-copy tree treecopy)
@@ -312,7 +312,7 @@
 	(treecopy (make-scaffold-copy tree)))
     (let ((result
 	   (apply #'subst-if-not new pred tree
-		  (unless (eq key 'no-key) `(:key ,key)))))
+		  (unless (eqt key 'no-key) `(:key ,key)))))
       (and (check-scaffold-copy new newcopy)
 	   (check-scaffold-copy pred predcopy)
 	   (check-scaffold-copy tree treecopy)
@@ -403,7 +403,7 @@
   (setf old (copy-tree old))
   (setf tree (copy-tree tree))
   (apply #'nsubst new old tree
-	 `(,@(unless (eq key 'no-key) `(:key ,key))
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
 	     ,@(when test `(:test ,test))
 	     ,@(when test-not `(:test-not ,test-not)))))
 
@@ -474,14 +474,14 @@
   (setf new (copy-tree new))
   (setf tree (copy-tree tree))
   (apply #'nsubst-if new pred tree
-	 (unless (eq key 'no-key) `(:key ,key))))
+	 (unless (eqt key 'no-key) `(:key ,key))))
 
 (defun check-nsubst-if-not (new pred tree &key (key 'no-key))
   "Call nsubst-if-not new pred tree, with keyword arguments if present."
   (setf new (copy-tree new))
   (setf tree (copy-tree tree))
   (apply #'nsubst-if-not new pred tree
-		  (unless (eq key 'no-key) `(:key ,key))))
+		  (unless (eqt key 'no-key) `(:key ,key))))
 
 (deftest nsubst-if-1
     (check-nsubst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))

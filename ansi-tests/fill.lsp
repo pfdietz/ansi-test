@@ -14,42 +14,42 @@
 (deftest array-fill-1
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
 	 (b (fill a 'x)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (x x x x x))
 
 (deftest array-fill-2
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
 	 (b (fill a 'x :start 2)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (a b x x x))
 
 (deftest array-fill-3
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
 	 (b (fill a 'x :end 2)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (x x c d e))
 
 (deftest array-fill-4
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
 	 (b (fill a 'x :start 1 :end 3)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (a x x d e))
 
 (deftest array-fill-5
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
 	 (b (fill a 'x :start 1 :end nil)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (a x x x x))
 
 (deftest array-fill-6
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
 	 (b (fill a 'x :end nil)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (x x x x x))
 
@@ -86,42 +86,42 @@
 (deftest array-fixnum-fill-1
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
 	 (b (fill a 6)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (6 6 6 6 6))
 
 (deftest array-fixnum-fill-2
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
 	 (b (fill a 6 :start 2)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (1 2 6 6 6))
 
 (deftest array-fixnum-fill-3
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
 	 (b (fill a 7 :end 2)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (7 7 3 4 5))
 
 (deftest array-fixnum-fill-4
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
 	 (b (fill a 8 :start 1 :end 3)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (1 8 8 4 5))
 
 (deftest array-fixnum-fill-5
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
 	 (b (fill a 0 :start 1 :end nil)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (1 0 0 0 0))
 
 (deftest array-fixnum-fill-6
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
 	 (b (fill a -1 :end nil)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a)))
   t (-1 -1 -1 -1 -1))
 
@@ -159,7 +159,7 @@
   (let* ((a (make-array '(5) :element-type (list 'unsigned-byte byte-size)
 			:initial-contents '(1 2 3 4 5)))
 	 (b (apply #'fill a fill-args)))
-    (values (eq a b)
+    (values (eqt a b)
 	    (map 'list #'identity a))))
 
 (deftest array-unsigned-byte8-fill-1

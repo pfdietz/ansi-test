@@ -15,7 +15,7 @@
   nil)
 
 (deftest member-if-2
-  (member-if #'(lambda (x) (eq x 'a)) '(1 2 a 3 4))
+  (member-if #'(lambda (x) (eqt x 'a)) '(1 2 a 3 4))
   (a 3 4))
 
 (deftest member-if-3
@@ -32,7 +32,7 @@
     (not (every
 	  #'(lambda (x)
 	      (let ((result (catch-type-error (member-if #'listp x))))
-		(or (eq result 'type-error)
+		(or (eqt result 'type-error)
 		    (progn
 		      (format t "~%On ~S: returned ~%~S" x result)
 		      nil))))
@@ -48,7 +48,7 @@
   nil)
 
 (deftest member-if-not-2
-  (member-if-not #'(lambda (x) (eq x 'a)) '(a 1 2 a 3 4))
+  (member-if-not #'(lambda (x) (eqt x 'a)) '(a 1 2 a 3 4))
   (1 2 a 3 4))
 
 (deftest member-if-not-3
@@ -65,7 +65,7 @@
     (not (every
 	  #'(lambda (x)
 	      (let ((result (catch-type-error (member-if-not #'listp x))))
-		(or (eq result 'type-error)
+		(or (eqt result 'type-error)
 		    (progn
 		      (format t "~%On x = ~S, returns: ~%~S" x result)
 		      nil))))

@@ -63,9 +63,9 @@
       (let ((y (cdr x))
 	    (z (cddr x)))
 	(let ((result (nbutlast x 2)))
-	  (and (eq x result)
-	       (eq (cdr x) y)
-	       (eq (cddr x) z)
+	  (and (eqt x result)
+	       (eqt (cdr x) y)
+	       (eqt (cddr x) z)
 	       result))))
   (a b c))
 
@@ -84,7 +84,7 @@
 (deftest nbutlast-4
     (let ((x (list* 'a 'b 'c 'd)))
       (let ((result (catch-type-error (nbutlast x 1))))
-	(and (eq result x)
+	(and (eqt result x)
 	     result)))
   (a b))
 

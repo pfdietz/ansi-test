@@ -8,7 +8,7 @@
 (defun array-string-fill-test-fn (a &rest fill-args)
   (setq a (copy-seq a))
   (let ((b (apply #'fill a fill-args)))
-    (values (eq a b) b)))
+    (values (eqt a b) b)))
 
 (deftest array-string-fill-1
   (array-string-fill-test-fn "abcde" #\Z)

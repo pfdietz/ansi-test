@@ -19,10 +19,10 @@
 	      (find-symbol "FOO" p)
 	    (prog1
 		(and sym2
-		     (eq (symbol-package sym2) p)
+		     (eqt (symbol-package sym2) p)
 		     (string= (symbol-name sym2) "FOO")
-		     (eq sym sym2)
-		     (eq status :external))
+		     (eqt sym sym2)
+		     (eqt status :external))
 	      (delete-package p)))))
       return-value)
   t)
@@ -36,10 +36,10 @@
 		   (find-symbol "FOO" p)
 		 (prog1
 		     (and sym2
-			  (eq (symbol-package sym2) p)
+			  (eqt (symbol-package sym2) p)
 			  (string= (symbol-name sym2) "FOO")
-			  (eq sym sym2)
-			  (eq status :external))
+			  (eqt sym sym2)
+			  (eqt status :external))
 		   (delete-package p))))))
   t)
 

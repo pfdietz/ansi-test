@@ -136,7 +136,7 @@
 		(y (apply #'my-string-compare s1 s2 comparison :case case args)))
 	    (not
 	     (or (eql x y)
-		 (and x y (eq comparison '=))))))))
+		 (and x y (eqt comparison '=))))))))
 
 (defun make-random-string (n)
   (let ((s (random-case

@@ -18,7 +18,7 @@
 	  (unless (packagep p2)
 	    (ignore-errors (delete-package p))
 	    (return p2))
-	  (unless (and (eq p p2)
+	  (unless (and (eqt p p2)
 		       (equal (package-name p2) "TEST2"))
 	    (ignore-errors (delete-package p))
 	    (ignore-errors (delete-package p2))
@@ -37,7 +37,7 @@
 	  (unless (packagep p2)
 	    (ignore-errors (delete-package p))
 	    (return p2))
-	  (unless (and (eq p p2)
+	  (unless (and (eqt p p2)
 		       (equal (package-name p2) "TEST2")
 		       (null (set-exclusive-or nicknames
 					       (package-nicknames p2)
@@ -59,7 +59,7 @@
 	  (unless (packagep p2)
 	    (ignore-errors (delete-package p))
 	    (return p2))
-	  (unless (and (eq p p2)
+	  (unless (and (eqt p p2)
 		       (equal (package-name p2) "TEST2")
 		       (equal
 			(sort (copy-list (package-nicknames p2))
@@ -85,7 +85,7 @@
 	  (unless (packagep p2)
 	    (ignore-errors (delete-package p))
 	    (return p2))
-	  (unless (and (eq p p2)
+	  (unless (and (eqt p p2)
 		       (equal (package-name p2) "TEST2")
 		       (null (set-exclusive-or nicknames
 					       (package-nicknames p2)
@@ -107,7 +107,7 @@
 	  (unless (packagep p2)
 	    (ignore-errors (delete-package p))
 	    (return p2))
-	  (unless (and (eq p p2)
+	  (unless (and (eqt p p2)
 		       (equal (package-name p2) "G")
 		       (null (set-exclusive-or nicknames
 					       (package-nicknames p2)
@@ -130,7 +130,7 @@
 	  (unless (packagep p2)
 	    (ignore-errors (delete-package p))
 	    (return p2))
-	  (unless (and (eq p p2)
+	  (unless (and (eqt p p2)
 		       (equal (package-name p2) "TEST2")
 		       (equal
 			(sort (copy-list (package-nicknames p2))

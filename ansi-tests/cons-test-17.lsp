@@ -47,7 +47,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (rassoc 'b x)))
       (and
-       (eq result (second x))
+       (eqt result (second x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -178,7 +178,7 @@
 	    (copy-tree
 	     (rev-assoc-list
 	      '((b . 1) (a . 2) (c . 3))))
-	   :test #'(lambda (x y) (and (eq x y) 'matched)))
+	   :test #'(lambda (x y) (and (eqt x y) 'matched)))
   (2 . a))
 
 ;; Check that the order of the arguments to :test is correct
@@ -187,8 +187,8 @@
     (block fail
       (rassoc 'a '((1 . b) (2 . c) (3 . a))
 	     :test #'(lambda (x y)
-		       (unless (eq x 'a) (return-from fail 'fail))
-		       (eq x y))))
+		       (unless (eqt x 'a) (return-from fail 'fail))
+		       (eqt x y))))
   (3 . A))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -200,7 +200,7 @@
 	   (result (rassoc-if #'evenp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (third x))
+       (eqt result (third x))
        result))
   (c . 6))
 
@@ -211,7 +211,7 @@
 	       (result (rassoc-if #'oddp x :key #'1+)))
 	  (and
 	   (check-scaffold-copy x xcopy)
-	   (eq result (third x))
+	   (eqt result (third x))
 	   result))
       (program-error (c) c))
   (c . 6))
@@ -222,7 +222,7 @@
 	   (result (rassoc-if #'evenp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (fourth x))
+       (eqt result (fourth x))
        result))
   (c . 6))
 
@@ -240,7 +240,7 @@
 	   (result (rassoc-if-not #'oddp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (third x))
+       (eqt result (third x))
        result))
   (c . 6))
 
@@ -251,7 +251,7 @@
 	       (result (rassoc-if-not #'evenp x :key #'1+)))
 	  (and
 	   (check-scaffold-copy x xcopy)
-	   (eq result (third x))
+	   (eqt result (third x))
 	   result))
       (program-error (c) c))
   (c . 6))
@@ -262,7 +262,7 @@
 	   (result (rassoc-if-not #'oddp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (fourth x))
+       (eqt result (fourth x))
        result))
   (c . 6))
 

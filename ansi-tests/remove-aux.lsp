@@ -7,17 +7,17 @@
 
 (defun make-random-element (type)
   (cond
-   ((subtypep 'fixnum type)
+   ((subtypep* 'fixnum type)
     (random most-positive-fixnum))
-   ((subtypep '(integer 0 255) type)
+   ((subtypep* '(integer 0 255) type)
     (random 255))
-   ((subtypep '(integer 0 7) type)
+   ((subtypep* '(integer 0 7) type)
     (random 8))
-   ((subtypep 'bit type)
+   ((subtypep* 'bit type)
     (random 2))
-   ((subtypep 'symbol type)
+   ((subtypep* 'symbol type)
     (elt '(a b c d e f g h) (random 8)))
-   ((subtypep '(member #\a #\b #\c #\d #\e #\f #\g #\h) type)
+   ((subtypep* '(member #\a #\b #\c #\d #\e #\f #\g #\h) type)
     (elt "abcdefgh" (random 8)))
    (t (error "Can't get random element of type ~A~%." type))))
 
@@ -29,7 +29,7 @@
    generate a random member of the sequence or a random
    element of the element type to delete from the sequence."
   
-  (let* ((seq (if (subtypep type 'list)
+  (let* ((seq (if (subtypep* type 'list)
 		  (loop for i from 1 to len collect
 			(make-random-element element-type))
 		(let ((seq (make-sequence type len)))
@@ -109,6 +109,9 @@
 		      :initial-contents result))))))
 
 (defun my-remove-if-not (pred &rest args)
+  (when (symbolp pred)
+    (setq pred (coerce pred 'function)))
+  (assert (typep pred 'function))
   (apply #'my-remove-if (complement pred) args))
 
 (defun make-random-rd-params (maxlen)

@@ -53,7 +53,7 @@
 	(and
 	 (check-scaffold-copy x xcopy)
 	 (check-scaffold-copy y ycopy)
-	 (eq tail (nthcdr 6 x))
+	 (eqt tail (nthcdr 6 x))
 	 (values indicator value tail))))
   g h (g h a c))
 
@@ -224,7 +224,7 @@
        (and (remf x 'c) t)
        (loop
 	   for ptr on x by #'cddr count
-	     (not (eq (car ptr) 'a)))))
+	     (not (eqt (car ptr) 'a)))))
   t 0)
 
 

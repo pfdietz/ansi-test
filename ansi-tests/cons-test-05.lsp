@@ -44,7 +44,7 @@
 (deftest rest-set-1
     (let ((x (list 'a 'b 'c)))
       (and
-       (eq (setf (rest x) 'd) 'd)
+       (eqt (setf (rest x) 'd) 'd)
        x))
   (a . d))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -110,7 +110,7 @@
   (loop
       for e in x
        and i from 0
-       count (not (eq e (nth i x)))))
+       count (not (eqt e (nth i x)))))
 
 (deftest nth-1
     (nth-1-body (loop for i from 1 to 2000 collect (* 4 i)))

@@ -18,7 +18,7 @@
 	(ycopy (make-scaffold-copy y)))
     (let ((result (apply #'set-difference
 			 x y
-			 `(,@(unless (eq key 'no-key) `(:key ,key))
+			 `(,@(unless (eqt key 'no-key) `(:key ,key))
 			   ,@(when test `(:test ,test))
 			   ,@(when test-not `(:test-not ,test-not))))))  
       (cond
@@ -31,7 +31,7 @@
 (defun check-set-difference (x y z &key (key #'identity)
 					(test #'eql))
   (and
-   (not (eq 'failed z))
+   (not (eqt 'failed z))
    (every #'(lambda (e) (member e x :key key :test test)) z)
    (every #'(lambda (e) (or (member e y :key key :test test)
 			    (member e z :key key :test test))) x)
@@ -143,7 +143,7 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(eq x y))))
+			(eqt x y))))
 	    #'<))
   (1 2 3 4))
 
@@ -158,7 +158,7 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(eq x y))))
+			(eqt x y))))
 	    #'<))
   (1 2 3 4))
 
@@ -173,7 +173,7 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(not (eq x y)))))
+			(not (eqt x y)))))
 	    #'<))
   (1 2 3 4))
 
@@ -188,7 +188,7 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(not (eq x y)))))
+			(not (eqt x y)))))
 	    #'<))
   (1 2 3 4))
 
@@ -201,7 +201,7 @@
   (setf y (copy-list y))
   (apply #'nset-difference
 	 x y
-	 `(,@(unless (eq key 'no-key) `(:key ,key))
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
 	     ,@(when test `(:test ,test))
 	     ,@(when test-not `(:test-not ,test-not)))))
 
@@ -318,7 +318,7 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(eq x y))))
+			(eqt x y))))
 	    #'<))
   (1 2 3 4))
 
@@ -333,7 +333,7 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(eq x y))))
+			(eqt x y))))
 	    #'<))
   (1 2 3 4))
 
@@ -348,7 +348,7 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(not (eq x y)))))
+			(not (eqt x y)))))
 	    #'<))
   (1 2 3 4))
 
@@ -362,6 +362,6 @@
 			(when (or (member x '(e f g h))
 				  (member y '(1 2 3 4)))
 			  (return-from fail 'fail))
-			(not (eq x y)))))
+			(not (eqt x y)))))
 	    #'<))
   (1 2 3 4))

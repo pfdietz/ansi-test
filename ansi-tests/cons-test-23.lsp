@@ -18,7 +18,7 @@
 	(ycopy (make-scaffold-copy y)))
     (let ((result (apply #'set-exclusive-or
 			 x y
-			 `(,@(unless (eq key 'no-key) `(:key ,key))
+			 `(,@(unless (eqt key 'no-key) `(:key ,key))
 			   ,@(when test `(:test ,test))
 			   ,@(when test-not `(:test-not ,test-not))))))  
       (cond
@@ -31,7 +31,7 @@
 (defun check-set-exclusive-or (x y z &key (key #'identity)
 					(test #'eql))
   (and
-   (not (eq 'failed z))
+   (not (eqt 'failed z))
    (every #'(lambda (e) (or (member e x :key key :test test)
 		            (member e y :key key :test test)))
 	  z)
@@ -229,7 +229,7 @@
   (setf y (copy-list y))
   (apply #'nset-exclusive-or
 	 x y
-	 `(,@(unless (eq key 'no-key) `(:key ,key))
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
 	     ,@(when test `(:test ,test))
 	     ,@(when test-not `(:test-not ,test-not)))))
 

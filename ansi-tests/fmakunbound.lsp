@@ -10,7 +10,7 @@
     (and (not (fboundp g))
 	 (setf (symbol-function g) #'car)
 	 (fboundp g)
-	 (values (eq (fmakunbound g) g)
+	 (values (eqt (fmakunbound g) g)
 		 (fboundp g))))
   t nil)
 
@@ -19,7 +19,7 @@
     (and (not (fboundp g))
 	 (eval `(defun ,g () nil))
 	 (fboundp g)
-	 (values (eq (fmakunbound g) g)
+	 (values (eqt (fmakunbound g) g)
 		 (fboundp g))))
   t nil)
 
@@ -28,7 +28,7 @@
     (and (not (fboundp g))
 	 (eval `(defmacro ,g () nil))
 	 (fboundp g)
-	 (values (eq (fmakunbound g) g)
+	 (values (eqt (fmakunbound g) g)
 		 (fboundp g))))
   t nil)
 

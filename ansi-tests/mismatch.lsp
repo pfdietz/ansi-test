@@ -392,7 +392,8 @@
   nil)
 
 (deftest mismatch-string.8
-  (mismatch "1001" "0110" :test #'(lambda (x y) (eql x (if (eq y #\0) #\1 #\0))))
+  (mismatch "1001" "0110" :test #'(lambda (x y) (eql x (if (eql y #\0)
+							   #\1 #\0))))
   nil)
 
 (deftest mismatch-string.8a

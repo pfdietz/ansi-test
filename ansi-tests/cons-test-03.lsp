@@ -15,10 +15,10 @@
   (if
       (consp x)
       (and (consp y)
-	   (not (eq x y))
-	   (eq (car x) (car y))
+	   (not (eqt x y))
+	   (eqt (car x) (car y))
 	   (check-copy-list-copy (cdr x) (cdr y)))
-    (and (eq x y) t)))
+    (and (eqt x y) t)))
 
 (defun check-copy-list (x)
   "Apply copy-list, checking that it properly copies,
@@ -102,7 +102,7 @@
     (loop
 	for x in (list 'a 1 1.0 #\w (make-array '(10))
 		       '(a b . c) (symbol-package 'cons))
-	count (not (eq (catch-type-error (list-length x))
+	count (not (eqt (catch-type-error (list-length x))
 		       'type-error)))
   0)
 

@@ -17,7 +17,7 @@
 	(ycopy (make-scaffold-copy y)))
     (let ((result
 	   (apply #'subsetp x y
-		  `(,@(unless (eq key 'no-key)
+		  `(,@(unless (eqt key 'no-key)
 			`(:key ,key))
 		    ,@(when test `(:test ,test))
 		    ,@(when test-not `(:test-not ,test-not))))))
@@ -75,7 +75,7 @@
 			 (list '(z . c) '(a . y) '(b . 100) '(e . f)
 			      '(c . foo)))
 			:test #'(lambda (e1 e2)
-				   (eq e1 (car e2))))
+				   (eqt e1 (car e2))))
   t)
 
 (deftest subsetp-10
@@ -85,7 +85,7 @@
 			     (list '(z . c) '(a . y) '(b . 100) '(e . f)
 				  '(c . foo)))
 			    :test #'(lambda (e1 e2)
-				      (eq e1 (car e2)))
+				      (eqt e1 (car e2)))
 			    :key nil)
       (error (c) c))
   t)
@@ -96,7 +96,7 @@
 			 (list '(z . c) '(a . y) '(b . 100) '(e . f)
 			       '(c . foo)))
 			:test-not  #'(lambda (e1 e2)
-				       (not (eq e1 (car e2)))))
+				       (not (eqt e1 (car e2)))))
   t)
 
 ;; Check that it maintains order of arguments

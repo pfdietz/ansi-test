@@ -23,19 +23,20 @@
 
 ;; Fields have appropriate values
 (deftest structure-2-1
-    (let ((s (make-s-2)))
-      (and
-       (eql (s-2-f1 s) 0)
-       (eq  (s-2-f2 s) 'a)
-       (eql (s-2-f3 s) 1.21)
-       (eql (s-2-f4 s) #\d)
-       (equal (s-2-f5 s) '(a b))
-       (eql (s-2-f6 s) *s-2-f6-counter*)))
+  (let ((s (make-s-2)))
+    (not (not
+	  (and
+	   (eql (s-2-f1 s) 0)
+	   (eqt (s-2-f2 s) 'a)
+	   (eql (s-2-f3 s) 1.21)
+	   (eql (s-2-f4 s) #\d)
+	   (equal (s-2-f5 s) '(a b))
+	   (eql (s-2-f6 s) *s-2-f6-counter*)))))
   t)
 
 ;; Two successive invocations of make-s-2 return different objects
 (deftest structure-2-2
-   (eq (s-2-f5 (make-s-2))
+  (eqt (s-2-f5 (make-s-2))
        (s-2-f5 (make-s-2)))
   nil)
     

@@ -55,23 +55,23 @@
   8)
 
 (deftest count-if-list.13
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    '(a b c d a e f a e f f a a) :start 2)
   4)
 
 (deftest count-if-list.14
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    '(a b c d a e f a e f f a a) :end 7)
   2)
   
 (deftest count-if-list.15
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    '(a b c d a e f a e f f a a) :end 7
 	    :start 2)
   1)
   
 (deftest count-if-list.16
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    '(a b c d a e f a e f f a a) :end 7
 	    :start 2 :from-end t)
   1)
@@ -129,23 +129,23 @@
   8)
 
 (deftest count-if-vector.13
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    #(a b c d a e f a e f f a a) :start 2)
   4)
 
 (deftest count-if-vector.14
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    #(a b c d a e f a e f f a a) :end 7)
   2)
   
 (deftest count-if-vector.15
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    #(a b c d a e f a e f f a a) :end 7
 	    :start 2)
   1)
   
 (deftest count-if-vector.16
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    #(a b c d a e f a e f f a a) :end 7
 	    :start 2 :from-end t)
   1)
@@ -232,28 +232,28 @@
   8)
 
 (deftest count-if-nonsimple-vector.13
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
 			:fill-pointer t :adjustable t)
 	    :start 2)
   4)
 
 (deftest count-if-nonsimple-vector.14
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
 			:fill-pointer t :adjustable t)
 	    :end 7)
   2)
   
 (deftest count-if-nonsimple-vector.15
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
 			:fill-pointer t :adjustable t)
 	    :end 7 :start 2)
   1)
   
 (deftest count-if-nonsimple-vector.16
-  (count-if #'(lambda (x) (eq x 'a))
+  (count-if #'(lambda (x) (eqt x 'a))
 	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
 			:fill-pointer t :adjustable t)
 	    :end 7 :start 2 :from-end t)

@@ -228,7 +228,7 @@
 	  (setf y (* y y))))
     (not (not
 	  (or
-	   (eq x y)  ;; if bignums are eq, the test is worthless
+	   (eqt x y)  ;; if bignums are eq, the test is worthless
 	   (eql (length
 		 (nunion-with-copy (list x) (list x)))
 		1)))))

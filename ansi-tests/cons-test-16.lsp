@@ -16,7 +16,7 @@
 	   (result (acons 'a 'b x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq (cdr result) x)
+       (eqt (cdr result) x)
        result))
   ((a . b) (c . d) (e . f)))
 
@@ -72,7 +72,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (assoc 'b x)))
       (and
-       (eq result (second x))
+       (eqt result (second x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -165,7 +165,7 @@
 
 (deftest assoc-24
     (assoc 'a '((b . 1) (a . 2) (c . 3))
-	   :test #'(lambda (x y) (and (eq x y) 'matched)))
+	   :test #'(lambda (x y) (and (eqt x y) 'matched)))
   (a . 2))
 
 ;; Check that the order of the arguments to test is correct
@@ -174,8 +174,8 @@
     (block fail
       (assoc 'a '((b . 1) (c . 2) (a . 3))
 	     :test #'(lambda (x y)
-		       (unless (eq x 'a) (return-from fail 'fail))
-		       (eq x y))))
+		       (unless (eqt x 'a) (return-from fail 'fail))
+		       (eqt x y))))
   (A . 3))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -187,7 +187,7 @@
 	   (result (assoc-if #'evenp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (third x))
+       (eqt result (third x))
        result))
   (6 . c))
 
@@ -198,7 +198,7 @@
 	       (result (assoc-if #'oddp x :key #'1+)))
 	  (and
 	   (check-scaffold-copy x xcopy)
-	   (eq result (third x))
+	   (eqt result (third x))
 	   result))
       (program-error (c) c))
   (6 . c))
@@ -209,7 +209,7 @@
 	   (result (assoc-if #'evenp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (fourth x))
+       (eqt result (fourth x))
        result))
   (6 . c))
 
@@ -226,7 +226,7 @@
 	   (result (assoc-if-not #'oddp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (third x))
+       (eqt result (third x))
        result))
   (6 . c))
 
@@ -237,7 +237,7 @@
 	       (result (assoc-if-not #'evenp x :key #'1+)))
 	  (and
 	   (check-scaffold-copy x xcopy)
-	   (eq result (third x))
+	   (eqt result (third x))
 	   result))
       (program-error (c) c))
   (6 . c))
@@ -248,7 +248,7 @@
 	   (result (assoc-if-not #'oddp x)))
       (and
        (check-scaffold-copy x xcopy)
-       (eq result (fourth x))
+       (eqt result (fourth x))
        result))
   (6 . c))
 
@@ -270,9 +270,9 @@
        (= (length x) (length result))
        (every #'(lambda (p1 p2)
 		  (or (and (null p1) (null p2))
-		      (and (not (eq p1 p2))
-			   (eq (car p1) (car p2))
-			   (eq (cdr p1) (cdr p2)))))
+		      (and (not (eqt p1 p2))
+			   (eqt (car p1) (car p2))
+			   (eqt (cdr p1) (cdr p2)))))
 	      x result)
        t))
   t)
@@ -328,7 +328,7 @@
        (check-scaffold-copy x xcopy)
        (check-scaffold-copy y ycopy)
        (check-scaffold-copy z zcopy)
-       (eq (cdr (cddr (cddr result))) z)
+       (eqt (cdr (cddr (cddr result))) z)
        (or
 	(equal result expected)
 	(equal result (append (reverse (subseq expected 0 5))

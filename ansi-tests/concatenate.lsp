@@ -41,7 +41,7 @@
 	 (copy (concatenate 'vector orig)))
     (values
      copy
-     (eq copy orig)))
+     (eqt copy orig)))
   #(a b c d e)
   nil)
 

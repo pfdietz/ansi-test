@@ -347,7 +347,7 @@
   7)
 
 (deftest count-string.4
-  (count #\1 "00101100011011000" :key #'(lambda (x) (if (eq x #\0) #\1 #\2)))
+  (count #\1 "00101100011011000" :key #'(lambda (x) (if (eql x #\0) #\1 #\2)))
   10)
 
 (deftest count-string.5

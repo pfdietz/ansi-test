@@ -36,4 +36,4 @@ STREAM-ERROR
 END-OF-FILE
 PRINT-NOT-READABLE
 		READER-ERROR)
-      collect (list tp (multiple-value-list (subtypep tp 'atom)))))
+      collect (list tp (multiple-value-list (subtypep* tp 'atom)))))

@@ -28,7 +28,7 @@
     (let ((x (copy-tree '(a))))
       (push x x)
       (and
-       (eq (car x) (cdr x))
+       (eqt (car x) (cdr x))
        x))
   ((a) a))
 
@@ -52,7 +52,7 @@
 	  (y x))
       (push 'c x)
       (and
-       (eq (cdr x) y)
+       (eqt (cdr x) y)
        (pop x)))
   c)
 
@@ -63,7 +63,7 @@
     (let ((x nil))
       (let ((y (pushnew 'a x)))
 	(and
-	 (eq x y)
+	 (eqt x y)
 	 (equal x '(a))
 	 t)))
   t)
@@ -72,7 +72,7 @@
     (let* ((x (copy-tree '(b c d a k f q)))
 	   (y (pushnew 'a x)))
       (and
-       (eq x y)
+       (eqt x y)
        x))
   (b c d a k f q))
 
@@ -80,7 +80,7 @@
     (let* ((x (copy-tree '(1 2 3 4 5 6 7 8)))
 	   (y (pushnew 7 x)))
       (and
-       (eq x y)
+       (eqt x y)
        x))
   (1 2 3 4 5 6 7 8))
 
@@ -88,7 +88,7 @@
     (let* ((x (copy-tree '((a b) 1 "and" c d e)))
 	   (y (pushnew (copy-tree '(c d)) x
 		       :test 'equal)))
-      (and (eq x y)
+      (and (eqt x y)
 	   x))
   ((c d) (a b) 1 "and" c d e))
 
@@ -97,7 +97,7 @@
 	   (y (pushnew (copy-tree '(a b)) x
 		       :test 'equal)))
       (and
-       (eq x y)
+       (eqt x y)
        x))
   ((a b) 1 "and" c d e))
 
@@ -105,8 +105,8 @@
     (let* ((x (copy-tree '((a b) (c e) (d f) (g h))))
 	   (y (pushnew (copy-tree '(d i)) x :key #'car))
 	   (z (pushnew (copy-tree '(z 10)) x :key #'car)))
-      (and (eq y (cdr z))
-	   (eq z x)
+      (and (eqt y (cdr z))
+	   (eqt z x)
 	   x))
   ((z 10) (a b) (c e) (d f) (g h)))
 
@@ -118,8 +118,8 @@
 		       x
 		       :key #'car :test #'string=)))
       (and
-       (eq y (cdr x))
-       (eq x z)
+       (eqt y (cdr x))
+       (eqt x z)
        x))
   (("xyz" 10) ("abc" 1) ("def" 2) ("ghi" 3)))
 	  
@@ -130,8 +130,8 @@
 	   (z (pushnew (copy-tree '("xyz" 10)) x
 		       :key #'car :test-not (complement #'string=))))
       (and
-       (eq y (cdr x))
-       (eq x z)
+       (eqt y (cdr x))
+       (eqt x z)
        x))
   (("xyz" 10) ("abc" 1) ("def" 2) ("ghi" 3)))
 
@@ -142,8 +142,8 @@
 	   (z (pushnew (copy-tree '("xyz" 10)) x
 		       :key 'car :test-not (complement #'string=))))
       (and
-       (eq y (cdr x))
-       (eq x z)
+       (eqt y (cdr x))
+       (eqt x z)
        x))
   (("xyz" 10) ("abc" 1) ("def" 2) ("ghi" 3)))
 
@@ -163,7 +163,7 @@
 	   (y (pushnew (copy-tree '(a b)) x
 		       :test 'equal :key nil)))
       (and
-       (eq x y)
+       (eqt x y)
        x))
     (error (c) c))
   ((a b) 1 "and" c d e))

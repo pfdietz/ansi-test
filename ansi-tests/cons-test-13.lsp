@@ -15,7 +15,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 'c x)))
       (and
-       (eq result (cddr x))
+       (eqt result (cddr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -24,7 +24,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 'e x)))
       (and
-       (eq result (cddddr x))
+       (eqt result (cddddr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -33,7 +33,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 4 x)))
       (and
-       (eq result (cdddr x))
+       (eqt result (cdddr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -42,7 +42,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 9 x :key #'1+)))
       (and
-       (eq result (cdddr x))
+       (eqt result (cdddr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -51,7 +51,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member '(c d) x :test #'equal)))
       (and
-       (eq result (cdr x))
+       (eqt result (cdr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -60,7 +60,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 'c x :key #'car)))
       (and
-       (eq result (cdr x))
+       (eqt result (cdr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -69,7 +69,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 'c x :key #'car :test #'eq)))
       (and
-       (eq result (cdr x))
+       (eqt result (cdr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -78,7 +78,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 'c x :key #'car :test-not (complement #'eq))))
       (and
-       (eq result (cdr x))
+       (eqt result (cdr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -87,7 +87,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member 'c x :key #'car :test #'eql)))
       (and
-       (eq result (cdr x))
+       (eqt result (cdr x))
        (check-scaffold-copy x xcopy)))
   t)
 
@@ -96,7 +96,7 @@
 	   (xcopy (make-scaffold-copy x))
 	   (result (member (list 'd) x :key #'cdr :test #'equal)))
       (and
-       (eq result (cdr x))
+       (eqt result (cdr x))
        (check-scaffold-copy x xcopy)))
   t)
 

@@ -14,99 +14,100 @@
 ;; we don't examine it here.
 ;; Try several ways of specifying the package name.
 (deftest defpackage-1
-    (handler-case 
-	(loop
-	    for n in '("H" #:|H| #\H) count
-	      (not
-	       (progn
-		 (ignore-errors (delete-package "H"))
-		 (let ((p (ignore-errors (eval `(defpackage ,n)))))
-		   (and
-		    (packagep p)
-		    (equal (package-name p)              "H")
-		    ;; (equal (package-use-list p)          nil)
-		    (equal (package-used-by-list p)      nil)
-		    (equal (package-nicknames p)         nil)
-		    (equal (package-shadowing-symbols p) nil)
-		    (null (documentation p t))
-		    )))))
-      (error (c) c))
+  (handler-case 
+   (loop
+    for n in '("H" #:|H| #\H) count
+    (not
+     (progn
+       (ignore-errors (delete-package "H"))
+       (let ((p (ignore-errors (eval `(defpackage ,n)))))
+	 (and
+	  (packagep p)
+	  (equal (package-name p)              "H")
+	  ;; (equal (package-use-list p)          nil)
+	  (equal (package-used-by-list p)      nil)
+	  (equal (package-nicknames p)         nil)
+	  (equal (package-shadowing-symbols p) nil)
+	  (null (documentation p t))
+	  )))))
+   (error (c) c))
   0)
 
 ;; Test :nicknames option
 ;; Do not check use-list, because it is implementation dependent
 ;; Try several ways of specifying a nickname.
 (deftest defpackage-2
-    (loop
-	for n in '("I" #:|I| #\I) count
-	  (not
-	   (ignore-errors
-	    (progn
-	      (ignore-errors (delete-package "H"))
-	      (let ((p (ignore-errors
-			(eval `(defpackage "H" (:nicknames ,n "J"))))))
-		(and
-		 (packagep p)
-		 (equal (package-name p)              "H")
-		 ;; (equal (package-use-list p)          nil)
-		 (equal (package-used-by-list p)      nil)
-		 (equal (sort (copy-list (package-nicknames p))
-			      #'string<)
-			'("I" "J"))
-		 (equal (package-shadowing-symbols p) nil)
-		 (null (documentation p t))
-		 ))))))
-    0)
+  (loop
+   for n in '("I" #:|I| #\I) count
+   (not
+    (ignore-errors
+      (progn
+	(ignore-errors (delete-package "H"))
+	(let ((p (ignore-errors
+		   (eval `(defpackage "H" (:nicknames ,n "J"))))))
+	  (and
+	   (packagep p)
+	   (equal (package-name p)              "H")
+	   ;; (equal (package-use-list p)          nil)
+	   (equal (package-used-by-list p)      nil)
+	   (equal (sort (copy-list (package-nicknames p))
+			#'string<)
+		  '("I" "J"))
+	   (equal (package-shadowing-symbols p) nil)
+	   (null (documentation p t))
+	   ))))))
+  0)
 
 ;; Test defpackage with documentation option
 ;; Do not check use-list, because it is implementation dependent
 (deftest defpackage-3
-     (progn
-      (ignore-errors (delete-package "H"))
-      (ignore-errors
-       (let ((p (eval '(defpackage "H" (:documentation "This is a doc string")))))
-	 (and
-	  (packagep p)
-	  (equal (package-name p)              "H")
-	  ;; (equal (package-use-list p)          nil)
-	  (equal (package-used-by-list p)      nil)
-	  (equal (package-nicknames p)	nil)
-	  (equal (package-shadowing-symbols p) nil)
-	  (equal (documentation p t)
-		 "This is a doc string")
-	  ))))
+  (progn
+    (ignore-errors (delete-package "H"))
+    (ignore-errors
+      (let ((p (eval '(defpackage "H" (:documentation "This is a doc string")))))
+	(and
+	 (packagep p)
+	 (equal (package-name p)              "H")
+	 ;; (equal (package-use-list p)          nil)
+	 (equal (package-used-by-list p)      nil)
+	 (equal (package-nicknames p)	nil)
+	 (equal (package-shadowing-symbols p) nil)
+	 (equal (documentation p t) "This is a doc string")
+	 t))))
   t)
 
 ;; Check use argument
 ;; Try several ways of specifying the package to be used
 (deftest defpackage-4
-    (loop
-	for n in '("A" :|A| #\A) count
-	  (not
-	   (ignore-errors
-	    (progn
-	      (ignore-errors (delete-package "H"))
-	      (let ((p (ignore-errors (eval `(defpackage "H" (:use ,n))))))
-		(and
-		 (packagep p)
-		 (equal (package-name p)              "H")
-		 (equal (package-use-list p)          (list (find-package "A")))
-		 (equal (package-used-by-list p)      nil)
-		 (equal (package-nicknames p)         nil)
-		 (equal (package-shadowing-symbols p) nil)
-		 (eql (num-symbols-in-package p)
-		      (num-external-symbols-in-package "A"))
-		 (equal (documentation p t)             nil)
-		 ))))))
+  (loop
+   for n in '("A" :|A| #\A) count
+   (not
+    (ignore-errors
+      (progn
+	(ignore-errors (delete-package "H"))
+	(let ((p (ignore-errors (eval `(defpackage "H" (:use ,n))))))
+	  (and
+	   (packagep p)
+	   (equal (package-name p)              "H")
+	   (equal (package-use-list p)          (list (find-package "A")))
+	   (equal (package-used-by-list p)      nil)
+	   (equal (package-nicknames p)         nil)
+	   (equal (package-shadowing-symbols p) nil)
+	   (eql (num-symbols-in-package p)
+		(num-external-symbols-in-package "A"))
+	   (equal (documentation p t)             nil)
+	   ))))))
   0)
 
 ;; Test defpackage shadow option, and null use
 (deftest defpackage-5
-    (progn
-      (ignore-errors (delete-package "H"))
-      (ignore-errors
-       (let ((p (ignore-errors (eval `(defpackage "H" (:use) 
-					(:shadow "foo"))))))
+  (progn
+    (ignore-errors (delete-package "H"))
+    (ignore-errors
+      (let ((p (ignore-errors (eval `(defpackage "H" (:use) 
+				       (:shadow "foo"))))))
+	(mapcar
+	 #'notnot
 	 (list
 	  (not (not (packagep p)))
 	  (equal (package-name p)              "H")
@@ -115,45 +116,47 @@
 	  (equal (package-nicknames p)         nil)
 	  (eql (num-symbols-in-package p) 1)
 	  (multiple-value-bind (sym access)
-			       (find-symbol "foo" p)
-			       (and (eq access :internal)
-				    (equal (symbol-name sym) "foo")
-				    (equal (symbol-package sym) p)
-				    (equal (package-shadowing-symbols p)
-					   (list sym))))
+	      (find-symbol "foo" p)
+	    (and (eqt access :internal)
+		 (equal (symbol-name sym) "foo")
+		 (equal (symbol-package sym) p)
+		 (equal (package-shadowing-symbols p)
+			(list sym))))
 	  (equal (documentation p t)             nil)
-	  ))))
-    (t t t t t t t t))
+	 )))))
+  (t t t t t t t t))
 
 ;; Test defpackage shadow and null use, with several ways
 ;; of specifying the name of the shadowed symbol
 (deftest defpackage-6
-    (loop
-	for s in '(:|f| #\f)
-	collect
-	(ignore-errors
-	  (ignore-errors (delete-package "H"))
-	  (let ((p (ignore-errors (eval `(defpackage "H" 
-					   (:use)
-					   (:shadow ,s))))))
-	    (list
-	     (not (not (packagep p)))
-	     (equal (package-name p)              "H")
-	     (equal (package-use-list p)          nil)
-	     (equal (package-used-by-list p)      nil)
-	     (equal (package-nicknames p)         nil)
-	     (eql (num-symbols-in-package p) 1)
-	     (multiple-value-bind (sym access)
-		 (find-symbol "f" p)
-	       (and (eq access :internal)
-		    (equal (symbol-name sym) "f")
-		    (equal (symbol-package sym) p)
-		    (equal (package-shadowing-symbols p)
-			   (list sym))))
-	     (equal (documentation p t)             nil)
-	     ))))
-    ((t t t t t t t t)
-     (t t t t t t t t)))
+  (loop
+   for s in '(:|f| #\f)
+   collect
+   (ignore-errors
+     (ignore-errors (delete-package "H"))
+     (let ((p (ignore-errors (eval `(defpackage "H" 
+				      (:use)
+				      (:shadow ,s))))))
+       (mapcar
+	#'notnot
+	(list
+	 (not (not (packagep p)))
+	 (equal (package-name p)              "H")
+	 (equal (package-use-list p)          nil)
+	 (equal (package-used-by-list p)      nil)
+	 (equal (package-nicknames p)         nil)
+	 (eql (num-symbols-in-package p) 1)
+	 (multiple-value-bind (sym access)
+	     (find-symbol "f" p)
+	   (and (eqt access :internal)
+		(equal (symbol-name sym) "f")
+		(equal (symbol-package sym) p)
+		(equal (package-shadowing-symbols p)
+		       (list sym))))
+	 (equal (documentation p t)             nil)
+	 )))))
+  ((t t t t t t t t)
+   (t t t t t t t t)))
 
 
 ;; Testing defpackage with shadowing-import-from.
@@ -179,22 +182,24 @@
 		     `(defpackage "H"
 			(:use)
 			(:shadowing-import-from "G" ,n))))))
-	   (list
-	    (not (not (packagep p)))
-	    (equal (package-name p)              "H")
-	    (equal (package-use-list p)          nil)
-	    (equal (package-used-by-list p)      nil)
-	    (equal (package-nicknames p)         nil)
-	    (eql (num-symbols-in-package p) 1)
-	    (multiple-value-bind (sym access)
-		(find-symbol "A" p)
-	      (and (eq access :internal)
-		   (equal (symbol-name sym) "A")
-		   (equal (symbol-package sym) pg)
-		   (equal (package-shadowing-symbols p)
-			  (list sym))))
-	    (equal (documentation p t)             nil)
-	    ))))))
+	   (mapcar
+	    #'notnot
+	    (list
+	     (not (not (packagep p)))
+	     (equal (package-name p)              "H")
+	     (equal (package-use-list p)          nil)
+	     (equal (package-used-by-list p)      nil)
+	     (equal (package-nicknames p)         nil)
+	     (eql (num-symbols-in-package p) 1)
+	     (multiple-value-bind (sym access)
+		 (find-symbol "A" p)
+	       (and (eqt access :internal)
+		    (equal (symbol-name sym) "A")
+		    (equal (symbol-package sym) pg)
+		    (equal (package-shadowing-symbols p)
+			   (list sym))))
+	     (equal (documentation p t)             nil)
+	     )))))))
   ((t t t t t t t t)
    (t t t t t t t t)
    (t t t t t t t t)))
@@ -220,26 +225,28 @@
 			(eval `(defpackage
 				 "H" (:use)
 				 (:import-from ,pn ,n "A"))))))
-	       (list
-		(not (not (packagep p)))
-		(equal (package-name p)              "H")
-		(equal (package-use-list p)          nil)
-		(equal (package-used-by-list p)      nil)
-		(equal (package-nicknames p)         nil)
-		(equal (package-shadowing-symbols p) nil)
-		(eql (num-symbols-in-package p) 2)
-		(multiple-value-bind (sym access)
-		    (find-symbol "A" p)
-		  (and (eq access :internal)
-		       (equal (symbol-name sym) "A")
-		       (equal (symbol-package sym) pg)))
-		(multiple-value-bind (sym access)
-		    (find-symbol "B" p)
-		  (and (eq access :internal)
-		       (equal (symbol-name sym) "B")
-		       (equal (symbol-package sym) pg)))
-		(equal (documentation p t)             nil)
-		)))))))
+	       (mapcar
+		#'notnot
+		(list
+		 (not (not (packagep p)))
+		 (equal (package-name p)              "H")
+		 (equal (package-use-list p)          nil)
+		 (equal (package-used-by-list p)      nil)
+		 (equal (package-nicknames p)         nil)
+		 (equal (package-shadowing-symbols p) nil)
+		 (eql (num-symbols-in-package p) 2)
+		 (multiple-value-bind (sym access)
+		     (find-symbol "A" p)
+		   (and (eqt access :internal)
+			(equal (symbol-name sym) "A")
+			(equal (symbol-package sym) pg)))
+		 (multiple-value-bind (sym access)
+		     (find-symbol "B" p)
+		   (and (eqt access :internal)
+			(equal (symbol-name sym) "B")
+			(equal (symbol-package sym) pg)))
+		 (equal (documentation p t)             nil)
+		 ))))))))
     (((t t t t t t t t t t) (t t t t t t t t t t) (t t t t t t t t t t))
      ((t t t t t t t t t t) (t t t t t t t t t t) (t t t t t t t t t t))
      ((t t t t t t t t t t) (t t t t t t t t t t) (t t t t t t t t t t))))
@@ -257,25 +264,27 @@
 		  (eval `(defpackage
 			   "H"
 			   (:export "Q" ,n "R") (:use))))))
-	 (list
-	  (not (not (packagep p)))
-	  (equal (package-name p)              "H")
-	  (equal (package-use-list p)          nil)
-	  (equal (package-used-by-list p)      nil)
-	  (equal (package-nicknames p)         nil)
-	  (equal (package-shadowing-symbols p) nil)
-	  (eql (num-symbols-in-package p) 3)
-	  (loop
-	   for s in '("Q" "Z" "R") do
-	   (unless
-	       (multiple-value-bind (sym access)
-		   (find-symbol s p)
-		 (and (eq access :external)
-		      (equal (symbol-name sym) s)
-		      (equal (symbol-package sym) p)))
-	     (return nil))
-	   finally (return t))
-	  )))))
+	 (mapcar
+	  #'notnot
+	  (list
+	   (not (not (packagep p)))
+	   (equal (package-name p)              "H")
+	   (equal (package-use-list p)          nil)
+	   (equal (package-used-by-list p)      nil)
+	   (equal (package-nicknames p)         nil)
+	   (equal (package-shadowing-symbols p) nil)
+	   (eql (num-symbols-in-package p) 3)
+	   (loop
+	    for s in '("Q" "Z" "R") do
+	    (unless
+		(multiple-value-bind (sym access)
+		    (find-symbol s p)
+		  (and (eqt access :external)
+		       (equal (symbol-name sym) s)
+		       (equal (symbol-package sym) p)))
+	      (return nil))
+	    finally (return t))
+	   ))))))
   ((t t t t t t t t)(t t t t t t t t)(t t t t t t t t)))
 
 ;; Test defpackage with the intern option
@@ -291,25 +300,27 @@
 		  (eval `(defpackage
 			   "H"
 			   (:intern "Q" ,n "R") (:use))))))
-	 (list
-	  (not (not (packagep p)))
-	  (equal (package-name p)              "H")
-	  (equal (package-use-list p)          nil)
-	  (equal (package-used-by-list p)      nil)
-	  (equal (package-nicknames p)         nil)
-	  (equal (package-shadowing-symbols p) nil)
-	  (eql (num-symbols-in-package p) 3)
-	  (loop
-	   for s in '("Q" "Z" "R") do
-	   (unless
-	       (multiple-value-bind (sym access)
-		   (find-symbol s p)
-		 (and (eq access :internal)
-		      (equal (symbol-name sym) s)
-		      (equal (symbol-package sym) p)))
-	     (return nil))
-	   finally (return t))
-	  )))))
+	 (mapcar
+	  #'notnot
+	  (list
+	   (not (not (packagep p)))
+	   (equal (package-name p)              "H")
+	   (equal (package-use-list p)          nil)
+	   (equal (package-used-by-list p)      nil)
+	   (equal (package-nicknames p)         nil)
+	   (equal (package-shadowing-symbols p) nil)
+	   (eql (num-symbols-in-package p) 3)
+	   (loop
+	    for s in '("Q" "Z" "R") do
+	    (unless
+		(multiple-value-bind (sym access)
+		    (find-symbol s p)
+		  (and (eqt access :internal)
+		       (equal (symbol-name sym) s)
+		       (equal (symbol-package sym) p)))
+	      (return nil))
+	    finally (return t))
+	   ))))))
   ((t t t t t t t t) (t t t t t t t t) (t t t t t t t t)))
 
 ;; Test defpackage with size
@@ -319,14 +330,16 @@
     (ignore-errors (delete-package "H"))
     (let ((p (ignore-errors
 	       (eval '(defpackage "H" (:use) (:size 0))))))
-      (list
-       (not (not (packagep p)))
-       (equal (package-name p)              "H")
-       (equal (package-use-list p)          nil)
-       (equal (package-used-by-list p)      nil)
-       (equal (package-nicknames p)         nil)
-       (equal (package-shadowing-symbols p) nil)
-       (not (not (zerop (num-symbols-in-package p)))))))
+      (mapcar
+       #'notnot
+       (list
+	(packagep p)
+	(equal (package-name p)              "H")
+	(equal (package-use-list p)          nil)
+	(equal (package-used-by-list p)      nil)
+	(equal (package-nicknames p)         nil)
+	(equal (package-shadowing-symbols p) nil)
+	(zerop (num-symbols-in-package p))))))
   (t t t t t t t))
 
 (deftest defpackage-12
@@ -334,14 +347,16 @@
     (ignore-errors (delete-package "H"))
     (let ((p (ignore-errors
 	       (eval '(defpackage "H" (:use) (:size 10000))))))
-      (list
-       (not (not (packagep p)))
-       (equal (package-name p)              "H")
-       (equal (package-use-list p)          nil)
-       (equal (package-used-by-list p)      nil)
-       (equal (package-nicknames p)         nil)
-       (equal (package-shadowing-symbols p) nil)
-       (not (not (zerop (num-symbols-in-package p)))))))
+      (mapcar
+       #'notnot
+       (list
+	(packagep p)
+	(equal (package-name p)              "H")
+	(equal (package-use-list p)          nil)
+	(equal (package-used-by-list p)      nil)
+	(equal (package-nicknames p)         nil)
+	(equal (package-shadowing-symbols p) nil)
+	(zerop (num-symbols-in-package p))))))
   (t t t t t t t))
 
 ;; defpackage error handling
@@ -358,37 +373,37 @@
 
 ;; Repeated documentation field should cause a program-error
 (deftest defpackage-14
-    (progn
-      (ignore-errors (delete-package "H"))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:documentation "foo")
-		  (:documentation "bar")))
-	(program-error () 'program-error)
-	(error (c) c)))
+  (progn
+    (ignore-errors (delete-package "H"))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:documentation "foo")
+	      (:documentation "bar")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; When a nickname refers to an existing package or nickname,
 ;; signal a package-error
 
 (deftest defpackage-15
-    (progn
-      (ignore-errors (delete-package "H"))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:nicknames "A")))
-	(package-error () 'package-error)
-	(error (c) c)))
+  (progn
+    (ignore-errors (delete-package "H"))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:nicknames "A")))
+     (package-error () 'package-error)
+     (error (c) c)))
   package-error)
 
 (deftest defpackage-16
-    (progn
-      (ignore-errors (delete-package "H"))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:nicknames "Q")))
-	(package-error () 'package-error)
-	(error (c) c)))
+  (progn
+    (ignore-errors (delete-package "H"))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:nicknames "Q")))
+     (package-error () 'package-error)
+     (error (c) c)))
   package-error)
 
 ;; Names in :shadow, :shadowing-import-from, :import-from, and :intern
@@ -396,132 +411,132 @@
 
 ;; :shadow and :shadowing-import-from
 (deftest defpackage-17
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (eval '(defpackage "G" (:use) (:export "A")))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:shadow "A")
-		  (:shadowing-import-from "G" "A")))
-	(program-error () 'program-error)
-	(error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G"))
+    (eval '(defpackage "G" (:use) (:export "A")))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:shadow "A")
+	      (:shadowing-import-from "G" "A")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; :shadow and :import-from
 (deftest defpackage-18
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (eval '(defpackage "G" (:use) (:export "A")))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:shadow "A")
-		  (:import-from "G" "A")))
-	(program-error () 'program-error)
-	(error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G"))
+    (eval '(defpackage "G" (:use) (:export "A")))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:shadow "A")
+	      (:import-from "G" "A")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; :shadow and :intern
 (deftest defpackage-19
-    (progn
-      (ignore-errors (delete-package "H"))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:shadow "A")
-		  (:intern "A")))
-	(program-error () 'program-error)
-	(error (c) c)))
+  (progn
+    (ignore-errors (delete-package "H"))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:shadow "A")
+	      (:intern "A")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; :shadowing-import-from and :import-from
 (deftest defpackage-20
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (eval '(defpackage "G" (:use) (:export "A")))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:shadowing-import-from "G" "A")
-		  (:import-from "G" "A")))
-	(program-error () 'program-error)
-	(error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G"))
+    (eval '(defpackage "G" (:use) (:export "A")))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:shadowing-import-from "G" "A")
+	      (:import-from "G" "A")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; :shadowing-import-from and :intern
 (deftest defpackage-21
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (eval '(defpackage "G" (:use) (:export "A")))
-      (handler-case
-	    (eval '(defpackage "H" (:use)
-		    (:shadowing-import-from "G" "A")
-		    (:intern "A")))
-	  (program-error () 'program-error)
-	  (error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G"))
+    (eval '(defpackage "G" (:use) (:export "A")))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:shadowing-import-from "G" "A")
+	      (:intern "A")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; :import-from and :intern
 (deftest defpackage-22
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (eval '(defpackage "G" (:use) (:export "A")))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:import-from "G" "A")
-		  (:intern "A")))
-	(program-error () 'program-error)
-	(error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G"))
+    (eval '(defpackage "G" (:use) (:export "A")))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:import-from "G" "A")
+	      (:intern "A")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; Names given to :export and :intern must be disjoint,
 ;;  otherwise signal a program-error
 (deftest defpackage-23
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (handler-case
-	  (eval '(defpackage "H" (:use)
-		  (:export "A")
-		  (:intern "A")))
-	(program-error () 'program-error)
-	(error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (handler-case
+     (eval '(defpackage "H" (:use)
+	      (:export "A")
+	      (:intern "A")))
+     (program-error () 'program-error)
+     (error (c) c)))
   program-error)
 
 ;; :shadowing-import-from signals a correctable package-error
 ;;  if the symbol is not accessible in the named package
 (deftest defpackage-24
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (eval '(defpackage "G" (:use)))
-      (handler-case
-	  (eval '(defpackage "H" (:shadowing-import-from "G" "NOT-THERE")))
-	(package-error (c)
-	  (if (position 'abort (compute-restarts c)
-			:key #'restart-name :test-not #'eq)
-	      'success
-	    'fail))
-	(error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G"))
+    (eval '(defpackage "G" (:use)))
+    (handler-case
+     (eval '(defpackage "H" (:shadowing-import-from "G" "NOT-THERE")))
+     (package-error (c)
+		    (if (position 'abort (compute-restarts c)
+				  :key #'restart-name :test-not #'eq)
+			'success
+		      'fail))
+     (error (c) c)))
   success)
 
 ;; :import-from signals a correctable package-error if a symbol with
 ;; the indicated name is not accessible in the package indicated
 
 (deftest defpackage-25
-    (ignore-errors
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (eval '(defpackage "G" (:use)))
-      (handler-case
-	  (eval '(defpackage "H" (:import-from "G" "NOT-THERE")))
-	(package-error (c)
-	  (if (position 'abort (compute-restarts c)
-			:key #'restart-name :test-not #'eq)
-	      'success
-	    'fail))
-	(error (c) c)))
+  (ignore-errors
+    (ignore-errors (delete-package "H"))
+    (ignore-errors (delete-package "G"))
+    (eval '(defpackage "G" (:use)))
+    (handler-case
+     (eval '(defpackage "H" (:import-from "G" "NOT-THERE")))
+     (package-error (c)
+		    (if (position 'abort (compute-restarts c)
+				  :key #'restart-name :test-not #'eq)
+			'success
+		      'fail))
+     (error (c) c)))
   success)
 
 ;; A big test that combines all the options to defpackage
@@ -529,90 +544,92 @@
 (deftest defpackage-26
   (ignore-errors
     (flet
-	((%do-it% (args)
-	   (ignore-errors (delete-package "H"))
-	   (ignore-errors (delete-package "G1"))
-	   (ignore-errors (delete-package "G2"))
-	   (ignore-errors (delete-package "G3"))
-	   (let ((pg1 
-		  (progn
-		    (format t "Making G1...~%")
-		    (eval '(defpackage "G1"
+	((%do-it%
+	  (args)
+	  (ignore-errors (delete-package "H"))
+	  (ignore-errors (delete-package "G1"))
+	  (ignore-errors (delete-package "G2"))
+	  (ignore-errors (delete-package "G3"))
+	  (let ((pg1 
+		 (progn
+		   (format t "Making G1...~%")
+		   (eval '(defpackage "G1"
 			    (:use)
 			    (:export "A" "B" "C")
 			    (:intern "D" "E" "F")))))
-		 (pg2
-		  (progn
-		    (format t "Making G2...~%")
-		    (eval '(defpackage "G2" 
+		(pg2
+		 (progn
+		   (format t "Making G2...~%")
+		   (eval '(defpackage "G2" 
 			    (:use)
 			    (:export "A" "D" "G")
 			    (:intern "E" "H" "I")))))
-		 (pg3 
-		  (progn
-		    (format t "Making G3...~%")
-		    (eval '(defpackage "G3" 
+		(pg3 
+		 (progn
+		   (format t "Making G3...~%")
+		   (eval '(defpackage "G3" 
 			    (:use)
 			    (:export "J" "K" "L")
 			    (:intern "M" "N" "O"))))))
-	     (let ((p (eval (list* 'defpackage "H" (copy-tree args)))))
-	       (prog ()
-		 (unless (packagep p) (return 1))
-		 (unless (equal (package-name p) "H") (return 2))
-		 (unless (equal (package-name pg1) "G1") (return 3))
-		 (unless (equal (package-name pg2) "G2") (return 4))
-		 (unless (equal (package-name pg3) "G3") (return 5))
+	    (let ((p (eval (list* 'defpackage "H" (copy-tree args)))))
+	      (prog
+	       ()
+	       (unless (packagep p) (return 1))
+	       (unless (equal (package-name p) "H") (return 2))
+	       (unless (equal (package-name pg1) "G1") (return 3))
+	       (unless (equal (package-name pg2) "G2") (return 4))
+	       (unless (equal (package-name pg3) "G3") (return 5))
+	       (unless
+		   (equal (sort (copy-list (package-nicknames p)) #'string<)
+			  '("H1" "H2"))
+		 (return 6))
+	       (unless
+		   (or
+		    (equal (package-use-list p) (list pg1 pg2))
+		    (equal (package-use-list p) (list pg2 pg1)))
+		 (return 7))
+	       (unless (equal (package-used-by-list pg1) (list p))
+		 (return 8))
+	       (unless (equal (package-used-by-list pg2) (list p))
+		 (return 9))
+	       (when (package-used-by-list pg3) (return 10))
+	       (unless (equal (sort (mapcar #'symbol-name
+					    (package-shadowing-symbols p))
+				    #'string<)
+			      '("A" "B"))
+		 (return 10))
+	       (let ((num 11))
 		 (unless
-		     (equal (sort (copy-list (package-nicknames p)) #'string<)
-			    '("H1" "H2"))
-		   (return 6))
-		 (unless
-		     (or
-		      (equal (package-use-list p) (list pg1 pg2))
-		      (equal (package-use-list p) (list pg2 pg1)))
-		   (return 7))
-		 (unless (equal (package-used-by-list pg1) (list p))
-		   (return 8))
-		 (unless (equal (package-used-by-list pg2) (list p))
-		   (return 9))
-		 (when (package-used-by-list pg3) (return 10))
-		 (unless (equal (sort (mapcar #'symbol-name
-					      (package-shadowing-symbols p))
-				      #'string<)
-				'("A" "B"))
-		   (return 10))
-		 (let ((num 11))
-		   (unless
-		       (every
-			#'(lambda (str acc pkg)
-			    (multiple-value-bind
-				(sym access)
-				(find-symbol str p)
-			      (or
-			       (and (or (not acc) (equal (symbol-name sym) str))
-				    (or (not acc) (equal (symbol-package sym) pkg))
-				    (equal access acc)
-				    (incf num))
-			       (progn
-				 (format t
-					 "Failed on str = ~S, acc = ~S, pkg = ~S, sym = ~S, access = ~S~%"
-					 str acc pkg sym access)
-				 nil))))
-			(list "A" "B" "C" "D" "E" "F" "G"
-			      "H" "I" "J" "K" "L" "M" "N" "O")
-			(list :internal :internal
-			      :external :inherited
-			      nil nil
-			      :inherited :internal
-			      nil nil
-			      nil :external
-			      nil nil
-			      :internal)
-			(list pg2 p pg1 pg2 nil nil
-			      pg2 p nil nil nil pg3
-			      nil nil pg3))
-		     (return num)))
-		 (return 'success))))))
+		     (every
+		      #'(lambda (str acc pkg)
+			  (multiple-value-bind
+			      (sym access)
+			      (find-symbol str p)
+			    (or
+			     (and (or (not acc) (equal (symbol-name sym) str))
+				  (or (not acc) (equal (symbol-package sym) pkg))
+				  (equal access acc)
+				  (incf num))
+			     (progn
+			       (format t
+				       "Failed on str = ~S, acc = ~S, pkg = ~S, sym = ~S, access = ~S~%"
+				       str acc pkg sym access)
+			       nil))))
+		      (list "A" "B" "C" "D" "E" "F" "G"
+			    "H" "I" "J" "K" "L" "M" "N" "O")
+		      (list :internal :internal
+			    :external :inherited
+			    nil nil
+			    :inherited :internal
+			    nil nil
+			    nil :external
+			    nil nil
+			    :internal)
+		      (list pg2 p pg1 pg2 nil nil
+			    pg2 p nil nil nil pg3
+			    nil nil pg3))
+		   (return num)))
+	       (return 'success))))))
       (let ((args '((:nicknames "H1" "H2")
 		    (:use "G1" "G2")
 		    (:shadow "B")
@@ -625,6 +642,7 @@
 	(list (%do-it% args)
 	      (%do-it% (reverse args))))))
   (success success))
+
 
 
       

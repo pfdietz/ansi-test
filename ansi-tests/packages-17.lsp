@@ -44,8 +44,8 @@
   (remove-duplicates
    (collect-symbols "DS4")
    :test #'(lambda (x y)
-	     (and (eq x y)
-		  (not (eq x 'DS4::B)))))
+	     (and (eqt x y)
+		  (not (eqt x 'DS4::B)))))
   (DS1:A DS1:B DS2::F DS3:G DS3:I DS3:J DS3:K DS4::X DS4::Y DS4::Z))
 
 
@@ -66,15 +66,15 @@
   ())
 
 (deftest do-external-symbols-5
-    (equal (collect-external-symbols "KEYWORD")
-	   (collect-symbols "KEYWORD"))
-  t)
+    (not (equal (collect-external-symbols "KEYWORD")
+		(collect-symbols "KEYWORD")))
+  nil)
 
 ;; Test that do-symbols, do-external-symbols work without
 ;; a return value (and that the default return value is nil)
 
 (deftest do-symbols-6
-  (do-symbols (s "DS1") (declare (ignore s))  t)
+  (do-symbols (s "DS1") (declare (ignore s)) t)
   nil)
 
 (deftest do-external-symbols-6

@@ -6,5 +6,5 @@
 (in-package :cl-test)
 
 (defun make-array-check-upgrading (type)
-  (subtypep type (array-element-type (make-array 0 :element-type type))))
+  (subtypep* type (array-element-type (make-array 0 :element-type type))))
 

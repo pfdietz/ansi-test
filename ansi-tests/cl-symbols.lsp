@@ -12,8 +12,8 @@
 (defun is-external-symbol-of (sym package)
   (multiple-value-bind (sym2 status)
       (find-symbol (symbol-name sym) package)
-    (and (eq sym sym2)
-	 (eq status :external))))
+    (and (eqt sym sym2)
+	 (eqt status :external))))
 
 (defun test-if-not-in-cl-package (str)
   (multiple-value-bind (sym status)
@@ -25,7 +25,7 @@
        ;; Check if it has any properties whose indicators are
        ;; external in any of the standard packages or are accessible
        ;; in CL-USER
-       (and (eq status :external)
+       (and (eqt status :external)
 	    (let ((plist (symbol-plist sym)))
 	      (loop for e = plist then (cddr e)
 		    while e
@@ -33,7 +33,7 @@
 		    when (and (symbolp indicator)
 			      (or (is-external-symbol-of indicator "COMMON-LISP")
 				  (is-external-symbol-of indicator "KEYWORD")
-				  (eq indicator (find-symbol (symbol-name indicator)
+				  (eqt indicator (find-symbol (symbol-name indicator)
 							     "COMMON-LISP-USER"))))
 		    collect indicator))))))
 
@@ -1033,11 +1033,11 @@
       (multiple-value-bind (sym status)
 	  (find-symbol (symbol-name s) keyword-package)
 	(cond
-	 ((not (eq s sym)) (push (list s sym) results))
-	 ((eq status :internal)
+	 ((not (eqt s sym)) (push (list s sym) results))
+	 ((eqt status :internal)
 	  (push (list s status) result))
-	 ((eq status :external)
-	  (unless (and (eq (symbol-value s) s)
+	 ((eqt status :external)
+	  (unless (and (eqt (symbol-value s) s)
 		       (constantp s))
 	    (push (list s sym 'not-constant) result)))))))
   nil)
@@ -1151,7 +1151,7 @@
   "xyz")
 
 (deftest make-symbol-6
-    (eq (make-symbol "A")
+    (eqt (make-symbol "A")
 	(make-symbol "A"))
   nil)
 
@@ -1264,8 +1264,8 @@
 		   (every #'eq (symbol-plist y) (symbol-plist x))
 		   (symbolp y)
 		   (if (boundp x)
-		       (eq (symbol-value x)
-			   (symbol-value y))
+		       (eqt (symbol-value x)
+			    (symbol-value y))
 		     (not (boundp y)))
 		   (not (fboundp y))
 		   (null (symbol-package y))
@@ -1278,7 +1278,7 @@
   t)
 
 (deftest copy-symbol-4
-  (eq (copy-symbol 'a) (copy-symbol 'a))
+  (eqt (copy-symbol 'a) (copy-symbol 'a))
   nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -8,20 +8,20 @@
 (deftest nstring-downcase.1
   (let* ((s (copy-seq "A"))
 	 (s2 (nstring-downcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "a")
 
 (deftest nstring-downcase.2
   (let* ((s (copy-seq "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"))
 	 (s2 (nstring-downcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t
   "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz")
 
 (deftest nstring-downcase.3
   (let* ((s (copy-seq "0123456789!@#$%^&*()_-+=|\\{}[]:\";'<>?,./ "))
 	 (s2 (nstring-downcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t
   "0123456789!@#$%^&*()_-+=|\\{}[]:\";'<>?,./ ")
 
@@ -29,14 +29,14 @@
   (let* ((s (make-array 6 :element-type 'character
 			:initial-contents '(#\A #\B #\C #\D #\E #\F)))
 	 (s2 (nstring-downcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "abcdef")
 
 (deftest nstring-downcase.7
   (let* ((s (make-array 6 :element-type 'standard-char
 			:initial-contents '(#\A #\B #\7 #\D #\E #\F)))
 	 (s2 (nstring-downcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t
   "ab7def")
 

@@ -50,7 +50,7 @@
 		   (return-from fail nil))
 		 (multiple-value-bind (sym2 access2)
 		     (find-symbol (symbol-name sym) pkg)
-		   (unless (or (eq sym sym2)
+		   (unless (or (eqt sym sym2)
 			       (member sym2 (PACKAGE-SHADOWING-SYMBOLS pkg)))
 		     (unless (> fail-count +fail-count-limit+)
 		       (format t "Not same symbol: ~S ~S~%" sym sym2))
@@ -58,7 +58,7 @@
 		       (format t "Further messages suppressed~%"))
 		     (incf fail-count)
 		     (return-from fail nil))
-		   (unless  (eq access access2)
+		   (unless  (eqt access access2)
 		     (unless (> fail-count +fail-count-limit+)
 		       (format t "Not same access type: ~S ~S ~S~%"
 			       sym access access2))
@@ -74,7 +74,7 @@
 		 (do-symbols (sym p)
 		   (multiple-value-bind (sym2 access)
 		       (find-symbol (symbol-name sym) p)
-		     (unless (eq sym sym2)
+		     (unless (eqt sym sym2)
 		       (unless (> fail-count +fail-count-limit+)
 			 (format t "Not same symbol (2): ~S ~S~%"
 				 sym sym2))

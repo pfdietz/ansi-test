@@ -8,18 +8,18 @@
 (defun char-type-error-check (fn)
   (loop for x in *universe*
 	always (or (characterp x)
-		   (eq (catch-type-error (funcall fn x)) 'type-error))))
+		   (eqt (catch-type-error (funcall fn x)) 'type-error))))
 
 (deftest character-class.1
-  (subtypep 'character t)
+  (subtypep* 'character t)
   t t)
 
 (deftest base-char.1
-  (subtypep 'base-char 'character)
+  (subtypep* 'base-char 'character)
   t t)
 
 (deftest base-char.2
-  (subtypep 'base-char t)
+  (subtypep* 'base-char t)
   t t)
 
 (deftest base-char.3
@@ -27,15 +27,15 @@
   t)
 
 (deftest standard-char.1
-  (subtypep 'standard-char 'base-char)
+  (subtypep* 'standard-char 'base-char)
   t t)
 
 (deftest standard-char.2
-  (subtypep 'standard-char 'character)
+  (subtypep* 'standard-char 'character)
   t t)
 
 (deftest standard-char.3
-  (subtypep 'standard-char t)
+  (subtypep* 'standard-char t)
   t t)
 
 (deftest standard-char.4
@@ -50,11 +50,11 @@
   t)
 
 (deftest extended-char.1
-  (subtypep 'extended-char 'character)
+  (subtypep* 'extended-char 'character)
   t t)
 
 (deftest extended-char.2
-  (subtypep 'extended-char t)
+  (subtypep* 'extended-char t)
   t t)
 
 (deftest extended-char.3

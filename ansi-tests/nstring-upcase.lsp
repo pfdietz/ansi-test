@@ -8,20 +8,20 @@
 (deftest nstring-upcase.1
   (let* ((s (copy-seq "a"))
 	 (s2 (nstring-upcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "A")
 
 (deftest nstring-upcase.2
   (let* ((s (copy-seq "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"))
 	 (s2 (nstring-upcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t
   "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ")  
 
 (deftest nstring-upcase.3
   (let* ((s (copy-seq "0123456789!@#$%^&*()_-+=|\\{}[]:\";'<>?,./ "))
 	 (s2 (nstring-upcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t
   "0123456789!@#$%^&*()_-+=|\\{}[]:\";'<>?,./ ")
 
@@ -29,14 +29,14 @@
   (let* ((s (make-array 6 :element-type 'character
 			:initial-contents '(#\a #\b #\c #\d #\e #\f)))
 	 (s2 (nstring-upcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "ABCDEF")
 
 (deftest nstring-upcase.7
   (let* ((s (make-array 6 :element-type 'standard-char
 			:initial-contents '(#\a #\b #\7 #\d #\e #\f)))
 	 (s2 (nstring-upcase s)))
-    (values (eq s s2) s))
+    (values (eqt s s2) s))
   t "AB7DEF")
 
 ;; Tests with :start, :end

@@ -30,7 +30,10 @@
 (load "lambda-parameters-limit.lsp")
 (load "let.lsp")
 (load "macrolet.lsp")
+(load "nil.lsp")
+(load "not-and-null.lsp")
 (load "progv.lsp")
+(load "t.lsp")
 (load "tagbody.lsp")
 (load "unwind-protect.lsp")
 
