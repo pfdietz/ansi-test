@@ -1857,7 +1857,63 @@
 		 (%f15)))))
   -10)
 
+;;; cmucl (22 Oct 2003):  NIL is not of type C::REF
+(deftest misc.143
+  (block b2
+      (max (return-from b2 1)
+           (let ((v3
+                  (unwind-protect
+                      (let* ((v1 (ignore-errors -254)))
+                        1))))
+             -2)))
+  1)
 
+;;; The assertion (NOT (C::BLOCK-DELETE-P BLOCK)) failed.
+(deftest misc.144
+  (funcall
+   (compile nil
+	    '(lambda (a b c)
+	       (declare (type (integer 9739325 14941321) c))
+	       (labels ((%f7 (f7-1 f7-2 f7-3 &optional (f7-4 b))
+			     (return-from %f7 f7-4)))
+		 (if (= -76482 c)
+		     (if (>= c 10986082) (%f7 a b (%f7 -8088 c -147106 2)) -10502)
+		   (%f7 509252 b b)))))
+   -200 17 10000000)
+  17)
 
-   
+(deftest misc.145
+  (funcall
+   (compile nil
+	    '(lambda (a b c)
+	       (declare (optimize (safety 3)))
+	       (block b5
+		 (return-from b5
+		   (logior (if (or c t) b (load-time-value -61)) (return-from b5 -3))))))
+   1 2 3)
+  -3)
+
+;;; cmucl: order of evaluation error
+(deftest misc.146
+  (funcall
+   (compile nil
+	    '(lambda (b)
+	       (declare (optimize (speed 3)))
+	       (flet ((%f14 (&optional (f14-1 301917227)
+				       (f14-2 (setq b 995196571)))
+			    f14-1))
+		 (%f14 b (block b3 (%f14 -64))))))
+   10)
+  10)
+
+;;; cmucl (22 Oct 2003): NIL is not of type C::CLEANUP
+(deftest misc.147
+  (flet ((%f11 () (if nil (ignore-errors -19884254) (unwind-protect -2)))) :good)
+  :good)
+
+;;; The assertion (C::CONSTANT-CONTINUATION-P C::CONT) failed.
+(deftest misc.148
+  (block b2 (logior (return-from b2 484) (restart-case (ignore-errors 1737021))))
+  484)
+
 
