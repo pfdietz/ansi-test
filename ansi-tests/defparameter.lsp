@@ -64,6 +64,3 @@
 		    "documentation"
 		    "illegal extra argument"))
   program-error)
-
-
-  
