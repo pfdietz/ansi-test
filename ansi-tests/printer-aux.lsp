@@ -39,6 +39,13 @@
 	,form))
      ,expected-value))
 
+(defmacro def-ppblock-test (name form expected-value &rest key-args)
+  `(def-pprint-test ,name
+     (with-output-to-string
+       (*standard-output*)
+       (pprint-logical-block (*standard-output* nil) ,form))
+     ,expected-value
+     ,@key-args))
 
 ;;; Function to test readable of printed forms, under random settings
 ;;; of various printer control variables.
