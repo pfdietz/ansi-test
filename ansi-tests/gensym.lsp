@@ -93,6 +93,13 @@
     *gensym-counter*)
   10)
 
+;;; GENSYM counter is a non-negative integer
+(deftest gensym-counter.1
+  (and (integerp *gensym-counter*)
+       (>= *gensym-counter* 0)
+       t)
+  t)
+
 ;;; Check response to erroneous arguments
 ;;; Note! NIL is not the same as no argument
 ;;; gensym should be implemented so that its only

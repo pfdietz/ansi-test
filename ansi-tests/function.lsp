@@ -47,7 +47,8 @@
   (typep '(lambda (x) x) 'function)
   nil)
 
-(eval-when (eval compile)
+(eval-when #+gcl (eval compile)
+	   #-gcl (:load-toplevel :compile-toplevel)
   (ignore-errors
     (defun (setf function-7-accessor) (y x) (setf (car x) y) y)))
 

@@ -263,7 +263,8 @@ do the defstruct."
 		     (cons slot-name (defstruct-maketemp name "SLOTTEMP" i)))))
 	 )
     ;; Build the tests in an eval-when form
-    `(eval-when (compile load eval)
+    `(eval-when #+gcl (compile load eval)
+		#-gcl (:load-toplevel :compile-toplevel :execute)
 
        (ignore-errors
 	 (eval '(defstruct ,name-and-options

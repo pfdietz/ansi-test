@@ -376,7 +376,8 @@
 ;;; Initializer forms are evaluated only when needed, and are
 ;;; evaluated in the lexical environment in which they were defined
 
-(eval-when (load eval)
+(eval-when #+gcl (load eval)
+	   #-gcl (:load-toplevel)
   (let ((x nil))
     (flet ((%f () x)
 	  (%g (y) (setf x y)))

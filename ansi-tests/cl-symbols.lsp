@@ -1134,14 +1134,6 @@
 
 ;;; Various error cases for symbol-related functions
 
-(deftest symbolp.error.1
-  (classify-error (symbolp))
-  program-error)
-
-(deftest symbolp.error.2
-  (classify-error (symbolp nil nil))
-  program-error)
-
 (deftest symbol-function.error.1
   (classify-error (symbol-function))
   program-error)

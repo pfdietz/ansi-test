@@ -46,8 +46,22 @@
 (defvar *expected-failures* nil
   "A list of test names that are expected to fail.")
 
+(defvar *notes* (make-hash-table :test 'equal)
+  "A mapping from names of notes to note objects.")
+  
 (defstruct (entry (:conc-name nil))
   pend name props form vals)
+
+;;; Note objects are used to attach information to tests.
+;;; A typical use is to mark tests that depend on a particular
+;;; part of a set of requirements, or a particular interpretation
+;;; of the requirements.
+
+(defstruct note
+  name  
+  contents
+  disabled ;; When true, tests with this note are considered inactive
+  )
 
 ;; (defmacro vals (entry) `(cdddr ,entry))
 
@@ -86,6 +100,20 @@
         "~%No test with name ~:@(~S~)."
 	name))
     entry))
+
+(defun entry-notes (entry)
+  (let* ((props (props entry))
+	 (notes (getf props :notes)))
+    (if (listp notes)
+	notes
+      (list notes))))
+
+(defun has-disabled-note (entry)
+  (let ((notes (entry-notes entry)))
+    (loop for n in notes
+	  for note = (if (note-p n) n
+		       (gethash n *notes*))
+	  thereis (and note (note-disabled note)))))
 
 (defmacro deftest (name &rest body)
   (let* ((p body)
@@ -279,11 +307,11 @@
 (defun do-entries (s)
   (format s "~&Doing ~A pending test~:P ~
              of ~A tests total.~%"
-          (count t (cdr *entries*)
-		 :key #'pend)
+          (count t (the list (cdr *entries*)) :key #'pend)
 	  (length (cdr *entries*)))
   (dolist (entry (cdr *entries*))
-    (when (pend entry)
+    (when (and (pend entry)
+	       (not (has-disabled-note entry)))
       (format s "~@[~<~%~:; ~:@(~S~)~>~]"
 	      (do-entry entry s))))
   (let ((pending (pending-tests))
@@ -314,3 +342,12 @@
 		    new-failures)))
 	  ))
       (null pending))))
+
+;;; Note handling functions and macros
+
+(defmacro defnote (name contents)
+  `(eval-when #+gcl (load eval) #-gcl (:load-toplevel :execute)
+     (let ((note (make-note :name ,name :contents ,contents)))
+       (setf (gethash *notes* (note-name note)) note)
+       note)))
+

@@ -294,7 +294,12 @@
       (make-array '(5) :element-type 'long-float
 		  :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0))
       )
-     
+
+     ;; The ever-popular NIL array
+     (handler-case
+      (list (make-array '(0) :element-type nil))
+      (error () nil))
+
      ;; more kinds of arrays here later
      ))
 
@@ -353,7 +358,7 @@
 (defgeneric meaningless-user-generic-function-for-universe (x y z)
   (:method ((x integer) (y integer) (z integer)) (+ x y z)))
 
-(eval-when (load)
+(eval-when #+gcl (load) #-gcl (:load-toplevel)
   (compile 'meaningless-user-function-for-universe)
   (compile 'meaningless-user-generic-function-for-universe)
   )

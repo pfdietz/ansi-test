@@ -53,7 +53,8 @@
   c
   (c b))
 
-(eval-when (load eval compile)
+(eval-when #+gcl (load eval compile)
+	   #-gcl (:load-toplevel :compile-toplevel :execute)
   (ignore-errors
     (defun (setf defun-test-fun-4) (newval x)
       (return-from defun-test-fun-4 (setf (car x) newval)))))

@@ -91,7 +91,11 @@ Results: ~A~%" expected-number form n results))))
   (loop for i from 0 below n collect i))
 
 (defun make-int-array (n &optional (fn #'make-array))
-  (let ((a (funcall fn n)))
+  (when (symbolp fn)
+    (assert (fboundp fn))
+    (setf fn (symbol-function (the symbol fn))))
+  (let ((a (funcall (the function fn) n)))
+    (declare (type (array * *) a))
     (loop for i from 0 below n do (setf (aref a i) i))
     a))
 
@@ -106,17 +110,19 @@ Results: ~A~%" expected-number form n results))))
 	   (equal (aref a1) (aref a2))
 	 (let ((ad (array-dimensions a1)))
 	   (and (equal ad (array-dimensions a2))
-		(if (= (array-rank a1) 1)
-		    (let ((as (first ad)))
-		      (loop
-		       for i from 0 below as
-		       always (equal (aref a1 i) (aref a2 i))))
-		  (let ((as (array-total-size a1)))
-		    (and (= as (array-total-size a2))
-			 (loop
-			  for i from 0 below as
-			  always (equal (row-major-aref a1 i)
-					(row-major-aref a2 i)))))))))))
+		(locally
+		 (declare (type (array * *) a1 a2))
+		 (if (= (array-rank a1) 1)
+		     (let ((as (first ad)))
+		       (loop
+			for i from 0 below as
+			always (equal (aref a1 i) (aref a2 i))))
+		   (let ((as (array-total-size a1)))
+		     (and (= as (array-total-size a2))
+			  (loop
+			   for i from 0 below as
+			   always (equal (row-major-aref a1 i)
+					 (row-major-aref a2 i))))))))))))
 
 ;;; *universe* is defined elsewhere -- it is a list of various
 ;;; lisp objects used when stimulating things in various tests.
@@ -207,11 +213,17 @@ Results: ~A~%" expected-number form n results))))
   "Check that a predicate P is the same as #'(lambda (x) (typep x TYPE))
    by applying both to all elements of *UNIVERSE*.  Print message
    when a mismatch is found, and return number of mistakes."
+
+  (when (symbolp p)
+    (assert (fboundp p))
+    (setf p (symbol-function p)))
+  (assert (typep p 'function))
+  
   (loop
       for x in *universe* count
 	(block failed
 	  (let ((p1 (handler-case
-			(funcall P x)
+			(funcall (the function p) x)
 		      (error () (format t "(FUNCALL ~S ~S) failed~%"
 					P x)
 			(return-from failed t))))
@@ -376,8 +388,8 @@ the condition to go uncaught if it cannot be classified."
 
 (defun compose (&rest fns)
   (let ((rfns (reverse fns)))
-    #'(lambda (x) (loop for f of-type function
-			in rfns do (setf x (funcall f x))) x)))
+    #'(lambda (x) (loop for f
+			in rfns do (setf x (funcall (the function f) x))) x)))
 
 (defun evendigitp (c)
   (notnot (find c "02468")))
@@ -417,8 +429,9 @@ the condition to go uncaught if it cannot be classified."
     (cons 'list args)))  
 
 (defparameter +standard-chars+
+  (coerce
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+|\\=-`{}[]:\";'<>?,./
- ")
+ " 'simple-base-string))
 
 (defparameter
   +base-chars+ #.(concatenate 'simple-base-string
@@ -436,16 +449,21 @@ the condition to go uncaught if it cannot be classified."
 (defparameter +upper-case-chars+ (subseq +alpha-chars+ 26 52))
 (defparameter +alphanumeric-chars+ (subseq +standard-chars+ 0 62))
 (defparameter +digit-chars+ "0123456789")
-(defparameter +extended-digit-chars+ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+(defparameter +extended-digit-chars+ (coerce
+				      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+				      'simple-base-string))
 
 (declaim (type simple-base-string +alpha-chars+ +lower-case-chars+
-	       +upper-case-chars+ +alphanumeric-chars+))
+	       +upper-case-chars+ +alphanumeric-chars+ +extended-digit-chars+
+	       +standard-chars+))
 
 (defparameter +code-chars+
   (coerce (loop for i from 0 below 256
 		for c = (code-char i)
 		when c collect c)
-	  'string))
+	  'simple-string))
+
+(declaim (type simple-string +code-chars+))
 
 (defparameter +rev-code-chars+ (reverse +code-chars+))
 
@@ -453,7 +471,7 @@ the condition to go uncaught if it cannot be classified."
 
 (defun has-non-abort-restart (c)
   (throw 'handled
-	 (if (position 'abort (compute-restarts c)
+	 (if (position 'abort (the list (compute-restarts c))
 		       :key #'restart-name :test-not #'eq)
 	     'success
 	   'fail)))
@@ -1256,10 +1274,10 @@ the condition to go uncaught if it cannot be classified."
   (classify-error* (elt x n)))
 
 (defmacro defstruct* (&body args)
-  `(eval-when (load eval compile)
+  `(eval-when #+gcl (load eval compile)
+	      #-gcl (:load-toplevel :compile-toplevel :execute)
      (handler-case (eval '(defstruct ,@args))
 		   (serious-condition () nil))))
-
 
 (defun sort-package-list (x)
   (sort (copy-list x)

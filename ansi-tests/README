@@ -12,3 +12,12 @@ Please tell me when you find incorrect test cases.
 	Paul Dietz
 	dietz@dls.net
 
+--------------------------------
+
+(30 Jun 2003) I've decided to add metainformation to the tests,
+in the form of :<attribute> <value> pairs after DEFTEST.  Also,
+I've added a DEFNOTE form to define note objects whose names
+can be attached to properties of tests, to enable selective
+disabling of classes of tests.
+
+

@@ -98,11 +98,11 @@
 
 ;;;; Tests on the definitions of various vector types
 
-(deftest string-is-vector-of-character.1
+(deftest string-is-not-vector-of-character.1
   (subtypep* 'string '(vector character))
-  t t)
+  nil t)
 
-(deftest string-is-vector-of-character.2
+(deftest vector-of-character-is-string.2
   (subtypep* '(vector character) 'string)
   t t)
 
@@ -110,7 +110,7 @@
   (subtypep* '(string *) '(vector character))
   nil t)
 
-(deftest string-is-vector-of-character.4
+(deftest vector-of-character-is-string.4
   (subtypep* '(vector character) '(string *))
   t t)
 
@@ -118,7 +118,7 @@
   (subtypep* '(string 17) '(vector character 17))
   nil t)
 
-(deftest string-is-vector-of-character.6
+(deftest vector-of-character-is-string.6
   (subtypep* '(vector character 17) '(string 17))
   t t)
 
@@ -174,7 +174,7 @@
   (subtypep* 'simple-string '(simple-array character (*)))
   nil t)
 
-(deftest simple-string-is-simple-1d-array-of-character.2
+(deftest simple-1d-array-of-character-is-simple-string.2
   (subtypep* '(simple-array character (*)) 'simple-string)
   t t)
 
@@ -182,7 +182,7 @@
   (subtypep* '(simple-string *) '(simple-array character (*)))
   nil t)
 
-(deftest simple-string-is-simple-1d-array-of-character.4
+(deftest simple-1d-array-of-character-is-simple-string.4
   (subtypep* '(simple-array character (*)) '(simple-string *))
   t t)
 
@@ -190,7 +190,7 @@
   (subtypep* '(simple-string 17) '(simple-array character (17)))
   nil t)
 
-(deftest simple-string-is-simple-1d-array-of-character.6
+(deftest simple-1d-array-of-character-is-simple-string.6
   (subtypep* '(simple-array character (17)) '(simple-string 17))
   t t)
 

@@ -19,7 +19,8 @@
   (dolist (parent parents) (assert (symbolp parent)))
   
   (let ((name (symbol-name name-symbol)))
-  `(eval-when (load eval compile)
+  `(eval-when #+gcl (load eval compile)
+	      #-gcl (:load-toplevel :compile-toplevel :execute)
      (ignore-errors (eval '(define-condition ,name-symbol ,parents
 			    ,slot-specs ,@options)))
      ,@(loop for parent in (adjoin 'condition parents)
