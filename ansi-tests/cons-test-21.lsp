@@ -169,12 +169,10 @@
   t)
 
 (deftest nunion-22
-  (handler-case
-    (let ((x '(1 2 3 4 5 6 7))
-	  (y '(10 19 5 3 17 1001 2)))
-      (let ((result (nunion-with-copy-and-key x y nil)))
-	(check-union x y result)))
-    (error (c) c))
+  (let ((x '(1 2 3 4 5 6 7))
+	(y '(10 19 5 3 17 1001 2)))
+    (let ((result (nunion-with-copy-and-key x y nil)))
+      (check-union x y result)))
   t)
 
 (deftest nunion-23

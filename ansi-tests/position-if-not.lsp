@@ -414,26 +414,18 @@
 ;;; Error tests
 
 (deftest position-if-not-error.1
-  (handler-case (position-if-not #'identity 'b)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (position-if-not #'identity 'b))
+  type-error)
 
 (deftest position-if-not-error.2
-  (handler-case (position-if-not #'identity 10)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (position-if-not #'identity 10))
+  type-error)
 
 (deftest position-if-not-error.3
-  (handler-case (position-if-not 'null 1.4)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (position-if-not 'null 1.4))
+  type-error)
 
 (deftest position-if-not-error.4
-  (locally (declare (optimize (safety 3)))
-	   (handler-case (position-if-not 'identity '(a b c . d))
-			 (type-error () :type-error)
-			 (error (c) c)))
-  :type-error)
+  (classify-error (position-if-not 'identity '(a b c . d)))
+  type-error)
+

@@ -8,10 +8,7 @@
 (declaim (optimize (safety 3)))
 
 (defun safe-elt (x n)
-  (handler-case
-   (elt x n)
-   (type-error () 'type-error)
-   (error (c) c)))
+  (classify-error (elt x n)))
 
 ;; elt on lists
 
@@ -50,11 +47,9 @@
   ((a b c e) e))
 
 (deftest elt-10
-  (handler-case
+  (classify-error
    (let ((x (list 'a 'b 'c)))
-     (setf (elt x 4) 'd))
-   (type-error () 'type-error)
-   (error (c) c))
+     (setf (elt x 4) 'd)))
   type-error)
 
 (deftest elt-11
@@ -114,10 +109,8 @@
   type-error)
 
 (deftest elt-v-1
-  (handler-case
-   (elt (make-array '(0)) 0)
-   (type-error () 'type-error)
-   (error (c) c))
+  (classify-error
+   (elt (make-array '(0)) 0))
   type-error)
 
 ;; (deftest elt-v-2 (elt (make-array '(1)) 0) nil)  ;; actually undefined
@@ -159,19 +152,15 @@
   (a b c e e))
 
 (deftest elt-v-10
-  (handler-case
+  (classify-error
    (let ((x (make-array '(3) :initial-contents (list 'a 'b 'c))))
-     (setf (elt x 4) 'd))
-   (type-error () 'type-error)
-   (error (c) c))
+     (setf (elt x 4) 'd)))
   type-error)
 
 (deftest elt-v-11
-  (handler-case
+  (classify-error
    (let ((x (make-array '(3) :initial-contents (list 'a 'b 'c))))
-     (setf (elt x -100) 'd))
-   (type-error () 'type-error)
-   (error (c) c))
+     (setf (elt x -100) 'd)))
   type-error)
 
 (deftest elt-v-12
@@ -195,10 +184,7 @@
     (make-array n :adjustable t)))
 
 (deftest elt-adj-array-1
-  (handler-case
-   (elt (make-adj-array '(0)) 0)
-   (type-error () 'type-error)
-   (error (c) c))
+  (classify-error (elt (make-adj-array '(0)) 0))
   type-error)
 
 ;;; (deftest elt-adj-array-2 (elt (make-adj-array '(1)) 0) nil) ;; actually undefined 
@@ -246,19 +232,15 @@
   (a b c e e))
 
 (deftest elt-adj-array-10
-  (handler-case
+  (classify-error
    (let ((x (make-adj-array '(3) :initial-contents (list 'a 'b 'c))))
-     (setf (elt x 4) 'd))
-   (type-error () 'type-error)
-   (error (c) c))
+     (setf (elt x 4) 'd)))
   type-error)
 
 (deftest elt-adj-array-11
-  (handler-case
+  (classify-error
    (let ((x (make-adj-array '(3) :initial-contents (list 'a 'b 'c))))
-     (setf (elt x -100) 'd))
-   (type-error () 'type-error)
-   (error (c) c))
+     (setf (elt x -100) 'd)))
   type-error)
 
 (deftest elt-adj-array-12
@@ -284,10 +266,7 @@
 	      :displaced-index-offset displacement))
 
 (deftest elt-displaced-array-1 
-  (handler-case
-   (elt (make-displaced-array '(0) 100) 0)
-   (type-error () 'type-error)
-   (error (c) c))
+  (classify-error (elt (make-displaced-array '(0) 100) 0))
   type-error)
 
 (deftest elt-displaced-array-2
@@ -297,21 +276,3 @@
 (deftest elt-displaced-array-3
   (elt (make-displaced-array '(5) 100) 4)
   104)
-
-#|
-(deftest elt-displaced-array-4
-  (handler-case
-   (make-displaced-array '(100) 100000)
-   (type-error () 'type-error)
-   (error (c) c))
-  type-error)
-|#
-
-#|
-(deftest elt-displaced-array-5
-  (handler-case
-   (make-displaced-array '(100) (- 100000 50))
-   (type-error () 'type-error)
-   (error (c) c))
-  type-error)
-|#

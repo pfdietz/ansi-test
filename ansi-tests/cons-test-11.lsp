@@ -19,18 +19,16 @@
   (a b c))
 
 (deftest ldiff-2
-  (handler-case
-    (let* ((x (copy-tree '(a b c d e f)))
-	   (xcopy (make-scaffold-copy x)))
-      (let ((result (ldiff x 'a)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 (zerop
-	  (loop
-	      for a on x and b on result count
-		(eqt a b)))
-	 result)))
-    (error (c) c))
+  (let* ((x (copy-tree '(a b c d e f)))
+	 (xcopy (make-scaffold-copy x)))
+    (let ((result (ldiff x 'a)))
+      (and
+       (check-scaffold-copy x xcopy)
+       (zerop
+	(loop
+	 for a on x and b on result count
+	 (eqt a b)))
+       result)))
   (a b c d e f))
 
 ;; Works when the end of the dotted list is a symbol

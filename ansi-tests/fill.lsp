@@ -55,30 +55,22 @@
 
 (deftest array-fill-7
   (let* ((a (make-array '(5))))
-    (handler-case (fill a 'x :start -1)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a 'x :start -1)))
   type-error)
 
 (deftest array-fill-8
   (let* ((a (make-array '(5))))
-    (handler-case (fill a 'x :start 'a)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a 'x :start 'a)))
   type-error)
 
 (deftest array-fill-9
   (let* ((a (make-array '(5))))
-    (handler-case (fill a 'x :end -1)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a 'x :end -1)))
   type-error)
 
 (deftest array-fill-10
   (let* ((a (make-array '(5))))
-    (handler-case (fill a 'x :end 'a)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a 'x :end 'a)))
   type-error)
 
 ;;; fill on arrays of fixnums
@@ -127,30 +119,22 @@
 
 (deftest array-fixnum-fill-7
   (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (handler-case (fill a 10 :start -1)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a 10 :start -1)))
   type-error)
 
 (deftest array-fixnum-fill-8
   (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (handler-case (fill a 100 :start 'a)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a 100 :start 'a)))
   type-error)
 
 (deftest array-fixnum-fill-9
   (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (handler-case (fill a -5 :end -1)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a -5 :end -1)))
   type-error)
 
 (deftest array-fixnum-fill-10
   (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (handler-case (fill a 17 :end 'a)
-		  (type-error (c) 'type-error)
-		  (error (c) c)))
+    (classify-error (fill a 17 :end 'a)))
   type-error)
 
 ;;; fill on arrays of unsigned eight bit bytes
@@ -187,27 +171,19 @@
   t (0 0 0 0 0))
 
 (deftest array-unsigned-byte8-fill-7
-  (handler-case (array-unsigned-byte-fill-test-fn 8 0 :start -1)
-		(type-error (c) 'type-error)
-		(error (c) c))
+  (classify-error (array-unsigned-byte-fill-test-fn 8 0 :start -1))
   type-error)
 
 (deftest array-unsigned-byte8-fill-8
-    (handler-case (array-unsigned-byte-fill-test-fn 8 100 :start 'a)
-		  (type-error (c) 'type-error)
-		  (error (c) c))
+  (classify-error (array-unsigned-byte-fill-test-fn 8 100 :start 'a))
   type-error)
 
 (deftest array-unsigned-byte8-fill-9
-  (handler-case (array-unsigned-byte-fill-test-fn 8 19 :end -1)
-		(type-error (c) 'type-error)
-		(error (c) c))
+  (classify-error (array-unsigned-byte-fill-test-fn 8 19 :end -1))
   type-error)
 
 (deftest array-unsigned-byte8-fill-10
-  (handler-case (array-unsigned-byte-fill-test-fn 8 17 :end 'a)
-		(type-error (c) 'type-error)
-		(error (c) c))
+  (classify-error (array-unsigned-byte-fill-test-fn 8 17 :end 'a))
   type-error)
 
 

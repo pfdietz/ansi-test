@@ -138,13 +138,11 @@
   0)
 
 (deftest nth-2
-  (handler-case
-    (let ((x (loop for i from 1 to 2000 collect i)))
-      (loop
-	  for i from 0 to 1999 do
-	    (setf (nth i x) (- 1999 i)))
-      (equal x (loop for i from 1999 downto 0 collect i)))
-    (error (c) c))
+  (let ((x (loop for i from 1 to 2000 collect i)))
+    (loop
+     for i from 0 to 1999 do
+     (setf (nth i x) (- 1999 i)))
+    (equalt x (loop for i from 1999 downto 0 collect i)))
   t)
 
 ;;; Test side effects, evaluation order in assignment to NTH

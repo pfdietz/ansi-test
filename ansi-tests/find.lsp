@@ -701,26 +701,18 @@
 ;;; Error tests
 
 (deftest find-error.1
-  (handler-case (find 'a 'b)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (find 'a 'b))
+  type-error)
 
 (deftest find-error.2
-  (handler-case (find 'a 10)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (find 'a 10))
+  type-error)
 
 (deftest find-error.3
-  (handler-case (find 'a 1.4)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (find 'a 1.4))
+  type-error)
 
 (deftest find-error.4
-  (locally (declare (optimize (safety 3)))
-	   (handler-case (find 'e '(a b c . d))
-			 (type-error () :type-error)
-			 (error (c) c)))
-  :type-error)
+  (classify-error (find 'e '(a b c . d)))
+  type-error)
+

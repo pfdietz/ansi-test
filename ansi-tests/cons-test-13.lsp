@@ -164,14 +164,9 @@
 ;; Check that a null key argument is ignored
 
 (deftest member-25
-    (handler-case
-	(member 'a '(c d a b e) :key nil)
-      (error (c) c))
+  (member 'a '(c d a b e) :key nil)
   (a b e))
 
 (deftest member-26
-    (handler-case
-	(member 'z '(a b c d) :key nil)
-      (error (c) c))
+  (member 'z '(a b c d) :key nil)
   nil)
-

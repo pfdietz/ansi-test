@@ -87,6 +87,20 @@
 ;;;      x))
 ;;;  11)
 
+;;; Tests of large number of LET variables
+(deftest let.14
+  (let* ((n 1000)
+	 (vars (mapcar #'gensym (make-list n :initial-element "G")))
+	 (expr `(let ,(let ((i 0))
+			(mapcar #'(lambda (v) (list v (incf i))) vars))
+		  ,(let ((sumexpr 0))
+		     (dolist (v vars)
+		       (setq sumexpr `(+ ,v ,sumexpr)))
+		     sumexpr)))
+	 (val (eval expr)))
+    (or (eqlt val (/ (* n (1+ n)) 2)) (list val)))
+  t)
+
 ;;; Tests for LET*
 
 (deftest let*.1
@@ -162,3 +176,17 @@
 ;;;      (declare (special x))
 ;;;      x))
 ;;;  2)
+
+;;; Tests of large number of LET* variables
+(deftest let*.14
+  (let* ((n 1000)
+	 (vars (mapcar #'gensym (make-list n :initial-element "G")))
+	 (expr `(let* ,(let ((i 0))
+			 (mapcar #'(lambda (v) (list v (incf i))) vars))
+		  ,(let ((sumexpr 0))
+		     (dolist (v vars)
+		       (setq sumexpr `(+ ,v ,sumexpr)))
+		     sumexpr)))
+	 (val (eval expr)))
+    (or (eqlt val (/ (* n (1+ n)) 2)) (list val)))
+  t)

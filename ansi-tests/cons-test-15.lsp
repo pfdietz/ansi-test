@@ -65,11 +65,8 @@
   (h g f e d c b a))
 
 (deftest mapc-7
-  (handler-case
-   (mapc (gensym) '(a b c))
-   (error () 'error))
-  error)
-
+  (classify-error (mapc #'identity 1))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcar
@@ -135,10 +132,8 @@
  ((h g f e d c b a) (a b c d e f g h)))
 
 (deftest mapcar-7
-    (handler-case
-	(mapcar (gensym) '(a b c))
-      (error () 'error))
-  error)
+  (classify-error (mapcar #'identity 1))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
@@ -207,174 +202,158 @@
   nil)
 
 (deftest mapcan-10
-    (handler-case
-	(mapcan (gensym) (copy-list '(a b c)))
-      (error () 'error))
-  error)
-
-(deftest mapcan-11
-    (handler-case
-	(mapcan 1 (copy-list '(a b c)))
-      (error () 'error))
-  error)
-
-(deftest mapcan-12
-    (handler-case
-	(mapcan 1.234 (copy-list '(a b c)))
-      (error () 'error))
-  error)
-
-(deftest mapcan-13
-    (handler-case
-	(mapcan "foo" (copy-list '(a b c)))
-      (error () 'error))
-  error)
+  (classify-error (mapcan #'identity 1))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapl
 
 (deftest mapl-1
-    (mapl #'list nil)
+  (mapl #'list nil)
   nil)
 
 (deftest mapl-2
-    (let* ((a nil)
-	   (x (copy-list '(a b c)))
-	   (xcopy (make-scaffold-copy x))
-	   (result
-	    (mapl #'(lambda (y) (push y a))
-		  x)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (eqt result x)
-       a))
-   ((c) (b c) (a b c)))
+  (let* ((a nil)
+	 (x (copy-list '(a b c)))
+	 (xcopy (make-scaffold-copy x))
+	 (result
+	  (mapl #'(lambda (y) (push y a))
+		x)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (eqt result x)
+     a))
+  ((c) (b c) (a b c)))
 
 (deftest mapl-3
-   (let* ((a nil)
-	  (x (copy-list '(a b c d)))
-	  (y (copy-list '(1 2 3 4)))
-	  (xcopy (make-scaffold-copy x))
-	  (ycopy (make-scaffold-copy y))
-	  (result
-	   (mapl #'(lambda (xtail ytail)
-		     (setf a
-		       (append (mapcar #'list xtail ytail)
-			       a)))
-		 x y)))
-      (and
-       (eqt result x)
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       a))
+  (let* ((a nil)
+	 (x (copy-list '(a b c d)))
+	 (y (copy-list '(1 2 3 4)))
+	 (xcopy (make-scaffold-copy x))
+	 (ycopy (make-scaffold-copy y))
+	 (result
+	  (mapl #'(lambda (xtail ytail)
+		    (setf a
+			  (append (mapcar #'list xtail ytail)
+				  a)))
+		x y)))
+    (and
+     (eqt result x)
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     a))
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
-	 (a 1) (b 2) (c 3) (d 4)))
+   (a 1) (b 2) (c 3) (d 4)))
 
 (deftest mapl-4
-   (let* ((a nil)
-	  (x (copy-list '(a b c d)))
-	  (y (copy-list '(1 2 3 4 5 6 7 8)))
-	  (xcopy (make-scaffold-copy x))
-	  (ycopy (make-scaffold-copy y))
-	  (result
-	   (mapl #'(lambda (xtail ytail)
-		     (setf a
-		       (append (mapcar #'list xtail ytail)
-			       a)))
-		 x y)))
-      (and
-       (eqt result x)
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       a))
+  (let* ((a nil)
+	 (x (copy-list '(a b c d)))
+	 (y (copy-list '(1 2 3 4 5 6 7 8)))
+	 (xcopy (make-scaffold-copy x))
+	 (ycopy (make-scaffold-copy y))
+	 (result
+	  (mapl #'(lambda (xtail ytail)
+		    (setf a
+			  (append (mapcar #'list xtail ytail)
+				  a)))
+		x y)))
+    (and
+     (eqt result x)
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     a))
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
-	 (a 1) (b 2) (c 3) (d 4)))
+   (a 1) (b 2) (c 3) (d 4)))
 
 (deftest mapl-5
-   (let* ((a nil)
-	  (x (copy-list '(a b c d e f g)))
-	  (y (copy-list '(1 2 3 4)))
-	  (xcopy (make-scaffold-copy x))
-	  (ycopy (make-scaffold-copy y))
-	  (result
-	   (mapl #'(lambda (xtail ytail)
-		     (setf a
-		       (append (mapcar #'list xtail ytail)
-			       a)))
-		 x y)))
-      (and
-       (eqt result x)
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       a))
+  (let* ((a nil)
+	 (x (copy-list '(a b c d e f g)))
+	 (y (copy-list '(1 2 3 4)))
+	 (xcopy (make-scaffold-copy x))
+	 (ycopy (make-scaffold-copy y))
+	 (result
+	  (mapl #'(lambda (xtail ytail)
+		    (setf a
+			  (append (mapcar #'list xtail ytail)
+				  a)))
+		x y)))
+    (and
+     (eqt result x)
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     a))
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
-	 (a 1) (b 2) (c 3) (d 4)))
+   (a 1) (b 2) (c 3) (d 4)))
+
+(deftest mapl-6
+  (classify-error (mapl #'identity 1))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; maplist
 
 (deftest maplist-1
-    (maplist #'list nil)
+  (maplist #'list nil)
   nil)
 
 (deftest maplist-2
-    (let* ((x (copy-list '(a b c)))
-	   (xcopy (make-scaffold-copy x))
-	   (result (maplist #'identity x)))
-      (and (check-scaffold-copy x xcopy)
-	   result))
+  (let* ((x (copy-list '(a b c)))
+	 (xcopy (make-scaffold-copy x))
+	 (result (maplist #'identity x)))
+    (and (check-scaffold-copy x xcopy)
+	 result))
   ((a b c) (b c) (c)))
 
 (deftest maplist-3
-   (let* ((x (copy-list '(a b c d)))
-	  (y (copy-list '(1 2 3 4)))
-	  (xcopy (make-scaffold-copy x))
-	  (ycopy (make-scaffold-copy y))
-	  (result
-	   (maplist #'append x y)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       result))
+  (let* ((x (copy-list '(a b c d)))
+	 (y (copy-list '(1 2 3 4)))
+	 (xcopy (make-scaffold-copy x))
+	 (ycopy (make-scaffold-copy y))
+	 (result
+	  (maplist #'append x y)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     result))
   ((a b c d 1 2 3 4)
    (b c d 2 3 4)
    (c d 3 4)
    (d 4)))
 
 (deftest maplist-4
-   (let* ((x (copy-list '(a b c d)))
-	  (y (copy-list '(1 2 3 4 5)))
-	  (xcopy (make-scaffold-copy x))
-	  (ycopy (make-scaffold-copy y))
-	  (result
-	   (maplist #'append x y)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       result))
+  (let* ((x (copy-list '(a b c d)))
+	 (y (copy-list '(1 2 3 4 5)))
+	 (xcopy (make-scaffold-copy x))
+	 (ycopy (make-scaffold-copy y))
+	 (result
+	  (maplist #'append x y)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     result))
   ((a b c d 1 2 3 4 5)
    (b c d 2 3 4 5)
    (c d 3 4 5)
    (d 4 5)))
 
 (deftest maplist-5
-   (let* ((x (copy-list '(a b c d e)))
-	  (y (copy-list '(1 2 3 4)))
-	  (xcopy (make-scaffold-copy x))
-	  (ycopy (make-scaffold-copy y))
-	  (result
-	   (maplist #'append x y)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       result))
+  (let* ((x (copy-list '(a b c d e)))
+	 (y (copy-list '(1 2 3 4)))
+	 (xcopy (make-scaffold-copy x))
+	 (ycopy (make-scaffold-copy y))
+	 (result
+	  (maplist #'append x y)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     result))
   ((a b c d e 1 2 3 4)
    (b c d e 2 3 4)
    (c d e 3 4)
    (d e 4)))
 
 (deftest maplist-6
-    (maplist 'append '(a b c) '(1 2 3))
+  (maplist 'append '(a b c) '(1 2 3))
   ((a b c 1 2 3) (b c 2 3) (c 3)))
 
 (deftest maplist-7
@@ -385,57 +364,54 @@
   (a c c e e g g))
 
 (deftest maplist-8
-  (handler-case
-   (maplist #'identity 'a)
-   (error () 'error))
-  error)
+  (classify-error (maplist #'identity 'a))
+  type-error)
 
 (deftest maplist-9
-  (handler-case
-   (maplist #'identity 1)
-   (error () 'error))
-  error)
+  (classify-error (maplist #'identity 1))
+  type-error)
 
 (deftest maplist-10
-  (handler-case
-   (maplist #'identity 1.1323)
-   (error () 'error))
-  error)
+  (classify-error (maplist #'identity 1.1323))
+  type-error)
 
 (deftest maplist-11
-  (handler-case
-   (maplist #'identity "abcde")
-   (error () 'error))
-  error)
+  (classify-error (maplist #'identity "abcde"))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
 
 (deftest mapcon-1
-    (mapcon #'(lambda (x) (append '(a) x nil)) nil)
+  (mapcon #'(lambda (x) (append '(a) x nil)) nil)
   nil)
 
 (deftest mapcon-2
-    (let* ((x (copy-list '(1 2 3 4)))
-	   (xcopy (make-scaffold-copy x))
-	   (result
-	    (mapcon #'(lambda (y) (append '(a) y nil)) x)))
-      (and
-       (check-scaffold-copy x xcopy)
-       result))
+  (let* ((x (copy-list '(1 2 3 4)))
+	 (xcopy (make-scaffold-copy x))
+	 (result
+	  (mapcon #'(lambda (y) (append '(a) y nil)) x)))
+    (and
+     (check-scaffold-copy x xcopy)
+     result))
   (a 1 2 3 4 a 2 3 4 a 3 4 a 4))
 
 (deftest mapcon-3
-    (let* ((x (copy-list '(4 2 3 2 2)))
-	   (y (copy-list '(a b c d e f g h i j k l)))
-	   (xcopy (make-scaffold-copy x))
-	   (ycopy (make-scaffold-copy y))
-	   (result
-	    (mapcon #'(lambda (xt yt)
-			(subseq yt 0 (car xt)))
-		    x y)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       result))
+  (let* ((x (copy-list '(4 2 3 2 2)))
+	 (y (copy-list '(a b c d e f g h i j k l)))
+	 (xcopy (make-scaffold-copy x))
+	 (ycopy (make-scaffold-copy y))
+	 (result
+	  (mapcon #'(lambda (xt yt)
+		      (subseq yt 0 (car xt)))
+		  x y)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     result))
   (a b c d b c c d e d e e f))
+
+(deftest mapcon-4
+  (classify-error (mapcon #'identity 1))
+  type-error)
+

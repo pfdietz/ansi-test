@@ -127,5 +127,5 @@
   :caught)
 
 (deftest concatenate-error.3
-  (catch-type-error (concatenate '(vector * 3) '(a b c d e)))
+  (classify-error (concatenate '(vector * 3) '(a b c d e)))
   type-error)

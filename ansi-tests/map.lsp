@@ -169,17 +169,9 @@
   :caught)
 
 (deftest map-error.2
-  (handler-case (map '(vector * 8) #'identity '(a b c))
-		(type-error () :caught))
-  :caught)
+  (classify-error (map '(vector * 8) #'identity '(a b c)))
+  type-error)
 
 (deftest map-error.3
-  (handler-case (map 'list #'identity '(a b . c))
-		(type-error () :caught))
-  :caught)
-
-
-
-
-
-
+  (classify-error (map 'list #'identity '(a b . c)))
+  type-error)

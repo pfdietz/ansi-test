@@ -205,15 +205,13 @@
   (c . 6))
 
 (deftest rassoc-if-2
-    (handler-case
-	(let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	       (xcopy (make-scaffold-copy x))
-	       (result (rassoc-if #'oddp x :key #'1+)))
-	  (and
-	   (check-scaffold-copy x xcopy)
-	   (eqt result (third x))
-	   result))
-      (program-error (c) c))
+  (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
+	 (xcopy (make-scaffold-copy x))
+	 (result (rassoc-if #'oddp x :key #'1+)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (eqt result (third x))
+     result))
   (c . 6))
 
 (deftest rassoc-if-3
@@ -245,15 +243,13 @@
   (c . 6))
 
 (deftest rassoc-if-not-2
-    (handler-case
-	(let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	       (xcopy (make-scaffold-copy x))
-	       (result (rassoc-if-not #'evenp x :key #'1+)))
-	  (and
-	   (check-scaffold-copy x xcopy)
-	   (eqt result (third x))
-	   result))
-      (program-error (c) c))
+  (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
+	 (xcopy (make-scaffold-copy x))
+	 (result (rassoc-if-not #'evenp x :key #'1+)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (eqt result (third x))
+     result))
   (c . 6))
 
 (deftest rassoc-if-not-3

@@ -132,9 +132,7 @@
 ;;;;;;;;
 
 (deftest reduce-error.1
-  (handler-case (reduce 'cons 'a)
-		(type-error (c) 'type-error)
-		(error (c) c))
+  (classify-error (reduce 'cons 'a))
   type-error)
 
 ;;;;;;;;

@@ -414,29 +414,24 @@
   :caught)
 
 (deftest merge-error.2
-  (handler-case  (merge '(vector * 3) (list 1 2 3) (list 4 5 6) #'<)
-		 (type-error () :caught))
-  :caught)
+  (classify-error (merge '(vector * 3) (list 1 2 3) (list 4 5 6) #'<))
+  type-error)
 
 (deftest merge-error.3
-  (handler-case  (merge '(bit-vector 3) (list 0 0 0) (list 1 1 1) #'<)
-		 (type-error () :caught))
-  :caught)
+  (classify-error (merge '(bit-vector 3) (list 0 0 0) (list 1 1 1) #'<))
+  type-error)
 
 (deftest merge-error.4
-  (handler-case  (merge '(vector * 7) (list 1 2 3) (list 4 5 6) #'<)
-		 (type-error () :caught))
-  :caught)
+  (classify-error (merge '(vector * 7) (list 1 2 3) (list 4 5 6) #'<))
+  type-error)
 
 (deftest merge-error.5
-  (handler-case  (merge '(bit-vector 7) (list 0 0 0) (list 1 1 1) #'<)
-		 (type-error () :caught))
-  :caught)
+  (classify-error (merge '(bit-vector 7) (list 0 0 0) (list 1 1 1) #'<))
+  type-error)
 
 (deftest merge-error.6
-  (handler-case (merge 'null (list 1 2 3) (list 4 5 6) #'<)
-		(type-error () :caught))
-  :caught)
+  (classify-error (merge 'null (list 1 2 3) (list 4 5 6) #'<))
+  type-error)
 
 
    

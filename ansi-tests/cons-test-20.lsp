@@ -190,12 +190,10 @@
   t)
 
 (deftest union-22
-  (handler-case
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check-and-key x y nil)))
-	(check-union x y result)))
-    (error (c) c))
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check-and-key x y nil)))
+      (check-union x y result)))
   t)
 
 (deftest union-23

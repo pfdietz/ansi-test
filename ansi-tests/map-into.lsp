@@ -157,24 +157,13 @@
   "1234")
 
 (deftest map-into-error.1
-  (handler-case (map-into 'a #'(lambda () nil))
-		(type-error (c) 'type-error)
-		(error (c) c))
+  (classify-error (map-into 'a #'(lambda () nil)))
   type-error)
 
 (deftest map-into-error.2
-  (handler-case (map-into nil #'identity 'a)
-		(type-error (c) 'type-error)
-		(error (c) c))
+  (classify-error (map-into nil #'identity 'a))
   type-error)
 
 (deftest map-into-error.3
-  (handler-case (map-into (copy-seq '(a b c)) #'cons '(d e f) 100)
-		(type-error (c) 'type-error)
-		(error (c) c))
+  (classify-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100))
   type-error)
-
-
-
-
-

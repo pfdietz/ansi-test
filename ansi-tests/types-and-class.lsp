@@ -11,15 +11,11 @@
 (declaim (optimize (safety 3)))
 
 (deftest boolean-type-1
-  (handler-case
-    (not (not (typep nil 'boolean)))
-    (error (c) c))
+  (notnot (typep nil 'boolean))
   t)
 
 (deftest boolean-type-2
-  (handler-case
-    (not (not (typep t 'boolean)))
-    (error (c) c))
+  (notnot (typep t 'boolean))
   t)
 
 (defun is-t-or-nil (e)

@@ -67,10 +67,8 @@
   nil)
 
 (deftest set-difference-6
-    (handler-case
-	(set-difference-with-check '(a b c d e) '(d a b e)
-				   :key nil)
-      (error (c) c))
+  (set-difference-with-check '(a b c d e) '(d a b e)
+			     :key nil)
   (c))
 
 (deftest set-difference-7
@@ -243,10 +241,8 @@
   nil)
 
 (deftest nset-difference-6
-    (handler-case
-	(nset-difference-with-check '(a b c d e) '(d a b e)
-				    :key nil)
-      (error (c) c))
+  (nset-difference-with-check '(a b c d e) '(d a b e)
+			      :key nil)
   (c))
 
 (deftest nset-difference-7

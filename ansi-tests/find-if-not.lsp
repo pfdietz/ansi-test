@@ -487,29 +487,17 @@
 ;;; Error tests
 
 (deftest find-if-not-error.1
-  (handler-case (find-if-not #'null 'b)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (find-if-not #'null 'b))
+  type-error)
 
 (deftest find-if-not-error.2
-  (handler-case (find-if-not #'identity 10)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (find-if-not #'identity 10))
+  type-error)
 
 (deftest find-if-not-error.3
-  (handler-case (find-if-not '1+ 1.4)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (find-if-not '1+ 1.4))
+  type-error)
 
 (deftest find-if-not-error.4
-  (locally (declare (optimize (safety 3)))
-	   (handler-case (find-if-not 'identity '(a b c . d))
-			 (type-error () :type-error)))
-  :type-error)
-
-
-		
-
+  (classify-error (find-if-not 'identity '(a b c . d)))
+  type-error)

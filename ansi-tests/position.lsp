@@ -567,29 +567,21 @@
 ;;; Error tests
 
 (deftest position-error.1
-  (handler-case (position 'a 'b)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (position 'a 'b))
+  type-error)
 
 (deftest position-error.2
-  (handler-case (position 'a 10)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (position 'a 10))
+  type-error)
 
 (deftest position-error.3
-  (handler-case (position 'a 1.4)
-		(type-error () :type-error)
-		(error (c) c))
-  :type-error)
+  (classify-error (position 'a 1.4))
+  type-error)
 
 (deftest position-error.4
-  (locally (declare (optimize (safety 3)))
-	   (handler-case (position 'e '(a b c . d))
-			 (type-error () :type-error)
-			 (error (c) c)))
-  :type-error)
+  (classify-error (position 'e '(a b c . d)))
+  type-error)
+
 
 
 

@@ -192,15 +192,13 @@
   (6 . c))
 
 (deftest assoc-if-2
-    (handler-case
-	(let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	       (xcopy (make-scaffold-copy x))
-	       (result (assoc-if #'oddp x :key #'1+)))
-	  (and
-	   (check-scaffold-copy x xcopy)
-	   (eqt result (third x))
-	   result))
-      (program-error (c) c))
+  (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
+	 (xcopy (make-scaffold-copy x))
+	 (result (assoc-if #'oddp x :key #'1+)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (eqt result (third x))
+     result))
   (6 . c))
 
 (deftest assoc-if-3
@@ -231,15 +229,13 @@
   (6 . c))
 
 (deftest assoc-if-not-2
-    (handler-case
-	(let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	       (xcopy (make-scaffold-copy x))
-	       (result (assoc-if-not #'evenp x :key #'1+)))
-	  (and
-	   (check-scaffold-copy x xcopy)
-	   (eqt result (third x))
-	   result))
-      (program-error (c) c))
+  (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
+	 (xcopy (make-scaffold-copy x))
+	 (result (assoc-if-not #'evenp x :key #'1+)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (eqt result (third x))
+     result))
   (6 . c))
 
 (deftest assoc-if-not-3

@@ -79,15 +79,13 @@
   t)
 
 (deftest subsetp-10
-    (handler-case
-	(subsetp-with-check (list 'a 'b 'c)
-			    (copy-tree
-			     (list '(z . c) '(a . y) '(b . 100) '(e . f)
-				  '(c . foo)))
-			    :test #'(lambda (e1 e2)
-				      (eqt e1 (car e2)))
-			    :key nil)
-      (error (c) c))
+  (subsetp-with-check (list 'a 'b 'c)
+		      (copy-tree
+		       (list '(z . c) '(a . y) '(b . 100) '(e . f)
+			     '(c . foo)))
+		      :test #'(lambda (e1 e2)
+				(eqt e1 (car e2)))
+		      :key nil)
   t)
 
 (deftest subsetp-11

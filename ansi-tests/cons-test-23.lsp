@@ -77,10 +77,8 @@
   t)
 
 (deftest set-exclusive-or-6
-    (handler-case
-	(set-exclusive-or-with-check '(a b c d e) '(d a b e)
-				   :key nil)
-      (error (c) c))
+  (set-exclusive-or-with-check '(a b c d e) '(d a b e)
+			       :key nil)
   (c))
 
 (deftest set-exclusive-or-7
@@ -265,10 +263,8 @@
   t)
 
 (deftest nset-exclusive-or-6
-    (handler-case
-	(nset-exclusive-or-with-check '(a b c d e) '(d a b e)
-				   :key nil)
-      (error (c) c))
+  (nset-exclusive-or-with-check '(a b c d e) '(d a b e)
+				:key nil)
   (c))
 
 (deftest nset-exclusive-or-7

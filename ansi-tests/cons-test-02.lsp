@@ -113,12 +113,10 @@
 ;; Check that a null key arg is ignored.
 
 (deftest sublis-8
-  (handler-case
-      (check-sublis 
-       '(1 2 a b)
-       '((1 . 2) (a . b))
-       :key nil)
-   (error (c) c))
+  (check-sublis 
+   '(1 2 a b)
+   '((1 . 2) (a . b))
+   :key nil)
   (2 2 b b))
 
 ;; nsublis
@@ -187,12 +185,10 @@
 ;; Check that a null key arg is ignored.
 
 (deftest nsublis-8
-  (handler-case
-      (check-nsublis 
-       '(1 2 a b)
-       '((1 . 2) (a . b))
-       :key nil)
-   (error (c) c))
+  (check-nsublis 
+   '(1 2 a b)
+   '((1 . 2) (a . b))
+   :key nil)
   (2 2 b b))
 
 (deftest sublis-shared
@@ -275,11 +271,9 @@
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
 (deftest subst-9
-  (handler-case
-   (check-subst 'a 'b
-		(copy-tree '(a b c d a b))
-		:key nil)
-   (error (c) c))
+  (check-subst 'a 'b
+	       (copy-tree '(a b c d a b))
+	       :key nil)
   (a a c d a a))
   
 
@@ -379,20 +373,16 @@
   (40 40 40 40))
 
 (deftest subst-if-6
-  (handler-case
-   (check-subst-if 'a  #'(lambda (x) (eql x 'b))
-		   '((a) (b) (c) (d))
-		   :key nil)
-   (error (c) c))
-((a) (a) (c) (d)))
+  (check-subst-if 'a  #'(lambda (x) (eql x 'b))
+		  '((a) (b) (c) (d))
+		  :key nil)
+  ((a) (a) (c) (d)))
   
 (deftest subst-if-not-5
-  (handler-case
-   (check-subst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
-		       '((a) (b) (c) (d))
-		       :key nil)
-   (error (c) c))
-((a) (a) (c) (d)))
+  (check-subst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
+		      '((a) (b) (c) (d))
+		      :key nil)
+  ((a) (a) (c) (d)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Check nsubst
@@ -458,11 +448,9 @@
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
 (deftest nsubst-9
-  (handler-case
-   (check-nsubst 'a 'b
+  (check-nsubst 'a 'b
 		(copy-tree '(a b c d a b))
 		:key nil)
-   (error (c) c))
   (a a c d a a))
   
 
@@ -544,17 +532,13 @@
   (40 40 40 40))
 
 (deftest nsubst-if-6
-  (handler-case
-   (check-nsubst-if 'a  #'(lambda (x) (eql x 'b))
+  (check-nsubst-if 'a  #'(lambda (x) (eql x 'b))
 		   '((a) (b) (c) (d))
 		   :key nil)
-   (error (c) c))
-((a) (a) (c) (d)))
+  ((a) (a) (c) (d)))
   
 (deftest nsubst-if-not-5
-  (handler-case
-   (check-nsubst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
+  (check-nsubst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
 		       '((a) (b) (c) (d))
 		       :key nil)
-   (error (c) c))
-((a) (a) (c) (d)))
+  ((a) (a) (c) (d)))

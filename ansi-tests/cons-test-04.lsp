@@ -161,23 +161,19 @@
 
 ;; Check that a NIL :key argument is the same as no key argument at all
 (deftest pushnew-10
-  (handler-case
-   (let* ((x (list 'a 'b 'c 'd))
-	  (result (pushnew 'z x :key nil)))
-      result)
-   (error (c) c))
+  (let* ((x (list 'a 'b 'c 'd))
+	 (result (pushnew 'z x :key nil)))
+    result)
   (z a b c d))
 
 ;; Check that a NIL :key argument is the same as no key argument at all
 (deftest pushnew-11
-  (handler-case
-    (let* ((x (copy-tree '((a b) 1 "and" c d e)))
-	   (y (pushnew (copy-tree '(a b)) x
-		       :test 'equal :key nil)))
-      (and
-       (eqt x y)
-       x))
-    (error (c) c))
+  (let* ((x (copy-tree '((a b) 1 "and" c d e)))
+	 (y (pushnew (copy-tree '(a b)) x
+		     :test 'equal :key nil)))
+    (and
+     (eqt x y)
+     x))
   ((a b) 1 "and" c d e))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -197,9 +193,7 @@
 
 ;; Check that a NIL :key argument is the same as no key argument at all
 (deftest adjoin-4
-  (handler-case
-   (adjoin 'a '(a) :key nil)
-   (error (c) c))
+  (adjoin 'a '(a) :key nil)
   (a))
 
 (deftest adjoin-5
@@ -248,24 +242,18 @@
 
 ;; Test that a :key of NIL is the same as no key at all
 (deftest adjoin-16
-  (handler-case
-   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	   :test #'equal :key nil)
-   (error (c) c))
-(aaa "AAA" "aaa" #\a))
+  (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
+	  :test #'equal :key nil)
+  (aaa "AAA" "aaa" #\a))
 
 ;; Test that a :key of NIL is the same as no key at all
 (deftest adjoin-17
-  (handler-case
-   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	   :test 'equal :key nil)
-   (error (c) c))
-(aaa "AAA" "aaa" #\a))
+  (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
+	  :test 'equal :key nil)
+  (aaa "AAA" "aaa" #\a))
 
 ;; Test that a :key of NIL is the same as no key at all
 (deftest adjoin-18
-  (handler-case
-   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	   :test-not (complement #'equal) :key nil)
-   (error (c) c))
-(aaa "AAA" "aaa" #\a))
+  (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
+	  :test-not (complement #'equal) :key nil)
+  (aaa "AAA" "aaa" #\a))

@@ -168,36 +168,29 @@
 ;;; Tests for errors
 
 (deftest make-sequence-error.1
-  (handler-case (make-sequence 'symbol 10)
-		(type-error () :caught))
-  :caught)
+  (classify-error (make-sequence 'symbol 10))
+  type-error)
 
 (deftest make-sequence-error.2
-  (handler-case (make-sequence 'null 1)
-		(type-error () :caught))
-  :caught)
+  (classify-error (make-sequence 'null 1))
+  type-error)
 
 (deftest make-sequence-error.3
-  (handler-case (make-sequence '(vector * 4) 3)
-		(type-error () :caught))
-  :caught)
+  (classify-error (make-sequence '(vector * 4) 3))
+  type-error)
 
 (deftest make-sequence-error.4
-  (handler-case (make-sequence '(vector * 2) 3)
-		(type-error () :caught))
-  :caught)
+  (classify-error (make-sequence '(vector * 2) 3))
+  type-error)
 
 (deftest make-sequence-error.5
-  (handler-case (make-sequence '(string 4) 3)
-		(type-error () :caught))
-  :caught)
+  (classify-error (make-sequence '(string 4) 3))
+  type-error)
 
 (deftest make-sequence-error.6
-  (handler-case (make-sequence '(simple-string 2) 3)
-		(type-error () :caught))
-  :caught)
+  (classify-error (make-sequence '(simple-string 2) 3))
+  type-error)
 
 (deftest make-sequence-error.7
-  (handler-case (make-sequence 'cons 0)
-		(type-error () :caught))
-  :caught)
+  (classify-error (make-sequence 'cons 0))
+  type-error)

@@ -220,17 +220,15 @@
 ;; Test that a nil key argument is ignored
 
 (deftest intersection-14
-  (handler-case
-   (let
-       ((result (intersection (copy-list '(a b c d))
-			      (copy-list '(e c f b g))
-			      :key nil)))
-     (and
-      (member 'b result)
-      (member 'c result)
-      (every #'(lambda (x) (member x '(b c))) result)
-      t))
-   (error (c) c))
+  (let
+      ((result (intersection (copy-list '(a b c d))
+			     (copy-list '(e c f b g))
+			     :key nil)))
+    (and
+     (member 'b result)
+     (member 'c result)
+     (every #'(lambda (x) (member x '(b c))) result)
+     t))
   t)
 
 ;; Test that intersection preserves the order of arguments to :test, :test-not
@@ -434,18 +432,16 @@
 ;; Check that a nil key argument is ignored
 
 (deftest nintersection-14
-  (handler-case
-   (let
-       ((result (nintersection
-		 (copy-list '(a b c d))
-		 (copy-list '(e c f b g))
-		 :key nil)))
-     (and
-      (member 'b result)
-      (member 'c result)
-      (every #'(lambda (x) (member x '(b c))) result)
-      t))
-   (error (c) c))
+  (let
+      ((result (nintersection
+		(copy-list '(a b c d))
+		(copy-list '(e c f b g))
+		:key nil)))
+    (and
+     (member 'b result)
+     (member 'c result)
+     (every #'(lambda (x) (member x '(b c))) result)
+     t))
   t) 
 
 ;; Test that nintersection preserves the order of arguments to :test, :test-not
