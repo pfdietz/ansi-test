@@ -174,6 +174,89 @@
    (peek-char #\z s nil 'foo))
   foo)
 
+;;; Interaction with echo streams
+
+(deftest peek-char.17
+  (block done
+    (with-input-from-string
+     (is "ab")
+     (with-output-to-string
+       (os)
+       (let ((es (make-echo-stream is os)))
+	 (let ((pos1 (file-position os)))
+	   (unless (zerop pos1) (return-from done :good))
+	   (peek-char nil es nil)
+	   (let ((pos2 (file-position os)))
+	     (return-from done
+	       (if (eql pos1 pos2)
+		   :good
+		 (list pos1 pos2)))))))))
+  :good)
+
+(deftest peek-char.18
+  (block done
+    (with-input-from-string
+     (is "   ab")
+     (with-output-to-string
+       (os)
+       (let ((es (make-echo-stream is os)))
+	 (let ((pos1 (file-position os)))
+	   (unless (zerop pos1) (return-from done :good))
+	   (peek-char t es nil)
+	   (let ((pos2 (file-position os)))
+	     (return-from done
+	       (if (eql pos1 pos2)
+		   pos1
+		 :good))))))))
+  :good)
+
+(deftest peek-char.19
+  (block done
+    (with-input-from-string
+     (is "abcde")
+     (with-output-to-string
+       (os)
+       (let ((es (make-echo-stream is os)))
+	 (let ((pos1 (file-position os)))
+	   (unless (zerop pos1) (return-from done :good))
+	   (peek-char #\c es nil)
+	   (let ((pos2 (file-position os)))
+	     (return-from done
+	       (if (eql pos1 pos2)
+		   pos1
+		 :good))))))))
+  :good)
+
+;;; Interactions with the readtable
+
+(deftest peek-char.20
+  (let ((*readtable* (copy-readtable)))
+    (set-syntax-from-char #\Space #\a)
+    (with-input-from-string
+     (*standard-input* "  x")
+     (values
+      (peek-char)
+      (read-char)
+      (peek-char t)
+      (read-char))))
+  #\Space #\Space
+  #\Space #\Space  ; *not* #\x #\x
+  )
+
+(deftest peek-char.21
+  (let ((*readtable* (copy-readtable)))
+    (set-syntax-from-char #\x #\Space)
+    (with-input-from-string
+     (*standard-input* "xxa")
+     (values
+      (peek-char)
+      (read-char)
+      (peek-char t)
+      (read-char))))
+  #\x #\x
+  #\a #\a  ; *not* #\x #\x
+  )
+
 
 ;;; Error tests
 
