@@ -383,9 +383,9 @@
 				    most-negative-double-float
 				    most-negative-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
-			(<= (rational lower-bound)
-			    x (rational bound)))
+		 when (<= (rational lower-bound)
+			  (rational x)
+			  (rational bound))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -408,8 +408,9 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
-			(<= (rational bound) x (rational upper-bound)))
+		 when (<= (rational bound)
+			  (rational x)
+			  (rational upper-bound))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -431,10 +432,9 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (if (floatp x) (subtypep (class-of x)
-					       (class-of lower-bound))
-			(<= (rational lower-bound)
-			    x (rational upper-bound)))
+		 when (<= (rational lower-bound)
+			  (rational x)
+			  (rational upper-bound))
 		 nconc
 		 (let* ((y (float x one))
 			(z1 (+ y epsilon))
@@ -444,6 +444,7 @@
 			 (list y z2 nil)
 			 (list z2 y t)))))
      )))
+
 
 
 (deftest <.4
@@ -583,9 +584,9 @@
 				    most-negative-double-float
 				    most-negative-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (if (floatp x) (subtypep (class-of x)
-					       (class-of lower-bound))
-			(<= (rational lower-bound) x (rational bound)))
+		 when (<= (rational lower-bound)
+			  (rational x)
+			  (rational bound))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -607,8 +608,9 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
-			(<= (rational bound) x (rational upper-bound)))
+		 when (<= (rational bound)
+			  (rational x)
+			  (rational upper-bound))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -630,10 +632,9 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (if (floatp x) (subtypep (class-of x)
-					       (class-of lower-bound))
-			(<= (rational lower-bound)
-			    x (rational upper-bound)))
+		 when (<= (rational lower-bound)
+			  (rational x)
+			  (rational upper-bound))
 		 nconc
 		 (let* ((y (float x one))
 			(z1 (+ y epsilon))
