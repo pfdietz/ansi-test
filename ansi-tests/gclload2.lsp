@@ -75,6 +75,7 @@
 (load "iteration.lsp")
 (load "loop.lsp")
 (load "loop1.lsp")
+(load "loop2.lsp")
 
 ;;; Tests of conses
 

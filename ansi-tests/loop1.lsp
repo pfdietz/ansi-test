@@ -172,3 +172,58 @@
      a b c i))
   (0 2 4 6 8)
   3 2 1 3)
+
+(deftest loop.1.33
+  (loop for x from 1 upto 5 collect x)
+  (1 2 3 4 5))
+
+(deftest loop.1.33
+  (loop for x from 1 upto 5 collect x)
+  (1 2 3 4 5))
+
+(deftest loop.1.34
+  (loop for x from 1 to 4.0 collect x)
+  (1 2 3 4))
+
+(deftest loop.1.35
+  (loop for x below 5 collect x)
+  (0 1 2 3 4))
+
+(deftest loop.1.36
+  (loop for x below 20 by 3 collect x)
+  (0 3 6 9 12 15 18))
+
+(deftest loop.1.37
+  (loop for x by 3 below 20 collect x)
+  (0 3 6 9 12 15 18))
+
+(deftest loop.1.38
+  (loop for x of-type fixnum from 1 to 5 collect x)
+  (1 2 3 4 5))
+
+;;; The following provides an example where an incorrect
+;;; implementation will assign X an out-of-range value
+;;; at the end.
+(deftest loop.1.39
+  (loop for x of-type (integer 1 5) from 1 to 5 collect x)
+  (1 2 3 4 5))
+
+;;; Test that the index variable achieves the inclusive
+;;; upper bound, but does not exceed it.
+(deftest loop.1.40
+  (loop for x from 1 to 5 do nil finally (return x))
+  5)
+
+;;; Test that the index variable acheives the exclusive
+;;; upper bound, but does not exceed it.
+(deftest loop.1.41
+  (loop for x from 1 below 5 do nil finally (return x))
+  4)
+
+(deftest loop.1.42
+  (loop for x from 10 downto 0 do nil finally (return x))
+  0)
+
+(deftest loop.1.43
+  (loop for x from 10 above 0 do nil finally (return x))
+  1)
