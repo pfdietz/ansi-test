@@ -77,7 +77,7 @@
 	 repeat 1000
 	 unless (and (null (cdr rlist))
 		     (typep y `(complex ,type)))
-	 collect (list x rlist)))
+	 collect (list x1 rlist)))
   nil)
 
 (deftest atanh.7
@@ -90,7 +90,7 @@
 	 repeat 1000
 	 unless (and (null (cdr rlist))
 		     (typep y `(complex ,type)))
-	 collect (list x rlist)))
+	 collect (list x1 rlist)))
   nil)
 
 

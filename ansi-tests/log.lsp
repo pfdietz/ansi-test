@@ -78,7 +78,7 @@
 	 repeat 1000
 	 unless (and (null (cdr rlist))
 		     (typep y `(complex ,type)))
-	 collect (list x rlist)))
+	 collect (list x1 x2 rlist)))
   nil)
 
 (deftest log.8
@@ -92,7 +92,7 @@
 	 repeat 1000
 	 unless (and (null (cdr rlist))
 		     (typep y `(complex ,type)))
-	 collect (list x rlist)))
+	 collect (list x1 x2 rlist)))
   nil)
 
 ;;; FIXME
