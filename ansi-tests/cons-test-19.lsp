@@ -235,24 +235,67 @@
 	   (not (eql x y))))))
   (4))
 
-(deftest intersection-19
+;;; Keyword tests
+
+(deftest intersection.allow-other-keys.1
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (intersection list1 list2 :bad t :allow-other-keys 1))
   (4))
 
-(deftest intersection-20
+(deftest intersection.allow-other-keys.2
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (intersection list1 list2 :allow-other-keys :foo :also-bad t))
   (4))
 
-(deftest intersection-21
+(deftest intersectionallow-other-keys.3
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (intersection list1 list2 :allow-other-keys :foo :also-bad t
 		  :test #'(lambda (x y) (= x (1+ y)))))
   nil)
+
+(deftest intersection.allow-other-keys.4
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (intersection list1 list2 :allow-other-keys t))
+  (4))
+
+(deftest intersection.allow-other-keys.5
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (intersection list1 list2 :allow-other-keys nil))
+  (4))
+
+(deftest intersection.allow-other-keys.6
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (intersection list1 list2 :allow-other-keys t
+		  :allow-other-keys nil :bad t))
+  (4))
+
+(deftest intersection.allow-other-keys.7
+  (sort
+   (let ((list1 (list 1 2 3 4))
+	 (list2 (list 4 5 6 7)))
+     (intersection list1 list2 :allow-other-keys t
+		   :allow-other-keys nil
+		   :test #'(lambda (x y) (eql x (1- y)))))
+   #'<)
+  (3 4))
+
+(deftest intersection.keywords.8
+  (sort
+   (let ((list1 (list 1 2 3 4))
+	 (list2 (list 4 5 6 7)))
+     (intersection list1 list2
+		   :test #'(lambda (x y) (eql x (1- y)))
+		   :test #'eql))
+   #'<)
+  (3 4))
+
+;;; Error tests
 
 (deftest intersection.error.1
   (classify-error (intersection))
@@ -470,19 +513,67 @@
 	   (not (eql x y))))))
   (4))
 
-(deftest nintersection-19
+;;; Keyword tests
+
+(deftest nintersection.allow-other-keys.1
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (nintersection list1 list2 :bad t :allow-other-keys 1))
   (4))
 
-(deftest nintersection-20
+(deftest nintersection.allow-other-keys.2
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (nintersection list1 list2 :allow-other-keys :foo :also-bad t))
   (4))
 
-(deftest nintersection-21
+(deftest nintersectionallow-other-keys.3
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (nintersection list1 list2 :allow-other-keys :foo :also-bad t
+		  :test #'(lambda (x y) (= x (1+ y)))))
+  nil)
+
+(deftest nintersection.allow-other-keys.4
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (nintersection list1 list2 :allow-other-keys t))
+  (4))
+
+(deftest nintersection.allow-other-keys.5
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (nintersection list1 list2 :allow-other-keys nil))
+  (4))
+
+(deftest nintersection.allow-other-keys.6
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (nintersection list1 list2 :allow-other-keys t
+		  :allow-other-keys nil :bad t))
+  (4))
+
+(deftest nintersection.allow-other-keys.7
+  (sort
+   (let ((list1 (list 1 2 3 4))
+	 (list2 (list 4 5 6 7)))
+     (nintersection list1 list2 :allow-other-keys t
+		   :allow-other-keys nil
+		   :test #'(lambda (x y) (eql x (1- y)))))
+   #'<)
+  (3 4))
+
+(deftest nintersection.keywords.8
+  (sort
+   (let ((list1 (list 1 2 3 4))
+	 (list2 (list 4 5 6 7)))
+     (nintersection list1 list2
+		   :test #'(lambda (x y) (eql x (1- y)))
+		   :test #'eql))
+   #'<)
+  (3 4))
+
+(deftest nintersection.allow-other-keys.9
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (nintersection list1 list2 :allow-other-keys :foo :also-bad t

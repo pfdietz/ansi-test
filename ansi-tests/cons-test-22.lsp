@@ -149,32 +149,93 @@
 	    #'<))
   (1 2 3 4))
 
-(deftest set-difference-20
+;;; Keyword tests
+
+(deftest set-difference.allow-other-keys.1
   (sort
    (copy-list
     (set-difference
-     '(1 2 3 4 5) '(2 3 4)
+     (list 1 2 3 4 5) (list 2 3 4)
      :bad t :allow-other-keys t))
    #'<)
   (1 5))
 
-(deftest set-difference-21
+(deftest set-difference.allow-other-keys.2
   (sort
    (copy-list
     (set-difference
-     '(1 2 3 4 5) '(2 3 4)
+     (list 1 2 3 4 5) (list 2 3 4)
      :allow-other-keys t :bad t))
    #'<)
   (1 5))
 
-(deftest set-difference-22
+(deftest set-difference.allow-other-keys.3
   (sort
    (copy-list
     (set-difference
-     '(1 2 3 4 5) '(2 3 4)
+     (list 1 2 3 4 5) (list 2 3 4)
      :allow-other-keys t :bad t :test #'(lambda (x y) (= x (1- y)))))
    #'<)
   (4 5))
+
+(deftest set-difference.allow-other-keys.4
+  (sort
+   (copy-list
+    (set-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t))
+   #'<)
+  (1 5))
+
+(deftest set-difference.allow-other-keys.5
+  (sort
+   (copy-list
+    (set-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys nil))
+   #'<)
+  (1 5))
+
+(deftest set-difference.allow-other-keys.6
+  (sort
+   (copy-list
+    (set-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t
+     :allow-other-keys nil))
+   #'<)
+  (1 5))
+
+(deftest set-difference.allow-other-keys.7
+  (sort
+   (copy-list
+    (set-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t
+     :allow-other-keys nil
+     '#:x 1))
+   #'<)
+  (1 5))
+
+(deftest set-difference.keywords.8
+  (sort
+   (copy-list
+    (set-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :test #'eql :test (complement #'eql)))
+   #'<)
+  (1 5))
+
+(deftest set-difference.keywords.9
+  (sort
+   (copy-list
+    (set-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :test (complement #'eql) :test #'eql))
+   #'<)
+  nil)
+
+;;; Error tests
 
 
 (deftest set-difference.error.1
@@ -342,7 +403,9 @@
 	  #'<))
   (1 2 3 4))
 
-(deftest nset-difference-20
+;;; Keyword tests
+
+(deftest nset-difference.allow-other-keys.1
   (sort
    (copy-list
     (nset-difference
@@ -351,7 +414,7 @@
    #'<)
   (1 5))
 
-(deftest nset-difference-21
+(deftest nset-difference.allow-other-keys.2
   (sort
    (copy-list
     (nset-difference
@@ -360,7 +423,7 @@
    #'<)
   (1 5))
 
-(deftest nset-difference-22
+(deftest nset-difference.allow-other-keys.3
   (sort
    (copy-list
     (nset-difference
@@ -368,6 +431,65 @@
      :allow-other-keys t :bad t :test #'(lambda (x y) (= x (1- y)))))
    #'<)
   (4 5))
+
+(deftest nset-difference.allow-other-keys.4
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t))
+   #'<)
+  (1 5))
+
+(deftest nset-difference.allow-other-keys.5
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys nil))
+   #'<)
+  (1 5))
+
+(deftest nset-difference.allow-other-keys.6
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t
+     :allow-other-keys nil))
+   #'<)
+  (1 5))
+
+(deftest nset-difference.allow-other-keys.7
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t
+     :allow-other-keys nil
+     '#:x 1))
+   #'<)
+  (1 5))
+
+(deftest nset-difference.keywords.8
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :test #'eql :test (complement #'eql)))
+   #'<)
+  (1 5))
+
+(deftest nset-difference.keywords.9
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :test (complement #'eql) :test #'eql))
+   #'<)
+  nil)
+
+;;; Error tests
 
 (deftest nset-difference.error.1
   (classify-error (nset-difference))

@@ -263,24 +263,62 @@
        #'<))
   (1 2 3 4 5 6))
 
-(deftest nunion-32
+;;; Keyword tests
+
+(deftest nunion.allow-other-keys.1
   (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2) :bad t
 	       :allow-other-keys "yes")
 	#'<)
   (1 2 5 7 9 10 11 20))
 
-(deftest nunion-33
+(deftest nunion.allow-other-keys.2
   (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2)
 	       :allow-other-keys t :also-bad t)
 	#'<)
   (1 2 5 7 9 10 11 20))
 
-(deftest nunion-34
+(deftest nunion.allow-other-keys.3
   (sort (nunion (list 1 2 3) (list 1 2 3)
 	       :allow-other-keys t :also-bad t
 	       :test #'(lambda (x y) (= x (+ y 100))))
 	#'<)
   (1 1 2 2 3 3))
+
+(deftest nunion.allow-other-keys.4
+  (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2)
+	       :allow-other-keys t)
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest nunion.allow-other-keys.5
+  (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2)
+	       :allow-other-keys nil)
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest nunion.allow-other-keys.6
+  (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2)
+	       :allow-other-keys t
+	       :allow-other-keys nil)
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest nunion.allow-other-keys.7
+  (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2)
+	       :allow-other-keys t
+	       :allow-other-keys nil
+	       '#:x 1)
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest nunion.keywords.9
+  (sort (nunion (list 1 2 3) (list 1 2 3)
+	       :test #'(lambda (x y) (= x (+ y 100)))
+	       :test #'eql)
+	#'<)
+  (1 1 2 2 3 3))
+
+;;; Error tests
 
 (deftest nunion.error.1
   (classify-error (nunion))

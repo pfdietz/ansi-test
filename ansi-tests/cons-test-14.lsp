@@ -65,12 +65,12 @@
   (member-if #'identity '(nil 2 3 4 5) :allow-other-keys nil)
   (2 3 4 5))
 
-(deftest member-if.allow-other-keys.5
+(deftest member-if.allow-other-keys.6
   (member-if #'identity '(nil 2 3 4 5) :allow-other-keys t
 	     :allow-other-keys nil)
   (2 3 4 5))
 
-(deftest member-if.allow-other-keys.6
+(deftest member-if.allow-other-keys.7
   (member-if #'identity '(nil 2 3 4 5) :allow-other-keys t
 	     :allow-other-keys nil :key #'identity :key #'null)
   (2 3 4 5))

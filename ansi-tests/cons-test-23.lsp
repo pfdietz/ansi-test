@@ -171,24 +171,67 @@
 			 t))))))
   t)
 
-(deftest set-exclusive-or-19
+;;; Keyword tests
+
+(deftest set-exclusive.allow-other-keys.1
   (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
 			  :bad t :allow-other-keys t)
 	#'<)
   (1 2 5 6))
 
-(deftest set-exclusive-or-20
+(deftest set-exclusive.allow-other-keys.2
   (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
 			  :allow-other-keys t :bad t)
 	#'<)
   (1 2 5 6))
 
-(deftest set-exclusive-or-21
+(deftest set-exclusive.allow-other-keys.3
   (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
 			  :allow-other-keys t :bad t
 			  :test #'(lambda (x y) (= x (1- y))))
 	#'<)
   (1 6))
+
+(deftest set-exclusive.allow-other-keys.4
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t)
+	#'<)
+  (1 2 5 6))
+
+(deftest set-exclusive.allow-other-keys.5
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys nil)
+	#'<)
+  (1 2 5 6))
+
+(deftest set-exclusive.allow-other-keys.6
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t
+			  :allow-other-keys nil)
+	#'<)
+  (1 2 5 6))
+
+(deftest set-exclusive.allow-other-keys.7
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t
+			  :allow-other-keys nil
+			  '#:x 1)
+	#'<)
+  (1 2 5 6))
+
+(deftest set-exclusive.keywords.8
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :test #'eql
+			  :test #'/=)
+	#'<)
+  (1 2 5 6))
+
+(deftest set-exclusive.keywords.9
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :test #'/=
+			  :test #'eql)
+	#'<)
+  nil)
 
 (deftest set-exclusive-or.error.1
   (classify-error (set-exclusive-or))
@@ -379,24 +422,69 @@
 			 t))))))
   t)
 
-(deftest nset-exclusive-or-19
+;;; Keyword tests
+
+(deftest nset-exclusive.allow-other-keys.1
   (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
 			  :bad t :allow-other-keys t)
 	#'<)
   (1 2 5 6))
 
-(deftest nset-exclusive-or-20
+(deftest nset-exclusive.allow-other-keys.2
   (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
 			  :allow-other-keys t :bad t)
 	#'<)
   (1 2 5 6))
 
-(deftest nset-exclusive-or-21
+(deftest nset-exclusive.allow-other-keys.3
   (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
 			  :allow-other-keys t :bad t
 			  :test #'(lambda (x y) (= x (1- y))))
 	#'<)
   (1 6))
+
+(deftest nset-exclusive.allow-other-keys.4
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t)
+	#'<)
+  (1 2 5 6))
+
+(deftest nset-exclusive.allow-other-keys.5
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys nil)
+	#'<)
+  (1 2 5 6))
+
+(deftest nset-exclusive.allow-other-keys.6
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t
+			  :allow-other-keys nil)
+	#'<)
+  (1 2 5 6))
+
+(deftest nset-exclusive.allow-other-keys.7
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t
+			  :allow-other-keys nil
+			  '#:x 1)
+	#'<)
+  (1 2 5 6))
+
+(deftest nset-exclusive.keywords.8
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :test #'eql
+			  :test #'/=)
+	#'<)
+  (1 2 5 6))
+
+(deftest nset-exclusive.keywords.9
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :test #'/=
+			  :test #'eql)
+	#'<)
+  nil)
+
+;;; Error tests
 
 (deftest nset-exclusive-or.error.1
   (classify-error (nset-exclusive-or))

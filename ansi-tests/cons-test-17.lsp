@@ -16,7 +16,7 @@
     (acons (cdar x) (caar x) (rev-assoc-list (cdr x))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; assoc
+;;; rassoc
 
 (deftest rassoc-1
     (rassoc nil nil)
@@ -191,18 +191,35 @@
 		       (eqt x y))))
   (3 . A))
 
-(deftest rassoc-26
+;;; Keyword tests
+
+(deftest rassoc.allow-other-keys.1
   (rassoc 'b '((1 . a) (2 . b) (3 . c)) :bad t :allow-other-keys t)
   (2 . b))
 
-(deftest rassoc-27
+(deftest rassoc.allow-other-keys.2
   (rassoc 'b '((1 . a) (2 . b) (3 . c)) :allow-other-keys t :bad t)
   (2 . b))
 
-(deftest rassoc-28
+(deftest rassoc.allow-other-keys.3
   (rassoc 'a '((1 . a) (2 . b) (3 . c)) :allow-other-keys t :bad t
 	  :test-not #'eql)
   (2 . b))
+
+(deftest rassoc.allow-other-keys.4
+  (rassoc 'b '((1 . a) (2 . b) (3 . c)) :allow-other-keys t)
+  (2 . b))
+
+(deftest rassoc.allow-other-keys.5
+  (rassoc 'b '((1 . a) (2 . b) (3 . c)) :allow-other-keys nil)
+  (2 . b))
+
+(deftest rassoc.keywords.6
+  (rassoc 'b '((1 . a) (2 . b) (3 . c))
+	  :test #'eql :test (complement #'eql))
+  (2 . b))
+
+;;; Error tests
 
 (deftest rassoc.error.1
   (classify-error (rassoc))
@@ -267,18 +284,34 @@
 	       (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
 
-(deftest rassoc-if-26
+;;; Keyword tests
+
+(deftest rassoc-if.allow-other-keys.1
   (rassoc-if #'null '((1 . a) (2) (3 . c)) :bad t :allow-other-keys t)
   (2))
 
-(deftest rassoc-if-27
+(deftest rassoc-if.allow-other-keys.2
   (rassoc-if #'null '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t)
   (2))
 
-(deftest rassoc-if-28
+(deftest rassoc-if.allow-other-keys.3
   (rassoc-if #'identity '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t
 	  :key 'not)
   (2))
+
+(deftest rassoc-if.allow-other-keys.4
+  (rassoc-if #'null '((1 . a) (2) (3 . c)) :allow-other-keys t)
+  (2))
+
+(deftest rassoc-if.allow-other-keys.5
+  (rassoc-if #'null '((1 . a) (2) (3 . c)) :allow-other-keys nil)
+  (2))
+
+(deftest rassoc-if.keywords.6
+  (rassoc-if #'identity '((1 . a) (2) (3 . c)) :key #'not :key #'identity)
+  (2))
+
+;;; Error tests
 
 (deftest rassoc-if.error.1
   (classify-error (rassoc-if))
@@ -342,18 +375,39 @@
 		   (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
 
-(deftest rassoc-if-not-26
+;;; Keyword tests
+
+(deftest rassoc-if-not.allow-other-keys.1
   (rassoc-if-not #'identity '((1 . a) (2) (3 . c)) :bad t :allow-other-keys t)
   (2))
 
-(deftest rassoc-if-not-27
+(deftest rassoc-if-not.allow-other-keys.2
   (rassoc-if-not #'values '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t)
   (2))
 
-(deftest rassoc-if-not-28
+(deftest rassoc-if-not.allow-other-keys.3
   (rassoc-if-not #'not '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t
 	  :key 'not)
   (2))
+
+(deftest rassoc-if-not.allow-other-keys.4
+  (rassoc-if-not #'identity '((1 . a) (2) (3 . c)) :allow-other-keys t)
+  (2))
+
+(deftest rassoc-if-not.allow-other-keys.5
+  (rassoc-if-not #'identity '((1 . a) (2) (3 . c)) :allow-other-keys nil)
+  (2))
+
+(deftest rassoc-if-not.allow-other-keys.6
+  (rassoc-if-not #'identity '((1 . a) (2) (3 . c)) :allow-other-keys t
+		 :allow-other-keys nil :bad t)
+  (2))
+
+(deftest rassoc-if-not.keywords.7
+  (rassoc-if-not #'identity '((1 . a) (2) (3 . c)) :key #'not :key nil)
+  (1 . a))
+
+;;; Error tests
 
 (deftest rassoc-if-not.error.1
   (classify-error (rassoc-if-not))
