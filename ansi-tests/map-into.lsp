@@ -371,6 +371,14 @@
   (classify-error (locally (map-into 'a #'(lambda () nil)) t))
   type-error)
 
+(deftest map-into.error.7
+  (classify-error (map-into (list 'a 'b 'c) #'cons '(a b c)))
+  program-error)
+
+(deftest map-into.error.8
+  (classify-error (map-into (list 'a 'b 'c) #'car '(a b c)))
+  type-error)
+
 ;;; Order of evaluation tests
 
 (deftest map-into.order.1

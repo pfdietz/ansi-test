@@ -521,3 +521,21 @@
 (deftest count-if.error.11
   (classify-error (locally (count-if #'identity 1) t))
   type-error)
+
+(deftest count-if.error.12
+  (classify-error (count-if #'cons '(a b c)))
+  program-error)
+
+(deftest count-if.error.13
+  (classify-error (count-if #'car '(a b c)))
+  type-error)
+
+(deftest count-if.error.14
+  (classify-error (count-if #'identity '(a b c) :key #'cdr))
+  type-error)
+
+(deftest count-if.error.15
+  (classify-error (count-if #'identity '(a b c) :key #'cons))
+  program-error)
+
+

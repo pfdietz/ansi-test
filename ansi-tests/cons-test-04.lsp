@@ -229,6 +229,24 @@
   (a b c) (a b c)
   3 1 3 2)
 
+(deftest pushnew.error.1
+  (classify-error
+   (let ((x '(a b)))
+     (pushnew 'c x :test #'identity)))
+  program-error)
+
+(deftest pushnew.error.2
+  (classify-error
+   (let ((x '(a b)))
+     (pushnew 'c x :test-not #'identity)))
+  program-error)
+
+(deftest pushnew.error.3
+  (classify-error
+   (let ((x '(a b)))
+     (pushnew 'c x :key #'cons)))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; adjoin
 
@@ -380,4 +398,16 @@
 
 (deftest adjoin.error.6
   (classify-error (adjoin 'a '(b c) :test))
+  program-error)
+
+(deftest adjoin.error.7
+  (classify-error (adjoin 'a '(b c) :test #'identity))
+  program-error)
+
+(deftest adjoin.error.8
+  (classify-error (adjoin 'a '(b c) :test-not #'identity))
+  program-error)
+
+(deftest adjoin.error.9
+  (classify-error (adjoin 'a '(b c) :key #'cons))
   program-error)

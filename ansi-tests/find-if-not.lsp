@@ -557,6 +557,22 @@
   (classify-error (locally (find-if-not #'null 'b) t))
   type-error)
 
+(deftest find-if-not.error.12
+  (classify-error (find-if-not #'cons '(a b c)))
+  program-error)
+
+(deftest find-if-not.error.13
+  (classify-error (find-if-not #'car '(a b c)))
+  type-error)
+
+(deftest find-if-not.error.14
+  (classify-error (find-if-not #'identity '(a b c) :key #'cons))
+  program-error)
+
+(deftest find-if-not.error.15
+  (classify-error (find-if-not #'identity '(a b c) :key #'car))
+  type-error)
+
 ;;; Order of evaluation tests
 
 (deftest find-if-not.order.1

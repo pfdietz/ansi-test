@@ -746,6 +746,25 @@
   (classify-error (remove 'a nil 1 2))
   program-error)
 
+(deftest remove.error.7
+  (classify-error (remove 'a (list 'a 'b 'c) :test #'identity))
+  program-error)
+
+(deftest remove.error.8
+  (classify-error (remove 'a (list 'a 'b 'c) :test-not #'identity))
+  program-error)
+
+(deftest remove.error.9
+  (classify-error (remove 'a (list 'a 'b 'c) :key #'cons))
+  program-error)
+
+(deftest remove.error.10
+  (classify-error (remove 'a (list 'a 'b 'c) :key #'car))
+  type-error)
+
+
+;;;
+
 (deftest delete.error.1
   (classify-error (delete))
   program-error)
@@ -770,3 +789,18 @@
   (classify-error (delete 'a nil 1 2))
   program-error)
 
+(deftest delete.error.7
+  (classify-error (delete 'a (list 'a 'b 'c) :test #'identity))
+  program-error)
+
+(deftest delete.error.8
+  (classify-error (delete 'a (list 'a 'b 'c) :test-not #'identity))
+  program-error)
+
+(deftest delete.error.9
+  (classify-error (delete 'a (list 'a 'b 'c) :key #'cons))
+  program-error)
+
+(deftest delete.error.10
+  (classify-error (delete 'a (list 'a 'b 'c) :key #'car))
+  type-error)

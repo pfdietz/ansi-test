@@ -135,3 +135,17 @@
 (deftest some.error.10
   (classify-error (locally (some 1 '(a b c)) t))
   type-error)
+
+(deftest some.error.11
+  (classify-error (some #'cons '(a b c)))
+  program-error)
+
+(deftest some.error.12
+  (classify-error (some #'car '(a b c)))
+  type-error)
+
+(deftest some.error.13
+  (classify-error (some #'cons '(a b c) '(b c d) '(c d e)))
+  program-error)
+
+

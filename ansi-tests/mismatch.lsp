@@ -697,3 +697,19 @@
 (deftest mismatch.error.6
   (classify-error (mismatch nil nil 1 2))
   program-error)
+
+(deftest mismatch.error.7
+  (classify-error (mismatch '(a b) '(a b) :test #'identity))
+  program-error)
+
+(deftest mismatch.error.8
+  (classify-error (mismatch '(a b) '(a b) :test-not #'identity))
+  program-error)
+
+(deftest mismatch.error.9
+  (classify-error (mismatch '(a b) '(a b) :key #'car))
+  type-error)
+
+(deftest mismatch.error.10
+  (classify-error (mismatch '(a b) '(a b) :key #'cons))
+  program-error)

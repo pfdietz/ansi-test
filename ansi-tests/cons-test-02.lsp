@@ -181,6 +181,24 @@
   (classify-error (sublis nil 'a :bad-keyword t))
   program-error)
 
+(deftest sublis.error.5
+  (classify-error (sublis '((a . 1) (b . 2))
+			  (list 'a 'b 'c 'd)
+			  :test #'identity))
+  program-error)
+
+(deftest sublis.error.6
+  (classify-error (sublis '((a . 1) (b . 2))
+			  (list 'a 'b 'c 'd)
+			  :key #'cons))
+  program-error)
+
+(deftest sublis.error.7
+  (classify-error (sublis '((a . 1) (b . 2))
+			  (list 'a 'b 'c 'd)
+			  :test-not #'identity))
+  program-error)
+
 ;; nsublis
 
 (deftest nsublis.1
@@ -321,6 +339,25 @@
   (classify-error (nsublis nil 'a :bad-keyword t))
   program-error)
 
+(deftest nsublis.error.5
+  (classify-error (nsublis '((a . 1) (b . 2))
+			   (list 'a 'b 'c 'd)
+			   :test #'identity))
+  program-error)
+
+(deftest nsublis.error.6
+  (classify-error (nsublis '((a . 1) (b . 2))
+			   (list 'a 'b 'c 'd)
+			   :key #'cons))
+  program-error)
+
+(deftest nsublis.error.7
+  (classify-error (nsublis '((a . 1) (b . 2))
+			   (list 'a 'b 'c 'd)
+			   :test-not #'identity))
+  program-error)
+
+;;;;;;
 
 (deftest sublis.shared
   (let* ((shared-piece (list 'a 'b))
@@ -891,6 +928,18 @@
   (classify-error (subst 'a 'b nil :bad t :allow-other-keys nil))
   program-error)
 
+(deftest subst.error.8
+  (classify-error (subst 'a 'b (list 'a 'b) :test #'identity))
+  program-error)
+
+(deftest subst.error.9
+  (classify-error (subst 'a 'b (list 'a 'b) :test-not #'identity))
+  program-error)
+
+(deftest subst.error.10
+  (classify-error (subst 'a 'b (list 'a 'b) :key #'equal))
+  program-error)
+
 ;;; nsubst
 (deftest nsubst.error.1
   (classify-error (nsubst))
@@ -920,6 +969,18 @@
   (classify-error (nsubst 'a 'b nil :bad t :allow-other-keys nil))
   program-error)
 
+(deftest nsubst.error.8
+  (classify-error (nsubst 'a 'b (list 'a 'b) :test #'identity))
+  program-error)
+
+(deftest nsubst.error.9
+  (classify-error (nsubst 'a 'b (list 'a 'b) :test-not #'identity))
+  program-error)
+
+(deftest nsubst.error.10
+  (classify-error (nsubst 'a 'b (list 'a 'b) :key #'equal))
+  program-error)
+
 ;;; subst-if
 (deftest subst-if.error.1
   (classify-error (subst-if))
@@ -947,6 +1008,10 @@
 
 (deftest subst-if.error.7
   (classify-error (subst-if 'a #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest subst-if.error.8
+  (classify-error (subst-if 'a #'null (list 'a nil 'c) :key #'cons))
   program-error)
 
 ;;; subst-if-not
@@ -979,6 +1044,10 @@
 				:bad t :allow-other-keys nil))
   program-error)
 
+(deftest subst-if-not.error.8
+  (classify-error (subst-if-not 'a #'null (list 'a nil 'c) :key #'cons))
+  program-error)
+
 ;;; nsubst-if
 (deftest nsubst-if.error.1
   (classify-error (nsubst-if))
@@ -1006,6 +1075,10 @@
 
 (deftest nsubst-if.error.7
   (classify-error (nsubst-if 'a #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest nsubst-if.error.8
+  (classify-error (nsubst-if 'a #'null (list 'a nil 'c) :key #'cons))
   program-error)
 
 
@@ -1038,3 +1111,8 @@
   (classify-error (nsubst-if-not 'a #'null nil
 				 :bad t :allow-other-keys nil))
   program-error)
+
+(deftest nsubst-if-not.error.8
+  (classify-error (nsubst-if-not 'a #'null (list 'a nil 'c) :key #'cons))
+  program-error)
+

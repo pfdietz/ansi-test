@@ -331,6 +331,23 @@
   (classify-error (set-exclusive-or nil nil :bad t :allow-other-keys nil))
   program-error)
 
+(deftest set-exclusive-or.error.7
+  (classify-error (set-exclusive-or (list 1 2) (list 3 4) :test #'identity))
+  program-error)
+
+(deftest set-exclusive-or.error.8
+  (classify-error (set-exclusive-or (list 1 2) (list 3 4) :test-not #'identity))
+  program-error)
+
+(deftest set-exclusive-or.error.9
+  (classify-error (set-exclusive-or (list 1 2) (list 3 4) :key #'cons))
+  program-error)
+
+(deftest set-exclusive-or.error.10
+  (classify-error (set-exclusive-or (list 1 2) (list 3 4) :key #'car))
+  type-error)
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-exclusive-or
@@ -657,3 +674,20 @@
 (deftest nset-exclusive-or.error.6
   (classify-error (nset-exclusive-or nil nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest nset-exclusive-or.error.7
+  (classify-error (nset-exclusive-or (list 1 2) (list 3 4) :test #'identity))
+  program-error)
+
+(deftest nset-exclusive-or.error.8
+  (classify-error (nset-exclusive-or (list 1 2) (list 3 4) :test-not #'identity))
+  program-error)
+
+(deftest nset-exclusive-or.error.9
+  (classify-error (nset-exclusive-or (list 1 2) (list 3 4) :key #'cons))
+  program-error)
+
+(deftest nset-exclusive-or.error.10
+  (classify-error (nset-exclusive-or (list 1 2) (list 3 4) :key #'car))
+  type-error)
+

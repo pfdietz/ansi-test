@@ -136,3 +136,19 @@
 (deftest stable-sort.error.6
   (classify-error (stable-sort nil #'< 1 2))
   program-error)
+
+(deftest stable-sort.error.7
+  (classify-error (stable-sort (list 1 2 3 4) #'identity))
+  program-error)
+
+(deftest stable-sort.error.8
+  (classify-error (stable-sort (list 1 2 3 4) #'< :key #'cons))
+  program-error)
+
+(deftest stable-sort.error.9
+  (classify-error (stable-sort (list 1 2 3 4) #'< :key #'car))
+  type-error)
+
+(deftest stable-sort.error.10
+  (classify-error (stable-sort (list 1 2 3 4) #'elt))
+  type-error)

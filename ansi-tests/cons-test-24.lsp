@@ -232,3 +232,19 @@
 (deftest subsetp.error.6
   (classify-error (subsetp nil nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest subsetp.error.7
+  (classify-error (subsetp (list 1 2) (list 3 4) :test #'identity))
+  program-error)
+
+(deftest subsetp.error.8
+  (classify-error (subsetp (list 1 2) (list 3 4) :test-not #'identity))
+  program-error)
+
+(deftest subsetp.error.9
+  (classify-error (subsetp (list 1 2) (list 3 4) :key #'cons))
+  program-error)
+
+(deftest subsetp.error.10
+  (classify-error (subsetp (list 1 2) (list 3 4) :key #'car))
+  type-error)

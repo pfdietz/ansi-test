@@ -19,6 +19,10 @@
   (classify-error (apply #'cons nil))
   program-error)
 
+(deftest apply.error.4
+  (classify-errir (apply #'cons (list 1 2 3)))
+  program-error)
+
 ;;; Non-error cases
 
 (deftest apply.1

@@ -136,3 +136,15 @@
 (deftest every.error.10
   (classify-error (locally (every 1 '(a b c)) t))
   type-error)
+
+(deftest every.error.11
+  (classify-error (every #'cons '(a b c)))
+  program-error)
+
+(deftest every.error.12
+  (classify-error (every #'cons '(a b c) '(1 2 3) '(4 5 6)))
+  program-error)
+
+(deftest every.error.13
+  (classify-error (every #'car '(a b c)))
+  type-error)

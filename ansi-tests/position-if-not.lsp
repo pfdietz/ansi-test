@@ -557,3 +557,19 @@
 (deftest position-if-not.error.11
   (classify-error (locally (position-if-not #'identity 'b) t))
   type-error)
+
+(deftest position-if-not.error.12
+  (classify-error (position-if-not #'cons '(a b c d)))
+  program-error)
+
+(deftest position-if-not.error.13
+  (classify-error (position-if-not #'car '(a b c d)))
+  type-error)
+
+(deftest position-if-not.error.14
+  (classify-error (position-if-not #'identity '(a b c d) :key #'cdr))
+  type-error)
+
+(deftest position-if-not.error.15
+  (classify-error (position-if-not #'identity '(a b c d) :key #'cons))
+  program-error)

@@ -279,6 +279,7 @@ the condition to go uncaught if it cannot be classified."
      (file-error    () 'file-error)
      (control-error () 'control-error)
      (cell-error    () 'cell-error)
+     (error         () 'error)
   )))
 
 (defun classify-error** (form)

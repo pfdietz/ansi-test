@@ -196,6 +196,19 @@
   (classify-error (locally (reduce 'cons 'a) t))
   type-error)
 
+(deftest reduce.error.8
+  (classify-error (reduce #'identity '(a b c)))
+  program-error)
+
+(deftest reduce.error.9
+  (classify-error (reduce #'cons '(a b c) :key #'cons))
+  program-error)
+
+(deftest reduce.error.10
+  (classify-error (reduce #'cons '(a b c) :key #'car))
+  type-error)
+
+
 ;;;;;;;;
 
 (deftest reduce-string.1

@@ -563,4 +563,10 @@
 			   t))
   type-error)
 
+(deftest merge.error.16
+  (classify-error (merge 'list (list 1 2) (list 3 4) #'car))
+  program-error)
 
+(deftest merge.error.17
+  (classify-error (merge 'list (list 'a 'b) (list 3 4) #'max))
+  type-error)

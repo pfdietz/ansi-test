@@ -816,6 +816,23 @@
   (classify-error (locally (find 'a 'b) t))
   type-error)
 
+(deftest find.error.12
+  (classify-error (find 'b '(a b c) :test #'identity))
+  program-error)
+
+(deftest find.error.13
+  (classify-error (find 'b '(a b c) :test-not #'identity))
+  program-error)
+
+(deftest find.error.14
+  (classify-error (find 'c '(a b c) :key #'cons))
+  program-error)
+
+(deftest find.error.15
+  (classify-error (find 'c '(a b c) :key #'car))
+  type-error)
+
+
 ;;; Order of evaluation tests
 
 (deftest find.order.1

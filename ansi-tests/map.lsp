@@ -189,6 +189,18 @@
   (classify-error (map 'list #'null))
   program-error)
 
+(deftest map.error.7
+  (classify-error (map 'list #'cons '(a b c d)))
+  program-error)
+
+(deftest map.error.8
+  (classify-error (map 'list #'cons '(a b c d) '(1 2 3 4) '(5 6 7 8)))
+  program-error)
+
+(deftest map.error.9
+  (classify-error (map 'list #'car '(a b c d)))
+  type-error)
+
 
 ;;; Test mapping on arrays with fill pointers
 

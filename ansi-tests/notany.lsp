@@ -128,3 +128,15 @@
 (deftest notany.error.10
   (classify-error (locally (notany 1 '(a b c)) t))
   type-error)
+
+(deftest notany.error.11
+  (classify-error (notany #'cons '(a b c)))
+  program-error)
+
+(deftest notany.error.12
+  (classify-error (notany #'cons '(a b c) '(1 2 4) '(g h j)))
+  program-error)
+
+(deftest notany.error.13
+  (classify-error (notany #'car '(a b c)))
+  type-error)

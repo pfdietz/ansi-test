@@ -198,6 +198,24 @@
   (classify-error (remove-duplicates nil 1 2))
   program-error)
 
+(deftest remove-duplicates.error.6
+  (classify-error (remove-duplicates (list 'a 'b 'c) :test #'identity))
+  program-error)
+
+(deftest remove-duplicates.error.7
+  (classify-error (remove-duplicates (list 'a 'b 'c) :test-not #'identity))
+  program-error)
+
+(deftest remove-duplicates.error.8
+  (classify-error (remove-duplicates (list 'a 'b 'c) :key #'cons))
+  program-error)
+
+(deftest remove-duplicates.error.9
+  (classify-error (remove-duplicates (list 'a 'b 'c) :key #'car))
+  type-error)
+
+;;;
+
 (deftest delete-duplicates.error.1
   (classify-error (delete-duplicates))
   program-error)
@@ -218,8 +236,18 @@
   (classify-error (delete-duplicates nil 1 2))
   program-error)
 
+(deftest delete-duplicates.error.6
+  (classify-error (delete-duplicates (list 'a 'b 'c) :test #'identity))
+  program-error)
 
+(deftest delete-duplicates.error.7
+  (classify-error (delete-duplicates (list 'a 'b 'c) :test-not #'identity))
+  program-error)
 
+(deftest delete-duplicates.error.8
+  (classify-error (delete-duplicates (list 'a 'b 'c) :key #'cons))
+  program-error)
 
-
-
+(deftest delete-duplicates.error.9
+  (classify-error (delete-duplicates (list 'a 'b 'c) :key #'car))
+  type-error)

@@ -372,6 +372,22 @@
   (classify-error (intersection nil nil :bad t :allow-other-keys nil))
   program-error)
 
+(deftest intersection.error.7
+  (classify-error (intersection '(a b c) '(d e f) :test #'identity))
+  program-error)
+
+(deftest intersection.error.8
+  (classify-error (intersection '(a b c) '(d e f) :test-not #'identity))
+  program-error)
+
+(deftest intersection.error.9
+  (classify-error (intersection '(a b c) '(d e f) :key #'cons))
+  program-error)
+
+(deftest intersection.error.10
+  (classify-error (intersection '(a b c) '(d e f) :key #'car))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nintersection
 
@@ -704,3 +720,19 @@
 (deftest nintersection.error.6
   (classify-error (nintersection nil nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest nintersection.error.7
+  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :test #'identity))
+  program-error)
+
+(deftest nintersection.error.8
+  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :test-not #'identity))
+  program-error)
+
+(deftest nintersection.error.9
+  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :key #'cons))
+  program-error)
+
+(deftest nintersection.error.10
+  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :key #'car))
+  type-error)

@@ -207,18 +207,12 @@
 ;;; Error tests
 
 (deftest concatenate.error.1
-  (handler-case
-   (progn (proclaim '(optimize (safety 3)))
-	  (eval '(concatenate 'sequence '(a b c))))
-   (error () :caught))
-  :caught)
+  (subtypep* (classify-error (concatenate 'sequence '(a b c))) 'error)
+  t t)
 
 (deftest concatenate.error.2
-  (handler-case
-      (progn (proclaim '(optimize (safety 3)))
-	     (concatenate 'fixnum '(a b c d e)))
-      (error () :caught))
-  :caught)
+  (subtypep* (classify-error (concatenate 'fixnum '(a b c d e))) 'error)
+  t t)
 
 (deftest concatenate.error.3
   (classify-error (concatenate '(vector * 3) '(a b c d e)))

@@ -125,3 +125,19 @@
 (deftest sort.error.6
   (classify-error (sort nil #'< 1 2))
   program-error)
+
+(deftest sort.error.7
+  (classify-error (sort (list 1 2 3 4) #'identity))
+  program-error)
+
+(deftest sort.error.8
+  (classify-error (sort (list 1 2 3 4) #'< :key #'cons))
+  program-error)
+
+(deftest sort.error.9
+  (classify-error (sort (list 1 2 3 4) #'< :key #'car))
+  type-error)
+
+(deftest sort.error.10
+  (classify-error (sort (list 1 2 3 4) #'elt))
+  type-error)

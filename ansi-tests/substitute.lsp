@@ -1067,3 +1067,20 @@
 (deftest substitute.error.7
   (classify-error (substitute 'a 'b nil 1 2))
   program-error)
+
+(deftest substitute.error.8
+  (classify-error (substitute 'a 'b (list 'a 'b 'c) :test #'identity))
+  program-error)
+
+(deftest substitute.error.9
+  (classify-error (substitute 'a 'b (list 'a 'b 'c) :test-not #'identity))
+  program-error)
+
+(deftest substitute.error.10
+  (classify-error (substitute 'a 'b (list 'a 'b 'c) :key #'cons))
+  program-error)
+
+(deftest substitute.error.11
+  (classify-error (substitute 'a 'b (list 'a 'b 'c) :key #'car))
+  type-error)
+

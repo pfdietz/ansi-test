@@ -47,3 +47,11 @@
 (deftest complement.error.2
   (classify-error (complement #'not t))
   program-error)
+
+(deftest complement.error.3
+  (classify-error (funcall (complement #'identity)))
+  program-error)
+
+(deftest complement.error.4
+  (classify-error (funcall (complement #'identity) t t))
+  program-error)

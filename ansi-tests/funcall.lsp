@@ -90,3 +90,16 @@
   (classify-error (funcall))
   program-error)
 
+(deftest funcall.error.5
+  (classify-error (funcall #'cons))
+  program-error)
+
+(deftest funcall.error.6
+  (classify-error (funcall #'cons 1))
+  program-error)
+
+(deftest funcall.error.7
+  (classify-error (funcall #'car 'a))
+  type-error)
+
+

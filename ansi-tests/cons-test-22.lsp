@@ -294,6 +294,23 @@
   (classify-error (set-difference nil nil :bad t :allow-other-keys nil))
   program-error)
 
+(deftest set-difference.error.7
+  (classify-error (set-difference (list 1 2) (list 3 4) :test #'identity))
+  program-error)
+
+(deftest set-difference.error.8
+  (classify-error (set-difference (list 1 2) (list 3 4) :test-not #'identity))
+  program-error)
+
+(deftest set-difference.error.9
+  (classify-error (set-difference (list 1 2) (list 3 4) :key #'cons))
+  program-error)
+
+(deftest set-difference.error.10
+  (classify-error (set-difference (list 1 2) (list 3 4) :key #'car))
+  type-error)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-difference
 
@@ -578,3 +595,19 @@
 (deftest nset-difference.error.6
   (classify-error (nset-difference nil nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest nset-difference.error.7
+  (classify-error (nset-difference (list 1 2) (list 3 4) :test #'identity))
+  program-error)
+
+(deftest nset-difference.error.8
+  (classify-error (nset-difference (list 1 2) (list 3 4) :test-not #'identity))
+  program-error)
+
+(deftest nset-difference.error.9
+  (classify-error (nset-difference (list 1 2) (list 3 4) :key #'cons))
+  program-error)
+
+(deftest nset-difference.error.10
+  (classify-error (nset-difference (list 1 2) (list 3 4) :key #'car))
+  type-error)

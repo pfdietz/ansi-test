@@ -278,3 +278,15 @@
 (deftest member.error.14
   (classify-error (locally (member 'a t) t))
   type-error)
+
+(deftest member.error.15
+  (classify-error (member 'a '(a b c) :test #'identity))
+  program-error)
+
+(deftest member.error.16
+  (classify-error (member 'a '(a b c) :test-not #'identity))
+  program-error)
+
+(deftest member.error.17
+  (classify-error (member 'a '(a b c) :key #'cons))
+  program-error)

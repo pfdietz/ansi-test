@@ -198,6 +198,22 @@
   (classify-error (search "a" "a" 1 2))
   program-error)
 
+(deftest search.error.7
+  (classify-error (search "c" "abcde" :test #'identity))
+  program-error)
+
+(deftest search.error.8
+  (classify-error (search "c" "abcde" :test-not #'identity))
+  program-error)
+
+(deftest search.error.9
+  (classify-error (search "c" "abcde" :key #'cons))
+  program-error)
+
+(deftest search.error.10
+  (classify-error (search "c" "abcde" :key #'car))
+  type-error)
+
 ;;; Order of evaluation
 
 (deftest search.order.1

@@ -207,7 +207,7 @@
    (7 7)
    (nil)))
 
-(deftest position-if-vector.11
+(deftest position-if-vector.13
   (let ((a (make-array '(10) :initial-contents '(1 3 1 4 3 1 2 1 8 9)
 		       :fill-pointer 5)))
     (flet ((%f (x) (eql x 1)))
@@ -554,3 +554,21 @@
 (deftest position-if.error.11
   (classify-error (locally (position-if #'identity 'b) t))
   type-error)
+
+(deftest position-if.error.12
+  (classify-error (position-if #'cons '(a b c d)))
+  program-error)
+
+(deftest position-if.error.13
+  (classify-error (position-if #'car '(a b c d)))
+  type-error)
+
+(deftest position-if.error.14
+  (classify-error (position-if #'identity '(a b c d) :key #'cdr))
+  type-error)
+
+(deftest position-if.error.15
+  (classify-error (position-if #'identity '(a b c d) :key #'cons))
+  program-error)
+
+

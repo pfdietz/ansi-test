@@ -836,3 +836,21 @@
 (deftest substitute-if.error.7
   (classify-error (substitute-if 'a #'null nil 1 2))
   program-error)
+
+(deftest substitute-if.error.8
+  (classify-error (substitute-if 'a #'cons (list 'a 'b 'c)))
+  program-error)
+
+(deftest substitute-if.error.9
+  (classify-error (substitute-if 'a #'car (list 'a 'b 'c)))
+  type-error)
+
+(deftest substitute-if.error.10
+  (classify-error (substitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'car))
+  type-error)
+
+(deftest substitute-if.error.11
+  (classify-error (substitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'cons))
+  program-error)

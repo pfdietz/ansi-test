@@ -124,3 +124,19 @@
 (deftest notevery.error.9
   (classify-error (notevery #'null))
   program-error)
+
+(deftest notevery.error.10
+  (classify-error (locally (notevery 1 '(a b c)) t))
+  type-error)
+
+(deftest notevery.error.11
+  (classify-error (notevery #'cons '(a b c)))
+  program-error)
+
+(deftest notevery.error.12
+  (classify-error (notevery #'cons '(a b c) '(1 2 4) '(g h j)))
+  program-error)
+
+(deftest notevery.error.13
+  (classify-error (notevery #'car '(a b c)))
+  type-error)

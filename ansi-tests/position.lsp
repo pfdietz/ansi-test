@@ -754,3 +754,20 @@
 (deftest position.error.11
   (classify-error (locally (position 'a 'b) t))
   type-error)
+
+(deftest position.error.12
+  (classify-error (position 'b '(a b c d) :test #'identity))
+  program-error)
+
+(deftest position.error.13
+  (classify-error (position 'b '(a b c d) :test-not #'not))
+  program-error)
+
+(deftest position.error.14
+  (classify-error (position 'b '(a b c d) :key #'cdr))
+  type-error)
+
+(deftest position.error.15
+  (classify-error (position 'b '(a b c d) :key #'cons))
+  program-error)
+

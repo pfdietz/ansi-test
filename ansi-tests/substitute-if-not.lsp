@@ -816,3 +816,22 @@
 (deftest substitute-if-not.error.7
   (classify-error (substitute-if-not 'a #'null nil 1 2))
   program-error)
+
+(deftest substitute-if-not.error.8
+  (classify-error (substitute-if-not 'a #'cons (list 'a 'b 'c)))
+  program-error)
+
+(deftest substitute-if-not.error.9
+  (classify-error (substitute-if-not 'a #'car (list 'a 'b 'c)))
+  type-error)
+
+(deftest substitute-if-not.error.10
+  (classify-error (substitute-if-not 'a #'identity (list 'a 'b 'c)
+				  :key #'car))
+  type-error)
+
+(deftest substitute-if-not.error.11
+  (classify-error (substitute-if-not 'a #'identity (list 'a 'b 'c)
+				  :key #'cons))
+  program-error)
+

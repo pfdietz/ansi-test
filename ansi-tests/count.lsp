@@ -592,3 +592,18 @@
   (classify-error (locally (count 'a 1) t))
   type-error)
 
+(deftest count.error.12
+  (classify-error (count 'b '(a b c) :test #'identity))
+  program-error)
+
+(deftest count.error.13
+  (classify-error (count 'b '(a b c) :key #'car))
+  type-error)
+
+(deftest count.error.14
+  (classify-error (count 'b '(a b c) :test-not #'identity))
+  program-error)
+
+(deftest count.error.15
+  (classify-error (count 'b '(a b c) :key #'cons))
+  program-error)

@@ -92,6 +92,18 @@
   (classify-error (locally (mapc #'identity 1) t))
   type-error)
 
+(deftest mapc.error.5
+  (classify-error (mapc #'cons '(a b c)))
+  program-error)
+
+(deftest mapc.error.6
+  (classify-error (mapc #'cons '(a b c) '(1 2 3) '(4 5 6)))
+  program-error)
+
+(deftest mapc.error.7
+  (classify-error (mapc #'car '(a b c)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcar
 
@@ -183,6 +195,19 @@
 (deftest mapcar.error.4
   (classify-error (locally (mapcar #'identity 1) t))
   type-error)
+
+(deftest mapcar.error.5
+  (classify-error (mapcar #'car '(a b c)))
+  type-error)
+
+(deftest mapcar.error.6
+  (classify-error (mapcar #'cons '(a b c)))
+  program-error)
+
+(deftest mapcar.error.7
+  (classify-error (mapcar #'cons '(a b c) '(1 2 3) '(4 5 6)))
+  program-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
@@ -282,6 +307,18 @@
 (deftest mapcan.error.4
   (classify-error (locally (mapcan #'identity 1) t))
   type-error)
+
+(deftest mapcan.error.5
+  (classify-error (mapcan #'car '(a b c)))
+  type-error)
+
+(deftest mapcan.error.6
+  (classify-error (mapcan #'cons '(a b c)))
+  program-error)
+
+(deftest mapcan.error.7
+  (classify-error (mapcan #'cons '(a b c) '(1 2 3) '(4 5 6)))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapl
@@ -393,6 +430,19 @@
 (deftest mapl.error.4
   (classify-error (locally (mapl #'identity 1) t))
   type-error)
+
+(deftest mapl.error.5
+  (classify-error (mapl #'cons '(a b c)))
+  program-error)
+
+(deftest mapl.error.6
+  (classify-error (mapl #'cons '(a b c) '(1 2 3) '(4 5 6)))
+  program-error)
+
+(deftest mapl.error.7
+  (classify-error (mapl #'caar '(a b c)))
+  type-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; maplist
@@ -512,6 +562,18 @@
   (classify-error (locally (maplist #'identity 'a) t))
   type-error)
 
+(deftest maplist.error.8
+  (classify-error (maplist #'caar '(a b c)))
+  type-error)
+
+(deftest maplist.error.9
+  (classify-error (maplist #'cons '(a b c)))
+  program-error)
+
+(deftest maplist.error.10
+  (classify-error (maplist #'cons '(a b c) '(1 2 3) '(4 5 6)))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcon
 
@@ -576,3 +638,15 @@
 (deftest mapcon.error.4
   (classify-error (locally (mapcon #'identity 1) t))
   type-error)
+
+(deftest mapcon.error.5
+  (classify-error (mapcon #'caar '(a b c)))
+  type-error)
+
+(deftest mapcon.error.6
+  (classify-error (mapcon #'cons '(a b c)))
+  program-error)
+
+(deftest mapcon.error.7
+  (classify-error (mapcon #'cons '(a b c) '(1 2 3) '(4 5 6)))
+  program-error)

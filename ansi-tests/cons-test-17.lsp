@@ -283,6 +283,18 @@
   (classify-error (rassoc nil nil :bad t :allow-other-keys nil))
   program-error)
 
+(deftest rassoc.error.7
+  (classify-error (rassoc 'a '((b . a)(c . d)) :test #'identity))
+  program-error)
+
+(deftest rassoc.error.8
+  (classify-error (rassoc 'a '((b . a)(c . d)) :test-not #'identity))
+  program-error)
+
+(deftest rassoc.error.9
+  (classify-error (rassoc 'a '((b . a)(c . d)) :key #'cons))
+  program-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc-if
@@ -396,6 +408,22 @@
 (deftest rassoc-if.error.6
   (classify-error (rassoc-if #'null nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest rassoc-if.error.7
+  (classify-error (rassoc-if #'cons '((a . b)(c . d))))
+  program-error)
+
+(deftest rassoc-if.error.8
+  (classify-error (rassoc-if #'car '((a . b)(c . d))))
+  type-error)
+
+(deftest rassoc-if.error.9
+  (classify-error (rassoc-if #'identity '((a . b)(c . d)) :key #'cons))
+  program-error)
+
+(deftest rassoc-if.error.10
+  (classify-error (rassoc-if #'identity '((a . b)(c . d)) :key #'car))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc-if-not
@@ -513,3 +541,19 @@
 (deftest rassoc-if-not.error.6
   (classify-error (rassoc-if-not #'null nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest rassoc-if-not.error.7
+  (classify-error (rassoc-if-not #'cons '((a . b)(c . d))))
+  program-error)
+
+(deftest rassoc-if-not.error.8
+  (classify-error (rassoc-if-not #'car '((a . b)(c . d))))
+  type-error)
+
+(deftest rassoc-if-not.error.9
+  (classify-error (rassoc-if-not #'identity '((a . b)(c . d)) :key #'cons))
+  program-error)
+
+(deftest rassoc-if-not.error.10
+  (classify-error (rassoc-if-not #'identity '((a . b)(c . d)) :key #'car))
+  type-error)

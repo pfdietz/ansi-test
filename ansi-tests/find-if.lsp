@@ -580,6 +580,22 @@
   (classify-error (locally (find-if #'null 'b) t))
   type-error)
 
+(deftest find-if.error.12
+  (classify-error (find-if #'cons '(a b c)))
+  program-error)
+
+(deftest find-if.error.13
+  (classify-error (find-if #'car '(a b c)))
+  type-error)
+
+(deftest find-if.error.14
+  (classify-error (find-if #'identity '(a b c) :key #'cons))
+  program-error)
+
+(deftest find-if.error.15
+  (classify-error (find-if #'identity '(a b c) :key #'car))
+  type-error)
+
 ;;; Order of evaluation tests
 
 (deftest find-if.order.1

@@ -298,6 +298,18 @@
   (classify-error (assoc nil nil :bad t :allow-other-keys nil))
   program-error)
 
+(deftest assoc.error.7
+  (classify-error (assoc 'a '((a . b)) :test #'identity))
+  program-error)
+
+(deftest assoc.error.8
+  (classify-error (assoc 'a '((a . b)) :test-not #'identity))
+  program-error)
+
+(deftest assoc.error.9
+  (classify-error (assoc 'a '((a . b)) :key #'cons))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if
 
@@ -413,6 +425,23 @@
 (deftest assoc-if.error.6
   (classify-error (assoc-if #'null nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest assoc-if.error.7
+  (classify-error (assoc-if #'cons '((a b)(c d))))
+  program-error)
+
+(deftest assoc-if.error.8
+  (classify-error (assoc-if #'identity '((a b)(c d)) :key #'cons))
+  program-error)
+
+(deftest assoc-if.error.9
+  (classify-error (assoc-if #'car '((a b)(c d))))
+  type-error)
+
+(deftest assoc-if.error.10
+  (classify-error (assoc-if #'identity '((a b)(c d)) :key #'car))
+  type-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if-not
@@ -531,6 +560,22 @@
 (deftest assoc-if-not.error.6
   (classify-error (assoc-if-not #'null nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest assoc-if-not.error.7
+  (classify-error (assoc-if-not #'cons '((a b)(c d))))
+  program-error)
+
+(deftest assoc-if-not.error.8
+  (classify-error (assoc-if-not #'identity '((a b)(c d)) :key #'cons))
+  program-error)
+
+(deftest assoc-if-not.error.9
+  (classify-error (assoc-if-not #'car '((a b)(c d))))
+  type-error)
+
+(deftest assoc-if-not.error.10
+  (classify-error (assoc-if-not #'identity '((a b)(c d)) :key #'car))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-alist

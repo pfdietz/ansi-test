@@ -383,3 +383,20 @@
 (deftest nunion.error.6
   (classify-error (nunion nil nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest nunion.error.7
+  (classify-error (nunion (list 1 2) (list 3 4) :test #'identity))
+  program-error)
+
+(deftest nunion.error.8
+  (classify-error (nunion (list 1 2) (list 3 4) :test-not #'identity))
+  program-error)
+
+(deftest nunion.error.9
+  (classify-error (nunion (list 1 2) (list 3 4) :key #'cons))
+  program-error)
+
+(deftest nunion.error.10
+  (classify-error (nunion (list 1 2) (list 3 4) :key #'car))
+  type-error)
+

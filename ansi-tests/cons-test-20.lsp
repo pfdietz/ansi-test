@@ -384,3 +384,21 @@
 (deftest union.error.6
   (classify-error (union nil nil :bad t :allow-other-keys nil))
   program-error)
+
+(deftest union.error.7
+  (classify-error (union (list 1 2) (list 3 4) :test #'identity))
+  program-error)
+
+(deftest union.error.8
+  (classify-error (union (list 1 2) (list 3 4) :test-not #'identity))
+  program-error)
+
+(deftest union.error.9
+  (classify-error (union (list 1 2) (list 3 4) :key #'cons))
+  program-error)
+
+(deftest union.error.10
+  (classify-error (union (list 1 2) (list 3 4) :key #'car))
+  type-error)
+
+

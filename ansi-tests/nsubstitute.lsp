@@ -938,3 +938,20 @@
 (deftest nsubstitute.error.7
   (classify-error (nsubstitute 'a 'b nil 1 2))
   program-error)
+
+(deftest nsubstitute.error.8
+  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :test #'identity))
+  program-error)
+
+(deftest nsubstitute.error.9
+  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :test-not #'identity))
+  program-error)
+
+(deftest nsubstitute.error.10
+  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :key #'cons))
+  program-error)
+
+(deftest nsubstitute.error.11
+  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :key #'car))
+  type-error)
+

@@ -732,3 +732,22 @@
 (deftest nsubstitute-if.error.7
   (classify-error (nsubstitute-if 'a #'null nil 1 2))
   program-error)
+
+(deftest nsubstitute-if.error.8
+  (classify-error (nsubstitute-if 'a #'cons (list 'a 'b 'c)))
+  program-error)
+
+(deftest nsubstitute-if.error.9
+  (classify-error (nsubstitute-if 'a #'car (list 'a 'b 'c)))
+  type-error)
+
+(deftest nsubstitute-if.error.10
+  (classify-error (nsubstitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'car))
+  type-error)
+
+(deftest nsubstitute-if.error.11
+  (classify-error (nsubstitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'cons))
+  program-error)
+

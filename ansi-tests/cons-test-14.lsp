@@ -225,6 +225,14 @@
   (classify-error (locally (member-if #'identity 'a) t))
   type-error)
 
+(deftest member-if.error.9
+  (classify-error (member-if #'cons '(a b c)))
+  program-error)
+
+(deftest member-if.error.10
+  (classify-error (member-if #'identity '(a b c) :key #'cons))
+  program-error)
+
 
 (deftest member-if-not.error.1
   (classify-error (member-if-not #'identity 'a))
@@ -257,3 +265,11 @@
 (deftest member-if-not.error.8
   (classify-error (locally (member-if-not #'identity 'a) t))
   type-error)
+
+(deftest member-if-not.error.9
+  (classify-error (member-if-not #'cons '(a b c)))
+  program-error)
+
+(deftest member-if-not.error.10
+  (classify-error (member-if-not #'identity '(a b c) :key #'cons))
+  program-error)
