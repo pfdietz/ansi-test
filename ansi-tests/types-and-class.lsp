@@ -127,7 +127,16 @@
 	      for result = (check-disjointness tp1 tp2)
 	      append result))
   nil)
-	
+
+(deftest types-7c
+  (loop for e on *disjoint-types-list2*
+	for list1 = (first e)
+	append
+	(loop for tp1 in list1 append
+	      (loop for list2 in (rest e) append
+		    (loop for tp2 in list2 append
+			  (check-disjointness tp1 tp2)))))
+  nil)	
 
 (deftest types-8
   (loop
@@ -212,6 +221,18 @@
 (deftest integer-subranges-are-disjoint
   (check-disjointness '(integer 0 (10)) '(integer 10 (20)))
   nil)
+
+(deftest keyword-and-null-are-disjoint
+  (check-disjointness 'keyword 'null)
+  nil)
+
+(deftest keyword-and-boolean-are-disjoint
+  (check-disjointness 'keyword 'boolean)
+  nil)
+
+
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

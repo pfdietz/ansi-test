@@ -590,10 +590,29 @@ the condition to go uncaught if it cannot be classified."
   
   table))
 
-(defvar *disjoint-types-list*
+(defparameter *disjoint-types-list*
     '(cons symbol array
       number character hash-table function readtable package
       pathname stream random-state condition restart))
+
+(defparameter *disjoint-types-list2*
+  `((cons (cons t t) (cons t (cons t t)))
+    (symbol keyword boolean null)
+    (array vector simple-array simple-vector string simple-string
+	   base-string simple-base-string)
+    (character base-char standard-char extended-char)
+    (function compiled-function generic-function standard-generic-function)
+    (package)
+    (pathname logical-pathname)
+    (stream broadcast-stream concatenated-stream echo-stream
+	    file-stream string-stream synonym-stream two-way-stream)
+    (number real complex float integer rational ratio
+	    bit (integer 0 100) (float 0.0 100.0) (integer 0 *)
+	    (rational 0 *) (mod 10))
+    (random-state)
+    ,*condition-types*
+    (restart)
+    (readtable)))
 
 (defun is-t-or-nil (e)
   (or (eqt e t) (eqt e nil)))
@@ -609,8 +628,8 @@ the condition to go uncaught if it cannot be classified."
 	  (format t "~%Problem!  Did not find to be an atomic type: ~S" tp)
 	  t))))
 
-(defvar *type-list* nil)
-(defvar *supertype-table* nil)
+(defparameter *type-list* nil)
+(defparameter *supertype-table* nil)
 (declaim (special *subtype-table*))
 
 (defun types-9-body ()
