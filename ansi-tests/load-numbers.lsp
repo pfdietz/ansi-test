@@ -72,6 +72,7 @@
 (load "logorc2.lsp")
 (load "lognot.lsp")
 (load "logxor.lsp")
+(load "logbitp.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
