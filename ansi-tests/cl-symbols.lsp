@@ -37,8 +37,9 @@
 							     "COMMON-LISP-USER"))))
 		    collect indicator))))))
 
-;; Test for the presence of every darned symbol
-;; the standard says should be in the CL package.
+;;; Test for the presence of every darned symbol
+;;; the standard says should be in the CL package.
+;;; Also, test that they have no prohibited plist indicators (section 11.1.2.1.1)
 
 (deftest symbol-&allow-other-keys (test-if-not-in-cl-package "&allow-other-keys") nil)
 (deftest symbol-&aux (test-if-not-in-cl-package "&aux") nil)
@@ -1019,6 +1020,28 @@
 (deftest symbol-yes-or-no-p (test-if-not-in-cl-package "yes-or-no-p") nil)
 (deftest symbol-zerop (test-if-not-in-cl-package "zerop") nil)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Test that all keywords have themselves as their value,
+;;; are external if present in KEYWORD, and have themselves
+;;; as their values (and are constant).  Symbols that are
+;;; merely used in KEYWORD but not present there are exempt.
+
+(deftest keyword-1
+  (let ((result nil)
+	(keyword-package (find-package "KEYWORD")))
+    (do-symbols (s keyword-package result)
+      (multiple-value-bind (sym status)
+	  (find-symbol (symbol-name s) keyword-package)
+	(cond
+	 ((not (eq s sym)) (push (list s sym) results))
+	 ((eq status :internal)
+	  (push (list s status) result))
+	 ((eq status :external)
+	  (unless (and (eq (symbol-value s) s)
+		       (constantp s))
+	    (push (list s sym 'not-constant) result)))))))
+  nil)
+		       
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; keywordp
@@ -1033,7 +1056,8 @@
 (deftest keywordp-8 (keywordp "rest")     nil)
 (deftest keywordp-9 (keywordp ":rest")    nil)
 (deftest keywordp-10 (keywordp '&body) nil)
-;;(deftest keywordp-11 (not (not (keywordp :foo)))       t)
+;;; This next test was busted.  ::foo is not portable syntax
+;;(deftest keywordp-11 (not (not (keywordp ::foo)))       t)
 (deftest keywordp-12 (keywordp t)          nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1227,54 +1251,54 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; gensym
 
-;; Gensym returns unique symbols
+;;; Gensym returns unique symbols
 (deftest gensym-1
     (equal (gensym) (gensym))
   nil)
 
-;; Gensym returns symbols with distinct print names
+;;; Gensym returns symbols with distinct print names
 (deftest gensym-2
     (string= (symbol-name (gensym))
 	     (symbol-name (gensym)))
   nil)
 
-;; Gensym uses the *gensym-counter* special variable,
-;; but does not increment it until after the symbol
-;; has been created.
+;;; Gensym uses the *gensym-counter* special variable,
+;;; but does not increment it until after the symbol
+;;; has been created.
 (deftest gensym-3
   (let ((*gensym-counter* 1))
     (declare (special *gensym-counter*))
      (symbol-name (gensym)))
   "G1")
 
-;; Gensym uses the string argument instead of the default
+;;; Gensym uses the string argument instead of the default
 (deftest gensym-4
   (let ((*gensym-counter* 1327))
     (declare (special *gensym-counter*))
     (symbol-name (gensym "FOO")))
   "FOO1327")
 
-;; The symbol returned by gensym should be unbound
+;;; The symbol returned by gensym should be unbound
 (deftest gensym-5
     (boundp (gensym))
   nil)
 
-;; The symbol returned by gensym should have no function binding
+;;; The symbol returned by gensym should have no function binding
 (deftest gensym-6
     (fboundp (gensym))
   nil)
 
-;; The symbol returned by gensym should have no property list
+;;; The symbol returned by gensym should have no property list
 (deftest gensym-7
     (symbol-plist (gensym))
   nil)
 
-;; The symbol returned by gensym should be uninterned
+;;; The symbol returned by gensym should be uninterned
 (deftest gensym-8
     (symbol-package (gensym))
   nil)
 
-;; *gensym-counter* is incremented by gensym
+;;; *gensym-counter* is incremented by gensym
 (deftest gensym-9
   (let ((*gensym-counter* 12345))
     (declare (special *gensym-counter*))
@@ -1282,16 +1306,16 @@
     *gensym-counter*)
   12346)
 
-;; Gensym works when *gensym-counter* is Really Big
-;; (and does not increment the counter until after creating
-;; the symbol.)
+;;; Gensym works when *gensym-counter* is Really Big
+;;; (and does not increment the counter until after creating
+;;; the symbol.)
 (deftest gensym-10
   (let ((*gensym-counter* 1234567890123456789012345678901234567890))
     (declare (special *gensym-counter*))
     (symbol-name (gensym)))
   "G1234567890123456789012345678901234567890")
 
-;; gensym increments Really Big values of *gensym-counter*
+;;; gensym increments Really Big values of *gensym-counter*
 (deftest gensym-11
   (let ((*gensym-counter* 12345678901234567890123456789012345678901234567890))
     (declare (special *gensym-counter*))
@@ -1299,15 +1323,15 @@
     *gensym-counter*)
   12345678901234567890123456789012345678901234567891)
 
-;; Gensym uses an integer argument instead of the counter
+;;; Gensym uses an integer argument instead of the counter
 (deftest gensym-12
   (let ((*gensym-counter* 10))
     (declare (special *gensym-counter*))
     (symbol-name (gensym 123)))
   "G123")
 
-;; When given an integer argument, gensym does not increment the
-;; *gensym-counter*
+;;; When given an integer argument, gensym does not increment the
+;;; *gensym-counter*
 (deftest gensym-13
   (let ((*gensym-counter* 10))
     (declare (special *gensym-counter*))
@@ -1315,10 +1339,10 @@
     *gensym-counter*)
   10)
 
-;; Check response to erroneous arguments
-;; Note! NIL is not the same as no argument
-;; gensym should be implemented so that its only
-;; argument defaults to "G", with NIL causing an error.
+;;; Check response to erroneous arguments
+;;; Note! NIL is not the same as no argument
+;;; gensym should be implemented so that its only
+;;; argument defaults to "G", with NIL causing an error.
 
 (deftest gensym-14
     (catch-type-error (gensym 'aaa))
