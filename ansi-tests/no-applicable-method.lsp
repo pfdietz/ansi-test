@@ -1,0 +1,50 @@
+;-*- Mode:     Lisp -*-
+;;;; Author:   Paul Dietz
+;;;; Created:  Sun May 11 13:46:44 2003
+;;;; Contains: Tests of NO-APPLICABLE-METHOD
+
+(in-package :cl-test)
+
+(deftest no-applicable-method.error.1
+  (classify-error (no-applicable-method))
+  program-error)
+
+(defgeneric no-app-meth-gf-01 (x))
+
+(deftest no-applicable-method.2
+  (handler-case
+   (progn (no-app-meth-gf-01 'x) :bad)
+   (error () :good))
+  :good)
+
+(defparameter *no-app-meth-gf-02*
+  (defgeneric no-app-meth-gf-02 (x)))
+
+(defmethod no-applicable-method ((x (eql *no-app-meth-gf-02*)) &rest args)
+  (declare (ignore args x))
+  :good)
+
+(deftest no-applicable-method.3
+  (no-app-meth-gf-02 (cons 'a 'b))
+  :good)
+
+(defparameter *no-app-meth-gf-03*
+  (defgeneric no-app-meth-gf-03 (x)))
+
+(defmethod no-applicable-method ((x (eql *no-app-meth-gf-03*)) &rest args)
+  (declare (ignore args x))
+  :no-method-found)
+
+(defmethod no-app-meth-gf-03 ((x integer)) :good)
+
+(deftest no-applicable-method.4
+  (no-app-meth-gf-03 (cons 'a 'b))
+  :no-method-found)
+
+(deftest no-applicable-method.5
+  (no-app-meth-gf-03 100)
+  :good)
+
+(deftest no-applicable-method.6
+  (no-app-meth-gf-03 100000000000000000)
+  :good)

@@ -21,3 +21,4 @@
 (load "slot-makunbound.lsp")
 (load "slot-value.lsp")
 (load "method-qualifiers.lsp")
+(load "no-applicable-method.lsp")
