@@ -38,15 +38,18 @@
 			     (type-error () :caught)))
   t)
 
-(deftest string.8
+(deftest string.8 
+  :notes (:nil-vectors-are-strings)
   (subtypep* '(array nil (*)) 'string)
   t t)
 
 (deftest string.9
+  :notes (:nil-vectors-are-strings)
   (subtypep* '(array nil 1) 'string)
   t t)
 
 (deftest string.10
+  :notes (:nil-vectors-are-strings)
   (string (make-array '(0) :element-type nil))
   "")
 
@@ -59,6 +62,7 @@
   t)
 
 (deftest string.13
+  :notes (:nil-vectors-are-strings)
   (typep* (make-array '(0) :element-type nil) 'string)
   t)
 
@@ -130,15 +134,18 @@
   (subtypep* 'simple-string 'simple-base-string)
   nil t)
 
-(deftest simple-string.11
+(deftest simple-string.11 
+  :notes (:nil-vectors-are-strings)
   (subtypep* '(simple-array nil (*)) 'simple-string)
   t t)
 
 (deftest simple-string.12
+  :notes (:nil-vectors-are-strings)
   (typep* (make-array '(0) :element-type nil) 'simple-string)
   t)
 
 (deftest simple-string.13
+  :notes (:nil-vectors-are-strings)
   (typep* (make-array '(12) :element-type nil) 'simple-string)
   t)
 
@@ -235,10 +242,12 @@
   nil)
 
 (deftest simple-string-p.8
+  :notes (:nil-vectors-are-strings)
   (notnot-mv (simple-string-p (make-array '(0) :element-type nil)))
   t)
 
 (deftest simple-string-p.9
+  :notes (:nil-vectors-are-strings)
   (notnot-mv (simple-string-p (make-array '(37) :element-type nil)))
   t)
 
@@ -288,9 +297,11 @@
   t)
 
 (deftest stringp.9
+  :notes (:nil-vectors-are-strings)
   (notnot-mv (stringp (make-array '(0) :element-type nil)))
   t)
 
 (deftest stringp.10
+  :notes (:nil-vectors-are-strings)
   (notnot-mv (stringp (make-array '(37) :element-type nil)))
   t)

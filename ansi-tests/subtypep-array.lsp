@@ -99,6 +99,7 @@
 ;;;; Tests on the definitions of various vector types
 
 (deftest string-is-not-vector-of-character.1
+  :notes (:nil-vectors-are-strings)
   (subtypep* 'string '(vector character))
   nil t)
 
@@ -107,6 +108,7 @@
   t t)
 
 (deftest string-is-not-vector-of-character.3
+  :notes (:nil-vectors-are-strings)
   (subtypep* '(string *) '(vector character))
   nil t)
 
@@ -115,6 +117,7 @@
   t t)
 
 (deftest string-is-not-vector-of-character.5
+  :notes (:nil-vectors-are-strings)
   (subtypep* '(string 17) '(vector character 17))
   nil t)
 
@@ -171,6 +174,7 @@
   t t)
 
 (deftest simple-string-is-not-simple-1d-array-of-character.1
+  :notes (:nil-vectors-are-strings)
   (subtypep* 'simple-string '(simple-array character (*)))
   nil t)
 
@@ -179,6 +183,7 @@
   t t)
 
 (deftest simple-string-is-not-simple-1d-array-of-character.3
+  :notes (:nil-vectors-are-strings)
   (subtypep* '(simple-string *) '(simple-array character (*)))
   nil t)
 
@@ -187,6 +192,7 @@
   t t)
 
 (deftest simple-string-is-not-simple-1d-array-of-character.5
+  :notes (:nil-vectors-are-strings)
   (subtypep* '(simple-string 17) '(simple-array character (17)))
   nil t)
 
