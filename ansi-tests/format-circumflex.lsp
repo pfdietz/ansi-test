@@ -922,3 +922,23 @@
 (deftest  format.\:^.\:@{.39
   (format nil "~:@{~#,#,#:^~A~}" '(1 2 3) '(2) '(0 A B C D) '(4 5) '(5 7 8 9))
   "")
+
+;;; ~^ inside ~?, ~@?
+
+(deftest format.^.?.1
+  (format nil "~AY~?X~A" 1 "~A~0^~A" '(2 4) 3)
+  "1Y2X3")
+
+(deftest format.^.?.2
+  (format nil "~AY~?X~A" 1 "~A~^~A" '(2) 3)
+  "1Y2X3")
+
+(deftest format.^.?.3
+  (format nil "~AY~?X~A" 1 "~A~^~A~^~A" '(2 4) 3)
+  "1Y24X3")
+
+(deftest format.^.@?.1
+  (format nil "~AY~@?X~A" 1 "~A~0^~A" 2 3 4)
+  "1Y2X3")
+
+
