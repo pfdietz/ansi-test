@@ -23,3 +23,15 @@
 	collect x)
   nil)
 
+(deftest logical-pathname.error.2
+  ;; Doesn't specify a host
+  (signals-error (logical-pathname "FOO.TXT") type-error)
+  t)
+
+(deftest logical-pathname.error.3
+  (signals-error
+   (with-open-file (s #p"logical-pathname.lsp" :direction :input)
+		   (logical-pathname s))
+   type-error)
+  t)
+

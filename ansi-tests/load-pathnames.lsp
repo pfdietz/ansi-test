@@ -24,6 +24,10 @@
 (load "translate-logical-pathname.lsp")
 
 (load "namestring.lsp")
+(load "file-namestring.lsp")
+(load "directory-namestring.lsp")
+(load "host-namestring.lsp")
+(load "enough-namestring.lsp")
 
 (load "wild-pathname-p.lsp")
 (load "merge-pathnames.lsp")

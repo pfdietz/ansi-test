@@ -49,6 +49,8 @@
 	 (not (pathname-match-p pn1 pn2))))
   nil)
 
+;;; Add more tests here
+
 ;;; Here are error tests
 
 (deftest pathname-match-p.error.1
