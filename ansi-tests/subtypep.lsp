@@ -111,11 +111,26 @@
   (subtypep* 'simple-bit-vector 'simple-vector)
   nil t)
 
+;;; Extended characters
+
 (deftest subtypep.extended-char.1
   (if (subtypep* 'character 'base-char)
       (subtypep* 'extended-char nil)
     (values t t))
   t t)
+
+(deftest subtypep.extended-char.2
+  (if (subtypep* 'extended-char nil)
+      (subtypep* 'character 'base-char)
+    (values t t))
+  t t)
+
+(deftest subtypep.extended-char.3
+  (check-equivalence 'extended-char '(and character (not base-char)))
+  nil)
+
+
+;;; Some and, or combinations
 
 (deftest subtypep.and/or.1
   (check-equivalence
