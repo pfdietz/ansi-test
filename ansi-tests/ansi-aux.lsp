@@ -285,7 +285,12 @@ the condition to go uncaught if it cannot be classified."
   (handler-bind ((warning #'(lambda (c) (declare (ignore c))
 			      (muffle-warning))))
 		(proclaim '(optimize (safety 3)))
-		(classify-error* (eval form)
+		(classify-error*
+		 (if rt::*compile-tests*
+		     (funcall (compile nil `(lambda ()
+					      (declare (optimize (safety 3)))
+					      ,form)))
+		     (eval form))
 		 )))
 
 (defmacro classify-error (form)

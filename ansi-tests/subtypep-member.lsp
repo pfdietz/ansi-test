@@ -138,3 +138,22 @@
 		     '(member a b))
   nil)
 
+(deftest subtypep.member.27
+  (check-all-subtypep '(member a b c d) '(satisfies #'symbolp))
+  nil)
+
+(deftest subtypep.member.28
+  (check-all-subtypep '(member a b c d) t)
+  nil)
+
+(deftest subtypep.member.29
+  (check-all-not-subtypep '(member a b 10 z) '(satisfies #'symbolp))
+  nil)
+
+(deftest subtypep.member.30
+  (check-disjointness '(member 1 6 10) '(satisfies #'symbolp))
+  nil)
+
+(deftest subtypep.member.31
+  (check-equivalence '(member a b c d) '(member c d b a))
+  nil)
