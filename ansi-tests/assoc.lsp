@@ -150,16 +150,7 @@
   (assoc 10 '((1 a) (5 b) (8 c) (11 d) (12 e)) :test-not #'>=)
   (11 d))
 
-;;; Special case: the nil key does not match the nil pair
-
-(deftest assoc.28
-  (assoc nil '((a . b) nil (c . d) (nil . e) (nil . f) nil (g . h)))
-  (nil . e))
-
-(deftest assoc.29
-  (assoc nil '((a . b) nil (c . d) (nil . e) (nil . f) nil (g . h))
-	 :test #'eq)
-  (nil . e))
+;;; Special cases: the nil key does not match the nil pair
 
 (deftest assoc.30
   (let () (assoc nil '((a . b) nil (c . d) (nil . e) (nil . f) nil (g . h))))
