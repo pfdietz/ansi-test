@@ -298,18 +298,20 @@
      (2 `(the integer ,(make-random-integer-form (1- size))))
       
      (1 `(cl:handler-bind nil ,(make-random-integer-form (1- size))))
+     (1 `(restart-bind nil ,(make-random-integer-form (1- size))))
      (1 `(macrolet () ,(make-random-integer-form (1- size))))
 
      ;; dotimes
      #-allegro
      (10
       (let* ((var (random-from-seq #(iv1 iv2 iv3 iv4)))
-	     (count (random 10))
+	     (count (random 4))
 	     (sizes (random-partition (1- size) 2))
 	     (body (let ((*vars* (cons (make-var-desc :name var :type nil)
 				       *vars*)))
 		     (make-random-integer-form (first sizes))))
 	     (ret-form (make-random-integer-form (second sizes))))
+	(unless (consp body) (setq body `(progn ,body)))
 	`(dotimes (,var ,count ,ret-form) ,body)))	
 
      ;; load-time-value
@@ -376,7 +378,7 @@
 	`(,op ,@args)))
 
      ;; expt
-     (3 `(expt ,(make-random-integer-form (1- size)) ,(random 10)))
+     (3 `(expt ,(make-random-integer-form (1- size)) ,(random 3)))
 
      ;; coerce
      (2 `(coerce ,(make-random-integer-form (1- size)) 'integer))
@@ -945,7 +947,8 @@
 	    (when (= (length body) 1)
 	      (prune (first body)
 		     #'(lambda (form)
-			 (try `(dotimes (,var ,count-form ,result) ,form)))))))
+			 (when (consp form)
+			   (try `(dotimes (,var ,count-form ,result) ,form))))))))
 	 
 	 ((abs 1+ 1-)
 	  (try 0)
@@ -994,7 +997,7 @@
 		     #'(lambda (form)
 			 (try `(load-time-value ,form))))))))
 
-	 ((the macrolet cl:handler-bind)
+	 ((the macrolet cl:handler-bind restart-bind)
 	  (assert (= (length args) 2))
 	  (try (second args))
 	  (prune (second args) try-fn))
@@ -1498,9 +1501,16 @@
   (find-if-subtree
    #'(lambda (form)
        (and (consp form)
-	    (member (car form) '(let let*) :test #'eq)
-	    (loop for binding in (cadr form)
-		  thereis (eq (car binding) var))))
+	    (case (car form)
+	      ((let let*)
+	       (loop for binding in (cadr form)
+		     thereis (eq (car binding) var)))
+	      ((progv)
+	       (and (consp (cadr form))
+		    (eq (caadr form) 'quote)
+		    (consp (second (cadr form)))
+		    (member var (second (cadr form)))))
+	      (t nil))))
    form))
 
 (defun find-if-subtree (pred tree)
