@@ -496,6 +496,14 @@ do the defstruct."
 				       '(nil t)))
 		       collect type))
 	       nil)
+	     (deftest ,(make-struct-test-name name "15A")
+	       (let ((class (find-class (quote ,name))))
+		 (notnot-mv (subtypep class 'structure-object)))
+	       t t)
+	     (deftest ,(make-struct-test-name name "15B")
+	       (notnot-mv (subtypep (quote ,name) 'structure-object))
+	       t t)
+
 	     ))
 
        ;;; Documentation tests
