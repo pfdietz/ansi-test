@@ -53,10 +53,22 @@
 	   collect x)))
   nil)
 
+(deftest pprint-indent.7
+  (my-with-standard-io-syntax
+   (let ((*print-pretty* nil))
+     (with-open-stream (*standard-output* (make-broadcast-stream))
+		       (pprint-indent :current 0 nil))))
+  nil)
 
-
-
-
-
+(deftest pprint-indent.8
+  (my-with-standard-io-syntax
+   (let ((*print-pretty* nil))
+     (with-open-stream
+      (os (make-string-output-stream))
+      (with-open-stream
+       (is (make-string-input-stream ""))
+       (with-open-stream (*terminal-io* (make-two-way-stream is os))
+			 (pprint-indent :current 0 t))))))
+  nil)
 
 
