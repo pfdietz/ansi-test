@@ -5,82 +5,122 @@
 
 (in-package :cl-test)
 
+(defun numbers-are-compatible (x y)
+  (cond
+   ((complexp x)
+    (and (numbers-are-compatible (realpart x) y)
+	 (numbers-are-compatible (imagpart x) y)))
+   ((complexp y)
+    (and (numbers-are-compatible x (realpart y))
+	 (numbers-are-compatible x (imagpart y))))
+   (t
+    (when (floatp x) (rotatef x y))
+    (or (floatp x)
+	(not (floatp y))
+	(etypecase y
+	  (short-float
+	   (<= #.(rationalize most-negative-short-float)
+	       x
+	       #.(rationalize most-positive-short-float)))
+	  (single-float
+	   (<= #.(rationalize most-negative-single-float)
+	       x
+	       #.(rationalize most-positive-single-float)))
+	  (double-float
+	   (<= #.(rationalize most-negative-double-float)
+	       x
+	       #.(rationalize most-positive-double-float)))
+	  (long-float
+	   (<= #.(rationalize most-negative-long-float)
+	       x
+	       #.(rationalize most-positive-long-float))))))))    
+
 (defun =.4-fn ()
   (loop for x in *numbers*
 	append
 	(loop for y in *numbers*
-	      unless (if (= x y) (= y x) (not (= y x)))
+	      unless (or (not (numbers-are-compatible x y))
+			 (if (= x y) (= y x) (not (= y x))))
 	      collect (list x y))))
 
 (defun /=.4-fn ()
   (loop for x in *numbers*
 	append
 	(loop for y in *numbers*
-	      unless (if (/= x y) (/= y x) (not (/= y x)))
+	      unless (or (not (numbers-are-compatible x y))
+			 (if (/= x y) (/= y x) (not (/= y x))))
 	      collect (list x y))))
 
 (defun /=.4a-fn ()
   (loop for x in *numbers*
 	append
 	(loop for y in *numbers*
-	      when (if (= x y)
-		       (/= x y)
-		     (not (/= x y)))
+	      when (and (numbers-are-compatible x y)
+			(if (= x y)
+			    (/= x y)
+			  (not (/= x y))))
 	      collect (list x y))))
 
 (defun <.8-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (< x y) (> x y))
+	      when (and (numbers-are-compatible x y)
+			(and (< x y) (> x y)))
 	      collect (list x y))))
 
 (defun <.9-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (if (< x y) (not (> y x))
-		     (> y x))
+	      when (and (numbers-are-compatible x y)
+			(if (< x y) (not (> y x))
+			  (> y x)))
 	      collect (list x y))))
 
 (defun <.10-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (if (< x y) (>= x y)
-		     (not (>= x y)))
+	      when (and (numbers-are-compatible x y)
+			(if (< x y) (>= x y)
+			  (not (>= x y))))
 	      collect (list x y))))
 
 (defun <=.8-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (if (<= x y) (not (>= y x))
-		     (>= y x))
+	      when (and (numbers-are-compatible x y)
+			(if (<= x y) (not (>= y x))
+			  (>= y x)))
 	      collect (list x y))))
  
 (defun <=.9-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (if (<= x y) (not (or (= x y) (< x y)))
-		     (or (= x y) (< x y)))
+	      when (and (numbers-are-compatible x y)
+			(if (<= x y) (not (or (= x y) (< x y)))
+			  (or (= x y) (< x y))))
 	      collect (list x y))))
 
 (defun >.8-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (if (> x y) (<= x y)
-		     (not (<= x y)))
+	      when (and (numbers-are-compatible x y)
+			(if (> x y) (<= x y)
+			  (not (<= x y))))
 	      collect (list x y))))
 
 (defun >=.8-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (if (>= x y) (not (or (= x y) (> x y)))
-		     (or (= x y) (> x y)))
+	      when (and (numbers-are-compatible x y)
+			(if (>= x y) (not (or (= x y) (> x y)))
+			  (or (= x y) (> x y))))
 	      collect (list x y))))
 
 ;;; Comparison of rationsls

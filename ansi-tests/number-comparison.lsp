@@ -378,13 +378,20 @@
 				    most-positive-single-float
 				    most-positive-double-float
 				    most-positive-long-float)
+		 for lower-bound in (list most-negative-short-float
+				    most-negative-single-float
+				    most-negative-double-float
+				    most-negative-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (<= x bound)
+		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
+			(<= (rationalize lower-bound)
+			  x (rationalize bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
 		   (list (list y z nil)
 			 (list z y t)))))
+     
      (loop for x in *universe*
 	   when (and (realp x) (<= x -1))
 	   nconc
@@ -396,8 +403,13 @@
 				    most-negative-single-float
 				    most-negative-double-float
 				    most-negative-long-float)
+		 for upper-bound in (list most-positive-short-float
+				    most-positive-single-float
+				    most-positive-double-float
+				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (>= x bound)
+		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
+			(<= (rationalize bound) x (rationalize upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -410,7 +422,19 @@
 				      single-float-epsilon
 				      double-float-epsilon
 				      long-float-epsilon)
+		 for lower-bound in (list most-negative-short-float
+				    most-negative-single-float
+				    most-negative-double-float
+				    most-negative-long-float)
+		 for upper-bound in (list most-positive-short-float
+				    most-positive-single-float
+				    most-positive-double-float
+				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (if (floatp x) (subtypep (class-of x)
+					       (class-of lower-bound))
+			(<= (rationalize lower-bound)
+			    x (rationalize upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z1 (+ y epsilon))
@@ -554,8 +578,14 @@
 				    most-positive-single-float
 				    most-positive-double-float
 				    most-positive-long-float)
+		 for lower-bound in (list most-negative-short-float
+				    most-negative-single-float
+				    most-negative-double-float
+				    most-negative-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (<= x bound)
+		 when (if (floatp x) (subtypep (class-of x)
+					       (class-of lower-bound))
+			(<= (rationalize lower-bound) x (rationalize bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -572,8 +602,13 @@
 				    most-negative-single-float
 				    most-negative-double-float
 				    most-negative-long-float)
+		 for upper-bound in (list most-positive-short-float
+				    most-positive-single-float
+				    most-positive-double-float
+				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
-		 when (>= x bound)
+		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
+			(<= (rationalize bound) x (rationalize upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -586,7 +621,19 @@
 				      single-float-epsilon
 				      double-float-epsilon
 				      long-float-epsilon)
+		 for lower-bound in (list most-negative-short-float
+				    most-negative-single-float
+				    most-negative-double-float
+				    most-negative-long-float)
+		 for upper-bound in (list most-positive-short-float
+				    most-positive-single-float
+				    most-positive-double-float
+				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (if (floatp x) (subtypep (class-of x)
+					       (class-of lower-bound))
+			(<= (rationalize lower-bound)
+			    x (rationalize upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z1 (+ y epsilon))
