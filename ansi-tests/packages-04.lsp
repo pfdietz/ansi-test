@@ -51,7 +51,7 @@
 (deftest intern.3
   (let ((cl-user-package (find-package "CL-USER")))
     (eqt (intern "" cl-user-package)
-	 (intern (make-array 0 :element-type nil))))
+	 (intern (make-array 0 :element-type nil) cl-user-package)))
   t)
 
 (deftest intern.4
