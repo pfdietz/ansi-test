@@ -106,6 +106,9 @@
 	return opt
 	finally (return default)))
 
+(defvar *defstruct-with-tests-names* nil
+  "Names of structure types defined with DEFSRUCT-WITH-TESTS.")
+
 ;;
 ;; There are a number of standardized tests for
 ;; structures.  The following macro generates the
@@ -174,6 +177,7 @@ do the defstruct."
 	 (struct-type (second type-option))
 
 	 (named-option (find-option options :named))
+	 (include-option (find-option options :include))
 
 	 ;; The :predicate option entry from OPTIONS, or NIL if none
 	 (predicate-option (find-option options :predicate))
@@ -228,15 +232,20 @@ do the defstruct."
 	   for slot-desc in slot-descriptions
 	   for slot-name in slot-names
 	   for type      in slot-types
+	   for i from 1
 	   collect (if (not (eq type :none))
 		       (cons slot-name (create-instance-of-type type))
-		     (cons slot-name (gensym)))))
+		     (cons slot-name (defstruct-maketemp name "SLOTTEMP" i)))))
 	 )
     ;; Build the tests in an eval-when form
     `(eval-when (compile load eval)
+
        (ignore-errors
 	 (eval '(defstruct ,name-and-options
-		  ,@slot-descriptions-and-documentation)))
+		  ,@slot-descriptions-and-documentation))
+	 ,(unless (or type-option include-option)
+	    `(pushnew ',name *defstruct-with-tests-names*))
+	 nil)
 
        ;; Test that structure is of the correct type
        (deftest ,(make-struct-test-name name 1)
@@ -273,7 +282,7 @@ do the defstruct."
        (deftest ,(make-struct-test-name name 5)
 	 ,(let ((inits nil)
 		(tests nil)
-		(var (gensym "X")))
+		(var (defstruct-maketemp name "TEMP-5")))
 	    (loop
 	     for (slot-name . initval) in initial-value-alist
 	     for field-fn in field-fns
@@ -296,8 +305,8 @@ do the defstruct."
 
        ;; Check that we can setf the fields
        (deftest ,(make-struct-test-name name 7)
-	 ,(let* ((var (gensym "X"))
-		 (var2 (gensym "T"))
+	 ,(let* ((var (defstruct-maketemp name "TEMP-7-1"))
+		 (var2 (defstruct-maketemp name "TEMP-7-2"))
 		 (tests
 		  (loop
 		   for (slot-name . initval) in initial-value-alist
@@ -325,8 +334,8 @@ do the defstruct."
        ;; Check that the copy function properly copies fields
        ,@(when copy-fn
 	   `((deftest ,(make-struct-test-name name 9)
-	       ,(let* ((var (gensym "X"))
-		       (var2 (gensym "Y")))
+	       ,(let* ((var 'XTEMP-9)
+		       (var2 'YTEMP-9))
 		  `(let ((,var (,make-fn
 				,@(loop
 				   for (slot-name . initval)
@@ -414,6 +423,11 @@ do the defstruct."
 		       collect type))
 	       nil)
 	     ))
+
        nil
        )))
 
+(defun defstruct-maketemp (stem suffix1 &optional suffix2)
+  "Make a temporary variable for DEFSTRUCT-WITH-TESTS."
+  (intern (if suffix2 (format nil "~A-~A-~A" stem suffix1 suffix2)
+	    (format nil "~A-~A" stem suffix1))))
