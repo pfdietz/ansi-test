@@ -3,6 +3,11 @@
 ;;; Tests of symbols
 (load "cl-symbols.lsp")
 
+;;; Tests of data and control flow
+
+(load "constantly.lsp")
+(load "complement.lsp")
+
 ;;; Tests of conses
 
 (load "cons-test-01.lsp")
