@@ -29,10 +29,11 @@
 
 (deftest parse-integer.3
   (parse-integer "    12345678901234567890   ")
-  12345678901234567890 24)
+  12345678901234567890 27)
 
 (deftest parse-integer.4
-  (parse-integer (concatenate 'string (string #\Newline) "17"))
+  (parse-integer (concatenate 'string (string #\Newline) "17"
+			      (string #\Newline)))
   17 4)
 
 (deftest parse-integer.5
