@@ -15,19 +15,9 @@
 (defparameter *find-method-gf-01-method4*
   (defmethod find-method-gf-01 ((x t)) 'd))
 
-(deftest find-method.1
-  (eqt (find-method #'find-method-gf-01 nil (list 'integer))
-       *find-method-gf-01-method1*)
-  t)
-
 (deftest find-method.2
   (eqt (find-method #'find-method-gf-01 nil (list (find-class 'integer)))
        *find-method-gf-01-method1*)
-  t)
-
-(deftest find-method.3
-  (eqt (find-method #'find-method-gf-01 nil (list 'rational))
-       *find-method-gf-01-method2*)
   t)
 
 (deftest find-method.4
@@ -35,19 +25,9 @@
        *find-method-gf-01-method2*)
   t)
 
-(deftest find-method.5
-  (eqt (find-method #'find-method-gf-01 nil (list 'real))
-       *find-method-gf-01-method3*)
-  t)
-
 (deftest find-method.6
   (eqt (find-method #'find-method-gf-01 nil (list (find-class 'real)))
        *find-method-gf-01-method3*)
-  t)
-
-(deftest find-method.7
-  (eqt (find-method #'find-method-gf-01 nil (list t))
-       *find-method-gf-01-method4*)
   t)
 
 (deftest find-method.8
@@ -56,15 +36,18 @@
   t)
 
 (deftest find-method.9
-  (find-method #'find-method-gf-01 (list :around) (list t) nil)
+  (find-method #'find-method-gf-01 (list :around) (list (find-class t))
+	       nil)
   nil)
 
 (deftest find-method.10
-  (find-method #'find-method-gf-01 (list :after) (list 'integer) nil)
+  (find-method #'find-method-gf-01 (list :after)
+	       (list (find-class 'integer)) nil)
   nil)
 
 (deftest find-method.11
-  (find-method #'find-method-gf-01 (list :before) (list 'real) nil)
+  (find-method #'find-method-gf-01 (list :before) (list (find-class 'real))
+	       nil)
   nil)
 
 (deftest find-method.error.1
@@ -81,18 +64,18 @@
 
 (deftest find-method.error.4
   (classify-error
-   (find-method #'find-method-gf-01 nil (list 'integer) nil nil))
+   (find-method #'find-method-gf-01 nil (list (find-class 'integer)) nil nil))
   program-error)
 
 (deftest find-method.error.5
   (handler-case
-   (find-method #'find-method-gf-01 nil (list 'symbol))
+   (find-method #'find-method-gf-01 nil (list (find-class 'symbol)))
    (error () :error))
   :error)
 
 (deftest find-method.error.6
   (handler-case
-   (find-method #'find-method-gf-01 nil (list 'symbol) 'x)
+   (find-method #'find-method-gf-01 nil (list (find-class 'symbol)) 'x)
    (error () :error))
   :error)
 
@@ -104,7 +87,8 @@
 
 (deftest find-method.error.8
   (handler-case
-   (find-method #'find-method-gf-01 nil (list 'integer t))
+   (find-method #'find-method-gf-01 nil (list (find-class 'integer)
+					      (find-class t)))
    (error () :error))
   :error)
 
@@ -116,7 +100,9 @@
 
 (deftest find-method.error.10
   (handler-case
-   (find-method #'find-method-gf-01 nil (list 'integer t) nil)
+   (find-method #'find-method-gf-01 nil (list (find-class 'integer)
+					      (find-class t))
+		nil)
    (error () :error))
   :error)
 
