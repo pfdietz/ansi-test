@@ -12,4 +12,5 @@
 (load "remhash.lsp")
 (load "clrhash.lsp")
 (load "maphash.lsp")
-
+(load "with-hash-table-iterator.lsp")
+(load "sxhash.lsp")
