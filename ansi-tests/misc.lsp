@@ -1369,6 +1369,7 @@
   -27)
 
 ;;; This bug was occuring a lot in sbcl, and now occurs in cmucl too
+;;; NIL fell through ETYPECASE expression.  Wanted one of (C:FIXUP X86::EA C:TN).
 (deftest misc.110
   (funcall
    (compile nil
@@ -1868,7 +1869,9 @@
              -2)))
   1)
 
-;;; The assertion (NOT (C::BLOCK-DELETE-P BLOCK)) failed.
+;;; (was) The assertion (NOT (C::BLOCK-DELETE-P BLOCK)) failed.
+;;; (now) The assertion (NOT (MEMBER C::KIND '(:DELETED :OPTIONAL :TOP-LEVEL))) failed.
+
 (deftest misc.144
   (funcall
    (compile nil
@@ -1916,4 +1919,44 @@
   (block b2 (logior (return-from b2 484) (restart-case (ignore-errors 1737021))))
   484)
 
+;;; Argument X is not a NUMBER: NIL.
+(deftest misc.149
+  (funcall
+   (compile nil '(lambda (b)
+		   (block b1 (- (logand 0 -34 1026491) (ignore-errors (return-from b1 b))))))
+   0)
+  0)
+
+;;; cmucl (11 2003 image)  "NIL is not of type C::CONTINUATION"
+(deftest misc.150
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (flet ((%f17
+	       (&optional
+		(f17-4
+		 (labels ((%f13 (f13-1 &optional (f13-2 (multiple-value-prog1 b)))
+				-4))
+		   (%f13 b (%f13 190)))))
+	       -157596))
+	 (labels ((%f6 () (%f17))) c))))
+   10 20 30000)
+  30000)
+
+;;; cmucl (11 2003 x86 linux)  "NIL is not of type C::ENVIRONMENT"
+(deftest misc.151
+  (funcall
+   (compile
+    nil
+    '(lambda (b c)
+       (declare (type (integer -249 97) b))
+       (declare (type (integer 3565969 6559088) c))
+       (let* ((v7
+	       (if (not (= 1030 4))
+		   c
+		 (logand (if (/= b c) b 34945725) (unwind-protect -12443701)))))
+	 5520737)))
+   -24 5657943)
+  5520737)
 
