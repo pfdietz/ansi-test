@@ -16,47 +16,53 @@
 
 (deftest write.2
   (with-standard-io-syntax
-   (with-output-to-string
-     (*standard-output*)
-     (write 2 :stream nil)))
+   (let ((*print-readably* nil))
+     (with-output-to-string
+       (*standard-output*)
+       (write 2 :stream nil))))
   "2")
 
 (deftest write.3
   (with-standard-io-syntax
-   (with-output-to-string
-     (os)
-     (with-input-from-string
-      (is "")
-      (with-open-stream (*terminal-io* (make-two-way-stream is os))
-			(write 3 :stream t)))))
+   (let ((*print-readably* nil))
+     (with-output-to-string
+       (os)
+       (with-input-from-string
+	(is "")
+	(with-open-stream (*terminal-io* (make-two-way-stream is os))
+			  (write 3 :stream t))))))
   "3")
 
 (deftest write.4
   (with-standard-io-syntax
-   (with-output-to-string
-     (os)
-     (write 4 :stream os)))
+   (let ((*print-readably* nil))
+     (with-output-to-string
+       (os)
+       (write 4 :stream os))))
   "4")
 
 (deftest write.5
   (with-standard-io-syntax
-   (with-output-to-string
-     (*standard-output*)
-     (write 5 :allow-other-keys nil)))
+   (let ((*print-readably* nil))
+     (with-output-to-string
+       (*standard-output*)
+       (write 5 :allow-other-keys nil))))
   "5")
 
 (deftest write.6
   (with-standard-io-syntax
-   (with-output-to-string
-     (*standard-output*)
-     (write 6 :allow-other-keys t :foo 'bar)))
+   (let ((*print-readably* nil))
+     (with-output-to-string
+       (*standard-output*)
+       (write 6 :allow-other-keys t :foo 'bar))))
   "6")
 
 (deftest write.7
   (with-standard-io-syntax
-   (with-output-to-string
-     (*standard-output*)
-     (write 7 :base 10 :base 3)))
+   (let ((*print-readably* nil))
+     (with-output-to-string
+       (*standard-output*)
+       (write 7 :base 10 :base 3))))
   "7")
 
 ;;; Error tests
