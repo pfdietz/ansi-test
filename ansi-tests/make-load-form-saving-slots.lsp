@@ -128,6 +128,53 @@
 	(map-slot-value newobj '(a b c)))))
   2 t (t t t) (7 100 64))
 
+(defpackage "CL-TEST-MLFSS-PACKAGE" (:use) (:export "A"))
+(defstruct mlfss-03 cl-test-mlfss-package:a)
+
+(deftest make-load-form-savings-slots.10
+  (let* ((obj (make-mlfss-03 :a 17))
+	 (forms (multiple-value-list
+		 (make-load-form-saving-slots obj))))
+    (let ((newobj (eval (first forms))))
+      (eval (subst newobj obj (second forms)))
+      (values
+       (mlfss-03-a obj)
+       (length forms)
+       (eqt (class-of obj) (class-of newobj))
+       (mlfss-03-a newobj))))
+  17 2 t 17)
+
+(deftest make-load-form-savings-slots.11
+  (let* ((obj (make-mlfss-03 :a 17))
+	 (forms (multiple-value-list
+		 (make-load-form-saving-slots
+		  obj
+		  :slot-names '(cl-test-mlfss-package:a)))))
+    (let ((newobj (eval (first forms))))
+      (eval (subst newobj obj (second forms)))
+      (values
+       (mlfss-03-a obj)
+       (length forms)
+       (eqt (class-of obj) (class-of newobj))
+       (mlfss-03-a newobj))))
+  17 2 t 17)
+
+
+(defstruct mlfss-04 (a 0 :read-only t))
+
+(deftest make-load-form-savings-slots.12
+  (let* ((obj (make-mlfss-04 :a 123))
+	 (forms (multiple-value-list
+		 (make-load-form-saving-slots obj))))
+    (let ((newobj (eval (first forms))))
+      (eval (subst newobj obj (second forms)))
+      (values
+       (mlfss-04-a obj)
+       (length forms)
+       (eqt (class-of obj) (class-of newobj))
+       (mlfss-04-a newobj))))
+  123 2 t 123)
+
 
 ;;; General error tests
 
