@@ -68,6 +68,33 @@
 	collect (list type ut1 ut2))
   nil)
 
+;;; Subtype constraint
+
+(deftest upgraded-complex-part-type.9
+  (let* ((types `(nil integer fixnum bignum float
+		     short-float single-float double-float long-float
+		     rational #-sbcl ratio real
+		     ,@(remove-duplicates
+			(mapcar #'class-of '(0.0s0 0.0f0 0.0d0 0.0l0 0 100000000000000000)))
+		     ,@(mapcar #'(lambda (x) `(eql ,x))
+			       (remove-duplicates
+				'(0.0s0 0.0f0 0.0d0 0.0l0 0
+				  1.0s0 1.0f0 1.0d0 1.0l0 1
+				  100000000000000000)))))
+	 (utypes (mapcar #'upgraded-complex-part-type types)))
+    (loop for sublist on types
+	  for usublist on utypes
+	  for tp1 = (car sublist)
+	  for utp1 = (car usublist)
+	  nconc (loop for tp2 in (cdr sublist)
+		      for utp2 in (cdr usublist)
+		      nconc
+		      (and (subtypep tp1 tp2)
+			   (let ((result (check-all-subtypep utp1 utp2)))
+			     (and result
+				  (list (list tp1 tp2 result))))))))
+  nil)		     
+
 ;;; Error tests
 
 (deftest upgraded-complex-part-type.error.1
