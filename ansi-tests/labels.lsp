@@ -153,9 +153,9 @@
   (let* ((n (min lambda-parameters-limit 1024))
 	 (vars (loop for i from 1 to n collect (gensym))))
     (eval
-     `(eql ,n
-	   (labels ((%f ,vars (+ ,@ vars)))
-	     (%f ,@(loop for e in vars collect 1))))))
+     `(eqlt ,n
+	    (labels ((%f ,vars (+ ,@ vars)))
+	      (%f ,@(loop for e in vars collect 1))))))
   t)
 
 ;;; Declarations and documentation strings are ok

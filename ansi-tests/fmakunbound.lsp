@@ -38,7 +38,7 @@
     (and (not (fboundp n))
 	 (eval `(defun ,n () nil))
 	 (fboundp n)
-	 (values (equal (check-values (fmakunbound n)) n)
+	 (values (equalt (check-values (fmakunbound n)) n)
 		 (fboundp n))))
   t nil)
 
