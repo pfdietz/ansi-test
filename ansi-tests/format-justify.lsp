@@ -226,3 +226,50 @@ X
 X AAA,
 X BBB,
 X CCC")
+
+;;; Error cases
+
+;;; See 22.3.5.2
+
+;;; Interaction with ~W
+
+(deftest format.justify.error.w.1
+  (signals-error-always (format nil "~< ~W ~>" nil) error)
+  t t)
+
+(deftest format.justify.error.w.2
+  (signals-error-always (format nil "~<X~:;Y~>~W" nil) error)
+  t t)
+
+(deftest format.justify.error.w.3
+  (signals-error-always (format nil "~w~<X~:;Y~>" nil) error)
+  t t)
+
+;;; Interaction with ~_
+
+(deftest format.justify.error._.1
+  (signals-error-always (format nil "~< ~_ ~>") error)
+  t t)
+
+(deftest format.justify.error._.2
+  (signals-error-always (format nil "~<X~:;Y~>~_") error)
+  t t)
+
+(deftest format.justify.error._.3
+  (signals-error-always (format nil "~_~<X~:;Y~>") error)
+  t t)
+
+;;; Interaction with ~I
+
+(deftest format.justify.error.i.1
+  (signals-error-always (format nil "~< ~i ~>") error)
+  t t)
+
+(deftest format.justify.error.i.2
+  (signals-error-always (format nil "~<X~:;Y~>~I") error)
+  t t)
+
+(deftest format.justify.error.i.3
+  (signals-error-always (format nil "~i~<X~:;Y~>") error)
+  t t)
+
