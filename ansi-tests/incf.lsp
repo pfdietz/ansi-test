@@ -96,9 +96,10 @@
 	nconc
 	(loop for r = (random-from-interval 1000000)
 	      repeat 100
-	      unless (let* ((y x) (z (incf y r)))
-			(and (eql (+ x r) y) (eql y z)))
-	      collect (list x y r)))
+	      when (let* ((y x) (z (incf y r)))
+			(and (not (and (eql (+ x r) y) (eql y z)))
+			     (list x y r)))
+	      collect it))
   nil)
 
 (deftest incf.14
