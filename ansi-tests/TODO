@@ -33,3 +33,39 @@ Things to do to the test suite (not a complete list)
 
 16. Test VECTOR-PUSH-EXTEND on displaced vectors, etc. (just like adjust-array;
    see 6.)
+
+17. Tests that have an argument that provides a return value for special
+  conditions (like eof) that happens to be the same as a normal value the
+  functions would return (suggested by CR).
+
+18. Add random tests for COERCE (the result either is either typep of the
+ second arg (except for rational stuff) or a type-error is signalled.)
+
+19. Add two missing tests from CLOS (spotted by Bruno Haible):
+
+;; Shared slot remains shared.
+;; CLHS 4.3.6.: "The value of a slot that is specified as shared both in the old
+;;               class and in the new class is retained."
+(multiple-value-bind (value condition)
+    (ignore-errors
+      (defclass foo74 () ((size :initarg :size :initform 1 :allocation :class)))
+      (setq i (make-instance 'foo74))
+      (defclass foo74 () ((size :initarg :size :initform 2 :allocation :class) (other)))
+      (slot-value i 'size))
+  (list value (type-of condition)))
+Expected: (1 NULL)
+Got:      (2 NULL)
+
+(progn
+  (defclass foo92b (foo92a) ((s :initarg :s)))
+  (defclass foo92a () ())
+  (let ((x (make-instance 'foo92b :s 5)) (update-counter 0))
+    (defclass foo92b (foo92a) ((s) (s1) (s2))) ; still subclass of foo92a
+    (slot-value x 's)
+    (defmethod update-instance-for-redefined-class ((object foo92b) added-slots discarded-slots property-list &rest initargs)
+      (incf update-counter))
+    (make-instances-obsolete 'foo92a)
+    (slot-value x 's)
+    update-counter))
+Expected: 1
+Got:      0
