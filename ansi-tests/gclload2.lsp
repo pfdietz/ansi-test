@@ -121,3 +121,4 @@
 (load "nstring-upcase.lsp")
 (load "nstring-downcase.lsp")
 (load "nstring-capitalize.lsp")
+(load "string-trim.lsp")
