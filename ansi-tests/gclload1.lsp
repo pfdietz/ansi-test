@@ -1,4 +1,5 @@
 #+:ecl (si::package-lock (find-package "COMMON-LISP") nil)
+
 (load "compile-and-load.lsp")
 (load "rt-package.lsp")
 (compile-and-load "rt.lsp")
@@ -15,4 +16,14 @@
 
 (load "cl-symbol-names.lsp")
 (load "notes.lsp")
+
+#+cmu (setq *compile-verbose* nil *compile-print* nil
+	    ext:*gc-verbose* nil)
+#+gcl (setq compiler:*suppress-compiler-notes* t
+	    compiler:*suppress-compiler-warnings* t
+	    *compile-verbose* nil
+	    *compile-print* nil
+	    compiler:*compile-verbose* nil
+	    compiler:*compile-print* nil
+	    *load-verbose* nil)
 
