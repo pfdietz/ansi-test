@@ -264,7 +264,7 @@
        ((:readably *print-readably*)               *print-readably*)
        ((:right-margin *print-right-margin*)       *print-right-margin*)
        ((:stream *standard-output*)                *standard-output*))
-  (let ((results (multiple-value-list (apply fun obj))))
+  (let ((results (multiple-value-list (funcall fun obj))))
     (assert (= (length results) 1))
     (assert (eql (car results) obj))
     obj))
@@ -299,7 +299,7 @@
      (loop
       for args = (make-random-write-args)
       for package = (find-package (random-from-seq #("CL-TEST" "CL-USER" "KEYWORD")))
-      for obj = (random-thing (random 1))
+      for obj = (random-thing (random 10))
       for s1 = (let ((*package* package))
 		 (with-output-to-string (s) (apply #'write obj :stream s ,@write-args args)))
       for s2 = (let ((*package* package))
@@ -326,7 +326,7 @@
      (loop
       for args = (make-random-write-args)
       for package = (find-package (random-from-seq #("CL-TEST" "CL-USER" "KEYWORD")))
-      for obj = (random-thing (random 1))
+      for obj = (random-thing (random 10))
       for s1 = (let ((*package* package))
 		 (with-output-to-string (s) (apply #'write obj :stream s ,@write-args args)))
       for s2 = (let ((*package* package))
