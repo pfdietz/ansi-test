@@ -40,3 +40,27 @@
      (error fmt)
      (simple-error (c) (frob-simple-error c fmt))))
   t)
+
+(deftest error.6
+  (handler-case
+   (error 'simple-condition)
+   (error (c) :wrong)
+   (simple-condition (c) :right))
+  :right)
+
+(deftest error.7
+  (handler-case
+   (error 'simple-warning)
+   (error (c) :wrong)
+   (simple-warning (c) :right)
+   (condition (c) :wrong2))
+  :right)
+
+(deftest error.8
+  (let ((fmt "Boo!"))
+    (handler-case
+     (error 'simple-warning :format-control fmt)
+     (simple-warning (c) (frob-simple-warning c fmt))))
+  t)
+
+;;; Tests for other conditions will in their own files.

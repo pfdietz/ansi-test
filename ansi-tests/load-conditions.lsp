@@ -5,3 +5,5 @@
 (load "error.lsp")
 (load "cerror.lsp")
 (load "check-type.lsp")
+(load "warn.lsp")
+
