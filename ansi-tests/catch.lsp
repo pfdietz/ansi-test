@@ -70,6 +70,18 @@
       'bad))
   good)
 
+;;; No implicit tagbody
+(deftest catch.13
+  (block done
+    (tagbody
+     (catch 'foo
+       (go 10)
+       10
+       (return-from done 'bad))
+     10
+     (return-from done 'good)))
+  good)
+
 (deftest throw-error
   (classify-error (throw (gensym) nil))
   control-error)

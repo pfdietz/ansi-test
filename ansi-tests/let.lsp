@@ -110,6 +110,16 @@
 	collect s)
   nil)
 
+;;; Check that LET does not have a tagbody
+(deftest let.16
+  (block done
+    (tagbody
+     (let () (go 10) 10 (return-from done 'bad))
+     10
+     (return-from done 'good)))
+  good)
+
+
 ;;; Tests for LET*
 
 (deftest let*.1
@@ -208,3 +218,12 @@
 	unless (eql (eval form) 17)
 	collect s)
   nil)
+
+;;; Check that LET* does not have a tagbody
+(deftest let*.16
+  (block done
+    (tagbody
+     (let () (go 10) 10 (return-from done 'bad))
+     10
+     (return-from done 'good)))
+  good)

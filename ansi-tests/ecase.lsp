@@ -147,3 +147,14 @@
 (deftest ecase.32
   (ecase 'a (a) (b 'b))
   nil)
+
+;;; No implicit tagbody
+(deftest ecase.33
+  (block done
+    (tagbody
+     (ecase 'a (a (go 10)
+		  10
+		  (return-from done 'bad)))
+     10
+     (return-from done 'good)))
+  good)

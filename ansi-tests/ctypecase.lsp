@@ -86,3 +86,14 @@
 	     (#.(find-class 'symbol nil) 'good))
   good)
 
+(deftest ctypecase.14
+  (block done
+    (tagbody
+     (let ((x 'a))
+       (ctypecase x (symbol (go 10)
+			    10
+			    (return-from done 'bad))))
+     10
+     (return-from done 'good)))
+  good)
+

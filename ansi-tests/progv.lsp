@@ -73,3 +73,13 @@
 	(progn (setf y (incf c)) nil)
       (values x y c)))
   1 2 2)
+
+;;; No tagbody
+
+(deftest progv.11
+  (block nil
+    (tagbody
+     (progv nil nil (go 10) 10 (return 'bad))
+     10
+     (return 'good)))
+  good)

@@ -69,3 +69,17 @@
 	(return-from foo 'a)))
      x y))
   a 1 2)
+
+;;; No implicit tagbody
+(deftest multiple-value-prog1.10
+  (block nil
+    (tagbody
+     (multiple-value-prog1
+      (values)
+      (go 10)
+      10
+      (return 'bad))
+     10
+     (return 'good)))
+  good)
+

@@ -59,3 +59,15 @@
     (#.(find-class 'symbol nil) 'good))
   good)
 
+(deftest etypecase.13
+  (block nil
+    (tagbody
+     (let ((x 'a))
+       (etypecase x (symbol (go 10)
+			    10
+			    (return 'bad))))
+     10
+     (return 'good)))
+  good)
+
+

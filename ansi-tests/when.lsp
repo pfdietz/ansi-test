@@ -34,6 +34,19 @@
      x))
   a 1)
 
+;;; No implicit tagbody
+(deftest when.8
+  (block done
+    (tagbody
+     (when t
+       (go 10)
+       10
+       (return-from done 'bad))
+     10
+     (return-from done 'good)))
+  good)
+
+
 ;;; (deftest when.error.1
 ;;;  (classify-error (when))
 ;;;  program-error)

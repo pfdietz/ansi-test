@@ -25,3 +25,13 @@
   (let ((x 0))
     (values (prog1 x (incf x)) x))
   0 1)
+
+;;; Test that prog1 doesn't have a tagbody
+
+(deftest prog1.6
+  (block nil
+    (tagbody
+     (return (prog1 'bad (go 10) 10))
+     10
+     (return 'good)))
+  good)

@@ -64,6 +64,18 @@
     'bad)
   good)
 
+;;; Block has no tagbody
+(deftest block.11
+  (block done
+    (tagbody
+     (block nil
+       (go 10)
+       10
+       (return-from done 'bad))
+     10
+     (return-from done 'good)))
+  good)
+
 #|
 (deftest return.error.1
   (classify-error

@@ -428,4 +428,12 @@
 	collect s)
   nil)
 
-
+;;; Check that FLET does not have a tagbody
+(deftest flet.52
+  (block done
+    (tagbody
+     (flet ((%f () (go 10) 10 (return-from done 'bad)))
+       (%f))
+     10
+     (return-from done 'good)))
+  good)

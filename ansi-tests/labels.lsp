@@ -212,3 +212,13 @@
 	unless (eq (eval form) 'a)
 	collect s)
   nil)
+
+;;; Check that LABELS does not have a tagbody
+(deftest labels.27
+  (block done
+    (tagbody
+     (labels ((%f () (go 10) 10 (return-from done 'bad)))
+       (%f))
+     10
+     (return-from done 'good)))
+  good)

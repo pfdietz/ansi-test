@@ -36,3 +36,15 @@
 	  x
 	  (return 'good)))
   good)
+
+;;; No implicit tagbody
+(deftest progn.8
+  (block nil
+    (tagbody
+     (progn
+      (go 10)
+      10
+      (return 'bad))
+     10
+     (return 'good)))
+  good)

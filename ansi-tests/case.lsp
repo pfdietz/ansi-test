@@ -166,6 +166,31 @@
   (case 'a (b 'b) (otherwise))
   nil)
 
+;;; No implicit tagbody
+(deftest case.35
+  (block done
+    (tagbody
+     (case 'a (a (go 10)
+		 10
+		 (return-from done 'bad)))
+     10
+     (return-from done 'good)))
+  good)
+
+(deftest case.36
+  (block done
+    (tagbody
+     (case 'b
+       (a 'bad)
+       (otherwise (go 10)
+		  10
+		  (return-from done 'bad)))
+     10
+     (return-from done 'good)))
+  good)
+
+
+
 ;;; (deftest case.error.1
 ;;;  (classify-error (case))
 ;;;  program-error)

@@ -181,9 +181,19 @@
       (2 nil))))
   :good)
 
+;;; No implicit tagbody
+(deftest ccase.32
+  (block done
+    (tagbody
+     (let ((x 'a))
+       (ccase x (a (go 10)
+		   10
+		   (return-from done 'bad))))
+     10
+     (return-from done 'good)))
+  good)
+
+
 ;;; (deftest ccase.error.1
 ;;;  (classify-error (ccase))
 ;;;  program-error)
-
-
-    

@@ -88,3 +88,16 @@
 	  (push 'a x)))
       (type-error () x)))
   (a))
+
+;;; No implicit tagbody
+(deftest unwind-protect.10
+  (block done
+    (tagbody
+     (unwind-protect
+	 'foo
+       (go 10)
+       10
+       (return-from done 'bad))
+     10
+     (return-from done 'good)))
+  good)

@@ -80,6 +80,16 @@
   (destructuring-bind ((&key a b c)) '((:c 1 :b 2)) (values a b c))
   nil 2 1)
 
+;;; Test that destructuring-bind does not have a tagbody
+(deftest destructuring-bind.19
+  (block nil
+    (tagbody
+     (destructuring-bind (a . b) '(1 2) (go 10) 10 (return 'bad))
+     10
+     (return 'good)))
+  good)
+
+
 ;;; Error cases
 
 #|

@@ -70,3 +70,29 @@
     (number 'bad)
     (#.(find-class 'symbol nil) 'good))
   good)
+
+(deftest typecase.16
+  (block done
+    (tagbody
+     (typecase 'a (symbol (go 10)
+			  10
+			  (return-from done 'bad)))
+     10
+     (return-from done 'good)))
+  good)
+
+(deftest typecase.17
+  (block done
+    (tagbody
+     (typecase 'a
+       (integer 'bad)
+       (t (go 10)
+	  10
+	  (return-from done 'bad)))
+     10
+     (return-from done 'good)))
+  good)
+
+
+
+

@@ -70,6 +70,13 @@
 
 (deftest cond.14 (cond (t (values))))
 
-
-
-
+;;; No implicit tagbody
+(deftest cond.15
+  (block done
+    (tagbody
+     (cond (t (go 10)
+	      10
+	      (return-from done 'bad)))
+     10
+     (return-from done 'good)))
+  good)

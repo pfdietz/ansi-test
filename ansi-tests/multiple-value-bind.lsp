@@ -51,6 +51,18 @@
      x y z))
   (1 2 0) nil nil 0)
 
+;;; No implicit tagbody
+(deftest multiple-value-bind.8
+  (block nil
+    (tagbody
+     (multiple-value-bind (x) nil
+       (go 10)
+       10
+       (return 'bad))
+     10
+     (return 'good)))
+  good)
+
 ;;; (deftest multiple-value-bind.error.1
 ;;;  (classify-error (multiple-value-bind))
 ;;;  program-error)
