@@ -33,7 +33,6 @@
        (eqt (class-of obj) (class-of newobj)))))
   2 t)
 
-
 (defclass mlfss-02 () ((a :initarg :a) (b :initarg :b) (c :initarg :c)))
 
 (deftest make-load-form-saving-slots.3
@@ -75,4 +74,73 @@
 	(slot-value newobj 'a))))
   2 t (t nil nil) #(x y z))
 
+(deftest make-load-form-saving-slots.6
+  (let* ((obj (make-instance 'mlfss-02))
+	 (forms (multiple-value-list
+		 (make-load-form-saving-slots obj :allow-other-keys nil))))
+     (let ((newobj (eval (first forms))))
+       (eval (subst newobj obj (second forms)))
+       (values
+	(length forms)
+	(eqt (class-of obj) (class-of newobj))
+	(map-slot-boundp* newobj '(a b c)))))
+  2 t (nil nil nil))
 
+;;; If :slot-names is missing, all initialized slots are retained
+(deftest make-load-form-saving-slots.7
+  (let* ((obj (make-instance 'mlfss-02 :a (list 'x) :c 6/5))
+	 (forms (multiple-value-list
+		 (make-load-form-saving-slots obj))))
+     (let ((newobj (eval (first forms))))
+       (eval (subst newobj obj (second forms)))
+       (values
+	(length forms)
+	(eqt (class-of obj) (class-of newobj))
+	(map-slot-boundp* newobj '(a b c))
+	(map-slot-value newobj '(a c)))))
+  2 t (t nil t) ((x) 6/5))
+
+;;; If :slot-names is present, all initialized slots in the list are retained
+(deftest make-load-form-saving-slots.8
+  (let* ((obj (make-instance 'mlfss-02 :a (list 'x) :c 6/5))
+	 (forms (multiple-value-list
+		 (make-load-form-saving-slots obj :slot-names '(c)))))
+     (let ((newobj (eval (first forms))))
+       (eval (subst newobj obj (second forms)))
+       (values
+	(length forms)
+	(eqt (class-of obj) (class-of newobj))
+	(map-slot-boundp* newobj '(a b c))
+	(slot-value newobj 'c))))
+  2 t (nil nil t) 6/5)
+
+;; It takes an :environment parameter
+(deftest make-load-form-saving-slots.9
+  (let* ((obj (make-instance 'mlfss-02 :a 7 :c 64 :b 100))
+	 (forms (multiple-value-list
+		 (make-load-form-saving-slots obj :environment nil))))
+     (let ((newobj (eval (first forms))))
+       (eval (subst newobj obj (second forms)))
+       (values
+	(length forms)
+	(eqt (class-of obj) (class-of newobj))
+	(map-slot-boundp* newobj '(a b c))
+	(map-slot-value newobj '(a b c)))))
+  2 t (t t t) (7 100 64))
+
+
+;;; General error tests
+
+(deftest make-load-form-saving-slots.error.1
+  (classify-error (make-load-form-saving-slots))
+  program-error)
+
+(deftest make-load-form-saving-slots.error.2
+  (classify-error (make-load-form-saving-slots (make-instance 'mlfss-02)
+					       :slot-names))
+  program-error)
+
+(deftest make-load-form-saving-slots.error.3
+  (classify-error (make-load-form-saving-slots (make-instance 'mlfss-02)
+					       (gensym) t))
+  program-error)
