@@ -94,6 +94,10 @@
 	counting x into foo
 	collect foo)
   (1 2 2 3 3 4))
+
+(deftest loop.10.14
+  (loop for x in '(a b c) count (return 10))
+  10)
 	
 
 ;;; Tests of MAXIMIZE, MAXIMIZING
@@ -194,6 +198,10 @@
   program-error)
 
 
+(deftest loop.10.39
+  (loop for x in '(1 2 3) maximize (return 10))
+  10)
+
 ;;; Tests of MINIMIZE, MINIMIZING
 
 (deftest loop.10.40
@@ -290,6 +298,10 @@
 	 for i from 1 to 10 minimizing i into foo
 	 finally (return foo)))
   program-error)
+
+(deftest loop.10.58a
+  (loop for x in '(1 2 3) minimize (return 10))
+  10)
 
 ;;; Tests combining MINIMIZE, MAXIMIZE
 
@@ -428,3 +440,11 @@
 	sum (float (1+ i)) into bar float
 	finally (return (values foo bar)))
   10 14.0)
+
+(deftest loop.10.92
+  (loop for i from 1 to 4 sum (return 100))
+  100)
+
+(deftest loop.10.93
+  (loop for i from 1 to 4 summing (return 100))
+  100)
