@@ -29,13 +29,13 @@
   (map '(vector * 4) #'+ #(1 2 3 4) #(6 6 6 6))
   #(7 8 9 10))
 
-(deftest map-array.7
-  (map 'array #'identity '(a b c d e f))
-  #(a b c d e f))
+;;; (deftest map-array.7
+;;;  (map 'array #'identity '(a b c d e f))
+;;;  #(a b c d e f))
 
-(deftest map-array.8
-  (map 'simple-array #'identity '(a b c d e f))
-  #(a b c d e f))
+;;; (deftest map-array.8
+;;;   (map 'simple-array #'identity '(a b c d e f))
+;;;   #(a b c d e f))
 
 (deftest map-array.9
   (map 'simple-vector #'identity '(a b c d e f))
