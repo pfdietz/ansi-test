@@ -217,7 +217,11 @@ the condition to go uncaught if it cannot be classified."
   )))
 
 (defun classify-error** (form)
-  (classify-error* (eval form)))
+  (handler-bind ((warning #'(lambda (c) (declare (ignore c))
+			      (muffle-warning))))
+		(classify-error*
+		 (eval `(locally (declare (optimize (safety 3))) ,form))
+		 )))
 
 (defmacro classify-error (form)
   `(classify-error** ',form))
