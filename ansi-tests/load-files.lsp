@@ -10,4 +10,5 @@
 (load "ensure-directories-exist.lsp")
 (load "truename.lsp")
 (load "file-author.lsp")
+(load "file-write-date.lsp")
 
