@@ -9676,3 +9676,86 @@ Broken at C::WT-MAKE-CLOSURE.
 	 a)))
    99)
   332)
+
+;;; Seg fault
+
+(deftest misc.524
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -2432551 871) a))
+       (declare (type (integer -6390 -1) b))
+       (declare (ignorable b))
+       (declare (optimize (compilation-speed 0) (safety 0) (space 2) (speed 0) (debug 3)))
+       (flet ((%f18 (f18-1 f18-2 f18-3 &optional &key (key1 0) &allow-other-keys)
+		    (labels ((%f12
+			      (f12-1
+			       &optional (f12-2 0)
+			       &key (key1 (catch 'ct7 (conjugate key1))) (key2 0)
+			       &allow-other-keys)
+			      0))
+		      (%f12 a))))
+	 (%f18 a 0 0))))
+   -925293 -1603)
+  0)
+
+;;; Internal error: tried to advance stack.
+
+(deftest misc.525
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -17179869184 -2147483648) a))
+       (declare (ignorable a))
+       (declare
+	(optimize (space 2) (debug 3) (speed 3) (compilation-speed 3) (safety 1)))
+       (catch 'ct4
+	 (max (conjugate (unwind-protect 0 (catch 'ct4 (values 0))))
+	      (throw 'ct4 0)))))
+   -17179869184)
+  0)
+
+;;; integer does not specify a sequence type
+
+(deftest misc.526
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -4 3025867) a))
+       (declare (ignorable a))
+       (declare
+	(optimize (space 1) (safety 0) (debug 0) (speed 3) (compilation-speed 0)))
+       (flet ((%f14 (f14-1 f14-2 f14-3 &key)
+		    (let ((v4
+			   (return-from %f14
+			     (flet ((%f11
+				     (&optional (f11-1 0) (f11-2 0)
+						(f11-3
+						 (coerce
+						  (reduce (function (lambda (lmv2 lmv5) a))
+							  (vector f14-1 f14-1 0 f14-3 a f14-3 a f14-1
+								  0 f14-2))
+						  (quote integer)))
+						&key (key1 f14-3) (key2 a))
+				     (flet ((%f8
+					     (f8-1
+					      &optional
+					      (f8-2
+					       (flet ((%f16
+						       (f16-1 f16-2 f16-3
+							      &optional
+							      &key (key1 0)
+							      (key2 f11-3))
+						       key1))
+						 0))
+					      &key (key1 0))
+					     f14-3))
+				       0)))
+			       (if (%f11 f14-1 (%f11 0 f14-3) f14-1) 0 0)))))
+		      0)))
+	 (%f14 0 a a))))
+   857304)
+  0)
