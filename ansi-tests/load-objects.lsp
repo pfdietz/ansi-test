@@ -16,6 +16,6 @@
 (load "shared-initialize.lsp")
 (load "change-class.lsp")
 (load "update-instance-for-different-class.lsp")
-(load "slot-boundp,lsp")
+(load "slot-boundp.lsp")
 
 
