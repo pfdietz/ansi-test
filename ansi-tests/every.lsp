@@ -71,6 +71,49 @@
   (every #'(lambda (x) (eql x #\a)) "aaaaaabaaaa")
   nil)
 
+(deftest every.15
+  (classify-error (every 1 '(a b c)))
+  type-error)
+
+(deftest every.16
+  (classify-error (every #\a '(a b c)))
+  type-error)
+
+(deftest every.17
+  (classify-error (every #() '(a b c)))
+  type-error)
+
+(deftest every.18
+  (every 'null '(nil nil t nil))
+  nil)
+
+(deftest every.19
+  (not (every 'null '(nil nil nil nil)))
+  nil)
+
+(deftest every.20
+  (classify-error (every #'null 'a))
+  type-error)
+
+(deftest every.21
+  (classify-error (every #'null 100))
+  type-error)
+
+(deftest every.22
+  (classify-error (every #'null 'a))
+  type-error)
+
+(deftest every.23
+  (classify-error (every #'eq () 'a))
+  type-error)
+
+
+
+
+
+
+
+
 
 
 
