@@ -27,7 +27,7 @@
 
 (in-package :user)
 ;; (require "RT")
-(use-package :regression-tes)
+(use-package :regression-test)
 
 (defmacro setup (&rest body)
   `(do-setup '(progn ., body)))
