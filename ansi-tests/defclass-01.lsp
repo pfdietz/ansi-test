@@ -828,3 +828,68 @@
      (slot-value c 'c)
      (slot-value c 'd)))
   nil 10 26 43)
+
+;;;
+
+(declaim (special *class-28-reset-fn*
+		  *class-28-query-fn*))
+
+(let ((x 0) (y 0))
+  (flet ((%reset (a b) (setf x a y b))
+	 (%query () (list x y)))
+    (setf *class-28-reset-fn* #'%reset
+	  *class-28-query-fn* #'%query)
+    (defclass class-28 ()
+      ((s1 :initform (incf x) :initarg :s1)
+       (s2 :initarg :s2))
+      (:default-initargs :s2 (incf y)))))
+
+(deftest class-28.1
+  (let ((class (find-class 'class-28)))
+    (funcall *class-28-reset-fn* 5 10)
+    (list
+     (funcall *class-28-query-fn*)
+     (let ((obj (make-instance 'class-28)))
+       (list
+	(typep* obj 'class-28)
+	(typep* obj class)
+	(eqt (class-of obj) class)
+	(map-slot-value obj '(s1 s2))
+	(funcall *class-28-query-fn*)))))
+  ((5 10)
+   (t t t (6 11) (6 11))))
+
+(deftest class-28.2
+  (let ((class (find-class 'class-28)))
+    (funcall *class-28-reset-fn* 5 10)
+    (list
+     (funcall *class-28-query-fn*)
+     (let ((obj (make-instance 'class-28 :s1 17)))
+       (list
+	(typep* obj 'class-28)
+	(typep* obj class)
+	(eqt (class-of obj) class)
+	(map-slot-value obj '(s1 s2))
+	(funcall *class-28-query-fn*)))))
+  ((5 10)
+   (t t t (17 11) (5 11))))
+
+
+(deftest class-28.3
+  (let ((class (find-class 'class-28)))
+    (funcall *class-28-reset-fn* 5 10)
+    (list
+     (funcall *class-28-query-fn*)
+     (let ((obj (make-instance 'class-28 :s2 17)))
+       (list
+	(typep* obj 'class-28)
+	(typep* obj class)
+	(eqt (class-of obj) class)
+	(map-slot-value obj '(s1 s2))
+	(funcall *class-28-query-fn*)))))
+  ((5 10)
+   (t t t (6 17) (6 10))))
+
+
+      
+      
