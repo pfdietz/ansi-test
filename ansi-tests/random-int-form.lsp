@@ -39,7 +39,9 @@
 
 (defvar *maximum-random-int-bits* 45)
 
-(defvar *compile-unoptimized-form* #-clisp t #+clisp nil)
+(defvar *compile-unoptimized-form*
+  #-(or gcl clisp) t
+  #+(or gcl clisp) nil)
 
 (declaim (special *vars*))
 
@@ -143,6 +145,7 @@
 	`(,op ,(make-random-integer-form (1- size)))))
      (2 `(isqrt (abs ,(make-random-integer-form (- size 2)))))
 
+     #-cmu
      (2
       (destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
