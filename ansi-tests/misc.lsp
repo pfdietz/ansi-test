@@ -2804,7 +2804,7 @@
 	       ((41771 -113272 -48004 -39699 50691 -13222)
 		(multiple-value-call #'%f17 (values -1963404294 -105)))
 	       (t -7026139)))))))
-   200 -10000)
+   2000 -10000)
   -64796)
 
 (deftest misc.180
@@ -2925,4 +2925,41 @@
 	      -1))))))
    -100 1)
   1)
+
+;;; sbcl 0.8.5.40
+;;; Different results from exprs containing ROUND
+
+;;; (deftest misc.182
+;;;   (let* ((form '(labels ((%f14 (f14-1 f14-2)
+;;; 			       (labels ((%f16
+;;; 					 (f16-1 f16-2
+;;; 						&optional
+;;; 						(f16-3 (setq f14-1 (ash f14-1 (min 77 b)))))
+;;; 					 (logandc2 c -100)))
+;;; 				 (return-from %f14 (* 2 (gcd f14-1 (%f16 c f14-1)))))))
+;;; 		  (round (%f14 c c)
+;;; 			 (max 83 (%f14 (multiple-value-call #'%f14 (values 0 2)) 0)))))
+;;; 	 (fn1 `(lambda (a b c)
+;;; 		 (declare (type (integer 5628 8762) a))
+;;; 		 (declare (type (integer 778 33310188747) b))
+;;; 		 (declare (type (integer -6699 4554) c))
+;;; 		 (declare (optimize (speed 3)))
+;;; 		 (declare (optimize (safety 1)))
+;;; 		 (declare (optimize (debug 1)))
+;;; 		 ,form))
+;;; 	 (fn2 `(lambda (a b c)
+;;; 		 (declare (notinline values max round gcd * logandc2 min ash))
+;;; 		 (declare (optimize (safety 3)))
+;;; 		 (declare (optimize (speed 0)))
+;;; 		 (declare (optimize (debug 0)))
+;;; 		 ,form))
+;;; 	 (vals '(7395 1602862793 -2384))
+;;; 	 (cfn1 (compile nil fn1))
+;;; 	 (cfn2 (compile nil fn2))
+;;; 	 (result1 (multiple-value-list (apply cfn1 vals)))
+;;; 	 (result2 (multiple-value-list (apply cfn2 vals))))
+;;;     (if (equal result1 result2)
+;;; 	:good
+;;;       (values result1 result2)))
+;;;   :good)
 
