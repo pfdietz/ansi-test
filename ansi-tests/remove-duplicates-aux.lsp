@@ -19,20 +19,21 @@
     (assert (integerp start))
     (assert (integerp end))
     (assert (<= 0 start end len))
-    (format t "start = ~A, end = ~A, len = ~A~%" start end len)
+    ;; (format t "start = ~A, end = ~A, len = ~A~%" start end len)
     (if from-end
 	(psetq start (- len end)
 	       end (- len start)
 	       sequence (reverse sequence))
 	(setq sequence (copy-seq sequence)))
-    (format t "start = ~A, end = ~A, len = ~A~%" start end len)
+    ;; (format t "start = ~A, end = ~A, len = ~A~%" start end len)
     (assert (<= 0 start end len) (start end len))
     (let ((result nil))
       (loop for i from 0 below start
 	    do (push (elt sequence i) result))
       (loop for i from start below end
 	    for x = (elt sequence i)
-	    unless (position x
+	    for kx = (if key (funcall key x) x)
+	    unless (position kx
 			     sequence
 			     :start (1+ i)
 			     :end end
@@ -49,4 +50,39 @@
 		     :element-type (array-element-type orig-sequence)))
 	(t (assert nil))))))
 
+(defun make-random-rdup-params (maxlen)
+  "Make random input parameters for REMOVE-DUPLICATES."
+  (multiple-value-bind (element-type type len start end from-end
+				     count seq key test test-not)
+      (make-random-rd-params maxlen)
+    (declare (ignore count element-type))
+    (let ((arg-list
+	   (reduce #'nconc
+		   (random-permute
+		    (list
+		     (when start (list :start start))
+		     (cond (end (list :end end))
+			   ((coin) (list :end nil)))
+		     (cond (from-end (list :from-end from-end))
+			   ((coin) (list :from-end nil)))
+		     (cond (key (list :key key))
+			   ;; ((coin) (list :key nil))
+			   )
+		     (when test (list :test test))
+		     (when test-not (list :test test-not)))))))
+      (values seq arg-list))))
 
+(defun random-test-remove-dups (maxlen &optional (pure t))
+  (multiple-value-bind (seq arg-list)
+      (make-random-rdup-params maxlen)
+    (let* ((seq1 (copy-seq seq))
+	   (seq2 (copy-seq seq))
+	   (seq1r (apply (if pure #'remove-duplicates
+			   #'delete-duplicates)
+			 seq1 arg-list))
+	   (seq2r (apply #'my-remove-duplicates seq2 arg-list)))
+      (cond
+       ((and pure (not (equalp seq seq1))) :fail1)
+       ((and pure (not (equalp seq seq2))) :fail2)
+       ((not (equalp seq1r seq2r)) :fail3)
+       (t t)))))

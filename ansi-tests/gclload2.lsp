@@ -93,11 +93,9 @@
 (load "concatenate.lsp")
 (load "merge.lsp")
 (compile-and-load "remove-aux.lsp")
-(load "remove.lsp")  ;; need to extend these tests
-
-;;; Need to add tests for REMOVE-IF, REMOVE-IF-NOT, DELETE,
-;;; DELETE-IF, DELETE-IF-NOT, REMOVE-DUPLICATES, DELETE-DUPLICATES
-
+(load "remove.lsp")  ;; also related funs
+(compile-and-load "remove-duplicates-aux.lsp")
+(load "remove-duplicates.lsp")  ;; also delete-duplicates
 
 ;;; Tests of structures
 
