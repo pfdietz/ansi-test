@@ -9276,3 +9276,13 @@ Broken at C::WT-MAKE-CLOSURE.
 	-16435 2620))
   -16435)
 
+;;; Stack overflow during compilation
+
+(deftest misc.500
+  (funcall
+   (compile nil '(lambda nil
+		   (declare (optimize (space 2) (debug 2) (compilation-speed 2)
+				      (speed 1) (safety 3)))
+		   (the integer
+		     (integer-length (dotimes (iv4 2 15790955) (progn -10)))))))
+  24)
