@@ -82,6 +82,7 @@ If an error does occur, return a symbol classify the error, or allow
 the condition to go uncaught if it cannot be classified."
 `(locally (declare (optimize (safety 3)))
   (handler-case ,form
+     (undefined-function () 'undefined-function)
      (program-error () 'program-error)
      (type-error    () 'type-error))))
 

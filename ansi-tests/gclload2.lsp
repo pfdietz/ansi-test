@@ -11,8 +11,10 @@
 (load "fboundp.lsp")
 (load "flet.lsp")
 (load "fmakunbound.lsp")
+(load "funcall.lsp")
 (load "function.lsp")
 (load "functionp.lsp")
+(load "labels.lsp")
 (load "lambda-list-keywords.lsp")
 (load "macrolet.lsp")
 
