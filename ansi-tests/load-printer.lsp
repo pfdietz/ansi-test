@@ -21,3 +21,4 @@
 (load "print-vector.lsp")
 (load "print-array.lsp")
 (load "print-random-state.lsp")
+(load "print-pathname.lsp")
