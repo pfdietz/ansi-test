@@ -1196,7 +1196,7 @@
 	      nconc
 	      (let ((i (+ r (ceiling (rational x)))))
 		(unless (< x i)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.1b
@@ -1209,7 +1209,7 @@
 	      nconc
 	      (let ((i (- (floor (rational x)) r)))
 		(unless (< i x)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.2a
@@ -1222,7 +1222,7 @@
 	      nconc
 	      (let ((i (+ r (ceiling (rational x)))))
 		(unless (> i x)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.2b
@@ -1235,7 +1235,7 @@
 	      nconc
 	      (let ((i (- (floor (rational x)) r)))
 		(unless (> x i)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.3a
@@ -1248,7 +1248,7 @@
 	      nconc
 	      (let ((i (+ r (ceiling (rational x)))))
 		(when (or (= x i) (= i x))
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.3b
@@ -1261,7 +1261,7 @@
 	      nconc
 	      (let ((i (- (floor (rational x)) r)))
 		(when (or (= x i) (= i x))
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.4a
@@ -1274,7 +1274,7 @@
 	      nconc
 	      (let ((i (+ r (ceiling (rational x)))))
 		(unless (and (/= i x) (/= x i))
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.4b
@@ -1287,7 +1287,7 @@
 	      nconc
 	      (let ((i (- (floor (rational x)) r)))
 		(unless (and (/= i x) (/= x i))
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.5a
@@ -1300,7 +1300,7 @@
 	      nconc
 	      (let ((i (+ r (ceiling (rational x)))))
 		(unless (<= x i)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.5b
@@ -1313,7 +1313,7 @@
 	      nconc
 	      (let ((i (- (floor (rational x)) r)))
 		(unless (<= i x)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.6a
@@ -1326,7 +1326,7 @@
 	      nconc
 	      (let ((i (+ r (ceiling (rational x)))))
 		(unless (>= i x)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.6b
@@ -1339,7 +1339,7 @@
 	      nconc
 	      (let ((i (- (floor (rational x)) r)))
 		(unless (>= x i)
-		  (list (list x i))))))
+		  (list (list r x i))))))
   nil)
 
 (deftest bignum.float.compare.7
