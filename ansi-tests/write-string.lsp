@@ -1,0 +1,113 @@
+;-*- Mode:     Lisp -*-
+;;;; Author:   Paul Dietz
+;;;; Created:  Sun Jan 18 21:13:32 2004
+;;;; Contains: Tests of WRITE-STRING
+
+(in-package :cl-test)
+
+(deftest write-string.1
+  (let (result)
+    (values
+     (with-output-to-string
+       (*standard-output*)
+       (setq result (multiple-value-list (write-string ""))))
+     result))
+  "" (""))
+
+(deftest write-string.2
+  :notes (:nil-vectors-are-strings)
+  (let (result)
+    (values
+     (with-output-to-string
+       (*standard-output*)
+       (setq result
+	     (multiple-value-list
+	      (write-string (make-array '(0) :element-type nil)))))
+     result))
+  "" (""))
+
+(deftest write-string.3
+  (let (result)
+    (values
+     (with-output-to-string
+       (*standard-output*)
+       (setq result (multiple-value-list (write-string "abcde"))))
+     result))
+  "abcde" ("abcde"))
+
+(deftest write-string.4
+  (let (result)
+    (values
+     (with-output-to-string
+       (s)
+       (setq result (multiple-value-list (write-string "abcde" s :start 1))))
+     result))
+  "bcde" ("abcde"))
+
+(deftest write-string.5
+  (let (result)
+    (values
+     (with-output-to-string
+       (s)
+       (setq result (multiple-value-list
+		     (write-string "abcde" s :start 1 :end 3))))
+     result))
+  "bc" ("abcde"))
+
+(deftest write-string.6
+  (let (result)
+    (values
+     (with-output-to-string
+       (s)
+       (setq result (multiple-value-list
+		     (write-string "abcde" s :start 1 :end nil))))
+     result))
+  "bcde" ("abcde"))
+
+(deftest write-string.7
+  (let (result)
+    (values
+     (with-output-to-string
+       (s)
+       (setq result (multiple-value-list (write-string "abcde" s :end 3))))
+     result))
+  "abc" ("abcde"))
+
+(deftest write-string.8
+  (let (result)
+    (values
+     (with-output-to-string
+       (s)
+       (setq result (multiple-value-list
+		     (write-string "abcde" s :end 3 :allow-other-keys nil))))
+     result))
+  "abc" ("abcde"))
+
+(deftest write-string.9
+  (let (result)
+    (values
+     (with-output-to-string
+       (s)
+       (setq result
+	     (multiple-value-list
+	      (write-string "abcde" s :end 3 :allow-other-keys t :foo 'bar))))
+     result))
+  "abc" ("abcde"))
+
+(deftest write-string.10
+  (let (result)
+    (values
+     (with-output-to-string
+       (s)
+       (setq result (multiple-value-list
+		     (write-string "abcde" s :end 3 :end 2))))
+     result))
+  "abc" ("abcde"))
+
+;;; Error tests
+
+(deftest write-string.error.1
+  (signals-error (write-string) program-error)
+  t)
+
+;;; More here

@@ -20,3 +20,4 @@
 (load "unread-char.lsp")
 (load "write-char.lsp")
 (load "read-line.lsp")
+(load "write-string.lsp")
