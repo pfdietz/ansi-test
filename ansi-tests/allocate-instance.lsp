@@ -89,7 +89,6 @@
   t t t
   x 1234567890 #\Z foo)
 
-	  
-	  
-
-
+(deftest allocate-instance.error.1
+  (classify-error (allocate-instance))
+  program-error)

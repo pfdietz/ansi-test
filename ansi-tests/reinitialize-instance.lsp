@@ -69,8 +69,53 @@
   t a b)
 
 
+;;; Tests of user-defined methods
 
+(defclass reinit-class-01 ()
+  ((a :initarg :a) (b :initarg :b)))
 
+(defmethod reinitialize-instance :after ((instance reinit-class-01)
+					 &rest initargs
+					 &key (x nil x-p))
+  (declare (ignore initargs))
+  (when x-p (setf (slot-value instance 'a) x))
+  instance)
+
+(deftest reinitialize-instance.8
+  (let* ((obj (make-instance 'reinit-class-01))
+	 (obj2 (reinitialize-instance obj :a 1 :b 3)))
+    (values
+     (eqt obj obj2)
+     (map-slot-value obj2 '(a b))))
+  t (1 3))
+
+(deftest reinitialize-instance.9
+  (let* ((obj (make-instance 'reinit-class-01 :a 10 :b 20))
+	 (obj2 (reinitialize-instance obj :x 3)))
+    (values
+     (eqt obj obj2)
+     (map-slot-value obj2 '(a b))))
+  t (3 20))
+
+(deftest reinitialize-instance.10
+  (let* ((obj (make-instance 'reinit-class-01 :a 10 :b 20))
+	 (obj2 (reinitialize-instance obj :x 3 :x 100)))
+    (values
+     (eqt obj obj2)
+     (map-slot-value obj2 '(a b))))
+  t (3 20))
+
+;;; Error cases
+
+(deftest reinitialize-instance.error.1
+  (handler-case
+   (eval '(reinitialize-instance (make-instance 'class-01) :garbage t))
+   (error () :good))
+  :good)
+
+(deftest reinitialize-instance.error.2
+  (classify-error (reinitialize-instance))
+  program-error)
 
 
 
