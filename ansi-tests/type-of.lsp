@@ -98,6 +98,13 @@
     (eqt (type-of (make-instance class)) class))
   t)
 
+(deftest type-of.10
+  (let* ((class (eval '(defclass type-of.example-class-4 () ((a) (b) (c)))))
+	 (obj (make-instance class)))
+    (setf (class-name class) nil)
+    (notnot-mv (typep obj class)))
+  t)
+
 ;;; Error tests
 
 (deftest type-of.error.1
@@ -107,3 +114,4 @@
 (deftest type-of.error.2
   (signals-error (type-of nil nil) program-error)
   t)  
+
