@@ -7759,9 +7759,89 @@ Broken at C::WT-C-INLINE-LOC.
    -1648)
   -1648)
 
+;;; From abcl (cvs, 15 Sept 2004)
+;;; Inconsistent stack height
 
+(deftest misc.404
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile
+	 nil
+	 '(lambda (a b)
+	    (declare (type (integer -77007578505 7500480849) a))
+	    (declare (type (integer 211464 53140083) b))
+	    (declare (ignorable a b))
+	    (declare (optimize (compilation-speed 0) (speed 2) (debug 3)
+			       (safety 1) (space 3)))
+	    (progn (tagbody (let ((v3
+				   (cons (case a
+					   ((13 5 -9 2 -13) (go tag8))
+					   (t 0))
+					 0)))
+			      0)
+			    tag8)
+		   a)))
+	-1068524571 20786758))
+  -1068524571)
 
+(deftest misc.405
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile
+	 nil
+	 '(lambda (a b)
+	    (declare (type (integer -82196 13938) a))
+	    (declare (type (integer -44152792 -15846835) b))
+	    (declare (ignorable a b))
+	    (declare (optimize (compilation-speed 3) (safety 2) (speed 3)
+			       (space 0) (debug 0)))
+	    (block b5
+	      (let ((*s7*
+		     (cons (if (position (if (eql 0 0)
+					     (return-from b5
+					       (return-from b5
+						 (let ((*s6* (cons b a))) 0)))
+					   b)
+					 #(23)
+					 :test-not
+					 'eql)
+			       0
+			     0)
+			   b)))
+		0))))
+	-10305 -26691848))
+  0)
 
-  
+(deftest misc.406
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile
+	 nil
+	 '(lambda (a)
+	    (declare (type (integer -1 1412366903315) a))
+	    (declare (ignorable a))
+	    (declare (optimize (debug 3) (safety 3) (space 3)
+			       (compilation-speed 1) (speed 2)))
+	    (progn (tagbody (case 0 ((1 0 4) (values (go 1) 0)) (t 0))
+			    1)
+		   0)))
+	251841706892))
+  0)
 
+;;; Incorrect binding
+(deftest misc.407
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -324 175) a))
+       (declare (ignorable a))
+       (declare (optimize (safety 0) (space 0) (speed 2) (debug 0)
+			  (compilation-speed 0)))
+       (multiple-value-bind (v5) (cons (truncate 0) a) (cdr v5))))
+   -279)
+  -279)
 
