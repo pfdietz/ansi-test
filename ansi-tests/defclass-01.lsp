@@ -432,4 +432,185 @@
     (s1 c))
   t)
 
+;;; Tests of :default-initargs
 
+(defclass class-16 ()
+  ((s1 :initarg :s1))
+  (:default-initargs :s1 'x))
+
+(deftest class-16.1
+  (let ((c (make-instance 'class-16)))
+    (slot-value c 's1))
+  x)
+
+(deftest class-16.2
+  (let ((c (make-instance 'class-16 :s1 'y)))
+    (slot-value c 's1))
+  y)
+
+(deftest class-16.3
+  (let ((c (make-instance 'class-16 :s1 nil)))
+    (slot-value c 's1))
+  nil)
+
+;;;
+
+(defclass class-17 ()
+  ((s1 :initarg :s1 :initform 'foo))
+  (:default-initargs :s1 'bar))
+
+(deftest class-17.1
+  (let ((c (make-instance 'class-17)))
+    (slot-value c 's1))
+  bar)
+
+(deftest class-17.2
+  (let ((c (make-instance 'class-17 :s1 'z)))
+    (slot-value c 's1))
+  z)
+
+(deftest class-17.3
+  (let ((c (make-instance 'class-17 :s1 nil)))
+    (slot-value c 's1))
+  nil)
+
+;;;
+
+(defclass class-18 ()
+  ((s1 :initarg :s1 :initarg :s1b))
+  (:default-initargs :s1 'x :s1b 'y))
+
+(deftest class-18.1
+  (let ((c (make-instance 'class-18)))
+    (slot-value c 's1))
+  x)
+
+(deftest class-18.2
+  (let ((c (make-instance 'class-18 :s1 'z)))
+    (slot-value c 's1))
+  z)
+
+(deftest class-18.3
+  (let ((c (make-instance 'class-18 :s1 nil)))
+    (slot-value c 's1))
+  nil)
+
+(deftest class-18.4
+  (let ((c (make-instance 'class-18 :s1b 'z)))
+    (slot-value c 's1))
+  z)
+
+(deftest class-18.5
+  (let ((c (make-instance 'class-18 :s1b nil)))
+    (slot-value c 's1))
+  nil)
+
+;;;
+
+(declaim (special *class-19-s1-initvar*))
+
+(defclass class-19 ()
+  ((s1 :initarg :s1))
+  (:default-initargs :s1 (setf *class-19-s1-initvar* 'a)))
+
+(deftest class-19.1
+  (let* ((*class-19-s1-initvar* nil)
+	 (c (make-instance 'class-19)))
+    (declare (special *class-19-s1-initvar*))
+    (values
+     (slot-value c 's1)
+     *class-19-s1-initvar*))
+  a a)
+
+(deftest class-19.2
+  (let* ((*class-19-s1-initvar* nil)
+	 (c (make-instance 'class-19 :s1 nil)))
+    (declare (special *class-19-s1-initvar*))
+    (values
+     (slot-value c 's1)
+     *class-19-s1-initvar*))
+  nil nil)
+
+(deftest class-19.3
+  (let* ((*class-19-s1-initvar* nil)
+	 (c (make-instance 'class-19 :s1 'x)))
+    (declare (special *class-19-s1-initvar*))
+    (values
+     (slot-value c 's1)
+     *class-19-s1-initvar*))
+  x nil)
+
+;;;
+
+(declaim (special *class-20-s1-initvar-1* *class-20-s1-initvar-2*))
+
+(defclass class-20 ()
+  ((s1 :initarg :s1 :initarg :s1b))
+  (:default-initargs :s1 (setf *class-20-s1-initvar-1* 'a)
+		     :s1b (setf *class-20-s1-initvar-2* 'b)))
+
+(deftest class-20.1
+  (let* (*class-20-s1-initvar-1*
+	 *class-20-s1-initvar-2*
+	 (c (make-instance 'class-20)))
+    (declare (special *class-20-s1-initvar-1*
+		      *class-20-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     *class-20-s1-initvar-1*
+     *class-20-s1-initvar-2*))
+  a a b)
+
+(deftest class-20.2
+  (let* (*class-20-s1-initvar-1*
+	 *class-20-s1-initvar-2*
+	 (c (make-instance 'class-20 :s1 'x)))
+    (declare (special *class-20-s1-initvar-1*
+		      *class-20-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     *class-20-s1-initvar-1*
+     *class-20-s1-initvar-2*))
+  x nil b)
+
+(deftest class-20.3
+  (let* (*class-20-s1-initvar-1*
+	 *class-20-s1-initvar-2*
+	 (c (make-instance 'class-20 :s1b 'y)))
+    (declare (special *class-20-s1-initvar-1*
+		      *class-20-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     *class-20-s1-initvar-1*
+     *class-20-s1-initvar-2*))
+  y a nil)
+
+;;;
+
+(declaim (special *class-21-s1-initvar-1* *class-21-s1-initvar-2*))
+
+(defclass class-21 ()
+  ((s1 :initarg :s1  :initarg :s1b)
+   (s2 :initarg :s1b :initarg :s2))
+  (:default-initargs :s1 (incf *class-21-s1-initvar-1*)
+		     :s1b (incf *class-21-s1-initvar-2*)))
+
+(deftest class-21.1
+  (let* ((*class-21-s1-initvar-1* 10)
+	 (*class-21-s1-initvar-2* 20)
+	 (c (make-instance 'class-21)))
+    (declare (special *class-21-s1-initvar-1*
+		      *class-21-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)
+     *class-21-s1-initvar-1*
+     *class-21-s1-initvar-2*))
+  11 21 11 21)
+
+
+
+
+
+
+     
