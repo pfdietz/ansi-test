@@ -352,7 +352,7 @@ the condition to go uncaught if it cannot be classified."
     (cons 'list args)))  
 
 (defparameter +standard-chars+
-  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+|\\=-`{}[]:\";'<>?,./ 
+  " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+|\\=-`{}[]:\";'<>?,./
 ")
 
 (defparameter
