@@ -38,6 +38,10 @@
        (notnot (constantp s)))))
   nil t :external t t t)
 
+;;; Note that the case of a symbol inherited into KEYWORD cannot arise
+;;; standardly from user actions, since USE-PACKAGE disallows KEYWORD
+;;; as the package designated by its second argument.
+
 ;; Every keyword is external
 (deftest keyword.2
   (do-symbols (s "KEYWORD" t)
