@@ -121,7 +121,7 @@
   t)
 
 (deftest subseq-vector.9
-    (let* ((x (make-array '(1000) :initial-element 17.6e.1
+    (let* ((x (make-array '(1000) :initial-element 17.6e-1
 			  :element-type 'single-float))
 	   (lo 164)
 	   (hi 873)
@@ -129,7 +129,7 @@
       (and (eqlt (length y) (- hi lo))
 	   (equal-array y
 			(make-array (list (- hi lo))
-				    :initial-element 17.6e.1
+				    :initial-element 17.6e-1
 				    :element-type 'single-float))))
   t)
 
