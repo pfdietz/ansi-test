@@ -29,7 +29,7 @@
 	 (or ,(if ordered
 		  nil
 		`(and (not (eql (class-of obj) (find-class ',(first expected-cpl))))
-		      (progn (format t "~%Note: ~S not an instance of ~A~%"
+		      (progn (format t "~%Note: ~S not a direct instance of ~A~%"
 				     ',objform ',(first expected-cpl))
 			     t)))	       
 	     (and ,(if ordered t `(eql (first cpl) ',(first expected-cpl)))
