@@ -347,10 +347,29 @@
      (make-bar-structure :x 1 :y 'a :z nil)
      ))
 
+(defun meaningless-user-function-for-universe (x y z)
+  (list (+ x 1) (+ y 2) (+ z 3)))
+
+(defgeneric meaningless-user-generic-function-for-universe (x y z)
+  (:method ((x integer) (y integer) (z integer)) (+ x y z)))
+
+(eval-when (load)
+  (compile 'meaningless-user-function-for-universe)
+  (compile 'meaningless-user-generic-function-for-universe)
+  )
+
 (defvar *functions*
   (list #'cons #'car #'append #'values
 	(macro-function 'cond)
+	#'meaningless-user-function-for-universe
+	#'meaningless-user-generic-function-for-universe
 	#'(lambda (x) x)))
+
+(defvar *methods*
+  (list
+   ;; Add methods here
+   ))
+   
 
 (defvar *random-states*
   (list (make-random-state)))
@@ -373,6 +392,7 @@
       *structures*
       *functions*
       *random-states*
+      *methods*
       nil)))
 
 (defvar *mini-universe*
@@ -393,6 +413,7 @@
 		  *readtables*
 		  *structures*
 		  *functions*
-		  *random-states*))
+		  *random-states*
+		  *methods*))
     '(;;; Others to fill in gaps
       1.2s0 1.3f0 1.5d0 1.8l0 3/5 10000000000000000000000))))

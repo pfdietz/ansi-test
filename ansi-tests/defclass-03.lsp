@@ -202,4 +202,53 @@
     (slot-value (make-instance 'class-0308b :a 'x) 'a))
   x)
 
+;;; More class redefinition tests
 
+(deftest class-0309.1
+  (progn
+    (setf (find-class 'class-0309) nil)
+    (let* ((class1 (eval '(defclass class-0309 () ((a) (b) (c)))))
+	   (obj1 (make-instance 'class-0309)))
+      (setf (class-name class1) nil)
+      (let ((class2 (eval '(defclass class-0309 () ((a) (b) (c))))))
+	(values
+	 (eqt (class-of obj1) class1)
+	 (eqt class1 class2)
+	 (typep* obj1 class1)
+	 (typep* obj1 class2)))))
+  t nil t nil)
+
+(deftest class-0309.2
+  (progn
+    (setf (find-class 'class-0310a) nil
+	  (find-class 'class-0310b) nil)
+    (let* ((class1 (eval '(defclass class-0310a () ((a) (b) (c)))))
+	   (obj1 (make-instance 'class-0310a)))
+      (setf (class-name class1) 'class-0310b)
+      (let ((class2 (eval '(defclass class-0310a () ((a) (b) (c))))))
+	(values
+	 (eqt (class-of obj1) class1)
+	 (eqt class1 class2)
+	 (typep* obj1 class1)
+	 (typep* obj1 class2)
+	 (class-name class1)
+	 (class-name class2)))))
+  t nil t nil class-0310b class-0310a)
+
+(deftest class-0309.3
+  (progn
+    (setf (find-class 'class-0311) nil)
+    (let* ((class1 (eval '(defclass class-0311 () ((a) (b) (c)))))
+	   (obj1 (make-instance 'class-0311)))
+      (setf (find-class (class-name class1)) nil)
+      (let ((class2 (eval '(defclass class-0311 () ((a) (b) (c))))))
+	(values
+	 (eqt (class-of obj1) class1)
+	 (eqt class1 class2)
+	 (typep* obj1 class1)
+	 (typep* obj1 class2)
+	 (class-name class1)
+	 (class-name class2)
+	 (eqt (find-class 'class-0311) class1)
+	 (eqt (find-class 'class-0311) class2)))))
+  t nil t nil class-0311 class-0311 nil t)
