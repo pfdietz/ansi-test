@@ -192,24 +192,62 @@
 
 (deftest make-array.10
   (make-array-with-checks nil :initial-element 1)
-  #0A1)
+  #0a1)
 
 (deftest make-array.11
   (make-array-with-checks nil :initial-contents 2)
-  #0A2)
+  #0a2)
 
 (deftest make-array.12
   (make-array-with-checks nil :element-type 'bit :initial-contents 1)
-  #0A1)
+  #0a1)
 
 (deftest make-array.13
   (make-array-with-checks nil :element-type t :initial-contents 'a)
-  #0Aa)
+  #0aa)
 
+;;; Higher dimensional arrays
 
+(deftest make-array.14
+  (let ((a (make-array-with-checks '(2 3))))
+    (and (symbolp a) a))
+  nil)
 
+(deftest make-array.15
+  (make-array-with-checks '(2 3) :initial-element 'x)
+  #2a((x x x) (x x x)))
 
+(deftest make-array.16
+  (make-array-with-checks '(0 0))
+  #2a())
 
+(deftest make-array.17
+  (make-array-with-checks '(2 3) :initial-contents '((a b c) (d e f)))
+  #2a((a b c) (d e f)))
+
+(deftest make-array.18
+  (make-array-with-checks '(2 3) :initial-contents '(#(a b c) #(d e f)))
+  #2a((a b c) (d e f)))
+
+;;; Adjustable arrays
+
+(deftest make-array.adjustable.1
+  (let ((a (make-array-with-checks '(10) :adjustable t)))
+    (and (symbolp a) a))
+  nil)
+
+(deftest make-array.adjustable.2
+ (make-array-with-checks '(4) :adjustable t
+			 :initial-element 6)
+ #(6 6 6 6))
+
+(deftest make-array.adjustable.3
+  (make-array-with-checks nil :adjustable t :initial-element 7)
+  #0a7)
+
+(deftest make-array.adjustable.4
+  (make-array-with-checks '(2 3) :adjustable t :initial-element 7)
+  #2a((7 7 7) (7 7 7)))
 
 
 
