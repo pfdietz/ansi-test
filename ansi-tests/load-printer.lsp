@@ -22,3 +22,4 @@
 (load "print-array.lsp")
 (load "print-random-state.lsp")
 (load "print-pathname.lsp")
+(load "print-structure.lsp")
