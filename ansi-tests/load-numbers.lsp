@@ -18,3 +18,5 @@
 (load "fceiling.lsp")
 (load "truncate.lsp")
 (load "ftruncate.lsp")
+
+(load "epsilons.lsp")
