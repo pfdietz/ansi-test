@@ -356,3 +356,48 @@
 			   (packagep x)))
 	   t)
   nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; There were many failures in string comparison functions
+;;; Some are that C::WIN strange template problem, but others
+;;; are not.
+
+;;;  0 is not of type (INTEGER 0 (0))
+(deftest cmucl-type-prop.32
+  (funcall
+   (compile
+    nil
+    '(lambda (p4)
+       (declare (optimize (speed 1) (safety 1) (debug 1) (space 0))
+		(type (integer -2040 9) p4))
+       (string< "bbaa" "" :start1 p4)))
+   2)
+  nil)
+
+;;;  2 is not of type (INTEGER 0 (2))
+(deftest cmucl-type-prop.33
+  (funcall
+   (compile
+    nil
+    '(lambda (p4)
+       (declare (optimize (speed 0) (safety 0) (debug 2) (space 0))
+		(type (integer -52340 *) p4))
+       (string< "baabbb" "bb" :start2 p4)))
+   1)
+  nil)
+
+;;; Incorrect return value
+(deftest cmucl-type-prop.34
+  (funcall
+   (compile
+    nil
+    '(lambda (p1 p4)
+       (declare (optimize (speed 2) (safety 0) (debug 3) (space 0))
+		(type (simple-string) p1) (type real p4))
+       (string< (the array p1)
+		"bbbba"
+		:start1 (the (integer -16382 *) p4)
+		:end1 7)))
+   "J4sPI71C3Xn" 5)
+  5)

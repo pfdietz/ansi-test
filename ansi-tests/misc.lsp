@@ -10410,3 +10410,59 @@ Broken at C::WT-MAKE-CLOSURE.
 	     (list c1 c2)
 	     nil)))
   nil)
+
+;;; sbcl 0.8.20.19
+;;; The value 22 is not of type (MOD 22).
+
+(deftest misc.572
+  (funcall
+   (compile
+    nil
+    '(lambda (p4)
+       (declare (optimize (speed 1) (safety 2) (debug 1) (space 1))
+		(type (integer -59 65558) p4))
+       (string<= #.(coerce "1yapt1l7eeenz72u6xqhdfimcyk" 'base-string)
+		 #.(coerce "bababababbbabbabbababb" 'base-string)
+		 :start2
+		 (the (integer -3735 *) p4))))
+   22)
+  nil)
+
+;;; The value 0 is not of type NIL.
+
+(deftest misc.573
+  (funcall
+   (compile
+    nil
+    '(lambda (p4)
+       (declare (optimize (speed 2) (safety 1) (debug 2) (space 2))
+		(type unsigned-byte p4))
+       (string<= (coerce "pdhd5oeynvqlthz3xrrdycotf" 'base-string)
+		 (coerce "" 'base-string)
+		 :start1 (the (integer * 81) p4))))
+   10)
+  nil)
+
+;;; incorrect return value
+
+(deftest misc.574
+  (funcall
+   (compile
+    nil
+    '(lambda (p4)
+       (declare (optimize (speed 3) (safety 1)
+			  (debug 1) (space 2))
+		(type (integer * 397079023) p4))
+	     (string<= "e99mo7yAJ6oU4"
+		       "aaABAAbaa"
+		       :start1
+		       (the
+			   (member -34
+				   131074
+				   67108872
+				   9
+				   -3305367300
+				   335)
+			 p4))))
+   9)
+  9)
