@@ -269,3 +269,48 @@
 (deftest delete-duplicates.error.9
   (signals-error (delete-duplicates (list 'a 'b 'c) :key #'car) type-error)
   t)
+
+;;; Specialized string tests
+
+(deftest remove-duplicates.string.1
+  (do-special-strings
+   (s "abcadefabgz" nil)
+   (let ((s2 (remove-duplicates s)))
+     (assert (string= s "abcadefabgz"))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "cdefabgz"))))
+  nil)
+
+(deftest remove-duplicates.string.2
+  (do-special-strings
+   (s "abcadefabgz" nil)
+   (let ((s2 (remove-duplicates s :from-end t)))
+     (assert (string= s "abcadefabgz"))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "abcdefgz"))))
+  nil)
+
+(deftest delete-duplicates.string.1
+  (do-special-strings
+   (s "abcadefabgz" nil)
+   (let ((aet (array-element-type s))
+	 (s2 (delete-duplicates s)))
+     (assert (equal aet (array-element-type s2)))
+     (assert (string= s2 "cdefabgz"))))
+  nil)
+
+(deftest delete-duplicates.string.2
+  (do-special-strings
+   (s "abcadefabgz" nil)
+   (let ((aet (array-element-type s))
+	 (s2 (delete-duplicates s :from-end t)))
+     (assert (equal aet (array-element-type s2)))
+     (assert (string= s2 "abcdefgz"))))
+  nil)
+
+
+
+
+		    
