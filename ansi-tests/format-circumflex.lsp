@@ -198,7 +198,7 @@
 
 (deftest format.^.\:{.13
   (format nil "~:{~v,v^~A~}" '((1 2 0) (#\a #\A 1) (#\A #\A 2) (1 2 3)))
-  "03")
+  "013")
 
 (deftest format.^.\:{.14
   (format nil "~:{~'x,3^~A~}" '((1)))
@@ -499,7 +499,7 @@
 
 (deftest format.^.\:@{.13
   (format nil "~:@{~v,v^~A~}" '(1 2 0) '(#\a #\A 1) '(#\A #\A 2) '(1 2 3))
-  "03")
+  "013")
 
 (deftest format.^.\:@{.14
   (format nil "~:@{~'x,3^~A~}" '(1))
@@ -604,3 +604,95 @@
 (deftest format.^.\:@{.39
   (format nil "~:@{~v,1,v^~A~}" '(#\a nil 0))
   "0")
+
+;;; ~:^ in ~:{
+
+(deftest format.\:^.\:{.1
+  (format nil "~:{~:^~A~}"  nil)
+  "")
+
+(deftest format.\:^.\:{.2
+  (format nil "(~:{~A~:^,~})"  '((1)(2)(3)))
+  "(1,2,3)")
+
+(deftest format.\:^.\:{.3
+  (format nil "~:{~:^~A~}"  '((1)(2)(3)(4)))
+  "123")
+
+;;; arguments
+
+(deftest format.\:^.\:{.4
+  (format nil "~:{~0:^~A~}" '((1)(2)))
+  "")
+
+(deftest format.\:^.\:{.5
+  (format nil "~:{~1:^~A~}" '((1)(2)))
+  "12")
+
+(deftest format.\:^.\:{.6
+  (format nil "~:{~'X:^~A~}" '((1)(2)))
+  "12")
+
+(deftest format.\:^.\:{.7
+  (format nil "~:{~v:^~A~}" '((1 8)(2 3 4)(3 1)(0)(6 7)(8 10)))
+  "831")
+
+(deftest format.\:^.\:{.8
+  (format nil "~:{~V:^~A~}" '((#\X 1)(0 2)))
+  "1")
+
+(deftest format.\:^.\:{.9
+  (format nil "~:{~#:^~A~}" '((1)(2)(3 4)(5 6 7)()(8 9 10)))
+  "1235")
+
+(deftest format.\:^.\:{.10
+  (format nil "~:{~1,1:^~A~}" '(()(1)(2 3)))
+  "")
+
+(deftest format.\:^.\:{.11
+  (format nil "~:{~0,1:^~A~}" '((1)(2 3)))
+  "12")
+
+(deftest format.\:^.\:{.12
+  (format nil "~:{~v,1:^~A~}" '((2 3)(4 5 6)(0 2)(1 7)(9 10)))
+  "352")
+
+(deftest format.\:^.\:{.13
+  (format nil "~:{~1,V:^~A~}" '((2 3)(4 5 6)(0 2)(1 7)(9 10)))
+  "352")
+
+(deftest format.\:^.\:{.14
+  (format nil "~:{~V,v:^~A~}" '((0 1 2) (1 0 3) (4 4) () (5 6 7)))
+  "23")
+
+(deftest format.\:^.\:{.15
+  (format nil "~:{~#,1:^~A~}" '((2 3 4)(4 5)(0)(1 7)(9 10)))
+  "24")
+
+(deftest format.\:^.\:{.16
+  (format nil "~:{~1,#:^~A~}" '((2 3 4)(4 5)(0)(1 7)(9 10)))
+  "24")
+
+(deftest format.\:^.\:{.17
+  (format nil "~:{~#,#:^~A~}" '(nil))
+  "")
+
+(deftest format.\:^.\:{.18
+  (format nil "~:{~#,#:^~A~}" '((1)))
+  "")
+
+(deftest format.\:^.\:{.19
+  (format nil "~:{~#,v:^~A~}" '((1 2)(3 4)(2 5 6)(1)(2)))
+  "245")
+
+(deftest format.\:^.\:{.20
+  (format nil "~:{~V,#:^~A~}" '((0 2)(1 3 4)(1 3)()(0 7)))
+  "23")
+
+(deftest format.\:^.\:{.21
+  (format nil "~:{~'X,'Y:^~A~}" '((1)(2)))
+  "12")
+
+(deftest format.\:^.\:{.22
+  (format nil "~:{~'X,'X:^~A~}" '((1)(2)))
+  "")
