@@ -484,7 +484,7 @@ the condition to go uncaught if it cannot be classified."
        '(
 	 (null symbol)
 	 (symbol t)
-	 #-(and cmu (not sparc)) (boolean symbol)
+	 (boolean symbol)
 	 (standard-object t)
 	 (function t)
 	 (compiled-function function)
@@ -553,7 +553,7 @@ the condition to go uncaught if it cannot be classified."
 	 (sequence t)
 	 (list sequence)
 	 (null list)
-	 #-(and cmu (not sparc)) (null boolean)
+	 (null boolean)
 	 (cons list)
 	 (array t)
 	 (simple-array array)
@@ -624,6 +624,18 @@ the condition to go uncaught if it cannot be classified."
 
 (defun is-t-or-nil (e)
   (or (eqt e t) (eqt e nil)))
+
+(defun is-builtin-class (type)
+  (when (symbolp type) (setq type (find-class type nil)))
+  (typep type 'built-in-class))
+
+(defun classes-are-disjoint (c1 c2)
+  "If either c1 or c2 is a builtin class or the name of a builtin
+   class, then check for disjointness.  Return a non-NIL list
+   of failed subtypep relationships, if any."
+  (and (or (is-builtin-class c1)
+	   (is-builtin-class c2))
+       (check-disjointness c1 c2)))
 
 (declaim (special *subtype-table*))
 

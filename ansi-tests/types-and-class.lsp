@@ -103,31 +103,12 @@
 
 ;;; Check that the disjoint types really are disjoint
 
-(deftest types-7
-  (loop
-   for tp in *disjoint-types-list* sum
-   (loop for tp2 in *disjoint-types-list* count
-	 (and (not (eqt tp tp2))
-	      (subtypep* tp tp2))))
-  0)
-
-(deftest types-7a
-  (loop
-   for tp in *disjoint-types-list* sum
-   (loop for tp2 in *disjoint-types-list* count
-	 (and (not (eqt tp tp2))
-	      (multiple-value-bind (sub valid)
-		  (subtypep `(not ,tp) `(not ,tp2))
-		(and sub valid)))))
-  0)
-
 (deftest types-7b
   (loop for e on *disjoint-types-list*
 	for tp1 = (first e)
 	append
 	(loop for tp2 in (rest e)
-	      for result = (check-disjointness tp1 tp2)
-	      append result))
+	      append (classes-are-disjoint tp1 tp2)))
   nil)
 
 (deftest types-7c
@@ -135,10 +116,11 @@
 	for list1 = (first e)
 	append
 	(loop for tp1 in list1 append
-	      (loop for list2 in (rest e) append
+	      (loop for list2 in (rest e)
+		    append
 		    (loop for tp2 in list2 append
-			  (check-disjointness tp1 tp2)))))
-  nil)	
+			  (classes-are-disjoint tp1 tp2)))))
+  nil)
 
 (deftest types-8
   (loop
@@ -150,8 +132,7 @@
      t)))
   0)
 
-(declaim (special *type-list*
-		  *supertype-table*))
+(declaim (special *type-list* *supertype-table*))
 
 ;;;
 ;;; TYPES-9 checks the transitivity of SUBTYPEP on pairs of types
@@ -192,55 +173,81 @@
 	collect (list e types))
   nil)
 
+
 (deftest integer-and-ratio-are-disjoint
-  (check-disjointness 'integer 'ratio)
+  (classes-are-disjoint 'integer 'ratio)
   nil)
 
 (deftest bignum-and-ratio-are-disjoint
-  (check-disjointness 'bignum 'ratio)
+  (classes-are-disjoint 'bignum 'ratio)
   nil)
 
 (deftest bignum-and-fixnum-are-disjoint
-  (check-disjointness 'bignum 'fixnum)
+  (classes-are-disjoint 'bignum 'fixnum)
   nil)
 
 (deftest fixnum-and-ratio-are-disjoint
-  (check-disjointness 'fixnum 'ratio)
+  (classes-are-disjoint 'fixnum 'ratio)
   nil)
 
 (deftest byte8-and-ratio-are-disjoint
-  (check-disjointness '(unsigned-byte 8) 'ratio)
+  (classes-are-disjoint '(unsigned-byte 8) 'ratio)
   nil)
 
 (deftest bit-and-ratio-are-disjoint
-  (check-disjointness 'bit 'ratio)
+  (classes-are-disjoint 'bit 'ratio)
   nil)
 
 (deftest integer-and-float-are-disjoint
-  (check-disjointness 'integer 'float)
+  (classes-are-disjoint 'integer 'float)
   nil)
 
 (deftest ratio-and-float-are-disjoint
-  (check-disjointness 'ratio 'float)
+  (classes-are-disjoint 'ratio 'float)
   nil)
 
 (deftest complex-and-float-are-disjoint
-  (check-disjointness 'complex 'float)
+  (classes-are-disjoint 'complex 'float)
   nil)
 
 (deftest integer-subranges-are-disjoint
-  (check-disjointness '(integer 0 (10)) '(integer 10 (20)))
+  (classes-are-disjoint '(integer 0 (10)) '(integer 10 (20)))
   nil)
 
 (deftest keyword-and-null-are-disjoint
-  (check-disjointness 'keyword 'null)
+  (classes-are-disjoint 'keyword 'null)
   nil)
 
 (deftest keyword-and-boolean-are-disjoint
-  (check-disjointness 'keyword 'boolean)
+  (classes-are-disjoint 'keyword 'boolean)
   nil)
 
 
+;;; Check that all class names in CL that name standard-classes or
+;;; structure-classes are subtypes of standard-object and structure-object,
+;;; respectively
+
+(deftest all-standard-classes-are-subtypes-of-standard-object
+  (loop for sym being  the external-symbols of "COMMON-LISP"
+	for class = (find-class sym nil)
+	when (and class
+		  (typep class 'standard-class)
+		  (or (not (subtypep sym 'standard-object))
+		      (not (subtypep class 'standard-object))))
+	collect sym)
+  nil)
+
+(deftest all-structure-classes-are-subtypes-of-structure-object
+  (loop for sym being the external-symbols of "COMMON-LISP"
+	for class = (find-class sym nil)
+	when (and class
+		  (typep class 'structure-class)
+		  (or (not (subtypep sym 'structure-object))
+		      (not (subtypep class 'structure-object))))
+	collect sym)
+  nil)
+		  
+	
 
 
 
@@ -250,14 +257,14 @@
 
 (deftype even-array (&optional type size)
   `(and (array ,type ,size)
-       (satisfies even-size-p)))
+	(satisfies even-size-p)))
 
 (deftest deftype-1
-    (typep 1 '(even-array integer (10)))
+  (typep 1 '(even-array integer (10)))
   nil)
 
 (deftest deftype-2
-    (typep nil '(even-array t (*)))
+  (typep nil '(even-array t (*)))
   nil)
 
 (deftest deftype-3
