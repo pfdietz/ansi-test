@@ -3185,3 +3185,21 @@
    0 0 0)
   0)
 
+;;; acl 6.2 (trial, x86)
+;;; Returns incorrect value
+
+(deftest misc.192
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (optimize (speed 3)))
+       (declare (optimize (safety 1)))
+       (declare (optimize (debug 1)))
+       (flet ((%f8 (f8-1 f8-2 f8-3) f8-2))
+	 (catch 'ct6 (%f8 0 b (catch 'ct6 (throw 'ct6 a)))))))
+   1 2)
+  2)
+
+
+  
