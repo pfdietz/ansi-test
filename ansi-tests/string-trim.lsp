@@ -141,6 +141,14 @@
   (string-trim "abc" (copy-seq "abcabcabc"))
   "")
 
+(deftest string-trim.20
+  (string-trim "abcd" (make-array '(0) :element-type nil))
+  "")
+
+(deftest string-trim.21
+  (string-trim (make-array '(0) :element-type nil) "abcd")
+  "abcd")
+
 (deftest string-trim.order.1
   (let ((i 0) x y)
     (values

@@ -46,6 +46,10 @@
   (symbol-name (make-symbol ""))
   "")
 
+(deftest make-symbol.11
+  (symbol-name (make-symbol (make-array '(0) :element-type nil)))
+  "")
+
 (deftest make-symbol.order.1
   (let ((i 0))
     (values

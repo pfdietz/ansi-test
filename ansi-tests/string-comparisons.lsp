@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "string-aux.lsp")
+
 (deftest string=.1
   (not (string= "abc" (copy-seq "abc")))
   nil)
@@ -500,6 +502,152 @@
 		    (random-string-compare-test 10 cmp case 1000))))
   ((= nil 0) (= t 0) (/= nil 0) (/= t 0) (< nil 0) (< t 0)
    (> nil 0) (> t 0) (<= nil 0) (<= t 0) (>= nil 0) (>= t 0)))
+
+;;; Tests on nil arrays
+
+(deftest string=.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (notnot (string= s1 s1))
+     (notnot (string= s1 (make-array '(0) :element-type nil)))
+     (notnot (string= s1 (make-array '(0) :element-type 'base-char)))
+     (notnot (string= s1 ""))
+     (notnot (string= "" s1))
+     (string= s1 "a")
+     (string= "a" s1)))
+  t t t t t nil nil)
+
+(deftest string/=.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string/= s1 s1)
+     (string/= s1 (make-array '(0) :element-type nil))
+     (string/= s1 (make-array '(0) :element-type 'base-char))
+     (string/= s1 "")
+     (string/= "" s1)
+     (string/= s1 "a")
+     (string/= "a" s1)))
+   nil nil nil nil nil 0 0)
+
+(deftest string<.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string< s1 s1)
+     (string< s1 (make-array '(0) :element-type nil))
+     (string< s1 (make-array '(0) :element-type 'base-char))
+     (string< s1 "")
+     (string< "" s1)
+     (string< s1 "a")
+     (string< "a" s1)))
+  nil nil nil nil nil 0 nil)
+
+(deftest string<=.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string<= s1 s1)
+     (string<= s1 (make-array '(0) :element-type nil))
+     (string<= s1 (make-array '(0) :element-type 'base-char))
+     (string<= s1 "")
+     (string<= "" s1)
+     (string<= s1 "a")
+     (string<= "a" s1)))
+  0 0 0 0 0 0 nil)
+
+(deftest string>.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string> s1 s1)
+     (string> s1 (make-array '(0) :element-type nil))
+     (string> s1 (make-array '(0) :element-type 'base-char))
+     (string> s1 "")
+     (string> "" s1)
+     (string> s1 "a")
+     (string> "a" s1)))
+  nil nil nil nil nil nil 0)
+
+(deftest string>=.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string>= s1 s1)
+     (string>= s1 (make-array '(0) :element-type nil))
+     (string>= s1 (make-array '(0) :element-type 'base-char))
+     (string>= s1 "")
+     (string>= "" s1)
+     (string>= s1 "a")
+     (string>= "a" s1)))
+  0 0 0 0 0 nil 0)
+
+(deftest string-equal.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (notnot (string-equal s1 s1))
+     (notnot (string-equal s1 (make-array '(0) :element-type nil)))
+     (notnot (string-equal s1 (make-array '(0) :element-type 'base-char)))
+     (notnot (string-equal s1 ""))
+     (notnot (string-equal "" s1))
+     (string-equal s1 "a")
+     (string-equal "a" s1)))
+  t t t t t nil nil)
+
+(deftest string-not-equal.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string-not-equal s1 s1)
+     (string-not-equal s1 (make-array '(0) :element-type nil))
+     (string-not-equal s1 (make-array '(0) :element-type 'base-char))
+     (string-not-equal s1 "")
+     (string-not-equal "" s1)
+     (string-not-equal s1 "a")
+     (string-not-equal "a" s1)))
+   nil nil nil nil nil 0 0)
+
+(deftest string-lessp.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string-lessp s1 s1)
+     (string-lessp s1 (make-array '(0) :element-type nil))
+     (string-lessp s1 (make-array '(0) :element-type 'base-char))
+     (string-lessp s1 "")
+     (string-lessp "" s1)
+     (string-lessp s1 "a")
+     (string-lessp "a" s1)))
+  nil nil nil nil nil 0 nil)
+
+(deftest string-not-greaterp.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string-not-greaterp s1 s1)
+     (string-not-greaterp s1 (make-array '(0) :element-type nil))
+     (string-not-greaterp s1 (make-array '(0) :element-type 'base-char))
+     (string-not-greaterp s1 "")
+     (string-not-greaterp "" s1)
+     (string-not-greaterp s1 "a")
+     (string-not-greaterp "a" s1)))
+  0 0 0 0 0 0 nil)
+
+(deftest string-greaterp.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string-greaterp s1 s1)
+     (string-greaterp s1 (make-array '(0) :element-type nil))
+     (string-greaterp s1 (make-array '(0) :element-type 'base-char))
+     (string-greaterp s1 "")
+     (string-greaterp "" s1)
+     (string-greaterp s1 "a")
+     (string-greaterp "a" s1)))
+  nil nil nil nil nil nil 0)
+
+(deftest string-not-lessp.nil-array.1
+  (let ((s1 (make-array '(0) :element-type nil)))
+    (values
+     (string-not-lessp s1 s1)
+     (string-not-lessp s1 (make-array '(0) :element-type nil))
+     (string-not-lessp s1 (make-array '(0) :element-type 'base-char))
+     (string-not-lessp s1 "")
+     (string-not-lessp "" s1)
+     (string-not-lessp s1 "a")
+     (string-not-lessp "a" s1)))
+  0 0 0 0 0 nil 0)
 
 
 

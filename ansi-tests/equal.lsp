@@ -61,6 +61,18 @@
   (equalt (copy-seq #*000110) (copy-seq #*000111))
   nil)
 
+(deftest equal.13
+  (let ((x (make-array '(0) :element-type nil))
+	(y (make-array '(0) :element-type nil)))
+    (equalt x y))
+  t)
+
+(deftest equal.14
+  (and
+   (equalt (make-array '(0) :element-type nil) "")
+   (equalt "" (make-array '(0) :element-type nil)))
+  t)
+
 (deftest equal.order.1
   (let ((i 0) x y)
     (values

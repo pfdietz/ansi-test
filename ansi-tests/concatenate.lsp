@@ -184,6 +184,14 @@
   #*01100
   nil)
 
+(deftest concatenate.31
+  (concatenate 'string "abc" (make-array '(0) :element-type nil) "def")
+  "abcdef")
+
+(deftest concatenate.32
+  (concatenate '(array nil (*)))
+  "")
+
 (deftest concatenate.order.1
   (let ((i 0) w x y z)
     (values

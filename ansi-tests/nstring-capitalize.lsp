@@ -60,6 +60,14 @@
    ("ABCDEF" "ABCDEF" "ABCDEf")
    ("ABCDEF" "ABCDEF")))
 
+(deftest nstring-capitalize.11
+  (nstring-capitalize "")
+  "")
+
+(deftest nstring-capitalize.12
+  (nstring-capitalize (make-array '(0) :element-type nil))
+  "")
+
 (deftest nstring-capitalize.order.1
   (let ((i 0) a b c (s (copy-seq "abcdef")))
     (values

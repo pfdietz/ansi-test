@@ -27,6 +27,14 @@
   (equalpt "abc" "abd")
   nil)
 
+(deftest equalp.5
+  (equalpt (make-array '(0) :element-type nil) #())
+  t)
+
+(deftest equalp.6
+  (equalpt (make-array '(0) :element-type nil) "")
+  t)
+
 (deftest equalp.order.1
   (let ((i 0) x y)
     (values

@@ -30,7 +30,7 @@
 				 (file-write-date compile-pathname))))
     (unless (and (not force)
 		 former-data
-		 (<= (cadr former-data) source-write-time))
+		 (>= (cadr former-data) source-write-time))
       (when (or (not target-write-time)
 		(<= target-write-time source-write-time))
 	(compile-file pathname))

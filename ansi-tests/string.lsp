@@ -38,6 +38,30 @@
 			     (type-error () :caught)))
   t)
 
+(deftest string.8
+  (subtypep* '(array nil (*)) 'string)
+  t t)
+
+(deftest string.9
+  (subtypep* '(array nil 1) 'string)
+  t t)
+
+(deftest string.10
+  (string (make-array '(0) :element-type nil))
+  "")
+
+(deftest string.11
+  (typep* "abcd" 'string)
+  t)
+
+(deftest string.12
+  (typep* (make-array '(17) :element-type nil) 'string)
+  t)
+
+(deftest string.13
+  (typep* (make-array '(0) :element-type nil) 'string)
+  t)
+
 ;;; Tests of base-string
 
 (deftest base-string.1
@@ -55,6 +79,14 @@
 (deftest base-string.4
   (subtypep* 'base-string 'sequence)
   t t)
+
+(deftest base-string.5
+  (subtypep* '(array nil (*)) 'base-string)
+  nil t)
+
+(deftest base-string.6
+  (subtypep* 'string 'base-string)
+  nil t)
 
 ;;; Tests of simple-string
 
@@ -77,6 +109,38 @@
 (deftest simple-string.5
   (subtypep* 'simple-string 'sequence)
   t t)
+
+(deftest simple-string.6
+  (subtypep* 'simple-string '(simple-array * (*)))
+  t t)
+
+(deftest simple-string.7
+  (subtypep* 'simple-string '(simple-array * 1))
+  t t)
+
+(deftest simple-string.8
+  (subtypep* 'simple-string '(simple-array character (*)))
+  nil t)
+
+(deftest simple-string.9
+  (subtypep* 'simple-string '(simple-array base-char (*)))
+  nil t)
+
+(deftest simple-string.10
+  (subtypep* 'simple-string 'simple-base-string)
+  nil t)
+
+(deftest simple-string.11
+  (subtypep* '(simple-array nil (*)) 'simple-string)
+  t t)
+
+(deftest simple-string.12
+  (typep* (make-array '(0) :element-type nil) 'simple-string)
+  t)
+
+(deftest simple-string.13
+  (typep* (make-array '(12) :element-type nil) 'simple-string)
+  t)
 
 ;;; Tests for simple-base-string
 
@@ -112,6 +176,18 @@
   (subtypep* 'simple-base-string 'simple-vector)
   nil t)
 
+(deftest simple-base-string.9
+  (subtypep* '(simple-array nil (*)) 'simple-base-string)
+  nil t)
+
+(deftest simple-base-string.10
+  (typep* (make-array '(0) :element-type nil) 'simple-base-string)
+  nil)
+
+(deftest simple-base-string.11
+  (typep* (make-array '(12) :element-type nil) 'simple-base-string)
+  nil)
+
 ;;; Tests for simple-string-p
 
 (deftest simple-string-p.1
@@ -122,7 +198,7 @@
   t)
 
 (deftest simple-string-p.2
-  (notnot (simple-string-p "ancd"))
+  (notnot-mv (simple-string-p "ancd"))
   t)
 
 (deftest simple-string-p.3
@@ -136,15 +212,17 @@
   nil)
 
 (deftest simple-string-p.5
-  (notnot (simple-string-p (make-array
-			    4 :element-type 'base-char
-			    :initial-contents '(#\a #\a #\a #\b))))
+  (notnot-mv
+   (simple-string-p (make-array
+		     4 :element-type 'base-char
+		     :initial-contents '(#\a #\a #\a #\b))))
   t)
 
 (deftest simple-string-p.6
-  (notnot (simple-string-p (make-array
-			    4 :element-type 'standard-char
-			    :initial-contents '(#\a #\a #\a #\b))))
+  (notnot-mv
+   (simple-string-p (make-array
+		     4 :element-type 'standard-char
+		     :initial-contents '(#\a #\a #\a #\b))))
   t)
 
 (deftest simple-string-p.7
@@ -155,6 +233,14 @@
 			 :displaced-index-offset 2)))
     (simple-string-p s2))
   nil)
+
+(deftest simple-string-p.8
+  (notnot-mv (simple-string-p (make-array '(0) :element-type nil)))
+  t)
+
+(deftest simple-string-p.9
+  (notnot-mv (simple-string-p (make-array '(37) :element-type nil)))
+  t)
 
 ;;; Tests of stringp
 
@@ -199,4 +285,12 @@
 			 :displaced-to s
 			 :displaced-index-offset 2)))
     (notnot (stringp s2)))
+  t)
+
+(deftest stringp.9
+  (notnot-mv (stringp (make-array '(0) :element-type nil)))
+  t)
+
+(deftest stringp.10
+  (notnot-mv (stringp (make-array '(37) :element-type nil)))
   t)

@@ -80,6 +80,10 @@
    ("abcde" "abcdE"))
   "abcde")
 
+(deftest string-upcase.11
+  (string-upcase (make-array '(0) :element-type nil))
+  "")
+
 (deftest string-upcase.order.1
   (let ((i 0) a b c (s (copy-seq "abcdef")))
     (values

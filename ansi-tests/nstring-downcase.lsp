@@ -67,6 +67,10 @@
    ("abcde" "abcDe" "abcDE")
    ("abcde" "abcdE")))
 
+(deftest nstring-downcase.11
+  (nstring-downcase (make-array '(0) :element-type nil))
+  "")
+
 (deftest nstring-downcase.order.1
   (let ((i 0) a b c (s (copy-seq "ABCDEF")))
     (values

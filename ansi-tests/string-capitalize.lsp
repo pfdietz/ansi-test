@@ -84,6 +84,10 @@
    ("ABCDEF" "ABCDEF"))
   "ABCDEF")
 
+(deftest string-capitalize.11
+  (string-capitalize (make-array '(0) :element-type nil))
+  "")
+
 (deftest string-capitalize.order.1
   (let ((i 0) a b c (s (copy-seq "abcdef")))
     (values

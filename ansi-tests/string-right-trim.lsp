@@ -141,6 +141,14 @@
   (string-right-trim "abc" (copy-seq "abcabcabc"))
   "")
 
+(deftest string-right-trim.20
+  (string-right-trim "abcd" (make-array '(0) :element-type nil))
+  "")
+
+(deftest string-right-trim.21
+  (string-right-trim (make-array '(0) :element-type nil) "abcd")
+  "abcd")
+
 (deftest string-right-trim.order.1
   (let ((i 0) x y)
     (values
