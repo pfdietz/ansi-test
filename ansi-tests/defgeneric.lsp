@@ -41,7 +41,8 @@
   nil)
 
 (deftest defgeneric.error.4
-  (classify-error (defgeneric defgeneric-error-fn.4 (x x)))
+  (classify-error (defgeneric defgeneric-error-fn.4 (x y)
+		    (:argument-precedence-order x y x)))
   program-error)
 
 (deftest defgeneric.error.5
@@ -64,4 +65,7 @@
    (error () :good))
   :good)
 
-   
+(deftest defgeneric.error.8
+  (classify-error (defgeneric defgeneric-error-fn.8 (x y)
+		    (:argument-precedence-order x)))
+  program-error)
