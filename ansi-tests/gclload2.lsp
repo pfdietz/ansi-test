@@ -30,6 +30,7 @@
 (load "let.lsp")
 (load "macrolet.lsp")
 (load "progv.lsp")
+(load "tagbody.lsp")
 
 
 ;;; Tests of conses
