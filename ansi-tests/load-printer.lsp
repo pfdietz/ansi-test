@@ -19,3 +19,4 @@
 (load "print-cons.lsp")
 (load "print-bit-vector.lsp")
 (load "print-vector.lsp")
+(load "print-array.lsp")
