@@ -2084,3 +2084,17 @@
                          (multiple-value-call #'%f9 (values v2 v2))))
                    100)))))
   100)
+
+;;; gcl (9 Nov 2003) bug
+;;; Error in FUNCALL [or a callee]: Caught fatal error [memory may be damaged]
+
+(deftest misc.160
+  (funcall
+   (compile nil
+	    '(lambda (c)
+	       (declare (notinline + funcall))
+	       (+ (labels ((%f1 () -14)) (funcall #'%f1))
+		  (flet ((%f2 () (floor c))) (funcall #'%f2)))))
+   0)
+  -14)
+
