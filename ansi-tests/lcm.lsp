@@ -70,7 +70,7 @@
 	for n = (random-fixnum)
 	repeat 1000
 	unless (eql (my-lcm (my-lcm i j) (my-lcm k n)) (lcm i j k n))
-	collect (list i j k))
+	collect (list i j k n))
   nil)
 
 (deftest lcm.8
