@@ -7845,3 +7845,25 @@ Broken at C::WT-C-INLINE-LOC.
    -279)
   -279)
 
+;;; Stack size too large
+
+(deftest misc.408
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile
+	 nil
+	 '(lambda (a)
+	    (declare (type (integer 0 0) a))
+	    (declare (ignorable a))
+	    (declare (optimize (compilation-speed 0) (safety 3) (speed 0)
+			       (debug 1) (space 0)))
+	    (progn (tagbody (dotimes (iv4 0
+					  (let ((v5 (cons 0 (if (go 3) 0 0)))) 0))
+			      (progn 0))
+			    3)
+		   (ash 0 (min 16 0)))))
+	0))
+  0)
+
+
