@@ -93,14 +93,36 @@
 		    (read-from-string (concatenate 'string (list c #\Z c)))
 		    (error (c) c))
 		   (handler-case
-		    (read-from-string (concatenate 'string (list c #\Z #\|)))
+		    (read-from-string (concatenate 'string (list c #\z #\|)))
 		    (error (c) c))
 		   (handler-case
 		    (read-from-string (concatenate 'string (list #\| #\Z c)))
 		    (error (c) c)))))
-	     (unless (or (eql c #\Z) (equal results '(t |Z| |Z| |Z|)))
+	     (unless (or (eql c #\Z) (eql c #\z) (equal results '(t |Z| |z| |Z|)))
 	       (list c results))))))
   nil)
 
-
-		
+(deftest set-syntax-from-char.semicolon
+  (loop for c across +standard-chars+
+	nconc
+	(with-standard-io-syntax
+	 (let ((*readtable* (copy-readtable nil))
+	       (*package* (find-package "CL-TEST"))
+	       (expected (if (eql c #\0) '1 '0))
+	       (c2 (if (eql c #\0) #\1 #\0)))
+	   (let ((results
+		  (list
+		   (set-syntax-from-char c #\;)
+		   (handler-case
+		    (read-from-string (concatenate 'string (list c2 c #\2)))
+		    (error (c) c))
+		   (handler-case
+		    (read-from-string (concatenate 'string (list c2 c #\2 #\Newline #\3)))
+		    (error (c) c))
+		   (handler-case
+		    (read-from-string (concatenate 'string (list c #\2 #\Newline c2)))
+		    (error (c) c)))))
+	     (unless (equal results (list t expected expected expected))
+	       (list c results))))))
+  nil)
+		   
