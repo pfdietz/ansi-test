@@ -7418,3 +7418,21 @@ Broken at C::WT-C-INLINE-LOC.
 	 (boole boole-orc2 b (let ((*s3* (%f12 0))) -14)))))
    -173 1028908375 1289968133290)
   1028908383)
+
+;;; sbcl 0.8.14.14
+;;; "The value NIL is not of type SB-C::LVAR"
+
+(deftest misc.391
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (optimize (speed 2) (space 0) (safety 0)
+			  (debug 1) (compilation-speed 3)))
+       (let* ((v5 (cons b b)))
+	 (declare (dynamic-extent v5))
+	 a)))
+   'x 'y)
+  x)
+
+
