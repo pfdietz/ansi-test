@@ -164,6 +164,17 @@
 (load "vectorp.lsp")
 (load "bit.lsp")
 (load "sbit.lsp")
+(load "bit-and.lsp")
+(load "bit-andc1.lsp")
+(load "bit-andc2.lsp")
+(load "bit-eqv.lsp")
+(load "bit-ior.lsp")
+(load "bit-nand.lsp")
+(load "bit-nor.lsp")
+(load "bit-orc1.lsp")
+(load "bit-orc2.lsp")
+(load "bit-xor.lsp")
+(load "bit-not.lsp")
 
 ;;; Tests of packages
 
