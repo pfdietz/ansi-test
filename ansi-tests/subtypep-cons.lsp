@@ -88,3 +88,25 @@
      (cons (integer 3 (6)) (integer 3 (6))))
    '(cons (integer 0 (9)) (integer 0 (9))))
   nil)
+
+(deftest subtypep.cons.10
+  (check-equivalence
+   '(or
+     (cons (rational 0 (3)) (rational 0 (6)))
+     (cons (rational 3 (9)) (rational 0 (3)))
+     (cons (rational 0 (6)) (rational 6 (9)))
+     (cons (rational 6 (9)) (rational 3 (9)))
+     (cons (rational 3 (6)) (rational 3 (6))))
+   '(cons (rational 0 (9)) (rational 0 (9))))
+  nil)
+
+(deftest subtypep.cons.11
+  (check-equivalence
+   '(or
+     (cons (real 0 (3)) (real 0 (6)))
+     (cons (real 3 (9)) (real 0 (3)))
+     (cons (real 0 (6)) (real 6 (9)))
+     (cons (real 6 (9)) (real 3 (9)))
+     (cons (real 3 (6)) (real 3 (6))))
+   '(cons (real 0 (9)) (real 0 (9))))
+  nil)

@@ -162,3 +162,12 @@
   (check-equivalence '(and integer (rational (-1/2) (1/2)))
 		     '(integer 0 0))
   nil)
+
+(deftest subtypep.rational.17
+  (subtypep*-or-fail '(not (rational -1/2 1/2)) '(not (integer 0 0)))
+  t)
+
+(deftest subtypep.rational.18
+  (subtypep*-or-fail '(not (rational -1/2 1/2)) '(not (eql 0)))
+  t)
+
