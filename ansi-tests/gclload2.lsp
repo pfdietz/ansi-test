@@ -71,6 +71,7 @@
 (load "features.lsp")
 (load "disassemble.lsp")
 (load "environment-functions.lsp")
+(load "user-homedir-pathname.lsp")
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
