@@ -102,11 +102,56 @@
   program-error)
 
 
-    
+;;; Definition of a (setf ...) function
 
+(deftest flet.17
+  (flet (((setf %f) (x y) (setf (car x) y)))
+    (let ((z (list 1 2)))
+      (setf (%f z) 'a)
+      z))
+  (a 2))
 
+;;; Body is an implicit progn
+(deftest flet.18
+  (flet ((%f (x) (incf x) (+ x x)))
+    (%f 10))
+  22)
 
+;;; Can handle at least 50 lambda parameters
+(deftest flet.19
+  (flet ((%f (a1 a2 a3 a4 a5 a6 a7 a8 a9 a10
+	      b1 b2 b3 b4 b5 b6 b7 b8 b9 b10
+	      c1 c2 c3 c4 c5 c6 c7 c8 c9 c10
+	      d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
+	      e1 e2 e3 e4 e5 e6 e7 e8 e9 e10)
+	     (+ a1 a2 a3 a4 a5 a6 a7 a8 a9 a10
+		b1 b2 b3 b4 b5 b6 b7 b8 b9 b10
+		c1 c2 c3 c4 c5 c6 c7 c8 c9 c10
+		d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
+		e1 e2 e3 e4 e5 e6 e7 e8 e9 e10)))
+    (%f 1 2 3 4 5 6 7 8 9 10
+	11 12 13 14 15 16 17 18 19 20
+	21 22 23 24 25 26 27 28 29 30
+	31 32 33 34 35 36 37 38 39 40
+	41 42 43 44 45 46 47 48 49 50))
+  1275)
 
+;;; flet works with a large (maximal?) number of arguments
+(deftest flet.20
+  (let* ((n (min lambda-parameters-limit 1024))
+	 (vars (loop for i from 1 to n collect (gensym))))
+    (eval
+     `(eql ,n
+	   (flet ((%f ,vars (+ ,@ vars)))
+	     (%f ,@(loop for e in vars collect 1))))))
+  t)
 
-
-
+;;; Declarations and documentation strings are ok
+(deftest flet.21
+  (flet ((%f (x)
+	     (declare (type fixnum x))
+	     "Add one to the fixnum x."
+	     (1+ x)))
+    (declare (ftype (fixnum) integer))
+    (%f 10))
+  11)

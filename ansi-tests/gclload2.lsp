@@ -14,6 +14,7 @@
 (load "function.lsp")
 (load "functionp.lsp")
 (load "lambda-list-keywords.lsp")
+(load "macrolet.lsp")
 
 ;;; Tests of conses
 
@@ -125,5 +126,3 @@
 (compile-and-load "char-aux.lsp")
 (load "character.lsp")
 (load "char-compare.lsp")
-
-
