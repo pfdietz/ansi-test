@@ -42,15 +42,16 @@
       (let ((*print-pretty* t)
 	    (*print-readably* nil)
 	    (*print-right-margin* ,margin)
+	    (*package* (find-package "CL-TEST"))
 	    (*print-circle* ,circle))
 	(with-output-to-string
 	  (s)
 	  (pprint-linear s ,@args))))
      ,expected-value))
 
-(def-pprint-linear-test pprint-linear.3 ('(cl-user::|A|)) "(A)")
-(def-pprint-linear-test pprint-linear.4 ('(cl-user::|A|) t) "(A)")
-(def-pprint-linear-test pprint-linear.5 ('(cl-user::|A|) nil) "A")
+(def-pprint-linear-test pprint-linear.3 ('(|A|)) "(A)")
+(def-pprint-linear-test pprint-linear.4 ('(|A|) t) "(A)")
+(def-pprint-linear-test pprint-linear.5 ('(|A|) nil) "A")
 (def-pprint-linear-test pprint-linear.6 ('(1 2 3 4 5)) "(1 2 3 4 5)")
 (def-pprint-linear-test pprint-linear.7 ('((1) (2) #(3) "abc" 5) nil) "(1) (2) #(3) \"abc\" 5")
 
@@ -65,7 +66,10 @@
    (let ((*print-pretty* nil)
 	 (*print-readably* nil)
 	 (*print-right-margin* 100))
-     (with-output-to-string (*terminal-io*) (pprint-linear t '(1 2 3)))))
+     (with-output-to-string
+       (os)
+       (with-open-stream (*terminal-io* (make-two-way-stream (make-string-input-stream "") os))
+			 (pprint-linear t '(1 2 3))))))
   "(1 2 3)")
 
 (deftest pprint-linear.11
@@ -126,7 +130,7 @@
   nil)
 
 ;;; 
-(def-pprint-linear-test pprint-linear.14 ((let ((x (list 'CL-USER::|A|))) (list x x)))
+(def-pprint-linear-test pprint-linear.14 ((let ((x (list '|A|))) (list x x)))
   "(#1=(A) #1#)" :circle t)
 
 ;;; Error tests

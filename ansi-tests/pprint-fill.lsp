@@ -61,7 +61,10 @@
    (let ((*print-pretty* nil)
 	 (*print-readably* nil)
 	 (*print-right-margin* 100))
-     (with-output-to-string (*terminal-io*) (pprint-fill t '(1 2 3)))))
+     (with-output-to-string
+       (os)
+       (with-open-stream (*terminal-io* (make-two-way-stream (make-string-input-stream "") os))
+			 (pprint-fill t '(1 2 3))))))
   "(1 2 3)")
 
 (deftest pprint-fill.11

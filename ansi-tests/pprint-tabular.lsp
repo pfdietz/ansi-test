@@ -91,6 +91,26 @@
       3)"
   :pre (write "     " :stream s :escape nil) :margin 10)
 
+;;; Takes T, NIL as stream designators
+
+(deftest pprint-tabular.23
+  (my-with-standard-io-syntax
+   (let ((*print-pretty* nil)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100))
+     (with-output-to-string
+       (os)
+       (with-open-stream (*terminal-io* (make-two-way-stream (make-string-input-stream "") os))
+			 (pprint-tabular t '(1 2 3) t nil 1)))))
+  "(1 2 3)")
+
+(deftest pprint-tabular.24
+  (my-with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100))
+     (with-output-to-string (*standard-output*) (pprint-tabular nil '(1 2 3) t nil 1))))
+  "(1 2 3)")
 
 ;;; Test that pprint-tabular returns NIL
 
@@ -109,3 +129,21 @@
      (with-open-stream (s (make-broadcast-stream))
 		       (pprint-tabular s 10 nil nil 100))))
   nil)
+
+;;; Error tests
+
+(deftest pprint-tabular.error.1
+  (signals-error (pprint-tabular) program-error)
+  t)
+
+(deftest pprint-tabular.error.2
+  (signals-error (pprint-tabular *standard-output*) program-error)
+  t)
+
+(deftest pprint-tabular.error.3
+  (signals-error (pprint-tabular *standard-output* nil t nil 1 nil) program-error)
+  t)
+
+(deftest pprint-tabular.error.4
+  (signals-error (pprint-tabular *standard-output* '(a b c) t t 1 nil) program-error)
+  t)
