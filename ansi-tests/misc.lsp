@@ -10093,3 +10093,41 @@ Broken at C::WT-MAKE-CLOSURE.
        (typep (the (eql :c1) p1) (type-of "b"))))
    :c1)
   nil)
+
+;;; The value NIL is not of type SB-KERNEL:CTYPE.
+
+(deftest misc.548
+  (notnot
+   (funcall
+    (compile
+     nil
+     '(lambda (p1)
+	(declare (optimize (speed 2) (safety 1) (debug 3) (space 2)))
+	(atom (the (member f assoc-if write-line t w) p1))))
+    t))
+  t)
+
+;;; IR2 type checking of unused values in not implemented. 
+
+(deftest misc.549
+  (funcall
+   (compile
+    nil
+    '(lambda (p2)
+       (declare (optimize (speed 1) (safety 1) (debug 0) (space 3))
+		(type symbol p2))
+       (and :a (the (eql t) p2))))
+   t)
+  :a)
+
+(deftest misc.550
+  (funcall
+   (compile
+    nil
+    '(lambda (p1 p2)
+       (declare (optimize (speed 3) (safety 2) (debug 3) (space 3))
+		(type atom p1)
+		(type symbol p2))
+       (or p1 (the (eql t) p2))))
+   nil t)
+  t)
