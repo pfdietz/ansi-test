@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "pathnames-aux.lsp")
+
 (deftest pathname-version.1
   (loop for p in *pathnames*
 	for version = (pathname-version p)
@@ -17,6 +19,10 @@
   (loop for p in *logical-pathnames*
 	when (eq (pathname-version p) :unspecific)
 	collect p)
+  nil)
+
+(deftest pathname-version.3
+  (do-special-strings (s "" nil) (pathname-version s))
   nil)
 
 (deftest pathname-version.error.1

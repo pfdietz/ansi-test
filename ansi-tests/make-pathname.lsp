@@ -52,9 +52,21 @@
   (make-pathname-test :name "foo")
   t)
 
+(deftest make-pathname.2a
+  (do-special-strings
+   (s "foo")
+   (assert (make-pathname-test :name s)))
+  nil)
+
 (deftest make-pathname.3
   (make-pathname-test :name "foo" :type "txt")
   t)
+
+(deftest make-pathname.3a
+  (do-special-strings
+   (s "txt")
+   (assert (make-pathname-test :name "foo" :type s)))
+  nil)
 
 (deftest make-pathname.4
   (make-pathname-test :type "lsp")

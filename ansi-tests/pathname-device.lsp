@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "pathnames-aux.lsp")
+
 (deftest pathname-device.1
   (loop for p in *pathnames*
 	for device = (pathname-device p)
@@ -58,6 +60,10 @@
   (loop for p in *logical-pathnames*
 	always (eq (pathname-device p) :unspecific))
   t)
+
+(deftest pathname-device.8
+  (do-special-strings (s "" nil) (pathname-device s))
+  nil)
 
 (deftest pathname-device.error.1
   (signals-error (pathname-device) program-error)

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "pathnames-aux.lsp")
+
 (deftest pathname-type.1
   (loop for p in *pathnames*
 	for type = (pathname-type p)
@@ -58,6 +60,10 @@
   (loop for p in *logical-pathnames*
 	when (eq (pathname-type p) :unspecific)
 	collect p)
+  nil)
+
+(deftest pathname-type.8
+  (do-special-strings (s "" nil) (pathname-type s))
   nil)
 
 (deftest pathname-type.error.1
