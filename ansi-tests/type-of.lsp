@@ -101,9 +101,9 @@
 ;;; Error tests
 
 (deftest type-of.error.1
-  (classify-error (type-of))
-  program-error)
+  (signals-error (type-of) program-error)
+  t)
 
 (deftest type-of.error.2
-  (classify-error (type-of nil nil))
-  program-error)  
+  (signals-error (type-of nil nil) program-error)
+  t)  

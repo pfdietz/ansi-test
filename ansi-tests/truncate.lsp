@@ -9,12 +9,12 @@
 (compile-and-load "truncate-aux.lsp")
 
 (deftest truncate.error.1
-  (classify-error (truncate))
-  program-error)
+  (signals-error (truncate) program-error)
+  t)
 
 (deftest truncate.error.2
-  (classify-error (truncate 1.0 1 nil))
-  program-error)
+  (signals-error (truncate 1.0 1 nil) program-error)
+  t)
 
 ;;;
 

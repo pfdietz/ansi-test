@@ -72,31 +72,31 @@
 ;;;
 
 (deftest truename.error.1
-  (classify-error (truename))
-  program-error)
+  (signals-error (truename) program-error)
+  t)
 
 (deftest truename.error.2
-  (classify-error (truename "truename.lsp" nil))
-  program-error)
+  (signals-error (truename "truename.lsp" nil) program-error)
+  t)
 
 (deftest truename.error.3
-  (classify-error (truename "nonexistent"))
-  file-error)
+  (signals-error (truename "nonexistent") file-error)
+  t)
 
 (deftest truename.error.4
-  (classify-error (truename #p"nonexistent"))
-  file-error)
+  (signals-error (truename #p"nonexistent") file-error)
+  t)
 
 (deftest truename.error.5
-  (classify-error (truename (logical-pathname "CLTESTROOT:nonexistent")))
-  file-error)
+  (signals-error (truename (logical-pathname "CLTESTROOT:nonexistent")) file-error)
+  t)
 
 (deftest truename.error.6
-  (classify-error
+  (signals-error
    (let ((pn (make-pathname :name :wild
 			    :defaults *default-pathname-defaults*)))
-     (truename pn)))
-  file-error)
+     (truename pn)) file-error)
+  t)
 
 
 

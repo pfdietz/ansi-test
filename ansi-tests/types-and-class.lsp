@@ -283,41 +283,42 @@
 
 ;;; Error checking of type-related functions
 
-
-
 (deftest typep.error.1
-  (classify-error (typep))
-  program-error)
+  (signals-error (typep) program-error)
+  t)
 
 (deftest typep.error.2
-  (classify-error (typep nil))
-  program-error)
+  (signals-error (typep nil) program-error)
+  t)
 
 (deftest typep.error.3
-  (classify-error (typep nil t nil nil))
-  program-error)
+  (signals-error (typep nil t nil nil) program-error)
+  t)
 
 (deftest type-error-datum.error.1
-  (classify-error (type-error-datum))
-  program-error)
+  (signals-error (type-error-datum) program-error)
+  t)
 
 (deftest type-error-datum.error.2
-  (classify-error
+  (signals-error
    (let ((c (make-condition 'type-error :datum nil
 			    :expected-type t)))
-     (type-error-datum c nil)))
-  program-error)
+     (type-error-datum c nil))
+   program-error)
+  t)
 
 (deftest type-error-expected-type.error.1
-  (classify-error (type-error-expected-type))
-  program-error)
+  (signals-error (type-error-expected-type)
+		 program-error)
+  t)
 
 (deftest type-error-expected-type.error.2
-  (classify-error
+  (signals-error
    (let ((c (make-condition 'type-error :datum nil
 			    :expected-type t)))
-     (type-error-expected-type c nil)))
-  program-error)
+     (type-error-expected-type c nil))
+   program-error)
+  t)
 
 ;;; Tests of env arguments to typep
 

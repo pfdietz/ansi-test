@@ -307,13 +307,13 @@
   t)
 
 (deftest vector-push.error.14
-  (classify-error (vector-push))
-  program-error)
+  (signals-error (vector-push) program-error)
+  t)
 
 (deftest vector-push.error.15
-  (classify-error (vector-push (vector 1 2 3)))
-  program-error)
+  (signals-error (vector-push (vector 1 2 3)) program-error)
+  t)
 
 (deftest vector-push.error.16
-  (classify-error (vector-push (vector 1 2 3) 4 nil))
-  program-error)
+  (signals-error (vector-push (vector 1 2 3) 4 nil) program-error)
+  t)

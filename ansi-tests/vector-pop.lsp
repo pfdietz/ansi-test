@@ -19,8 +19,8 @@
 ;;; Error cases
 
 (deftest vector-pop.error.1
-  (classify-error (vector-pop (vector 1 2 3)))
-  type-error)
+  (signals-error (vector-pop (vector 1 2 3)) type-error)
+  t)
 
 (deftest vector-pop.error.2
   (let ((v (make-array '(5) :initial-element 'x
@@ -30,15 +30,16 @@
   error)
 
 (deftest vector-pop.error.3
-  (classify-error (vector-pop))
-  program-error)
+  (signals-error (vector-pop) program-error)
+  t)
 
 (deftest vector-pop.error.4
-  (classify-error (let ((v (make-array '(5) :fill-pointer t
+  (signals-error (let ((v (make-array '(5) :fill-pointer t
 				       :initial-element 'x)))
-		    (vector-pop v nil)))
-  program-error)
+		    (vector-pop v nil))
+		 program-error)
+  t)
 
 (deftest vector-pop.error.5
-  (classify-error (locally (vector-pop (vector 1 2 3)) t))
-  type-error)
+  (signals-error (locally (vector-pop (vector 1 2 3)) t) type-error)
+  t)

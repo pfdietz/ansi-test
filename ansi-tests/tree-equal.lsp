@@ -114,25 +114,25 @@
 ;;; Error tests
 
 (deftest tree-equal.error.1
-  (classify-error (tree-equal))
-  program-error)
+  (signals-error (tree-equal) program-error)
+  t)
 
 (deftest tree-equal.error.2
-  (classify-error (tree-equal '(a b)))
-  program-error)
+  (signals-error (tree-equal '(a b)) program-error)
+  t)
 
 (deftest tree-equal.error.3
-  (classify-error (tree-equal '(a b) '(a b) (gensym) t))
-  program-error)
+  (signals-error (tree-equal '(a b) '(a b) (gensym) t) program-error)
+  t)
 
 (deftest tree-equal.error.4
-  (classify-error (tree-equal '(a b) '(a b) (gensym) t :allow-other-keys nil))
-  program-error)
+  (signals-error (tree-equal '(a b) '(a b) (gensym) t :allow-other-keys nil) program-error)
+  t)
 
 (deftest tree-equal.error.5
-  (classify-error (tree-equal '(a b) '(a b) :test #'identity))
-  program-error)
+  (signals-error (tree-equal '(a b) '(a b) :test #'identity) program-error)
+  t)
 
 (deftest tree-equal.error.6
-  (classify-error (tree-equal '(a b) '(a b) :test #'(lambda (x y z) (eq x y))))
-  program-error)
+  (signals-error (tree-equal '(a b) '(a b) :test #'(lambda (x y z) (eq x y))) program-error)
+  t)

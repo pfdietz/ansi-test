@@ -46,21 +46,20 @@
      (return-from done 'good)))
   good)
 
-
-;;; (deftest when.error.1
-;;;  (classify-error (when))
-;;;  program-error)
+;;; Error tests
 
 (deftest when.error.1
-  (classify-error (funcall (macro-function 'when)))
-  program-error)
+  (signals-error (funcall (macro-function 'when)) program-error)
+  t)
 
 (deftest when.error.2
-  (classify-error (funcall (macro-function 'when)
-			   '(when t)))
-  program-error)
+  (signals-error (funcall (macro-function 'when)
+			   '(when t))
+		 program-error)
+  t)
 
 (deftest when.error.3
-  (classify-error (funcall (macro-function 'when)
-			   '(when t) nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'when)
+			   '(when t) nil nil)
+		 program-error)
+  t)

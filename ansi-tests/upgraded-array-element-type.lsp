@@ -118,9 +118,9 @@
 ;;; Error tests
 
 (deftest upgraded-array-element-type.error.1
-  (classify-error (upgraded-array-element-type))
-  program-error)
+  (signals-error (upgraded-array-element-type) program-error)
+  t)
 
 (deftest upgraded-array-element-type.error.2
-  (classify-error (upgraded-array-element-type 'bit nil nil))
-  program-error)
+  (signals-error (upgraded-array-element-type 'bit nil nil) program-error)
+  t)

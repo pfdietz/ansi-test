@@ -68,12 +68,12 @@
 ;;; Error tests
 
 (deftest vectorp.error.1
-  (classify-error (vectorp))
-  program-error)
+  (signals-error (vectorp) program-error)
+  t)
 
 (deftest vectorp.error.2
-  (classify-error (vectorp #() #()))
-  program-error)
+  (signals-error (vectorp #() #()) program-error)
+  t)
 
 
 

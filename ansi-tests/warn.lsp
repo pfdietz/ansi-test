@@ -133,29 +133,29 @@
   (nil) t)
 
 (deftest warn.12
-  (classify-error (warn 'condition))
-  type-error)
+  (signals-error (warn 'condition) type-error)
+  t)
 
 (deftest warn.13
-  (classify-error (warn 'simple-condition))
-  type-error)
+  (signals-error (warn 'simple-condition) type-error)
+  t)
 
 (deftest warn.14
-  (classify-error (warn (make-condition 'simple-warning) :format-control "Foo"))
-  type-error)
+  (signals-error (warn (make-condition 'simple-warning) :format-control "Foo") type-error)
+  t)
 
 (deftest warn.15
-  (classify-error (warn))
-  program-error)
+  (signals-error (warn) program-error)
+  t)
 
 (deftest warn.16
-  (classify-error (warn (make-condition 'condition)))
-  type-error)
+  (signals-error (warn (make-condition 'condition)) type-error)
+  t)
 
 (deftest warn.17
-  (classify-error (warn (make-condition 'simple-condition)))
-  type-error)
+  (signals-error (warn (make-condition 'simple-condition)) type-error)
+  t)
 
 (deftest warn.18
-  (classify-error (warn (make-condition 'simple-error)))
-  type-error)
+  (signals-error (warn (make-condition 'simple-error)) type-error)
+  t)

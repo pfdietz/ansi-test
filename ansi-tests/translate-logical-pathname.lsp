@@ -44,5 +44,5 @@
 ;;; errors
 
 (deftest translate-logical-pathname.error.1
-  (classify-error (translate-logical-pathname))
-  program-error)
+  (signals-error (translate-logical-pathname) program-error)
+  t)

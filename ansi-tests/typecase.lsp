@@ -94,19 +94,19 @@
   good)
 
 (deftest typecase.error.1
-  (classify-error (funcall (macro-function 'typecase)))
-  program-error)
+  (signals-error (funcall (macro-function 'typecase)) program-error)
+  t)
 
 (deftest typecase.error.2
-  (classify-error (funcall (macro-function 'typecase)
-			   '(typecase t)))
-  program-error)
+  (signals-error (funcall (macro-function 'typecase)
+			   '(typecase t)) program-error)
+  t)
 
 (deftest typecase.error.3
-  (classify-error (funcall (macro-function 'typecase)
+  (signals-error (funcall (macro-function 'typecase)
 			   '(typecase t)
-			   nil nil))
-  program-error)
+			   nil nil) program-error)
+  t)
 
 
 

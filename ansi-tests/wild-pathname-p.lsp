@@ -201,19 +201,18 @@
 ;;;
 
 (deftest wild-pathname-p.error.1
-  (classify-error (wild-pathname-p))
-  program-error)
+  (signals-error (wild-pathname-p) program-error)
+  t)
 
 (deftest wild-pathname-p.error.2
-  (classify-error (wild-pathname-p *default-pathname-defaults* nil nil))
-  program-error)
+  (signals-error (wild-pathname-p *default-pathname-defaults* nil nil)
+		 program-error)
+  t)
 
 (deftest wild-pathname-p.error.3
   (loop for x in *mini-universe*
-	when (and (not (could-be-pathname-designator x))
-		  (not (eq (eval `(classify-error
-				   (wild-pathname-p ',x)))
-			   'type-error)))
+	unless (or (could-be-pathname-designator x)
+		   (eval `(signals-error (wild-pathname-p ',x)
+					 type-error)))
 	collect x)
   nil)
-

@@ -6,20 +6,20 @@
 (in-package :cl-test)
 
 (deftest values-list.error.1
-  (classify-error (values-list))
-  program-error)
+  (signals-error (values-list) program-error)
+  t)
 
 (deftest values-list.error.2
-  (classify-error (values-list nil nil))
-  program-error)
+  (signals-error (values-list nil nil) program-error)
+  t)
 
 (deftest values-list.error.3
-  (classify-error (values-list 'a))
-  type-error)
+  (signals-error (values-list 'a) type-error)
+  t)
 
 (deftest values-list.error.4
-  (classify-error (values-list '(a b c . d)))
-  type-error)
+  (signals-error (values-list '(a b c . d)) type-error)
+  t)
 
 (deftest values-list.1
   (values-list nil))

@@ -364,49 +364,49 @@
 ;;; Error tests
 
 (deftest union.error.1
-  (classify-error (union))
-  program-error)
+  (signals-error (union) program-error)
+  t)
 
 (deftest union.error.2
-  (classify-error (union nil))
-  program-error)
+  (signals-error (union nil) program-error)
+  t)
 
 (deftest union.error.3
-  (classify-error (union nil nil :bad t))
-  program-error)
+  (signals-error (union nil nil :bad t) program-error)
+  t)
 
 (deftest union.error.4
-  (classify-error (union nil nil :key))
-  program-error)
+  (signals-error (union nil nil :key) program-error)
+  t)
 
 (deftest union.error.5
-  (classify-error (union nil nil 1 2))
-  program-error)
+  (signals-error (union nil nil 1 2) program-error)
+  t)
 
 (deftest union.error.6
-  (classify-error (union nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (union nil nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest union.error.7
-  (classify-error (union (list 1 2) (list 3 4) :test #'identity))
-  program-error)
+  (signals-error (union (list 1 2) (list 3 4) :test #'identity) program-error)
+  t)
 
 (deftest union.error.8
-  (classify-error (union (list 1 2) (list 3 4) :test-not #'identity))
-  program-error)
+  (signals-error (union (list 1 2) (list 3 4) :test-not #'identity) program-error)
+  t)
 
 (deftest union.error.9
-  (classify-error (union (list 1 2) (list 3 4) :key #'cons))
-  program-error)
+  (signals-error (union (list 1 2) (list 3 4) :key #'cons) program-error)
+  t)
 
 (deftest union.error.10
-  (classify-error (union (list 1 2) (list 3 4) :key #'car))
-  type-error)
+  (signals-error (union (list 1 2) (list 3 4) :key #'car) type-error)
+  t)
 
 (deftest union.error.11
-  (classify-error (union (list 1 2 3) (list* 4 5 6)))
-  type-error)
+  (signals-error (union (list 1 2 3) (list* 4 5 6)) type-error)
+  t)
 
 (deftest union.error.12
-  (classify-error (union (list* 1 2 3) (list 4 5 6)))
-  type-error)
+  (signals-error (union (list* 1 2 3) (list 4 5 6)) type-error)
+  t)

@@ -331,16 +331,16 @@
   t)
 
 (deftest vector-push-extend.error.14
-  (classify-error (vector-push-extend))
-  program-error)
+  (signals-error (vector-push-extend) program-error)
+  t)
 
 (deftest vector-push-extend.error.15
-  (classify-error (vector-push-extend (vector 1 2 3)))
-  program-error)
+  (signals-error (vector-push-extend (vector 1 2 3)) program-error)
+  t)
 
 (deftest vector-push-extend.error.16
-  (classify-error (vector-push-extend (vector 1 2 3) 4 1 nil))
-  program-error)
+  (signals-error (vector-push-extend (vector 1 2 3) 4 1 nil) program-error)
+  t)
 
 (deftest vector-push-extend.error.17
   (handler-case

@@ -6,21 +6,21 @@
 (in-package :cl-test)
 
 (deftest zerop.error.1
-  (classify-error (zerop))
-  program-error)
+  (signals-error (zerop) program-error)
+  t)
 
 (deftest zerop.error.2
-  (classify-error (zerop 0 1))
-  program-error)
+  (signals-error (zerop 0 1) program-error)
+  t)
 
 (deftest zerop.error.3
-  (classify-error (zerop 1 0))
-  program-error)
+  (signals-error (zerop 1 0) program-error)
+  t)
 
 (deftest zerop.error.4
   (loop for x in *mini-universe*
 	unless (or (numberp x)
-		   (eq (classify-error** `(zerop ',x)) 'type-error))
+		   (eval `(signals-error (zerop ',x) type-error)))
 	collect x)
   nil)
 
