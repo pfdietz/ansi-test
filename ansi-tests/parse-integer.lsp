@@ -71,6 +71,27 @@
   (parse-integer "+0")
   0 2)
 
+(deftest parse-integer.11
+  (parse-integer "-00")
+  0 3)
+
+(deftest parse-integer.12
+  (parse-integer "+000")
+  0 4)
+
+(deftest parse-integer.13
+  (parse-integer "00010")
+  10 5)
+
+(deftest parse-integer.14
+  (parse-integer "10110" :radix 2)
+  22 5)
+
+(deftest parse-integer.15
+  (parse-integer "1021" :radix 3)
+  34 4)
+
+
 
 
 
