@@ -33,3 +33,4 @@
 (load "pprint-logical-block.lsp")
 (load "pprint-exit-if-list-exhausted.lsp")
 (load "pprint-newline.lsp")
+(load "pprint-tab.lsp")
