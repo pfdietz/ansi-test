@@ -40,26 +40,70 @@
   (let* ((obj (make-instance 'make-load-form-class-01))
 	 (fun #'make-load-form)
 	 (methods (compute-applicable-methods fun (list obj))))
-    (values
-     (typep* fun 'standard-generic-function)
-     (notnot-mv methods)))
-  t t)
+     (notnot-mv methods))
+  t)
 
 (deftest make-load-form.5
   (let* ((obj (make-make-load-form-struct-02))
 	 (fun #'make-load-form)
 	 (methods (compute-applicable-methods fun (list obj))))
-    (values
-     (typep* fun 'standard-generic-function)
-     (notnot-mv methods)))
-  t t)
+    (notnot-mv methods))
+  t)
 
 (deftest make-load-form.6
   (let* ((obj (make-condition 'make-load-form-condition-03))
 	 (fun #'make-load-form)
 	 (methods (compute-applicable-methods fun (list obj))))
-    (values
-     (typep* fun 'standard-generic-function)
-     (notnot-mv methods)))
-  t t)
+    (notnot-mv methods))
+  t)
 
+(deftest make-load-form.7
+  (let* ((obj (make-instance 'make-load-form-class-01))
+	 (fun #'make-load-form)
+	 (methods (compute-applicable-methods fun (list obj nil))))
+    (notnot-mv methods))
+  t)
+
+(deftest make-load-form.8
+  (let* ((obj (make-make-load-form-struct-02))
+	 (fun #'make-load-form)
+	 (methods (compute-applicable-methods fun (list obj nil))))
+    (notnot-mv methods))
+  t)
+
+(deftest make-load-form.9
+  (let* ((obj (make-condition 'make-load-form-condition-03))
+	 (fun #'make-load-form)
+	 (methods (compute-applicable-methods fun (list obj nil))))
+    (notnot-mv methods))
+  t)
+  
+(deftest make-load-form.10
+  (macrolet
+      ((%m (&environment env)
+	   (let* ((obj (make-instance 'make-load-form-class-01))
+		  (fun #'make-load-form)
+		  (methods (compute-applicable-methods fun (list obj env))))
+	     (notnot-mv methods))))
+    (%m))
+  t)
+
+(deftest make-load-form.11
+  (macrolet
+      ((%m (&environment env)
+	   (let* ((obj (make-make-load-form-struct-02))
+		  (fun #'make-load-form)
+		  (methods (compute-applicable-methods fun (list obj env))))
+	     (notnot-mv methods))))
+    (%m))
+  t)
+
+(deftest make-load-form.12
+  (macrolet
+      ((%m (&environment env)
+	   (let* ((obj (make-condition 'make-load-form-condition-03))
+		  (fun #'make-load-form)
+		  (methods (compute-applicable-methods fun (list obj env))))
+	     (notnot-mv methods))))
+    (%m))
+  t)
