@@ -150,6 +150,7 @@
 (load "simple-vector-p.lsp")
 (load "svref.lsp")
 (load "upgraded-array-element-type.lsp")
+(load "vector.lsp")
 
 ;;; Tests of packages
 

@@ -8,33 +8,32 @@
 
 (declaim (optimize (safety 3)))
 
+;;; A function for coercing truth values to BOOLEAN
+
+(defun notnot (x) (not (not x)))
+
 ;;; Comparison functions that are like various builtins,
 ;;; but are guaranteed to return T for true.
 
 (defun eqt (x y)
   "Like EQ, but guaranteed to return T for true."
-  (if (eq x y) t nil))
+  (apply #'values (mapcar #'notnot (multiple-value-list (eq x y)))))
 
 (defun eqlt (x y)
   "Like EQL, but guaranteed to return T for true."
-  (if (eql x y) t nil))
+  (apply #'values (mapcar #'notnot (multiple-value-list (eql x y)))))
 
 (defun equalt (x y)
   "Like EQUAL, but guaranteed to return T for true."
-  (if (equal x y) t nil))
+  (apply #'values (mapcar #'notnot (multiple-value-list (equal x y)))))
 
 (defun equalpt (x y)
   "Like EQUALP, but guaranteed to return T for true."
-  (if (equalp x y) t nil))
+  (apply #'values (mapcar #'notnot (multiple-value-list (equalp x y)))))
 
 (defun =t (x &rest args)
   "Like =, but guaranteed to return T for true."
-  (if (apply #'= x args) t nil))
-
-
-;;; A function for coercing truth values to BOOLEAN
-
-(defun notnot (x) (not (not x)))
+  (apply #'values (mapcar #'notnot (multiple-value-list (apply #'= args)))))
 
 (defun make-int-list (n)
   (loop for i from 0 below n collect i))
@@ -222,15 +221,14 @@ the condition to go uncaught if it cannot be classified."
        count (not (eqt e (nth i x)))))
 
 ;;;
-;;; The function SUBTYPEP returns two generalized booleans.
-;;; This auxiliary function returns two booleans instead
+;;; The function SUBTYPEP should return two generalized booleans.
+;;; This auxiliary function returns booleans instead
 ;;; (which makes it easier to write tests).
 ;;;
 (defun subtypep* (obj type)
-  (multiple-value-bind (result good)
-      (subtypep obj type)
-    (values (notnot result)
-	    (notnot good))))
+  (apply #'values
+	 (mapcar #'notnot
+		 (multiple-value-list (subtypep obj type)))))
 
 ;;; (eval-when (load eval compile)
 ;;;   (unless (fboundp 'complement)
