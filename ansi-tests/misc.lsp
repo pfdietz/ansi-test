@@ -10506,3 +10506,69 @@ Broken at C::WT-MAKE-CLOSURE.
 		   (member 61 '(432445) :allow-other-keys t :foo t))))
   nil)
 
+;;; sbcl 0.8.20.19
+;;;  The component type for COMPLEX is not numeric: (OR RATIO FIXNUM)
+
+(deftest misc.580
+  (notnot-mv (typep #c(1 2) '(complex (or ratio fixnum))))
+  t)
+
+;;; The value -5067.2056 is not of type (SINGLE-FLOAT -5067.2056 -5067.2056).
+
+(deftest misc.581
+  (notnot
+   (floatp
+    (funcall
+     (compile nil '(lambda (x)
+		     (declare (type (eql -5067.2056) x))
+		     (+ 213734822 x)))
+     -5067.2056)))
+  t)
+
+;;; Incorrect result
+
+(deftest misc.582
+  (let ((result
+	 (funcall
+	  (compile
+	   nil
+	   ' (lambda (p1)
+	       (declare (optimize (speed 0) (safety 1) (debug 1) (space 1))
+			(type (eql -39887.645) p1))
+	       (mod p1 382352925)))
+	  -39887.645)))
+    (if (plusp result)
+	t
+      result))
+  t)
+
+;;; Argument X is not a REAL: #<FUNCTION {A39DEDD}>
+
+(deftest misc.583
+  (notnot-mv
+   (complexp
+    (funcall
+     (compile
+      nil
+      '(lambda (p1)
+	 (declare (optimize (speed 0) (safety 0) (debug 2) (space 3))
+		  (type (complex rational) p1))
+	 (sqrt p1)))
+     #c(-9003 -121))))
+  t)
+
+;;; The value -27 is not of type (INTEGER -34359738403 -24). 
+
+(deftest misc.584
+  (approx=
+   (funcall
+    (compile
+     nil
+     '(lambda (p1 p2)
+	(declare (optimize (speed 1) (safety 1) (debug 0) (space 1))
+		 (type (member -3712.8447) p1)
+		 (type (integer -34359738403 -24) p2))
+	(scale-float p1 p2)))
+    -3712.8447 -27)
+   (scale-float -3712.8447 -27))
+  t)
