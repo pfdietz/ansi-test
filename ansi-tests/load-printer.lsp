@@ -13,4 +13,4 @@
 (load "print-ratios.lsp")
 (load "print-floats.lsp")
 (load "print-complex.lsp")
-
+(load "print-characters.lsp")
