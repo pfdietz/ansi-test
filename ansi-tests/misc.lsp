@@ -8623,3 +8623,10 @@ Broken at C::WT-MAKE-CLOSURE.
 (deftest misc.449
   (funcall (compile nil '(lambda (a) (* 10 a (setq a 1000)))) 1)
   10000)
+
+;;; Error in COMPILER::CMP-ANON [or a callee]: The variable MIN is unbound.
+(deftest misc.450
+  (funcall
+   (compile nil '(lambda (a b) (min 0 (reduce #'min (vector a b 0)) 0)))
+   -10 -1)
+  -10)
