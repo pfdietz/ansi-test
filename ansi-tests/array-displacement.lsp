@@ -94,6 +94,17 @@
 	   (eqlt disp 0))))
   t)
 
+(deftest array-displacement.order.1
+  (let* ((a (make-array '(10)))
+	 (b (make-array '(10) :displaced-to a))
+	 (i 0))
+    (multiple-value-bind* (dt disp)
+	(array-displacement (progn (incf i) b))
+      (and (eql i 1)
+	   (eqt a dt)
+	   (eqlt disp 0))))
+  t)
+
 ;;; Error tests
 
 (deftest array-displacement.error.1

@@ -134,7 +134,7 @@
 
 ;;; Order of evaluation tests
 
-(deftest array-in-bounds-p.24
+(deftest array-in-bounds-p.order.1
   (let ((x 0) y z)
     (values
      (array-in-bounds-p (progn (setf y (incf x))

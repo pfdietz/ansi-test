@@ -27,6 +27,13 @@
   (array-total-size #2a((1 2 3)(4 5 6)(7 8 9)(a b c)))
   12)
 
+(deftest array-total-size.order.1
+  (let ((i 0) a)
+    (values
+     (array-total-size (progn (setf a (incf i)) #(a b c d)))
+     i a))
+  4 1 1)
+
 ;;; Error tests
 
 (deftest array-total-size.error.1

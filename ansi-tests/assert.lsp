@@ -23,10 +23,20 @@
 		 (setq x 17)
 		 (let ((r (find-restart 'continue c)))
 		   (when r (invoke-restart r))))))
-     (progn
-       (assert x)
-       x)))
+     (assert x)
+     x))
   17)
+
+(deftest assert.3a
+  (let ((x nil))
+    (handler-bind
+     ((error #'(lambda (c)
+		 (setq x 17)
+		 (continue c))))
+     (assert x)
+     x))
+  17)
+
 
 ;;; I don't yet know how to test the interactive version of ASSERT
 ;;; that is normally invoked when places are given.
@@ -49,4 +59,32 @@
 	    "Vector x has value: ~A." x))
   nil)
 
+(deftest assert.7
+  (let ((x nil))
+    (handler-bind
+     ((simple-error #'(lambda (c)
+			(setq x 17)
+			(continue c))))
+     (assert x () 'simple-error)
+     x))
+  17)
 
+(deftest assert.8
+  (let ((x 0))
+    (handler-bind
+     ((type-error #'(lambda (c)
+			(incf x)
+			(continue c))))
+     (assert (> x 5) () 'type-error)
+     x))
+  6)
+
+(deftest assert.9
+  (let ((x 0))
+    (handler-bind
+     ((type-error #'(lambda (c) (declare (ignore c))
+			(incf x)
+			(continue))))
+     (assert (> x 5) () 'type-error)
+     x))
+  6)

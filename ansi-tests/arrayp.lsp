@@ -36,6 +36,13 @@
 	collect e)
   nil)
 
+(deftest arrayp.order.1
+  (let ((i 0) a)
+    (values
+     (arrayp (progn (setf a (incf i)) nil))
+     i a))
+  nil 1 1)
+
 ;;; Error tests
 
 (deftest arrayp.error.1

@@ -110,6 +110,7 @@
 (load "assert.lsp")
 (load "error.lsp")
 (load "cerror.lsp")
+(load "check-type.lsp")
 
 ;;; Tests of conses
 

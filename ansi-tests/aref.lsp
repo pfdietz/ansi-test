@@ -48,7 +48,7 @@
 
 ;;; Order of argument evaluation
 
-(deftest aref.8
+(deftest aref.order.1
   (let ((i 0) x y (a #(a b c d)))
     (values
      (aref (progn (setf x (incf i)) a)
@@ -56,7 +56,7 @@
      i x y))
   c 2 1 2)
 
-(deftest aref.9
+(deftest aref.order.2
   (let ((i 0) x y z (a #2a((a b c)(d e f))))
     (values
      (aref (progn (setf x (incf i)) a)
@@ -123,7 +123,7 @@
   0
   #2a((1 0 1)(1 1 1)))
 
-(deftest setf-aref.8
+(deftest setf-aref.order.1
   (let ((i 0) x y z (a (copy-seq #(a b c d))))
     (values
      (setf (aref (progn (setf x (incf i)) a)

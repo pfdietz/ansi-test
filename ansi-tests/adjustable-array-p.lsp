@@ -25,6 +25,14 @@
   (notnot (adjustable-array-p (make-array '(2 2 2 2) :adjustable t)))
   t)
 
+(deftest adjustable-array-p.order.1
+  (let ((i 0) x)
+    (values
+     (notnot (adjustable-array-p (progn (setf x (incf i))
+					(make-array '(5) :adjustable t))))
+     i x))
+  t 1 1)
+
 ;;; Error tests
 
 (deftest adjustable-array-p.error.1

@@ -37,6 +37,14 @@
        (array-dimension a 0))))
   10 20)
 
+(deftest array-dimension.order.1
+  (let ((i 0) a b)
+    (values
+     (array-dimension (progn (setf a (incf i)) #(a b c d))
+		      (progn (setf b (incf i)) 0))
+     i a b))
+  4 2 1 2)
+
 ;;; Error tests
 
 (deftest array-dimension.error.1

@@ -18,6 +18,13 @@
 	collect e)
   nil)
 
+(deftest array-rank.order.1
+  (let ((i 0) a)
+    (values
+     (array-rank (progn (setf a (incf i)) "abcd"))
+     i a))
+  1 1 1)
+
 ;;; Error tests
 
 (deftest array-rank.error.1
