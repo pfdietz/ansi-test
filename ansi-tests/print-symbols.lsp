@@ -230,28 +230,62 @@
     (when (find-package pkg-name)
       (delete-package pkg-name))
     (prog1
-	(let ((*package* (make-package pkg-name)))
+	(let ((*package* (make-package pkg-name))
+	      (count 0))
 	  (loop for c1 = (random-from-seq +standard-chars+)
 		for c2 = (random-from-seq +standard-chars+)
 		for string = (concatenate 'string (string c1) (string c2))
-		repeat 10000
-		nconc (randomly-check-readability (intern string))))
+		for result = (randomly-check-readability (intern string))
+		for tries from 1 to 10000
+		when result do (incf count)
+		nconc result
+		when (= count 10)
+		collect	(format nil "... ~A out of ~A, stopping test ..."
+				count tries)
+		while (< count 10)))
       ;; (delete-package pkg-name)
       ))
   nil)
 
 (deftest print.symbol.random.3
-  (let ((result nil) (count 0))
+  (let ((result nil) (count 0) (tries 0))
     (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
       (when (find-package pkg-name)
 	(delete-package pkg-name)))
     (block done
       (do-all-symbols (s)
 	(when (symbol-package s)
+	  (incf tries)
 	  (let ((problem (randomly-check-readability s)))
 	    (when problem
 	      (setf result (nconc problem result))
-	      (when (= (incf count) 100) (return-from done)))))))
+	      (when (= (incf count) 10)
+		(push (format nil "... ~A out of ~A, stopping test ..."
+			      count tries)
+		      result)
+		(return-from done)))))))
+    (reverse result))
+  nil)
+
+(deftest print.symbol.random.4
+  (let ((result nil) (count 0) (tries 0))
+    (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
+      (when (find-package pkg-name)
+	(delete-package pkg-name)))
+    (block done
+      (do-all-symbols (s)
+	(when (symbol-package s)
+	  (incf tries)
+	  (let ((problem
+		 (let ((*package* (symbol-package s)))
+		   (randomly-check-readability s))))
+	    (when problem
+	      (setf result (nconc problem result))
+	      (when (= (incf count) 10)
+		(push (format nil "... ~A out of ~A, stopping test ..."
+			      count tries)
+		      result)
+		(return-from done)))))))
     (reverse result))
   nil)
 
