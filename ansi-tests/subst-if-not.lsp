@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest subst-if-not.1
   (check-subst-if-not '(x) 'consp '(1 (1 2) (1 2 3) (1 2 3 4)))
   ((x)

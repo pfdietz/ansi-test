@@ -5,6 +5,7 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
 
 (deftest append.1
   (append)

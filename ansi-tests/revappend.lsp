@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest revappend.1
     (let* ((x (list 'a 'b 'c))
 	   (y (list 'd 'e 'f))

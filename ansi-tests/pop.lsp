@@ -3,8 +3,9 @@
 ;;;; Created:  Sat Apr 19 22:27:18 2003
 ;;;; Contains: Tests of POP
 
-
 (in-package :cl-test)
+
+(compile-and-load "cons-aux.lsp")
 
 (deftest pop.1
   (let ((x (copy-tree '(a b c))))

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest tailp.1
   (let ((x (copy-tree '(a b c d e . f))))
     (and

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest copy-list.1
   (check-copy-list '(a b c d))
   (a b c d))

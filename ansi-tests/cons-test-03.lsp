@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; (typep <obj> 'list)
 

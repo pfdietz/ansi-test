@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest nreconc.1
   (let* ((x (list 'a 'b 'c))
 	 (y (copy-tree '(d e f)))

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest nset-difference.1
   (nset-difference nil nil)
   nil)

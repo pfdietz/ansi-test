@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest remf.1
   (let ((x nil))
     (values (remf x 'a) x))

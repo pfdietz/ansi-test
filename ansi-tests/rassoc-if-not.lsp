@@ -5,6 +5,7 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
 
 (deftest rassoc-if-not.1
     (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (defvar cons-test-24-var '(78 "z" (8 9)))
 
 (deftest subsetp.1

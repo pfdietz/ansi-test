@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest sublis.1
   (check-sublis '((a b) g (d e 10 g h) 15 . g)
 		'((e . e2) (g . 17)))

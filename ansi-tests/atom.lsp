@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+; (compile-and-load "cons-aux.lsp")
+
 (deftest atom.order.1
   (let ((i 0))
     (values (atom (progn (incf i) '(a b))) i))

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest tree-equal.1
   (notnot-mv (tree-equal 'a 'a))
   t)

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest rplacd.1
   (let ((x (cons 'a 'b)))
     (let ((y x))

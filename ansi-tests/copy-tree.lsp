@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 ;; Try copy-tree on a tree containing elements of various kinds
 (deftest copy-tree.1
   (let* ((x (cons 'a (list

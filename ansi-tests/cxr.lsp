@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 ;; Tests of car, cdr and compound forms
 (deftest cons.23
   (car '(a))

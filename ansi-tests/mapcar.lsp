@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest mapcar.1
   (mapcar #'1+ nil)
   nil)

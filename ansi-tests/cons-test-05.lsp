@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (defparameter *cons-accessors*
   '(first second third fourth fifth sixth seventh eighth ninth tenth
     car cdr caar cadr cdar cddr

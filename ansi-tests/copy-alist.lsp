@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest copy-alist.1
     (let* ((x (copy-tree '((a . b) (c . d) nil (e f) ((x) ((y z)) w)
 			   ("foo" . "bar") (#\w . 1.234)

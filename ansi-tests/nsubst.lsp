@@ -5,6 +5,7 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
 
 (defvar *nsubst-tree-1* '(10 (30 20 10) (20 10) (10 20 30 40)))
 

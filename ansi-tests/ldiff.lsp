@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest ldiff.1
   (let* ((x (copy-tree '(a b c d e f)))
 	 (xcopy (make-scaffold-copy x)))

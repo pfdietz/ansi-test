@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest nbutlast.1
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((y (cdr x))

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest subst-if.1
   (check-subst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
   a)
