@@ -224,3 +224,5 @@
   ((1 5) (0 a))
   t
   ((0 5) (0 a)))
+
+;;; Must add tests for nonstandard method combinations

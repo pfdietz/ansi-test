@@ -1485,3 +1485,11 @@ the condition to go uncaught if it cannot be classified."
   (and (slot-exists-p object slot-name)
        (slot-boundp object slot-name)
        (slot-value object slot-name)))
+
+(defun is-noncontiguous-sublist-of (list1 list2)
+  (loop
+   for x in list1
+   do (loop
+       when (null list2) do (return-from is-noncontiguous-sublist-of nil)
+       when (eql x (pop list2)) do (return))
+   finally (return t)))
