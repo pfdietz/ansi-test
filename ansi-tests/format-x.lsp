@@ -256,21 +256,17 @@
 
 ;;; NIL arguments
 
-(deftest format.x.14
-  (format nil "~vx" nil #x100)
-  "100")
+(def-format-test format.x.14
+  "~vx" (nil #x100) "100")
 
-(deftest format.x.15
-  (format nil "~6,vX" nil #x100)
-  "   100")
+(def-format-test format.x.15
+  "~6,vX" (nil #x100) "   100")
 
-(deftest format.x.16
-  (format nil "~,,v:x" nil #x12345)
-  "12,345")
+(def-format-test format.x.16
+  "~,,v:x" (nil #x12345) "12,345")
 
-(deftest format.x.17
-  (format nil "~,,'*,v:x" nil #x12345)
-  "12*345")
+(def-format-test format.x.17
+  "~,,'*,v:x" (nil #x12345) "12*345")
 
 ;;; When the argument is not an integer, print as if using ~A and base 10
 
@@ -370,25 +366,20 @@
   "+1234567890"
   "+1234567890")
 
-(deftest format.x.25
-  (format nil "~+10x" #x1234)
-  "      1234")
+(def-format-test format.x.25
+  "~+10x" (#x1234) "      1234")
 
-(deftest format.x.26
-  (format nil "~+10@X" #x1234)
-  "     +1234")
+(def-format-test format.x.26
+  "~+10@X" (#x1234) "     +1234")
 
-(deftest format.x.27
-  (format nil "~-1X" #x1234)
-  "1234")
+(def-format-test format.x.27
+  "~-1X" (#x1234) "1234")
 
-(deftest format.x.28
-  (format nil "~-1000000000000000000x" #x1234)
-  "1234")
+(def-format-test format.x.28
+  "~-1000000000000000000x" (#x1234) "1234")
 
-(deftest format.x.29
-  (format nil "~vx" (1- most-negative-fixnum) #x1234)
-  "1234")
+(def-format-test format.x.29
+  "~vx" ((1- most-negative-fixnum) #x1234) "1234")
 
 ;;; Randomized test
 

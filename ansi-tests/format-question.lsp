@@ -7,44 +7,34 @@
 
 (compile-and-load "printer-aux.lsp")
 
-(deftest format.?.1
-  (format nil "~?" "" nil)
-  "")
+(def-format-test format.?.1
+  "~?" ("" nil) "")
 
-(deftest format.?.2
-  (format nil "~?" "~A" '(1))
-  "1")
+(def-format-test format.?.2
+  "~?" ("~A" '(1)) "1")
 
-(deftest format.?.3
-  (format nil "~?" "" '(1))
-  "")
+(def-format-test format.?.3
+  "~?" ("" '(1)) "")
 
-(deftest format.?.4
-  (format nil "~? ~A" "" '(1) 2)
-  " 2")
+(def-format-test format.?.4
+  "~? ~A" ("" '(1) 2) " 2")
 
-(deftest format.?.5
-  (format nil "a~?z" "b~?y" '("c~?x" ("~A" (1))))
-  "abc1xyz")
+(def-format-test format.?.5
+  "a~?z" ("b~?y" '("c~?x" ("~A" (1)))) "abc1xyz")
 
 ;;; Tests of ~@?
 
-(deftest format.@?.1
-  (format nil "~@?" "")
-  "")
+(def-format-test format.@?.1
+  "~@?" ("") "")
 
-(deftest format.@?.2
-  (format nil "~@?" "~A" 1)
-  "1")
+(def-format-test format.@?.2
+  "~@?" ("~A" 1) "1")
 
-(deftest format.@?.3
-  (format nil "~@? ~A" "<~A>" 1 2)
-  "<1> 2")
+(def-format-test format.@?.3
+  "~@? ~A" ("<~A>" 1 2) "<1> 2")
 
-(deftest format.@?.4
-  (format nil "a~@?z" "b~@?y" "c~@?x" "~A" 1)
-  "abc1xyz")
+(def-format-test format.@?.4
+  "a~@?z" ("b~@?y" "c~@?x" "~A" 1) "abc1xyz")
 
-(deftest format.@?.5
-  (format nil "~{~A~@?~A~}" '(1 "~4*" 2 3 4 5 6))
-  "16")
+(def-format-test format.@?.5
+  "~{~A~@?~A~}" ('(1 "~4*" 2 3 4 5 6)) "16")

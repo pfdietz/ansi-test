@@ -5,9 +5,8 @@
 
 (in-package :cl-test)
 
-(deftest format.%.1
-  (format nil "~%")
-  #.(string #\Newline))
+(def-format-test format.%.1
+  "~%" nil #.(string #\Newline))
 
 (deftest format.%.2
   (loop for i from 0 to 100
@@ -17,14 +16,11 @@
 	collect i)
   nil)
 
-(deftest format.%.3
-  (format nil "~v%" nil)
-  "
-")
+(def-format-test format.%.3
+  "~v%" (nil) #.(string #\Newline))
 
-(deftest format.%.4
-  (format nil "~V%" 1)
-  #.(string #\Newline))
+(def-format-test format.%.4
+  "~V%" (1) #.(string #\Newline))
 
 (deftest format.%.5
   (loop for i from 0 to 100
@@ -42,4 +38,3 @@
 	unless (string= s1 s2)
 	collect i)
   nil)
-

@@ -5,23 +5,17 @@
 
 (in-package :cl-test)
 
-(deftest format.&.1
-  (format nil "~0&")
-  "")
+(def-format-test format.&.1
+  "~0&" nil "")
 
-(deftest format.&.2
-  (format nil "~&")
-  "")
+(def-format-test format.&.2
+  "~&" nil "")
 
-(deftest format.&.3
-  (format nil "X~&")
-  "X
-")
+(def-format-test format.&.3
+  "X~&" nil #.(concatenate 'string "X" (string #\Newline)))
 
-(deftest format.&.4
-  (format nil "X~%~&")
-  "X
-")
+(def-format-test format.&.4
+  "X~%~&" nil #.(concatenate 'string "X" (string #\Newline)))
 
 (deftest format.&.5
   (loop for i from 1 to 100
@@ -41,14 +35,11 @@
 	collect i)
   nil)
 
-(deftest format.&.7
-  (format nil "~v&" nil)
-  "")
+(def-format-test format.&.7
+  "~v&" (nil) "")
 
-(deftest format.&.8
-  (format nil "X~v&" nil)
-  "X
-")
+(def-format-test format.&.8
+  "X~v&" (nil) #.(concatenate 'string "X" (string #\Newline)))
 
 (deftest format.&.9
   (loop for i from 1 to 100
@@ -67,20 +58,16 @@
 	collect i)
   nil)
 
-(deftest format.&.11
-  (format nil "X~V%" 0)
-  "X")
+(def-format-test format.&.11
+  "X~V%" (0) "X")
 
-(deftest format.&.12
-  (format nil "X~#%")
-  "X")
+(def-format-test format.&.12
+  "X~#%" nil "X")
 
-(deftest format.&.13
-  (format nil "X~#%" 'a 'b 'c)
-  "X
+(def-format-test format.&.13
+  "X~#%" ('a 'b 'c) #.(let ((nl (string #\Newline)))
+			(concatenate 'string "X" nl nl nl)))
 
-
-")
 
 
 

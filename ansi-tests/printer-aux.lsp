@@ -400,3 +400,45 @@
 			     (* suffix-integer (expt 1/10 suffix-len)))))
 	  (if neg (- magnitude) magnitude))))))
 
+
+;;; Macro to define both FORMAT and FORMATTER tests
+
+(defmacro def-format-test (name string args expected-output)
+  (assert (symbolp name))
+  (let* ((s (symbol-name name))
+	 (expected-prefix (string 'format.))
+	 (expected-prefix-length (length expected-prefix)))
+    (assert (>= (length s) expected-prefix-length))
+    (assert (string-equal (subseq s 0 expected-prefix-length)
+			  expected-prefix))
+    (let* ((formatter-test-name-string
+	    (concatenate 'string (string 'formatter.)
+			 (subseq s expected-prefix-length)))
+	   (formatter-test-name (intern formatter-test-name-string
+					(symbol-package name)))
+	   (formatter-form (if (stringp string)
+			       `(formatter ,string)
+			     (list 'formatter (eval string)))))
+      `(progn
+	 (deftest ,name
+	   (with-standard-io-syntax
+	    (let ((*print-readably* nil))
+	      (format nil ,string ,@args)))
+	   ,expected-output)
+	 (deftest ,formatter-test-name
+	   (let ((fn ,formatter-form)
+		 (args (list ,@args)))
+	     (with-standard-io-syntax
+	      (let ((*print-readably* nil))
+		(with-output-to-string
+		  (stream)
+		  (apply fn stream args)
+		  ;; FIXME -- Need to check for tail return
+		  ;; The plan is to add an extra optional argument
+		  ;; to def-format-test that, when present, gives the
+		  ;; number of arguments that should be left over.
+		  ;; The FORMAT test will ignore this, but the FORMATTER
+		  ;; test will check that a list of that many values is
+		  ;; returned, and that they are the last values in ARGS.
+		  ))))
+	   ,expected-output)))))

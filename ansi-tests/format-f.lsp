@@ -452,9 +452,9 @@
   nil)
 
 ;;; This failed in sbcl 0.8.12.25
-(deftest format.f.43
-  (format nil "~,,,,',f" 0.0)
-  "0.0")
+
+(def-format-test format.f.43
+  "~,,,,',f" (0.0) "0.0")
 
 (deftest format.f.44
   (loop for i from 0 below (min #x10000 char-code-limit)

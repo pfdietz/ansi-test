@@ -5,9 +5,8 @@
 
 (in-package :cl-test)
 
-(deftest format.page.1
-  (format nil "~0|")
-  "")
+(def-format-test format.page.1
+  "~0|" nil "")
 
 (deftest format.page.2
   (let ((s (format nil "~|")))
@@ -37,14 +36,8 @@
 	      collect i)))))
   nil)
 
-(deftest format.page.4
-  (format nil "~V|" 0)
-  "")
+(def-format-test format.page.4
+  "~V|" (0) "")
 
-(deftest format.page.5
-  (string=t (format nil "~v|" nil)
-	    (format nil "~|"))
-  t)
-
-  
-	
+(def-format-test format.page.5
+  "~v|" (nil) #.(format nil "~|"))

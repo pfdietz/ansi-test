@@ -5,9 +5,8 @@
 
 (in-package :cl-test)
 
-(deftest format.~.1
-  (format nil "~~")
-  "~")
+(def-format-test format.~.1
+  "~~" nil "~")
 
 (deftest format.~.2
   (loop for i from 0 to 100
@@ -17,9 +16,8 @@
 	collect (list i s s2))
   nil)
 
-(deftest format.~.3
-  (format nil "~v~" 0)
-  "")
+(def-format-test format.~.3
+  "~v~" (0) "")
 
 (deftest format.~.4
   (loop for i from 0 to 100
@@ -37,4 +35,3 @@
 	unless (string= s s2)
 	collect (list i s s2))
   nil)
-

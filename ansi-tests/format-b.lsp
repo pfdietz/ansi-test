@@ -244,21 +244,17 @@
 
 ;;; NIL arguments
 
-(deftest format.b.14
-  (format nil "~vb" nil #b110100)
-  "110100")
+(def-format-test format.b.14
+  "~vb" (nil #b110100) "110100")
 
-(deftest format.b.15
-  (format nil "~6,vB" nil #b100)
-  "   100")
+(def-format-test format.b.15
+  "~6,vB" (nil #b100) "   100")
 
-(deftest format.b.16
-  (format nil "~,,v:b" nil #b10011)
-  "10,011")
+(def-format-test format.b.16
+  "~,,v:b" (nil #b10011) "10,011")
 
-(deftest format.b.17
-  (format nil "~,,'*,v:B" nil #b10110)
-  "10*110")
+(def-format-test format.b.17
+  "~,,'*,v:B" (nil #b10110) "10*110")
 
 ;;; When the argument is not an integer, print as if using ~A and base 10
 
@@ -358,25 +354,20 @@
   "+1100100010"
   "+1100100010")
 
-(deftest format.b.25
-  (format nil "~+10b" #b1101)
-  "      1101")
+(def-format-test format.b.25
+  "~+10b" (#b1101) "      1101")
 
-(deftest format.b.26
-  (format nil "~+10@B" #b1101)
-  "     +1101")
+(def-format-test format.b.26
+  "~+10@B" (#b1101) "     +1101")
 
-(deftest format.b.27
-  (format nil "~-1b" #b1101)
-  "1101")
+(def-format-test format.b.27
+  "~-1b" (#b1101) "1101")
 
-(deftest format.b.28
-  (format nil "~-1000000000000000000B" #b1101)
-  "1101")
+(def-format-test format.b.28
+  "~-1000000000000000000B" (#b1101) "1101")
 
-(deftest format.b.29
-  (format nil "~vb" (1- most-negative-fixnum) #b1101)
-  "1101")
+(def-format-test format.b.29
+  "~vb" ((1- most-negative-fixnum) #b1101) "1101")
 
 ;;; Randomized test
 

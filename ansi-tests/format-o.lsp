@@ -247,21 +247,17 @@
 
 ;;; NIL arguments
 
-(deftest format.o.14
-  (format nil "~vO" nil #o100)
-  "100")
+(def-format-test format.o.14
+  "~vO" (nil #o100) "100")
 
-(deftest format.o.15
-  (format nil "~6,vO" nil #o100)
-  "   100")
+(def-format-test format.o.15
+  "~6,vO" (nil #o100) "   100")
 
-(deftest format.o.16
-  (format nil "~,,v:o" nil #o12345)
-  "12,345")
+(def-format-test format.o.16
+  "~,,v:o" (nil #o12345) "12,345")
 
-(deftest format.o.17
-  (format nil "~,,'*,v:o" nil #o12345)
-  "12*345")
+(def-format-test format.o.17
+  "~,,'*,v:o" (nil #o12345) "12*345")
 
 ;;; When the argument is not an integer, print as if using ~A and base 10
 
@@ -361,25 +357,20 @@
   "+1234567012"
   "+1234567012")
 
-(deftest format.o.25
-  (format nil "~+10o" #o1234)
-  "      1234")
+(def-format-test format.o.25
+  "~+10o" (#o1234) "      1234")
 
-(deftest format.o.26
-  (format nil "~+10@O" #o1234)
-  "     +1234")
+(def-format-test format.o.26
+  "~+10@O" (#o1234) "     +1234")
 
-(deftest format.o.27
-  (format nil "~-1O" #o1234)
-  "1234")
+(def-format-test format.o.27
+  "~-1O" (#o1234) "1234")
 
-(deftest format.o.28
-  (format nil "~-1000000000000000000o" #o1234)
-  "1234")
+(def-format-test format.o.28
+  "~-1000000000000000000o" (#o1234) "1234")
 
-(deftest format.o.29
-  (format nil "~vo" (1- most-negative-fixnum) #o1234)
-  "1234")
+(def-format-test format.o.29
+  "~vo" ((1- most-negative-fixnum) #o1234) "1234")
 
 ;;; Randomized test
 

@@ -6,19 +6,15 @@
 (in-package :cl-test)
 (compile-and-load "printer-aux.lsp")
 
-(deftest format.newline.1
-  (let ((nl (string #\Newline)))
-    (format nil (concatenate 'string "~" nl "   X")))
-  "X")
+(def-format-test format.newline.1
+  (concatenate 'string "~" (string #\Newline) "   X")
+  nil "X")
 
-(deftest format.newline.2
-  (let ((nl (string #\Newline)))
-    (format nil (concatenate 'string "A~:" nl " X")))
-  "A X")
+(def-format-test format.newline.2
+  (concatenate 'string "A~:" (string #\Newline) " X")
+  nil "A X")
 
-(deftest format.newline.3
-  (let ((nl (string #\Newline)))
-    (format nil (concatenate 'string "A~@" nl " X")))
-  #.(concatenate 'string "A" (string #\Newline) "X"))
-
+(def-format-test format.newline.3
+  (concatenate 'string "A~@" (string #\Newline) " X")
+  nil #.(concatenate 'string "A" (string #\Newline) "X"))
 

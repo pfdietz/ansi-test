@@ -4,11 +4,10 @@
 ;;;; Contains: Tests of printing using the ~A directive
 
 (in-package :cl-test)
+(compile-and-load "printer-aux.lsp")
 
-(deftest format.a.1
-  (with-standard-io-syntax
-   (format nil "~a" nil))
-  "NIL")
+(def-format-test format.a.1
+  "~a" (nil) "NIL")
 
 (deftest format.a.2
   (with-standard-io-syntax
@@ -22,19 +21,14 @@
      (format nil "~a" nil)))
   "Nil")
 
-(deftest format.a.4
-  (format nil "~:a" nil)
-  "()")
+(def-format-test format.a.4
+  "~:a" (nil) "()")
 
-(deftest format.a.5
-  (with-standard-io-syntax
-   (format nil "~:A" '(nil)))
-  "(NIL)")
+(def-format-test format.a.5
+  "~:A" ('(nil)) "(NIL)")
 
-(deftest format.a.6
-  (with-standard-io-syntax
-   (format nil "~:A" #(nil)))
-  "#(NIL)")
+(def-format-test format.a.6
+  "~:A" (#(nil)) "#(NIL)")
 
 (deftest format.a.7
   (loop for c across +standard-chars+
@@ -167,69 +161,49 @@
   "       ()"
   "        ()")
 
-(deftest format.a.15
-  (with-standard-io-syntax
-   (format nil "~vA" nil nil))
-  "NIL")
+(def-format-test format.a.15
+  "~vA" (nil nil) "NIL")
 
-(deftest format.a.16
-  (with-standard-io-syntax
-   (format nil "~v:A" nil nil))
-  "()")
+(def-format-test format.a.16
+  "~v:A" (nil nil) "()")
 
-(deftest format.a.17
-  (with-standard-io-syntax
-   (format nil "~@A" nil))
-  "NIL")
+(def-format-test format.a.17
+  "~@A" (nil) "NIL")
 
-(deftest format.a.18
-  (with-standard-io-syntax
-   (format nil "~v@A" nil nil))
-  "NIL")
+(def-format-test format.a.18
+  "~v@A" (nil nil) "NIL")
 
-(deftest format.a.19
-  (with-standard-io-syntax
-   (format nil "~v:@a" nil nil))
-  "()")
+(def-format-test format.a.19
+  "~v:@a" (nil nil) "()")
 
-(deftest format.a.20
-  (with-standard-io-syntax
-   (format nil "~v@:a" nil nil))
-  "()")
+(def-format-test format.a.20
+  "~v@:a" (nil nil) "()")
 
 ;;; With colinc specified
 
-(deftest format.a.21
-  (format nil "~3,1a" nil)
-  "NIL")
+(def-format-test format.a.21
+  "~3,1a" (nil) "NIL")
 
-(deftest format.a.22
-  (format nil "~4,3a" nil)
-  "NIL   ")
+(def-format-test format.a.22
+  "~4,3a" (nil) "NIL   ")
 
-(deftest format.a.23
-  (format nil "~3,3@a" nil)
-  "NIL")
+(def-format-test format.a.23
+  "~3,3@a" (nil) "NIL")
 
-(deftest format.a.24
-  (format nil "~4,4@a" nil)
-  "    NIL")
+(def-format-test format.a.24
+  "~4,4@a" (nil) "    NIL")
 
-(deftest format.a.25
-  (format nil "~5,3@a" nil)
-  "   NIL")
+(def-format-test format.a.25
+  "~5,3@a" (nil) "   NIL")
 
-(deftest format.a.26
-  (format nil "~5,3A" nil)
-  "NIL   ")
+(def-format-test format.a.26
+  "~5,3A" (nil) "NIL   ")
 
-(deftest format.a.27
-  (format nil "~7,3@a" nil)
-  "      NIL")
+(def-format-test format.a.27
+  "~7,3@a" (nil) "      NIL")
 
-(deftest format.a.28
-  (format nil "~7,3A" nil)
-  "NIL      ")
+(def-format-test format.a.28
+  "~7,3A" (nil) "NIL      ")
 
 ;;; With minpad
 
@@ -252,65 +226,51 @@
    "ABC      "
    "ABC       "))
 
-(deftest format.a.30
-  (format nil "~3,,+2A" "ABC")
-  "ABC  ")
+(def-format-test format.a.30
+  "~3,,+2A" ("ABC") "ABC  ")
 
-(deftest format.a.31
-  (format nil "~3,,0A" "ABC")
-  "ABC")
+(def-format-test format.a.31
+  "~3,,0A" ("ABC") "ABC")
 
-(deftest format.a.32
-  (format nil "~3,,-1A" "ABC")
-  "ABC")
+(def-format-test format.a.32
+  "~3,,-1A" ("ABC") "ABC")
 
-(deftest format.a.33
-  (format nil "~3,,0A" "ABCD")
-  "ABCD")
+(def-format-test format.a.33
+  "~3,,0A" ("ABCD") "ABCD")
 
-(deftest format.a.34
-  (format nil "~3,,-1A" "ABCD")
-  "ABCD")
+(def-format-test format.a.34
+  "~3,,-1A" ("ABCD") "ABCD")
 
 ;;; With padchar
 
-(deftest format.a.35
-  (format nil "~4,,,'XA" "AB")
-  "ABXX")
+(def-format-test format.a.35
+  "~4,,,'XA" ("AB") "ABXX")
 
-(deftest format.a.36
-  (format nil "~4,,,a" "AB")
-  "AB  ")
+(def-format-test format.a.36
+  "~4,,,a" ("AB") "AB  ")
 
-(deftest format.a.37
-  (format nil "~4,,,'X@a" "AB")
-  "XXAB")
+(def-format-test format.a.37
+  "~4,,,'X@a" ("AB") "XXAB")
 
-(deftest format.a.38
-  (format nil "~4,,,@A" "AB")
-  "  AB")
+(def-format-test format.a.38
+  "~4,,,@A" ("AB") "  AB")
 
-(deftest format.a.39
-  (format nil "~10,,,vA" nil "abcde")
-  "abcde     ")
+(def-format-test format.a.39
+  "~10,,,vA" (nil "abcde") "abcde     ")
 
-(deftest format.a.40
-  (format nil "~10,,,v@A" nil "abcde")
-  "     abcde")
+(def-format-test format.a.40
+  "~10,,,v@A" (nil "abcde") "     abcde")
 
-(deftest format.a.41
-  (format nil "~10,,,va" #\* "abcde")
-  "abcde*****")
+(def-format-test format.a.41
+  "~10,,,va" (#\* "abcde") "abcde*****")
 
-(deftest format.a.42
-  (format nil "~10,,,v@a" #\* "abcde")
-  "*****abcde")
+(def-format-test format.a.42
+  "~10,,,v@a" (#\* "abcde") "*****abcde")
 
 ;;; Other tests
 
-(deftest format.a.43
-  (format nil "~3,,vA" nil "ABC")
-  "ABC")
+(def-format-test format.a.43
+  "~3,,vA" (nil "ABC") "ABC")
 
 (deftest format.a.44
   (loop for i from 0 to 6
@@ -334,60 +294,46 @@
    "     ABC"
    "      ABC"))
 
-(deftest format.a.45
-  (format nil "~4,,va" -1 "abcd")
-  "abcd")
+(def-format-test format.a.45
+  "~4,,va" (-1 "abcd") "abcd")
 
-(deftest format.a.46
-  (format nil "~5,vA" nil "abc")
-  "abc  ")
+(def-format-test format.a.46
+  "~5,vA" (nil "abc") "abc  ")
 
-(deftest format.a.47
-  (format nil "~5,vA" 3 "abc")
-  "abc   ")
+(def-format-test format.a.47
+  "~5,vA" (3 "abc") "abc   ")
 
-(deftest format.a.48
-  (format nil "~5,v@A" 3 "abc")
-  "   abc")
+(def-format-test format.a.48
+  "~5,v@A" (3 "abc") "   abc")
 
 ;;; # parameters
 
-(deftest format.a.49
-  (format nil "~#A" "abc" nil nil nil)
-  "abc ")
+(def-format-test format.a.49
+  "~#A" ("abc" nil nil nil) "abc ")
 
-(deftest format.a.50
-  (format nil "~#@a" "abc" nil nil nil nil nil)
-  "   abc")
+(def-format-test format.a.50
+  "~#@a" ("abc" nil nil nil nil nil) "   abc")
 
-(deftest format.a.51
-  (format nil "~5,#a" "abc" nil nil nil)
-  "abc    ")
+(def-format-test format.a.51
+  "~5,#a" ("abc" nil nil nil) "abc    ")
 
-(deftest format.a.52
-  (format nil "~5,#@A" "abc" nil nil nil)
-  "    abc")
+(def-format-test format.a.52
+  "~5,#@A" ("abc" nil nil nil) "    abc")
 
-(deftest format.a.53
-  (format nil "~4,#A" "abc" nil nil)
-  "abc   ")
+(def-format-test format.a.53
+  "~4,#A" ("abc" nil nil) "abc   ")
 
-(deftest format.a.54
-  (format nil "~4,#@A" "abc" nil nil)
-  "   abc")
+(def-format-test format.a.54
+  "~4,#@A" ("abc" nil nil) "   abc")
 
-(deftest format.a.55
-  (format nil "~#,#A" "abc" nil nil nil)
-  "abc    ")
+(def-format-test format.a.55
+  "~#,#A" ("abc" nil nil nil) "abc    ")
 
-(deftest format.a.56
-  (format nil "~#,#@A" "abc" nil nil nil)
-  "    abc")
+(def-format-test format.a.56
+  "~#,#@A" ("abc" nil nil nil) "    abc")
 
-(deftest format.a.57
-  (format nil "~-100A" "xyz")
-  "xyz")
+(def-format-test format.a.57
+  "~-100A" ("xyz") "xyz")
 
-(deftest format.a.58
-  (format nil "~-100000000000000000000a" "xyz")
-  "xyz")
+(def-format-test format.a.58
+  "~-100000000000000000000a" ("xyz") "xyz")

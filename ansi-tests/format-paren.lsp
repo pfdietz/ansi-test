@@ -30,25 +30,20 @@
 	collect it)
   nil)
 
-(deftest format.paren.3
-  (format nil "~@(this is a TEST.~)")
-  "This is a test.")
+(def-format-test format.paren.3
+  "~@(this is a TEST.~)" nil "This is a test.")
 
-(deftest format.paren.4
-  (format nil "~@(!@#$%^&*this is a TEST.~)")
-  "!@#$%^&*This is a test.")
+(def-format-test format.paren.4
+  "~@(!@#$%^&*this is a TEST.~)" nil "!@#$%^&*This is a test.")
 
-(deftest format.paren.5
-  (format nil "~:(this is a TEST.~)")
-  "This Is A Test.")
+(def-format-test format.paren.5
+  "~:(this is a TEST.~)" nil "This Is A Test.")
 			
-(deftest format.paren.6
-  (format nil "~:(this is7a TEST.~)")
-  "This Is7a Test.")
+(def-format-test format.paren.6
+  "~:(this is7a TEST.~)" nil "This Is7a Test.")
 
-(deftest format.paren.7
-  (format nil "~:@(this is AlSo A teSt~)")
-  "THIS IS ALSO A TEST")
+(def-format-test format.paren.7
+  "~:@(this is AlSo A teSt~)" nil "THIS IS ALSO A TEST")
 
 (deftest format.paren.8
   (loop for i from 0 below (min char-code-limit (ash 1 16))
@@ -70,70 +65,53 @@
 
 ;;; Nested conversion
 
-(deftest format.paren.9
-  (format nil "~(aBc ~:(def~) GHi~)")
-  "abc def ghi")
+(def-format-test format.paren.9
+  "~(aBc ~:(def~) GHi~)" nil "abc def ghi")
 
-(deftest format.paren.10
-  (format nil "~(aBc ~(def~) GHi~)")
-  "abc def ghi")
+(def-format-test format.paren.10
+  "~(aBc ~(def~) GHi~)" nil "abc def ghi")
 
-(deftest format.paren.11
-  (format nil "~@(aBc ~:(def~) GHi~)")
-  "Abc def ghi")
+(def-format-test format.paren.11
+  "~@(aBc ~:(def~) GHi~)" nil "Abc def ghi")
 
-(deftest format.paren.12
-  (format nil "~(aBc ~@(def~) GHi~)")
-  "abc def ghi")
+(def-format-test format.paren.12
+  "~(aBc ~@(def~) GHi~)" nil "abc def ghi")
 
-(deftest format.paren.13
-  (format nil "~(aBc ~:(def~) GHi~)")
-  "abc def ghi")
+(def-format-test format.paren.13
+  "~(aBc ~:(def~) GHi~)" nil "abc def ghi")
 
-(deftest format.paren.14
-  (format nil "~:(aBc ~(def~) GHi~)")
-  "Abc Def Ghi")
+(def-format-test format.paren.14
+  "~:(aBc ~(def~) GHi~)" nil "Abc Def Ghi")
 
-(deftest format.paren.15
-  (format nil "~:(aBc ~:(def~) GHi~)")
-  "Abc Def Ghi")
+(def-format-test format.paren.15
+  "~:(aBc ~:(def~) GHi~)" nil "Abc Def Ghi")
 
-(deftest format.paren.16
-  (format nil "~:(aBc ~@(def~) GHi~)")
-  "Abc Def Ghi")
+(def-format-test format.paren.16
+  "~:(aBc ~@(def~) GHi~)" nil "Abc Def Ghi")
 
-(deftest format.paren.17
-  (format nil "~:(aBc ~@:(def~) GHi~)")
-  "Abc Def Ghi")
+(def-format-test format.paren.17
+  "~:(aBc ~@:(def~) GHi~)" nil "Abc Def Ghi")
 
-(deftest format.paren.18
-  (format nil "~@(aBc ~(def~) GHi~)")
-  "Abc def ghi")
+(def-format-test format.paren.18
+  "~@(aBc ~(def~) GHi~)" nil "Abc def ghi")
 
-(deftest format.paren.19
-  (format nil "~@(aBc ~:(def~) GHi~)")
-  "Abc def ghi")
+(def-format-test format.paren.19
+  "~@(aBc ~:(def~) GHi~)" nil "Abc def ghi")
 
-(deftest format.paren.20
-  (format nil "~@(aBc ~@(def~) GHi~)")
-  "Abc def ghi")
+(def-format-test format.paren.20
+  "~@(aBc ~@(def~) GHi~)" nil "Abc def ghi")
 
-(deftest format.paren.21
-  (format nil "~@(aBc ~@:(def~) GHi~)")
-  "Abc def ghi")
+(def-format-test format.paren.21
+  "~@(aBc ~@:(def~) GHi~)" nil "Abc def ghi")
 
-(deftest format.paren.22
-  (format nil "~:@(aBc ~(def~) GHi~)")
-  "ABC DEF GHI")
+(def-format-test format.paren.22
+  "~:@(aBc ~(def~) GHi~)" nil "ABC DEF GHI")
 
-(deftest format.paren.23
-  (format nil "~@:(aBc ~:(def~) GHi~)")
-  "ABC DEF GHI")
+(def-format-test format.paren.23
+  "~@:(aBc ~:(def~) GHi~)" nil "ABC DEF GHI")
 
-(deftest format.paren.24
-  (format nil "~:@(aBc ~@(def~) GHi~)")
-  "ABC DEF GHI")
+(def-format-test format.paren.24
+  "~:@(aBc ~@(def~) GHi~)" nil "ABC DEF GHI")
 
-(deftest format.paren.25
-  (format nil "~@:(aBc ~@:(def~) GHi~)")
-  "ABC DEF GHI")
+(def-format-test format.paren.25
+  "~@:(aBc ~@:(def~) GHi~)" nil "ABC DEF GHI")

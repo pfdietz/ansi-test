@@ -24,13 +24,11 @@
 	 collect (list i x s1 s2)))
   nil)
 
-(deftest format.r.2
-  (format nil "~2r" 14)
-  "1110")
+(def-format-test format.r.2
+  "~2r" (14) "1110")
 
-(deftest format.r.3
-  (format nil "~3r" 29)
-  "1002")
+(def-format-test format.r.3
+  "~3r" (29) "1002")
 
 (deftest format.r.4
   (loop for base from 2 to 36
@@ -113,13 +111,11 @@
 	collect (list i s1 s3 s4))
   nil)
 
-(deftest format.r.8
-  (format nil "~vr" nil 5)
-  "five")
+(def-format-test format.r.8
+  "~vr" (nil 5) "five")
 
-(deftest format.r.9
-  (format nil "~#r" 4 nil nil)
-  "11")
+(def-format-test format.r.9
+  "~#r" (4 nil nil) "11")
 
 (deftest format.r.10
   (with-standard-io-syntax
@@ -127,17 +123,14 @@
      (format nil "~10r" 123)))
   "123")
 
-(deftest format.r.11
-  (format nil "~8@R" 65)
-  "+101")
+(def-format-test format.r.11
+  "~8@R" (65) "+101")
 
-(deftest format.r.12
-  (format nil "~2:r" 126)
-  "1,111,110")
+(def-format-test format.r.12
+  "~2:r" (126) "1,111,110")
 
-(deftest format.r.13
-  (format nil "~3@:r" #3r2120012102)
-  "+2,120,012,102")
+(def-format-test format.r.13
+  "~3@:r" (#3r2120012102) "+2,120,012,102")
 
 (deftest format.r.14
   (loop
@@ -171,13 +164,11 @@
    collect (list i interval comma x s1 y))
   nil)
 
-(deftest format.r.16
-  (format nil "~2,,,,1000000000000000000r" 17)
-  "10001")
+(def-format-test format.r.16
+  "~2,,,,1000000000000000000r" (17) "10001")
 
-(deftest format.r.17
-  (format nil "~8,10:@r" #o526104)
-  "  +526,104")
+(def-format-test format.r.17
+  "~8,10:@r" (#o526104) "  +526,104")
 
 (defparameter *english-ordinal-names*
   '("zeroth"
@@ -271,19 +262,16 @@
 
 ;; Combinations of mincol and comma chars
 
-(deftest format.r.22
-  (format nil "~2,12,,'*:r" #b1011101)
-  "   1*011*101")
+(def-format-test format.r.22
+  "~2,12,,'*:r" (#b1011101) "   1*011*101")
 
-(deftest format.r.23
-  (format nil "~3,14,'X,',:R" #3r1021101)
-  "XXXXX1,021,101")
+(def-format-test format.r.23
+  "~3,14,'X,',:R" (#3r1021101) "XXXXX1,021,101")
 
 ;; v directive in various positions
 
-(deftest format.r.24
-  (format nil "~10,vr" nil 12345)
-  "12345")
+(def-format-test format.r.24
+  "~10,vr" (nil 12345) "12345")
 
 (deftest format.r.25
   (loop for i from 0 to 5
@@ -292,59 +280,46 @@
 	collect (list i s))
   nil)
 
-(deftest format.r.26
-  (format nil "~10,#r" 12345 nil nil nil nil nil)
-  " 12345")
+(def-format-test format.r.26
+  "~10,#r" (12345 nil nil nil nil nil) " 12345")
 
-(deftest format.r.27
-  (format nil "~10,12,vr" #\/ 123456789)
-  "///123456789")
+(def-format-test format.r.27
+  "~10,12,vr" (#\/ 123456789) "///123456789")
 
-(deftest format.r.28
-  (format nil "~10,,,v:r" #\/ 123456789)
-  "123/456/789")
+(def-format-test format.r.28
+  "~10,,,v:r" (#\/ 123456789) "123/456/789")
 
-(deftest format.r.29
-  (format nil "~10,,,v:r" nil 123456789)
-  "123,456,789")
+(def-format-test format.r.29
+  "~10,,,v:r" (nil 123456789) "123,456,789")
 
-(deftest format.r.30
-  (format nil "~8,,,,v:R" nil #o12345670)
-  "12,345,670")
+(def-format-test format.r.30
+  "~8,,,,v:R" (nil #o12345670) "12,345,670")
 
-(deftest format.r.31
-  (format nil "~8,,,,v:R" 2 #o12345670)
-  "12,34,56,70")
+(def-format-test format.r.31
+  "~8,,,,v:R" (2 #o12345670) "12,34,56,70")
 
-(deftest format.r.32
-  (format nil "~16,,,,#:r" #x12345670 nil nil nil)
-  "1234,5670")
+(def-format-test format.r.32
+  "~16,,,,#:r" (#x12345670 nil nil nil) "1234,5670")
 
-(deftest format.r.33
-  (format nil "~16,,,,1:r" #x12345670)
-  "1,2,3,4,5,6,7,0")
+(def-format-test format.r.33
+  "~16,,,,1:r" (#x12345670) "1,2,3,4,5,6,7,0")
 
 ;;; Explicit signs
 
-(deftest format.r.34
-  (format nil "~+10r" 12345)
-  "12345")
+(def-format-test format.r.34
+  "~+10r" (12345) "12345")
 
-(deftest format.r.35
-  (format nil "~10,+8r" 12345)
-  "   12345")
+(def-format-test format.r.35
+  "~10,+8r" (12345) "   12345")
 
-(deftest format.r.36
-  (format nil "~10,0r" 12345)
-  "12345")
+(def-format-test format.r.36
+  "~10,0r" (12345) "12345")
 
-(deftest format.r.37
-  (format nil "~10,-1r" 12345)
-  "12345")
+(def-format-test format.r.37
+  "~10,-1r" (12345) "12345")
 
-(deftest format.r.38
-  (format nil "~10,-1000000000000000r" 12345)
-  "12345")
+(def-format-test format.r.38
+  "~10,-1000000000000000r" (12345) "12345")
 
 ;;; Randomized test
 
@@ -372,4 +347,3 @@
    unless (string= s1 s2)
    collect (list radix mincol padchar commachar commaint fmt x s1 s2))
   nil)
-	      

@@ -7,43 +7,33 @@
 
 (compile-and-load "printer-aux.lsp")
 
-(deftest format.{.1
-  (format nil "~{~
-~}" nil)
-  "")
+(def-format-test format.{.1
+  (concatenate 'string "~{~" (string #\Newline) "~}")
+  (nil) "")
 
-(deftest format.{.1a
-  (format nil "~{~}" "" nil)
-  "")
+(def-format-test format.{.1a
+  "~{~}" ("" nil) "")
 
-(deftest format.{.1b
-  (format nil "~0{~}" "" '(1 2 3))
-  "")
+(def-format-test format.{.1b
+  "~0{~}" ("" '(1 2 3)) "")
 
-(deftest format.{.2
-  (format nil "~{ ~}" nil)
-  "")
+(def-format-test format.{.2
+  "~{ ~}" (nil) "")
 
-(deftest format.{.3
-  (format nil "~{X Y Z~}" nil)
-  "")
+(def-format-test format.{.3
+  "~{X Y Z~}" (nil) "")
 
-(deftest format.{.4
-  (format nil "~{~A~}" '(1 2 3 4))
-  "1234")
+(def-format-test format.{.4
+  "~{~A~}" ('(1 2 3 4)) "1234")
 
-(deftest format.{.5
-  (format nil "~{~{~A~}~}" '((1 2 3)(4 5)(6 7 8)))
-  "12345678")
+(def-format-test format.{.5
+  "~{~{~A~}~}" ('((1 2 3)(4 5)(6 7 8))) "12345678")
 
-(deftest format.{.6
-  (format nil "~{~1{~A~}~}" '((1 2 3)(4 5)(6 7 8)))
-  "146")
+(def-format-test format.{.6
+  "~{~1{~A~}~}" ('((1 2 3)(4 5)(6 7 8))) "146")
 
-(deftest format.{.7
-  (format nil "~1{~
-~}" nil)
-  "")
+(def-format-test format.{.7
+  (concatenate 'string "~1{~" (string #\Newline) "~}") (nil) "")
 
 (deftest format.{.8
   (loop for i from 0 to 10
@@ -52,20 +42,17 @@
 	collect (list i s))
   nil)
 
-(deftest format.{.9
-  (format nil "~#{~A~}" '(1 2 3 4 5 6 7) nil nil nil)
-  "1234")
+(def-format-test format.{.9
+  "~#{~A~}" ('(1 2 3 4 5 6 7) nil nil nil) "1234")
 
 ;;; (missing tests involved ~^ and have been moved to format-circumflex.lsp
 ;;;  and renamed.)
 
-(deftest format.{.15
-  (format nil "~0{~}" "~A" '(1 2 3))
-  "")
+(def-format-test format.{.15
+  "~0{~}" ("~A" '(1 2 3)) "")
 
-(deftest format.{.16
-  (format nil "~1{~}" "~A" '(4 5 6))
-  "4")
+(def-format-test format.{.16
+  "~1{~}" ("~A" '(4 5 6)) "4")
 
 (deftest format.{.17
   (format nil "~{~}" (formatter "") nil)
@@ -83,101 +70,79 @@
   (format nil "~3{~}" (formatter "~A") '(1 2 3 4))
   "123")
 
-(deftest format.{.21
-  (format nil "~V{~}" 2 "~A" '(1 2 3 4 5))
-  "12")
+(def-format-test format.{.21
+  "~V{~}" (2 "~A" '(1 2 3 4 5)) "12")
 
-(deftest format.{.22
-  (format nil "~#{~}" "~A" '(1 2 3 4 5))
-  "12")
+(def-format-test format.{.22
+  "~#{~}" ("~A" '(1 2 3 4 5)) "12")
 
-(deftest format.{.23
-  (format nil "~{FOO~:}" nil)
-  "FOO")
+(def-format-test format.{.23
+  "~{FOO~:}" (nil) "FOO")
 
-(deftest format.{.24
-  (format nil "~{~A~:}" '(1))
-  "1")
+(def-format-test format.{.24
+  "~{~A~:}" ('(1)) "1")
 
-(deftest format.{.25
-  (format nil "~{~A~:}" '(1 2))
-  "12")
+(def-format-test format.{.25
+  "~{~A~:}" ('(1 2)) "12")
 
-(deftest format.{.26
-  (format nil "~{~A~:}" '(1 2 3))
-  "123")
+(def-format-test format.{.26
+  "~{~A~:}" ('(1 2 3)) "123")
 
-(deftest format.{.27
-  (format nil "~0{FOO~:}" nil)
-  "")
+(def-format-test format.{.27
+  "~0{FOO~:}" (nil) "")
 
-(deftest format.{.28
-  (format nil "~V{FOO~:}" 0 nil)
-  "")
+(def-format-test format.{.28
+  "~V{FOO~:}" (0 nil) "")
 
-(deftest format.{.29
-  (format nil "~1{FOO~:}" nil)
-  "FOO")
+(def-format-test format.{.29
+  "~1{FOO~:}" (nil) "FOO")
 
-(deftest format.{.30
-  (format nil "~2{FOO~:}" nil)
-  "FOO")
+(def-format-test format.{.30
+  "~2{FOO~:}" (nil) "FOO")
 
-(deftest format.{.31
-  (format nil "~2{~
-~:}" nil)
-  "")
+(def-format-test format.{.31
+  (concatenate 'string "~2{~" (string #\Newline) "~:}")
+  (nil) "")
 
-(deftest format.{.32
-  (format nil "~2{FOO~}" nil)
-  "")
+(def-format-test format.{.32
+  "~2{FOO~}" (nil) "")
 
-(deftest format.{.33
-  (format nil "~v{~a~}" nil '(1 2 3 4 5 6 7))
-  "1234567")
+(def-format-test format.{.33
+  "~v{~a~}" (nil '(1 2 3 4 5 6 7)) "1234567")
 
 ;;; ~:{ ... ~}
 
-(deftest format.\:{.1
-  (format nil "~:{(~A ~A)~}" '((1 2 3)(4 5)(6 7 8)))
-  "(1 2)(4 5)(6 7)")
+(def-format-test format.\:{.1
+  "~:{(~A ~A)~}" ('((1 2 3)(4 5)(6 7 8))) "(1 2)(4 5)(6 7)")
 
-(deftest format.\:{.2
-  (format nil "~:{~
-~}" nil)
-  "")
+(def-format-test format.\:{.2
+  (concatenate 'string "~:{~" (string #\Newline) "~}")
+  (nil) "")
 
-(deftest format.\:{.3
-  (format nil "~:{~}" "" nil)
-  "")
+(def-format-test format.\:{.3
+  "~:{~}" ("" nil) "")
 
-(deftest format.\:{.4
-  (format nil "~:{~}" "~A" nil)
-  "")
+(def-format-test format.\:{.4
+  "~:{~}" ("~A" nil) "")
 
-(deftest format.\:{.5
-  (format nil "~:{~}" "X" '(nil (1 2) (3)))
-  "XXX")
+(def-format-test format.\:{.5
+  "~:{~}" ("X" '(nil (1 2) (3))) "XXX")
 
 (deftest format.\:{.6
   (format nil "~:{~}" (formatter "~A") '((1 2) (3) (4 5 6)))
   "134")
 
-(deftest format.\:{.7
-  (format nil "~0:{XYZ~}" '((1)))
-  "")
+(def-format-test format.\:{.7
+  "~0:{XYZ~}" ('((1))) "")
 	  
-(deftest format.\:{.8
-  (format nil "~2:{XYZ~}" '((1)))
-  "XYZ")
+(def-format-test format.\:{.8
+  "~2:{XYZ~}" ('((1))) "XYZ")
 	  
-(deftest format.\:{.9
-  (format nil "~2:{~A~}" '((1) (2)))
-  "12")
+(def-format-test format.\:{.9
+  "~2:{~A~}" ('((1) (2))) "12")
 	  
-(deftest format.\:{.10
-  (format nil "~2:{~A~}" '((1 X) (2 Y) (3 Z)))
-  "12")
+(def-format-test format.\:{.10
+  "~2:{~A~}" ('((1 X) (2 Y) (3 Z))) "12")
 
 (deftest format.\:{.11
   (loop for i from 0 to 10 collect
@@ -185,17 +150,14 @@
   ("" "1" "12" "123" "1234" "12345"
    "123456" "123456" "123456" "123456" "123456"))
 
-(deftest format.\:{.12
-  (format nil "~V:{X~}" nil '((1) (2) (3) nil (5)))
-  "XXXXX")
+(def-format-test format.\:{.12
+  "~V:{X~}" (nil '((1) (2) (3) nil (5))) "XXXXX")
 
-(deftest format.\:{.13
-  (format nil "~#:{~A~}" '((1) (2) (3) (4) (5)) 'foo 'bar)
-  "123")
+(def-format-test format.\:{.13
+  "~#:{~A~}" ('((1) (2) (3) (4) (5)) 'foo 'bar) "123")
 
-(deftest format.\:{.14
-  (format nil "~:{~A~:}" '((1 X) (2 Y) (3) (4 A B)))
-  "1234")
+(def-format-test format.\:{.14
+  "~:{~A~:}" ('((1 X) (2 Y) (3) (4 A B))) "1234")
 
 (deftest format.\:{.15
   (loop for i from 0 to 10 collect
@@ -203,59 +165,45 @@
   ("" "1" "12" "123" "1234" "1234"
    "1234" "1234" "1234" "1234" "1234"))
 
-(deftest format.\:{.16
-  (format nil "~:{ABC~:}" '(nil))
-  "ABC")
+(def-format-test format.\:{.16
+  "~:{ABC~:}" ('(nil)) "ABC")
 
-(deftest format.\:{.17
-  (format nil "~v:{ABC~:}" nil '(nil))
-  "ABC")
+(def-format-test format.\:{.17
+  "~v:{ABC~:}" (nil '(nil)) "ABC")
 
 
 ;;; Tests of ~@{ ... ~}
 
-(deftest format.@{.1
-  (format nil "~@{~
-~}")
-  "")
+(def-format-test format.@{.1
+  (concatenate 'string "~@{~" (string #\Newline) "~}")
+  nil "")
 
-(deftest format.@{.1A
-  (format nil "~@{~}" "")
-  "")
+(def-format-test format.@{.1A
+  "~@{~}" ("") "")
 
-(deftest format.@{.2
-  (format nil "~@{ ~}")
-  "")
+(def-format-test format.@{.2
+  "~@{ ~}" nil "")
 
-(deftest format.@{.3
-  (with-standard-io-syntax
-   (let ((*print-readably* nil))
-     (format nil "~@{X ~A Y Z~}" nil)))
-  "X NIL Y Z")
+(def-format-test format.@{.3
+  "~@{X ~A Y Z~}" (nil) "X NIL Y Z")
 
-(deftest format.@{.4
-  (format nil "~@{~A~}" 1 2 3 4)
-  "1234")
+(def-format-test format.@{.4
+  "~@{~A~}" (1 2 3 4) "1234")
 
-(deftest format.@{.5
-  (format nil "~@{~{~A~}~}" '(1 2 3) '(4 5) '(6 7 8))
-  "12345678")
+(def-format-test format.@{.5
+  "~@{~{~A~}~}" ('(1 2 3) '(4 5) '(6 7 8)) "12345678")
 
-(deftest format.@{.6
-  (format nil "~@{~1{~A~}~}" '(1 2 3) '(4 5) '(6 7 8))
-  "146")
+(def-format-test format.@{.6
+  "~@{~1{~A~}~}" ('(1 2 3) '(4 5) '(6 7 8)) "146")
 
-(deftest format.@{.7
-  (format nil "~1@{FOO~}")
-  "")
+(def-format-test format.@{.7
+  "~1@{FOO~}" nil "")
 
-(deftest format.@{.8
-  (format nil "~v@{~A~}" nil 1 4 7)
-  "147")
+(def-format-test format.@{.8
+  "~v@{~A~}" (nil 1 4 7) "147")
 
-(deftest format.@{.9
-  (format nil "~#@{~A~}" 1 2 3)
-  "123")
+(def-format-test format.@{.9
+  "~#@{~A~}" (1 2 3) "123")
 
 (deftest format.@{.10
   (loop for i from 0 to 10
@@ -264,56 +212,44 @@
   ("" "1" "12" "123" "1234" "12345"
    "123456" "1234567" "12345678" "123456789" "12345678910"))
 
-(deftest format.@{.11
-  (format nil "~@{X~:}")
-  "X")
+(def-format-test format.@{.11
+  "~@{X~:}" nil "X")
 
-(deftest format.@{.12
-  (format nil "~@{~}" (formatter "X~AY") 1)
-  "X1Y")
+(def-format-test format.@{.12
+  "~@{~}" ((formatter "X~AY") 1) "X1Y")
 
-(deftest format.@{.13
-  (format nil "~v@{~}" 1 (formatter "X") 'foo)
-  "X")
+(def-format-test format.@{.13
+  "~v@{~}" (1 (formatter "X") 'foo) "X")
 
 ;;; ~:@{
 
-(deftest format.\:@{.1
-  (format nil "~:@{~
-~}")
-  "")
+(def-format-test format.\:@{.1
+  (concatenate 'string "~:@{~" (string #\Newline) "~}")
+  nil "")
 
-(deftest format.\:@{.2
-  (format nil "~:@{~A~}" '(1 2) '(3) '(4 5 6))
-  "134")
+(def-format-test format.\:@{.2
+  "~:@{~A~}" ('(1 2) '(3) '(4 5 6)) "134")
 
-(deftest format.\:@{.3
-  (format nil "~:@{(~A ~A)~}" '(1 2 4) '(3 7) '(4 5 6))
-  "(1 2)(3 7)(4 5)")
+(def-format-test format.\:@{.3
+  "~:@{(~A ~A)~}" ('(1 2 4) '(3 7) '(4 5 6)) "(1 2)(3 7)(4 5)")
 
-(deftest format.\:@{.4
-  (format nil "~:@{~}" "(~A ~A)" '(1 2 4) '(3 7) '(4 5 6))
-  "(1 2)(3 7)(4 5)")
+(def-format-test format.\:@{.4
+  "~:@{~}" ("(~A ~A)" '(1 2 4) '(3 7) '(4 5 6)) "(1 2)(3 7)(4 5)")
 
-(deftest format.\:@{.5
-  (format nil "~:@{~}" (formatter "(~A ~A)") '(1 2 4) '(3 7) '(4 5 6))
-  "(1 2)(3 7)(4 5)")
+(def-format-test format.\:@{.5
+  "~:@{~}" ((formatter "(~A ~A)") '(1 2 4) '(3 7) '(4 5 6)) "(1 2)(3 7)(4 5)")
 
-(deftest format.\:@.6
-  (format nil "~:@{~A~:}" '(1 A) '(2 B) '(3) '(4 C D))
-  "1234")
+(def-format-test format.\:@.6
+  "~:@{~A~:}" ('(1 A) '(2 B) '(3) '(4 C D)) "1234")
 
-(deftest format.\:@.7
-  (format nil "~0:@{~A~:}" '(1 A) '(2 B) '(3) '(4 C D))
-  "")
+(def-format-test format.\:@.7
+  "~0:@{~A~:}" ('(1 A) '(2 B) '(3) '(4 C D)) "")
 
-(deftest format.\:@.8
-  (format nil "~#:@{A~:}" nil nil nil)
-  "AAA")
+(def-format-test format.\:@.8
+  "~#:@{A~:}" (nil nil nil) "AAA")
 
-(deftest format.\:@.9
-  (format nil "~v:@{~A~}" nil '(1) '(2) '(3))
-  "123")
+(def-format-test format.\:@.9
+  "~v:@{~A~}" (nil '(1) '(2) '(3)) "123")
 
 (deftest format.\:@.10
   (loop for i from 0 to 10
