@@ -126,3 +126,104 @@
 (deftest vector.type.30
   (typep "abcde" '(vector t *))
   nil)
+
+(deftest vector.type.31
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (notnot-mv (typep s '(vector base-char))))
+  t)
+
+(deftest vector.type.32
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (notnot-mv (typep s '(vector base-char 3))))
+  t)
+
+(deftest vector.type.33
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (typep s '(vector base-char 2)))
+  nil)
+
+(deftest vector.type.34
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (typep s '(vector base-char 4)))
+  nil)
+
+(deftest vector.type.35
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (notnot-mv (typep s 'vector)))
+  t)
+
+(deftest vector.type.36
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (notnot-mv (typep s '(vector *))))
+  t)
+
+(deftest vector.type.37
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (notnot-mv (typep s '(vector * 3))))
+  t)
+
+(deftest vector.type.38
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (notnot-mv (typep s '(vector * *))))
+  t)
+
+(deftest vector.type.39
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (typep s '(vector t)))
+  nil)
+
+(deftest vector.type.40
+  (let ((s (coerce "abc" 'simple-base-string)))
+    (typep s '(vector t *)))
+  nil)
+
+;;;; Tests of the function VECTOR
+
+(deftest vector.1
+  (vector)
+  #())
+
+(deftest vector.2
+  (vector 1 2 3)
+  #(1 2 3))
+
+(deftest vector.3
+  (let* ((len (min 1000 (1- call-arguments-limit)))
+	 (args (make-int-list len))
+	 (v (apply #'vector args)))
+    (and
+     (typep v '(vector t))
+     (typep v '(vector t *))
+     (typep v `(vector t ,len))
+     (typep v 'simple-vector)
+     (typep v `(simple-vector ,len))
+     (eql (length v) len)
+     (loop for i from 0
+	   for e across v
+	   always (eql i e))
+     t))
+  t)
+
+(deftest vector.4
+  (notnot-mv (typep (vector) '(vector t 0)))
+  t)
+  
+(deftest vector.5
+  (notnot-mv (typep (vector) 'simple-vector))
+  t)
+  
+(deftest vector.6
+  (notnot-mv (typep (vector) '(simple-vector 0)))
+  t)
+  
+(deftest vector.7
+  (notnot-mv (typep (vector 1 2 3) 'simple-vector))
+  t)
+  
+(deftest vector.8
+  (notnot-mv (typep (vector 1 2 3) '(simple-vector 3)))
+  t)
+
+(deftest vector.9
+  (typep (vector #\a #\b #\c) 'string)
+  nil)
