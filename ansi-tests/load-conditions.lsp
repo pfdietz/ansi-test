@@ -12,5 +12,7 @@
 (load "ignore-errors.lsp")
 (compile-and-load "define-condition-aux.lsp")
 (load "define-condition.lsp")
+(load "restart-bind.lsp")
+
 
 
