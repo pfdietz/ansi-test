@@ -560,6 +560,41 @@
     (check-equivalence `(member 0 ,i1) `(member 0 ,i2)))
   nil)
 
+(deftest subtypep.member.20
+  (check-equivalence '(and (member a b c d) (member e d b f g))
+		     '(member b d))
+  nil)
+
+(deftest subtypep.member.21
+  (check-equivalence '(and (member a b c d) (member e d f g))
+		     '(eql d))
+  nil)
+
+(deftest subtypep.member.22
+  (check-equivalence '(and (member a b c d) (member e f g))
+		     nil)
+  nil)
+
+(deftest subtypep.member.23
+  (check-equivalence '(or (member a b c) (member z b w))
+		     '(member z a b w c))
+  nil)
+
+(deftest subtypep.member.24
+  (check-equivalence '(or (member a b c) (eql d))
+		     '(member d c b a))
+  nil)
+
+(deftest subtypep.member.25
+  (check-equivalence 'boolean '(member nil t))
+  nil)
+
+(deftest subtypep.member.26
+  (check-equivalence '(or (eql a) (eql b))
+		     '(member a b))
+  nil)
+
+
 ;;; Tests of EQL types
 
 (deftest subtypep.eql.1
@@ -590,5 +625,6 @@
     (check-equivalence `(eql ,i1) `(eql ,i2)))
   nil)
 
-
-    
+(deftest subtypep.eql.4
+  (check-equivalence '(and (eql a) (eql b)) nil)
+  nil)
