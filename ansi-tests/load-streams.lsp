@@ -39,5 +39,6 @@
 (load "synonym-stream-symbol.lsp")
 (load "make-broadcast-stream.lsp")
 (load "broadcast-stream-streams.lsp")
+(load "make-two-way-stream.lsp")
 
 

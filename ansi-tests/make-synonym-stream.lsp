@@ -47,6 +47,13 @@
      (write-char #\y ss)))
   "abxy")
 
+;;; FIXME
+;;; Add tests for: open-stream-p, close, stream-element-type, streamp,
+;;;  peek-char, read-char-no-hang, terpri, fresh-line, unread-char,
+;;;  read-line, write-line, write-string, read-sequence, write-sequence,
+;;;  read-byte, write-byte, listen, clear-input, finish-output, force-output,
+;;;  clear-output, format, print, prin1, princ
+
 ;;; Error cases
 
 (deftest make-synonym-stream.error.1
