@@ -46,9 +46,9 @@
   a b c d e)
 
 (deftest symbol-macrolet.8
-  (let ((x :bad))
+  (let ((x :good))
     (declare (special x))
-    (let ((x :good))
+    (let ((x :bad))
       (symbol-macrolet () (declare (special x)) x)))
   :good)
 
@@ -74,5 +74,3 @@
   (signals-error (symbol-macrolet ((*pathnames* 19)) *pathnames*)
 		 program-error)
   t)
-
-
