@@ -19,21 +19,21 @@
 	(not (floatp y))
 	(etypecase y
 	  (short-float
-	   (<= #.(rationalize most-negative-short-float)
+	   (<= #.(rational most-negative-short-float)
 	       x
-	       #.(rationalize most-positive-short-float)))
+	       #.(rational most-positive-short-float)))
 	  (single-float
-	   (<= #.(rationalize most-negative-single-float)
+	   (<= #.(rational most-negative-single-float)
 	       x
-	       #.(rationalize most-positive-single-float)))
+	       #.(rational most-positive-single-float)))
 	  (double-float
-	   (<= #.(rationalize most-negative-double-float)
+	   (<= #.(rational most-negative-double-float)
 	       x
-	       #.(rationalize most-positive-double-float)))
+	       #.(rational most-positive-double-float)))
 	  (long-float
-	   (<= #.(rationalize most-negative-long-float)
+	   (<= #.(rational most-negative-long-float)
 	       x
-	       #.(rationalize most-positive-long-float))))))))    
+	       #.(rational most-positive-long-float))))))))    
 
 (defun =.4-fn ()
   (loop for x in *numbers*

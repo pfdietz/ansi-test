@@ -384,8 +384,8 @@
 				    most-negative-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
 		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
-			(<= (rationalize lower-bound)
-			  x (rationalize bound)))
+			(<= (rational lower-bound)
+			    x (rational bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -409,7 +409,7 @@
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
 		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
-			(<= (rationalize bound) x (rationalize upper-bound)))
+			(<= (rational bound) x (rational upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -433,8 +433,8 @@
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
 		 when (if (floatp x) (subtypep (class-of x)
 					       (class-of lower-bound))
-			(<= (rationalize lower-bound)
-			    x (rationalize upper-bound)))
+			(<= (rational lower-bound)
+			    x (rational upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z1 (+ y epsilon))
@@ -585,7 +585,7 @@
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
 		 when (if (floatp x) (subtypep (class-of x)
 					       (class-of lower-bound))
-			(<= (rationalize lower-bound) x (rationalize bound)))
+			(<= (rational lower-bound) x (rational bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -608,7 +608,7 @@
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
 		 when (if (floatp x) (subtypep (class-of x) (class-of bound))
-			(<= (rationalize bound) x (rationalize upper-bound)))
+			(<= (rational bound) x (rational upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -632,8 +632,8 @@
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
 		 when (if (floatp x) (subtypep (class-of x)
 					       (class-of lower-bound))
-			(<= (rationalize lower-bound)
-			    x (rationalize upper-bound)))
+			(<= (rational lower-bound)
+			    x (rational upper-bound)))
 		 nconc
 		 (let* ((y (float x one))
 			(z1 (+ y epsilon))

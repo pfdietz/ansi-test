@@ -26,6 +26,10 @@
 (load "times.lsp")
 (load "plus.lsp")
 (load "minus.lsp")
+(load "divide.lsp")
+
+(load "rational.lsp")
+(load "rationalize.lsp")
 
 (load "evenp.lsp")
 (load "oddp.lsp")

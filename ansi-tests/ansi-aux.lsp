@@ -302,8 +302,11 @@ the condition to go uncaught if it cannot be classified."
      (stream-error  () 'stream-error)
      (reader-error  () 'reader-error)
      (file-error    () 'file-error)
-     (control-error () 'control-error)
      (cell-error    () 'cell-error)
+     (division-by-zero () 'division-by-zero)
+     (floating-pointer-overflow () 'floating-point-overflow)
+     (floating-pointer-underflow () 'floating-point-underflow)
+     (arithmethic-error () 'arithmetic-error)
      (error         () 'error)
   )))
 
