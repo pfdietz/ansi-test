@@ -42,6 +42,7 @@
 
 (defmacro def-open-test (name args form expected
 			      &key
+			      (notes nil notes-p)
 			      (build-form nil build-form-p)
 			      (element-type 'character element-type-p)
 			      (pathname #p"tmp.dat"))
@@ -74,6 +75,7 @@
 	    ))))
 			      
   `(deftest ,name
+     ,@(when notes-p `(:notes ,notes))
      (let ((pn ,pathname))
        (delete-all-versions pn)
        ,build-form
@@ -548,7 +550,9 @@
 	 (with-open-file
 	  (s pn :direction :input)
 	  (values (read-line s nil))))
-  ("wxyz"))
+  ("wxyz")
+  :notes (:open-if-exists-new-version-no-error)
+  )
 
 (def-open-test open.output.22 (:if-exists :rename :direction :output)
   (progn (write-sequence "wxyz" s)
@@ -628,6 +632,7 @@
 ;;; of the filespec is :newest
 
 (deftest open.output.30
+  :notes (:open-if-exists-new-version-no-error)
   (let ((pn (make-pathname :name "tmp" :type "dat" :version :newest)))
     (or (not (eql (pathname-version pn) :newest))
 	(progn
@@ -877,7 +882,9 @@
   (progn (write-sequence "wxyz" s)
 	 (file-position s :start)
 	 (values (read-line s nil)))
-  ("wxyz"))
+  ("wxyz")
+  :notes (:open-if-exists-new-version-no-error)
+  )
 
 (def-open-test open.io.22 (:if-exists :rename :direction :io)
   (progn (write-sequence "wxyz" s)
@@ -945,6 +952,7 @@
 ;;; of the filespec is :newest
 
 (deftest open.io.30
+  :notes (:open-if-exists-new-version-no-error)
   (let ((pn (make-pathname :name "tmp" :type "dat" :version :newest)))
     (or (not (eql (pathname-version pn) :newest))
 	(progn

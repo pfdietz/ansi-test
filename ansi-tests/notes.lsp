@@ -26,3 +26,8 @@
 (defnote :assume-no-simple-streams
   "Disable the test if simple streams are present.")
 
+(defnote :open-if-exists-new-version-no-error
+  "Assume that OPEN, when called with :if-exists :new-version, does not fail.")
+
+#+sbcl (rt::disable-note :open-if-exists-new-version-no-error)
+
