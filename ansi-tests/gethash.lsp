@@ -143,7 +143,7 @@
 			(gethash pz table)
 			(gethash nz table)))
 	unless (or (eql pz nz)
-		   (equal result '(:x :x nil :y :y :y)))
+		   (equal result '(:x :x :x :y :y :y)))
 	collect (list pz nz result))
   nil)
 
