@@ -2148,7 +2148,7 @@
 		 *cl-local-macro-symbols*
 		 *cl-special-operator-symbols*
 		 *cl-standard-generic-function-symbols*
-		 '(declare)))))
+		 '(declare ed)))))
 
 (defparameter *cl-function-or-accessor-symbols*
   (append *cl-function-symbols* *cl-accessor-symbols*))
