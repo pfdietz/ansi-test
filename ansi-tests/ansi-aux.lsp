@@ -1391,3 +1391,21 @@ the condition to go uncaught if it cannot be classified."
 
 (defun with-package-iterator-all (packages)
   (test-with-package-iterator packages :internal :external :inherited))
+
+(defun frob-simple-condition (c expected-fmt &rest expected-args)
+  "Try out the format control and format arguments of a simple-condition C,
+   but make no assumptions about what they print as, only that they
+   do print."
+  (declare (ignore expected-fmt expected-args))
+  (and (typep c 'simple-condition)
+       (let ((fc (simple-condition-format-control c))
+	     (args (simple-condition-format-arguments c)))
+	 (and
+	  (stringp (apply #'format nil fc args))
+	  t))))
+
+(defun frob-simple-error (c expected-fmt &rest expected-args)
+  (and (typep c 'simple-error)
+       (apply #'frob-simple-condition c expected-fmt expected-args)))
+
+  

@@ -9,51 +9,32 @@
 (deftest cerror.1
   (let ((fmt "Cerror"))
     (handler-case (cerror "Keep going." fmt)
-		  (simple-error (c)
-				(and
-				 (null (simple-condition-format-arguments c))
-				 (eqt (simple-condition-format-control c)
-				      fmt)))))
+		  (simple-error (c) (frob-simple-error c fmt))))
   t)
 
 (deftest cerror.2
   (let* ((fmt "Cerror")
 	 (cnd (make-condition 'simple-error :format-control fmt)))
     (handler-case (cerror "Continue on." cnd)
-		  (simple-error (c)
-				(and (eqt c cnd)
-				     (eqt (simple-condition-format-control c)
-					  fmt)))))
+		  (simple-error (c) (frob-simple-error c fmt))))
   t)
 
 (deftest cerror.3
   (let ((fmt "Cerror"))
     (handler-case (cerror "Continue" 'simple-error :format-control fmt)
-		  (simple-error (c)
-				(eqt (simple-condition-format-control c)
-				     fmt))))
+		  (simple-error (c) (frob-simple-error c fmt))))
   t)
 
 (deftest cerror.4
   (let ((fmt "Cerror: ~A"))
     (handler-case (cerror "On on" fmt 10)
-		  (simple-error (c)
-				(and
-				 (equalt
-				  (simple-condition-format-arguments c)
-				  '(10))
-				 (eqt (simple-condition-format-control c)
-				      fmt)))))
+		  (simple-error (c) (frob-simple-error c fmt 10))))
   t)
 
 (deftest cerror.5
   (let ((fmt (formatter "Cerror")))
     (handler-case (cerror "Keep going." fmt)
-		  (simple-error (c)
-				(and
-				 (null (simple-condition-format-arguments c))
-				 (eqt (simple-condition-format-control c)
-				      fmt)))))
+		  (simple-error (c) (frob-simple-error c fmt))))
   t)
 
 ;;; Continuing from a cerror
