@@ -207,6 +207,12 @@
 				      (:type list) :named)
   a39 b39 c39)
 
+;;; Vector structures
+
+(defstruct-with-tests (struct-test-40 (:type vector)) a40 b40)
+(defstruct-with-tests (struct-test-41 (:type vector) :named) a41 b41)
+(defstruct-with-tests (struct-test-42 (:type (vector t))) a42 b42)
+(defstruct-with-tests (struct-test-43 (:type (vector t)) :named) a43 b43)
 
 
 
