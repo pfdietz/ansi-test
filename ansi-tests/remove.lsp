@@ -373,37 +373,37 @@
   (loop for i from 1 to 2500
 	unless (eq (random-test-remove 20) t)
 	do (return *remove-fail-args*))
-  t)
+  nil)
 
 (deftest remove-if-random
   (loop for i from 1 to 2500
 	unless (eq (random-test-remove-if 20) t)
 	do (return *remove-fail-args*))
-  t)
+  nil)
 
 (deftest remove-if-not-random
   (loop for i from 1 to 2500
 	unless (eq (random-test-remove-if 20 t) t)
 	do (return *remove-fail-args*))
-  t)
+  nil)
 
 (deftest delete-random
   (loop for i from 1 to 2500
 	unless (eq (random-test-delete 20) t)
 	do (return *remove-fail-args*))
-  t)
-1
+  nil)
+
 (deftest delete-if-random
   (loop for i from 1 to 2500
 	unless (eq (random-test-delete-if 20) t)
 	do (return *remove-fail-args*))
-  t)
+  nil)
 
 (deftest delete-if-not-random
   (loop for i from 1 to 2500
 	unless (eq (random-test-delete-if 20 t) t)
 	do (return *remove-fail-args*))
-  t)
+  nil)
 
 ;;; Additional tests with KEY = NIL
 
