@@ -401,3 +401,180 @@
   (t t)
   (117 foo)
   (117 foo))
+
+(deftest shared-initialize.5.4
+  (let* ((class (find-class 'shared-init-class-05))
+	 (obj (allocate-instance class))
+	 (obj2 (allocate-instance class)))
+    (slot-makunbound obj 'a)
+    (values
+     (setf (slot-value obj 'b) 'bar)
+     (eqt obj (shared-initialize obj t :a 117))
+     (map-slot-boundp* obj '(a b))
+     (map-slot-value obj '(a b))
+     (map-slot-value obj2 '(a b))))
+  bar
+  t
+  (t t)
+  (117 bar)
+  (117 bar))
+
+;;; Shared initargs
+
+(defclass shared-init-class-06 ()
+  ((a :initarg :i1 :initarg :i2 :initform 'x)
+   (b :initarg :i2 :initarg :i3 :initform 'y)))
+
+(deftest shared-initialize.6.1
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil))
+     (map-slot-boundp* obj '(a b))))
+  (nil nil)
+  t
+  (nil nil))
+
+(deftest shared-initialize.6.2
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj t))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  x y)
+
+(deftest shared-initialize.6.3
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil :i1 'z))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)))
+  (nil nil)
+  t
+  (t nil)
+  z)
+
+(deftest shared-initialize.6.4
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil :i2 'z))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  z z)
+
+(deftest shared-initialize.6.5
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil :i1 'w :i2 'z))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  w z)
+
+(deftest shared-initialize.6.6
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil :i2 'z :i1 'w))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  z z)
+
+(deftest shared-initialize.6.7
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil :i2 'z :i2 'w))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  z z)
+
+
+(deftest shared-initialize.6.8
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil :i2 'z :i2 'w :foo t))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  z z)
+
+
+(deftest shared-initialize.6.9
+  (let* ((class (find-class 'shared-init-class-06))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil :allow-other-keys nil
+				 :i2 'z :i2 'w :foo t))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  z z)
+
+;;; Error tests
+
+(deftest shared-initialize.error.1
+  (classify-error (shared-initialize))
+  program-error)
+
+(deftest shared-initialize.error.2
+  (classify-error (let ((obj (allocate-instance
+			      (find-class 'shared-init-class-01))))
+		    (shared-initialize obj)))
+  program-error)
+
+(deftest shared-initialize.error.3
+  (classify-error (let ((obj (allocate-instance
+			      (find-class 'shared-init-class-01))))
+		    (shared-initialize obj nil :a)))
+  program-error)
+
+(deftest shared-initialize.error.4
+  (classify-error (let ((obj (allocate-instance
+			      (find-class 'shared-init-class-01))))
+		    (shared-initialize obj nil '(a b c) nil)))
+  program-error)
+
+
+
+
+

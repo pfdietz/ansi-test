@@ -92,3 +92,13 @@
 (deftest allocate-instance.error.1
   (classify-error (allocate-instance))
   program-error)
+
+(deftest allocate-instance.error.2
+  (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
+				     :b))
+  program-error)
+
+(deftest allocate-instance.error.3
+  (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
+				     '(a b c) nil))
+  program-error)
