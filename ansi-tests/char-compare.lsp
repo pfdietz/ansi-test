@@ -13,7 +13,9 @@
 		   char-not-lessp char-not-greaterp char-not-equal)
 	collect (classify-error (funcall f)))
   (program-error program-error program-error program-error 
-   program-error program-error program-error program-error))
+   program-error program-error program-error program-error
+   program-error program-error program-error program-error
+   ))
 
 (deftest char=.1
   (is-ordered-by +code-chars+ #'(lambda (c1 c2) (not (char= c1 c2))))

@@ -14,23 +14,21 @@
 ;; we don't examine it here.
 ;; Try several ways of specifying the package name.
 (deftest defpackage-1
-  (handler-case 
-   (loop
-    for n in '("H" #:|H| #\H) count
-    (not
-     (progn
-       (ignore-errors (delete-package "H"))
-       (let ((p (ignore-errors (eval `(defpackage ,n)))))
-	 (and
-	  (packagep p)
-	  (equal (package-name p)              "H")
-	  ;; (equal (package-use-list p)          nil)
-	  (equal (package-used-by-list p)      nil)
-	  (equal (package-nicknames p)         nil)
-	  (equal (package-shadowing-symbols p) nil)
-	  (null (documentation p t))
-	  )))))
-   (error (c) c))
+  (loop
+   for n in '("H" #:|H| #\H) count
+   (not
+    (progn
+      (ignore-errors (delete-package "H"))
+      (let ((p (ignore-errors (eval `(defpackage ,n)))))
+	(and
+	 (packagep p)
+	 (equal (package-name p)              "H")
+	 ;; (equal (package-use-list p)          nil)
+	 (equal (package-used-by-list p)      nil)
+	 (equal (package-nicknames p)         nil)
+	 (equal (package-shadowing-symbols p) nil)
+	 (null (documentation p t))
+	 )))))
   0)
 
 ;; Test :nicknames option
@@ -365,22 +363,18 @@
 (deftest defpackage-13
   (progn
     (ignore-errors (delete-package "H"))
-    (handler-case
-     (eval '(defpackage "H" (:use) (:size 10) (:size 20)))
-     (program-error () 'program-error)
-     (error (c) c)))
+    (classify-error
+     (eval '(defpackage "H" (:use) (:size 10) (:size 20)))))
   program-error)
 
 ;; Repeated documentation field should cause a program-error
 (deftest defpackage-14
   (progn
     (ignore-errors (delete-package "H"))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:documentation "foo")
-	      (:documentation "bar")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:documentation "bar")))))
   program-error)
 
 ;; When a nickname refers to an existing package or nickname,
@@ -389,21 +383,17 @@
 (deftest defpackage-15
   (progn
     (ignore-errors (delete-package "H"))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
-	      (:nicknames "A")))
-     (package-error () 'package-error)
-     (error (c) c)))
+	      (:nicknames "A")))))
   package-error)
 
 (deftest defpackage-16
   (progn
     (ignore-errors (delete-package "H"))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
-	      (:nicknames "Q")))
-     (package-error () 'package-error)
-     (error (c) c)))
+	      (:nicknames "Q")))))
   package-error)
 
 ;; Names in :shadow, :shadowing-import-from, :import-from, and :intern
@@ -411,132 +401,107 @@
 
 ;; :shadow and :shadowing-import-from
 (deftest defpackage-17
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
     (ignore-errors (delete-package "G"))
     (eval '(defpackage "G" (:use) (:export "A")))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:shadow "A")
-	      (:shadowing-import-from "G" "A")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:shadowing-import-from "G" "A")))))
   program-error)
 
 ;; :shadow and :import-from
 (deftest defpackage-18
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
     (ignore-errors (delete-package "G"))
     (eval '(defpackage "G" (:use) (:export "A")))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:shadow "A")
-	      (:import-from "G" "A")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:import-from "G" "A")))))
   program-error)
 
 ;; :shadow and :intern
 (deftest defpackage-19
   (progn
     (ignore-errors (delete-package "H"))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:shadow "A")
-	      (:intern "A")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:intern "A")))))
   program-error)
 
 ;; :shadowing-import-from and :import-from
 (deftest defpackage-20
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
     (ignore-errors (delete-package "G"))
     (eval '(defpackage "G" (:use) (:export "A")))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:shadowing-import-from "G" "A")
-	      (:import-from "G" "A")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:import-from "G" "A")))))
   program-error)
 
 ;; :shadowing-import-from and :intern
 (deftest defpackage-21
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
     (ignore-errors (delete-package "G"))
     (eval '(defpackage "G" (:use) (:export "A")))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:shadowing-import-from "G" "A")
-	      (:intern "A")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:intern "A")))))
   program-error)
 
 ;; :import-from and :intern
 (deftest defpackage-22
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
     (ignore-errors (delete-package "G"))
     (eval '(defpackage "G" (:use) (:export "A")))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:import-from "G" "A")
-	      (:intern "A")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:intern "A")))))
   program-error)
 
 ;; Names given to :export and :intern must be disjoint,
 ;;  otherwise signal a program-error
 (deftest defpackage-23
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
-    (handler-case
+    (classify-error
      (eval '(defpackage "H" (:use)
 	      (:export "A")
-	      (:intern "A")))
-     (program-error () 'program-error)
-     (error (c) c)))
+	      (:intern "A")))))
   program-error)
 
 ;; :shadowing-import-from signals a correctable package-error
 ;;  if the symbol is not accessible in the named package
 (deftest defpackage-24
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
     (ignore-errors (delete-package "G"))
     (eval '(defpackage "G" (:use)))
-    (handler-case
-     (eval '(defpackage "H" (:shadowing-import-from "G" "NOT-THERE")))
-     (package-error (c)
-		    (if (position 'abort (compute-restarts c)
-				  :key #'restart-name :test-not #'eq)
-			'success
-		      'fail))
-     (error (c) c)))
+    (handle-non-abort-restart
+     (eval '(defpackage "H" (:shadowing-import-from
+			     "G" "NOT-THERE")))))
   success)
 
 ;; :import-from signals a correctable package-error if a symbol with
 ;; the indicated name is not accessible in the package indicated
 
 (deftest defpackage-25
-  (ignore-errors
+  (progn
     (ignore-errors (delete-package "H"))
     (ignore-errors (delete-package "G"))
     (eval '(defpackage "G" (:use)))
-    (handler-case
-     (eval '(defpackage "H" (:import-from "G" "NOT-THERE")))
-     (package-error (c)
-		    (if (position 'abort (compute-restarts c)
-				  :key #'restart-name :test-not #'eq)
-			'success
-		      'fail))
-     (error (c) c)))
+    (handle-non-abort-restart
+     (eval '(defpackage "H" (:import-from "G" "NOT-THERE")))))
   success)
 
 ;; A big test that combines all the options to defpackage

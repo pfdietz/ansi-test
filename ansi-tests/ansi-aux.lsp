@@ -129,6 +129,7 @@ the condition to go uncaught if it cannot be classified."
   (handler-case ,form
      (undefined-function () 'undefined-function)
      (program-error () 'program-error)
+     (package-error () 'package-error)
      (type-error    () 'type-error)
      (control-error () 'control-error)
   )))
@@ -270,3 +271,18 @@ the condition to go uncaught if it cannot be classified."
 		when c collect c)
 	  'string))
 (defparameter +rev-code-chars+ (reverse +code-chars+))
+
+;;; Used in checking for continuable errors
+
+(defun has-non-abort-restart (c)
+  (throw 'handled
+	 (if (position 'abort (compute-restarts c)
+		       :key #'restart-name :test-not #'eq)
+	     'success
+	   'fail)))
+
+(defmacro handle-non-abort-restart (&body body)
+  `(catch 'handled
+     (handler-bind ((error #'has-non-abort-restart))
+		   ,@body)))
+

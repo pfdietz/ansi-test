@@ -126,7 +126,3 @@
     (setf (schar s 2) #\X)
     s)
   "xxXxxx")
-
-
-
-
