@@ -7218,5 +7218,84 @@ Broken at C::WT-C-INLINE-LOC.
        (values (floor 0) (multiple-value-bind (v3) (cons 0 0) (car v3))))))
   0 0)
 
+;;; gcl (31 May 2004, cvs head)
+;;; Error in APPLY [or a callee]: Expected a FIXNUM
+;;; Also fails in cmucl 1/2003
+(deftest misc.380
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -1397457 1846252) a))
+       (declare (optimize (speed 2) (space 2) (safety 1)
+			  (debug 3) (compilation-speed 3)))
+       (let ((v9 (make-array nil :initial-element 0)))
+	 (declare (dynamic-extent v9))
+	 (block b8
+	   (let ((*s1* 0))
+	     (let ((*s4* (let
+			     ((*s1*
+			       (return-from b8
+				 (rational
+				  (setf (aref v9)
+					(deposit-field -5
+						       (byte 20 30) a))))))
+			   0)))
+	       (let ((*s8* (cons 0 0))) 0)))))))
+   399997)
+  1125898833500797)
 
-   
+;; This also fails in cmucl (11/2003 image).  This case has not been fully
+;; pruned for cmucl.
+;;
+;; Error in function LISP::ASSERT-ERROR:  The assertion (NOT C::WIN) failed.
+(deftest misc.381
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -1397457 1846252) a))
+       (declare (optimize (speed 2) (space 2) (safety 1)
+			  (debug 3) (compilation-speed 3)))
+       (let ((v9 (make-array nil :initial-element 0)))
+	 (declare (dynamic-extent v9))
+	 (block b8
+	   (let ((s1 0))
+	     (let ((s4 (let
+			     ((s1
+			       (return-from b8
+				 (rational
+				  (setf (aref v9)
+					(deposit-field -5
+						       (byte 20 30) a))))))
+			   0)))
+	       (let ((s8 (cons 0 0))) 0)))))))
+   399997)
+  1125898833500797)
+
+;;; gcl (31 May 2004, cvs head)
+;;; Error in SYSTEM:ASET [or a callee]: Expected a FIXNUM
+
+(deftest misc.382
+  (funcall
+   '(lambda (b)
+      (declare (type (integer -65822755520 31689335872) b))
+      (declare (optimize (speed 2) (space 2) (safety 3)
+			 (debug 0) (compilation-speed 1)))
+      (let ((s8 (make-array nil :initial-element
+			    (catch 'ct4
+			      (complex
+			       (dotimes (iv1 1 0)
+				 (rational (throw 'ct4 b)))
+			       0)))))
+	(elt '(13423701584)
+	     (min 0
+		  (max 0
+		       (rational
+			(let ((s3 (make-array nil :initial-element 0)))
+			  (if (ldb-test (byte 0 0)
+					(shiftf (aref s8)
+						(aref s8)))
+			      0 0))))))))
+   -38169486910)
+  13423701584)
