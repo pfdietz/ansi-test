@@ -9,19 +9,30 @@
 
 ;; elt on lists
 
-(deftest elt-1 (safe-elt nil 0) type-error)
-(deftest elt-1a (safe-elt nil -10) type-error)
-(deftest elt-2 (safe-elt nil 1000000) type-error)
-(deftest elt-3 (safe-elt '(a b c d e) 0) a)
-(deftest elt-4 (safe-elt '(a b c d e) 2) c)
-(deftest elt-5 (safe-elt '(a b c d e) 4) e)
-(deftest elt-5a (safe-elt '(a b c d e) -4) type-error)
+(deftest elt-1
+  (classify-error (elt nil 0))
+  type-error)
+
+(deftest elt-1a
+  (classify-error (elt nil -10))
+  type-error)
+
+(deftest elt-2
+  (classify-error (elt nil 1000000))
+  type-error)
+
+(deftest elt-3 (elt '(a b c d e) 0) a)
+(deftest elt-4 (elt '(a b c d e) 2) c)
+(deftest elt-5 (elt '(a b c d e) 4) e)
+(deftest elt-5a 
+  (classify-error (elt '(a b c d e) -4))
+  type-error)
+
 (deftest elt-6
   (let ((x (make-int-list 1000)))
-    (notnot
+    (notnot-mv
      (every
-      #'(lambda (i)
-	  (eql i (safe-elt x i)))
+      #'(lambda (i) (eql i (elt x i)))
       x)))
   t)
 
@@ -53,7 +64,7 @@
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((y (loop for c on x collect c)))
       (setf (elt x 2) 'f)
-      (notnot
+      (notnot-mv
        (every #'eq
 	      y
 	      (loop for c on x collect c)))))
@@ -61,48 +72,51 @@
 
 (deftest elt-12
   (let ((x (make-int-list 100000)))
-    (safe-elt x 90000))
+    (elt x 90000))
   90000)
 
 (deftest elt-13
   (let ((x (make-int-list 100000)))
     (setf (elt x 80000) 'foo)
-    (list (safe-elt x 79999)
-	  (safe-elt x 80000)
-	  (safe-elt x 80001)))
+    (list (elt x 79999)
+	  (elt x 80000)
+	  (elt x 80001)))
   (79999 foo 80001))
 
-
-;; Special case to test error handling as dictated by new
-;; CL standard
 (deftest elt-14
-  (let ((x (list 'a 'b 'c)))
-    (safe-elt x 10))
+  (classify-error
+   (let ((x (list 'a 'b 'c)))
+     (elt x 10)))
   type-error)
 
 (deftest elt-15
-  (let ((x (list 'a 'b 'c)))
-    (safe-elt x 'a))
+  (classify-error
+   (let ((x (list 'a 'b 'c)))
+     (elt x 'a)))
   type-error)
 
 (deftest elt-16
-  (let ((x (list 'a 'b 'c)))
-    (safe-elt x 10.0))
+  (classify-error
+   (let ((x (list 'a 'b 'c)))
+     (elt x 10.0)))
   type-error)
 
 (deftest elt-17
-  (let ((x (list 'a 'b 'c)))
-    (safe-elt x -1))
+  (classify-error
+   (let ((x (list 'a 'b 'c)))
+     (elt x -1)))
   type-error)
 
 (deftest elt-18
-  (let ((x (list 'a 'b 'c)))
-    (safe-elt x -100000000000000000))
+  (classify-error
+   (let ((x (list 'a 'b 'c)))
+     (elt x -100000000000000000)))
   type-error)
 
 (deftest elt-19
-  (let ((x (list 'a 'b 'c)))
-    (safe-elt x #\w))
+  (classify-error
+   (let ((x (list 'a 'b 'c)))
+     (elt x #\w)))
   type-error)
 
 (deftest elt-v-1
@@ -111,11 +125,16 @@
   type-error)
 
 ;; (deftest elt-v-2 (elt (make-array '(1)) 0) nil)  ;; actually undefined
-(deftest elt-v-3 (elt (make-array '(5) :initial-contents '(a b c d e)) 0)
+(deftest elt-v-3
+  (elt (make-array '(5) :initial-contents '(a b c d e)) 0)
   a)
-(deftest elt-v-4 (elt (make-array '(5) :initial-contents '(a b c d e)) 2)
+
+(deftest elt-v-4
+  (elt (make-array '(5) :initial-contents '(a b c d e)) 2)
   c)
-(deftest elt-v-5 (elt (make-array '(5) :initial-contents '(a b c d e)) 4)
+
+(deftest elt-v-5
+  (elt (make-array '(5) :initial-contents '(a b c d e)) 4)
   e)
 
 (deftest elt-v-6

@@ -9,7 +9,7 @@
   (subtypep* type (array-element-type (make-array 0 :element-type type))))
 
 (defun subtypep-or-unknown (subtype supertype)
-  (multiple-value-bind (is-subtype is-known)
+  (multiple-value-bind* (is-subtype is-known)
       (subtypep subtype supertype)
     (or (not is-known) (notnot is-subtype))))
 
@@ -30,10 +30,10 @@
   "Call MAKE-ARRAY and do sanity tests on the output."
   (declare (ignore element-type-p initial-contents initial-contents-p
 		   initial-element initial-element-p dio-p))
-  (let ((a (apply #'make-array dimensions options)))
+  (let ((a (check-values (apply #'make-array dimensions options))))
     (cond
      ((not (typep a 'array)) :fail-not-array)
-     ((not (arrayp a)) :fail-not-arrayp)
+     ((not (check-values (arrayp a))) :fail-not-arrayp)
 
      ((and (eq t element-type)
 	   (not adjustable)
@@ -92,18 +92,18 @@
 
      ;; If :adjustable is given, the array must be adjustable.
      ((and adjustable
-	   (not (adjustable-array-p a))
+	   (not (check-values (adjustable-array-p a)))
 	   :fail-adjustable))
 
      ;; If :fill-pointer is given, the array must have a fill pointer
      ((and fill-pointer
-	   (not (array-has-fill-pointer-p a))
+	   (not (check-values (array-has-fill-pointer-p a)))
 	   :fail-has-fill-pointer))
 
      ;; If the fill pointer is given as an integer, it must be the value
      ;; of the fill pointer of the new array
-     ((and (integerp fill-pointer)
-	   (not (eql fill-pointer (fill-pointer a)))
+     ((and (check-values (integerp fill-pointer))
+	   (not (eql fill-pointer (check-values (fill-pointer a))))
 	   :fail-fill-pointer-1))
 
      ;; If the fill-pointer argument is t, the fill pointer must be
@@ -115,7 +115,7 @@
      ;; If displaced-to another array, check that this is proper
      ((and
        displaced-to
-       (multiple-value-bind (actual-dt actual-dio)
+       (multiple-value-bind* (actual-dt actual-dio)
 	   (array-displacement a)
 	 (cond
 	  ((not (eq actual-dt displaced-to))
@@ -124,14 +124,15 @@
 	   :fail-displaced-index-offset)))))
 
      ;; Test of array-total-size
-     ((not (eql (array-total-size a)
+     ((not (eql (check-values (array-total-size a))
 		(reduce #'* dimensions-list :initial-value 1)))
       :fail-array-total-size)
 
      ;; Test array-row-major-index on all zeros
      ((and (> (array-total-size a) 0)
-	   (not (eql (apply #'array-row-major-index
-			    a (make-list (array-rank a) :initial-element 0))
+	   (not (eql (check-values
+		      (apply #'array-row-major-index
+			     a (make-list (array-rank a) :initial-element 0)))
 		     0)))
       :fail-array-row-major-index-0)
 

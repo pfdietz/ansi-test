@@ -9,7 +9,7 @@
   t t)
 
 (deftest t.2
-  (not (constantp t))
+  (not-mv (constantp t))
   nil)
 
 (deftest t.3

@@ -13,13 +13,32 @@
 (defun notnot (x) (not (not x)))
 
 (defmacro notnot-mv (form)
-  `(apply #'values (mapcar #'notnot (multiple-value-list ,form))))
+  `(notnot-mv-fn (multiple-value-list ,form)))
 
-;;; Macro to check that a function is returning a single value
-(defmacro check-value (form &optional (num 1))
+(defun notnot-mv-fn (results)
+  (if (null results)
+      (values)
+    (apply #'values
+	   (not (not (first results)))
+	   (rest results))))
+
+(defmacro not-mv (form)
+  `(not-mv-fn (multiple-value-list ,form)))
+
+(defun not-mv-fn (results)
+  (if (null results)
+      (values)
+    (apply #'values
+	   (not (first results))
+	   (rest results))))
+
+
+;;; Macro to check that a function is returning a specified number of values
+;;; (defaults to 1)
+(defmacro check-values (form &optional (num 1))
   (let ((v (gensym))
 	(n (gensym)))
-   `(let ((,v ,form)
+   `(let ((,v (multiple-value-list ,form))
 	  (,n ,num))
       (check-values-length ,v ,n ',form)
       (car ,v))))

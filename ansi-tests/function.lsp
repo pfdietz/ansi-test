@@ -21,7 +21,7 @@
   nil)
 
 (deftest function.3
-  (not (typep #'identity 'function))
+  (not-mv (typep #'identity 'function))
   nil)
 
 (deftest function.4
@@ -52,15 +52,15 @@
     (defun (setf function-7-accessor) (y x) (setf (car x) y) y)))
 
 (deftest function.7
-  (not (typep #'(setf function-7-accessor) 'function))
+  (not-mv (typep #'(setf function-7-accessor) 'function))
   nil)
 
 (deftest function.8
-  (not (typep #'(lambda (x) x) 'function))
+  (not-mv (typep #'(lambda (x) x) 'function))
   nil)
 
 (deftest function.9
-  (not (typep (compile nil '(lambda (x) x)) 'function))
+  (not-mv (typep (compile nil '(lambda (x) x)) 'function))
   nil)
 
 ;;; The next test demonstrates an incompatibility between CLtL1 and ANSI CL.
@@ -79,11 +79,11 @@
   nil)
 
 (deftest function.12
-  (flet ((%f () nil)) (not (typep #'%f 'function)))
+  (flet ((%f () nil)) (not-mv (typep #'%f 'function)))
   nil)
 
 (deftest function.13
-  (labels ((%f () nil)) (not (typep #'%f 'function)))
+  (labels ((%f () nil)) (not-mv (typep #'%f 'function)))
   nil)
 
 ;;; "If name is a function name, the functional definition of that
@@ -91,5 +91,5 @@
 ;;; labels, or macrolet form, if there is one." (page for FUNCTION, sec. 5.3)
 ;;;            ^^^^^^^^
 ;;;(deftest function.14
-;;;  (macrolet ((%f () nil)) (not (typep #'%f 'function)))
+;;;  (macrolet ((%f () nil)) (not-mv (typep #'%f 'function)))
 ;;;  nil)

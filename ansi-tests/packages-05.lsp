@@ -15,7 +15,7 @@
     (let ((p (make-package "TEST1")))
       (let ((sym (intern "FOO" p)))
 	(setf return-value (export sym p))
-	(multiple-value-bind (sym2 status)
+	(multiple-value-bind* (sym2 status)
 	    (find-symbol "FOO" p)
 	  (prog1
 	      (and sym2
@@ -33,7 +33,7 @@
     (let ((p (make-package "TEST1")))
       (let ((sym (intern "FOO" p)))
 	(export (list sym) p)
-	(multiple-value-bind (sym2 status)
+	(multiple-value-bind* (sym2 status)
 	    (find-symbol "FOO" p)
 	  (prog1
 	      (and sym2

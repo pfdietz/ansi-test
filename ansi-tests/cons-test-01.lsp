@@ -116,68 +116,67 @@
 
 ;; All the cons-related macros have a macro binding
 (deftest macro-bound-cons-macros
-    (not (every #'macro-function
-		      (list 'push 'pop 'pushnew 'remf)))
-  nil)
+  (notnot-mv (every #'macro-function
+		    (list 'push 'pop 'pushnew 'remf)))
+  t)
 
 ;; None of the cons-related functions have macro bindings
 (deftest no-cons-fns-are-macros
-    (some #'macro-function *cons-fns*)
+  (some #'macro-function *cons-fns*)
   nil)
 
 ;; Various easy tests of cons
 (deftest cons-of-symbols
-    (cons 'a 'b)
+  (cons 'a 'b)
   (a . b))
 
 (deftest cons-with-nil
-    (cons 'a nil)
+  (cons 'a nil)
   (a))
 
 ;; successive calls to cons produces results that are equal, but not eq
 (deftest cons-eq-equal
-    (let ((x (cons 'a 'b))
-	  (y (cons 'a 'b)))
-      (and (not (eqt x y))
-	   (equal x y)
-	   t))
+  (let ((x (cons 'a 'b))
+	(y (cons 'a 'b)))
+    (and (not (eqt x y))
+	 (equalt x y)))
   t)
 
 ;; list can be expressed as a bunch of conses (with nil)
 (deftest cons-equal-list
-    (equal (cons 'a (cons 'b (cons 'c nil)))
-	   (list 'a 'b 'c))
+  (equalt (cons 'a (cons 'b (cons 'c nil)))
+	  (list 'a 'b 'c))
   t)
 
 ;; Lists satisfy consp
 (deftest consp-list
-    (not (not (consp '(a))))
+  (notnot-mv (consp '(a)))
   t)
 
 ;; cons satisfies consp
 (deftest consp-cons
-    (not (not (consp (cons nil nil))))
+  (notnot-mv (consp (cons nil nil)))
   t)
 
 ;; nil is not a consp
 (deftest consp-nil
-    (consp nil)
+  (consp nil)
   nil)
 
 ;; The empty list is not a cons
 (deftest consp-empty-list
-    (consp (list))
+  (consp (list))
   nil)
 
 ;; A single element list is a cons
 (deftest consp-single-element-list
-    (not (not (consp (list 'a))))
+  (notnot-mv (consp (list 'a)))
   t)
 
 ;; For everything in *universe*, it is either an atom, or satisfies
 ;; consp, but not both
 (deftest consp-xor-atom-universe
-  (notnot
+  (notnot-mv
    (every #'(lambda (x) (or (and (consp x) (not (atom x)))
 			    (and (not (consp x)) (atom x))))
 	  *universe*))
@@ -185,7 +184,7 @@
 
 ;; Everything in type cons satisfies consp, and vice versa
 (deftest consp-cons-universe
-    (check-type-predicate 'consp 'cons)
+  (check-type-predicate 'consp 'cons)
   0)
 
 (deftest consp.error.1

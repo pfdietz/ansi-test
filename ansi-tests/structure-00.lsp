@@ -290,7 +290,7 @@ do the defstruct."
 		      (functionp (function ,p-fn))
 		      (symbol-function (quote ,p-fn))
 		      (notnot (funcall #',p-fn s))
-		      (notnot (,p-fn s))
+		      (notnot-mv (,p-fn s))
 		      ))
 	       t)
 	     (deftest ,(make-struct-test-name name "ERROR.1")
@@ -455,7 +455,7 @@ do the defstruct."
 			for read-only in slot-read-only
 			for field-fn in field-fns
 			when read-only
-			collect `(not (fboundp '(setf ,field-fn))))
+			collect `(not-mv (fboundp '(setf ,field-fn))))
 		t)
 	       t)))
 
@@ -464,14 +464,14 @@ do the defstruct."
        ,@(unless type-option
 	   `(
 	     (deftest ,(make-struct-test-name name 13)
-	       (notnot (typep (,make-fn) (find-class (quote ,name))))
+	       (notnot-mv (typep (,make-fn) (find-class (quote ,name))))
 	       t)
 	     (deftest ,(make-struct-test-name name 14)
 	       (let ((class (find-class (quote ,name))))
-		 (notnot (typep class 'structure-class)))
+		 (notnot-mv (typep class 'structure-class)))
 	       t)
 	     (deftest ,(make-struct-test-name name 15)
-	       (notnot (typep (,make-fn) 'structure-object))
+	       (notnot-mv (typep (,make-fn) 'structure-object))
 	       t)
 	     (deftest ,(make-struct-test-name name 16)
 	       (loop for type in *disjoint-types-list*

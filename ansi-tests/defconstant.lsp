@@ -12,8 +12,8 @@
   17)
 
 (deftest defconstant.2
-  (not (constantp 'test-constant-1))
-  nil)
+  (notnot-mv (constantp 'test-constant-1))
+  t)
 
 (deftest defconstant.3
   (documentation 'test-constant-1 'variable)

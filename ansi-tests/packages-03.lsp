@@ -29,7 +29,7 @@
 
 ;; The list returned has only packages in it
 (deftest list-all-packages-3
-    (notnot (every #'packagep (list-all-packages)))
+    (notnot-mv (every #'packagep (list-all-packages)))
   t)
 
 ;; It returns a list of the same packages each time it is called
@@ -65,12 +65,12 @@
   "A")
 
 (deftest package-name-5
-  (notnot (member (classify-error (package-name "NOT-THERE"))
+  (notnot-mv (member (classify-error (package-name "NOT-THERE"))
 		  '(type-error package-error)))
   t)
 
 (deftest package-name-6
-  (notnot (member (classify-error (package-name #\*))
+  (notnot-mv (member (classify-error (package-name #\*))
 		  '(type-error package-error)))
   t)
 
@@ -185,7 +185,7 @@
   ("Q"))
 
 (deftest package-nicknames-11
-  (notnot (member (classify-error (package-nicknames "NOT-A-PACKAGE-NAME"))
+  (notnot-mv (member (classify-error (package-nicknames "NOT-A-PACKAGE-NAME"))
 		  '(type-error package-error)))
   t)
 

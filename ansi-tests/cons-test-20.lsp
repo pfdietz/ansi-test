@@ -197,13 +197,13 @@
      do (progn
 	  (setf x (* x x))
 	  (setf y (* y y))))
-    (not (not
-	  (or
-	   (eqt x y)  ;; if bignums are eq, the test is worthless
-	   (eql (length
-		 (union-with-check
-		  (list x) (list x)))
-		1)))))
+    (notnot-mv
+     (or
+      (eqt x y)  ;; if bignums are eq, the test is worthless
+      (eql (length
+	    (union-with-check
+	     (list x) (list x)))
+	   1))))
   t)
 
 (deftest union-27

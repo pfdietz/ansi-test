@@ -7,21 +7,21 @@
 
 ;;; The variable is bound
 (deftest lambda-list-keywords.1
-  (not (boundp 'lambda-list-keywords))
+  (not-mv (boundp 'lambda-list-keywords))
   nil)
 
 ;;; The variable is a constant
 (deftest lambda-list-keywords.2
-  (not (constantp 'lambda-list-keywords))
+  (not-mv (constantp 'lambda-list-keywords))
   nil)
 
 ;;; The standard keywords are present in the list
 (deftest lambda-list-keywords.3
   (and (consp lambda-list-keywords)
-       (null (set-difference '(&allow-other-keys 
-			       &aux &body &environment
-			       &key &optional &rest &whole)
-			     lambda-list-keywords)))
+       (not-mv (set-difference '(&allow-other-keys 
+				 &aux &body &environment
+				 &key &optional &rest &whole)
+			       lambda-list-keywords)))
   t)
 
 ;;; No lambda list keywords are in the keyword package
@@ -37,6 +37,3 @@
 		       (eql (aref name 0) #\&))))
 	    lambda-list-keywords)
   nil)
-
-
-  

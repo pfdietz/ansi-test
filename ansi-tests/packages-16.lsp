@@ -112,13 +112,13 @@
 	(mapcar
 	 #'notnot
 	 (list
-	  (not (not (packagep p)))
+	  (packagep p)
 	  (equal (package-name p)              "H")
 	  (equal (package-use-list p)          nil)
 	  (equal (package-used-by-list p)      nil)
 	  (equal (package-nicknames p)         nil)
 	  (eql (num-symbols-in-package p) 1)
-	  (multiple-value-bind (sym access)
+	  (multiple-value-bind* (sym access)
 	      (find-symbol "foo" p)
 	    (and (eqt access :internal)
 		 (equal (symbol-name sym) "foo")
@@ -143,13 +143,13 @@
        (mapcar
 	#'notnot
 	(list
-	 (not (not (packagep p)))
+	 (packagep p)
 	 (equal (package-name p)              "H")
 	 (equal (package-use-list p)          nil)
 	 (equal (package-used-by-list p)      nil)
 	 (equal (package-nicknames p)         nil)
 	 (eql (num-symbols-in-package p) 1)
-	 (multiple-value-bind (sym access)
+	 (multiple-value-bind* (sym access)
 	     (find-symbol "f" p)
 	   (and (eqt access :internal)
 		(equal (symbol-name sym) "f")
@@ -188,13 +188,13 @@
 	   (mapcar
 	    #'notnot
 	    (list
-	     (not (not (packagep p)))
+	     (packagep p)
 	     (equal (package-name p)              "H")
 	     (equal (package-use-list p)          nil)
 	     (equal (package-used-by-list p)      nil)
 	     (equal (package-nicknames p)         nil)
 	     (eql (num-symbols-in-package p) 1)
-	     (multiple-value-bind (sym access)
+	     (multiple-value-bind* (sym access)
 		 (find-symbol "A" p)
 	       (and (eqt access :internal)
 		    (equal (symbol-name sym) "A")
@@ -231,19 +231,19 @@
 	       (mapcar
 		#'notnot
 		(list
-		 (not (not (packagep p)))
+		 (packagep p)
 		 (equal (package-name p)              "H")
 		 (equal (package-use-list p)          nil)
 		 (equal (package-used-by-list p)      nil)
 		 (equal (package-nicknames p)         nil)
 		 (equal (package-shadowing-symbols p) nil)
 		 (eql (num-symbols-in-package p) 2)
-		 (multiple-value-bind (sym access)
+		 (multiple-value-bind* (sym access)
 		     (find-symbol "A" p)
 		   (and (eqt access :internal)
 			(equal (symbol-name sym) "A")
 			(equal (symbol-package sym) pg)))
-		 (multiple-value-bind (sym access)
+		 (multiple-value-bind* (sym access)
 		     (find-symbol "B" p)
 		   (and (eqt access :internal)
 			(equal (symbol-name sym) "B")
@@ -270,7 +270,7 @@
 	 (mapcar
 	  #'notnot
 	  (list
-	   (not (not (packagep p)))
+	   (packagep p)
 	   (equal (package-name p)              "H")
 	   (equal (package-use-list p)          nil)
 	   (equal (package-used-by-list p)      nil)
@@ -280,7 +280,7 @@
 	   (loop
 	    for s in '("Q" "Z" "R") do
 	    (unless
-		(multiple-value-bind (sym access)
+		(multiple-value-bind* (sym access)
 		    (find-symbol s p)
 		  (and (eqt access :external)
 		       (equal (symbol-name sym) s)
@@ -306,7 +306,7 @@
 	 (mapcar
 	  #'notnot
 	  (list
-	   (not (not (packagep p)))
+	   (packagep p)
 	   (equal (package-name p)              "H")
 	   (equal (package-use-list p)          nil)
 	   (equal (package-used-by-list p)      nil)
@@ -316,7 +316,7 @@
 	   (loop
 	    for s in '("Q" "Z" "R") do
 	    (unless
-		(multiple-value-bind (sym access)
+		(multiple-value-bind* (sym access)
 		    (find-symbol s p)
 		  (and (eqt access :internal)
 		       (equal (symbol-name sym) s)
@@ -572,7 +572,7 @@
 		 (unless
 		     (every
 		      #'(lambda (str acc pkg)
-			  (multiple-value-bind
+			  (multiple-value-bind*
 			      (sym access)
 			      (find-symbol str p)
 			    (or

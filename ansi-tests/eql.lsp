@@ -10,7 +10,7 @@
 ;;; is true.
 
 (deftest eql.1
-  (loop for x in *universe* always (eql x x))
+  (loop for x in *universe* always (check-values (eql x x)))
   t)
 
 (deftest eql.2

@@ -30,7 +30,7 @@
   nil)
 
 (deftest some.6
-  (not (some #'/= '(1 2 3 4 5) '(1 2 3 4 6)))
+  (not-mv (some #'/= '(1 2 3 4 5) '(1 2 3 4 6)))
   nil)
 
 (deftest some.7
@@ -55,7 +55,7 @@
   nil)
 
 (deftest some.11
-  (not (some #'zerop #*1111111011111))
+  (not-mv (some #'zerop #*1111111011111))
   nil)
 
 (deftest some.12
@@ -67,7 +67,7 @@
   nil)
 
 (deftest some.14
-  (not (some #'(lambda (x) (not (eql x #\a))) "aaaaaabaaaa"))
+  (not-mv (some #'(lambda (x) (not (eql x #\a))) "aaaaaabaaaa"))
   nil)
 
 (deftest some.15
@@ -75,7 +75,7 @@
   nil)
 
 (deftest some.16
-  (not (some 'null '(1 2 3 nil 5)))
+  (not-mv (some 'null '(1 2 3 nil 5)))
   nil)
 
 

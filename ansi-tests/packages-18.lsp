@@ -25,7 +25,7 @@
 ;; *package* is always a package
 
 (deftest packagep-2
-  (not (packagep *package*))
+  (not-mv (packagep *package*))
   nil)
 
 (deftest packagep.error.1

@@ -174,7 +174,7 @@
   t
   "1234")
 
-`w(deftest map-into-string.4
+(deftest map-into-string.4
   (let ((a (make-array 6 :initial-element #\x
 		       :element-type 'character
 		       :fill-pointer 3)))

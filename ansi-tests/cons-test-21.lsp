@@ -195,12 +195,12 @@
      do (progn
 	  (setf x (* x x))
 	  (setf y (* y y))))
-    (not (not
-	  (or
-	   (eqt x y)  ;; if bignums are eq, the test is worthless
-	   (eql (length
-		 (nunion-with-copy (list x) (list x)))
-		1)))))
+    (notnot-mv
+     (or
+      (eqt x y)  ;; if bignums are eq, the test is worthless
+      (eql (length
+	    (nunion-with-copy (list x) (list x)))
+	   1))))
   t)
 
 (deftest nunion-27

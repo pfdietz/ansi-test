@@ -18,7 +18,7 @@
     (prog1
 	(let ((p (make-package "H")))
 	  (intern "FOO" p)
-	  (multiple-value-bind (sym access)
+	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO" p)
 	    (and
 	     (eqt access :internal)
@@ -37,7 +37,7 @@
 	(let ((*PACKAGE* (make-package "H")))
 	  (declare (special *PACKAGE*))
 	  (intern "FOO")
-	  (multiple-value-bind (sym access)
+	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO")
 	    (and
 	     (eqt access :internal)
@@ -54,7 +54,7 @@
     (prog1
 	(let ((p (make-package "H")))
 	  (intern "FOO" p)
-	  (multiple-value-bind (sym access)
+	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO" p)
 	    (and
 	     (eqt access :internal)
@@ -71,7 +71,7 @@
     (prog1
 	(let ((p (make-package "H")))
 	  (intern "FOO" p)
-	  (multiple-value-bind (sym access)
+	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO" p)
 	    (and
 	     (eqt access :internal)
@@ -89,7 +89,7 @@
      (prog1
 	 (let ((p (make-package "H")))
 	   (intern "FOO" p)
-	   (multiple-value-bind (sym access)
+	   (multiple-value-bind* (sym access)
 	       (find-symbol "FOO" p)
 	     (and
 	      (eqt access :internal)
@@ -116,7 +116,7 @@
      (export (intern "FOO" "H") "H")
      ;; At this point, G:FOO is also an external
      ;; symbol of H.
-     (multiple-value-bind (sym1 access1)
+     (multiple-value-bind* (sym1 access1)
 	 (find-symbol "FOO" "H")
        (and sym1
 	    (eqt access1 :external)
@@ -124,7 +124,7 @@
 	    (eqt (find-package "G")
 		 (symbol-package sym1))
 	    (unintern sym1 "H")
-	    (multiple-value-bind (sym2 access2)
+	    (multiple-value-bind* (sym2 access2)
 		(find-symbol "FOO" "H")
 	      (and (eqt sym1 sym2)
 		   (eqt (symbol-package sym1)
@@ -146,7 +146,7 @@
 	   (error (c) (return-from failed (list :shadow-error c))))
 	(export (intern "FOO" pg) pg)
 	;; At this point, H::FOO shadows G:FOO
-	(multiple-value-bind (sym1 access1)
+	(multiple-value-bind* (sym1 access1)
 	    (find-symbol "FOO" ph)
 	  (and
 	   sym1
@@ -154,7 +154,7 @@
 	   (eqt access1 :internal)
 	   (equal (list sym1) (package-shadowing-symbols ph))
 	   (unintern sym1 ph)
-	   (multiple-value-bind (sym2 access2)
+	   (multiple-value-bind* (sym2 access2)
 	       (find-symbol "FOO" ph)
 	     (and (not (eqt sym1 sym2))
 		  (eqt access2 :inherited)
@@ -179,7 +179,7 @@
 	    (gsym2 (intern "FOO" pg2)))
 	(export gsym1 pg1)
 	(export gsym2 pg2)
-	(multiple-value-bind (sym1 access1)
+	(multiple-value-bind* (sym1 access1)
 	    (find-symbol "FOO" ph)
 	  (and
 	   (equal (list sym1) (package-shadowing-symbols ph))
@@ -217,7 +217,7 @@
 	(export gsym pg3)
 	(export gsym pg1)
 	(export gsym pg2)
-	(multiple-value-bind (sym access)
+	(multiple-value-bind* (sym access)
 	    (find-symbol "FOO" ph)
 	  (and
 	   (equal (list sym) (package-shadowing-symbols ph))
@@ -227,7 +227,7 @@
 	   (eqt access :internal)
 	   (handler-case
 	    (and (unintern sym ph)
-		 (multiple-value-bind (sym2 access2)
+		 (multiple-value-bind* (sym2 access2)
 		     (find-symbol "FOO" ph)
 		   (and (eqt gsym sym2)
 			(eqt access2 :inherited))))

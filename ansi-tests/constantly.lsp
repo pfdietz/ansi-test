@@ -14,9 +14,13 @@
   t)
 
 (deftest constantly.2
+  (notnot-mv (cl:constantly 1))
+  t)
+
+(deftest constantly.error.1
   (classify-error (cl:constantly))
   program-error)
 
-(deftest constantly.3
+(deftest constantly.error.2
   (classify-error (cl:constantly 1 1))
   program-error)

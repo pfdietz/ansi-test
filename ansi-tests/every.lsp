@@ -6,12 +6,12 @@
 (in-package :cl-test)
 
 (deftest every.1
-  (not (every #'identity nil))
-  nil)
+  (notnot-mv (every #'identity nil))
+  t)
 
 (deftest every.2
-  (not (every #'identity #()))
-  nil)
+  (notnot-mv (every #'identity #()))
+  t)
 
 (deftest every.3
   (let ((count 0))
@@ -22,50 +22,49 @@
   nil 4)
 
 (deftest every.4
-  (not (every #'= '(1 2 3 4) '(1 2 3 4 5)))
-  nil)
+  (notnot-mv (every #'= '(1 2 3 4) '(1 2 3 4 5)))
+  t)
 
 (deftest every.5
-  (not (every #'= '(1 2 3 4 5) '(1 2 3 4)))
-  nil)
+  (notnot-mv (every #'= '(1 2 3 4 5) '(1 2 3 4)))
+  t)
 
 (deftest every.6
   (every #'= '(1 2 3 4 5) '(1 2 3 4 6))
   nil)
 
 (deftest every.7
-  (not (every #'(lambda (x y) (or x y))
-	      '(nil t t nil t) #(t nil t t nil nil)))
-  nil)
+  (notnot-mv (every #'(lambda (x y) (or x y))
+		    '(nil t t nil t) #(t nil t t nil nil)))
+  t)
 
 (deftest every.8
   (let ((x '(1))
 	(args nil))
-    (not
-     (loop for i from 1 below (1- (min 100 call-arguments-limit))
-	   do (push x args)
-	   always (apply #'every #'= args))))
-  nil)
+    (loop for i from 1 below (1- (min 100 call-arguments-limit))
+	  do (push x args)
+	  always (apply #'every #'= args)))
+  t)
 
 (deftest every.9
-  (not (every #'zerop #*000000000000))
-  nil)
+  (notnot-mv (every #'zerop #*000000000000))
+  t)
 
 (deftest every.10
-  (not (every #'zerop #*))
-  nil)
+  (notnot-mv (every #'zerop #*))
+  t)
 
 (deftest every.11
   (every #'zerop #*0000010000)
   nil)
 
 (deftest every.12
-  (not (every #'(lambda (x) (eql x #\a)) "aaaaaaaa"))
-  nil)
+  (notnot-mv (every #'(lambda (x) (eql x #\a)) "aaaaaaaa"))
+  t)
 
 (deftest every.13
-  (not (every #'(lambda (x) (eql x #\a)) ""))
-  nil)
+  (notnot-mv (every #'(lambda (x) (eql x #\a)) ""))
+  t)
 
 (deftest every.14
   (every #'(lambda (x) (eql x #\a)) "aaaaaabaaaa")
@@ -76,8 +75,8 @@
   nil)
 
 (deftest every.16
-  (not (every 'null '(nil nil nil nil)))
-  nil)
+  (notnot-mv (every 'null '(nil nil nil nil)))
+  t)
 
 ;;; Error cases
 
@@ -108,7 +107,7 @@
 (deftest every.error.7
   (classify-error (every #'eq () 'a))
   type-error)
-
+`
 (deftest every.error.8
   (classify-error (every))
   program-error)

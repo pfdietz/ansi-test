@@ -21,83 +21,83 @@
 ;; Test that make-s-1 produces objects
 ;; of the correct type
 (deftest structure-1-1
-    (not (not (typep (make-s-1) 's-1)))
+  (notnot-mv (typep (make-s-1) 's-1))
   t)
 
 ;; Test that the -p predicate exists
 (deftest structure-1-2
-    (not (not (s-1-p (make-s-1))))
+  (notnot-mv (s-1-p (make-s-1)))
   t)
 
 ;; Test that all the objects in the universe are
 ;; not of this type
 (deftest structure-1-3
-    (count-if #'s-1-p *universe*)
+  (count-if #'s-1-p *universe*)
   0)
 
 (deftest structure-1-4
-    (count-if #'(lambda (x) (typep x 's-1)) *universe*)
+  (count-if #'(lambda (x) (typep x 's-1)) *universe*)
   0)
 
 ;; Check that the fields can be read after being initialized
 (deftest structure-1-5
-    (s-1-foo (make-s-1 :foo 'a))
+  (s-1-foo (make-s-1 :foo 'a))
   a)
 
 (deftest structure-1-6
-    (s-1-bar (make-s-1 :bar 'b))
+  (s-1-bar (make-s-1 :bar 'b))
   b)
 
 (deftest structure-1-7
-    (let ((s (make-s-1 :foo 'c :bar 'd)))
-      (list (s-1-foo s) (s-1-bar s)))
+  (let ((s (make-s-1 :foo 'c :bar 'd)))
+    (list (s-1-foo s) (s-1-bar s)))
   (c d))
 
 ;; Can setf the fields
 (deftest structure-1-8
-    (let ((s (make-s-1)))
-      (setf (s-1-foo s) 'e)
-      (setf (s-1-bar s) 'f)
-      (list (s-1-foo s) (s-1-bar s)))
+  (let ((s (make-s-1)))
+    (setf (s-1-foo s) 'e)
+    (setf (s-1-bar s) 'f)
+    (list (s-1-foo s) (s-1-bar s)))
   (e f))
 
 (deftest structure-1-9
-    (let ((s (make-s-1 :foo 'a :bar 'b)))
-      (setf (s-1-foo s) 'e)
-      (setf (s-1-bar s) 'f)
-      (list (s-1-foo s) (s-1-bar s)))
+  (let ((s (make-s-1 :foo 'a :bar 'b)))
+    (setf (s-1-foo s) 'e)
+    (setf (s-1-bar s) 'f)
+    (list (s-1-foo s) (s-1-bar s)))
   (e f))
 
 ;; copier function defined
 (deftest structure-1-10
-    (let ((s (make-s-1 :foo 'a :bar 'b)))
-      (let ((s2 (copy-s-1 s)))
-	(setf (s-1-foo s) nil)
-	(setf (s-1-bar s) nil)
-	(list (s-1-foo s2)
-	      (s-1-bar s2))))
+  (let ((s (make-s-1 :foo 'a :bar 'b)))
+    (let ((s2 (copy-s-1 s)))
+      (setf (s-1-foo s) nil)
+      (setf (s-1-bar s) nil)
+      (list (s-1-foo s2)
+	    (s-1-bar s2))))
   (a b))
 
 ;; Make produces unique items
 (deftest structure-1-11
-    (eqt (make-s-1) (make-s-1))
+  (eqt (make-s-1) (make-s-1))
   nil)
 
 (deftest structure-1-12
-    (eqt (make-s-1 :foo 'a :bar 'b)
-	(make-s-1 :foo 'a :bar 'b))
+  (eqt (make-s-1 :foo 'a :bar 'b)
+       (make-s-1 :foo 'a :bar 'b))
   nil)
 
 ;; More type and class checks
 
 (deftest structure-1-13
-    (not (not (typep (class-of (make-s-1)) 'structure-class)))
+  (notnot-mv (typep (class-of (make-s-1)) 'structure-class))
   t)
 
 (deftest structure-1-14
-    (not (not (typep (make-s-1) 'structure-object)))
+  (notnot-mv (typep (make-s-1) 'structure-object))
   t)
 
 (deftest structure-1-15
-    (subtypep* 's-1 'structure-object)
+  (subtypep* 's-1 'structure-object)
   t t)

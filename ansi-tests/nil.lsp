@@ -18,7 +18,7 @@
   nil)
 
 (deftest nil.3
-  (not (constantp nil))
+  (not-mv (constantp nil))
   nil)
 
 (deftest nil.4

@@ -51,15 +51,15 @@
     (defun (setf functionp-7-accessor) (y x) (setf (car x) y) y)))
 
 (deftest functionp.7
-  (not (functionp #'(setf functionp-7-accessor)))
+  (not-mv (functionp #'(setf functionp-7-accessor)))
   nil)
 
 (deftest functionp.8
-  (not (functionp #'(lambda (x) x)))
+  (not-mv (functionp #'(lambda (x) x)))
   nil)
 
 (deftest functionp.9
-  (not (functionp (compile nil '(lambda (x) x))))
+  (not-mv (functionp (compile nil '(lambda (x) x))))
   nil)
 
 ;;; In ANSI CL, symbols and cons can no longer be functions
@@ -77,13 +77,13 @@
   nil)
 
 (deftest functionp.12
-  (flet ((%f () nil)) (not (functionp #'%f)))
+  (flet ((%f () nil)) (not-mv (functionp #'%f)))
   nil)
 
-(deftest functionp.13
+(deftest functionp.error.1
   (classify-error (functionp))
   program-error)
 
-(deftest functionp.14
+(deftest functionp.error.2
   (classify-error (functionp #'cons nil))
   program-error)

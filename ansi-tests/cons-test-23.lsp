@@ -114,61 +114,61 @@
 ;; the order of the arguments to the test function
 ;;
 (deftest set-exclusive-or-17
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (set-exclusive-or-with-check
-	       list1 list2
-	       :test #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (set-exclusive-or-with-check
+	list1 list2
+	:test #'(lambda (s1 s2)
+		  (when (or (member s1 list2)
+			    (member s2 list1))
+		    (return-from fail 'failed)))))))
   t)
 
 (deftest set-exclusive-or-17-a
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (set-exclusive-or-with-check
-	       list1 list2
-	       :key #'identity
-	       :test #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (set-exclusive-or-with-check
+	list1 list2
+	:key #'identity
+	:test #'(lambda (s1 s2)
+		  (when (or (member s1 list2)
+			    (member s2 list1))
+		    (return-from fail 'failed)))))))
   t)
 
 (deftest set-exclusive-or-18
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (set-exclusive-or-with-check
-	       list1 list2
-	       :test-not
-	       #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))
-			 t))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (set-exclusive-or-with-check
+	list1 list2
+	:test-not
+	#'(lambda (s1 s2)
+	    (when (or (member s1 list2)
+		      (member s2 list1))
+	      (return-from fail 'failed))
+	    t)))))
   t)
 
 (deftest set-exclusive-or-18-a
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (set-exclusive-or-with-check
-	       list1 list2
-	       :key #'identity
-	       :test-not
-	       #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))
-			 t))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (set-exclusive-or-with-check
+	list1 list2
+	:key #'identity
+	:test-not
+	#'(lambda (s1 s2)
+	    (when (or (member s1 list2)
+		      (member s2 list1))
+	      (return-from fail 'failed))
+	    t)))))
   t)
 
 ;;; Keyword tests
@@ -365,61 +365,61 @@
 ;; the order of the arguments to the test function
 ;;
 (deftest nset-exclusive-or-17
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (nset-exclusive-or-with-check
-	       list1 list2
-	       :test #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (nset-exclusive-or-with-check
+	list1 list2
+	:test #'(lambda (s1 s2)
+		  (when (or (member s1 list2)
+			    (member s2 list1))
+		    (return-from fail 'failed)))))))
   t)
 
 (deftest nset-exclusive-or-17-a
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (nset-exclusive-or-with-check
-	       list1 list2
-	       :key #'identity
-	       :test #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (nset-exclusive-or-with-check
+	list1 list2
+	:key #'identity
+	:test #'(lambda (s1 s2)
+		  (when (or (member s1 list2)
+			    (member s2 list1))
+		    (return-from fail 'failed)))))))
   t)
 
 (deftest nset-exclusive-or-18
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (nset-exclusive-or-with-check
-	       list1 list2
-	       :test-not
-	       #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))
-			 t))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (nset-exclusive-or-with-check
+	list1 list2
+	:test-not
+	#'(lambda (s1 s2)
+	    (when (or (member s1 list2)
+		      (member s2 list1))
+	      (return-from fail 'failed))
+	    t)))))
   t)
 
 (deftest nset-exclusive-or-18-a
-    (let ((list1 '(a b c d))
-	  (list2 '(e f g h)))
-      (block fail
-	(not (not
-	      (nset-exclusive-or-with-check
-	       list1 list2
-	       :key #'identity
-	       :test-not
-	       #'(lambda (s1 s2)
-			 (when (or (member s1 list2)
-				   (member s2 list1))
-			   (return-from fail 'failed))
-			 t))))))
+  (let ((list1 '(a b c d))
+	(list2 '(e f g h)))
+    (block fail
+      (notnot-mv
+       (nset-exclusive-or-with-check
+	list1 list2
+	:key #'identity
+	:test-not
+	#'(lambda (s1 s2)
+	    (when (or (member s1 list2)
+		      (member s2 list1))
+	      (return-from fail 'failed))
+	    t)))))
   t)
 
 ;;; Keyword tests

@@ -25,15 +25,15 @@
   nil)
 
 (deftest constantp.2
-  (notnot (constantp t))
+  (notnot-mv (constantp t))
   t)
   
 (deftest constantp.3
-  (notnot (constantp nil))
+  (notnot-mv (constantp nil))
   t)
 
 (deftest constantp.4
-  (notnot (constantp :foo))
+  (notnot-mv (constantp :foo))
   t)
 
 (deftest constantp.5
@@ -43,7 +43,7 @@
 (defconstant constantp-test-symbol 1)
 
 (defmacro constantp-macro (form &environment env)
-  (notnot (constantp form env)))
+  (notnot-mv (constantp form env)))
 
 (deftest constantp.6
   (constantp-macro constantp-test-symbol)
@@ -54,15 +54,15 @@
   nil)
 
 (deftest constantp.8
-  (notnot (constantp 1 nil))
+  (notnot-mv (constantp 1 nil))
   t)
 
 (deftest constantp.9
-  (notnot (constantp ''(((foo)))))
+  (notnot-mv (constantp ''(((foo)))))
   t)
 
 (deftest constantp.10
-  (notnot (constantp 'pi))
+  (notnot-mv (constantp 'pi))
   t)
 
 

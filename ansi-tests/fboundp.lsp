@@ -6,15 +6,15 @@
 (in-package :cl-test)
 
 (deftest fboundp.1
-  (not (fboundp 'car))
+  (not-mv (fboundp 'car))
   nil)
 
 (deftest fboundp.2
-  (not (fboundp 'cdr))
+  (not-mv (fboundp 'cdr))
   nil)
 
 (deftest fboundp.3
-  (not (fboundp 'defun))  ; a macro
+  (not-mv (fboundp 'defun))  ; a macro
   nil)
 
 (deftest fboundp.4
@@ -24,7 +24,7 @@
 
 (defun fboundp-5-fn (x) x)
 (deftest fboundp.5
-  (not (fboundp 'fboundp-5-fn))
+  (not-mv (fboundp 'fboundp-5-fn))
   nil)
 
 (eval-when (eval compile)
@@ -32,7 +32,7 @@
     (defun (setf fboundp-6-accessor) (y x) (setf (car x) y))))
 
 (deftest fboundp.6
-  (not (fboundp '(setf fboundp-6-accessor)))
+  (not-mv (fboundp '(setf fboundp-6-accessor)))
   nil)
 
 (deftest fboundp.7

@@ -48,7 +48,7 @@
 
 (deftest multiple-value-prog1.8
   (let* ((n (min 100 multiple-values-limit)))
-    (not
+    (not-mv
      (loop for i from 0 below n
 	   for x = (make-int-list i)
 	   always

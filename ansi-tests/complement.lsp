@@ -6,8 +6,8 @@
 (in-package :cl-test)
 
 (deftest complement.1
-  (not (funcall (complement #'identity) nil))
-  nil)
+  (notnot-mv (funcall (complement #'identity) nil))
+  t)
 
 (deftest complement.2
   (funcall (complement #'identity) t)
@@ -28,11 +28,13 @@
   t)
 
 (deftest complement.5
+  (notnot-mv (complement #'identity))
+  t)
+
+(deftest complement.error.1
   (classify-error (complement))
   program-error)
 
-(deftest complement.6
+(deftest complement.error.2
   (classify-error (complement #'not t))
   program-error)
-
-

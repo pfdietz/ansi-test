@@ -107,31 +107,31 @@
 ;; Check listp against various simple cases
 
 (deftest listp-nil
-    (not (not (listp nil)))
+  (notnot-mv (listp nil))
   t)
 
 (deftest listp-symbol
-    (listp 'a)
+  (listp 'a)
   nil)
 
 (deftest listp-singleton-list
-    (not (not (listp '(a))))
+  (notnot-mv (listp '(a)))
   t)
 
 (deftest listp-circular-list
-    (let ((x (cons nil nil)))
-      (setf (cdr x) x)
-      (not (not (listp x))))
+  (let ((x (cons nil nil)))
+    (setf (cdr x) x)
+    (notnot-mv (listp x)))
   t)
 
 (deftest listp-longer-list
-    (not (not (listp '(a b c d e f g h))))
+  (notnot-mv (listp '(a b c d e f g h)))
   t)
 
 ;;; Check that (listp x) == (typep x 'list)
 
 (deftest listp-universe
-    (check-type-predicate 'listp 'list)
+  (check-type-predicate 'listp 'list)
   0)
 
 (deftest listp.error.1
@@ -148,25 +148,25 @@
 ;;; These tests are now somewhat redundant
 
 (deftest typep-nil-list
-    (not (not (typep nil 'list)))
+  (notnot-mv (typep nil 'list))
   t)
 
 (deftest typep-symbol-list
-    (typep 'a 'list)
+  (typep 'a 'list)
   nil)
 
 (deftest typep-singleton-list-list
-    (not (not (typep '(a) 'list)))
+  (notnot-mv (typep '(a) 'list))
   t)
 
 (deftest typep-circular-list-list
-    (let ((x (cons nil nil)))
-      (setf (cdr x) x)
-      (not (not (typep x 'list))))
+  (let ((x (cons nil nil)))
+    (setf (cdr x) x)
+    (notnot-mv (typep x 'list)))
   t)
 
 (deftest typep-longer-list-list
-    (not (not (typep '(a b c d e f g h) 'list)))
+  (notnot-mv (typep '(a b c d e f g h) 'list))
   t)
 
 
@@ -174,19 +174,19 @@
 ;;; make-list
 
 (deftest make-list-empty-1
-    (make-list 0)
+  (make-list 0)
   nil)
 
 (deftest make-list-empty-2
-    (make-list 0 :initial-element 'a)
+  (make-list 0 :initial-element 'a)
   nil)
 
 (deftest make-list-no-initial-element
-    (make-list 6)
+  (make-list 6)
   (nil nil nil nil nil nil))
 
 (deftest make-list-with-initial-element
-    (make-list 6 :initial-element 'a)
+  (make-list 6 :initial-element 'a)
   (a a a a a a))
 
 (deftest make-list.allow-other-keys.1
@@ -220,7 +220,7 @@
 ;; This next test causes ACL 4.3 (Linux) to loop
 #-allegro
 (deftest make-list-type.error.2
-  (catch-type-error (make-list 'a))
+  (classify-error (make-list 'a))
   type-error)
 
 (deftest make-list.error.3

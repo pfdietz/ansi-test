@@ -7,7 +7,7 @@
 
 (deftest compiled-function-p.1
   (some #'(lambda (obj)
-	     (if (compiled-function-p obj)
+	     (if (check-values (compiled-function-p obj))
 		 (not (typep obj 'compiled-function))
 	       (typep obj 'compiled-function)))
 	 *universe*)
@@ -18,8 +18,8 @@
   nil)
 
 (deftest compiled-function-p.3
-  (not (compiled-function-p (compile nil '(lambda (y x) (cons x y)))))
-  nil)
+  (notnot-mv (compiled-function-p (compile nil '(lambda (y x) (cons x y)))))
+  t)
 
 (deftest compiled-function-p.error.1
   (classify-error (compiled-function-p))

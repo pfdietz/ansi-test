@@ -16,7 +16,7 @@
   nil)
 
 (deftest simple-vector-p.2
-  (notnot (simple-vector-p (make-array '(10))))
+  (notnot-mv (simple-vector-p (make-array '(10))))
   t)
 
 (deftest simple-vector-p.3
@@ -24,7 +24,7 @@
   nil)
 
 (deftest simple-vector-p.4
-  (notnot (simple-vector-p (vector 'a 'b 'c)))
+  (notnot-mv (simple-vector-p (vector 'a 'b 'c)))
   t)
 
 (deftest simple-vector-p.5

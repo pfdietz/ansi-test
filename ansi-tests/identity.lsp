@@ -7,17 +7,17 @@
 
 (deftest identity.1
   (loop for x in *universe*
-	always (eqlt x (identity x)))
+	always (eqlt x (check-values (identity x))))
   t)
 
 (deftest identity.2
   (let ((x (ash 1 100)))
-    (eqlt x (identity x)))
+    (eqlt x (check-values (identity x))))
   t)
 
 (deftest identity.3
   (let ((x 1.00000001))
-    (eqlt x (identity x)))
+    (eqlt x (check-values (identity x))))
   t)
 
 (deftest identity.error.1

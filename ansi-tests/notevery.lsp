@@ -30,7 +30,7 @@
   nil)
 
 (deftest notevery.6
-  (not (notevery #'= '(1 2 3 4 5) '(1 2 3 4 6)))
+  (not-mv (notevery #'= '(1 2 3 4 5) '(1 2 3 4 6)))
   nil)
 
 (deftest notevery.7
@@ -56,7 +56,7 @@
   nil)
 
 (deftest notevery.11
-  (not (notevery #'zerop #*0000010000))
+  (not-mv (notevery #'zerop #*0000010000))
   nil)
 
 (deftest notevery.12
@@ -68,11 +68,11 @@
   nil)
 
 (deftest notevery.14
-  (not (notevery #'(lambda (x) (eql x #\a)) "aaaaaabaaaa"))
+  (not-mv (notevery #'(lambda (x) (eql x #\a)) "aaaaaabaaaa"))
   nil)
 
 (deftest notevery.15
-  (not (notevery 'null '(nil nil t nil)))
+  (not-mv (notevery 'null '(nil nil t nil)))
   nil)
 
 (deftest notevery.16

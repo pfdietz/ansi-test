@@ -178,7 +178,7 @@
 ;; TAILP-NIL:T in the X3J13 documentation.
 
 (deftest tailp.error.1
-  (catch-type-error (not (not (tailp 'e (copy-tree '(a b c d . e))))))
+  (catch-type-error (notnot-mv (tailp 'e (copy-tree '(a b c d . e)))))
   t)
 
 (deftest tailp.error.2
@@ -186,8 +186,8 @@
   nil)
 
 (deftest tailp.error.3
-  (catch-type-error (not (not (tailp 10203040506070
-	(list* 'a 'b (1- 10203040506071))))))
+  (catch-type-error (notnot-mv (tailp 10203040506070
+	(list* 'a 'b (1- 10203040506071)))))
   t)
 
 (deftest tailp.error.4

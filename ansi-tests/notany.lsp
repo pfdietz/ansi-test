@@ -6,11 +6,11 @@
 (in-package :cl-test)
 
 (deftest notany.1
-  (not (notany #'identity nil))
+  (not-mv (notany #'identity nil))
   nil)
 
 (deftest notany.2
-  (not (notany #'identity #()))
+  (not-mv (notany #'identity #()))
   nil)
 
 (deftest notany.3
@@ -22,11 +22,11 @@
   nil 4)
 
 (deftest notany.4
-  (not (notany #'/= '(1 2 3 4) '(1 2 3 4 5)))
+  (not-mv (notany #'/= '(1 2 3 4) '(1 2 3 4 5)))
   nil)
 
 (deftest notany.5
-  (not (notany #'/= '(1 2 3 4 5) '(1 2 3 4)))
+  (not-mv (notany #'/= '(1 2 3 4 5) '(1 2 3 4)))
   nil)
 
 (deftest notany.6
@@ -34,7 +34,7 @@
   nil)
 
 (deftest notany.7
-  (not (notany #'(lambda (x y) (and x y))
+  (not-mv (notany #'(lambda (x y) (and x y))
 	       '(nil t t nil t) #(t nil nil t nil nil)))
   nil)
 
@@ -48,11 +48,11 @@
   nil)
 
 (deftest notany.9
-  (not (notany #'zerop #*11111111111111))
+  (not-mv (notany #'zerop #*11111111111111))
   nil)
 
 (deftest notany.10
-  (not (notany #'zerop #*))
+  (not-mv (notany #'zerop #*))
   nil)
 
 (deftest notany.11
@@ -60,11 +60,11 @@
   nil)
 
 (deftest notany.12
-  (not (notany #'(lambda (x) (not (eql x #\a))) "aaaaaaaa"))
+  (not-mv (notany #'(lambda (x) (not (eql x #\a))) "aaaaaaaa"))
   nil)
 
 (deftest notany.13
-  (not (notany #'(lambda (x) (eql x #\a)) ""))
+  (not-mv (notany #'(lambda (x) (eql x #\a)) ""))
   nil)
 
 (deftest notany.14
@@ -72,7 +72,7 @@
   nil)
 
 (deftest notany.15
-  (not (notany 'null '(1 2 3 4)))
+  (not-mv (notany 'null '(1 2 3 4)))
   nil)
 
 (deftest notany.16

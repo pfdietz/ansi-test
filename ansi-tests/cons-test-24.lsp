@@ -129,43 +129,43 @@
 ;;; Keyword tests
 
 (deftest subsetp.allow-other-keys.1
-  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4 5) :bad t :allow-other-keys 67))
+  (notnot-mv (subsetp '(1 2 3 4) '(0 1 2 3 4 5) :bad t :allow-other-keys 67))
   t)
 
 (deftest subsetp.allow-other-keys.2
-  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4 5)
+  (notnot-mv (subsetp '(1 2 3 4) '(0 1 2 3 4 5)
 		   :allow-other-keys #'cons :bad t))
   t)
 
 (deftest subsetp.allow-other-keys.3
-  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4)
+  (notnot-mv (subsetp '(1 2 3 4) '(0 1 2 3 4)
 		   :allow-other-keys (make-hash-table)
 		   :bad t
 		   :test #'(lambda (x y) (= (1+ x) y))))
   nil)
 
 (deftest subsetp.allow-other-keys.4
-  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4 5) :allow-other-keys t))
+  (notnot-mv (subsetp '(1 2 3 4) '(0 1 2 3 4 5) :allow-other-keys t))
   t)
 
 (deftest subsetp.allow-other-keys.5
-  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4 5) :allow-other-keys nil))
+  (notnot-mv (subsetp '(1 2 3 4) '(0 1 2 3 4 5) :allow-other-keys nil))
   t)
 
 (deftest subsetp.allow-other-keys.6
-  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4 5)
+  (notnot-mv (subsetp '(1 2 3 4) '(0 1 2 3 4 5)
 		   :allow-other-keys t :bad1 t
 		   :allow-other-keys nil :bad2 t))
   t)
 
 (deftest subsetp.keywords.7
-  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4)
+  (notnot-mv (subsetp '(1 2 3 4) '(0 1 2 3 4)
 		   :test #'(lambda (x y) (= (1+ x) y))
 		   :test #'eql))
   nil)
 
 (deftest subsetp.keywords.8
-  (notnot (subsetp '(1 2 3 4 10) '(0 1 2 3 4)
+  (notnot-mv (subsetp '(1 2 3 4 10) '(0 1 2 3 4)
 		   :key nil
 		   :key #'(lambda (x) (mod x 2))))
   nil)

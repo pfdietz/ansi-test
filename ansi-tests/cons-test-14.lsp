@@ -29,15 +29,16 @@
 	     (a b c . d)
 	     ,(make-array '(10))
 	     "ancadas"  #\w)))
-    (not (every
-	  #'(lambda (x)
-	      (let ((result (catch-type-error (member-if #'listp x))))
-		(or (eqt result 'type-error)
-		    (progn
-		      (format t "~%On ~S: returned ~%~S" x result)
-		      nil))))
-	  test-inputs)))
-  nil)
+    (notnot-mv
+     (every
+      #'(lambda (x)
+	  (let ((result (catch-type-error (member-if #'listp x))))
+	    (or (eqt result 'type-error)
+		(progn
+		  (format t "~%On ~S: returned ~%~S" x result)
+		  nil))))
+      test-inputs)))
+  t)
 
 (deftest member-if-5
   (member-if #'identity '(1 2 3 4 5) :key #'evenp)
@@ -196,5 +197,3 @@
 (deftest member-if-not.error.7
   (classify-error (member-if-not #'null '(a b c) 1 2))
   program-error)
-
-  

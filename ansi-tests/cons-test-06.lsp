@@ -12,15 +12,15 @@
 ;;; endp
 
 (deftest endp-nil
-    (not (not (endp nil)))
+  (notnot-mv (endp nil))
   t)
 
 (deftest endp-cons
-    (endp (cons 'a 'a))
+  (endp (cons 'a 'a))
   nil)
 
 (deftest endp-singleton-list
-    (endp '(a))
+  (endp '(a))
   nil)
 
 (deftest endp-symbol-error
