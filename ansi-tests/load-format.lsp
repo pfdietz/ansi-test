@@ -36,3 +36,4 @@
 
 ;;; 22.3.6
 (load "format-t.lsp")
+(load "format-justify.lsp")
