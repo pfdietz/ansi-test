@@ -8659,7 +8659,30 @@ Broken at C::WT-MAKE-CLOSURE.
       (list val1 val2)))
   :good)
 
-    
+;;; sbcl 0.8.17.24
+;;; Bugs in the just-introduced fixnum arithmetic transforms
 
+(deftest misc.455
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -4079701634499 2272876436845) b))
+       (declare (optimize (space 0) (compilation-speed 1)
+			  (safety 3) (speed 2) (debug 0)))
+       (logand (* -775 b) a 37284)))
+   -18465060867 832909434173)
+  32772)
 
-  
+(deftest misc.456
+  (funcall
+   (compile
+    nil
+    '(lambda (b c)
+       (declare (type (integer -30606350847 35078064098) b))
+       (declare (type (integer -6652 6638) c))
+       (declare (optimize (space 3) (safety 0)
+			  (speed 0) (compilation-speed 2) (debug 1)))
+           (logand (* -9964236 (setq c 6206) 2600) b c)))
+    17296668225 -6574)
+  4096)
