@@ -21,7 +21,8 @@
  |  SOFTWARE.                                                                 |
  |----------------------------------------------------------------------------|#
 
-;This is the December 19, 1990 version of the regression tester.
+;This was the December 19, 1990 version of the regression tester, but
+;has since been modified.
 
 (in-package :regression-test)
 
