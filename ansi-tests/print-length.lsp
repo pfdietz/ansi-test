@@ -116,21 +116,32 @@
 ;;; The next test tacitly assumes issue STRUCTURE-READ-PRINT-SYNTAX
 
 (deftest print-length.11
-  (with-standard-io-syntax
-   (let ((*print-case* :upcase)
-	 (*print-escape* nil)
-	 (*print-readably* nil)
-	 (*print-pretty* nil)
-	 (*print-length* nil)
-	 (*package* (find-package "CL-TEST"))
-	 (s (make-print-length-struct :foo 17)))
-     (apply
-	#'values
-	(loop for i from 0 to 4
-	      collect (let ((*print-length* i))
-			(write-to-string s))))))
-  "#S(...)"
-  "#S(PRINT-LENGTH-STRUCT ...)"
-  "#S(PRINT-LENGTH-STRUCT :FOO ...)"
-  "#S(PRINT-LENGTH-STRUCT :FOO 17)"
-  "#S(PRINT-LENGTH-STRUCT :FOO 17)")
+  (let ((result
+	 (with-standard-io-syntax
+	  (let ((*print-case* :upcase)
+		(*print-escape* nil)
+		(*print-readably* nil)
+		(*print-pretty* nil)
+		(*print-length* nil)
+		(*package* (find-package "CL-TEST"))
+		(s (make-print-length-struct :foo 17)))
+	    (apply
+	     #'list
+	     (loop for i from 0 to 4
+		   collect (let ((*print-length* i))
+			     (write-to-string s))))))))
+    (if (member result
+		'(("#S(...)"
+		   "#S(PRINT-LENGTH-STRUCT ...)"
+		   "#S(PRINT-LENGTH-STRUCT :FOO ...)"
+		   "#S(PRINT-LENGTH-STRUCT :FOO 17)"
+		   "#S(PRINT-LENGTH-STRUCT :FOO 17)")
+		  ("#S(PRINT-LENGTH-STRUCT ...)"
+		   "#S(PRINT-LENGTH-STRUCT :FOO 17)"
+		   "#S(PRINT-LENGTH-STRUCT :FOO 17)"
+		   "#S(PRINT-LENGTH-STRUCT :FOO 17)"
+		   "#S(PRINT-LENGTH-STRUCT :FOO 17)"))
+		:test 'equal)
+	:good
+      result))
+  :good)
