@@ -173,3 +173,253 @@
 			   (long-float 1.0l0 3.0l0))
 		     '(long-float 1.0l0 2.0l0))
   nil)
+
+;;; Signed zero tests
+
+(deftest subtypep.short-float.zero.1
+  (check-equivalence '(short-float 0.0s0 *)
+		     '(or (short-float (0.0s0) *)
+			  (member -0.0s0 0.0s0)))
+  nil)
+
+(unless (eql 0.0s0 -0.0s0)
+  (deftest subtypep.short-float.zero.2
+    (values (subtypep '(short-float 0.0s0)
+		      '(or (short-float (0.0s0)) (member 0.0s0))))
+    nil)
+  (deftest subtypep.short-float.zero.
+    (values (subtypep '(short-float 0.0s0)
+		      '(or (short-float (0.0s0)) (member -0.0s0))))
+    nil))
+
+(deftest subtypep.short-float.zero.3
+  (subtypep* '(short-float -0.0s0 *) '(short-float 0.0s0 *))
+  t t)
+
+(deftest subtypep.short-float.zero.4
+  (subtypep* '(short-float * -0.0s0) '(short-float * 0.0s0))
+  t t)
+
+(deftest subtypep.short-float.zero.5
+  (subtypep* '(short-float (-0.0s0) *) '(short-float (0.0s0) *))
+  t t)
+
+(deftest subtypep.short-float.zero.6
+  (subtypep* '(short-float * (-0.0s0)) '(short-float * (0.0s0)))
+  t t)
+
+(deftest subtypep.short-float.zero.7
+  (subtypep* '(short-float 0.0s0 *) '(short-float -0.0s0 *))
+  t t)
+
+(deftest subtypep.short-float.zero.8
+  (subtypep* '(short-float * 0.0s0) '(short-float * -0.0s0))
+  t t)
+
+(deftest subtypep.short-float.zero.9
+  (subtypep* '(short-float (0.0s0) *) '(short-float (-0.0s0) *))
+  t t)
+
+(deftest subtypep.short-float.zero.10
+  (subtypep* '(short-float * (0.0s0)) '(short-float * (-0.0s0)))
+  t t)
+
+;;;
+
+(deftest subtypep.float.zero.1
+  (check-equivalence '(float 0.0 *)
+		     '(or (float (0.0) *)
+			  (member -0.0 0.0)))
+  nil)
+
+(unless (eql 0.0 -0.0)
+  (deftest subtypep.float.zero.2
+    (values (subtypep '(float 0.0)
+		      '(or (float (0.0)) (member 0.0))))
+    nil)
+  (deftest subtypep.float.zero.
+    (values (subtypep '(float 0.0)
+		      '(or (float (0.0)) (member -0.0))))
+    nil))
+
+(deftest subtypep.float.zero.3
+  (subtypep* '(float -0.0 *) '(float 0.0 *))
+  t t)
+
+(deftest subtypep.float.zero.4
+  (subtypep* '(float * -0.0) '(float * 0.0))
+  t t)
+
+(deftest subtypep.float.zero.5
+  (subtypep* '(float (-0.0) *) '(float (0.0) *))
+  t t)
+
+(deftest subtypep.float.zero.6
+  (subtypep* '(float * (-0.0)) '(float * (0.0)))
+  t t)
+
+(deftest subtypep.float.zero.7
+  (subtypep* '(float 0.0 *) '(float -0.0 *))
+  t t)
+
+(deftest subtypep.float.zero.8
+  (subtypep* '(float * 0.0) '(float * -0.0))
+  t t)
+
+(deftest subtypep.float.zero.9
+  (subtypep* '(float (0.0) *) '(float (-0.0) *))
+  t t)
+
+(deftest subtypep.float.zero.10
+  (subtypep* '(float * (0.0)) '(float * (-0.0)))
+  t t)
+
+;;;
+
+(deftest subtypep.single-float.zero.1
+  (check-equivalence '(single-float 0.0f0 *)
+		     '(or (single-float (0.0f0) *)
+			  (member -0.0f0 0.0f0)))
+  nil)
+
+(unless (eql 0.0f0 -0.0f0)
+  (deftest subtypep.single-float.zero.2
+    (values (subtypep '(single-float 0.0f0)
+		      '(or (single-float (0.0f0)) (member 0.0f0))))
+    nil)
+  (deftest subtypep.single-float.zero.
+    (values (subtypep '(single-float 0.0f0)
+		      '(or (single-float (0.0f0)) (member -0.0f0))))
+    nil))
+
+(deftest subtypep.single-float.zero.3
+  (subtypep* '(single-float -0.0f0 *) '(single-float 0.0f0 *))
+  t t)
+
+(deftest subtypep.single-float.zero.4
+  (subtypep* '(single-float * -0.0f0) '(single-float * 0.0f0))
+  t t)
+
+(deftest subtypep.single-float.zero.5
+  (subtypep* '(single-float (-0.0f0) *) '(single-float (0.0f0) *))
+  t t)
+
+(deftest subtypep.single-float.zero.6
+  (subtypep* '(single-float * (-0.0f0)) '(single-float * (0.0f0)))
+  t t)
+
+(deftest subtypep.single-float.zero.7
+  (subtypep* '(single-float 0.0f0 *) '(single-float -0.0f0 *))
+  t t)
+
+(deftest subtypep.single-float.zero.8
+  (subtypep* '(single-float * 0.0f0) '(single-float * -0.0f0))
+  t t)
+
+(deftest subtypep.single-float.zero.9
+  (subtypep* '(single-float (0.0f0) *) '(single-float (-0.0f0) *))
+  t t)
+
+(deftest subtypep.single-float.zero.10
+  (subtypep* '(single-float * (0.0f0)) '(single-float * (-0.0f0)))
+  t t)
+
+;;;
+
+(deftest subtypep.long-float.zero.1
+  (check-equivalence '(long-float 0.0l0 *)
+		     '(or (long-float (0.0l0) *)
+			  (member -0.0l0 0.0l0)))
+  nil)
+
+(unless (eql 0.0l0 -0.0l0)
+  (deftest subtypep.long-float.zero.2
+    (values (subtypep '(long-float 0.0l0)
+		      '(or (long-float (0.0l0)) (member 0.0l0))))
+    nil)
+  (deftest subtypep.long-float.zero.
+    (values (subtypep '(long-float 0.0l0)
+		      '(or (long-float (0.0l0)) (member -0.0l0))))
+    nil))
+
+(deftest subtypep.long-float.zero.3
+  (subtypep* '(long-float -0.0l0 *) '(long-float 0.0l0 *))
+  t t)
+
+(deftest subtypep.long-float.zero.4
+  (subtypep* '(long-float * -0.0l0) '(long-float * 0.0l0))
+  t t)
+
+(deftest subtypep.long-float.zero.5
+  (subtypep* '(long-float (-0.0l0) *) '(long-float (0.0l0) *))
+  t t)
+
+(deftest subtypep.long-float.zero.6
+  (subtypep* '(long-float * (-0.0l0)) '(long-float * (0.0l0)))
+  t t)
+
+(deftest subtypep.long-float.zero.7
+  (subtypep* '(long-float 0.0l0 *) '(long-float -0.0l0 *))
+  t t)
+
+(deftest subtypep.long-float.zero.8
+  (subtypep* '(long-float * 0.0l0) '(long-float * -0.0l0))
+  t t)
+
+(deftest subtypep.long-float.zero.9
+  (subtypep* '(long-float (0.0l0) *) '(long-float (-0.0l0) *))
+  t t)
+
+(deftest subtypep.long-float.zero.10
+  (subtypep* '(long-float * (0.0l0)) '(long-float * (-0.0l0)))
+  t t)
+
+;;;
+
+(deftest subtypep.double-float.zero.1
+  (check-equivalence '(double-float 0.0d0 *)
+		     '(or (double-float (0.0d0) *)
+			  (member -0.0d0 0.0d0)))
+  nil)
+
+(unless (eql 0.0d0 -0.0d0)
+  (deftest subtypep.double-float.zero.2
+    (values (subtypep '(double-float 0.0d0)
+		      '(or (double-float (0.0d0)) (member 0.0d0))))
+    nil)
+  (deftest subtypep.double-float.zero.
+    (values (subtypep '(double-float 0.0d0)
+		      '(or (double-float (0.0d0)) (member -0.0d0))))
+    nil))
+
+(deftest subtypep.double-float.zero.3
+  (subtypep* '(double-float -0.0d0 *) '(double-float 0.0d0 *))
+  t t)
+
+(deftest subtypep.double-float.zero.4
+  (subtypep* '(double-float * -0.0d0) '(double-float * 0.0d0))
+  t t)
+
+(deftest subtypep.double-float.zero.5
+  (subtypep* '(double-float (-0.0d0) *) '(double-float (0.0d0) *))
+  t t)
+
+(deftest subtypep.double-float.zero.6
+  (subtypep* '(double-float * (-0.0d0)) '(double-float * (0.0d0)))
+  t t)
+
+(deftest subtypep.double-float.zero.7
+  (subtypep* '(double-float 0.0d0 *) '(double-float -0.0d0 *))
+  t t)
+
+(deftest subtypep.double-float.zero.8
+  (subtypep* '(double-float * 0.0d0) '(double-float * -0.0d0))
+  t t)
+
+(deftest subtypep.double-float.zero.9
+  (subtypep* '(double-float (0.0d0) *) '(double-float (-0.0d0) *))
+  t t)
+
+(deftest subtypep.double-float.zero.10
+  (subtypep* '(double-float * (0.0d0)) '(double-float * (-0.0d0)))
+  t t)
