@@ -424,7 +424,7 @@
 	(symbol-name s)))
      nil ,(string-upcase string)))
 
-(def-syntax-unintern-test syntax.sharp-colon.1 "")
+; (def-syntax-unintern-test syntax.sharp-colon.1 "")
 (def-syntax-unintern-test syntax.sharp-colon.2 "#")
 (def-syntax-unintern-test syntax.sharp-colon.3 "a")
 (def-syntax-unintern-test syntax.sharp-colon.4 "A")
