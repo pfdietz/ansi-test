@@ -100,6 +100,44 @@
 	collect s)
   nil)
 
+(deftest string.17
+  (typep* "abc" '(string))
+  t)
+
+(deftest string.18
+  (typep* "abc" '(string *))
+  t)
+
+(deftest string.19
+  (typep* "abc" '(string 3))
+  t)
+
+(deftest string.20
+  (typep* "abc" '(string 2))
+  nil)
+
+(deftest string.21
+  (typep* "abc" '(string 4))
+  nil)
+
+(deftest string.22
+  (do-special-strings (s "X") (assert (typep s 'string)))
+  nil)
+		     
+(deftest string.23
+  (do-special-strings (s "X") (assert (typep s '(string))))
+  nil)
+		     
+(deftest string.24
+  (do-special-strings (s "X") (assert (typep s '(string *))))
+  nil)
+		     
+(deftest string.25
+  (do-special-strings (s "X")
+		      (or (array-has-fill-pointer-p s)
+			  (assert (typep s '(string 1)))))
+  nil)		     
+
 ;;; Error tests
 
 (deftest string.error.1
