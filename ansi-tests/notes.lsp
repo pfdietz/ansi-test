@@ -16,3 +16,6 @@
 
 (defnote :standardized-package-nicknames
   "The standardized package nicknames specified in section 11 of ANSI CL are exclusive (disputed).")
+
+(defnote :type-of/strict-builtins
+  "Interpret requirement 1.a on the TYPE-OF page to apply to all built-in types that contain the object, not just to some builtin type that contains the object.")

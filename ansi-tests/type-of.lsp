@@ -10,6 +10,7 @@
 ;;;  of which x is a member.
 
 (deftest type-of.1
+  :notes :type-of/strict-builtins
   (loop for x in *universe*
 	for tp = (type-of x)
 	for failures = (loop for tp2 in *cl-all-type-symbols*
@@ -17,6 +18,22 @@
 				       (not (subtypep tp tp2)))
 			     collect tp2)
 	when failures collect (list x failures))
+  nil)
+
+;;; Some have objected to that (in type-of.1) interpretation
+;;; of req. 1.a in the TYPE-OF page, saying that it need hold
+;;; for only *one* builtin type that the object is an element of.
+;;; This test tests the relaxed requirement.
+
+(deftest type-of.1-relaxed
+  (loop for x in *universe*
+	for builtins = (remove x *cl-all-type-symbols*
+			       :test (complement #'typep))
+	for tp = (type-of x)
+	when (and builtins
+		  (not (loop for tp2 in builtins
+			     thereis (subtypep tp tp2))))
+	collect x)
   nil)
 
 ;;; 1. For any object that is an element of some built-in type:
@@ -80,7 +97,6 @@
     (setf (find-class 'type-of.example-class-3) nil)
     (eqt (type-of (make-instance class)) class))
   t)
-
 
 ;;; Error tests
 
