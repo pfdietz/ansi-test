@@ -4697,4 +4697,22 @@
 			   (ldb (byte 13 13) 43710))))
   5)
 
-  
+;;; gcl (2/28/2004)
+;;; Error in COMPILER::CMP-ANON [or a callee]: T is not of type INTEGER.
+(deftest misc.283
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d)
+       (declare (optimize (speed 2) (space 2) (safety 1) (debug 1)
+                          (compilation-speed 3)))
+       (expt (logxor (progn
+                       (tagbody
+                        (multiple-value-prog1 0 a c (go 7))
+                        7)
+                       0)
+                     0 b (rational d))
+             0)))
+   1 2 3 4)
+  1)
+
