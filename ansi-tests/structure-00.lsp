@@ -364,7 +364,7 @@ do the defstruct."
 	   `((deftest ,(make-struct-test-name name 9)
 	       ,(let* ((var 'XTEMP-9)
 		       (var2 'YTEMP-9)
-		       (var3 'ZTEMP-9))		       
+		       (var3 'ZTEMP-9))	       
 		  `(let ((,var (,make-fn
 				,@(loop
 				   for (slot-name . initval)
@@ -470,6 +470,30 @@ do the defstruct."
 	     (let ((doc (documentation ',name 'type)))
 	       (or (null doc) (equalt doc ',doc-string)))
 	     t))
+
+       ;; Test that COPY-STRUCTURE works, if this is a structure
+       ;; type
+       ,@(unless type-option
+	   `((deftest ,(make-struct-test-name name 20)
+	       ,(let* ((var 'XTEMP-20)
+		       (var2 'YTEMP-20))
+		  `(let ((,var (,make-fn
+				,@(loop
+				   for (slot-name . initval)
+				   in initial-value-alist
+				   nconc (list (intern (string slot-name)
+						       "KEYWORD")
+					       `(quote ,initval))))))
+		     (let ((,var2 (copy-structure ,var)))
+		       (and
+			(not (eqlt ,var ,var2))
+			,@(loop
+			   for (slot-name . nil) in initial-value-alist
+			   for fn in field-fns
+			   collect
+			   `(eqlt (,fn ,var) (,fn ,var2)))
+			t))))
+	       t)))
        nil
        )))
 
