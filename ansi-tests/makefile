@@ -25,4 +25,4 @@ random-acl-test:
 
 
 clean:
-	rm -f test.out *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.fas *.lib \#*\#; rm -rf scratch/; rm -f foo.txt foo.lsp file-that-was-renamed.txt
+	rm -f test.out *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.fas *.lib \#*\#; rm -rf scratch/; rm -f foo.txt foo.lsp file-that-was-renamed.txt tmp.dat temp.dat
