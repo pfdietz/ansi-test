@@ -949,3 +949,52 @@
 			   (declare (optimize (safety 3) (speed 0) (debug 0)))
 			   (ash 6916244 (min 42 -185236061640)))))
   0)
+
+;;; Unwind-protect bug, from sbcl:
+;;; "The value NIL is not of type SB-C::NODE."
+
+(deftest misc.75
+  (funcall (compile nil '(lambda () (flet ((%f12 () (unwind-protect 1))) 0))))
+  0)
+
+
+;;; cmucl (2003-10-12), "NIL is not of type C::REF"
+(deftest misc.76
+  (funcall
+   (compile nil
+	    '(lambda (a c)
+		(if nil (unwind-protect (max 521739 (unwind-protect c)))
+		  (logandc2 3942 a))))
+   0 0)
+  3942)
+
+;;; gcl (2003-10-11)  Miscomputation of (mod 0 -53) in compiled code
+(deftest misc.77
+  (funcall (compile nil '(lambda () (mod 0 -53))))
+  0)
+
+
+;;; cmucl (2003-10-12)  "NIL is not of type C::BYTE-LAMBDA-INFO"
+(deftest misc.78
+  (funcall
+   (compile nil '(lambda ()
+		   (declare (optimize (speed 0) (debug 0)))
+		   (let ((v4
+			  (case 227
+			    ((-11113 -106126) (unwind-protect 8473))
+			    (t 43916))))
+		     -12))))
+  -12)
+
+;;; Same as misc.78, but with no declarations
+;;; In cmucl (2003-10-12)  "NIL is not of type C::ENVIRONMENT"
+(deftest misc.79
+  (funcall
+   (compile nil '(lambda ()
+		   (let ((v4
+			  (case 227
+			    ((-11113 -106126) (unwind-protect 8473))
+			    (t 43916))))
+		     -12))))
+  -12)
+
