@@ -620,6 +620,7 @@ the condition to go uncaught if it cannot be classified."
 	 (reader-error parse-error)
 	 (reader-error stream-error)
 	 )))
+  #|
   (when (subtypep* 'character 'base-char)
     (setq table
 	  (append
@@ -627,6 +628,7 @@ the condition to go uncaught if it cannot be classified."
 	     (string base-string)
 	     (simple-string simple-base-string))
 	   table)))
+  |#
   
   table))
 
