@@ -630,3 +630,32 @@
     result)
   #*01111)
 
+;;; Error cases
+
+(deftest nsubstitute-if.error.1
+  (classify-error (nsubstitute-if))
+  program-error)
+
+(deftest nsubstitute-if.error.2
+  (classify-error (nsubstitute-if 'a))
+  program-error)
+
+(deftest nsubstitute-if.error.3
+  (classify-error (nsubstitute-if 'a #'null))
+  program-error)
+
+(deftest nsubstitute-if.error.4
+  (classify-error (nsubstitute-if 'a #'null nil 'bad t))
+  program-error)
+
+(deftest nsubstitute-if.error.5
+  (classify-error (nsubstitute-if 'a #'null nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest nsubstitute-if.error.6
+  (classify-error (nsubstitute-if 'a #'null nil :key))
+  program-error)
+
+(deftest nsubstitute-if.error.7
+  (classify-error (nsubstitute-if 'a #'null nil 1 2))
+  program-error)

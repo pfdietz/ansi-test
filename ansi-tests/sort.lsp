@@ -80,9 +80,28 @@
     (sort a #'char<))
   "00111")
 
+;;; Error cases
 
+(deftest sort.error.1
+  (classify-error (sort))
+  program-error)
 
+(deftest sort.error.2
+  (classify-error (sort nil))
+  program-error)
 
+(deftest sort.error.3
+  (classify-error (sort nil #'< :key))
+  program-error)
 
+(deftest sort.error.4
+  (classify-error (sort nil #'< 'bad t))
+  program-error)
 
+(deftest sort.error.5
+  (classify-error (sort nil #'< 'bad t :allow-other-keys nil))
+  program-error)
 
+(deftest sort.error.6
+  (classify-error (sort nil #'< 1 2))
+  program-error)

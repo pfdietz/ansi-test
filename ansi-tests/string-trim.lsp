@@ -141,7 +141,16 @@
   (string-trim "abc" (copy-seq "abcabcabc"))
   "")
 
+;;; Error cases
 
+(deftest string-trim.error.1
+  (classify-error (string-trim))
+  program-error)
 
+(deftest string-trim.error.2
+  (classify-error (string-trim "abc"))
+  program-error)
 
-
+(deftest string-trim.error.3
+  (classify-error (string-trim "abc" "abcdddabc" nil))
+  program-error)

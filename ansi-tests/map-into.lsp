@@ -344,14 +344,25 @@
   8
   #*11111100)
 
-(deftest map-into-error.1
+
+;;; Error cases
+
+(deftest map-into.error.1
   (classify-error (map-into 'a #'(lambda () nil)))
   type-error)
 
-(deftest map-into-error.2
+(deftest map-into.error.2
   (classify-error (map-into nil #'identity 'a))
   type-error)
 
-(deftest map-into-error.3
+(deftest map-into.error.3
   (classify-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100))
   type-error)
+
+(deftest map-into.error.4
+  (classify-error (map-into))
+  program-error)
+
+(deftest map-into.error.5
+  (classify-error (map-into (list 'a 'b 'c)))
+  program-error)

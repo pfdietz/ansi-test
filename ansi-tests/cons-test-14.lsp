@@ -39,6 +39,22 @@
 	  test-inputs)))
   nil)
 
+(deftest member-if-5
+  (member-if #'identity '(1 2 3 4 5) :key #'evenp)
+  (2 3 4 5))
+
+(deftest member-if-6
+  (member-if #'identity '(1 2 3 4 5) :key #'evenp :key #'oddp)
+  (2 3 4 5))
+
+(deftest member-if-7
+  (member-if #'identity '(nil 2 3 4 5) :allow-other-keys t :bad t)
+  (2 3 4 5))
+
+(deftest member-if-8
+  (member-if #'identity '(nil 2 3 4 5) :bad t :allow-other-keys t)
+  (2 3 4 5))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; member-if-not
@@ -71,3 +87,79 @@
 		      nil))))
 	  test-inputs)))
   nil)
+
+(deftest member-if-not-5
+  (member-if-not #'not '(1 2 3 4 5) :key #'evenp)
+  (2 3 4 5))
+
+(deftest member-if-not-6
+  (member-if-not #'not '(1 2 3 4 5) :key #'evenp :key #'oddp)
+  (2 3 4 5))
+
+(deftest member-if-not-7
+  (member-if-not #'not '(nil 2 3 4 5) :allow-other-keys t :bad t)
+  (2 3 4 5))
+
+(deftest member-if-not-8
+  (member-if-not #'not '(nil 2 3 4 5) :bad t :allow-other-keys t)
+  (2 3 4 5))
+
+;;; Error cases
+
+(deftest member-if.error.1
+  (classify-error (member-if #'identity 'a))
+  type-error)
+  
+(deftest member-if.error.2
+  (classify-error (member-if))
+  program-error)
+  
+(deftest member-if.error.3
+  (classify-error (member-if #'null))
+  program-error)
+  
+(deftest member-if.error.4
+  (classify-error (member-if #'null '(a b c) :bad t))
+  program-error)
+  
+(deftest member-if.error.5
+  (classify-error (member-if #'null '(a b c) :bad t :allow-other-keys nil))
+  program-error)
+  
+(deftest member-if.error.6
+  (classify-error (member-if #'null '(a b c) :key))
+  program-error)
+  
+(deftest member-if.error.7
+  (classify-error (member-if #'null '(a b c) 1 2))
+  program-error)
+
+(deftest member-if-not.error.1
+  (classify-error (member-if-not #'identity 'a))
+  type-error)
+  
+(deftest member-if-not.error.2
+  (classify-error (member-if-not))
+  program-error)
+  
+(deftest member-if-not.error.3
+  (classify-error (member-if-not #'null))
+  program-error)
+  
+(deftest member-if-not.error.4
+  (classify-error (member-if-not #'null '(a b c) :bad t))
+  program-error)
+  
+(deftest member-if-not.error.5
+  (classify-error (member-if-not #'null '(a b c) :bad t :allow-other-keys nil))
+  program-error)
+  
+(deftest member-if-not.error.6
+  (classify-error (member-if-not #'null '(a b c) :key))
+  program-error)
+  
+(deftest member-if-not.error.7
+  (classify-error (member-if-not #'null '(a b c) 1 2))
+  program-error)
+
+  

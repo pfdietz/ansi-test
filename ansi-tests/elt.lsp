@@ -312,3 +312,17 @@
 			:fill-pointer 3)))
      (elt a 4)))
   type-error)
+
+(deftest elt.error.1
+  (classify-error (elt))
+  program-error)
+
+(deftest elt.error.2
+  (classify-error (elt nil))
+  program-error)
+
+(deftest elt.error.3
+  (classify-error (elt nil 0 nil))
+  program-error)
+
+

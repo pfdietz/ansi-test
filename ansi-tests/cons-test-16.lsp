@@ -40,6 +40,22 @@
     (acons #\R :foo :bar)
   ((#\R . :foo) . :bar))
 
+(deftest acons.error.1
+  (classify-error (acons))
+  program-error)
+
+(deftest acons.error.2
+  (classify-error (acons 'a))
+  program-error)
+
+(deftest acons.error.3
+  (classify-error (acons 'a 'b))
+  program-error)
+
+(deftest acons.error.4
+  (classify-error (acons 'a 'b 'c 'd))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc
 
@@ -178,6 +194,30 @@
 		       (eqt x y))))
   (A . 3))
 
+(deftest assoc.error.1
+  (classify-error (assoc))
+  program-error)
+
+(deftest assoc.error.2
+  (classify-error (assoc nil))
+  program-error)
+
+(deftest assoc.error.3
+  (classify-error (assoc nil nil :bad t))
+  program-error)
+
+(deftest assoc.error.4
+  (classify-error (assoc nil nil :key))
+  program-error)
+
+(deftest assoc.error.5
+  (classify-error (assoc nil nil  1 1))
+  program-error)
+
+(deftest assoc.error.6
+  (classify-error (assoc nil nil :bad t :allow-other-keys nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if
 
@@ -214,6 +254,30 @@
 (deftest assoc-if-4
     (assoc-if #'null '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
+
+(deftest assoc-if.error.1
+  (classify-error (assoc-if))
+  program-error)
+
+(deftest assoc-if.error.2
+  (classify-error (assoc-if #'null))
+  program-error)
+
+(deftest assoc-if.error.3
+  (classify-error (assoc-if #'null nil :bad t))
+  program-error)
+
+(deftest assoc-if.error.4
+  (classify-error (assoc-if #'null nil :key))
+  program-error)
+
+(deftest assoc-if.error.5
+  (classify-error (assoc-if #'null nil 1 1))
+  program-error)
+
+(deftest assoc-if.error.6
+  (classify-error (assoc-if #'null nil :bad t :allow-other-keys nil))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if-not
@@ -252,6 +316,30 @@
     (assoc-if-not #'identity '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
 
+(deftest assoc-if-not.error.1
+  (classify-error (assoc-if-not))
+  program-error)
+
+(deftest assoc-if-not.error.2
+  (classify-error (assoc-if-not #'null))
+  program-error)
+
+(deftest assoc-if-not.error.3
+  (classify-error (assoc-if-not #'null nil :bad t))
+  program-error)
+
+(deftest assoc-if-not.error.4
+  (classify-error (assoc-if-not #'null nil :key))
+  program-error)
+
+(deftest assoc-if-not.error.5
+  (classify-error (assoc-if-not #'null nil 1 1))
+  program-error)
+
+(deftest assoc-if-not.error.6
+  (classify-error (assoc-if-not #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-alist
 
@@ -272,6 +360,14 @@
 	      x result)
        t))
   t)
+
+(deftest copy-alist.error.1
+  (classify-error (copy-alist))
+  program-error)
+
+(deftest copy-alist.error.2
+  (classify-error (copy-alist nil nil))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; pairlis
@@ -332,6 +428,17 @@
        t))
   t)
 
+(deftest pairlis.error.1
+  (classify-error (pairlis))
+  program-error)
+
+(deftest pairlis.error.2
+  (classify-error (pairlis nil))
+  program-error)
+
+(deftest pairlis.error.3
+  (classify-error (pairlis nil nil nil nil))
+  program-error)
 
 
 

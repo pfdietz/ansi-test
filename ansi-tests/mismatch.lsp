@@ -596,3 +596,29 @@
      (mismatch m a)
      (mismatch m a :from-end t)))
   (4 4 5 nil nil 6 5 6))
+
+;;; Error cases
+
+(deftest mismatch.error.1
+  (classify-error (mismatch))
+  program-error)
+
+(deftest mismatch.error.2
+  (classify-error (mismatch nil))
+  program-error)
+
+(deftest mismatch.error.3
+  (classify-error (mismatch nil nil :bad t))
+  program-error)
+
+(deftest mismatch.error.4
+  (classify-error (mismatch nil nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest mismatch.error.5
+  (classify-error (mismatch nil nil :key))
+  program-error)
+
+(deftest mismatch.error.6
+  (classify-error (mismatch nil nil 1 2))
+  program-error)

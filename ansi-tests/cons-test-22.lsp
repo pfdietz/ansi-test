@@ -149,6 +149,30 @@
 	    #'<))
   (1 2 3 4))
 
+(deftest set-difference.error.1
+  (classify-error (set-difference))
+  program-error)
+
+(deftest set-difference.error.2
+  (classify-error (set-difference nil))
+  program-error)
+
+(deftest set-difference.error.3
+  (classify-error (set-difference nil nil :bad t))
+  program-error)
+
+(deftest set-difference.error.4
+  (classify-error (set-difference nil nil :key))
+  program-error)
+
+(deftest set-difference.error.5
+  (classify-error (set-difference nil nil 1 2))
+  program-error)
+
+(deftest set-difference.error.6
+  (classify-error (set-difference nil nil :bad t :allow-other-keys nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-difference
 
@@ -289,3 +313,27 @@
 		(not (eqt x y)))))
 	  #'<))
   (1 2 3 4))
+
+(deftest nset-difference.error.1
+  (classify-error (nset-difference))
+  program-error)
+
+(deftest nset-difference.error.2
+  (classify-error (nset-difference nil))
+  program-error)
+
+(deftest nset-difference.error.3
+  (classify-error (nset-difference nil nil :bad t))
+  program-error)
+
+(deftest nset-difference.error.4
+  (classify-error (nset-difference nil nil :key))
+  program-error)
+
+(deftest nset-difference.error.5
+  (classify-error (nset-difference nil nil 1 2))
+  program-error)
+
+(deftest nset-difference.error.6
+  (classify-error (nset-difference nil nil :bad t :allow-other-keys nil))
+  program-error)

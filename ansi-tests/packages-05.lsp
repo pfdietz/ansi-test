@@ -88,3 +88,14 @@
       (delete-package "TEST2")
       (delete-package "TEST1")))
   caught)
+
+(deftest export.error.1
+  (classify-error (export))
+  program-error)
+
+(deftest export.error.2
+  (classify-error (export 'X "CL-TEST" NIL))
+  program-error)
+
+
+

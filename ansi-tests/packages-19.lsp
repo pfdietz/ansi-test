@@ -33,3 +33,29 @@
   t)
 
 
+;;; Other error tests
+
+(deftest package-shadowing-symbols.error.1
+  (classify-error (package-shadowing-symbols))
+  program-error)
+
+(deftest package-shadowing-symbols.error.2
+  (classify-error (package-shadowing-symbols "CL" nil))
+  program-error)
+
+(deftest package-use-list.error.1
+  (classify-error (package-use-list))
+  program-error)
+
+(deftest package-use-list.error.2
+  (classify-error (package-use-list "CL" nil))
+  program-error)
+
+(deftest package-used-by-list.error.1
+  (classify-error (package-used-by-list))
+  program-error)
+
+(deftest package-used-by-list.error.2
+  (classify-error (package-used-by-list "CL" nil))
+  program-error)
+

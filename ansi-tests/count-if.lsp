@@ -419,14 +419,38 @@
 	    
 ;;; Error tests
 
-(deftest count-if-error.1
+(deftest count-if.error.1
   (catch-type-error (count-if #'identity 1))
   type-error)
 
-(deftest count-if-error.2
+(deftest count-if.error.2
   (catch-type-error (count-if #'identity 'a))
   type-error)
 
-(deftest count-if-error.3
+(deftest count-if.error.3
   (catch-type-error (count-if #'identity #\a))
   type-error)
+
+(deftest count-if.error.4
+  (classify-error (count-if))
+  program-error)
+
+(deftest count-if.error.5
+  (classify-error (count-if #'null))
+  program-error)
+
+(deftest count-if.error.6
+  (classify-error (count-if #'null nil :bad t))
+  program-error)
+
+(deftest count-if.error.7
+  (classify-error (count-if #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest count-if.error.8
+  (classify-error (count-if #'null nil :key))
+  program-error)
+
+(deftest count-if.error.9
+  (classify-error (count-if #'null nil 3 3))
+  program-error)

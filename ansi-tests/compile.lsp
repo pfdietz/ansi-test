@@ -87,3 +87,11 @@
   (let ((x (list 'a 'b)))
     (eqt x (funcall (compile nil `(lambda () ',x)))))
   t)
+
+(deftest compile.9
+  (classify-error (compile))
+  program-error)
+
+(deftest compile.10
+  (classify-error (compile nil '(lambda () nil) 'garbage))
+  program-error)

@@ -476,3 +476,55 @@
 	 (y (delete 2 x :key nil)))
     y)
   (1 3 6 1 4 1 3 7))
+
+
+;;; Error cases
+
+(deftest remove.error.1
+  (classify-error (remove))
+  program-error)
+
+(deftest remove.error.2
+  (classify-error (remove 'a))
+  program-error)
+
+(deftest remove.error.3
+  (classify-error (remove 'a nil :key))
+  program-error)
+
+(deftest remove.error.4
+  (classify-error (remove 'a nil 'bad t))
+  program-error)
+
+(deftest remove.error.5
+  (classify-error (remove 'a nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest remove.error.6
+  (classify-error (remove 'a nil 1 2))
+  program-error)
+
+(deftest delete.error.1
+  (classify-error (delete))
+  program-error)
+
+(deftest delete.error.2
+  (classify-error (delete 'a))
+  program-error)
+
+(deftest delete.error.3
+  (classify-error (delete 'a nil :key))
+  program-error)
+
+(deftest delete.error.4
+  (classify-error (delete 'a nil 'bad t))
+  program-error)
+
+(deftest delete.error.5
+  (classify-error (delete 'a nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest delete.error.6
+  (classify-error (delete 'a nil 1 2))
+  program-error)
+

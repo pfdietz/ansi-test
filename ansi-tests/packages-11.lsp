@@ -130,3 +130,12 @@
 		t)))))
    (error (c) c))
   t)
+
+(deftest unexport.error.1
+  (classify-error (unexport))
+  program-error)
+
+(deftest unexport.error.2
+  (classify-error (unexport 'xyz "CL-TEST" nil))
+  program-error)
+

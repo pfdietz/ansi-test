@@ -28,6 +28,14 @@
   (not (packagep *package*))
   nil)
 
+(deftest packagep.error.1
+  (classify-error (packagep))
+  program-error)
+
+(deftest packagep.error.2
+  (classify-error (packagep nil nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-error
 
@@ -94,3 +102,13 @@
       (error (c) c))
   t)
 
+(deftest package-error-package.error.1
+  (classify-error (package-error-package))
+  program-error)
+
+(deftest package-error-package.error.2
+  (classify-error
+   (package-error-package
+    (make-condition 'package-error :package #\A)
+    nil))
+  program-error)

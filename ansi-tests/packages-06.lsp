@@ -143,3 +143,18 @@
 	  (ignore-errors (delete-package p2))
 	  t)))
   t)
+
+(deftest rename-package.error.1
+  (classify-error (rename-package))
+  program-error)
+
+(deftest rename-package.error.2
+  (classify-error (rename-package "CL"))
+  program-error)
+
+(deftest rename-package.error.3
+  (classify-error (rename-package "A" "XXXXX" NIL NIL))
+  program-error)
+
+
+

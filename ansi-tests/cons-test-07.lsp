@@ -128,6 +128,18 @@
     (revappend (copy-tree '(a (b c) d)) nil)
   (d (b c) a))
 
+(deftest revappend.error.1
+  (classify-error (revappend))
+  program-error)
+
+(deftest revappend.error.2
+  (classify-error (revappend nil))
+  program-error)
+
+(deftest revappend.error.3
+  (classify-error (revappend nil nil nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nreconc
 
@@ -143,3 +155,14 @@
   (nreconc nil 'a)
   a)
 
+(deftest nreconc.error.1
+  (classify-error (nreconc))
+  program-error)
+
+(deftest nreconc.error.2
+  (classify-error (nreconc nil))
+  program-error)
+
+(deftest nreconc.error.3
+  (classify-error (nreconc nil nil nil))
+  program-error)

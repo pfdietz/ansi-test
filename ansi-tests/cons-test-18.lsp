@@ -57,6 +57,18 @@
 	 (values indicator value tail))))
   g h (g h a c))
 
+(deftest get-properties.error.1
+  (classify-error (get-properties))
+  program-error)
+
+(deftest get-properties.error.2
+  (classify-error (get-properties nil))
+  program-error)
+
+(deftest get-properties.error.3
+  (classify-error (get-properties nil nil nil))
+  program-error)
+
 	   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; getf
@@ -219,6 +231,18 @@
        (push 'x (getf p 'a))
        p))
   (x) (a (x)))
+
+(deftest getf.error.1
+  (classify-error (getf))
+  program-error)
+
+(deftest getf.error.2
+  (classify-error (getf nil))
+  program-error)
+
+(deftest getf.error.3
+  (classify-error (getf nil nil nil nil))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; remf

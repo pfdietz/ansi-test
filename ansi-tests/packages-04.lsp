@@ -38,3 +38,12 @@
 	     (eqt status2 :internal)
 	     (progn (delete-package p) t)))))
   t)
+
+(deftest intern.error.1
+  (classify-error (intern))
+  program-error)
+
+(deftest intern.error.2
+  (classify-error (intern "X" "CL" nil))
+  program-error)
+

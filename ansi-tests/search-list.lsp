@@ -134,3 +134,30 @@
 	  collect pat))
   nil)
 
+;;; Error cases
+
+(deftest search.error.1
+  (classify-error (search))
+  program-error)
+
+(deftest search.error.2
+  (classify-error (search "a"))
+  program-error)
+
+(deftest search.error.3
+  (classify-error (search "a" "a" :key))
+  program-error)
+
+(deftest search.error.4
+  (classify-error (search "a" "a" 'bad t))
+  program-error)
+
+(deftest search.error.5
+  (classify-error (search "a" "a" 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest search.error.6
+  (classify-error (search "a" "a" 1 2))
+  program-error)
+
+

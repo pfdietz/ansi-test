@@ -743,19 +743,42 @@
 
 ;;; Error tests
 
-(deftest find-error.1
+(deftest find.error.1
   (classify-error (find 'a 'b))
   type-error)
 
-(deftest find-error.2
+(deftest find.error.2
   (classify-error (find 'a 10))
   type-error)
 
-(deftest find-error.3
+(deftest find.error.3
   (classify-error (find 'a 1.4))
   type-error)
 
-(deftest find-error.4
+(deftest find.error.4
   (classify-error (find 'e '(a b c . d)))
   type-error)
 
+(deftest find.error.5
+  (classify-error (find))
+  program-error)
+
+(deftest find.error.6
+  (classify-error (find 'a))
+  program-error)
+
+(deftest find.error.7
+  (classify-error (find 'a nil :bad t))
+  program-error)
+
+(deftest find.error.8
+  (classify-error (find 'a nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest find.error.9
+  (classify-error (find 'a nil 1 1))
+  program-error)
+
+(deftest find.error.10
+  (classify-error (find 'a nil :key))
+  program-error)

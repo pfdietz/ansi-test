@@ -103,27 +103,39 @@
 
 ;; Error checking
 
-(deftest ldiff-7
-    (catch-type-error (ldiff 10 'a))
+(deftest ldiff.error.1
+  (catch-type-error (ldiff 10 'a))
   type-error)
 
 ;; Single atoms are not dotted lists, so the next
 ;; case should be a type-error
-(deftest ldiff-8
-    (catch-type-error (ldiff 'a 'a))
+(deftest ldiff.error.2
+  (catch-type-error (ldiff 'a 'a))
   type-error)
 
-(deftest ldiff-9
-    (catch-type-error (ldiff (make-array '(10) :initial-element 'a) '(a)))
+(deftest ldiff.error.3
+  (catch-type-error (ldiff (make-array '(10) :initial-element 'a) '(a)))
   type-error)
 
-(deftest ldiff-10
+(deftest ldiff.error.4
     (catch-type-error (ldiff 1.23 t))
   type-error)
 
-(deftest ldiff-11
+(deftest ldiff.error.5
     (catch-type-error (ldiff #\w 'a))
   type-error)
+
+(deftest ldiff.error.6
+  (classify-error (ldiff))
+  program-error)
+
+(deftest ldiff.error.7
+  (classify-error (ldiff nil))
+  program-error)
+
+(deftest ldiff.error.8
+  (classify-error (ldiff nil nil nil))
+  program-error)
 
 ;; Note!  The spec is ambiguous on whether this next test
 ;; is correct.  The spec says that ldiff should be prepared
@@ -165,24 +177,35 @@
 ;; The next four tests test that tailp handles dotted lists.  See
 ;; TAILP-NIL:T in the X3J13 documentation.
 
-(deftest tailp-2
-    (catch-type-error (not (not (tailp 'e (copy-tree '(a b c d . e))))))
+(deftest tailp.error.1
+  (catch-type-error (not (not (tailp 'e (copy-tree '(a b c d . e))))))
   t)
 
-(deftest tailp-3
-    (catch-type-error (tailp 'z (copy-tree '(a b c d . e))))
+(deftest tailp.error.2
+  (catch-type-error (tailp 'z (copy-tree '(a b c d . e))))
   nil)
 
-(deftest tailp-4
+(deftest tailp.error.3
   (catch-type-error (not (not (tailp 10203040506070
 	(list* 'a 'b (1- 10203040506071))))))
   t)
 
-(deftest tailp-5
+(deftest tailp.error.4
   (let ((x "abcde"))
-    (catch-type-error (tailp x
-	  (list* 'a 'b (copy-seq x)))))
+    (catch-type-error (tailp x (list* 'a 'b (copy-seq x)))))
   nil)
+
+(deftest tailp.error.5
+  (classify-error (tailp))
+  program-error)
+
+(deftest tailp.error.6
+  (classify-error (tailp nil))
+  program-error)
+
+(deftest tailp.error.7
+  (classify-error (tailp nil nil nil))
+  program-error)
 
 ;; Test that tailp does not modify its arguments
 
@@ -196,8 +219,6 @@
 	 (check-scaffold-copy x xcopy)
 	 (check-scaffold-copy y ycopy))))
   t)
-
-;; Error checking
 
 ;; Note!  The spec is ambiguous on whether this next test
 ;; is correct.  The spec says that tailp should be prepared

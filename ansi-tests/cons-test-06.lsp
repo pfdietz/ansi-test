@@ -24,16 +24,24 @@
   nil)
 
 (deftest endp-symbol-error
-    (catch-type-error (endp 'a))
+  (catch-type-error (endp 'a))
   type-error)
 
 (deftest endp-fixnum-error
-    (catch-type-error (endp 1))
+  (catch-type-error (endp 1))
   type-error)
 
 (deftest endp-float-error
-    (catch-type-error (endp 0.9212d4))
+  (catch-type-error (endp 0.9212d4))
   type-error)
+
+(deftest endp.error.4
+  (classify-error (endp))
+  program-error)
+
+(deftest endp.error.5
+  (classify-error (endp nil nil))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; null
@@ -48,6 +56,14 @@
 		   #'car (make-array '(10)))))
   t)
 
+(deftest null.error.1
+  (classify-error (null))
+  program-error)
+
+(deftest null.error.2
+  (classify-error (null nil nil))
+  program-error)
+
 (deftest not-1
     (not nil)
   t)
@@ -57,6 +73,14 @@
 	       `(1 a 1.2 "a" #\w (a) ,*terminal-io*
 		   #'car (make-array '(10)))))
   t)
+
+(deftest not.error.1
+  (classify-error (not))
+  program-error)
+
+(deftest not.error.2
+  (classify-error (not nil nil))
+  program-error)
 
 (deftest typep-nil-null
     (not (not (typep nil 'null)))

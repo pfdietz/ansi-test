@@ -72,37 +72,47 @@
   nil)
 
 (deftest notany.15
-  (classify-error (notany 1 '(a b c)))
-  type-error)
-
-(deftest notany.16
-  (classify-error (notany #\a '(a b c)))
-  type-error)
-
-(deftest notany.17
-  (classify-error (notany #() '(a b c)))
-  type-error)
-
-(deftest notany.18
   (not (notany 'null '(1 2 3 4)))
   nil)
 
-(deftest notany.19
+(deftest notany.16
   (notany 'null '(1 2 3 nil 5))
   nil)
 
-(deftest notany.20
+;;; Error cases
+
+(deftest notany.error.1
+  (classify-error (notany 1 '(a b c)))
+  type-error)
+
+(deftest notany.error.2
+  (classify-error (notany #\a '(a b c)))
+  type-error)
+
+(deftest notany.error.3
+  (classify-error (notany #() '(a b c)))
+  type-error)
+
+(deftest notany.error.4
   (classify-error (notany #'null 'a))
   type-error)
 
-(deftest notany.21
+(deftest notany.error.5
   (classify-error (notany #'null 100))
   type-error)
 
-(deftest notany.22
+(deftest notany.error.6
   (classify-error (notany #'null 'a))
   type-error)
 
-(deftest notany.23
+(deftest notany.error.7
   (classify-error (notany #'eq () 'a))
   type-error)
+
+(deftest notany.error.8
+  (classify-error (notany))
+  program-error)
+
+(deftest notany.error.9
+  (classify-error (notany #'null))
+  program-error)

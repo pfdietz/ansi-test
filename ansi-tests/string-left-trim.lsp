@@ -140,3 +140,17 @@
 (deftest string-left-trim.19
   (string-left-trim "abc" (copy-seq "abcabcabc"))
   "")
+
+;;; Error cases
+
+(deftest string-left-trim.error.1
+  (classify-error (string-left-trim))
+  program-error)
+
+(deftest string-left-trim.error.2
+  (classify-error (string-left-trim "abc"))
+  program-error)
+
+(deftest string-left-trim.error.3
+  (classify-error (string-left-trim "abc" "abcdddabc" nil))
+  program-error)

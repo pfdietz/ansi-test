@@ -86,28 +86,33 @@
     y)
   "edcba")
 
-(deftest nreverse-error.1
+(deftest nreverse.error.1
   (catch-type-error (nreverse 'a))
   type-error)
 
-(deftest nreverse-error.2
+(deftest nreverse.error.2
   (catch-type-error (nreverse #\a))
   type-error)
 
-(deftest nreverse-error.3
+(deftest nreverse.error.3
   (catch-type-error (nreverse 10))
   type-error)
 
-(deftest nreverse-error.4
+(deftest nreverse.error.4
   (catch-type-error (nreverse 0.3))
   type-error)
 
-(deftest nreverse-error.5
+(deftest nreverse.error.5
   (catch-type-error (nreverse 10/3))
   type-error)
 
-	 
+(deftest nreverse.error.6
+  (classify-error (nreverse))
+  program-error)
 
+(deftest nreverse.error.7
+  (classify-error (nreverse nil nil))
+  program-error)
 
 
 

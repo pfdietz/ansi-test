@@ -61,6 +61,14 @@
   (equalt (copy-seq #*000110) (copy-seq #*000111))
   nil)
 
+(deftest equal.error.1
+  (classify-error (equal))
+  program-error)
 
+(deftest equal.error.2
+  (classify-error (equal nil))
+  program-error)
 
-
+(deftest equal.error.3
+  (classify-error (equal nil nil nil))
+  program-error)

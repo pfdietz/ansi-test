@@ -170,6 +170,32 @@
 			   (return-from fail 'failed))
 			 t))))))
   t)
+
+(deftest set-exclusive-or.error.1
+  (classify-error (set-exclusive-or))
+  program-error)
+
+(deftest set-exclusive-or.error.2
+  (classify-error (set-exclusive-or nil))
+  program-error)
+
+(deftest set-exclusive-or.error.3
+  (classify-error (set-exclusive-or nil nil :bad t))
+  program-error)
+
+(deftest set-exclusive-or.error.4
+  (classify-error (set-exclusive-or nil nil :key))
+  program-error)
+
+(deftest set-exclusive-or.error.5
+  (classify-error (set-exclusive-or nil nil 1 2))
+  program-error)
+
+(deftest set-exclusive-or.error.6
+  (classify-error (set-exclusive-or nil nil :bad t :allow-other-keys nil))
+  program-error)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-exclusive-or
 
@@ -333,3 +359,27 @@
 			   (return-from fail 'failed))
 			 t))))))
   t)
+
+(deftest nset-exclusive-or.error.1
+  (classify-error (nset-exclusive-or))
+  program-error)
+
+(deftest nset-exclusive-or.error.2
+  (classify-error (nset-exclusive-or nil))
+  program-error)
+
+(deftest nset-exclusive-or.error.3
+  (classify-error (nset-exclusive-or nil nil :bad t))
+  program-error)
+
+(deftest nset-exclusive-or.error.4
+  (classify-error (nset-exclusive-or nil nil :key))
+  program-error)
+
+(deftest nset-exclusive-or.error.5
+  (classify-error (nset-exclusive-or nil nil 1 2))
+  program-error)
+
+(deftest nset-exclusive-or.error.6
+  (classify-error (nset-exclusive-or nil nil :bad t :allow-other-keys nil))
+  program-error)

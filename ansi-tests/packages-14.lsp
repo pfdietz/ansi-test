@@ -183,3 +183,16 @@
 	    (dolist (p '("H1" "H2" "G1" "G2" "G3"))
 	      (ignore-errors (delete-package p)))))))
   t)
+
+(deftest unuse-package.error.1
+  (classify-error (unuse-package))
+  program-error)
+
+(deftest unuse-package.error.2
+  (progn
+    (ignore-errors (delete-package "UPE2"))
+    (ignore-errors (delete-package "UPE2A"))
+    (make-package "UPE2" :use ())
+    (make-package "UPE2A" :use '("UPE2"))
+    (classify-error (unuse-package "UPE2" "UPE2A" nil)))
+  program-error)

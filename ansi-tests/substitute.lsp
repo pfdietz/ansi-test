@@ -965,3 +965,33 @@
 	 (result (substitute 1 0 x :from-end t :count 1)))
     result)
   #*01111)
+
+;;; Error cases
+
+(deftest substitute.error.1
+  (classify-error (substitute))
+  program-error)
+
+(deftest substitute.error.2
+  (classify-error (substitute 'a))
+  program-error)
+
+(deftest substitute.error.3
+  (classify-error (substitute 'a 'b))
+  program-error)
+
+(deftest substitute.error.4
+  (classify-error (substitute 'a 'b nil 'bad t))
+  program-error)
+
+(deftest substitute.error.5
+  (classify-error (substitute 'a 'b nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest substitute.error.6
+  (classify-error (substitute 'a 'b nil :key))
+  program-error)
+
+(deftest substitute.error.7
+  (classify-error (substitute 'a 'b nil 1 2))
+  program-error)

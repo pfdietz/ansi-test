@@ -585,3 +585,30 @@
     (values (eqt x result) result))
   t
   "aabcef")
+
+;;; Error cases
+
+(deftest replace.error.1
+  (classify-error (replace))
+  program-error)
+
+(deftest replace.error.2
+  (classify-error (replace nil))
+  program-error)
+
+(deftest replace.error.3
+  (classify-error (replace nil nil :start))
+  program-error)
+
+(deftest replace.error.4
+  (classify-error (replace nil nil 'bad t))
+  program-error)
+
+(deftest replace.error.5
+  (classify-error (replace nil nil :allow-other-keys nil 'bad t))
+  program-error)
+
+(deftest replace.error.6
+  (classify-error (replace nil nil 1 2))
+  program-error)
+

@@ -91,9 +91,28 @@
     (stable-sort a #'char<))
   "00111")
 
+;;; Error cases
 
+(deftest stable-sort.error.1
+  (classify-error (stable-sort))
+  program-error)
 
+(deftest stable-sort.error.2
+  (classify-error (stable-sort nil))
+  program-error)
 
+(deftest stable-sort.error.3
+  (classify-error (stable-sort nil #'< :key))
+  program-error)
 
+(deftest stable-sort.error.4
+  (classify-error (stable-sort nil #'< 'bad t))
+  program-error)
 
+(deftest stable-sort.error.5
+  (classify-error (stable-sort nil #'< 'bad t :allow-other-keys nil))
+  program-error)
 
+(deftest stable-sort.error.6
+  (classify-error (stable-sort nil #'< 1 2))
+  program-error)

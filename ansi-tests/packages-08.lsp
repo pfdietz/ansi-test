@@ -141,3 +141,14 @@
 		       t)))
   t)
 
+(deftest delete-package.error.1
+  (classify-error (delete-package))
+  program-error)
+
+(deftest delete-package.error.2
+  (progn
+    (unless (find-package "TEST-DPE2")
+      (make-package "TEST-DPE2" :use nil))
+    (classify-error (delete-package "TEST-DPE2" nil)))
+  program-error)
+

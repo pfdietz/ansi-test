@@ -83,3 +83,30 @@
    ("ABCDEF" "ABCDEF" "ABCDEf")
    ("ABCDEF" "ABCDEF"))
   "ABCDEF")
+
+;;; Error cases
+
+(deftest string-capitalize.error.1
+  (classify-error (string-capitalize))
+  program-error)
+
+(deftest string-capitalize.error.2
+  (classify-error (string-capitalize (copy-seq "abc") :bad t))
+  program-error)
+
+(deftest string-capitalize.error.3
+  (classify-error (string-capitalize (copy-seq "abc") :start))
+  program-error)
+
+(deftest string-capitalize.error.4
+  (classify-error (string-capitalize (copy-seq "abc") :bad t
+				      :allow-other-keys nil))
+  program-error)
+
+(deftest string-capitalize.error.5
+  (classify-error (string-capitalize (copy-seq "abc") :end))
+  program-error)
+
+(deftest string-capitalize.error.6
+  (classify-error (string-capitalize (copy-seq "abc") 1 2))
+  program-error)

@@ -191,6 +191,31 @@
 		       (eqt x y))))
   (3 . A))
 
+(deftest rassoc.error.1
+  (classify-error (rassoc))
+  program-error)
+
+(deftest rassoc.error.2
+  (classify-error (rassoc nil))
+  program-error)
+
+(deftest rassoc.error.3
+  (classify-error (rassoc nil nil :bad t))
+  program-error)
+
+(deftest rassoc.error.4
+  (classify-error (rassoc nil nil :key))
+  program-error)
+
+(deftest rassoc.error.5
+  (classify-error (rassoc nil nil 1 1))
+  program-error)
+
+(deftest rassoc.error.6
+  (classify-error (rassoc nil nil :bad t :allow-other-keys nil))
+  program-error)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc-if
 
@@ -228,6 +253,30 @@
     (rassoc-if #'null
 	       (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
+
+(deftest rassoc-if.error.1
+  (classify-error (rassoc-if))
+  program-error)
+
+(deftest rassoc-if.error.2
+  (classify-error (rassoc-if #'null))
+  program-error)
+
+(deftest rassoc-if.error.3
+  (classify-error (rassoc-if #'null nil :bad t))
+  program-error)
+
+(deftest rassoc-if.error.4
+  (classify-error (rassoc-if #'null nil :key))
+  program-error)
+
+(deftest rassoc-if.error.5
+  (classify-error (rassoc-if #'null nil 1 1))
+  program-error)
+
+(deftest rassoc-if.error.6
+  (classify-error (rassoc-if #'null nil :bad t :allow-other-keys nil))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc-if-not
@@ -267,3 +316,26 @@
 		   (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
 
+(deftest rassoc-if-not.error.1
+  (classify-error (rassoc-if-not))
+  program-error)
+
+(deftest rassoc-if-not.error.2
+  (classify-error (rassoc-if-not #'null))
+  program-error)
+
+(deftest rassoc-if-not.error.3
+  (classify-error (rassoc-if-not #'null nil :bad t))
+  program-error)
+
+(deftest rassoc-if-not.error.4
+  (classify-error (rassoc-if-not #'null nil :key))
+  program-error)
+
+(deftest rassoc-if-not.error.5
+  (classify-error (rassoc-if-not #'null nil 1 1))
+  program-error)
+
+(deftest rassoc-if-not.error.6
+  (classify-error (rassoc-if-not #'null nil :bad t :allow-other-keys nil))
+  program-error)

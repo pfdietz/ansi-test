@@ -219,3 +219,11 @@
 	  (error (c) c))
       (ignore-errors (delete-package :G)))
   ("X" :internal "Y" :internal 2))
+
+(deftest shadow.error.1
+  (classify-error (shadow))
+  program-error)
+
+(deftest shadow.error.2
+  (classify-error (shadow "X" "CL-USER" nil))
+  program-error)

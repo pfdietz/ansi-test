@@ -29,6 +29,14 @@
 	(check-cons-copy x y)))
   t)
 
+(deftest copy-tree.error.1
+  (classify-error (copy-tree))
+  program-error)
+
+(deftest copy-tree.error.2
+  (classify-error (copy-tree 'a 'b))
+  program-error)
+
 (deftest sublis-1
     (check-sublis '((a b) g (d e 10 g h) 15 . g)
 		  '((e . e2) (g . 17)))
@@ -87,6 +95,28 @@
    :key nil)
   (2 2 b b))
 
+(deftest sublis-9
+  (sublis nil 'a :bad-keyword t :allow-other-keys t)
+  a)
+
+;; Argument error cases
+
+(deftest sublis.error.1
+  (classify-error (sublis))
+  program-error)
+
+(deftest sublis.error.2
+  (classify-error (sublis nil))
+  program-error)
+
+(deftest sublis.error.3
+  (classify-error (sublis nil 'a :test))
+  program-error)
+
+(deftest sublis.error.4
+  (classify-error (sublis nil 'a :bad-keyword t))
+  program-error)
+
 ;; nsublis
 
 (deftest nsublis-1
@@ -138,6 +168,10 @@
 				       '*not-present*)))
   (1 (z . 2) ((x . "aa"))))
 
+(deftest nsublis-9
+  (nsublis nil 'a :bad-keyword t :allow-other-keys t)
+  a)
+
 ;; Check that a null key arg is ignored.
 
 (deftest nsublis-8
@@ -146,6 +180,25 @@
    '((1 . 2) (a . b))
    :key nil)
   (2 2 b b))
+
+;; Argument error cases
+
+(deftest nsublis.error.1
+  (classify-error (nsublis))
+  program-error)
+
+(deftest nsublis.error.2
+  (classify-error (nsublis nil))
+  program-error)
+
+(deftest nsublis.error.3
+  (classify-error (nsublis nil 'a :test))
+  program-error)
+
+(deftest nsublis.error.4
+  (classify-error (nsublis nil 'a :bad-keyword t))
+  program-error)
+
 
 (deftest sublis-shared
     (let* ((shared-piece (list 'a 'b))
@@ -168,39 +221,39 @@
   "Z")
 
 (deftest subst-4
-    (check-subst 'grape 'dick
-		 '(melville wrote (moby dick)))
+  (check-subst 'grape 'dick
+	       '(melville wrote (moby dick)))
   (MELVILLE WROTE (MOBY GRAPE)))
 
 (deftest subst-5
-    (check-subst 'cha-cha-cha 'nil '(melville wrote (moby dick)))
+  (check-subst 'cha-cha-cha 'nil '(melville wrote (moby dick)))
   (MELVILLE WROTE (MOBY DICK . CHA-CHA-CHA) . CHA-CHA-CHA))
 
 (deftest subst-6
-    (check-subst
-     '(1 2) '(foo . bar)
-     '((foo . baz) (foo . bar) (bar . foo) (baz foo . bar))
-     :test #'equal)
+  (check-subst
+   '(1 2) '(foo . bar)
+   '((foo . baz) (foo . bar) (bar . foo) (baz foo . bar))
+   :test #'equal)
   ((foo . baz) (1 2) (bar . foo) (baz 1 2)))
 
 (deftest subst-7
-    (check-subst
-     'foo "aaa"
-     '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
-     :key #'(lambda (x) (if (and (numberp x) (evenp x))
-			    "aaa"
-			  nil))
-     :test #'string=)
+  (check-subst
+   'foo "aaa"
+   '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
+   :key #'(lambda (x) (if (and (numberp x) (evenp x))
+			  "aaa"
+			nil))
+   :test #'string=)
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
 (deftest subst-8
-    (check-subst
-     'foo nil
-     '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
-     :key #'(lambda (x) (if (and (numberp x) (evenp x))
-			    (copy-seq "aaa")
-			  nil))
-     :test-not #'equal)
+  (check-subst
+   'foo nil
+   '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
+   :key #'(lambda (x) (if (and (numberp x) (evenp x))
+			  (copy-seq "aaa")
+			nil))
+   :test-not #'equal)
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
 (deftest subst-9
@@ -208,6 +261,10 @@
 	       (copy-tree '(a b c d a b))
 	       :key nil)
   (a a c d a a))
+
+(deftest subst-10
+  (subst 'a 'b nil :bad t :allow-other-keys t)
+  nil)
   
 (deftest subst-if-1
     (check-subst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
@@ -275,11 +332,21 @@
 		  :key nil)
   ((a) (a) (c) (d)))
   
+(deftest subst-if-7
+  (subst-if 'a #'null nil :bad t :allow-other-keys t)
+  a)
+
 (deftest subst-if-not-5
   (check-subst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
 		      '((a) (b) (c) (d))
 		      :key nil)
   ((a) (a) (c) (d)))
+
+(deftest subst-if-not-7
+  (subst-if 'a #'identity nil :bad t :allow-other-keys t)
+  nil)
+
+
 
 (defvar *nsubst-tree-1* '(10 (30 20 10) (20 10) (10 20 30 40)))
 
@@ -336,8 +403,11 @@
 		(copy-tree '(a b c d a b))
 		:key nil)
   (a a c d a a))
-  
 
+(deftest nsubst-10
+  (nsubst 'a 'b nil :bad t :allow-other-keys t)
+  nil)
+  
 (deftest nsubst-if-1
     (check-nsubst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
   A)
@@ -409,3 +479,190 @@
 		       '((a) (b) (c) (d))
 		       :key nil)
   ((a) (a) (c) (d)))
+
+(deftest nsubst-if-7
+  (nsubst-if 'a #'null nil :bad t :allow-other-keys t)
+  a)
+
+(deftest nsubst-if-not-6
+  (nsubst-if 'a #'identity nil :bad t :allow-other-keys t)
+  nil)
+
+;;; Error cases
+
+;;; subst
+(deftest subst.error.1
+  (classify-error (subst))
+  program-error)
+
+(deftest subst.error.2
+  (classify-error (subst 'a))
+  program-error)
+
+(deftest subst.error.3
+  (classify-error (subst 'a 'b))
+  program-error)
+
+(deftest subst.error.4
+  (classify-error (subst 'a 'b nil :foo nil))
+  program-error)
+
+(deftest subst.error.5
+  (classify-error (subst 'a 'b nil :test))
+  program-error)
+
+(deftest subst.error.6
+  (classify-error (subst 'a 'b nil 1))
+  program-error)
+
+(deftest subst.error.7
+  (classify-error (subst 'a 'b nil :bad t :allow-other-keys nil))
+  program-error)
+
+;;; nsubst
+(deftest nsubst.error.1
+  (classify-error (nsubst))
+  program-error)
+
+(deftest nsubst.error.2
+  (classify-error (nsubst 'a))
+  program-error)
+
+(deftest nsubst.error.3
+  (classify-error (nsubst 'a 'b))
+  program-error)
+
+(deftest nsubst.error.4
+  (classify-error (nsubst 'a 'b nil :foo nil))
+  program-error)
+
+(deftest nsubst.error.5
+  (classify-error (nsubst 'a 'b nil :test))
+  program-error)
+
+(deftest nsubst.error.6
+  (classify-error (nsubst 'a 'b nil 1))
+  program-error)
+
+(deftest nsubst.error.7
+  (classify-error (nsubst 'a 'b nil :bad t :allow-other-keys nil))
+  program-error)
+
+;;; subst-if
+(deftest subst-if.error.1
+  (classify-error (subst-if))
+  program-error)
+
+(deftest subst-if.error.2
+  (classify-error (subst-if 'a))
+  program-error)
+
+(deftest subst-if.error.3
+  (classify-error (subst-if 'a #'null))
+  program-error)
+
+(deftest subst-if.error.4
+  (classify-error (subst-if 'a #'null nil :foo nil))
+  program-error)
+
+(deftest subst-if.error.5
+  (classify-error (subst-if 'a #'null nil :test))
+  program-error)
+
+(deftest subst-if.error.6
+  (classify-error (subst-if 'a #'null nil 1))
+  program-error)
+
+(deftest subst-if.error.7
+  (classify-error (subst-if 'a #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+;;; subst-if-not
+(deftest subst-if-not.error.1
+  (classify-error (subst-if-not))
+  program-error)
+
+(deftest subst-if-not.error.2
+  (classify-error (subst-if-not 'a))
+  program-error)
+
+(deftest subst-if-not.error.3
+  (classify-error (subst-if-not 'a #'null))
+  program-error)
+
+(deftest subst-if-not.error.4
+  (classify-error (subst-if-not 'a #'null nil :foo nil))
+  program-error)
+
+(deftest subst-if-not.error.5
+  (classify-error (subst-if-not 'a #'null nil :test))
+  program-error)
+
+(deftest subst-if-not.error.6
+  (classify-error (subst-if-not 'a #'null nil 1))
+  program-error)
+
+(deftest subst-if-not.error.7
+  (classify-error (subst-if-not 'a #'null nil
+				:bad t :allow-other-keys nil))
+  program-error)
+
+;;; nsubst-if
+(deftest nsubst-if.error.1
+  (classify-error (nsubst-if))
+  program-error)
+
+(deftest nsubst-if.error.2
+  (classify-error (nsubst-if 'a))
+  program-error)
+
+(deftest nsubst-if.error.3
+  (classify-error (nsubst-if 'a #'null))
+  program-error)
+
+(deftest nsubst-if.error.4
+  (classify-error (nsubst-if 'a #'null nil :foo nil))
+  program-error)
+
+(deftest nsubst-if.error.5
+  (classify-error (nsubst-if 'a #'null nil :test))
+  program-error)
+
+(deftest nsubst-if.error.6
+  (classify-error (nsubst-if 'a #'null nil 1))
+  program-error)
+
+(deftest nsubst-if.error.7
+  (classify-error (nsubst-if 'a #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+
+;;; nsubst-if-not
+(deftest nsubst-if-not.error.1
+  (classify-error (nsubst-if-not))
+  program-error)
+
+(deftest nsubst-if-not.error.2
+  (classify-error (nsubst-if-not 'a))
+  program-error)
+
+(deftest nsubst-if-not.error.3
+  (classify-error (nsubst-if-not 'a #'null))
+  program-error)
+
+(deftest nsubst-if-not.error.4
+  (classify-error (nsubst-if-not 'a #'null nil :foo nil))
+  program-error)
+
+(deftest nsubst-if-not.error.5
+  (classify-error (nsubst-if-not 'a #'null nil :test))
+  program-error)
+
+(deftest nsubst-if-not.error.6
+  (classify-error (nsubst-if-not 'a #'null nil 1))
+  program-error)
+
+(deftest nsubst-if-not.error.7
+  (classify-error (nsubst-if-not 'a #'null nil
+				 :bad t :allow-other-keys nil))
+  program-error)

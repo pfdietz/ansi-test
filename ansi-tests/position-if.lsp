@@ -443,18 +443,43 @@
 
 ;;; Error tests
 
-(deftest position-if-error.1
+(deftest position-if.error.1
   (classify-error (position-if #'identity 'b))
   type-error)
 
-(deftest position-if-error.2
+(deftest position-if,error.2
   (classify-error (position-if #'identity 10))
   type-error)
 
-(deftest position-if-error.3
+(deftest position-if.error.3
   (classify-error (position-if 'null 1.4))
   type-error)
 
-(deftest position-if-error.4
+(deftest position-if.error.4
   (classify-error (position-if 'null '(a b c . d)))
   type-error)
+
+(deftest position-if.error.5
+  (classify-error (position-if))
+  program-error)
+
+(deftest position-if.error.6
+  (classify-error (position-if #'null))
+  program-error)
+
+(deftest position-if.error.7
+  (classify-error (position-if #'null nil :key))
+  program-error)
+
+(deftest position-if.error.8
+  (classify-error (position-if #'null nil 'bad t))
+  program-error)
+
+(deftest position-if.error.9
+  (classify-error (position-if #'null nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest position-if.error.10
+  (classify-error (position-if #'null nil 1 2))
+  program-error)
+

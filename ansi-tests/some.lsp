@@ -71,37 +71,47 @@
   nil)
 
 (deftest some.15
-  (classify-error (some 1 '(a b c)))
-  type-error)
-
-(deftest some.16
-  (classify-error (some #\a '(a b c)))
-  type-error)
-
-(deftest some.17
-  (classify-error (some #() '(a b c)))
-  type-error)
-
-(deftest some.18
   (some 'null '(1 2 3 4))
   nil)
 
-(deftest some.19
+(deftest some.16
   (not (some 'null '(1 2 3 nil 5)))
   nil)
 
-(deftest some.20
+
+(deftest some.error.1
+  (classify-error (some 1 '(a b c)))
+  type-error)
+
+(deftest some.error.2
+  (classify-error (some #\a '(a b c)))
+  type-error)
+
+(deftest some.error.3
+  (classify-error (some #() '(a b c)))
+  type-error)
+
+(deftest some.error.4
   (classify-error (some #'null 'a))
   type-error)
 
-(deftest some.21
+(deftest some.error.5
   (classify-error (some #'null 100))
   type-error)
 
-(deftest some.22
+(deftest some.error.6
   (classify-error (some #'null 'a))
   type-error)
 
-(deftest some.23
+(deftest some.error.7
   (classify-error (some #'eq () 'a))
   type-error)
+
+(deftest some.error.8
+  (classify-error (some))
+  program-error)
+
+(deftest some.error.9
+  (classify-error (some #'null))
+  program-error)
+

@@ -173,3 +173,19 @@
 (deftest subseq-bit-vector-3
   (subseq-bit-vector-3-body)
   t)
+
+;;; Error cases
+
+(deftest subseq.error.1
+  (classify-error (subseq))
+  program-error)
+
+(deftest subseq.error.2
+  (classify-error (subseq nil))
+  program-error)
+
+(deftest subseq.error.3
+  (classify-error (subseq nil 0 0 0))
+  program-error)
+
+

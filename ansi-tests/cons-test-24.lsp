@@ -125,3 +125,27 @@
 		 (when (< y x) (return-from fail 'fail))
 		 nil)))
   t)
+
+(deftest subsetp.error.1
+  (classify-error (subsetp))
+  program-error)
+
+(deftest subsetp.error.2
+  (classify-error (subsetp nil))
+  program-error)
+
+(deftest subsetp.error.3
+  (classify-error (subsetp nil nil :bad t))
+  program-error)
+
+(deftest subsetp.error.4
+  (classify-error (subsetp nil nil :key))
+  program-error)
+
+(deftest subsetp.error.5
+  (classify-error (subsetp nil nil 1 2))
+  program-error)
+
+(deftest subsetp.error.6
+  (classify-error (subsetp nil nil :bad t :allow-other-keys nil))
+  program-error)

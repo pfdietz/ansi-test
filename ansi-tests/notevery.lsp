@@ -72,37 +72,47 @@
   nil)
 
 (deftest notevery.15
-  (classify-error (notevery 1 '(a b c)))
-  type-error)
-
-(deftest notevery.16
-  (classify-error (notevery #\a '(a b c)))
-  type-error)
-
-(deftest notevery.17
-  (classify-error (notevery #() '(a b c)))
-  type-error)
-
-(deftest notevery.18
   (not (notevery 'null '(nil nil t nil)))
   nil)
 
-(deftest notevery.19
+(deftest notevery.16
   (notevery 'null '(nil nil nil nil))
   nil)
 
-(deftest notevery.20
+;;; Error cases
+
+(deftest notevery.error.1
+  (classify-error (notevery 1 '(a b c)))
+  type-error)
+
+(deftest notevery.error.2
+  (classify-error (notevery #\a '(a b c)))
+  type-error)
+
+(deftest notevery.error.3
+  (classify-error (notevery #() '(a b c)))
+  type-error)
+
+(deftest notevery.error.4
   (classify-error (notevery #'null 'a))
   type-error)
 
-(deftest notevery.21
+(deftest notevery.error.5
   (classify-error (notevery #'null 100))
   type-error)
 
-(deftest notevery.22
+(deftest notevery.error.6
   (classify-error (notevery #'null 'a))
   type-error)
 
-(deftest notevery.23
+(deftest notevery.error.7
   (classify-error (notevery #'eq () 'a))
   type-error)
+
+(deftest notevery.error.8
+  (classify-error (notevery))
+  program-error)
+
+(deftest notevery.error.9
+  (classify-error (notevery #'null))
+  program-error)

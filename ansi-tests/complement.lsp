@@ -26,3 +26,14 @@
 		   (push #\a x)
 		   (apply (cl::complement #'char=) x))))
   t)
+
+(deftest complement.5
+  (classify-error (complement))
+  program-error)
+
+
+(deftest complement.6
+  (classify-error (complement #'not t))
+  program-error)
+
+

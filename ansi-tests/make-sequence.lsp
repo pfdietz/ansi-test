@@ -167,30 +167,55 @@
 
 ;;; Tests for errors
 
-(deftest make-sequence-error.1
+(deftest make-sequence.error.1
   (classify-error (make-sequence 'symbol 10))
   type-error)
 
-(deftest make-sequence-error.2
+(deftest make-sequence.error.2
   (classify-error (make-sequence 'null 1))
   type-error)
 
-(deftest make-sequence-error.3
+(deftest make-sequence.error.3
   (classify-error (make-sequence '(vector * 4) 3))
   type-error)
 
-(deftest make-sequence-error.4
+(deftest make-sequence.error.4
   (classify-error (make-sequence '(vector * 2) 3))
   type-error)
 
-(deftest make-sequence-error.5
+(deftest make-sequence.error.5
   (classify-error (make-sequence '(string 4) 3))
   type-error)
 
-(deftest make-sequence-error.6
+(deftest make-sequence.error.6
   (classify-error (make-sequence '(simple-string 2) 3))
   type-error)
 
-(deftest make-sequence-error.7
+(deftest make-sequence.error.7
   (classify-error (make-sequence 'cons 0))
   type-error)
+
+(deftest make-sequence.error.8
+  (classify-error (make-sequence))
+  program-error)
+
+(deftest make-sequence.error.9
+  (classify-error (make-sequence 'list))
+  program-error)
+
+(deftest make-sequence.error.10
+  (classify-error (make-sequence 'list 10 :bad t))
+  program-error)
+
+(deftest make-sequence.error.11
+  (classify-error (make-sequence 'list 10 :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest make-sequence.error.12
+  (classify-error (make-sequence 'list 10 :initial-element))
+  program-error)
+
+(deftest make-sequence.error.13
+  (classify-error (make-sequence 'list 10 0 0))
+  program-error)
+

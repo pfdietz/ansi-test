@@ -64,9 +64,17 @@
 	   *mapc-6-var*)))
   (h g f e d c b a))
 
-(deftest mapc-7
+(deftest mapc.error.1
   (classify-error (mapc #'identity 1))
   type-error)
+
+(deftest mapc.error.2
+  (classify-error (mapc))
+  program-error)
+
+(deftest mapc.error.3
+  (classify-error (mapc #'append))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcar
@@ -131,9 +139,17 @@
 	   (list *mapc-6-var* result))))
  ((h g f e d c b a) (a b c d e f g h)))
 
-(deftest mapcar-7
+(deftest mapcar.error.1
   (classify-error (mapcar #'identity 1))
   type-error)
+
+(deftest mapcar.error.2
+  (classify-error (mapcar))
+  program-error)
+
+(deftest mapcar.error.3
+  (classify-error (mapcar #'append))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
@@ -201,9 +217,17 @@
 	    nil)
   nil)
 
-(deftest mapcan-10
+(deftest mapcan.error.1
   (classify-error (mapcan #'identity 1))
   type-error)
+
+(deftest mapcan.error.2
+  (classify-error (mapcan))
+  program-error)
+
+(deftest mapcan.error.3
+  (classify-error (mapcan #'append))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapl
@@ -285,9 +309,17 @@
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
    (a 1) (b 2) (c 3) (d 4)))
 
-(deftest mapl-6
+(deftest mapl.error.1
   (classify-error (mapl #'identity 1))
   type-error)
+
+(deftest mapl.error.2
+  (classify-error (mapl))
+  program-error)
+
+(deftest mapl.error.3
+  (classify-error (mapl #'append))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; maplist
@@ -363,21 +395,30 @@
 	   )
   (a c c e e g g))
 
-(deftest maplist-8
+(deftest maplist.error.1
   (classify-error (maplist #'identity 'a))
   type-error)
 
-(deftest maplist-9
+(deftest maplist.error.2
   (classify-error (maplist #'identity 1))
   type-error)
 
-(deftest maplist-10
+(deftest maplist.error.3
   (classify-error (maplist #'identity 1.1323))
   type-error)
 
-(deftest maplist-11
+(deftest maplist.error.4
   (classify-error (maplist #'identity "abcde"))
   type-error)
+
+(deftest maplist.error.5
+  (classify-error (maplist))
+  program-error)
+
+(deftest maplist.error.6
+  (classify-error (maplist #'append))
+  program-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
@@ -411,7 +452,16 @@
      result))
   (a b c d b c c d e d e e f))
 
-(deftest mapcon-4
+(deftest mapcon.error.1
   (classify-error (mapcon #'identity 1))
   type-error)
+
+(deftest mapcon.error.2
+  (classify-error (mapcon))
+  program-error)
+
+(deftest mapcon.error.3
+  (classify-error (mapcon #'append))
+  program-error)
+
 

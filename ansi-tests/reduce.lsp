@@ -168,9 +168,29 @@
 
 ;;;;;;;;
 
-(deftest reduce-error.1
+(deftest reduce.error.1
   (classify-error (reduce 'cons 'a))
   type-error)
+
+(deftest reduce.error.2
+  (classify-error (reduce))
+  program-error)
+
+(deftest reduce.error.3
+  (classify-error (reduce #'list nil :start))
+  program-error)
+
+(deftest reduce.error.4
+  (classify-error (reduce #'list nil 'bad t))
+  program-error)
+
+(deftest reduce.error.5
+  (classify-error (reduce #'list nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest reduce.error.6
+  (classify-error (reduce #'list nil 1 2))
+  program-error)
 
 ;;;;;;;;
 

@@ -84,4 +84,10 @@
       (error (c) c))
   t)
 
+(deftest find-package.error.1
+  (classify-error (find-package))
+  program-error)
 
+(deftest find-package.error.2
+  (classify-error (find-package "CL" nil))
+  program-error)

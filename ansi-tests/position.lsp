@@ -640,25 +640,44 @@
 
 ;;; Error tests
 
-(deftest position-error.1
+(deftest position.error.1
   (classify-error (position 'a 'b))
   type-error)
 
-(deftest position-error.2
+(deftest position.error.2
   (classify-error (position 'a 10))
   type-error)
 
-(deftest position-error.3
+(deftest position.error.3
   (classify-error (position 'a 1.4))
   type-error)
 
-(deftest position-error.4
+(deftest position.error.4
   (classify-error (position 'e '(a b c . d)))
   type-error)
 
+(deftest position.error.5
+  (classify-error (position))
+  program-error)
+
+(deftest position.error.6
+  (classify-error (position 'a))
+  program-error)
+
+(deftest position.error.7
+  (classify-error (position 'a nil :key))
+  program-error)
+
+(deftest position.error.8
+  (classify-error (position 'a nil 'bad t))
+  program-error)
+
+(deftest position.error.9
+  (classify-error (position 'a nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest position.error.10
+  (classify-error (position 'a nil 1 2))
+  program-error)
 
 
-
-
-
-  

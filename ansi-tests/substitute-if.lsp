@@ -734,3 +734,33 @@
 	 (result (substitute-if 1 #'zerop x :from-end t :count 1)))
     result)
   #*01111)
+
+;;; Error cases
+
+(deftest substitute-if.error.1
+  (classify-error (substitute-if))
+  program-error)
+
+(deftest substitute-if.error.2
+  (classify-error (substitute-if 'a))
+  program-error)
+
+(deftest substitute-if.error.3
+  (classify-error (substitute-if 'a #'null))
+  program-error)
+
+(deftest substitute-if.error.4
+  (classify-error (substitute-if 'a #'null nil 'bad t))
+  program-error)
+
+(deftest substitute-if.error.5
+  (classify-error (substitute-if 'a #'null nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest substitute-if.error.6
+  (classify-error (substitute-if 'a #'null nil :key))
+  program-error)
+
+(deftest substitute-if.error.7
+  (classify-error (substitute-if 'a #'null nil 1 2))
+  program-error)

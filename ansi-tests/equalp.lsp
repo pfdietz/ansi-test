@@ -27,3 +27,14 @@
   (equalpt "abc" "abd")
   nil)
 
+(deftest equalp.error.1
+  (classify-error (equalp))
+  program-error)
+
+(deftest equalp.error.2
+  (classify-error (equalp nil))
+  program-error)
+
+(deftest equalp.error.3
+  (classify-error (equalp nil nil nil))
+  program-error)

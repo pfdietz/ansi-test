@@ -67,3 +67,29 @@
    ("abcde" "abcdE")))
 
   
+;;; Error cases
+
+(deftest nstring-upcase.error.1
+  (classify-error (nstring-upcase))
+  program-error)
+
+(deftest nstring-upcase.error.2
+  (classify-error (nstring-upcase (copy-seq "abc") :bad t))
+  program-error)
+
+(deftest nstring-upcase.error.3
+  (classify-error (nstring-upcase (copy-seq "abc") :start))
+  program-error)
+
+(deftest nstring-upcase.error.4
+  (classify-error (nstring-upcase (copy-seq "abc") :bad t
+				      :allow-other-keys nil))
+  program-error)
+
+(deftest nstring-upcase.error.5
+  (classify-error (nstring-upcase (copy-seq "abc") :end))
+  program-error)
+
+(deftest nstring-upcase.error.6
+  (classify-error (nstring-upcase (copy-seq "abc") 1 2))
+  program-error)

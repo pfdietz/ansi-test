@@ -509,18 +509,42 @@
 
 ;;; Error tests
 
-(deftest find-if-error.1
+(deftest find-if.error.1
   (classify-error (find-if #'null 'b))
   type-error)
 
-(deftest find-if-error.2
+(deftest find-if.error.2
   (classify-error (find-if #'identity 10))
   type-error)
 
-(deftest find-if-error.3
+(deftest find-if.error.3
   (classify-error (find-if '1+ 1.4))
   type-error)
 
-(deftest find-if-error.4
+(deftest find-if.error.4
   (classify-error (find-if 'null '(a b c . d)))
   type-error)
+
+(deftest find-if.error.5
+  (classify-error (find-if))
+  program-error)
+
+(deftest find-if.error.6
+  (classify-error (find-if #'null))
+  program-error)
+
+(deftest find-if.error.7
+  (classify-error (find-if #'null nil :bad t))
+  program-error)
+
+(deftest find-if.error.8
+  (classify-error (find-if #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest find-if.error.9
+  (classify-error (find-if #'null nil 1 1))
+  program-error)
+
+(deftest find-if.error.10
+  (classify-error (find-if #'null nil :key))
+  program-error)

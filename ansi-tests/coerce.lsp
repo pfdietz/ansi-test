@@ -151,7 +151,14 @@
 		(error () :caught))
   :caught)
 
+(deftest coerce.error.6
+  (classify-error (coerce))
+  program-error)
 
+(deftest coerce.error.7
+  (classify-error (coerce t))
+  program-error)
 
-
-		   
+(deftest coerce.error.8
+  (classify-error (coerce 'x t 'foo))
+  program-error)

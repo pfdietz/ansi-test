@@ -39,21 +39,22 @@
   (let ((g (gensym))) (fboundp (list 'setf g)))
   nil)
 
-(deftest fboundp.8
+(deftest fboundp.error.1
   (classify-error (fboundp 1))
   type-error)
 
-(deftest fboundp.9
+(deftest fboundp.error.2
   (classify-error (fboundp #\a))
   type-error)
 
-(deftest fboundp.10
+(deftest fboundp.error.3
   (classify-error (fboundp '(foo)))
   type-error)
 
+(deftest fboundp.error.4
+  (classify-error (fboundp))
+  program-error)
 
-
-
-
-
-  
+(deftest fboundp.error.5
+  (classify-error (fboundp 'cons nil))
+  program-error)

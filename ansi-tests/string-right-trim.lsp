@@ -141,3 +141,16 @@
   (string-right-trim "abc" (copy-seq "abcabcabc"))
   "")
 
+;;; Error cases
+
+(deftest string-right-trim.error.1
+  (classify-error (string-right-trim))
+  program-error)
+
+(deftest string-right-trim.error.2
+  (classify-error (string-right-trim "abc"))
+  program-error)
+
+(deftest string-right-trim.error.3
+  (classify-error (string-right-trim "abc" "abcdddabc" nil))
+  program-error)

@@ -163,18 +163,30 @@
   (map 'cons #'identity '(a b c))
   (a b c))
 
-(deftest map-error.1
+(deftest map.error.1
   (handler-case (map 'symbol #'identity '(a b c))
 		(error () :caught))
   :caught)
 
-(deftest map-error.2
+(deftest map.error.2
   (classify-error (map '(vector * 8) #'identity '(a b c)))
   type-error)
 
-(deftest map-error.3
+(deftest map.error.3
   (classify-error (map 'list #'identity '(a b . c)))
   type-error)
+
+(deftest map.error.4
+  (classify-error (map))
+  program-error)
+
+(deftest map.error.5
+  (classify-error (map 'list))
+  program-error)
+
+(deftest map.error.6
+  (classify-error (map 'list #'null))
+  program-error)
 
 
 ;;; Test mapping on arrays with fill pointers

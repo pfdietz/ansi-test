@@ -188,6 +188,22 @@
     (check-type-predicate 'consp 'cons)
   0)
 
+(deftest consp.error.1
+  (classify-error (consp))
+  program-error)
+
+(deftest consp.error.2
+  (classify-error (consp 'a 'b))
+  program-error)
+
+(deftest atom.error.1
+  (classify-error (atom))
+  program-error)
+
+(deftest atom.error.2
+  (classify-error (atom 'a 'b))
+  program-error)
+
 ;; Tests of car, cdr and compound forms
 (deftest cons-23
   (car '(a))
@@ -322,6 +338,18 @@
   (cddddr *cons-test-4*)
   p)
 
+(deftest cons.error.1
+  (classify-error (cons))
+  program-error)
+
+(deftest cons.error.2
+  (classify-error (cons 'a))
+  program-error)
+
+(deftest cons.error.3
+  (classify-error (cons 'a 'b 'c))
+  program-error)
+
 ;; Test rplaca, rplacd
 
 (deftest rplaca-1
@@ -343,15 +371,40 @@
   t)
 
 ;; rplaca on a fixnum is a type error
-(deftest rplaca-error-1
+(deftest rplaca.error.1
   (loop for x in *universe*
 	thereis (and (not (consp x))
 		     (not (eq (catch-type-error (rplaca x 1)) 'type-error))))
   nil)
 
+(deftest rplaca.error.2
+  (classify-error (rplaca))
+  program-error)
+
+(deftest rplaca.error.3
+  (classify-error (rplaca (cons 'a 'b)))
+  program-error)
+
+(deftest rplaca.error.4
+  (classify-error (rplaca (cons 'a 'b) (cons 'c 'd) 'garbage))
+  program-error)
+
 ;; rplacd on a fixnum is a type error
-(deftest rplacd-error-1
+(deftest rplacd.error.1
   (loop for x in *universe*
 	thereis (and (not (consp x))
 		     (not (eq (catch-type-error (rplacd x 1)) 'type-error))))
   nil)
+
+(deftest rplacd.error.2
+  (classify-error (rplacd))
+  program-error)
+
+(deftest rplacd.error.3
+  (classify-error (rplacd (cons 'a 'b)))
+  program-error)
+
+(deftest rplacd.error.4
+  (classify-error (rplacd (cons 'a 'b) (cons 'c 'd) 'garbage))
+  program-error)
+

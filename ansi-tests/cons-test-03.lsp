@@ -24,6 +24,14 @@
     (check-copy-list '(a b c . d))
   (a b c . d))
 
+(deftest copy-list.error.1
+  (classify-error (copy-list))
+  program-error)
+
+(deftest copy-list.error.2
+  (classify-error (copy-list nil nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; list, list*
 
@@ -62,7 +70,6 @@
     (list-length '(a b c d e f))
   6)
 
-
 ;; check that list-length returns nil
 ;; on a circular list
 
@@ -78,13 +85,21 @@
 ;; Check that list-length produces a type-error
 ;; on arguments that are not proper lists or circular lists
 
-(deftest list-length-error
+(deftest list-length.error.1
     (loop
 	for x in (list 'a 1 1.0 #\w (make-array '(10))
 		       '(a b . c) (symbol-package 'cons))
 	count (not (eqt (catch-type-error (list-length x))
 		       'type-error)))
   0)
+
+(deftest list-length.error.2
+  (classify-error (list-length))
+  program-error)
+
+(deftest list-length.error.3
+  (classify-error (list-length nil nil))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; listp
@@ -113,16 +128,24 @@
     (not (not (listp '(a b c d e f g h))))
   t)
 
-;; Check that (listp x) == (typep x 'list)
+;;; Check that (listp x) == (typep x 'list)
 
 (deftest listp-universe
     (check-type-predicate 'listp 'list)
   0)
 
+(deftest listp.error.1
+  (classify-error (listp))
+  program-error)
+
+(deftest listp.error.2
+  (classify-error (listp nil nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; (typep <obj> 'list)
 
-;; These tests are now somewhat redundant
+;;; These tests are now somewhat redundant
 
 (deftest typep-nil-list
     (not (not (typep nil 'list)))
@@ -166,12 +189,44 @@
     (make-list 6 :initial-element 'a)
   (a a a a a a))
 
-(deftest make-list-type-error-1
-    (catch-type-error (make-list -1))
+(deftest make-list-other-keywords.1
+  (make-list 5 :allow-other-keys t :foo 'a)
+  (nil nil nil nil nil))
+
+(deftest make-list-other-keywords.2
+  (make-list 5 :bar nil :allow-other-keys t)
+  (nil nil nil nil nil))
+
+(deftest make-list-repeated-keyword
+  (make-list 5 :initial-element 'a :initial-element 'b)
+  (a a a a a))
+
+(deftest make-list-type.error.1
+  (catch-type-error (make-list -1))
   type-error)
 
 ;; This next test causes ACL 4.3 (Linux) to loop
 #-allegro
-(deftest make-list-type-error-2
-    (catch-type-error (make-list 'a))
+(deftest make-list-type.error.2
+  (catch-type-error (make-list 'a))
   type-error)
+
+(deftest make-list.error.3
+  (classify-error (make-list))
+  program-error)
+
+(deftest make-list.error.4
+  (classify-error (make-list 5 :bad t))
+  program-error)
+
+(deftest make-list.error.5
+  (classify-error (make-list 5 :initial-element))
+  program-error)
+
+(deftest make-list.error.6
+  (classify-error (make-list 5 1 2))
+  program-error)
+
+(deftest make-list.error.7
+  (classify-error (make-list 5 :bad t :allow-other-keys nil))
+  program-error)

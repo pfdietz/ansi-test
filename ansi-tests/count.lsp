@@ -488,15 +488,39 @@
 
 ;;; Error tests
 
-(deftest count-error.1
+(deftest count.error.1
   (catch-type-error (count 'a 1))
   type-error)
 
-(deftest count-error.2
+(deftest count.error.2
   (catch-type-error (count 'a 'a))
   type-error)
 
-(deftest count-error.3
+(deftest count.error.3
   (catch-type-error (count 'a #\a))
   type-error)
+
+(deftest count.error.4
+  (classify-error (count))
+  program-error)
+
+(deftest count.error.5
+  (classify-error (count nil))
+  program-error)
+
+(deftest count.error.6
+  (classify-error (count nil nil :bad t))
+  program-error)
+
+(deftest count.error.7
+  (classify-error (count nil nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest count.error.8
+  (classify-error (count nil nil :key))
+  program-error)
+
+(deftest count.error.9
+  (classify-error (count nil nil 3 3))
+  program-error)
 

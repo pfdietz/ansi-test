@@ -58,6 +58,14 @@
     (catch-type-error (butlast 'a 0))
   type-error)
 
+(deftest butlast-8
+  (classify-error (butlast))
+  program-error)
+
+(deftest butlast-9
+  (classify-error (butlast '(a b c) 3 3))
+  program-error)
+
 (deftest nbutlast-1
     (let ((x (list 'a 'b 'c 'd 'e)))
       (let ((y (cdr x))
@@ -125,3 +133,11 @@
 (deftest nbutlast-13
     (catch-type-error (nbutlast (list 'a) -100.0))
   type-error)
+
+(deftest nbutlast-14
+  (classify-error (nbutlast))
+  program-error)
+
+(deftest nbutlast-15
+  (classify-error (nbutlast (list 'a 'b 'c) 3 3))
+  program-error)

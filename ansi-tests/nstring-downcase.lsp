@@ -67,4 +67,32 @@
    ("abcde" "abcDe" "abcDE")
    ("abcde" "abcdE")))
 
+;;; Error cases
+
+(deftest nstring-downcase.error.1
+  (classify-error (nstring-downcase))
+  program-error)
+
+(deftest nstring-downcase.error.2
+  (classify-error (nstring-downcase (copy-seq "abc") :bad t))
+  program-error)
+
+(deftest nstring-downcase.error.3
+  (classify-error (nstring-downcase (copy-seq "abc") :start))
+  program-error)
+
+(deftest nstring-downcase.error.4
+  (classify-error (nstring-downcase (copy-seq "abc") :bad t
+				      :allow-other-keys nil))
+  program-error)
+
+(deftest nstring-downcase.error.5
+  (classify-error (nstring-downcase (copy-seq "abc") :end))
+  program-error)
+
+(deftest nstring-downcase.error.6
+  (classify-error (nstring-downcase (copy-seq "abc") 1 2))
+  program-error)
+
+
 

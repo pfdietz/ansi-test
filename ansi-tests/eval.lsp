@@ -31,4 +31,12 @@
   (funcall #'eval 1)
   1)
 
-;;; Many more tests will go here?
+;;; Error cases
+
+(deftest eval.error.1
+  (classify-error (eval))
+  program-error)
+
+(deftest eval.error.2
+  (classify-error (eval nil nil))
+  program-error)

@@ -485,31 +485,61 @@
   
 ;;; Tests of error situations
 
-(deftest merge-error.1
+(deftest merge.error.1
   (handler-case  (merge 'symbol (list 1 2 3) (list 4 5 6) #'<)
 		 (error () :caught))
   :caught)
 
-(deftest merge-error.2
+(deftest merge.error.2
   (classify-error (merge '(vector * 3) (list 1 2 3) (list 4 5 6) #'<))
   type-error)
 
-(deftest merge-error.3
+(deftest merge.error.3
   (classify-error (merge '(bit-vector 3) (list 0 0 0) (list 1 1 1) #'<))
   type-error)
 
-(deftest merge-error.4
+(deftest merge.error.4
   (classify-error (merge '(vector * 7) (list 1 2 3) (list 4 5 6) #'<))
   type-error)
 
-(deftest merge-error.5
+(deftest merge.error.5
   (classify-error (merge '(bit-vector 7) (list 0 0 0) (list 1 1 1) #'<))
   type-error)
 
-(deftest merge-error.6
+(deftest merge.error.6
   (classify-error (merge 'null (list 1 2 3) (list 4 5 6) #'<))
   type-error)
 
+(deftest merge.error.7
+  (classify-error (merge))
+  program-error)
 
-   
-  
+(deftest merge.error.8
+  (classify-error (merge 'list))
+  program-error)
+
+(deftest merge.error.9
+  (classify-error (merge 'list (list 2 4 6)))
+  program-error)
+
+(deftest merge.error.10
+  (classify-error (merge 'list (list 2 4 6) (list 1 3 5)))
+  program-error)
+
+(deftest merge.error.11
+  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :bad t))
+  program-error)
+
+(deftest merge.error.12
+  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :key))
+  program-error)
+
+(deftest merge.error.13
+  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :bad t
+			 :allow-other-keys nil))
+  program-error)
+
+(deftest merge.error.14
+  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< 1 2))
+  program-error)
+

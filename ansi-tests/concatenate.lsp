@@ -200,3 +200,7 @@
 (deftest concatenate-error.3
   (classify-error (concatenate '(vector * 3) '(a b c d e)))
   type-error)
+
+(deftest concatenate-error.4
+  (classify-error (concatenate))
+  program-error)

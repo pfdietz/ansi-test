@@ -1005,7 +1005,7 @@
       (multiple-value-bind (sym status)
 	  (find-symbol (symbol-name s) keyword-package)
 	(cond
-	 ((not (eqt s sym)) (push (list s sym) results))
+	 ((not (eqt s sym)) (push (list s sym) result))
 	 ((eqt status :internal)
 	  (push (list s status) result))
 	 ((eqt status :external)
@@ -1052,6 +1052,14 @@
   (classify-error (special-operator-p 1))
   type-error)
 
+(deftest special-operator-p.4
+  (classify-error (special-operator-p))
+  program-error)
+
+(deftest special-operator-p.5
+  (classify-error (special-operator-p 'cons 'cons))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; keywordp
 
@@ -1068,6 +1076,8 @@
 ;;; This next test was busted.  ::foo is not portable syntax
 ;;(deftest keywordp-11 (not (not (keywordp ::foo)))       t)
 (deftest keywordp-12 (keywordp t)          nil)
+(deftest keywordp-13 (classify-error (keywordp)) program-error)
+(deftest keywordp-14 (classify-error (keywordp :x :x)) program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; symbol-name
@@ -1099,6 +1109,14 @@
 (deftest symbol-name-7
   (symbol-name :|abcdefg|)
   "abcdefg")
+
+(deftest symbol-name-8
+  (classify-error (symbol-name))
+  program-error)
+
+(deftest symbol-name-9
+  (classify-error (symbol-name 'a 'b))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; make-symbol
@@ -1176,6 +1194,14 @@
     (symbol-name (safe-make-symbol ""))
   "")
 
+(deftest make-symbol-19
+  (classify-error (make-symbol))
+  program-error)
+
+(deftest make-symbol-20
+  (classify-error (make-symbol "a" "a"))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-symbol
 
@@ -1250,6 +1276,14 @@
 (deftest copy-symbol-4
   (eqt (copy-symbol 'a) (copy-symbol 'a))
   nil)
+
+(deftest copy-symbol-5
+  (classify-error (copy-symbol))
+  program-error)
+
+(deftest copy-symbol-6
+  (classify-error (copy-symbol 'a t 'foo))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; gensym
@@ -1348,28 +1382,32 @@
 ;;; argument defaults to "G", with NIL causing an error.
 
 (deftest gensym-14
-    (catch-type-error (gensym 'aaa))
+  (classify-error (gensym 'aaa))
   type-error)
 
 (deftest gensym-15
-    (catch-type-error (gensym 12.3))
+  (classify-error (gensym 12.3))
   type-error)
 
 (deftest gensym-16
-    (catch-type-error (gensym t))
+  (classify-error (gensym t))
   type-error)
 
 (deftest gensym-17
-    (catch-type-error (gensym nil))
+  (classify-error (gensym nil))
   type-error) ;; NIL /= no argument!
 
 (deftest gensym-18
-    (catch-type-error (gensym '(a)))
+  (classify-error (gensym '(a)))
   type-error)
 
 (deftest gensym-19
-    (catch-type-error (gensym #\x))
+  (classify-error (gensym #\x))
   type-error)
+
+(deftest gensym-20
+  (classify-error (gensym 10 'foo))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;
 
@@ -1435,3 +1473,62 @@
 	       (typep c 'class))
    collect s)
   nil)
+
+;;; Various error cases for symbol-related functions
+
+(deftest symbolp.error.1
+  (classify-error (symbolp))
+  program-error)
+
+(deftest symbolp.error.2
+  (classify-error (symbolp nil nil))
+  program-error)
+
+(deftest keywordp.error.1
+  (classify-error (keywordp))
+  program-error)
+
+(deftest keywordp.error.2
+  (classify-error (keywordp nil nil))
+  program-error)
+
+(deftest symbol-function.error.1
+  (classify-error (symbol-function))
+  program-error)
+
+(deftest symbol-function.error.2
+  (classify-error (symbol-function 'cons nil))
+  program-error)
+
+(deftest symbol-name.error.1
+  (classify-error (symbol-name))
+  program-error)
+
+(deftest symbol-name.error.2
+  (classify-error (symbol-name 'cons nil))
+  program-error)
+
+(deftest symbol-package.error.1
+  (classify-error (symbol-package))
+  program-error)
+
+(deftest symbol-package.error.2
+  (classify-error (symbol-package 'cons nil))
+  program-error)
+
+(deftest symbol-plist.error.1
+  (classify-error (symbol-plist))
+  program-error)
+
+(deftest symbol-plist.error.2
+  (classify-error (symbol-plist 'cons nil))
+  program-error)
+
+(deftest symbol-value.error.1
+  (classify-error (symbol-value))
+  program-error)
+
+(deftest symbol-value.error.2
+  (classify-error (symbol-value '*package* nil))
+  program-error)
+

@@ -40,6 +40,10 @@
 	   (subsetp p2 p1)))
   t)
 
+(deftest list-all-packages.error.1
+  (classify-error (list-all-packages nil))
+  program-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-name
@@ -122,6 +126,14 @@
 	       (ignore-errors (package-name (package-name p))))))
   0)
 
+(deftest package-name.error.1
+  (classify-error (package-name))
+  program-error)
+
+(deftest package-name.error.2
+  (classify-error (package-name "CL" nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-nicknames
 
@@ -189,3 +201,11 @@
 	  (and (stringp nk)
 	       (eqt p (find-package nk))))))
   0)
+
+(deftest package-nicknames.error.1
+  (classify-error (package-nicknames))
+  program-error)
+
+(deftest package-nicknames.error.2
+  (classify-error (package-nicknames "CL" nil))
+  program-error)

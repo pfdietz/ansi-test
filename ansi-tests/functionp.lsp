@@ -80,5 +80,10 @@
   (flet ((%f () nil)) (not (functionp #'%f)))
   nil)
 
+(deftest functionp.13
+  (classify-error (functionp))
+  program-error)
 
-  
+(deftest functionp.14
+  (classify-error (functionp #'cons nil))
+  program-error)

@@ -72,7 +72,28 @@
 	 ))
   t)
 
+;;; Error cases
 
+(deftest make-string.error.1
+  (classify-error (make-string))
+  program-error)
 
+(deftest make-string.error.2
+  (classify-error (make-string 10 :bad t))
+  program-error)
 
+(deftest make-string.error.3
+  (classify-error (make-string 10 :bad t :allow-other-keys nil))
+  program-error)
 
+(deftest make-string.error.4
+  (classify-error (make-string 10 :initial-element))
+  program-error)
+
+(deftest make-string.error.5
+  (classify-error (make-string 10 1 1))
+  program-error)
+
+(deftest make-string.error.6
+  (classify-error (make-string 10 :element-type))
+  program-error)

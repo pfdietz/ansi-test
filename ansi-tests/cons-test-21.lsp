@@ -263,3 +263,26 @@
        #'<))
   (1 2 3 4 5 6))
 
+(deftest nunion.error.1
+  (classify-error (nunion))
+  program-error)
+
+(deftest nunion.error.2
+  (classify-error (nunion nil))
+  program-error)
+
+(deftest nunion.error.3
+  (classify-error (nunion nil nil :bad t))
+  program-error)
+
+(deftest nunion.error.4
+  (classify-error (nunion nil nil :key))
+  program-error)
+
+(deftest nunion.error.5
+  (classify-error (nunion nil nil 1 2))
+  program-error)
+
+(deftest nunion.error.6
+  (classify-error (nunion nil nil :bad t :allow-other-keys nil))
+  program-error)

@@ -51,4 +51,30 @@
   (eqlt #c(1 -2) (- #c(-1 2)))
   t)
 
-;;; There are many other uses of EQL in other files.
+(deftest eql.error.1
+  (classify-error (eql))
+  program-error)
+
+(deftest eql.error.2
+  (classify-error (eql nil))
+  program-error)
+
+(deftest eql.error.3
+  (classify-error (eql nil nil nil))
+  program-error)
+
+;;; Error tests for EQ
+
+(deftest eq.error.1
+  (classify-error (eq))
+  program-error)
+
+(deftest eq.error.2
+  (classify-error (eq nil))
+  program-error)
+
+(deftest eq.error.3
+  (classify-error (eq nil nil nil))
+  program-error)
+
+  

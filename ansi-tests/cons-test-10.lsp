@@ -69,3 +69,11 @@
 (deftest last-15
     (catch-type-error (last (list 'a 'b 'c) #\w))
   type-error)
+
+(deftest last-16
+  (classify-error (last))
+  program-error)
+
+(deftest last-17
+  (classify-error (last '(a b c) 2 nil))
+  program-error)

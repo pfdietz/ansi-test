@@ -235,6 +235,30 @@
 	   (not (eql x y))))))
   (4))
 
+(deftest intersection.error.1
+  (classify-error (intersection))
+  program-error)
+
+(deftest intersection.error.2
+  (classify-error (intersection nil))
+  program-error)
+
+(deftest intersection.error.3
+  (classify-error (intersection nil nil :bad t))
+  program-error)
+
+(deftest intersection.error.4
+  (classify-error (intersection nil nil :key))
+  program-error)
+
+(deftest intersection.error.5
+  (classify-error (intersection nil nil 1 2))
+  program-error)
+
+(deftest intersection.error.6
+  (classify-error (intersection nil nil :bad t :allow-other-keys nil))
+  program-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nintersection
 
@@ -426,3 +450,27 @@
 	   (when (< y x) (return-from fail 'fail))
 	   (not (eql x y))))))
   (4))
+
+(deftest nintersection.error.1
+  (classify-error (nintersection))
+  program-error)
+
+(deftest nintersection.error.2
+  (classify-error (nintersection nil))
+  program-error)
+
+(deftest nintersection.error.3
+  (classify-error (nintersection nil nil :bad t))
+  program-error)
+
+(deftest nintersection.error.4
+  (classify-error (nintersection nil nil :key))
+  program-error)
+
+(deftest nintersection.error.5
+  (classify-error (nintersection nil nil 1 2))
+  program-error)
+
+(deftest nintersection.error.6
+  (classify-error (nintersection nil nil :bad t :allow-other-keys nil))
+  program-error)

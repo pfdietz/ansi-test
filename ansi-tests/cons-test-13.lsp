@@ -133,40 +133,74 @@
   (member 'a nil :test #'(lambda (x y) (error "Should not call this function")))
   nil)
 
-(deftest member-18
-  (catch-type-error (member 'a 'b))
-  type-error)
-
-(deftest member-19
-  (catch-type-error (member 'a 1.3))
-  type-error)
-
-(deftest member-20
-  (catch-type-error (member 'a 1))
-  type-error)
-
-(deftest member-21
-  (catch-type-error (member 'a 0))
-  type-error)
-
-(deftest member-22
-  (catch-type-error (member 'a "abcde"))
-  type-error)
-
-(deftest member-23
-  (catch-type-error (member 'a #\w))
-  type-error)
-
-(deftest member-24
-  (catch-type-error (member 'a t))
-  type-error)
-
 ;; Check that a null key argument is ignored
 
-(deftest member-25
+(deftest member-18
   (member 'a '(c d a b e) :key nil)
   (a b e))
 
-(deftest member-26
+(deftest member-19
   (member 'z '(a b c d) :key nil)
   nil)
+
+(deftest member-20
+  (member 'b '(a b c) :bad t :allow-other-keys t)
+  (b c))
+
+(deftest member-21
+  (member 'b '(a b c) :test #'eq :test (complement #'eq))
+  (b c))
+
+;;; Error cases
+
+(deftest member.error.1
+  (catch-type-error (member 'a 'b))
+  type-error)
+
+(deftest member.error.2
+  (catch-type-error (member 'a 1.3))
+  type-error)
+
+(deftest member.error.3
+  (catch-type-error (member 'a 1))
+  type-error)
+
+(deftest member.error.4
+  (catch-type-error (member 'a 0))
+  type-error)
+
+(deftest member.error.5
+  (catch-type-error (member 'a "abcde"))
+  type-error)
+
+(deftest member.error.6
+  (catch-type-error (member 'a #\w))
+  type-error)
+
+(deftest member.error.7
+  (catch-type-error (member 'a t))
+  type-error)
+
+(deftest member.error.8
+  (classify-error (member))
+  program-error)
+
+(deftest member.error.9
+  (classify-error (member nil))
+  program-error)
+
+(deftest member.error.10
+  (classify-error (member nil nil :bad t))
+  program-error)
+
+(deftest member.error.11
+  (classify-error (member nil nil :test))
+  program-error)
+
+(deftest member.error.12
+  (classify-error (member nil nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest member.error.13
+  (classify-error (member nil nil nil))
+  program-error)

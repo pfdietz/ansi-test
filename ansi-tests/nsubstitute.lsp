@@ -835,3 +835,33 @@
 	 (result (nsubstitute 1 0 x :from-end t :count 1)))
     result)
   #*01111)
+
+;;; Error cases
+
+(deftest nsubstitute.error.1
+  (classify-error (nsubstitute))
+  program-error)
+
+(deftest nsubstitute.error.2
+  (classify-error (nsubstitute 'a))
+  program-error)
+
+(deftest nsubstitute.error.3
+  (classify-error (nsubstitute 'a 'b))
+  program-error)
+
+(deftest nsubstitute.error.4
+  (classify-error (nsubstitute 'a 'b nil 'bad t))
+  program-error)
+
+(deftest nsubstitute.error.5
+  (classify-error (nsubstitute 'a 'b nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest nsubstitute.error.6
+  (classify-error (nsubstitute 'a 'b nil :key))
+  program-error)
+
+(deftest nsubstitute.error.7
+  (classify-error (nsubstitute 'a 'b nil 1 2))
+  program-error)

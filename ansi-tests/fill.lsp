@@ -5,9 +5,37 @@
 
 (in-package :cl-test)
 
-(deftest fill-error.1
+(deftest fill.error.1
   (classify-error (fill 'a 'b))
   type-error)
+
+(deftest fill.error.2
+  (classify-error (fill))
+  program-error)
+
+(deftest fill.error.3
+  (classify-error (fill (list 'a 'b)))
+  program-error)
+
+(deftest fill.error.4
+  (classify-error (fill (list 'a 'b) 'c :bad t))
+  program-error)
+
+(deftest fill.error.5
+  (classify-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest fill.error.6
+  (classify-error (fill (list 'a 'b) 'c :start))
+  program-error)
+
+(deftest fill.error.7
+  (classify-error (fill (list 'a 'b) 'c :end))
+  program-error)
+
+(deftest fill.error.8
+  (classify-error (fill (list 'a 'b) 'c 1 2))
+  program-error)
 
 ;;; Fill on arrays
 

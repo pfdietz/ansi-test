@@ -63,6 +63,14 @@
   (character.2.body)
   nil)
 
+(deftest character.3
+  (classify-error (character))
+  program-error)
+
+(deftest character.4
+  (classify-error (character #\a #\a))
+  program-error)
+
 (deftest characterp.1
   (every #'characterp +standard-chars+)
   t)
@@ -74,6 +82,15 @@
 (deftest characterp.3
   (characterp.3.body)
   t)
+
+(deftest characterp.error.1
+  (classify-error (characterp))
+  program-error)
+
+(deftest characterp.error.2
+  (classify-error (characterp #\a #\b))
+  program-error)
+
 
 (deftest alpha-char-p.1
   (loop for c across +standard-chars+
@@ -89,6 +106,14 @@
 (deftest alpha-char-p.3
   (char-type-error-check #'alpha-char-p)
   t)
+
+(deftest alpha-char-p.error.1
+  (classify-error (alpha-char-p))
+  program-error)
+
+(deftest alpha-char-p.error.2
+  (classify-error (alpha-char-p #\a #\b))
+  program-error)
 
 (deftest alphanumericp.1
   (loop for c across +standard-chars+
@@ -114,6 +139,14 @@
   (alphanumericp.5.body)
   t)
 
+(deftest alphanumericp.error.1
+  (classify-error (alphanumericp))
+  program-error)
+
+(deftest alphanumericp.error.2
+  (classify-error (alphanumericp #\a #\b))
+  program-error)
+
 (deftest digit-char.1
   (digit-char.1.body)
   t)
@@ -124,6 +157,14 @@
    nil nil nil nil nil nil nil nil nil nil
    nil nil nil nil nil nil nil nil nil nil
    nil nil nil nil nil nil nil nil nil nil))
+
+(deftest digit-char.error.1
+  (classify-error (digit-char))
+  program-error)
+
+(deftest digit-char.error.2
+  (classify-error (digit-char 0 10 'foo))
+  program-error)
 
 (deftest digit-char-p.1
   (digit-char-p.1.body)
@@ -154,6 +195,15 @@
 	always (eqlt (digit-char-p c) i))
   t)
 
+(deftest digit-char-p.error.1
+  (classify-error (digit-char-p))
+  program-error)
+  
+(deftest digit-char-p.error.2
+  (classify-error (digit-char-p #\1 10 'foo))
+  program-error)
+  
+
 (deftest graphic-char-p.1
   (loop for c across +standard-chars+
 	always (if (eqlt c #\Newline)
@@ -172,6 +222,14 @@
   (char-type-error-check #'graphic-char-p)
   t)
 
+(deftest graphic-char-p.error.1
+  (classify-error (graphic-char-p))
+  program-error)
+
+(deftest graphic-char-p.error.2
+  (classify-error (graphic-char-p #\a #\a))
+  program-error)
+
 (deftest standard-char-p.1
   (every #'standard-char-p +standard-chars+)
   t)
@@ -188,6 +246,15 @@
   (char-type-error-check #'standard-char-p)
   t)
 
+(deftest standard-char-p.error.1
+  (classify-error (standard-char-p))
+  program-error)
+  
+(deftest standard-char-p.error.2
+  (classify-error (standard-char-p #\a #\a))
+  program-error)
+  
+
 (deftest char-upcase.1
   (char-upcase.1.body)
   t)
@@ -202,7 +269,15 @@
 
 (deftest char-upcase.4
   (char-type-error-check #'char-upcase)
-  t)	
+  t)
+
+(deftest char-upcase.error.1
+  (classify-error (char-upcase))
+  program-error)
+
+(deftest char-upcase.error.2
+  (classify-error (char-upcase #\a #\a))
+  program-error)
 
 (deftest char-downcase.1
   (char-downcase.1.body)
@@ -220,6 +295,14 @@
   (char-type-error-check #'char-downcase)
   t)
 
+(deftest char-downcase.error.1
+  (classify-error (char-downcase))
+  program-error)
+
+(deftest char-downcase.error.2
+  (classify-error (char-downcase #\A #\A))
+  program-error)
+
 (deftest upper-case-p.1
   (find-if-not #'upper-case-p +standard-chars+ :start 26 :end 52)
   nil)
@@ -236,6 +319,14 @@
   (char-type-error-check #'upper-case-p)
   t)
 
+(deftest upper-case-p.error.1
+  (classify-error (upper-case-p))
+  program-error)
+
+(deftest upper-case-p.error.2
+  (classify-error (upper-case-p #\a #\A))
+  program-error)
+
 (deftest lower-case-p.1
   (find-if-not #'lower-case-p +standard-chars+ :end 26)
   nil)
@@ -247,6 +338,14 @@
 (deftest lower-case-p.3
   (char-type-error-check #'lower-case-p)
   t)
+
+(deftest lower-case-p.error.1
+  (classify-error (lower-case-p))
+  program-error)
+
+(deftest lower-case-p.error.2
+  (classify-error (lower-case-p #\a #\a))
+  program-error)
 
 (deftest both-case-p.1
   (both-case-p.1.body)
@@ -260,6 +359,14 @@
   (char-type-error-check #'both-case-p)
   t)
 
+(deftest both-case-p.error.1
+  (classify-error (both-case-p))
+  program-error)
+
+(deftest both-case-p.error.2
+  (classify-error (both-case-p #\a #\a))
+  program-error)
+
 (deftest char-code.1
   (char-type-error-check #'char-code)
   t)
@@ -268,10 +375,26 @@
   (char-code.2.body)
   t)
 
+(deftest char-code.error.1
+  (classify-error (char-code))
+  program-error)
+
+(deftest char-code.error.2
+  (classify-error (char-code #\a #\a))
+  program-error)
+
 (deftest code-char.1
   (loop for x across +standard-chars+
 	always (eqlt (code-char (char-code x)) x))
   t)
+
+(deftest code-char.error.1
+  (classify-error (code-char))
+  program-error)
+
+(deftest code-char.error.2
+  (classify-error (code-char 1 1))
+  program-error)
 
 (deftest char-int.1
   (loop for x across +standard-chars+
@@ -281,6 +404,14 @@
 (deftest char-int.2
   (char-int.2.fn)
   t)
+
+(deftest char-int.error.1
+  (classify-error (char-int))
+  program-error)
+
+(deftest char-int.error.2
+  (classify-error (char-int #\a #\a))
+  program-error)
 
 (deftest char-name.1
   (char-name.1.fn)
@@ -316,6 +447,14 @@
   (char-type-error-check #'char-name)
   t)
 
+(deftest char-name.error.1
+  (classify-error (char-name))
+  program-error)
+
+(deftest char-name.error.2
+  (classify-error (char-name #\a #\a))
+  program-error)
+
 (deftest name-char.1
   (name-char.1.body)
   t)
@@ -330,3 +469,11 @@
 	      (c4 (name-char s)))
 	  (and (eqlt c1 c2) (eqlt c2 c3) (eqlt c3 c4))))
   t)
+
+(deftest name-char.error.1
+  (classify-error (name-char))
+  program-error)
+
+(deftest name-char.error.2
+  (classify-error (name-char "space" "space"))
+  program-error)

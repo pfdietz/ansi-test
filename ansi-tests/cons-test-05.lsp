@@ -8,6 +8,13 @@
 
 (declaim (optimize (safety 3)))
 
+(defparameter *cons-accessors*
+  '(first second third fourth fifth sixth seventh eighth ninth tenth
+    car cdr caar cadr cdar cddr
+    caaar caadr cadar caddr cdaar cdadr cddar cdddr
+    caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
+    cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; first, ..., tenth
 
@@ -117,11 +124,27 @@
 	       (nth ,(1- len) (car y))))
 	    a)))
 
+;; set up program error tests
+
+(loop for name in *cons-accessors*
+      do (eval
+	  `(deftest ,(intern (concatenate 'string (symbol-name name)
+					    ".ERROR.NO-ARGS")
+			       :cl-test)
+	     (classify-error (,name))
+	     program-error))
+      do (eval
+	  `(deftest ,(intern (concatenate 'string (symbol-name name)
+					    ".ERROR.EXCESS-ARGS")
+			       :cl-test)
+	     (classify-error (,name nil nil))
+	     program-error)))	  
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nth
 
 (deftest nth-1
-    (nth-1-body (loop for i from 1 to 2000 collect (* 4 i)))
+  (nth-1-body (loop for i from 1 to 2000 collect (* 4 i)))
   0)
 
 (deftest nth-2
@@ -144,3 +167,19 @@
      (eqlt z 2)
      x))
   (a z c d))
+
+(deftest nth.error.1
+  (classify-error (nth))
+  program-error)
+
+(deftest nth.error.2
+  (classify-error (nth 0))
+  program-error)
+
+(deftest nth.error.3
+  (classify-error (nth 1 '(a b c) nil))
+  program-error)
+
+(deftest nth.error.4
+  (classify-error (nth 0 '(a b c) nil))
+  program-error)

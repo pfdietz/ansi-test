@@ -420,14 +420,38 @@
 
 ;;; Error tests
 
-(deftest count-if-not-error.1
+(deftest count-if-not.error.1
   (catch-type-error (count-if-not #'identity 1))
   type-error)
 
-(deftest count-if-not-error.2
+(deftest count-if-not.error.2
   (catch-type-error (count-if-not #'identity 'a))
   type-error)
 
-(deftest count-if-not-error.3
+(deftest count-if-not.error.3
   (catch-type-error (count-if-not #'identity #\a))
   type-error)
+
+(deftest count-if-not.error.4
+  (classify-error (count-if-not))
+  program-error)
+
+(deftest count-if-not.error.5
+  (classify-error (count-if-not #'null))
+  program-error)
+
+(deftest count-if-not.error.6
+  (classify-error (count-if-not #'null nil :bad t))
+  program-error)
+
+(deftest count-if-not.error.7
+  (classify-error (count-if-not #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest count-if-not.error.8
+  (classify-error (count-if-not #'null nil :key))
+  program-error)
+
+(deftest count-if-not.error.9
+  (classify-error (count-if-not #'null nil 3 3))
+  program-error)

@@ -257,3 +257,39 @@
   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
 	  :test-not (complement #'equal) :key nil)
   (aaa "AAA" "aaa" #\a))
+
+(deftest adjoin-other-keys-1
+  (adjoin 'a '(b c) :bad t :allow-other-keys t)
+  (a b c))
+
+(deftest adjoin-other-keys-2
+  (adjoin 'a '(b c) :allow-other-keys t :foo t)
+  (a b c))
+
+(deftest adjoin-repeat-key
+  (adjoin 'a '(b c) :test #'eq :test (complement #'eq))
+  (a b c))					      
+
+(deftest adjoin.error.1
+  (classify-error (adjoin))
+  program-error)
+
+(deftest adjoin.error.2
+  (classify-error (adjoin 'a))
+  program-error)
+
+(deftest adjoin.error.3
+  (classify-error (adjoin 'a '(b c) :bad t))
+  program-error)
+
+(deftest adjoin.error.4
+  (classify-error (adjoin 'a '(b c) :allow-other-keys nil :bad t))
+  program-error)
+
+(deftest adjoin.error.5
+  (classify-error (adjoin 'a '(b c) 1 2))
+  program-error)
+
+(deftest adjoin.error.6
+  (classify-error (adjoin 'a '(b c) :test))
+  program-error)

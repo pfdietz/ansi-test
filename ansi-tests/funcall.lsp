@@ -42,16 +42,21 @@
 ;;; FUNCALL should throw an UNDEFINED-FUNCTION condition when
 ;;; called on a symbol with a global definition as a special
 ;;; operator
-(deftest funcall.8
+(deftest funcall.error.1
   (classify-error (funcall 'quote 1))
   undefined-function)
 
-(deftest funcall.9
+(deftest funcall.error.2
   (classify-error (funcall 'progn 1))
   undefined-function)
 
 ;;; FUNCALL should throw an UNDEFINED-FUNCTION condition when
 ;;; called on a symbol with a global definition as a macro
-(deftest funcall.10
+(deftest funcall.error.3
   (classify-error (funcall 'defconstant '(defconstant x 10)))
   undefined-function)
+
+(deftest funcall.error.4
+  (classify-error (funcall))
+  program-error)
+

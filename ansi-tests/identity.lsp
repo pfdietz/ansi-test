@@ -19,3 +19,11 @@
   (let ((x 1.00000001))
     (eqlt x (identity x)))
   t)
+
+(deftest identity.error.1
+  (classify-error (identity))
+  program-error)
+
+(deftest identity.error.2
+  (classify-error (identity 'a 'a))
+  program-error)

@@ -486,18 +486,42 @@
 
 ;;; Error tests
 
-(deftest find-if-not-error.1
+(deftest find-if-not.error.1
   (classify-error (find-if-not #'null 'b))
   type-error)
 
-(deftest find-if-not-error.2
+(deftest find-if-not.error.2
   (classify-error (find-if-not #'identity 10))
   type-error)
 
-(deftest find-if-not-error.3
+(deftest find-if-not.error.3
   (classify-error (find-if-not '1+ 1.4))
   type-error)
 
-(deftest find-if-not-error.4
+(deftest find-if-not.error.4
   (classify-error (find-if-not 'identity '(a b c . d)))
   type-error)
+
+(deftest find-if-not.error.5
+  (classify-error (find-if-not))
+  program-error)
+
+(deftest find-if-not.error.6
+  (classify-error (find-if-not #'null))
+  program-error)
+
+(deftest find-if-not.error.7
+  (classify-error (find-if-not #'null nil :bad t))
+  program-error)
+
+(deftest find-if-not.error.8
+  (classify-error (find-if-not #'null nil :bad t :allow-other-keys nil))
+  program-error)
+
+(deftest find-if-not.error.9
+  (classify-error (find-if-not #'null nil 1 1))
+  program-error)
+
+(deftest find-if-not.error.10
+  (classify-error (find-if-not #'null nil :key))
+  program-error)

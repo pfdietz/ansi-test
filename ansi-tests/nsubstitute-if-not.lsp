@@ -632,3 +632,35 @@
 	 (result (nsubstitute-if-not 1 #'onep x :from-end t :count 1)))
     result)
   #*01111)
+
+;;; Error cases
+
+(deftest nsubstitute-if-not.error.1
+  (classify-error (nsubstitute-if-not))
+  program-error)
+
+(deftest nsubstitute-if-not.error.2
+  (classify-error (nsubstitute-if-not 'a))
+  program-error)
+
+(deftest nsubstitute-if-not.error.3
+  (classify-error (nsubstitute-if-not 'a #'null))
+  program-error)
+
+(deftest nsubstitute-if-not.error.4
+  (classify-error (nsubstitute-if-not 'a #'null nil 'bad t))
+  program-error)
+
+(deftest nsubstitute-if-not.error.5
+  (classify-error (nsubstitute-if-not 'a #'null nil
+				      'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest nsubstitute-if-not.error.6
+  (classify-error (nsubstitute-if-not 'a #'null nil :key))
+  program-error)
+
+(deftest nsubstitute-if-not.error.7
+  (classify-error (nsubstitute-if-not 'a #'null nil 1 2))
+  program-error)
+

@@ -31,5 +31,50 @@
     y)
   (3 4 1 5 6 2 7))
 
+;;; Error cases
+
+(deftest remove-duplicates.error.1
+  (classify-error (remove-duplicates))
+  program-error)
+
+(deftest remove-duplicates.error.2
+  (classify-error (remove-duplicates nil :start))
+  program-error)
+
+(deftest remove-duplicates.error.3
+  (classify-error (remove-duplicates nil 'bad t))
+  program-error)
+
+(deftest remove-duplicates.error.4
+  (classify-error (remove-duplicates nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest remove-duplicates.error.5
+  (classify-error (remove-duplicates nil 1 2))
+  program-error)
+
+(deftest delete-duplicates.error.1
+  (classify-error (delete-duplicates))
+  program-error)
+
+(deftest delete-duplicates.error.2
+  (classify-error (delete-duplicates nil :start))
+  program-error)
+
+(deftest delete-duplicates.error.3
+  (classify-error (delete-duplicates nil 'bad t))
+  program-error)
+
+(deftest delete-duplicates.error.4
+  (classify-error (delete-duplicates nil 'bad t :allow-other-keys nil))
+  program-error)
+
+(deftest delete-duplicates.error.5
+  (classify-error (delete-duplicates nil 1 2))
+  program-error)
+
+
+
+
 
 

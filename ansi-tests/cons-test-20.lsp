@@ -263,3 +263,27 @@
 		      (not (eql x y))))
        #'<))
   (1 2 3 4 5 6))
+
+(deftest union.error.1
+  (classify-error (union))
+  program-error)
+
+(deftest union.error.2
+  (classify-error (union nil))
+  program-error)
+
+(deftest union.error.3
+  (classify-error (union nil nil :bad t))
+  program-error)
+
+(deftest union.error.4
+  (classify-error (union nil nil :key))
+  program-error)
+
+(deftest union.error.5
+  (classify-error (union nil nil 1 2))
+  program-error)
+
+(deftest union.error.6
+  (classify-error (union nil nil :bad t :allow-other-keys nil))
+  program-error)

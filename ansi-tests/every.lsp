@@ -72,37 +72,47 @@
   nil)
 
 (deftest every.15
-  (classify-error (every 1 '(a b c)))
-  type-error)
-
-(deftest every.16
-  (classify-error (every #\a '(a b c)))
-  type-error)
-
-(deftest every.17
-  (classify-error (every #() '(a b c)))
-  type-error)
-
-(deftest every.18
   (every 'null '(nil nil t nil))
   nil)
 
-(deftest every.19
+(deftest every.16
   (not (every 'null '(nil nil nil nil)))
   nil)
 
-(deftest every.20
+;;; Error cases
+
+(deftest every.error.1
+  (classify-error (every 1 '(a b c)))
+  type-error)
+
+(deftest every.error.2
+  (classify-error (every #\a '(a b c)))
+  type-error)
+
+(deftest every.error.3
+  (classify-error (every #() '(a b c)))
+  type-error)
+
+(deftest every.error.4
   (classify-error (every #'null 'a))
   type-error)
 
-(deftest every.21
+(deftest every.error.5
   (classify-error (every #'null 100))
   type-error)
 
-(deftest every.22
+(deftest every.error.6
   (classify-error (every #'null 'a))
   type-error)
 
-(deftest every.23
+(deftest every.error.7
   (classify-error (every #'eq () 'a))
   type-error)
+
+(deftest every.error.8
+  (classify-error (every))
+  program-error)
+
+(deftest every.error.9
+  (classify-error (every #'null))
+  program-error)

@@ -167,3 +167,11 @@
 (deftest copy-seq.error.3
   (classify-error (copy-seq 13.21))
   type-error)
+
+(deftest copy-seq.error.4
+  (classify-error (copy-seq))
+  program-error)
+
+(deftest copy-seq.error.5
+  (classify-error (copy-seq "abc" 2 nil))
+  program-error)
