@@ -30,6 +30,7 @@
 (load "open.lsp")
 (load "stream-external-format.lsp")
 (load "with-open-file.lsp")
+(load "with-open-stream.lsp")
 (load "listen.lsp")
 (load "clear-input.lsp")
 (load "finish-output.lsp")
