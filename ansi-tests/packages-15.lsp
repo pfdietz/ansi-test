@@ -198,10 +198,9 @@
 
 (deftest use-package.error.2
   (progn
-    (ignore-errors (delete-package "UPE2"))
     (ignore-errors (delete-package "UPE2A"))
+    (ignore-errors (delete-package "UPE2"))
     (make-package "UPE2" :use ())
     (make-package "UPE2A" :use ())
     (classify-error (use-package "UPE2" "UPE2A" nil)))
   program-error)
-
