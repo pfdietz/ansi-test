@@ -68,6 +68,10 @@
     (= (length s) 0))
   nil)
 
+;;; The TIME definition is weasely, so strenuous complaints from
+;;; implementors about specific tests lead me to remove them.
+;;; Someone didn't like this one at all.
+#|
 (deftest time.9
   (let ((s (with-output-to-string
 	     (*trace-output*)
@@ -75,5 +79,6 @@
 	       (time (return-from done nil))))))
     (= (length s) 0))
   nil)
+|#
 
   
