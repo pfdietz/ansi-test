@@ -33,3 +33,16 @@ The file doit.lsp disables some contentious tests under certain
 implementations using the note mechanism.  If any implementor
 wishes that some of these tests be inhibited in their implementation,
 please contact me and I will add code to do so.
+
+--------------------------------
+
+NOTE!!!
+
+This test suite is not intended to rank Common Lisp implementations.
+The tests have not be selected to reflect the importance or
+relative frequency of different CL features.  Implementations may
+even have extended the CL standard (arguably a good thing) in
+a way that causes certain tests to fail.
+
+
+
