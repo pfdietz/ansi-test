@@ -5,6 +5,10 @@
 
 (in-package :cl-test)
 
+;;; The next test was busted due to to a stupid cut and paste
+;;; error.  The loop terminates immediately, doing nothing
+;;; useful. -- PFD
+#|
 (deftest search-string.1
   (let ((target *searched-string*)
 	(pat #(a)))
@@ -14,6 +18,7 @@
 	  (let ((pos (search pat tail)))
 	    (search-check pat tail pos))))
   t)
+|#
 
 (deftest search-string.2
   (let ((target *searched-string*)
