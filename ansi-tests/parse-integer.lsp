@@ -39,28 +39,28 @@
   (let ((c (name-char "Tab")))
     (if c
 	(parse-integer (concatenate 'string (string c) "6381" (string c)))
-      (values 6381 5)))
+      (values 6381 6)))
   6381 6)
 
 (deftest parse-integer.6
   (let ((c (name-char "Linefeed")))
     (if c
 	(parse-integer (concatenate 'string (string c) "-123712" (string c)))
-      (values -123712 8)))
+      (values -123712 9)))
   -123712 9)
 
 (deftest parse-integer.7
   (let ((c (name-char "Page")))
     (if c
 	(parse-integer (concatenate 'string (string c) "0" (string c)))
-      (values 0 2)))
+      (values 0 3)))
   0 3)
 
 (deftest parse-integer.8
   (let ((c (name-char "Return")))
     (if c
 	(parse-integer (concatenate 'string (string c) "999" (string c)))
-      (values 999 4)))
+      (values 999 5)))
   999 5)
 
 (deftest parse-integer.9
@@ -90,16 +90,3 @@
 (deftest parse-integer.15
   (parse-integer "1021" :radix 3)
   34 4)
-
-
-
-
-
-
-
-
-
-
-
-    
-
