@@ -21,6 +21,23 @@
   (multiple-value-list (values (values 'a 'b 'c 'd 'e)))
   (a))
 
+(deftest multiple-value-list.5
+  (multiple-value-list (values 'a))
+  (a))
+
+(deftest multiple-value-list.6
+  (multiple-value-list (values 'a 'b))
+  (a b))
+
+(deftest multiple-value-list.7
+  (not
+   (loop
+    for i from 0 below (min multiple-values-limit 100)
+    for x = (make-list i :initial-element 'a)
+    always (equal x (multiple-value-list (values-list x)))))
+  nil)
+
+
 (deftest multiple-value-list.order.1
   (let ((i 0))
     (values (multiple-value-list (incf i)) i))

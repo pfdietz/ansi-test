@@ -16,27 +16,3 @@
 (deftest multiple-value-call.3
   (multiple-value-call 'list (floor 13 4))
   (3 1))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(deftest multiple-value-list.1
-  (multiple-value-list (values))
-  nil)
-
-(deftest multiple-value-list.2
-  (multiple-value-list (values 'a))
-  (a))
-
-(deftest multiple-value-list.3
-  (multiple-value-list (values 'a 'b))
-  (a b))
-
-(deftest multiple-value-list.4
-  (not
-   (loop
-    for i from 0 below (min multiple-values-limit 100)
-    for x = (make-list i :initial-element 'a)
-    always (equal x (multiple-value-list (values-list x)))))
-  nil)
-
-
