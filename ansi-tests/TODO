@@ -22,4 +22,4 @@ Things to do to the test suite (not a complete list)
 10. Two-arg tests of FILE-POSITION on binary streams.
 
 11. Address issues with broadcast streams (C. Rhodes) -- apparent
-   contradictions in the spec
+   contradictions in the spec.
