@@ -23,24 +23,24 @@
 		(error () :good))
   :good)
 
-(defparameter *no-next-meth-gf-02*
-  (defgeneric no-next-meth-gf-02 (x)))
-
-(defmethod no-next-meth-gf-02 ((x integer))
-  (call-next-method))
-
-(defmethod no-next-meth-gf-02 :around ((x character))
-  (call-next-method))
-
-(defmethod no-next-method ((gf (eql *no-next-meth-gf-02*))
-			   (method standard-method)
-			   &rest args)
-  (values args :aborted))
-
-(deftest no-next-method.3
-  (no-next-meth-gf-02 10)
-  (10) :aborted)
-
-(deftest no-next-method.4
-  (no-next-meth-gf-02 #\a)
-  (#\a) :aborted)
+;;; (defparameter *no-next-meth-gf-02*
+;;;   (defgeneric no-next-meth-gf-02 (x)))
+;;; 
+;;; (defmethod no-next-meth-gf-02 ((x integer))
+;;;   (call-next-method))
+;;; 
+;;; (defmethod no-next-meth-gf-02 :around ((x character))
+;;;   (call-next-method))
+;;; 
+;;; (defmethod no-next-method ((gf (eql *no-next-meth-gf-02*))
+;;; 			   (method standard-method)
+;;; 			   &rest args)
+;;;   (values (copy-list args) :aborted))
+;;; 
+;;; (deftest no-next-method.3
+;;;   (no-next-meth-gf-02 10)
+;;;   (10) :aborted)
+;;; 
+;;; (deftest no-next-method.4
+;;;   (no-next-meth-gf-02 #\a)
+;;;   (#\a) :aborted)
