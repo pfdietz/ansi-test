@@ -51,8 +51,8 @@
 (deftest struct-include.3
   (let ((obj (make-struct-include-02b)))
     (values
-     (typep obj 'struct-include-02a)
-     (typep obj 'struct-include-02b)
+     (typep* obj 'struct-include-02a)
+     (typep* obj 'struct-include-02b)
      (struct-include-02a-a obj)
      (struct-include-02b-a obj)))
   t t 10 10)
@@ -60,16 +60,16 @@
 (deftest struct-include.4
   (let ((obj (make-struct-include-02a)))
     (values
-     (typep obj 'struct-include-02a)
-     (typep obj 'struct-include-02b)
+     (typep* obj 'struct-include-02a)
+     (typep* obj 'struct-include-02b)
      (struct-include-02a-a obj)))
   t nil 0)
 
 (deftest struct-include.5
   (let ((obj (make-struct-include-02b :a 100)))
     (values
-     (typep obj 'struct-include-02a)
-     (typep obj 'struct-include-02b)
+     (typep* obj 'struct-include-02a)
+     (typep* obj 'struct-include-02b)
      (struct-include-02a-a obj)
      (struct-include-02b-a obj)))
   t t 100 100)
@@ -82,8 +82,8 @@
 (deftest struct-include.5a
   (let ((obj (make-struct-include-03b :a 100)))
     (values
-     (typep obj 'struct-include-03a)
-     (typep obj 'struct-include-03b)
+     (typep* obj 'struct-include-03a)
+     (typep* obj 'struct-include-03b)
      (struct-include-03a-a obj)
      (struct-include-03b-a obj)))
   t t 100 100)
@@ -96,8 +96,8 @@
 (deftest struct-include.6
   (let ((obj (make-struct-include-04b)))
     (values
-     (typep obj 'struct-include-04a)
-     (typep obj 'struct-include-04b)
+     (typep* obj 'struct-include-04a)
+     (typep* obj 'struct-include-04b)
      (struct-include-04a-a obj)
      (struct-include-04b-a obj)))
   t t 0 0)
@@ -105,8 +105,8 @@
 (deftest struct-include.7
   (let ((obj (make-struct-include-04b :a 1 :b 2)))
     (values
-     (typep obj 'struct-include-04a)
-     (typep obj 'struct-include-04b)
+     (typep* obj 'struct-include-04a)
+     (typep* obj 'struct-include-04b)
      (struct-include-04a-a obj)
      (struct-include-04b-a obj)
      (struct-include-04a-b obj)

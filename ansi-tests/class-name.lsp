@@ -13,7 +13,8 @@
 
 (defclass class-name-class-01 () (a b c))
 
-(defmethod class-name ((x class-name-class-01)) 'silly)
+(report-and-ignore-errors
+ (eval '(defmethod class-name ((x class-name-class-01)) 'silly)))
 
 (deftest class-name.2
   (class-name (make-instance 'class-name-class-01))
