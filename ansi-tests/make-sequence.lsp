@@ -9,6 +9,7 @@
   (let ((x (make-sequence 'list 4)))
     (and (eql (length x) 4)
 	 (listp x)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e in x always (eql (car x) e))
 	 t))
   t)
@@ -21,6 +22,7 @@
   (let ((x (make-sequence 'cons 4)))
     (and (eql (length x) 4)
 	 (listp x)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e in x always (eql (car x) e))
 	 t))
   t)
@@ -36,6 +38,7 @@
 (deftest make-sequence.6
   (let ((s (make-sequence 'string 10)))
     (and (eql (length s) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across s always (eql e (aref s 0)))
 	 t))
   t)
@@ -44,9 +47,11 @@
   (make-sequence 'simple-string 10 :initial-element #\a)
   "aaaaaaaaaa")
 
+
 (deftest make-sequence.8
   (let ((s (make-sequence 'simple-string 10)))
     (and (eql (length s) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across s always (eql e (aref s 0)))
 	 t))
   t)
@@ -58,6 +63,7 @@
 (deftest make-sequence.10
   (let ((x (make-sequence 'vector 10)))
     (and (eql (length x) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across x always (eql e (aref x 0)))
 	 t))
   t)
@@ -73,6 +79,7 @@
 (deftest make-sequence.12
   (let ((x (make-sequence 'simple-vector 10)))
     (and (eql (length x) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across x always (eql e (aref x 0)))
 	 t))
   t)
@@ -88,6 +95,7 @@
 (deftest make-sequence.14
   (let ((x (make-sequence '(vector *) 10)))
     (and (eql (length x) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across x always (eql e (aref x 0)))
 	 t))
   t)
@@ -103,6 +111,7 @@
 (deftest make-sequence.16
   (let ((x (make-sequence '(simple-vector *)  10)))
     (and (eql (length x) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across x always (eql e (aref x 0)))
 	 t))
   t)
@@ -118,6 +127,7 @@
 (deftest make-sequence.18
   (let ((x (make-sequence '(string *) 10)))
     (and (eql (length x) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across x always (eql e (aref x 0)))
 	 t))
   t)
@@ -133,6 +143,7 @@
 (deftest make-sequence.20
   (let ((x (make-sequence '(simple-string *)  10)))
     (and (eql (length x) 10)
+	 #+:ansi-tests-strict-initial-element
 	 (loop for e across x always (eql e (aref x 0)))
 	 t))
   t)

@@ -8,7 +8,8 @@
 (deftest make-string.1
   (let ((s (make-string 10)))
     (and (stringp s)
-	 ;; (string-all-the-same s)
+	 #+:ansi-tests-strict-initial-element
+	 (string-all-the-same s)
 	 (eqlt (length s) 10)
 	 ))
   t)
@@ -52,7 +53,8 @@
   (let ((s (make-string 10 :element-type 'character)))
     (and (stringp s)
 	 (eqlt (length s) 10)
-	 #| (string-all-the-same s) |#
+	 #+:ansi-tests-strict-initial-element
+	 (string-all-the-same s)
 	 ))
   t)
 
@@ -60,7 +62,8 @@
   (let ((s (make-string 10 :element-type 'standard-char)))
     (and (stringp s)
 	 (eqlt (length s) 10)
-	 #| (string-all-the-same s) |#
+	 #+:ansi-tests-strict-initial-element
+	 (string-all-the-same s)
 	 ))
   t)
 
@@ -68,7 +71,8 @@
   (let ((s (make-string 10 :element-type 'base-char)))
     (and (stringp s)
 	 (eqlt (length s) 10)
-	 #| (string-all-the-same s) |#
+	 #+:ansi-tests-strict-initial-element
+	 (string-all-the-same s)
 	 ))
   t)
 
