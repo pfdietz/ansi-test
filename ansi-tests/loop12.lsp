@@ -158,11 +158,25 @@
 	 always (< i 20)))
   program-error)
 
+(deftest loop.12.error.50a
+  (classify-error
+   (loop for i from 1 to 10
+	 always (< i 20)
+	 collect i))
+  program-error)
+
 (deftest loop.12.error.51
   (classify-error
    (loop for i from 1 to 10
 	 collect i
 	 never (> i 20)))
+  program-error)
+
+(deftest loop.12.error.51a
+  (classify-error
+   (loop for i from 1 to 10
+	 never (> i 20)
+	 collect i))
   program-error)
 
 (deftest loop.12.error.52
@@ -172,10 +186,25 @@
 	 thereis (> i 20)))
   program-error)
 
+(deftest loop.12.error.52a
+  (classify-error
+   (loop for i from 1 to 10
+	 thereis (> i 20)
+	 collect i))
+  program-error)
+
+;;; Non-error cases
+
 (deftest loop.12.53
   (loop for i from 1 to 10
 	collect i into foo
 	always (< i 20))
+  t)
+
+(deftest loop.12.53a
+  (loop for i from 1 to 10
+	always (< i 20)
+	collect i into foo)
   t)
 
 (deftest loop.12.54
@@ -184,10 +213,22 @@
 	never (> i 20))
   t)
 
+(deftest loop.12.54a
+  (loop for i from 1 to 10
+	never (> i 20)
+	collect i into foo)
+  t)
+
 (deftest loop.12.55
   (loop for i from 1 to 10
 	collect i into foo
 	thereis i)
+  1)
+
+(deftest loop.12.55a
+  (loop for i from 1 to 10
+	thereis i
+	collect i into foo)
   1)
 
 
