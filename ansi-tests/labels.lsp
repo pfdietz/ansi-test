@@ -104,7 +104,7 @@
 ;;; Definition of a (setf ...) function
 
 (deftest labels.17
-  (labels (((setf %f) (x y) (setf (car x) y)))
+  (labels (((setf %f) (x y) (setf (car y) x)))
     (let ((z (list 1 2)))
       (setf (%f z) 'a)
       z))

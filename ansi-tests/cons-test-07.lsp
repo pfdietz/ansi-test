@@ -139,17 +139,14 @@
 ;;; nreconc
 
 (deftest nreconc-1
-    (let* ((x (list 'a 'b 'c))
-	   (y (nreverse (loop for e on x collect e))))
-      (setf x (nreconc x (copy-tree '(d e f))))
-      (and (eq x (car y))
-	   (eq (cdr x) (cadr y))
-	   (eq (cddr x) (caddr y))
-	   x))
+  (let* ((x (list 'a 'b 'c))
+	 (y (copy-tree '(d e f)))
+	 (result (nreconc x y)))
+    (and (equal y '(d e f))
+	 result))
   (c b a d e f))
 
 (deftest nreconc-2
-  (handler-case
-    (nreconc nil 'a)
-    (error (c) c))
+  (nreconc nil 'a)
   a)
+

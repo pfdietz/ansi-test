@@ -105,7 +105,7 @@
 ;;; Definition of a (setf ...) function
 
 (deftest flet.17
-  (flet (((setf %f) (x y) (setf (car x) y)))
+  (flet (((setf %f) (x y) (setf (car y) x)))
     (let ((z (list 1 2)))
       (setf (%f z) 'a)
       z))
