@@ -676,6 +676,15 @@ the condition to go uncaught if it cannot be classified."
     (restart)
     (readtable)))
 
+(defparameter *types-list3*
+  (reduce #'append *disjoint-types-list2* :from-end t))
+
+(defun trim-list (list n)
+  (let ((len (length list)))
+    (if (<= len n) list
+      (append (subseq list 0 n)
+	      (format nil "And ~A more omitted." (- len n))))))
+
 (defun is-t-or-nil (e)
   (or (eqt e t) (eqt e nil)))
 

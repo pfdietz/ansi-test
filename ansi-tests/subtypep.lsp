@@ -132,17 +132,13 @@
   nil)
 
 (deftest subtypep.and.1
-  (loop
-   for typelist in *disjoint-types-list2*
-   append (loop for type in typelist
-		append (check-equivalence `(and ,type ,type) type)))
+  (loop for type in *types-list3*
+	append (check-equivalence `(and ,type ,type) type))
   nil)
 
 (deftest subtypep.or.1
-  (loop
-   for typelist in *disjoint-types-list2*
-   append (loop for type in typelist
-		append (check-equivalence `(or ,type ,type) type)))
+  (loop for type in *types-list3*
+	append (check-equivalence `(or ,type ,type) type))
   nil)
 
 (deftest subtypep.and.2
@@ -152,3 +148,38 @@
 (deftest subtypep.or.2
   (check-equivalence nil '(or))
   nil)
+
+(deftest subtypep.and.3
+  (loop for type in *types-list3*
+	append (check-equivalence `(and ,type) type))
+  nil)
+
+(deftest subtypep.or.3
+  (loop for type in *types-list3*
+	append (check-equivalence `(or ,type) type))
+  nil)
+
+(deftest subtypep.and.4
+  (let* ((n (length *types-list3*))
+	 (a (make-array n :initial-contents *types-list3*)))
+    (trim-list
+     (loop for i below 1000
+	   for tp1 = (aref a (random n))
+	   for tp2 = (aref a (random n))
+	   append (check-equivalence `(and ,tp1 ,tp2)
+				     `(and ,tp2 ,tp1)))
+     100))
+  nil)
+
+(deftest subtypep.or.4
+  (let* ((n (length *types-list3*))
+	 (a (make-array n :initial-contents *types-list3*)))
+    (trim-list
+     (loop for i below 1000
+	   for tp1 = (aref a (random n))
+	   for tp2 = (aref a (random n))
+	   append (check-equivalence `(or ,tp1 ,tp2)
+				     `(or ,tp2 ,tp1)))
+     100))
+  nil)
+
