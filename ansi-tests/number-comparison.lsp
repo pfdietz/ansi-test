@@ -470,6 +470,12 @@
   (<.10-fn)
   nil)
 
+(deftest <.11
+  (loop for x in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	never (or (< (- x) x)
+		  (< x (- x))))
+  t)
+
 (deftest <.order.1
   (let ((i 0) x y)
     (values
@@ -637,6 +643,12 @@
   (<=.9-fn)
   nil)
 
+(deftest <=.10
+  (loop for x in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	always (and (<= (- x) x)
+		    (<= x (- x))))
+  t)
+
 (deftest <=.order.1
   (let ((i 0) x y)
     (values
@@ -720,6 +732,12 @@
 (deftest >.8
   (>.8-fn)
   nil)
+
+(deftest >.9
+  (loop for x in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	never (or (> (- x) x)
+		  (> x (- x))))
+  t)
 
 (deftest >.order.1
   (let ((i 0) x y)
@@ -806,6 +824,12 @@
 (deftest >=.8
   (>=.8-fn)
   nil)
+
+(deftest >=.9
+  (loop for x in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	always (and (>= (- x) x)
+		    (>= x (- x))))
+  t)
 
 (deftest >=.order.1
   (let ((i 0) x y)
