@@ -57,6 +57,28 @@
 	collect x)
   nil)
 
+(defstruct type-of.example-struct a b c)
+
+(deftest type-of.6
+  (type-of (make-type-of.example-struct))
+  type-of.example-struct)
+
+(defclass type-of.example-class () ())
+
+(deftest type-of.7
+  (type-of (make-instance 'type-of.example-class))
+  type-of.example-class)
+
+(defparameter *type-of.example-class-2*
+  (defclass type-of.example-class-2 () ((a) (b) (c))))
+
+(deftest type-of.8
+  (progn
+    (setf (class-name *type-of.example-class-2*) nil)
+    (eqt (type-of (make-instance *type-of.example-class-2*))
+	 *type-of.example-class-2*))
+  t)
+
 ;;; Error tests
 
 (deftest type-of.error.1
