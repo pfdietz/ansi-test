@@ -7278,24 +7278,26 @@ Broken at C::WT-C-INLINE-LOC.
 
 (deftest misc.382
   (funcall
-   '(lambda (b)
-      (declare (type (integer -65822755520 31689335872) b))
-      (declare (optimize (speed 2) (space 2) (safety 3)
-			 (debug 0) (compilation-speed 1)))
-      (let ((s8 (make-array nil :initial-element
-			    (catch 'ct4
-			      (complex
-			       (dotimes (iv1 1 0)
-				 (rational (throw 'ct4 b)))
-			       0)))))
-	(elt '(13423701584)
-	     (min 0
-		  (max 0
-		       (rational
-			(let ((s3 (make-array nil :initial-element 0)))
-			  (if (ldb-test (byte 0 0)
-					(shiftf (aref s8)
-						(aref s8)))
-			      0 0))))))))
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer -65822755520 31689335872) b))
+       (declare (optimize (speed 2) (space 2) (safety 3)
+			  (debug 0) (compilation-speed 1)))
+       (let ((s8 (make-array nil :initial-element
+			     (catch 'ct4
+			       (complex
+				(dotimes (iv1 1 0)
+				  (rational (throw 'ct4 b)))
+				0)))))
+	 (elt '(13423701584)
+	      (min 0
+		   (max 0
+			(rational
+			 (let ((s3 (make-array nil :initial-element 0)))
+			   (if (ldb-test (byte 0 0)
+					 (shiftf (aref s8)
+						 (aref s8)))
+			       0 0)))))))))
    -38169486910)
   13423701584)
