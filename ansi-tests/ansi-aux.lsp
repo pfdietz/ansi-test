@@ -1536,3 +1536,29 @@ the condition to go uncaught if it cannot be classified."
 	  (unwind-protect (eval ',form) (return-from done :good))
 	  (condition () :good))))
      :good))
+
+;;; Binary search on reals
+
+(defun float-binary-search (fn lo hi)
+  "FN is a function that, if true for X, is true for all Y > X.
+   Find the smallest float in [lo,hi] for which the function
+   return true."
+  
+  (assert (functionp fn))
+  (assert (floatp lo))
+  (assert (floatp hi))
+  (assert (<= lo hi))
+  (assert (funcall fn hi))
+
+  (loop while (<= lo hi)
+	do (let ((mid (/ (+ lo hi) 2)))
+	     (if (funcall fn mid)
+		 (if (= mid hi)
+		     (return hi)
+		   (setq hi mid))
+	       (if (= mid lo)
+		   (return hi)
+		 (setq lo mid))))))
+
+	     
+  
