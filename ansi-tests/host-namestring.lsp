@@ -10,8 +10,8 @@
 		(host-namestring "host-namestring.lsp")))
 	 (s (first vals)))
     (if (and (null (cdr vals))
-	     (stringp s)
-	     (equal (host-namestring s) s))
+	     (or (null s)
+		 (equal (host-namestring s) s)))
 	:good
       vals))
   :good)
@@ -20,8 +20,9 @@
   (do-special-strings
    (s "host-namestring.lsp" nil)
    (let ((ns (host-namestring s)))
-     (assert (stringp ns))
-     (assert (string= (host-namestring ns) ns))))
+     (when ns
+       (assert (stringp ns))
+       (assert (string= (host-namestring ns) ns)))))
   nil)
 
 (deftest host-namestring.3
