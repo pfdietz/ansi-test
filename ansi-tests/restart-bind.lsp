@@ -29,6 +29,65 @@
      (return-from done 'good)))
   good)
 
+(deftest restart-bind.6
+  (restart-bind ())
+  nil)
+
+(deftest restart-bind.7
+  (block done
+    (restart-bind ((foo #'(lambda () (return-from done 'good))))
+		  (invoke-restart 'foo)
+		  'bad))
+  good)
+
+(deftest restart-bind.8
+  (block done
+    (restart-bind ((foo #'(lambda () (return-from done 'good))))
+		  (let ((restart (find-restart 'foo)))
+		    (and (typep restart 'restart)
+			 (invoke-restart restart)))
+		  'bad))
+  good)
+
+(deftest restart-bind.9
+  (restart-bind ((foo #'(lambda (a b c) (list c a b))))
+		(invoke-restart 'foo 1 2 3))
+  (3 1 2))
+
+(deftest restart-bind.10
+  (flet ((%f () (invoke-restart 'foo 'x 'y 'z)))
+    (restart-bind ((foo #'(lambda (a b c) (list c a b))))
+		  (%f)))
+  (z x y))
+
+(deftest restart-bind.11
+  (restart-bind
+   ((foo #'(lambda () 'bad)))
+   (restart-bind
+    ((foo #'(lambda () 'good)))
+    (invoke-restart 'foo)))
+  good)
+
+(deftest restart-bind.12
+  (let ((*x* 'bad))
+    (declare (special *x*))
+    (restart-bind
+     ((foo #'(lambda () (declare (special *x*)) *x*)))
+     (let ((*x* 'good))
+       (declare (special *x*))
+       (invoke-restart 'foo))))
+  good)
+
+(deftest restart-bind.13
+  (restart-bind
+   ((foo #'(lambda () 'bad)))
+   (flet ((%f () (invoke-restart 'foo)))
+     (restart-bind
+      ((foo #'(lambda () 'good)))
+      (%f))))
+  good)
+
+
 
 
 
