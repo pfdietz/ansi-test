@@ -4767,7 +4767,7 @@
 
 ;;; gcl (found by Camm)
 ;;; Error in COMPILER::CMP-ANON [or a callee]: The function NIL is undefined.
-(deftest misc.286
+(deftest misc.287
   (funcall
    (compile
     nil
