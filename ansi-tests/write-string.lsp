@@ -110,4 +110,17 @@
   (signals-error (write-string) program-error)
   t)
 
-;;; More here
+(deftest write-string.error.2
+  (signals-error (write-string "" *standard-output* :start) program-error)
+  t)
+
+(deftest write-string.error.3
+  (signals-error (write-string "" *standard-output* :foo nil) program-error)
+  t)
+
+(deftest write-string.error.4
+  (signals-error (write-string "" *standard-output*
+			       :allow-other-keys nil
+			       :foo nil)
+		 program-error)
+  t)
