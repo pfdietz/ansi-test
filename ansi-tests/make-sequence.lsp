@@ -165,6 +165,33 @@
   (equalp (make-sequence 'string 5) (make-string 5))
   t)
 
+;;; Keyword tests
+
+(deftest make-sequence.allow-other-keys.1
+  (make-sequence 'list 5 :allow-other-keys t :initial-element 'a :bad t)
+  (a a a a a))
+
+(deftest make-sequence.allow-other-keys.2
+  (make-sequence 'list 5 :initial-element 'a :bad t :allow-other-keys t)
+  (a a a a a))
+
+(deftest make-sequence.allow-other-keys.3
+  (make-sequence 'list 5 :initial-element 'a :allow-other-keys t)
+  (a a a a a))
+
+(deftest make-sequence.allow-other-keys.4
+  (make-sequence 'list 5 :initial-element 'a :allow-other-keys nil)
+  (a a a a a))
+
+(deftest make-sequence.allow-other-keys.5
+  (make-sequence 'list 5 :initial-element 'a :allow-other-keys t
+		 :allow-other-keys nil :bad t)
+  (a a a a a))
+
+(deftest make-sequence.keywords.6
+  (make-sequence 'list 5 :initial-element 'a :initial-element 'b)
+  (a a a a a))
+
 ;;; Tests for errors
 
 (deftest make-sequence.error.1

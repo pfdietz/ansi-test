@@ -258,12 +258,24 @@
 	  :test-not (complement #'equal) :key nil)
   (aaa "AAA" "aaa" #\a))
 
-(deftest adjoin-other-keys-1
+(deftest adjoin.allow-other-keys.1
   (adjoin 'a '(b c) :bad t :allow-other-keys t)
   (a b c))
 
-(deftest adjoin-other-keys-2
+(deftest adjoin.allow-other-keys.2
   (adjoin 'a '(b c) :allow-other-keys t :foo t)
+  (a b c))
+
+(deftest adjoin.allow-other-keys.3
+  (adjoin 'a '(b c) :allow-other-keys t)
+  (a b c))
+
+(deftest adjoin.allow-other-keys.4
+  (adjoin 'a '(b c) :allow-other-keys nil)
+  (a b c))
+
+(deftest adjoin.allow-other-keys.5
+  (adjoin 'a '(b c) :allow-other-keys t :allow-other-keys nil 'bad t)
   (a b c))
 
 (deftest adjoin-repeat-key

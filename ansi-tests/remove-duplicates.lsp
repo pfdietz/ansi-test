@@ -31,6 +31,89 @@
     y)
   (3 4 1 5 6 2 7))
 
+;;; Keyword tests
+
+(deftest remove-duplicates.allow-other-keys.1
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5) :allow-other-keys t)
+  (3 4 2 7 8 1 5))
+
+(deftest remove-duplicates.allow-other-keys.2
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5) :allow-other-keys nil)
+  (3 4 2 7 8 1 5))
+
+(deftest remove-duplicates.allow-other-keys.3
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5) :bad t :allow-other-keys t)
+  (3 4 2 7 8 1 5))
+
+(deftest remove-duplicates.allow-other-keys.4
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5) :allow-other-keys t :bad t)
+  (3 4 2 7 8 1 5))
+
+(deftest remove-duplicates.allow-other-keys.5
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5) :bad t
+		     :allow-other-keys t :allow-other-keys nil)
+  (3 4 2 7 8 1 5))
+
+(deftest remove-duplicates.allow-other-keys.6
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5)
+		     :allow-other-keys t :bad t :allow-other-keys nil)
+  (3 4 2 7 8 1 5))
+
+(deftest remove-duplicates.allow-other-keys.7
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5)
+		     :allow-other-keys t :allow-other-keys nil :bad t)
+  (3 4 2 7 8 1 5))
+
+(deftest remove-duplicates.allow-other-keys.8
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5)
+		     :allow-other-keys t :from-end t)
+  (1 2 3 4 7 8 5))
+
+(deftest remove-duplicates.keywords.1
+  (remove-duplicates '(1 2 3 4 2 7 8 1 5) :from-end t :from-end nil)
+  (1 2 3 4 7 8 5))
+
+
+(deftest delete-duplicates.allow-other-keys.1
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5) :allow-other-keys t)
+  (3 4 2 7 8 1 5))
+
+(deftest delete-duplicates.allow-other-keys.2
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5) :allow-other-keys nil)
+  (3 4 2 7 8 1 5))
+
+(deftest delete-duplicates.allow-other-keys.3
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5) :bad t :allow-other-keys t)
+  (3 4 2 7 8 1 5))
+
+(deftest delete-duplicates.allow-other-keys.4
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5) :allow-other-keys t :bad t)
+  (3 4 2 7 8 1 5))
+
+(deftest delete-duplicates.allow-other-keys.5
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5) :bad t
+		     :allow-other-keys t :allow-other-keys nil)
+  (3 4 2 7 8 1 5))
+
+(deftest delete-duplicates.allow-other-keys.6
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5)
+		     :allow-other-keys t :bad t :allow-other-keys nil)
+  (3 4 2 7 8 1 5))
+
+(deftest delete-duplicates.allow-other-keys.7
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5)
+		     :allow-other-keys t :allow-other-keys nil :bad t)
+  (3 4 2 7 8 1 5))
+
+(deftest delete-duplicates.allow-other-keys.8
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5)
+		     :allow-other-keys t :from-end t)
+  (1 2 3 4 7 8 5))
+
+(deftest delete-duplicates.keywords.1
+  (delete-duplicates (list 1 2 3 4 2 7 8 1 5) :from-end t :from-end nil)
+  (1 2 3 4 7 8 5))
+
 ;;; Error cases
 
 (deftest remove-duplicates.error.1

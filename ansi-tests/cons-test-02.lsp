@@ -95,9 +95,33 @@
    :key nil)
   (2 2 b b))
 
-(deftest sublis-9
-  (sublis nil 'a :bad-keyword t :allow-other-keys t)
+;;; Keyword tests
+
+(deftest sublis.allow-other-keys.1
+  (sublis nil 'a :bad t :allow-other-keys t)
   a)
+
+(deftest sublis.allow-other-keys.2
+  (sublis nil 'a :allow-other-keys t :bad t)
+  a)
+
+(deftest sublis.allow-other-keys.3
+  (sublis nil 'a :allow-other-keys t)
+  a)
+
+(deftest sublis.allow-other-keys.4
+  (sublis nil 'a :allow-other-keys nil)
+  a)
+
+(deftest sublis.allow-other-keys.5
+  (sublis nil 'a :allow-other-keys t :allow-other-keys t :bad t)
+  a)
+
+(deftest sublis.keywords.6
+  (sublis '((1 . a)) (list 0 1 2) :key #'(lambda (x) (if (numberp x) (1+ x) x))
+	  :key #'identity)
+  (a 1 2))
+
 
 ;; Argument error cases
 
@@ -181,6 +205,34 @@
    :key nil)
   (2 2 b b))
 
+;;; Keyword tests
+
+(deftest nsublis.allow-other-keys.1
+  (nsublis nil 'a :bad t :allow-other-keys t)
+  a)
+
+(deftest nsublis.allow-other-keys.2
+  (nsublis nil 'a :allow-other-keys t :bad t)
+  a)
+
+(deftest nsublis.allow-other-keys.3
+  (nsublis nil 'a :allow-other-keys t)
+  a)
+
+(deftest nsublis.allow-other-keys.4
+  (nsublis nil 'a :allow-other-keys nil)
+  a)
+
+(deftest nsublis.allow-other-keys.5
+  (nsublis nil 'a :allow-other-keys t :allow-other-keys t :bad t)
+  a)
+
+(deftest nsublis.keywords.6
+  (nsublis '((1 . a)) (list 0 1 2)
+	   :key #'(lambda (x) (if (numberp x) (1+ x) x))
+	   :key #'identity)
+  (a 1 2))
+
 ;; Argument error cases
 
 (deftest nsublis.error.1
@@ -262,9 +314,35 @@
 	       :key nil)
   (a a c d a a))
 
-(deftest subst-10
-  (subst 'a 'b nil :bad t :allow-other-keys t)
-  nil)
+;;; Keyword tests for subst
+
+(deftest subst.allow-other-keys.1
+  (subst 'a 'b (list 'a 'b 'c) :bad t :allow-other-keys t)
+  (a a c))
+
+(deftest subst.allow-other-keys.2
+  (subst 'a 'b (list 'a 'b 'c) :allow-other-keys t)
+  (a a c))
+
+(deftest subst.allow-other-keys.3
+  (subst 'a 'b (list 'a 'b 'c) :allow-other-keys nil)
+  (a a c))
+
+(deftest subst.allow-other-keys.4
+  (subst 'a 'b (list 'a 'b 'c) :allow-other-keys t :bad t)
+  (a a c))
+
+(deftest subst.allow-other-keys.5
+  (subst 'a 'b (list 'a 'b 'c) :allow-other-keys t :allow-other-keys nil
+	 :bad t)
+  (a a c))
+
+(deftest subst.keywords.6
+  (subst 'a 'b (list 'a 'b 'c) :test #'eq :test (complement #'eq))
+  (a a c))
+
+
+;;; Tests for subst-if, subst-if-not
   
 (deftest subst-if-1
     (check-subst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
@@ -332,20 +410,63 @@
 		  :key nil)
   ((a) (a) (c) (d)))
   
-(deftest subst-if-7
-  (subst-if 'a #'null nil :bad t :allow-other-keys t)
-  a)
-
 (deftest subst-if-not-5
   (check-subst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
 		      '((a) (b) (c) (d))
 		      :key nil)
   ((a) (a) (c) (d)))
 
-(deftest subst-if-not-7
-  (subst-if 'a #'identity nil :bad t :allow-other-keys t)
-  nil)
+;;; Keyword tests for subst-if
 
+(deftest subst-if.allow-other-keys.1
+  (subst-if 'a #'null nil :bad t :allow-other-keys t)
+  a)
+
+(deftest subst-if.allow-other-keys.2
+  (subst-if 'a #'null nil :allow-other-keys t)
+  a)
+
+(deftest subst-if.allow-other-keys.3
+  (subst-if 'a #'null nil :allow-other-keys nil)
+  a)
+
+(deftest subst-if.allow-other-keys.4
+  (subst-if 'a #'null nil :allow-other-keys t :bad t)
+  a)
+
+(deftest subst-if.allow-other-keys.5
+  (subst-if 'a #'null nil :allow-other-keys t :allow-other-keys nil :bad t)
+  a)
+
+(deftest subst-if.keywords.6
+  (subst-if 'a #'null nil :key nil :key (constantly 'b))
+  a)
+
+;;; Keywords tests for subst-if-not
+
+(deftest subst-if-not.allow-other-keys.1
+  (subst-if-not 'a #'identity nil :bad t :allow-other-keys t)
+  a)
+
+(deftest subst-if-not.allow-other-keys.2
+  (subst-if-not 'a #'identity nil :allow-other-keys t)
+  a)
+
+(deftest subst-if-not.allow-other-keys.3
+  (subst-if-not 'a #'identity nil :allow-other-keys nil)
+  a)
+
+(deftest subst-if-not.allow-other-keys.4
+  (subst-if-not 'a #'identity nil :allow-other-keys t :bad t)
+  a)
+
+(deftest subst-if-not.allow-other-keys.5
+  (subst-if-not 'a #'identity nil :allow-other-keys t :allow-other-keys nil :bad t)
+  a)
+
+(deftest subst-if-not.keywords.6
+  (subst-if-not 'a #'identity nil :key nil :key (constantly 'b))
+  a)
 
 
 (defvar *nsubst-tree-1* '(10 (30 20 10) (20 10) (10 20 30 40)))
@@ -404,10 +525,35 @@
 		:key nil)
   (a a c d a a))
 
-(deftest nsubst-10
-  (nsubst 'a 'b nil :bad t :allow-other-keys t)
-  nil)
-  
+;;; Keyword tests for nsubst
+
+(deftest nsubst.allow-other-keys.1
+  (nsubst 'a 'b (list 'a 'b 'c) :bad t :allow-other-keys t)
+  (a a c))
+
+(deftest nsubst.allow-other-keys.2
+  (nsubst 'a 'b (list 'a 'b 'c) :allow-other-keys t)
+  (a a c))
+
+(deftest nsubst.allow-other-keys.3
+  (nsubst 'a 'b (list 'a 'b 'c) :allow-other-keys nil)
+  (a a c))
+
+(deftest nsubst.allow-other-keys.4
+  (nsubst 'a 'b (list 'a 'b 'c) :allow-other-keys t :bad t)
+  (a a c))
+
+(deftest nsubst.allow-other-keys.5
+  (nsubst 'a 'b (list 'a 'b 'c) :allow-other-keys t :allow-other-keys nil
+	 :bad t)
+  (a a c))
+
+(deftest nsubst.keywords.6
+  (nsubst 'a 'b (list 'a 'b 'c) :test #'eq :test (complement #'eq))
+  (a a c))
+
+;;; Tests for nsubst-if, nsubst-if-not
+
 (deftest nsubst-if-1
     (check-nsubst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
   A)
@@ -487,6 +633,58 @@
 (deftest nsubst-if-not-6
   (nsubst-if-not 'a #'null nil :bad t :allow-other-keys t)
   nil)
+
+;;; Keyword tests for nsubst-if
+
+(deftest nsubst-if.allow-other-keys.1
+  (nsubst-if 'a #'null nil :bad t :allow-other-keys t)
+  a)
+
+(deftest nsubst-if.allow-other-keys.2
+  (nsubst-if 'a #'null nil :allow-other-keys t)
+  a)
+
+(deftest nsubst-if.allow-other-keys.3
+  (nsubst-if 'a #'null nil :allow-other-keys nil)
+  a)
+
+(deftest nsubst-if.allow-other-keys.4
+  (nsubst-if 'a #'null nil :allow-other-keys t :bad t)
+  a)
+
+(deftest nsubst-if.allow-other-keys.5
+  (nsubst-if 'a #'null nil :allow-other-keys t :allow-other-keys nil :bad t)
+  a)
+
+(deftest nsubst-if.keywords.6
+  (nsubst-if 'a #'null nil :key nil :key (constantly 'b))
+  a)
+
+;;; Keywords tests for nsubst-if-not
+
+(deftest nsubst-if-not.allow-other-keys.1
+  (nsubst-if-not 'a #'identity nil :bad t :allow-other-keys t)
+  a)
+
+(deftest nsubst-if-not.allow-other-keys.2
+  (nsubst-if-not 'a #'identity nil :allow-other-keys t)
+  a)
+
+(deftest nsubst-if-not.allow-other-keys.3
+  (nsubst-if-not 'a #'identity nil :allow-other-keys nil)
+  a)
+
+(deftest nsubst-if-not.allow-other-keys.4
+  (nsubst-if-not 'a #'identity nil :allow-other-keys t :bad t)
+  a)
+
+(deftest nsubst-if-not.allow-other-keys.5
+  (nsubst-if-not 'a #'identity nil :allow-other-keys t :allow-other-keys nil :bad t)
+  a)
+
+(deftest nsubst-if-not.keywords.6
+  (nsubst-if-not 'a #'identity nil :key nil :key (constantly 'b))
+  a)
 
 ;;; Error cases
 

@@ -189,12 +189,24 @@
     (make-list 6 :initial-element 'a)
   (a a a a a a))
 
-(deftest make-list-other-keywords.1
+(deftest make-list.allow-other-keys.1
   (make-list 5 :allow-other-keys t :foo 'a)
   (nil nil nil nil nil))
 
-(deftest make-list-other-keywords.2
+(deftest make-list.allow-other-keys.2
   (make-list 5 :bar nil :allow-other-keys t)
+  (nil nil nil nil nil))
+
+(deftest make-list.allow-other-keys.3
+  (make-list 5 :allow-other-keys nil)
+  (nil nil nil nil nil))
+
+(deftest make-list.allow-other-keys.4
+  (make-list 5 :allow-other-keys t :allow-other-keys nil 'bad t)
+  (nil nil nil nil nil))
+
+(deftest make-list.allow-other-keys.5
+  (make-list 5 :allow-other-keys t)
   (nil nil nil nil nil))
 
 (deftest make-list-repeated-keyword

@@ -194,18 +194,37 @@
 		       (eqt x y))))
   (A . 3))
 
-(deftest assoc-26
+;;; Keyword tests
+
+(deftest assoc.allow-other-keys.1
   (assoc 'b '((a . 1) (b . 2) (c . 3)) :bad t :allow-other-keys t)
   (b . 2))
 
-(deftest assoc-27
+(deftest assoc.allow-other-keys.2
   (assoc 'b '((a . 1) (b . 2) (c . 3)) :allow-other-keys t :also-bad t)
   (b . 2))
 
-(deftest assoc-28
+(deftest assoc.allow-other-keys.3
   (assoc 'b '((a . 1) (b . 2) (c . 3)) :allow-other-keys t :also-bad t
 	 :test-not #'eql)
   (a . 1))
+
+(deftest assoc.allow-other-keys.4
+  (assoc 'b '((a . 1) (b . 2) (c . 3)) :allow-other-keys t)
+  (b . 2))
+
+(deftest assoc.allow-other-keys.5
+  (assoc 'b '((a . 1) (b . 2) (c . 3)) :allow-other-keys nil)
+  (b . 2))
+
+(deftest assoc.keywords.6
+  (assoc 'b '((a . 1) (b . 2) (c . 3)) :key #'identity :key #'null)
+  (b . 2))
+
+(deftest assoc.keywords.7
+  (assoc 'b '((a . 1) (b . 2) (c . 3)) :key nil :key #'null)
+  (b . 2))
+
 
 (deftest assoc.error.1
   (classify-error (assoc))
@@ -268,19 +287,37 @@
     (assoc-if #'null '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
 
-(deftest assoc-if-5
+;;; Keyword tests
+
+(deftest assoc-if.allow-other-keys.1
   (assoc-if #'null '((a . 1) (nil . 2) (c . 3)) :bad t :allow-other-keys t)
   (nil . 2))
 
-(deftest assoc-if-6
+(deftest assoc-if.allow-other-keys.2
   (assoc-if #'null '((a . 1) (nil . 2) (c . 3))
 	    :allow-other-keys t :also-bad t)
   (nil . 2))
 
-(deftest assoc-if-7
+(deftest assoc-if.allow-other-keys.3
   (assoc-if #'null '((a . 1) (nil . 2) (c . 3))
 	    :allow-other-keys t :also-bad t :key #'not)
   (a . 1))
+
+(deftest assoc-if.allow-other-keys.4
+  (assoc-if #'null '((a . 1) (nil . 2) (c . 3)) :allow-other-keys t)
+  (nil . 2))
+
+(deftest assoc-if.allow-other-keys.5
+  (assoc-if #'null '((a . 1) (nil . 2) (c . 3)) :allow-other-keys nil)
+  (nil . 2))
+
+(deftest assoc-if.keywords.6
+  (assoc-if #'null '((a . 1) (nil . 2) (c . 3)) :key #'identity :key #'null)
+  (nil . 2))
+
+(deftest assoc-if.keywords.7
+  (assoc-if #'null '((a . 1) (nil . 2) (c . 3)) :key nil :key #'null)
+  (nil . 2))
 
 ;;; Error cases
 
@@ -345,20 +382,41 @@
     (assoc-if-not #'identity '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
 
-(deftest assoc-if-not-5
+;;; Keyword tests
+
+(deftest assoc-if-not.allow-other-keys.1
   (assoc-if-not #'identity
 		'((a . 1) (nil . 2) (c . 3)) :bad t :allow-other-keys t)
   (nil . 2))
 
-(deftest assoc-if-not-6
+(deftest assoc-if-not.allow-other-keys.2
   (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3))
 	    :allow-other-keys t :also-bad t)
   (nil . 2))
 
-(deftest assoc-if-not-7
+(deftest assoc-if-not.allow-other-keys.3
   (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3))
 	    :allow-other-keys t :also-bad t :key #'not)
   (a . 1))
+
+(deftest assoc-if-not.allow-other-keys.4
+  (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3)) :allow-other-keys t)
+  (nil . 2))
+
+(deftest assoc-if-not.allow-other-keys.5
+  (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3)) :allow-other-keys nil)
+  (nil . 2))
+
+(deftest assoc-if-not.keywords.6
+  (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3))
+		:key #'identity :key #'null)
+  (nil . 2))
+
+(deftest assoc-if-not.keywords.7
+  (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3)) :key nil :key #'null)
+  (nil . 2))
+
+;;; Error tests
 
 (deftest assoc-if-not.error.1
   (classify-error (assoc-if-not))

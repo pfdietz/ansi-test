@@ -43,18 +43,37 @@
   (member-if #'identity '(1 2 3 4 5) :key #'evenp)
   (2 3 4 5))
 
-(deftest member-if-6
+;;; Keyword tests
+
+(deftest member-if.keywords.1
   (member-if #'identity '(1 2 3 4 5) :key #'evenp :key #'oddp)
   (2 3 4 5))
 
-(deftest member-if-7
+(deftest member-if.allow-other-keys.2
   (member-if #'identity '(nil 2 3 4 5) :allow-other-keys t :bad t)
   (2 3 4 5))
 
-(deftest member-if-8
+(deftest member-if.allow-other-keys.3
   (member-if #'identity '(nil 2 3 4 5) :bad t :allow-other-keys t)
   (2 3 4 5))
 
+(deftest member-if.allow-other-keys.4
+  (member-if #'identity '(nil 2 3 4 5) :allow-other-keys t)
+  (2 3 4 5))
+
+(deftest member-if.allow-other-keys.5
+  (member-if #'identity '(nil 2 3 4 5) :allow-other-keys nil)
+  (2 3 4 5))
+
+(deftest member-if.allow-other-keys.5
+  (member-if #'identity '(nil 2 3 4 5) :allow-other-keys t
+	     :allow-other-keys nil)
+  (2 3 4 5))
+
+(deftest member-if.allow-other-keys.6
+  (member-if #'identity '(nil 2 3 4 5) :allow-other-keys t
+	     :allow-other-keys nil :key #'identity :key #'null)
+  (2 3 4 5))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; member-if-not
@@ -92,17 +111,33 @@
   (member-if-not #'not '(1 2 3 4 5) :key #'evenp)
   (2 3 4 5))
 
-(deftest member-if-not-6
+;;; Keyword tests
+
+(deftest member-if-not.keywords.1
   (member-if-not #'not '(1 2 3 4 5) :key #'evenp :key #'oddp)
   (2 3 4 5))
 
-(deftest member-if-not-7
+(deftest member-if-not.allow-other-keys.2
   (member-if-not #'not '(nil 2 3 4 5) :allow-other-keys t :bad t)
   (2 3 4 5))
 
-(deftest member-if-not-8
+(deftest member-if-not.allow-other-keys.3
   (member-if-not #'not '(nil 2 3 4 5) :bad t :allow-other-keys t)
   (2 3 4 5))
+
+(deftest member-if-not.allow-other-keys.4
+  (member-if-not #'not '(nil 2 3 4 5) :allow-other-keys t)
+  (2 3 4 5))
+
+(deftest member-if-not.allow-other-keys.5
+  (member-if-not #'not '(nil 2 3 4 5) :allow-other-keys nil)
+  (2 3 4 5))
+
+(deftest member-if-not.allow-other-keys.6
+  (member-if-not #'not '(nil 2 3 4 5) :allow-other-keys t
+		 :allow-other-keys nil :key #'identity :key #'null)
+  (2 3 4 5))
+
 
 ;;; Error cases
 

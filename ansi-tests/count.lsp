@@ -486,7 +486,7 @@
 	 :start 2 :end 5)
   3)
 
-;;; Allow-other-keys tests
+;;; Keyword tests
 
 (deftest count.allow-other-keys.1
   (count 'a '(b a d a c) :bad t :allow-other-keys t)
@@ -504,7 +504,7 @@
 	 :bad t)
   2)
 
-(deftest count.allow-other-keys.4
+(deftest count.keywords.4
   (count 2 '(1 2 3 2 5) :key #'identity :key #'1+)
   2)
 

@@ -417,7 +417,7 @@
 	    (count-if #'digit-char-p s :start 1 :end 2)))
   3 3 2 2 1)
 
-;;; Allow-other-keys tests
+;;; Keyword tests
 
 (deftest count-if.allow-other-keys.1
   (count-if #'evenp '(1 2 3 4 5) :bad t :allow-other-keys t)
@@ -435,10 +435,13 @@
 	    :bad t)
   2)
 
-(deftest count-if.allow-other-keys.4
+(deftest count-if.keywords.4
   (count-if #'evenp '(1 2 3 4 5) :key #'identity :key #'1+)
   2)
 
+(deftest count-if.allow-other-keys.5
+  (count-if #'evenp '(1 2 3 4 5) :allow-other-keys nil)
+  2)
 
 	    
 ;;; Error tests

@@ -633,6 +633,48 @@
     result)
   #*01111)
 
+;;; Keyword tests
+
+(deftest nsubstitute-if-not.allow-other-keys.1
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3)
+		      :allow-other-keys t :bad t)
+  (a a 0 a a 0 a))
+
+(deftest nsubstitute-if-not.allow-other-keys.2
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3)
+		      :bad t :allow-other-keys t)
+  (a a 0 a a 0 a))
+
+(deftest nsubstitute-if-not.allow-other-keys.3
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3) :allow-other-keys t
+		  :allow-other-keys nil :bad t)
+  (a a 0 a a 0 a))
+
+(deftest nsubstitute-if-not.allow-other-keys.4
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3) :bad t
+		  :allow-other-keys t :allow-other-keys nil)
+  (a a 0 a a 0 a))
+
+(deftest nsubstitute-if-not.allow-other-keys.5
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3)
+		  :allow-other-keys t :key #'1-)
+  (1 a a a 1 a a))
+
+(deftest nsubstitute-if-not.keywords.6
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3)
+		      :key #'1- :key #'identity)
+  (1 a a a 1 a a))
+
+(deftest nsubstitute-if-not.allow-other-keys.7
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3) :allow-other-keys t
+		  :bad t :allow-other-keys nil)
+  (a a 0 a a 0 a))
+
+(deftest nsubstitute-if-not.allow-other-keys.8
+  (nsubstitute-if-not 'a #'zerop (list 1 2 0 3 1 0 3) :allow-other-keys nil)
+  (a a 0 a a 0 a))
+
+
 ;;; Error cases
 
 (deftest nsubstitute-if-not.error.1

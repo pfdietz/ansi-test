@@ -134,6 +134,44 @@
 	  collect pat))
   nil)
 
+;;; Keyword tests
+
+(deftest search.allow-other-keys.1
+  (search '(c d) '(a b c d c d e) :allow-other-keys t)
+  2)
+
+(deftest search.allow-other-keys.2
+  (search '(c d) '(a b c d c d e) :allow-other-keys nil)
+  2)
+
+(deftest search.allow-other-keys.3
+  (search '(c d) '(a b c d c d e) :bad t :allow-other-keys t)
+  2)
+
+(deftest search.allow-other-keys.4
+  (search '(c d) '(a b c d c d e) :allow-other-keys 'foo :bad nil)
+  2)
+
+(deftest search.allow-other-keys.5
+  (search '(c d) '(a b c d c d e) :bad1 1 :allow-other-keys t :bad2 2
+	  :allow-other-keys nil :bad3 3)
+  2)
+
+(deftest search.allow-other-keys.6
+  (search '(c d) '(a b c d c d e) :allow-other-keys 'foo
+	  :from-end t)
+  4)
+
+(deftest search.allow-other-keys.7
+  (search '(c d) '(a b c d c d e) :from-end t :allow-other-keys t)
+  4)
+
+(deftest search.keywords.8
+  (search '(c d) '(a b c d c d e) :start1 0 :start2 0 :start1 1
+	  :start2 6 :from-end t :from-end nil)
+  4)
+
+
 ;;; Error cases
 
 (deftest search.error.1

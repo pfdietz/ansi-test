@@ -371,3 +371,43 @@
 		       :element-type 'bit)))
     (reduce #'+ s :start 2 :end 4))
   2)
+
+;;; Keyword tests
+
+(deftest reduce.allow-other-keys.1
+  (reduce #'+ '(1 2 3) :allow-other-keys t)
+  6)
+
+(deftest reduce.allow-other-keys.2
+  (reduce #'+ '(1 2 3) :allow-other-keys nil)
+  6)
+
+(deftest reduce.allow-other-keys.3
+  (reduce #'+ '(1 2 3) :bad t :allow-other-keys t)
+  6)
+
+(deftest reduce.allow-other-keys.4
+  (reduce #'+ '(1 2 3) :allow-other-keys t :bad t)
+  6)
+
+(deftest reduce.allow-other-keys.5
+  (reduce #'+ '(1 2 3) :allow-other-keys t :allow-other-keys nil :bad t)
+  6)
+
+(deftest reduce.allow-other-keys.6
+  (reduce #'+ '(1 2 3) :allow-other-keys t :bad t :allow-other-keys nil)
+  6)
+
+(deftest reduce.allow-other-keys.7
+  (reduce #'+ '(1 2 3) :bad t :allow-other-keys t :allow-other-keys nil)
+  6)
+
+(deftest reduce.allow-other-keys.8
+  (reduce #'cons '(1 2 3) :allow-other-keys t :from-end t :bad t
+	  :initial-value nil)
+  (1 2 3))
+
+(deftest reduce.keywords.9
+  (reduce #'cons '(1 2 3) :from-end t :from-end nil
+	  :initial-value nil :initial-value 'a)
+  (1 2 3))

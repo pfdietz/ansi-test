@@ -477,6 +477,69 @@
     y)
   (1 3 6 1 4 1 3 7))
 
+;;; Keyword tests
+
+(deftest remove.allow-other-keys.1
+  (remove 'a '(a b c a d) :allow-other-keys t)
+  (b c d))
+
+(deftest remove.allow-other-keys.2
+  (remove 'a '(a b c a d) :allow-other-keys nil)
+  (b c d))
+
+(deftest remove.allow-other-keys.3
+  (remove 'a '(a b c a d) :bad t :allow-other-keys t)
+  (b c d))
+
+(deftest remove.allow-other-keys.4
+  (remove 'a '(a b c a d) :allow-other-keys t :bad t :bad nil)
+  (b c d))
+
+(deftest remove.allow-other-keys.5
+  (remove 'a '(a b c a d) :bad1 t :allow-other-keys t :bad2 t
+	  :allow-other-keys nil :bad3 t)
+  (b c d))
+
+(deftest remove.allow-other-keys.6
+  (remove 'a '(a b c a d) :allow-other-keys t :from-end t :count 1)
+  (a b c d))
+
+(deftest remove.keywords.7
+  (remove 'a '(a b c a d) :from-end t :count 1 :from-end nil :count 10)
+  (a b c d))
+
+
+(deftest delete.allow-other-keys.1
+  (delete 'a (copy-seq '(a b c a d)) :allow-other-keys t)
+  (b c d))
+
+(deftest delete.allow-other-keys.2
+  (delete 'a (copy-seq '(a b c a d)) :allow-other-keys nil)
+  (b c d))
+
+(deftest delete.allow-other-keys.3
+  (delete 'a (copy-seq '(a b c a d)) :bad t :allow-other-keys t)
+  (b c d))
+
+(deftest delete.allow-other-keys.4
+  (delete 'a (copy-seq '(a b c a d)) :allow-other-keys t :bad t :bad nil)
+  (b c d))
+
+(deftest delete.allow-other-keys.5
+  (delete 'a (copy-seq '(a b c a d)) :bad1 t :allow-other-keys t :bad2 t
+	  :allow-other-keys nil :bad3 t)
+  (b c d))
+
+(deftest delete.allow-other-keys.6
+  (delete 'a (copy-seq '(a b c a d)) :allow-other-keys t :from-end t :count 1)
+  (a b c d))
+
+(deftest delete.keywords.7
+  (delete 'a (copy-seq '(a b c a d))
+	  :from-end t :count 1 :from-end nil :count 10)
+  (a b c d))
+
+
 
 ;;; Error cases
 

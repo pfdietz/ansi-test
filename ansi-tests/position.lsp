@@ -638,6 +638,47 @@
 	    :from-end t)
   4)
 
+;;; Keyword tests
+
+(deftest position.allow-other-keys.1
+  (position 0 '(1 2 0 3 2 1) :allow-other-keys t)
+  2)
+
+(deftest position.allow-other-keys.2
+  (position 0 '(1 2 0 3 2 1) :allow-other-keys nil)
+  2)
+
+(deftest position.allow-other-keys.3
+  (position 0 '(1 2 0 3 2 1) :allow-other-keys t :bad t)
+  2)
+
+(deftest position.allow-other-keys.4
+  (position 0 '(1 2 0 3 2 1) :bad t :allow-other-keys t)
+  2)
+
+(deftest position.allow-other-keys.5
+  (position 0 '(1 2 0 3 2 1) :bad t :allow-other-keys t :key #'1-)
+  0)
+
+(deftest position.keywords.6
+  (position 0 '(1 2 0 3 2 1) :key #'1- :key #'identity)
+  0)
+
+(deftest position.allow-other-keys.7
+  (position 0 '(1 2 0 3 2 1) :bad t :allow-other-keys t
+	       :allow-other-keys nil)
+  2)
+
+(deftest position.allow-other-keys.8
+  (position 0 '(1 2 0 3 2 1) :allow-other-keys t :bad t
+	       :allow-other-keys nil)
+  2)
+
+(deftest position.allow-other-keys.9
+  (position 0 '(1 2 0 3 2 1) :allow-other-keys t
+	       :allow-other-keys nil :bad t)
+  2)
+
 ;;; Error tests
 
 (deftest position.error.1

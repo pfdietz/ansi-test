@@ -143,11 +143,29 @@
   (member 'z '(a b c d) :key nil)
   nil)
 
-(deftest member-20
+;;; Keyword tests
+
+(deftest member.allow-other-keys.1
   (member 'b '(a b c) :bad t :allow-other-keys t)
   (b c))
 
-(deftest member-21
+(deftest member.allow-other-keys.2
+  (member 'b '(a b c) :allow-other-keys t :bad t)
+  (b c))
+
+(deftest member.allow-other-keys.3
+  (member 'b '(a b c) :allow-other-keys t)
+  (b c))
+
+(deftest member.allow-other-keys.4
+  (member 'b '(a b c) :allow-other-keys nil)
+  (b c))
+
+(deftest member.allow-other-keys.5
+  (member 'b '(a b c) :allow-other-keys 17 :allow-other-keys nil '#:x t)
+  (b c))
+
+(deftest member.keywords.6
   (member 'b '(a b c) :test #'eq :test (complement #'eq))
   (b c))
 

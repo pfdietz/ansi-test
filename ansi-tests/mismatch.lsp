@@ -597,6 +597,40 @@
      (mismatch m a :from-end t)))
   (4 4 5 nil nil 6 5 6))
 
+;;; Keyword tests
+
+(deftest mismatch.allow-other-keys.1
+  (mismatch "1234" "1244" :allow-other-keys t :bad t)
+  2)
+
+(deftest mismatch.allow-other-keys.2
+  (mismatch "1234" "1244" :bad t :allow-other-keys t)
+  2)
+
+(deftest mismatch.allow-other-keys.3
+  (mismatch "1234" "1244" :bad t :allow-other-keys t :allow-other-keys nil)
+  2)
+
+(deftest mismatch.allow-other-keys.4
+  (mismatch "1234" "1244" :allow-other-keys t :bad t 
+	    :allow-other-keys nil)
+  2)
+
+(deftest mismatch.allow-other-keys.5
+  (mismatch "1234" "1244" :allow-other-keys t
+	    :allow-other-keys nil
+	    :bad t)
+  2)
+
+(deftest mismatch.keywords.6
+  (mismatch "1234" "1244" :test #'equal :test (complement #'equal))
+  2)
+
+(deftest mismatch.allow-other-keys.7
+  (mismatch "1234" "1244" :bad t :allow-other-keys t
+	    :test (complement #'equal))
+  0)
+
 ;;; Error cases
 
 (deftest mismatch.error.1

@@ -586,6 +586,41 @@
   t
   "aabcef")
 
+;;; Keyword tests
+
+(deftest replace.allow-other-keys.1
+  (replace (copy-seq "abcdefg") "xyz" :allow-other-keys t)
+  "xyzdefg")
+
+(deftest replace.allow-other-keys.2
+  (replace (copy-seq "abcdefg") "xyz" :allow-other-keys nil)
+  "xyzdefg")
+
+(deftest replace.allow-other-keys.3
+  (replace (copy-seq "abcdefg") "xyz" :allow-other-keys t :bad t)
+  "xyzdefg")
+
+(deftest replace.allow-other-keys.4
+  (replace (copy-seq "abcdefg") "xyz" :bad t :allow-other-keys t)
+  "xyzdefg")
+
+(deftest replace.allow-other-keys.5
+  (replace (copy-seq "abcdefg") "xyz" :bad1 t :allow-other-keys t
+	   :bad2 t :allow-other-keys nil :bad3 nil)
+  "xyzdefg")
+
+(deftest replace.allow-other-keys.6
+  (replace (copy-seq "abcdefg") "xyz" :allow-other-keys t :start1 1)
+  "axyzefg")
+
+(deftest replace.keywords.7
+  (replace (copy-seq "abcdefg") "xyz" :start1 0 :start2 0 :end1 3 :end2 3
+	   :start1 1 :start2 1 :end1 2 :end1 2)
+  "xyzdefg")
+
+
+
+
 ;;; Error cases
 
 (deftest replace.error.1

@@ -418,7 +418,7 @@
 		   (count-if-not #'%onep a :from-end t)))))
   2 3 2 3)
 
-;;; Allow-other-keys tests
+;;; Keyword tests
 
 (deftest count-if-not.keywords.1
   (count-if-not #'oddp '(1 2 3 4 5) :bad t :allow-other-keys t)

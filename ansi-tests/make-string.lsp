@@ -72,7 +72,41 @@
 	 ))
   t)
 
-;;; Error cases
+;;; Keyword tests
+;
+(deftest make-string.allow-other-keys.1
+  (make-string 5 :allow-other-keys t :initial-element #\a)
+  "aaaaa")
+
+(deftest make-string.allow-other-keys.2
+  (make-string 5 :initial-element #\a :allow-other-keys t)
+  "aaaaa")
+
+(deftest make-string.allow-other-keys.3
+  (make-string 5 :initial-element #\a :allow-other-keys t
+	       :bad t)
+  "aaaaa")
+
+(deftest make-string.allow-other-keys.4
+  (make-string 5 :bad t :allow-other-keys t :allow-other-keys nil
+	       :initial-element #\a)
+  "aaaaa")
+
+(deftest make-string.allow-other-keys.5
+  (make-string 5 :allow-other-keys t :bad t :allow-other-keys nil
+	       :initial-element #\a)
+  "aaaaa")
+
+(deftest make-string.allow-other-keys.6
+  (make-string 5 :allow-other-keys t :allow-other-keys nil :bad nil
+	       :initial-element #\a)
+  "aaaaa")
+
+(deftest make-string.keywords.7
+  (make-string 5 :initial-element #\a :initial-element #\b)
+  "aaaaa")
+
+;; Error cases
 
 (deftest make-string.error.1
   (classify-error (make-string))

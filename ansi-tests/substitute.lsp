@@ -966,6 +966,44 @@
     result)
   #*01111)
 
+;;; Keyword tests
+
+(deftest substitute.allow-other-keys.1
+  (substitute 'a 0 (list 1 2 0 3 1 0 3) :allow-other-keys t :bad t)
+  (1 2 a 3 1 a 3))
+
+(deftest substitute.allow-other-keys.2
+  (substitute 'a 0 (list 1 2 0 3 1 0 3) :bad t :allow-other-keys t)
+  (1 2 a 3 1 a 3))
+
+(deftest substitute.allow-other-keys.3
+  (substitute 'a 0 (list 1 2 0 3 1 0 3) :allow-other-keys t
+		  :allow-other-keys nil :bad t)
+  (1 2 a 3 1 a 3))
+
+(deftest substitute.allow-other-keys.4
+  (substitute 'a 0 (list 1 2 0 3 1 0 3) :bad t
+		  :allow-other-keys t :allow-other-keys nil)
+  (1 2 a 3 1 a 3))
+
+(deftest substitute.allow-other-keys.5
+  (substitute 'a 0 (list 1 2 0 3 1 0 3)
+		  :allow-other-keys t :key #'1-)
+  (a 2 0 3 a 0 3))
+
+(deftest substitute.keywords.6
+  (substitute 'a 0 (list 1 2 0 3 1 0 3) :key #'1- :key #'identity)
+  (a 2 0 3 a 0 3))
+
+(deftest substitute.allow-other-keys.7
+  (substitute 'a 0 (list 1 2 0 3 1 0 3) :allow-other-keys t
+		  :bad t :allow-other-keys nil)
+  (1 2 a 3 1 a 3))
+
+(deftest substitute.allow-other-keys.8
+  (substitute 'a 0 (list 1 2 0 3 1 0 3) :allow-other-keys nil)
+  (1 2 a 3 1 a 3))
+
 ;;; Error cases
 
 (deftest substitute.error.1
