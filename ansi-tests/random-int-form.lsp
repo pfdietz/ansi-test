@@ -55,7 +55,7 @@
      (when x
        (setq $x (append $x x))
        (setq x (prune-results x))
-       (terpri) (print x)
+       (terpri) (print x) (finish-output *standard-output*)
        (setq $y (append $y x)))
      (terpri))))
 
@@ -94,7 +94,7 @@
   
   (loop for i from 1 to n
 	do (when (= (mod i 100) 0)
-	     #+sbcl (sb-ext::gc)
+	     #+sbcl (sb-ext::gc :full t)
 	     (prin1 i) (princ " ") (finish-output *standard-output*))
 	nconc (let ((result (test-random-integer-form size nvars)))
 		(when result
@@ -177,24 +177,27 @@
   
   (if (<= size 1)
       ;; Leaf node -- generate a variable, constant, or flet function call
-      (rcase
-       (10 (make-random-integer))
-       (9 (if *vars* (var-desc-name (random-from-seq  *vars*))
-	    (make-random-integer-form size)))
-       (1 (if *flet-names*
-	      (let* ((flet-entry (random-from-seq *flet-names*))
-		     (flet-name (car flet-entry))
-		     (flet-minargs (cadr flet-entry))
-		     (flet-maxargs (caddr flet-entry))
-		     (nargs (random-from-interval (1+ flet-maxargs) flet-minargs))
-		     (args (loop repeat nargs
-				 collect (make-random-integer-form 1))))
-		`(,flet-name ,@args))
-	    (make-random-integer-form size))))
+      (loop
+       when
+       (rcase
+	(10 (make-random-integer))
+	(9 (if *vars* (var-desc-name (random-from-seq  *vars*))
+	     nil))
+	(2 (if *flet-names*
+	       (let* ((flet-entry (random-from-seq *flet-names*))
+		      (flet-name (car flet-entry))
+		      (flet-minargs (cadr flet-entry))
+		      (flet-maxargs (caddr flet-entry))
+		      (nargs (random-from-interval (1+ flet-maxargs) flet-minargs))
+		      (args (loop repeat nargs
+				  collect (make-random-integer-form 1))))
+		 `(,flet-name ,@args))
+	     nil)))
+       return it)
     ;; (> size 1)
     (rcase
      ;; flet call
-     (5
+     (30 ;; 5
       (if *flet-names*
 	  (let* ((flet-entry (random-from-seq *flet-names*))
 		 (flet-name (car flet-entry))
@@ -208,7 +211,12 @@
 		     (args (mapcar #'make-random-integer-form arg-sizes)))
 		(rcase
 		 (1 `(,flet-name ,@args))
-		 (1 `(multiple-value-call #',flet-name (values ,@args))))))
+		 (1 `(multiple-value-call #',flet-name (values ,@args)))
+		 (1 `(funcall (function ,flet-name) ,@args))
+		 (1 (let ((r (random (1+ (length args)))))
+		      `(apply (function ,flet-name)
+			      ,@(subseq args 0 r)
+			      (list ,@(subseq args r))))))))
 	     (t (make-random-integer-form size))))
 	(make-random-integer-form size)))
 
@@ -367,7 +375,8 @@
 	;; No blocks -- try again
 	(make-random-integer-form size)))
 
-     (10 (make-random-flet-form size))
+     (50 ;; 10
+      (make-random-flet-form size))
 		
      )))
 
@@ -616,6 +625,7 @@
 		     (error #'(lambda (c)
 				(format t "Compilation failure~%")
 				(print form)
+				(finish-output *standard-output*)
 				(return-from test-int-form
 				  (list (list :vars vars
 					      :form form
@@ -655,6 +665,7 @@
 	  (flet ((%eval-error
 		  (kind)
 		  (print form)
+		  (finish-output *standard-output*)
 		  (return
 		   (list (list :vars vars
 			       :vals vals
@@ -689,17 +700,24 @@
 
 ;;; Interface to the form pruner
 
-(defun prune-int-form (form vars var-types vals-list)
-  "Conduct tests on selected simplified versions of FORM.  Return the
+(declaim (special *prune-table*))
+
+(defun prune-int-form (input-form vars var-types vals-list)
+  "Conduct tests on selected simplified versions of INPUT-FORM.  Return the
    minimal form that still causes some kind of failure."
-  (flet ((%try-fn (new-form)
-		  (when (test-int-form new-form vars var-types vals-list)
-		    (setf form new-form)
-		    (throw 'success nil))))
-    (loop
-     (catch 'success
-       (prune form #'%try-fn)
-       (return form)))))
+  (loop do
+	(let ((form input-form))
+	  (flet ((%try-fn (new-form)
+			  (when (test-int-form new-form vars var-types vals-list)
+			    (setf form new-form)
+			    (throw 'success nil))))
+	    (let ((*prune-table* (make-hash-table :test #'eq)))
+	      (loop
+	       (catch 'success
+		 (prune form #'%try-fn)
+		 (return form)))))
+	  (when (equal form input-form) (return form))
+	  (setq input-form form))))
 
 (defun prune-results (result-list)
   "Given a list of test results, prune their forms down to a minimal set."
@@ -731,6 +749,8 @@
 ;;;
 (defun prune (form try-fn)
   (declare (type function try-fn))
+  (when (gethash form *prune-table*)
+    (return-from prune nil))
   (flet ((try (x) (funcall try-fn x)))
     (when (consp form)
       (let* ((op (car form))
@@ -748,7 +768,7 @@
 	 
 	 ((abs 1+ 1- identity values progn prog1 multiple-value-prog1 unwind-protect
 	       ignore-errors cl:handler-case restart-case locally)
-	  (mapc #'try args)
+	  (mapc try-fn args)
 	  (prune-fn form try-fn))
 
 	 ((typep)
@@ -773,19 +793,19 @@
 	 ((the macrolet cl:handler-bind)
 	  (assert (= (length args) 2))
 	  (try (second args))
-	  (prune (second args) #'try))
+	  (prune (second args) try-fn))
 	 
 	 ((not eq eql equal)
 	  (when (every #'constantp args)
 	    (try (eval form)))
-	  (mapc #'try args)
+	  (mapc try-fn args)
 	  (prune-fn form try-fn))
 	 
 	 ((- + * min max logand logior logxor logeqv
 	     and or = < > <= >= /=)
 	  (when (every #'constantp args)
 	    (try (eval form)))
-	  (mapc #'try args)
+	  (mapc try-fn args)
 	  (prune-nary-fn form try-fn)
 	  (prune-fn form try-fn))
 
@@ -796,7 +816,7 @@
 	      (when (and (consp arg1) (consp arg2)
 			 (eql (first arg1) 'function)
 			 (eql (first arg2) 'values))
-		(mapc #'try (rest arg2))
+		(mapc try-fn (rest arg2))
 		(let ((fn (second arg1)))
 		  (when (symbolp fn)
 		    (try `(,fn ,@(rest arg2)))))
@@ -806,8 +826,8 @@
 			    #'(lambda (args)
 				(try `(multiple-value-call ,arg1 (values ,@args)))))
 		)))
-	  (mapc #'try (rest args)))
-	 
+	  (mapc try-fn (rest args)))
+
 	 ((if)
 	  (let (;; (pred (first args))
 		(then (second args))
@@ -956,10 +976,45 @@
 			   (try
 			    `(,op ,form1 (,(first form2) ,(second form2)
 					  ,form)))))))))
+
+	 ((funcall)
+	  (let ((fn (second form))
+		(fn-args (cddr form)))
+	    (mapc try-fn fn-args)
+	    (when (and (consp fn)
+		       (eql (car fn) 'function)
+		       (symbolp (cadr fn)))
+	      (try `(,(cadr fn) ,@fn-args)))
+	    (prune-list fn-args
+			#'prune
+			#'(lambda (args)
+			    (funcall try-fn `(funcall ,fn ,@args))))))
+
+	 ((apply)
+	  (let ((fn (second form))
+		(fn-args (butlast (cddr form)))
+		(list-arg (car (last form))))
+	    (mapc try-fn fn-args)
+	    (when (and (consp list-arg)
+		       (eq (car list-arg) 'list))
+	      (mapc try-fn (cdr list-arg)))
+	    (prune-list fn-args
+			#'prune
+			#'(lambda (args)
+			    (funcall try-fn `(apply ,fn ,@args ,list-arg))))
+	    (when (and (consp list-arg)
+		       (eq (car list-arg) 'list))
+	      (prune-list (cdr list-arg)
+			#'prune
+			#'(lambda (args)
+			    (funcall try-fn `(apply ,fn ,@fn-args
+						    (list ,@args))))))))
 	 
 	 (otherwise
 	  (prune-fn form try-fn))
-	 )))))
+	 ))))
+  (setf (gethash form *prune-table*) t)
+  nil)
 
 (defun find-in-tree (value tree)
   "Return true if VALUE is eql to a node in TREE."
@@ -1076,6 +1131,7 @@
 		 (not (rest body)))
 	(let ((binding (first binding-list)))
 	  (unless (or (consp (second binding))
+		      (has-binding-to-var (first binding) body)
 		      (has-assignment-to-var (first binding) body))
 	    (funcall try-fn `(let ()
 			       ,@(subst (second binding)
@@ -1086,11 +1142,30 @@
 			  `(,@(butlast form) ,form2)))))))
 
 (defun has-assignment-to-var (var form)
-  (when (consp form)
-    (or (and (member (car form) '(setq setf))
-	     (eq (cadr form) var))
-	(loop for subform in form
-	      thereis (has-assignment-to-var var subform)))))       
+  (find-if-subtree
+   #'(lambda (form)
+       (and (consp form)
+	    (member (car form) '(setq setf) :test #'eq)
+	    (eq (cadr form) var)))
+   form))
+
+(defun has-binding-to-var (var form)
+  (find-if-subtree
+   #'(lambda (form)
+       (and (consp form)
+	    (member (car form) '(let let*) :test #'eq)
+	    (loop for binding in (cadr form)
+		  thereis (eq (car binding) var))))
+   form))
+
+(defun find-if-subtree (pred tree)
+  (declare (type function pred))
+  (cond
+   ((funcall pred tree) tree)
+   ((consp tree)
+    (or (find-if-subtree pred (car tree))
+	(find-if-subtree pred (cdr tree))))
+   (t nil)))
 
 (defun prune-flet (form try-fn)
   "Attempt to simplify a FLET form."
