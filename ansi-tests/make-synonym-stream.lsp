@@ -26,6 +26,8 @@
   #\a #\b #\c #\d #\e)
 
 
+;;; This test was wrong (section 21.1.4)
+#|
 (deftest make-synonym-stream.2
    (let ((ss (make-synonym-stream '*s*)))
      (with-input-from-string
@@ -40,6 +42,7 @@
       (assert (stream-element-type ss))
       (read-char ss)))
    #\z)
+|#
 
 (deftest make-synonym-stream.3
   (with-output-to-string
