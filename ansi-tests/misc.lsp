@@ -8630,3 +8630,12 @@ Broken at C::WT-MAKE-CLOSURE.
    (compile nil '(lambda (a b) (min 0 (reduce #'min (vector a b 0)) 0)))
    -10 -1)
   -10)
+
+;;; gcl 28 Nov 2004
+;;; Incorrect return value
+
+(deftest misc.451
+  (funcall (compile nil '(lambda (a b) (flet ((%f3 () (setq a -2210)))
+					 (logxor a b (%f3)))))
+	   -22650 20595)
+  171)
