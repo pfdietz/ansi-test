@@ -131,3 +131,33 @@
 (deftest make-string.error.6
   (classify-error (make-string 10 :element-type))
   program-error)
+
+;;; Order of evaluation
+
+(deftest make-string.order.1
+  (let ((i 0) a b)
+    (values
+     (make-string (progn (setf a (incf i)) 4)
+		  :initial-element (progn (setf b (incf i)) #\a))
+     i a b))
+  "aaaa" 2 1 2)
+
+(deftest make-string.order.2
+  (let ((i 0) a b c)
+    (values
+     (make-string (progn (setf a (incf i)) 4)
+		  :initial-element (progn (setf b (incf i)) #\a)
+		  :element-type (progn (setf c (incf i)) 'base-char))
+     i a b c))
+  "aaaa" 3 1 2 3)
+
+(deftest make-string.order.3
+  (let ((i 0) a b c)
+    (values
+     (make-string (progn (setf a (incf i)) 4)
+		  :element-type (progn (setf b (incf i)) 'base-char)
+		  :initial-element (progn (setf c (incf i)) #\a))
+     i a b c))
+  "aaaa" 3 1 2 3)
+
+

@@ -51,6 +51,22 @@
     (funcall #'foo))
   )
 
+(deftest funcall.order.1
+  (let ((i 0) a b)
+    (values
+     (funcall (progn (setf a (incf i)) #'car)
+	      (progn (setf b (incf i)) '(x . y)))
+     i a b))
+  x 2 1 2)
+
+(deftest funcall.order.2
+  (let ((i 0) a b c)
+    (values
+     (funcall (progn (setf a (incf i)) #'cons)
+	      (progn (setf b (incf i)) 'x)
+	      (progn (setf c (incf i)) 'y))
+     i a b c))
+  (x . y) 3 1 2 3)
 
 
 ;;; FUNCALL should throw an UNDEFINED-FUNCTION condition when

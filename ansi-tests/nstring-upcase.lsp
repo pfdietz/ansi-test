@@ -66,6 +66,26 @@
    ("abcde" "abcDe" "abcDE")
    ("abcde" "abcdE")))
 
+(deftest nstring-upcase.order.1
+  (let ((i 0) a b c (s (copy-seq "abcdef")))
+    (values
+     (nstring-upcase
+      (progn (setf a (incf i)) s)
+      :start (progn (setf b (incf i)) 1)
+      :end   (progn (setf c (incf i)) 4))
+     i a b c))
+  "aBCDef" 3 1 2 3)
+
+(deftest nstring-upcase.order.2
+  (let ((i 0) a b c (s (copy-seq "abcdef")))
+    (values
+     (nstring-upcase
+      (progn (setf a (incf i)) s)
+      :end   (progn (setf b (incf i)) 4)
+      :start (progn (setf c (incf i)) 1))
+     i a b c))
+  "aBCDef" 3 1 2 3)
+
   
 ;;; Error cases
 

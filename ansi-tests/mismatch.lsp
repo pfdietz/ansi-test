@@ -631,6 +631,47 @@
 	    :test (complement #'equal))
   0)
 
+;;; Order of evaluation
+
+(deftest mismatch.order.1
+  (let ((i 0) a b)
+    (values
+     (mismatch (progn (setf a (incf i)) "abcd")
+	       (progn (setf b (incf i)) "abzd"))
+     i a b))
+  2 2 1 2)
+
+(deftest mismatch.order.2
+  (let ((i 0) a b c d e f g h j)
+    (values
+     (mismatch (progn (setf a (incf i)) "abcdef")
+	       (progn (setf b (incf i)) "abcdef")
+	       :key (progn (setf c (incf i)) #'identity)
+	       :test (progn (setf d (incf i)) #'equal)
+	       :start1 (progn (setf e (incf i)) 1)
+	       :start2 (progn (setf f (incf i)) 1)
+	       :end1 (progn (setf g (incf i)) 4)
+	       :end2 (progn (setf h (incf i)) 4)
+	       :from-end (setf j (incf i)))
+     i a b c d e f g h j))
+  nil 9 1 2 3 4 5 6 7 8 9)
+
+(deftest mismatch.order.3
+  (let ((i 0) a b c d e f g h j)
+    (values
+     (mismatch (progn (setf a (incf i)) "abcdef")
+	       (progn (setf b (incf i)) "abcdef")
+	       :from-end (setf c (incf i))
+	       :end2 (progn (setf d (incf i)) 4)
+	       :end1 (progn (setf e (incf i)) 4)
+	       :start2 (progn (setf f (incf i)) 1)
+	       :start1 (progn (setf g (incf i)) 1)
+	       :test (progn (setf h (incf i)) #'equal)
+	       :key (progn (setf j (incf i)) #'identity))
+     i a b c d e f g h j))
+  nil 9 1 2 3 4 5 6 7 8 9)
+
+
 ;;; Error cases
 
 (deftest mismatch.error.1

@@ -556,3 +556,40 @@
 (deftest find-if-not.error.11
   (classify-error (locally (find-if-not #'null 'b) t))
   type-error)
+
+;;; Order of evaluation tests
+
+(deftest find-if-not.order.1
+  (let ((i 0) x y)
+    (values
+     (find-if-not (progn (setf x (incf i)) #'null)
+		  (progn (setf y (incf i)) '(nil nil nil a nil nil)))
+     i x y))
+  a 2 1 2)
+
+(deftest find-if-not.order.2
+  (let ((i 0) a b c d e f g)
+    (values
+     (find-if-not (progn (setf a (incf i)) #'identity)
+		  (progn (setf b (incf i)) '(nil nil nil a nil nil))
+		  :start (progn (setf c (incf i)) 1)
+		  :end   (progn (setf d (incf i)) 4)
+		  :from-end (setf e (incf i))
+		  :key   (progn (setf f (incf i)) #'null)
+		  )
+     i a b c d e f))
+  a 6 1 2 3 4 5 6)
+
+
+(deftest find-if-not.order.3
+  (let ((i 0) a b c d e f g)
+    (values
+     (find-if-not (progn (setf a (incf i)) #'identity)
+		  (progn (setf b (incf i)) '(nil nil nil a nil nil))
+		  :key   (progn (setf c (incf i)) #'null)
+		  :from-end (setf d (incf i))
+		  :end   (progn (setf e (incf i)) 4)
+		  :start (progn (setf f (incf i)) 1)
+		  )
+     i a b c d e f))
+  a 6 1 2 3 4 5 6)

@@ -79,6 +79,14 @@
   (notevery 'null '(nil nil nil nil))
   nil)
 
+(deftest notevery.order.1
+  (let ((i 0) a b)
+    (values
+     (notevery (progn (setf a (incf i)) #'identity)
+	       (progn (setf b (incf i)) '(a b c d)))
+     i a b))
+  nil 2 1 2)
+
 ;;; Error cases
 
 (deftest notevery.error.1

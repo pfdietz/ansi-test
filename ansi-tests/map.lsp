@@ -231,3 +231,15 @@
 			:fill-pointer 8)))
     (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
+
+;;; Order of evaluation tests
+
+(deftest map.order.1
+  (let ((i 0) a b c d)
+    (values
+     (map (progn (setf a (incf i)) 'list)
+	  (progn (setf b (incf i)) #'list)
+	  (progn (setf c (incf i)) '(a b c))
+	  (progn (setf d (incf i)) '(b c d)))
+     i a b c d))
+  ((a b)(b c)(c d)) 4 1 2 3 4)

@@ -642,3 +642,29 @@
 (deftest make-array.error.6
   (classify-error (make-array '(10) 1 2))
   program-error)
+
+;;; Order of evaluation tests
+
+(deftest make-array.order.1
+  (let ((i 0) a b c d e)
+    (values
+     (make-array (progn (setf a (incf i)) 5)
+		 :initial-element (progn (setf b (incf i)) 'a)
+		 :fill-pointer (progn (setf c (incf i)) nil)
+		 :displaced-to (progn (setf d (incf i)) nil)
+		 :element-type (progn (setf e (incf i)) t)
+		 )
+     i a b c d e))
+  #(a a a a a) 5 1 2 3 4 5)
+
+(deftest make-array.order.2
+  (let ((i 0) a b c d e)
+    (values
+     (make-array (progn (setf a (incf i)) 5)
+		 :element-type (progn (setf b (incf i)) t)
+		 :displaced-to (progn (setf c (incf i)) nil)
+		 :fill-pointer (progn (setf d (incf i)) nil)
+		 :initial-element (progn (setf e (incf i)) 'a)
+		 )
+     i a b c d e))
+  #(a a a a a) 5 1 2 3 4 5)

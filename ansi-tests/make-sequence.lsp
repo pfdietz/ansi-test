@@ -249,3 +249,25 @@
 (deftest make-sequence.error.14
   (classify-error (locally (make-sequence 'symbol 10) t))
   type-error)
+
+;;; Order of execution tests
+
+(deftest make-sequence.order.1
+  (let ((i 0) a b c)
+    (values
+     (make-sequence (progn (setf a (incf i)) 'list)
+		    (progn (setf b (incf i)) 5)
+		    :initial-element (progn (setf c (incf i)) 'a))
+     i a b c))
+  (a a a a a) 3 1 2 3)
+
+(deftest make-sequence.order.2
+  (let ((i 0) a b c d e)
+    (values
+     (make-sequence (progn (setf a (incf i)) 'list)
+		    (progn (setf b (incf i)) 5)
+		    :allow-other-keys (setf c (incf i))
+		    :initial-element (progn (setf d (incf i)) 'a)
+		    :foo (setf e (incf i)))
+     i a b c d e))
+  (a a a a a) 5 1 2 3 4 5)

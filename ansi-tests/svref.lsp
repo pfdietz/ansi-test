@@ -28,3 +28,11 @@
 (deftest svref.error.2
   (classify-error (svref (vector 1)))
   program-error)
+
+(deftest svref.error.3
+  (classify-error (svref (vector 1) 0 0))
+  program-error)
+
+(deftest svref.error.4
+  (classify-error (svref (vector 1) 0 nil))
+  program-error)

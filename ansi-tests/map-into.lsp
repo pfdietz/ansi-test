@@ -370,3 +370,24 @@
 (deftest map-into.error.6
   (classify-error (locally (map-into 'a #'(lambda () nil)) t))
   type-error)
+
+;;; Order of evaluation tests
+
+(deftest map-into.order.1
+  (let ((i 0) a b c)
+    (values
+     (map-into (progn (setf a (incf i)) (list 1 2 3 4))
+	       (progn (setf b (incf i)) #'identity)
+	       (progn (setf c (incf i)) '(a b c d)))
+     i a b c))
+  (a b c d) 3 1 2 3)
+
+(deftest map-into.order.2
+  (let ((i 0) a b c d)
+    (values
+     (map-into (progn (setf a (incf i)) (list 1 2 3 4))
+	       (progn (setf b (incf i)) #'list)
+	       (progn (setf c (incf i)) '(a b c d))
+	       (progn (setf d (incf i)) '(e f g h)))
+     i a b c d))
+  ((a e) (b f) (c g) (d h)) 4 1 2 3 4)

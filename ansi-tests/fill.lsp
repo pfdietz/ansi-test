@@ -477,3 +477,46 @@
   (a a a a a))
 
 
+;;; Tests of evaluation order
+
+(deftest fill.order.1
+  (let ((i 0) x y (a (copy-seq #(a a a a))))
+    (values
+     (fill (progn (setf x (incf i)) a)
+	   (progn (setf y (incf i)) 'z))
+     i x y))
+  #(z z z z) 2 1 2)
+
+(deftest fill.order.2
+  (let ((i 0) x y z w (a (copy-seq #(a a a a))))
+    (values
+     (fill (progn (setf x (incf i)) a)
+	   (progn (setf y (incf i)) 'z)
+	   :start (progn (setf z (incf i)) 1)
+	   :end   (progn (setf w (incf i)) 3))
+     i x y z w))
+  #(a z z a) 4 1 2 3 4)
+
+(deftest fill.order.3
+  (let ((i 0) x y z w (a (copy-seq #(a a a a))))
+    (values
+     (fill (progn (setf x (incf i)) a)
+	   (progn (setf y (incf i)) 'z)
+	   :end   (progn (setf z (incf i)) 3)
+	   :start (progn (setf w (incf i)) 1))
+     i x y z w))
+  #(a z z a) 4 1 2 3 4)
+
+(deftest fill.order.4
+  (let ((i 0) x y z p q r s w (a (copy-seq #(a a a a))))
+    (values
+     (fill (progn (setf x (incf i)) a)
+	   (progn (setf y (incf i)) 'z)
+	   :end   (progn (setf z (incf i)) 3)
+	   :end   (progn (setf p (incf i)) 1)
+	   :end   (progn (setf q (incf i)) 1)
+	   :end   (progn (setf r (incf i)) 1)
+	   :start (progn (setf s (incf i)) 1)
+	   :start (progn (setf w (incf i)) 0))
+     i x y z p q r s w))
+  #(a z z a) 8 1 2 3 4 5 6 7 8)

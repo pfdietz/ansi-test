@@ -630,6 +630,41 @@
     result)
   #*01111)
 
+(deftest nsubstitute-if.order.1
+  (let ((i 0) a b c d e f g h)
+    (values
+     (nsubstitute-if
+      (progn (setf a (incf i)) 'a)
+      (progn (setf b (incf i)) #'null)
+      (progn (setf c (incf i)) (list nil 1 2 nil 3 4 nil 5))
+      :count (progn (setf d (incf i)) 2)
+      :start (progn (setf e (incf i)) 0)
+      :end (progn (setf f (incf i)) 7)
+      :key (progn (setf g (incf i)) #'identity)
+      :from-end (setf h (incf i))
+      )
+     i a b c d e f g h))
+  (nil 1 2 a 3 4 a 5)
+  8 1 2 3 4 5 6 7 8)
+
+(deftest nsubstitute-if.order.2
+  (let ((i 0) a b c d e f g h)
+    (values
+     (nsubstitute-if
+      (progn (setf a (incf i)) 'a)
+      (progn (setf b (incf i)) #'null)
+      (progn (setf c (incf i)) (list nil 1 2 nil 3 4 nil 5))
+      :from-end (setf h (incf i))
+      :key (progn (setf g (incf i)) #'identity)
+      :end (progn (setf f (incf i)) 7)
+      :start (progn (setf e (incf i)) 0)
+      :count (progn (setf d (incf i)) 2)
+      )
+     i a b c d e f g h))
+  (nil 1 2 a 3 4 a 5)
+  8 1 2 3 8 7 6 5 4)
+
+
 ;;; Keyword tests
 
 (deftest nsubstitute-if.allow-other-keys.1

@@ -79,6 +79,14 @@
   (notany 'null '(1 2 3 nil 5))
   nil)
 
+(deftest notany.order.1
+  (let ((i 0) a b)
+    (values
+     (not (notany (progn (setf a (incf i)) 'null)
+		  (progn (setf b (incf i)) '(a b c))))
+     i a b))
+  nil 2 1 2)
+
 ;;; Error cases
 
 (deftest notany.error.1

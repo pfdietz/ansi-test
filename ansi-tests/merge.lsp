@@ -482,6 +482,18 @@
 (deftest merge-bit-vector-length.1
   (merge '(bit-vector  6) (list 0 1 1) (list 0 0 1) #'<)
   #*000111)
+
+;;; Order of evaluation
+
+(deftest merge.order.1
+  (let ((i 0) a b c d)
+    (values
+     (merge (progn (setf a (incf i)) 'list)
+	    (progn (setf b (incf i)) (list 2 5 6))
+	    (progn (setf c (incf i)) (list 1 3 4))
+	    (progn (setf d (incf i)) #'<))
+     i a b c d))
+  (1 2 3 4 5 6) 4 1 2 3 4)
   
 ;;; Tests of error situations
 
