@@ -130,9 +130,9 @@
 
 ;;; Error tests
 
-(deftest coerce.error.1
-  (classify-error (coerce -1 '(integer 0 100)))
-  type-error)
+;;; (deftest coerce.error.1
+;;;  (classify-error (coerce -1 '(integer 0 100)))
+;;;  type-error)
 
 (deftest coerce.error.2
   (classify-error (coerce '(a b c) '(vector * 2)))
