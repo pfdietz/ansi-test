@@ -1,5 +1,7 @@
-
 ;;; Load individual test files
+
+;;; Tests of symbols
+(load "cl-symbols.lsp")
 
 ;;; Tests of conses
 
