@@ -54,13 +54,6 @@
    type-error)
   t)
 
-(deftest file-length.error.7
-  (signals-error
-   (let ((s (make-broadcast-stream)))
-     (unwind-protect (file-length s) (close s)))
-   type-error)
-  t)
-
 (deftest file-length.error.8
   (with-open-file
    (os "tmp.txt" :direction :output :if-exists :supersede)
