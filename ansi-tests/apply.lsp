@@ -43,12 +43,15 @@
   (apply 'cons '(a b))
   (a . b))
 
-(deftest apply.6
-  (let ((x 0) y z)
+(deftest apply.order.1
+  (let ((i 0) x y z)
     (values
-     (apply (progn (setf y (incf x))
-		   #'identity)
-	    (progn (setf z (incf x))
+     (apply (progn (setf x (incf i))
+		   #'list)
+	    (progn (setf y (incf i))
+		   'b)
+	    (progn (setf z (incf i))
 		   (list 'a)))
-     x y z))
-  a 2 1 2)
+     i x y z))
+  (b a) 3 1 2 3)
+

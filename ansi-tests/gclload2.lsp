@@ -109,6 +109,7 @@
 (load "cell-error-name.lsp")
 (load "assert.lsp")
 (load "error.lsp")
+(load "cerror.lsp")
 
 ;;; Tests of conses
 

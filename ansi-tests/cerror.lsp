@@ -1,13 +1,14 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
-;;;; Created:  Tue Jan 28 21:37:43 2003
-;;;; Contains: Tests of ERROR
+;;;; Created:  Sat Feb 15 19:45:27 2003
+;;;; Contains: Tests of CERROR
+
 
 (in-package :cl-test)
 
-(deftest error.1
-  (let ((fmt "Error"))
-    (handler-case (error fmt)
+(deftest cerror.1
+  (let ((fmt "Cerror"))
+    (handler-case (cerror "Keep going." fmt)
 		  (simple-error (c)
 				(and
 				 (null (simple-condition-format-arguments c))
@@ -15,27 +16,27 @@
 				      fmt)))))
   t)
 
-(deftest error.2
-  (let* ((fmt "Error")
+(deftest cerror.2
+  (let* ((fmt "Cerror")
 	 (cnd (make-condition 'simple-error :format-control fmt)))
-    (handler-case (error cnd)
+    (handler-case (cerror "Continue on." cnd)
 		  (simple-error (c)
 				(and (eqt c cnd)
 				     (eqt (simple-condition-format-control c)
 					  fmt)))))
   t)
 
-(deftest error.3
-  (let ((fmt "Error"))
-    (handler-case (error 'simple-error :format-control fmt)
+(deftest cerror.3
+  (let ((fmt "Cerror"))
+    (handler-case (cerror "Continue" 'simple-error :format-control fmt)
 		  (simple-error (c)
 				(eqt (simple-condition-format-control c)
 				     fmt))))
   t)
 
-(deftest error.4
-  (let ((fmt "Error: ~A"))
-    (handler-case (error fmt 10)
+(deftest cerror.4
+  (let ((fmt "Cerror: ~A"))
+    (handler-case (cerror "On on" fmt 10)
 		  (simple-error (c)
 				(and
 				 (equalt
@@ -45,9 +46,9 @@
 				      fmt)))))
   t)
 
-(deftest error.5
-  (let ((fmt (formatter "Error")))
-    (handler-case (error fmt)
+(deftest cerror.5
+  (let ((fmt (formatter "Cerror")))
+    (handler-case (cerror "Keep going." fmt)
 		  (simple-error (c)
 				(and
 				 (null (simple-condition-format-arguments c))
@@ -55,4 +56,11 @@
 				      fmt)))))
   t)
 
+;;; Continuing from a cerror
 
+(deftest cerror.6
+  (handler-bind ((simple-error #'(lambda (c) (continue c))))
+		(progn
+		  (cerror "Wooo" 'simple-error)
+		  10))
+  10)
