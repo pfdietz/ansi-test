@@ -100,6 +100,27 @@
 		  (otherwise :bad)))
   (:good :good :good :good))
 
+;;; A randomized test
+
+(deftest typecase.19
+  (let* ((u (coerce *universe* 'vector))
+	 (len1 (length u))
+	 (types (coerce *cl-all-type-symbols* 'vector))
+	 (len2 (length types)))
+    (loop
+     for n = (random 10)
+     for my-types = (loop repeat n collect (elt types (random len2)))
+     for val = (elt u (random len1))
+     for i = (position val my-types :test #'typep)
+     for form = `(typecase ',val
+		   ,@(loop for i from 0 for type in my-types collect `(,type ,i))
+		   (otherwise nil))
+     for j = (eval form)
+     repeat 1000
+     unless (eql i j)
+     collect (list n my-types val i form j)))
+  nil)
+
 ;;; Error cases
 
 (deftest typecase.error.1
