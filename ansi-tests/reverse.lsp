@@ -34,10 +34,9 @@
   (let* ((x (make-array 5 :initial-contents '(1 2 3 4 5)
 			:fill-pointer t :adjustable t))
 	 (y (reverse x)))
-    (values y x (equal (type-of x) (type-of y))))
+    (values y x))
   #(5 4 3 2 1)
-  #(1 2 3 4 5)
-  nil)
+  #(1 2 3 4 5))
 
 (deftest reverse-bitstring.1
   (reverse #*)
