@@ -160,6 +160,20 @@
    (error () :expected-error))
   :expected-error)
 
+;; test of class name as second argument
+(deftest change-class.1.12
+  (let ((obj (make-instance 'change-class-class-01a :b 1))
+	(new-class (find-class 'change-class-class-01b)))
+    (values
+     (eqt obj (change-class obj 'change-class-class-01b :c2 3))
+     (typep* obj 'change-class-class-01a)
+     (typep* obj 'change-class-class-01b)
+     (slot-exists-p obj 'a)
+     (map-slot-boundp* obj '(b c d))
+     (map-slot-value obj '(b c))))
+  t nil t nil (t t nil) (1 3))
+
+
 ;;; Shared slots
 
 (defclass change-class-class-02a ()
@@ -292,3 +306,141 @@
      (slot-value obj3 'b)
      ))
   (nil t) t nil t t nil (nil t) (nil t) (nil t) 17 17 17)
+
+;;; Destination class has slot initforms
+
+(defclass change-class-class-04a ()
+  ((a :initarg :a) (b :initarg :b)))
+
+(defclass change-class-class-04b ()
+  ((a :initform 'x :initarg :a2)
+   (c :initform 'y :initarg :c2)))
+
+(deftest change-class.4.1
+  (let ((obj (make-instance 'change-class-class-04a))
+	(new-class (find-class 'change-class-class-04b)))
+    (values
+     (eqt obj (change-class obj new-class))
+     (map-slot-boundp* obj '(a c))
+     (slot-value obj 'c)))
+  t
+  (nil t)
+  y)
+
+(deftest change-class.4.2
+  (let ((obj (make-instance 'change-class-class-04a))
+	(new-class (find-class 'change-class-class-04b)))
+    (values
+     (eqt obj (change-class obj new-class :a2 'z))
+     (map-slot-value obj '(a c))))
+  t
+  (z y))
+
+(deftest change-class.4.3
+  (let ((obj (make-instance 'change-class-class-04a :a 'p :b 'q))
+	(new-class (find-class 'change-class-class-04b)))
+    (values
+     (eqt obj (change-class obj new-class))
+     (map-slot-value obj '(a c))))
+  t
+  (p y))
+
+(deftest change-class.4.4
+  (let ((obj (make-instance 'change-class-class-04a))
+	(new-class (find-class 'change-class-class-04b)))
+    (values
+     (eqt obj (change-class obj new-class :c2 'k))
+     (map-slot-boundp* obj '(a c))
+     (slot-value obj 'c)))
+  t
+  (nil t)
+  k)
+
+;;; Custom methods for change-class
+
+(declaim (special *changed-class-on-class-05*))
+
+(defclass change-class-class-05 ()
+  (a b c))
+
+(defmethod change-class
+  ((obj change-class-class-05)
+   (new-class (eql (find-class 'change-class-class-05)))
+   &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs new-class))
+  (setq *changed-class-on-class-05* t)
+  obj)
+
+(deftest change-class.5
+  (let ((*changed-class-on-class-05* nil)
+	(obj (make-instance 'change-class-class-05)))
+    (values
+     (eqt obj (change-class obj (find-class 'change-class-class-05)))
+     *changed-class-on-class-05*))
+  t t)
+
+(defclass change-class-class-06 ()
+  ((a :initarg :a) (b :initarg :b) (c :initarg :c)))
+
+(defmethod change-class
+  ((obj change-class-class-06)
+   (new-class standard-class)
+   &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (setf (slot-value obj 'a) 123)
+  (call-next-method))
+
+(deftest change-class.6.1
+  (let* ((class (find-class 'change-class-class-06))
+	 (obj (make-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b c))
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b c))
+     (slot-value obj 'a)
+     ))
+  (nil nil nil)
+  t
+  (t nil nil)
+  123)
+
+(deftest change-class.6.2
+  (let* ((class (find-class 'change-class-class-06))
+	 (obj (make-instance class :a 'bad)))
+    (values
+     (map-slot-boundp* obj '(a b c))
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b c))
+     (slot-value obj 'a)
+     ))
+  (t nil nil)
+  t
+  (t nil nil)
+  123)
+
+
+;;; Error tests
+
+(deftest change-class.error.1
+  (classify-error (change-class))
+  program-error)
+
+(deftest change-class.error.2
+  (classify-error
+   (change-class (make-instance 'change-class-class-01a)))
+  program-error)
+
+(deftest change-class.error.3
+  (classify-error
+   (let ((obj (make-instance 'change-class-class-01a))
+	 (new-class (find-class 'change-class-class-01b)))
+     (change-class obj new-class :c2)))
+  program-error)
+
+(deftest change-class.error.4
+  (classify-error
+   (let ((obj (make-instance 'change-class-class-01a))
+	 (new-class (find-class 'change-class-class-01b)))
+     (change-class obj new-class '(nonsense) 'a)))
+  program-error)
+
