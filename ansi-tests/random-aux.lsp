@@ -18,6 +18,24 @@
        ,@(loop for i from 0 for e in cases collect `(,i ,e))
        (t (error "Can't happen?! (in random-case)~%")))))
 
+(defmacro rcase (&body cases)
+  "Usage: (RCASE (<weight> <form>+)+), where <weight> is a positive real
+   indicating the relative probability of executing the associated implicit
+   progn."
+  (assert cases)
+  (let* ((weights (mapcar #'car cases))
+	 (cumulative-weights (let ((sum 0))
+			       (loop for w in weights collect (incf sum w))))
+	 (total (car (last cumulative-weights)))
+	 (r (gensym)))
+    (assert (every #'plusp weights))
+    `(let ((,r (random ,total)))
+       (cond
+	,@(loop for case in (butlast cases)
+		for cw in cumulative-weights
+		collect `((< ,r ,cw) ,@(cdr case)))
+	(t ,@(cdar (last cases)))))))
+
 (defun random-nonnegative-real ()
   (if (coin 3)
       (random-case

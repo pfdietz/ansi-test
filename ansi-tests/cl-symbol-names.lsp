@@ -2148,6 +2148,9 @@
 		 *cl-standard-generic-function-symbols*
 		 '(declare)))))
 
+(defparameter *cl-function-or-accessor-symbols*
+  (append *cl-function-symbols* *cl-accessor-symbols*))
+
 (defparameter *cl-non-variable-constant-symbols*
   (set-difference
    *cl-symbols*
