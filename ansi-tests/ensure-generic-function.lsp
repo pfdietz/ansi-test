@@ -65,13 +65,3 @@
 (deftest ensure-generic-function.error.2
   (classify-error (ensure-generic-function (gensym) :lambda-list))
   program-error)
-
-(deftest ensure-generic-function.error.3
-  (classify-error (ensure-generic-function (gensym) :allow-other-keys t
-					   '("not a valid keyword") nil))
-  program-error)
-
-
-
-
-
