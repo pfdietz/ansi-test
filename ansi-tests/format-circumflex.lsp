@@ -266,7 +266,7 @@
 
 (deftest format.^.\:{.30
   (format nil "~:{~1,2,v^~A~}" '((nil 0)))
-  "")
+  "0")
 
 (deftest format.^.\:{.31
   (format nil "~:{~#,3,3^~A~}" '((1) (2 1) (3 2 1) (4 3 2 1) (5 4 3 2 1)))
@@ -567,7 +567,7 @@
 
 (deftest format.^.\:@{.30
   (format nil "~:@{~1,2,v^~A~}" '(nil 0))
-  "")
+  "0")
 
 (deftest format.^.\:@{.31
   (format nil "~:@{~#,3,3^~A~}" '(1) '(2 1) '(3 2 1) '(4 3 2 1) '(5 4 3 2 1))
