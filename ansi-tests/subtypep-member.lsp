@@ -157,3 +157,20 @@
 (deftest subtypep.member.31
   (check-equivalence '(member a b c d) '(member c d b a))
   nil)
+
+(deftest subtypep.member.32
+  (check-all-not-subtypep '(not (member a b 10 z)) '(satisfies symbolp))
+  nil)
+
+(deftest subtypep.member.33
+  (check-all-not-subtypep  '(satisfies symbolp) '(member a b 10 z))
+  nil)
+
+(deftest subtypep.member.34
+  (check-all-not-subtypep '(member a b 10 z) '(not (satisfies symbolp)))
+  nil)
+
+(deftest subtypep.member.35
+  (check-all-not-subtypep  '(satisfies symbolp) '(member a b c d))
+  nil)
+
