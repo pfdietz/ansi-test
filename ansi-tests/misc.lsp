@@ -1420,3 +1420,20 @@
    -238 -23658556)
   -23658556)
 
+;;; clisp (1 Oct 2003 cvs HEAD)  "*** - CAR: #:G7744659 is not a LIST"
+
+(deftest misc.114
+  (funcall
+   (compile nil
+            '(lambda (a b c)
+               (unwind-protect
+                   (block b2
+                     (flet ((%f1 nil b))
+                       (logior (if a (if (ldb-test (byte 23 1) 253966182) (return-from b2 a) -103275090) 62410)
+                               (if (not (not (if (not nil) t (ldb-test (byte 2 27) 253671809))))
+                                   (return-from b2 -22)
+                                 (%f1)
+                                 )))))))
+   777595384624 -1510893868 -41632818690)
+  777595384624)
+
