@@ -15,7 +15,7 @@
 (defclass dgmc-class-06 (dgmc-class-04) ())
 (defclass dgmc-class-07 (dgmc-class-05 dgmc-class-06) ())
 
-(deftest defgeneric-method-combination.1
+(deftest defgeneric-method-combination.+.1
   (let ((*x* nil)
 	(fn
 	 (eval '(defgeneric dg-mc.fun.1 (x)
@@ -30,7 +30,7 @@
     (values (%f 1) (%f 2/3) (%f 1.54) (%f 'a))))
   (15 (1 2 4 8)) (7 (1 2 4)) (3 (1 2)) (1 (1)))
 
-(deftest defgeneric-method-combination.2
+(deftest defgeneric-method-combination.+.2
   (let ((*x* nil)
 	(fn
 	 (eval '(defgeneric dg-mc.fun.2 (x)
@@ -45,7 +45,7 @@
     (values (%f 1) (%f 2/3) (%f 1.54) (%f 'a))))
   (15 (1 2 4 8)) (7 (1 2 4)) (3 (1 2)) (1 (1)))
 
-(deftest defgeneric-method-combination.3
+(deftest defgeneric-method-combination.+.3
   (let ((*x* nil)
 	(fn
 	 (eval '(defgeneric dg-mc.fun.3 (x)
@@ -60,7 +60,7 @@
     (values (%f 1) (%f 2/3) (%f 1.54) (%f 'a))))
   (15 (8 4 2 1)) (7 (4 2 1)) (3 (2 1)) (1 (1)))
 
-(deftest defgeneric-method-combination.4
+(deftest defgeneric-method-combination.+.4
   (let ((fn
 	 (eval '(defgeneric dg-mc.4 (x)
 		  (:method-combination +)
@@ -77,7 +77,7 @@
      (funcall fn '(a b c))))
   foo foo 5 6 4)
 
-(deftest defgeneric-method-combination.5
+(deftest defgeneric-method-combination.+.5
   (let ((fn
 	 (eval '(defgeneric dg-mc.5 (x)
 		  (:method-combination +)
@@ -95,7 +95,7 @@
      (funcall fn '(a b c))))
   (foo 11) (foo 10) 10 12 8)
 
-(deftest defgeneric-method-combination.6
+(deftest defgeneric-method-combination.+.6
   (let ((fn
 	 (eval '(defgeneric dg-mc.6 (x)
 		  (:method-combination +)
@@ -116,7 +116,7 @@
      (funcall fn '(a b c))))
   (foo (bar 11)) (foo (bar 10)) (bar 10) 10 12 8)
 
-(deftest defgeneric-method-combination.7
+(deftest defgeneric-method-combination.+.7
   (let ((fn
 	 (eval '(defgeneric dg-mc.7 (x)
 		  (:method-combination +)
@@ -131,7 +131,7 @@
      (funcall fn (make-instance 'dgmc-class-04))))
   8 12 10 15)
 
-(deftest defgeneric-method-combination.8
+(deftest defgeneric-method-combination.+.8
   (let ((fn
 	 (eval '(defgeneric dg-mc.8 (x)
 		  (:method-combination +)
@@ -147,9 +147,3 @@
      (multiple-value-list (funcall fn #c(9 8)))
      (multiple-value-list (funcall fn '(a b c)))))
   () (a b c) (1 2 3 4 5 6) (1))
-
-
-
-
-     
-     

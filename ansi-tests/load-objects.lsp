@@ -31,5 +31,7 @@
 (load "with-accessors.lsp")
 (load "with-slots.lsp")
 (load "defgeneric.lsp")
-(load "defgeneric-method-combination.lsp")
-
+(load "defgeneric-method-combination-plus.lsp")
+(load "defgeneric-method-combination-append.lsp")
+(load "defgeneric-method-combination-nconc.lsp")
+(load "defgeneric-method-combination-list.lsp")
