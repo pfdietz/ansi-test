@@ -37,7 +37,7 @@
 ;;     (loop for pn in pathnames
 ;;	   unless (pathname-match-p pn pattern-pathname)
 ;;	   collect pn))
-     )
+     ))
   nil nil nil)
 
 (deftest directory.error.1
