@@ -24,3 +24,4 @@
 (load "no-applicable-method.lsp")
 (load "no-next-method.lsp")
 (load "remove-method.lsp")
+(load "make-instance.lsp")
