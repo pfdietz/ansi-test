@@ -1303,6 +1303,13 @@
        (random-from-interval (1+ most-positive-fixnum) most-negative-fixnum))
       ((complex)
        (make-random-element-of-type '(complex real)))
+      ((cons)
+       (make-random-element-of-type '(cons t t)))
+      ((list)
+       (let ((len (min (random 10) (random 10))))
+	 (loop repeat len collect (make-random-element-of-type t))))
+      ((sequence)
+       (make-random-element-of-type '(or list vector)))
       ))))
 
 (defun make-random-character ()
