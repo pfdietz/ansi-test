@@ -207,13 +207,18 @@
   (map '(simple-base-string 3) #'identity '(#\a #\b #\c))
   "abc")
 
+(deftest map.48
+  (let ((type '(or (vector t 10) (vector t 5))))
+    (if (subtypep type 'vector)
+	(equalpt (map type #'identity '(1 2 3 4 5)) #(1 2 3 4 5))
+      t))
+  t)
+
 ;;; Error tests
 
 (deftest map.error.1
-  (handler-case (progn (proclaim '(optimize (safety 3)))
-		       (eval '(map 'symbol #'identity '(a b c))))
-		(error () :caught))
-  :caught)
+  (signals-error-always (map 'symbol #'identity '(a b c)) type-error)
+  t t)
 
 (deftest map.error.2
   (signals-error (map '(vector * 8) #'identity '(a b c)) type-error)
@@ -248,6 +253,19 @@
   (signals-error (map 'list #'car '(a b c d)) type-error)
   t)
 
+(deftest map.error.10
+  (let ((type '(or (vector bit) (vector t))))
+    (if (subtypep type 'vector)
+	(eval `(signals-error-always (map ',type #'identity '(1 0 1)) error))
+      (values t t)))
+  t t)
+
+(deftest map.error.11
+  (let ((type '(or (vector t 5) (vector t 10))))
+    (if (subtypep type 'vector)
+	(eval `(signals-error (map ',type #'identity '(1 2 3 4 5 6)) type-error))
+      t))
+  t)
 
 ;;; Test mapping on arrays with fill pointers
 

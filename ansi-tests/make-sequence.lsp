@@ -245,6 +245,9 @@
   (make-sequence '(simple-vector) 10 :initial-element nil)
   #(nil nil nil nil nil nil nil nil nil nil))
 
+(deftest make-sequence.36
+  (make-sequence '(vector * *) 10 :initial-element nil)
+  #(nil nil nil nil nil nil nil nil nil nil))
 
 ;;; Keyword tests
 
@@ -276,8 +279,8 @@
 ;;; Tests for errors
 
 (deftest make-sequence.error.1
-  (signals-error (make-sequence 'symbol 10) type-error)
-  t)
+  (signals-error-always (make-sequence 'symbol 10) type-error)
+  t t)
 
 (deftest make-sequence.error.2
   (signals-error (make-sequence 'null 1) type-error)
@@ -330,8 +333,14 @@
   t)
 
 (deftest make-sequence.error.14
-  (signals-error (locally (make-sequence 'symbol 10) t)
-		 type-error)
+  (signals-error-always (locally (make-sequence 'symbol 10) t)
+			type-error)
+  t t)
+
+(deftest make-sequence.error.15
+  (if (subtypep '(or (vector bit) (vector t)) 'vector)
+      (signals-error (make-sequence '(or (vector bit) (vector t)) 10 :initial-element 0) type-error)
+    t)
   t)
 
 ;;; Order of execution tests
