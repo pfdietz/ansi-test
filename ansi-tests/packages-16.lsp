@@ -471,7 +471,7 @@
   program-error)
 
 ;; Names given to :export and :intern must be disjoint,
-;;  otherwise signal a package-error
+;;  otherwise signal a program-error
 (deftest defpackage-23
     (ignore-errors
       (ignore-errors (delete-package "H"))
@@ -493,9 +493,8 @@
       (handler-case
 	  (eval '(defpackage "H" (:shadowing-import-from "G" "NOT-THERE")))
 	(package-error (c)
-	  (if (member 'abort (mapcar #'restart-name
-				     (compute-restarts c))
-                      :test (complement #'eq))
+	  (if (position 'abort (compute-restarts c)
+			:key #'restart-name :test-not #'eq)
 	      'success
 	    'fail))
 	(error (c) c)))
@@ -512,9 +511,8 @@
       (handler-case
 	  (eval '(defpackage "H" (:import-from "G" "NOT-THERE")))
 	(package-error (c)
-	  (if (member 'abort (mapcar #'restart-name
-				     (compute-restarts c))
-                      :test (complement #'eq))
+	  (if (position 'abort (compute-restarts c)
+			:key #'restart-name :test-not #'eq)
 	      'success
 	    'fail))
 	(error (c) c)))

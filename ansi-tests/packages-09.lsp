@@ -267,8 +267,8 @@
     (handler-case
 	(make-package "A")
       (error (c)
-	  (if (member 'abort (mapcar #'restart-name (compute-restarts c))
-		      :test (complement #'eq))
+	  (if (position 'abort (compute-restarts c)
+			:key #'restart-name :test-not #'eq)
 	      'success
 	    'failure)))
   success)
@@ -277,8 +277,8 @@
     (handler-case
 	(make-package "Q")
       (error (c)
-	  (if (member 'abort (mapcar #'restart-name (compute-restarts c))
-		      :test (complement #'eq))
+	  (if (position 'abort (compute-restarts c)
+			:key #'restart-name :test-not #'eq)
 	      'success
 	    'failure)))
   success)
@@ -288,8 +288,8 @@
 	(progn (ignore-errors (delete-package "TEST1"))
 	       (make-package "TEST1" :nicknames '("A")))
       (error (c)
-	  (if (member 'abort (mapcar #'restart-name (compute-restarts c))
-		      :test (complement #'eq))
+	  (if (position 'abort (compute-restarts c)
+			:key #'restart-name :test-not #'eq)
 	      'success
 	    'failure)))
   success)    
@@ -299,8 +299,8 @@
 	(progn (ignore-errors (delete-package "TEST1"))
 	       (make-package "TEST1" :nicknames '("Q")))
       (error (c)
-	  (if (member 'abort (mapcar #'restart-name (compute-restarts c))
-		      :test (complement #'eq))
+	  (if (position 'abort (compute-restarts c)
+			:key #'restart-name :test-not #'eq)
 	      'success
 	    'failure)))
   success)
