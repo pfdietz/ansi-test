@@ -1368,27 +1368,16 @@
   (funcall
    (compile
     nil
-    '(lambda (a b c d e f)
-       (declare (type (integer -28935194591 -20563088996) a))
-       (declare (type (integer -186827260167 31523) b))
-       (declare (type (integer -1065761318 945248348) c))
-       (declare (type (integer -5411779845588 -3063178248148) d))
-       (declare (type (integer -1656994 3808683) e))
-       (declare (type (integer -789320 850746504) f))
-       (declare (ignorable a b c d e f))
+    '(lambda ()
        (declare
-	(optimize (speed 2)
-		  (space 0)
-		  (safety 1)
-		  (debug 3)
-		  (compilation-speed 0)))
+	(optimize (speed 2) (space 0) (safety 1)
+		  (debug 3) (compilation-speed 0)))
        (flet ((%f14
 	       (f14-1
 		&optional (f14-2 (rationalize (catch 'ct4 0))) (f14-3 0)
 		(f14-4 0))
 	       (dotimes (iv2 0 0) (progn f14-2))))
-	 (apply #'%f14 0 0 0 nil))))
-   -25038256175 -100350952205 18860285 -4163099272623 -794421 38358082)
+	 (apply #'%f14 0 0 0 nil)))))
   0)
 
 ;;; cmucl bug (Argument X is not a NUMBER: NIL)
