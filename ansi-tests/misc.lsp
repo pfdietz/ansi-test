@@ -4521,3 +4521,26 @@
                          )))))))
    65)
   13)
+
+;;; sbcl 0.8.7.13
+;;; Lexical unwinding of UVL stack is not implemented.
+
+(deftest misc.274
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare
+	(optimize (speed 2)
+		  (space 2)
+		  (safety 1)
+		  (debug 2)
+		  (compilation-speed 0)))
+       (multiple-value-prog1
+	(ignore-errors 0)
+	0
+	(catch 'ct7 0)
+	(catch 'ct1
+	  (catch 'ct4
+	    (complex (throw 'ct4 (dotimes (iv4 0 0) (throw 'ct1 0))) 0)))))))
+  0)
