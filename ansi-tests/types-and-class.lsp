@@ -335,3 +335,29 @@
 		   (notnot-mv (typep env (type-of env)))))
     (%foo))
   t)
+
+;;; Other typep tests
+
+(deftest typep.1
+  (notnot-mv (typep 'a '(eql a)))
+  t)
+
+(deftest typep.2
+  (notnot-mv (typep 'a '(and (eql a))))
+  t)
+
+(deftest typep.3
+  (notnot-mv (typep 'a '(or (eql a))))
+  t)
+
+(deftest typep.4
+  (typep 'a '(eql b))
+  nil)
+
+(deftest typep.5
+  (typep 'a '(and (eql b)))
+  nil)
+
+(deftest typep.6
+  (typep 'a '(or (eql b)))
+  nil)
