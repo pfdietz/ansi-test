@@ -63,3 +63,23 @@
   (typep* (make-array '(12) :element-type nil) 'simple-string)
   t)
 
+(deftest simple-estring.14
+  (typep* "abc" '(simple-string))
+  t)
+
+(deftest simple-estring.15
+  (typep* "abc" '(simple-string *))
+  t)
+
+(deftest simple-estring.16
+  (typep* "abc" '(simple-string 3))
+  t)
+
+(deftest simple-estring.17
+  (typep* "abc" '(simple-string 2))
+  nil)
+
+(deftest simple-estring.18
+  (typep* "abc" '(simple-string 4))
+  nil)
+
