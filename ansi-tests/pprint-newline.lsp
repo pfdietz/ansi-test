@@ -459,6 +459,13 @@ A "
 	collect x)
   nil)
 
+(deftest pprint-newline.error.1-unsafe
+  (loop for x in *mini-universe*
+	unless (member x '(:linear :miser :fill :mandatory))
+	unless (eval `(signals-error (locally (declare (optimize (safety 0))) (pprint-newline ',x)) type-error))
+	collect x)
+  nil)
+
 (deftest pprint-newline.error.2
   (signals-error (pprint-newline) program-error)
   t)

@@ -230,6 +230,9 @@
 	collect x)
   nil)
 
-
-
-
+(deftest pprint-tab.error.5-unsafe
+  (loop for x in *mini-universe*
+	unless (or (member x '(:line :section :line-relative :section-relative))
+		   (eval `(signals-error (locally (declare (optimize (safety 0))) (pprint-tab ',x 1 1)) error)))
+	collect x)
+  nil)

@@ -404,3 +404,12 @@ M")
 		  (not (eval `(signals-error (pprint-indent ',x 0) error))))
 	collect x)
   nil)
+
+(deftest pprint-indent.error.4-unsafe
+  (loop for x in *mini-universe*
+	when (and (not (member x '(:block :current)))
+		  (not (eval `(signals-error (locally (declare (optimize (safety 0))) (pprint-indent ',x 0))
+					     error))))
+	collect x)
+  nil)
+

@@ -259,6 +259,14 @@ abcd3")
 	collect x)
   nil)
 
+(deftest pprint-logical-block.error.1-unsafe
+  (loop for x in *mini-universe*
+	for form = `(pprint-logical-block (*standard-output* '(1) :prefix ',x))
+	unless (or (stringp x)
+		   (eq (eval `(signals-error ,form type-error :safety 0)) t))
+	collect x)
+  nil)
+
 (deftest pprint-logical-block.error.2
   (loop for x in *mini-universe*
 	for form = `(pprint-logical-block (*standard-output* '(1) :suffix ',x))
@@ -267,11 +275,27 @@ abcd3")
 	collect x)
   nil)
 
+(deftest pprint-logical-block.error.2-unsafe
+  (loop for x in *mini-universe*
+	for form = `(pprint-logical-block (*standard-output* '(1) :suffix ',x))
+	unless (or (stringp x)
+		   (eq (eval `(signals-error ,form type-error :safety 0)) t))
+	collect x)
+  nil)
+
 (deftest pprint-logical-block.error.3
   (loop for x in *mini-universe*
 	for form = `(pprint-logical-block (*standard-output* '(1) :per-line-prefix ',x))
 	unless (or (stringp x)
 		   (eq (eval `(signals-error ,form type-error)) t))
+	collect x)
+  nil)
+
+(deftest pprint-logical-block.error.3-unsafe
+  (loop for x in *mini-universe*
+	for form = `(pprint-logical-block (*standard-output* '(1) :per-line-prefix ',x))
+	unless (or (stringp x)
+		   (eq (eval `(signals-error ,form type-error :safety 0)) t))
 	collect x)
   nil)
 
@@ -284,4 +308,16 @@ abcd3")
 		    (pprint-logical-block (os val :prefix "" :per-line-prefix "")
 					  (write (car val) :stream os))))
 		 error)
+  t)
+
+(deftest pprint-logical-block.error.4-unsafe
+  (signals-error (with-standard-io-syntax
+		  (let ((*print-pretty* t)
+			(*print-right-margin* 100)
+			(*print-readably* nil)
+			(val '(7)))
+		    (pprint-logical-block (os val :prefix "" :per-line-prefix "")
+					  (write (car val) :stream os))))
+		 error
+		 :safety 0)
   t)

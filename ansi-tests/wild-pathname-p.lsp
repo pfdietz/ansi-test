@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "pathnames-aux.lsp")
+
 (deftest wild-pathname-p.1
   (wild-pathname-p (make-pathname))
   nil)
@@ -214,5 +216,14 @@
 	unless (or (could-be-pathname-designator x)
 		   (eval `(signals-error (wild-pathname-p ',x)
 					 type-error)))
+	collect x)
+  nil)
+
+(deftest wild-pathname-p.error.4
+  (loop for x in *mini-universe*
+	unless (or (could-be-pathname-designator x)
+		   (eval `(signals-error (wild-pathname-p ',x)
+					 type-error
+					 :safety 0)))
 	collect x)
   nil)

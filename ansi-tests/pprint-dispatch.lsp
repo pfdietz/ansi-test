@@ -265,8 +265,22 @@
   t)
 
 
+(deftest set-pprint-dispatch.error.4
+  (loop for x in *mini-universe*
+	unless (or (typep x 'real)
+		   (eval `(signals-error (let ((table (copy-pprint-dispatch nil)))
+					   (set-pprint-dispatch t 'identity ',x))
+					 error)))
+	collect x)
+  nil)
 
-
-
-
+(deftest set-pprint-dispatch.error.4-unsafe
+  (loop for x in *mini-universe*
+	unless (or (typep x 'real)
+		   (eval `(signals-error (let ((table (copy-pprint-dispatch nil)))
+					   (declare (optimize (safety 0)))
+					   (set-pprint-dispatch t 'identity ',x))
+					 error)))
+	collect x)
+  nil)
 

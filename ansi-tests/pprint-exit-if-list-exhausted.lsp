@@ -308,10 +308,19 @@
   (signals-error (pprint-exit-if-list-exhausted) error)
   t)
 
+(deftest pprint-exit-if-list-exhausted.error.1-unsafe
+  (locally (declare (optimize (safety 0)))
+	   (signals-error (locally (declare (optimize (safety 0)))
+				   (pprint-exit-if-list-exhausted))
+			  error))
+  t)
+
 (deftest pprint-pop.error.1
   (signals-error (pprint-pop) error)
   t)
 
 
-
-
+(deftest pprint-pop.error.1-unsafe
+  (locally (declare (optimize (safety 0)))
+	   (signals-error (locally (declare (optimize (safety 0))) (pprint-pop)) error))
+  t)
