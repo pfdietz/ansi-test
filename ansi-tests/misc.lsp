@@ -4433,3 +4433,11 @@
 	done))))
   nil)
 
+;;; Incorrect return value
+
+(deftest misc.267
+  (locally (declare (special *s5*))
+	   (let ((v8 (progv '(*s5*) (list 0) (if t *s5* *s5*))))
+	     v8))
+  0)
+
