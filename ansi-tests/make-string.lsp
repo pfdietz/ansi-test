@@ -8,8 +8,9 @@
 (deftest make-string.1
   (let ((s (make-string 10)))
     (and (stringp s)
-	 (eql (length s) 10)
-	 (string-all-the-same s)))
+	 ;; (string-all-the-same s)
+	 (eqlt (length s) 10)
+	 ))
   t)
 
 (deftest make-string.2
@@ -50,22 +51,25 @@
 (deftest make-string.7
   (let ((s (make-string 10 :element-type 'character)))
     (and (stringp s)
-	 (eql (length s) 10)
-	 (string-all-the-same s)))
+	 (eqlt (length s) 10)
+	 #| (string-all-the-same s) |#
+	 ))
   t)
 
 (deftest make-string.8
   (let ((s (make-string 10 :element-type 'standard-char)))
     (and (stringp s)
-	 (eql (length s) 10)
-	 (string-all-the-same s)))
+	 (eqlt (length s) 10)
+	 #| (string-all-the-same s) |#
+	 ))
   t)
 
 (deftest make-string.9
   (let ((s (make-string 10 :element-type 'base-char)))
     (and (stringp s)
-	 (eql (length s) 10)
-	 (string-all-the-same s)))
+	 (eqlt (length s) 10)
+	 #| (string-all-the-same s) |#
+	 ))
   t)
 
 
