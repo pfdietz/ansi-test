@@ -10671,3 +10671,21 @@ Broken at C::WT-MAKE-CLOSURE.
 	   0)))
    2212755 3154856)
   0)
+
+;;; OpenMCL 0.14.3
+;;; 28192897: value doesn't match constraint :U8CONST in template for CCL::MATCH-VREG
+
+(deftest misc.594
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (ignorable a b c))
+       (declare (type (integer -1 0) a)
+		(type (integer -1065019672 -181184465) b)
+		(type (integer 30074 1948824693) c))
+       (declare (optimize (safety 2) (compilation-speed 1) (speed 2)
+			  (space 0) (debug 0)))
+       (ash c (min 82 -28192897))))
+   0 -714979492 1474663829)
+  0)
