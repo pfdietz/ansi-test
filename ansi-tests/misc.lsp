@@ -6651,4 +6651,11 @@ Broken at C::WT-C-INLINE-LOC.
     287358622300 400248608))
   0)
 
-    
+;;; Wrong return value
+
+(deftest misc.360
+  (let ((c :good))
+    (dotimes (i 1 c)
+      (dotimes (j 1 (setf c :bad)) (go 7))
+      7))
+  :good)
