@@ -660,7 +660,7 @@
       (let* ((vdesc (random-from-seq *vars*))
 	     (var (var-desc-name vdesc))
 	     (type (var-desc-type vdesc))
-	     (op (random-from-seq #(setq setf shiftf))))
+	     (op (random-from-seq #(setq setf #-(or armedbear)shiftf))))
 	(rcase
 	 (3 nil)
 	 (1 (setq op 'multiple-value-setq)
@@ -1204,8 +1204,12 @@
 	  (let ((arg (first args)))
 	    (cond
 	     ((consp arg)
-	      (when (eql (car arg) 'quote)
-		(prune (cadr arg) #'(lambda (form) (try `(eval ',form))))))
+	      (cond
+	       ((eql (car arg) 'quote)
+		(prune (cadr arg) #'(lambda (form) (try `(eval ',form)))))
+	       (t
+		(try arg)
+		(prune arg #'(lambda (form) `(eval ,form))))))
 	     (t (try arg)))))
 
 	 ((the macrolet cl:handler-bind restart-bind)
