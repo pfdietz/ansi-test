@@ -312,7 +312,7 @@
 
 ;;; Test multiple return values
 
-(deftest dolist..7
+(deftest dolist.7
   (dolist (x '(a b) (values))))
 
 (deftest dolist.8
