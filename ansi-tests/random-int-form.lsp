@@ -94,7 +94,7 @@
   
   (loop for i from 1 to n
 	do (when (= (mod i 100) 0)
-	     ;; #+sbcl (sb-ext::gc)
+	     #+sbcl (sb-ext::gc)
 	     (prin1 i) (princ " ") (finish-output *standard-output*))
 	nconc (let ((result (test-random-integer-form size nvars)))
 		(when result
@@ -165,6 +165,7 @@
 		       (format nil "-~D" arg-index))
 	  (symbol-package fn-name)))		       
 
+(declaim (special *flet-names*))
 (defparameter *flet-names* nil)
 
 (defun make-random-integer ()
@@ -614,6 +615,7 @@
 		     (warning #'muffle-warning)
 		     (error #'(lambda (c)
 				(format t "Compilation failure~%")
+				(print form)
 				(return-from test-int-form
 				  (list (list :vars vars
 					      :form form
@@ -652,6 +654,7 @@
 	  (setq *int-form-vals* vals)
 	  (flet ((%eval-error
 		  (kind)
+		  (print form)
 		  (return
 		   (list (list :vars vars
 			       :vals vals
