@@ -303,6 +303,7 @@ the condition to go uncaught if it cannot be classified."
      (reader-error  () 'reader-error)
      (file-error    () 'file-error)
      (cell-error    () 'cell-error)
+     (parse-error   () 'parse-error)
      (division-by-zero () 'division-by-zero)
      (floating-point-overflow () 'floating-point-overflow)
      (floating-point-underflow () 'floating-point-underflow)

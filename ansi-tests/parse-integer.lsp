@@ -17,6 +17,62 @@
   (classify-error (parse-integer "123" :bogus 'foo))
   program-error)
 
+(deftest parse-integer.error.4
+  (classify-error (parse-integer ""))
+  parse-error)
+
+(deftest parse-integer.error.5
+  (loop for x across +standard-chars+
+	unless (or (digit-char-p x)
+		   (eq (eval `(classify-error (parse-integer ,(string c))))
+		       'parse-error))
+	collect x)
+  nil)
+
+(deftest parse-integer.error.5
+  (classify-error (parse-integer ""))
+  parse-error)
+
+(deftest parse-integer.error.6
+  (classify-error (parse-integer "1234a"))
+  parse-error)
+
+(deftest parse-integer.error.7
+  (classify-error (parse-integer "-"))
+  parse-error)
+
+(deftest parse-integer.error.8
+  (classify-error (parse-integer "+"))
+  parse-error)
+
+(deftest parse-integer.error.9
+  (classify-error (parse-integer "--10"))
+  parse-error)
+
+(deftest parse-integer.error.10
+  (classify-error (parse-integer "++10"))
+  parse-error)
+
+(deftest parse-integer.error.11
+  (classify-error (parse-integer "10."))
+  parse-error)
+
+(deftest parse-integer.error.12
+  (classify-error (parse-integer "#O123"))
+  parse-error)
+
+(deftest parse-integer.error.13
+  (classify-error (parse-integer "#B0100"))
+  parse-error)
+
+(deftest parse-integer.error.14
+  (classify-error (parse-integer "#X0100"))
+  parse-error)
+
+(deftest parse-integer.error.15
+  (classify-error (parse-integer "#3R0100"))
+  parse-error)
+
 ;;;
 
 (deftest parse-integer.1
@@ -91,3 +147,103 @@
 (deftest parse-integer.15
   (parse-integer "1021" :radix 3)
   34 4)
+
+(deftest parse-integer.16
+  (loop for radix from 2 to 36
+	for c across "123456789abcdefghijklmnopqrstuvwxyz"
+	for s = (concatenate 'string (string c) "0")
+	for vals = (multiple-value-list (parse-integer s :radix radix))
+	for (val pos) = vals
+	always (and (= (length vals) 2)
+		    (= pos 2)
+		    (= val (* radix (1- radix)))))
+  t)
+
+(deftest parse-integer.17
+  (parse-integer "10A" :junk-allowed t)
+  10 2)
+
+(deftest parse-integer.18
+  (parse-integer "10" :junk-allowed t)
+  10 2)
+
+(deftest parse-integer.19
+  (parse-integer "ABCDE" :junk-allowed t)
+  nil 0)
+
+(deftest parse-integer.20
+  (parse-integer "" :junk-allowed t)
+  nil 0)
+
+(deftest parse-integer.21
+  :notes (:nil-vectors-are-strings)
+  (parse-integer (make-array 0 :element-type nil) :junk-allowed t)
+  nil 0)
+
+(deftest parse-integer.22
+  (parse-integer "a1234b" :start 2 :end 4)
+  23 4)
+
+(deftest parse-integer.23
+  (parse-integer "a1234b" :start 2 :end 4 :end nil)
+  23 4)
+
+(deftest parse-integer.24
+  (parse-integer "a1234b" :start 2 :end 4 :start 1)
+  23 4)
+
+
+(deftest parse-integer.25
+  (parse-integer "a1234b" :start 2 :end 4 :allow-other-keys nil)
+  23 4)
+
+(deftest parse-integer.26
+  (parse-integer "a1234b" :start 2 :end 4 :allow-other-keys t :foo nil)
+  23 4)
+
+(deftest parse-integer.27
+  (parse-integer "a1234b" :start 2 :end 4 :allow-other-keys t
+		 :allow-other-keys nil :foo nil)
+  23 4)
+
+(deftest parse-integer.28
+  (let* ((s (make-array 5 :initial-contents "a123b" :element-type 'base-char))
+	 (s2 (make-array 3 :displaced-to s :displaced-index-offset 1
+			 :element-type 'base-char)))
+    (values
+     s2
+     (length s2)
+     (equalpt "123" s2)
+     (multiple-value-list (parse-integer s2))))
+  "123" 3 t (123 3))
+
+(deftest parse-integer.29
+  (let ((s (make-array 10 :initial-contents "1234567890"
+		       :fill-pointer 3
+		       :element-type 'base-char)))
+    (values
+     (length s)
+     (multiple-value-list (parse-integer s))))
+  3 (123 3))
+
+(deftest parse-integer.30
+  (let ((s (make-array 10 :initial-contents "1234567890"
+		       :adjustable t
+		       :element-type 'base-char)))
+    (values
+     (length s)
+     (multiple-value-list (parse-integer s))
+     (progn
+       (adjust-array s 3 :element-type 'base-char)
+       (multiple-value-list (parse-integer s)))))
+  10
+  (1234567890 10)
+  (123 3))
+
+	
+
+
+
+
+
+	
