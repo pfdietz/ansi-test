@@ -19,16 +19,17 @@
   (setf (cadr x) val))
 
 (deftest defsetf.1
-  (progn
-    (let ((vals (multiple-value-list
-		 (defsetf defsetf.1-accessor defsetf.1-accessor-settor))))
-      (assert (equal vals '(defsetf.1-accessor))
-	      ()
-	      "Return values are ~A~%" vals))
-    (let ((x (list 1 2 3)))
-      (values
-       (setf (defsetf.1-accessor x) 4)
-       x)))
+  (eval
+   '(progn
+      (let ((vals (multiple-value-list
+		   (defsetf defsetf.1-accessor defsetf.1-accessor-settor))))
+	(assert (equal vals '(defsetf.1-accessor))
+		()
+		"Return values are ~A~%" vals))
+      (let ((x (list 1 2 3)))
+	(values
+	 (setf (defsetf.1-accessor x) 4)
+	 x))))
   4
   (1 4 3))
 
