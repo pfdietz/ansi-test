@@ -68,6 +68,7 @@
 (load "load-reader.lsp")
 
 ;;; Tests of system construction, environment
+(load "describe.lsp")
 (load "disassemble.lsp")
 (load "environment-functions.lsp")
 (load "features.lsp")
