@@ -54,7 +54,7 @@
   (notnot-mv (zerop 0.0d0))
   t)
 
-(deftest zerop.7
+(deftest zerop.7a
   (notnot-mv (zerop 0.0l0))
   t)
 
