@@ -40,6 +40,14 @@
   (append-6-body)
   0)
 
+;;; Test suggested by Peter Graves
+(deftest append.7
+  (let ((x (list 'a 'b 'c 'd)))
+    (eq (append x nil) x))
+  nil)
+
+;;; Order of evaluation tests
+
 (deftest append.order.1
   (let ((i 0) x y z)
     (values
