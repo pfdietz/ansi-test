@@ -269,10 +269,12 @@
       (delete-package pkg-name))
     (prog1
 	(let ((*package* (make-package pkg-name)))
-	  (loop for c across +standard-chars+
-		nconc
-		(loop repeat 50
-		      nconc (randomly-check-readability (intern (string c))))))
+	  (trim-list
+	   (loop for c across +standard-chars+
+		 nconc
+		 (loop repeat 50
+		       nconc (randomly-check-readability (intern (string c)))))
+	   10))
 ;;      (delete-package pkg-name)
       ))
   nil)
@@ -284,17 +286,19 @@
     (prog1
 	(let ((*package* (make-package pkg-name))
 	      (count 0))
-	  (loop for c1 = (random-from-seq +standard-chars+)
-		for c2 = (random-from-seq +standard-chars+)
-		for string = (concatenate 'string (string c1) (string c2))
-		for result = (randomly-check-readability (intern string))
-		for tries from 1 to 10000
-		when result do (incf count)
-		nconc result
-		when (= count 10)
-		collect	(format nil "... ~A out of ~A, stopping test ..."
-				count tries)
-		while (< count 10)))
+	  (trim-list
+	   (loop for c1 = (random-from-seq +standard-chars+)
+		 for c2 = (random-from-seq +standard-chars+)
+		 for string = (concatenate 'string (string c1) (string c2))
+		 for result = (randomly-check-readability (intern string))
+		 for tries from 1 to 10000
+		 when result do (incf count)
+		 nconc result
+		 when (= count 10)
+		 collect	(format nil "... ~A out of ~A, stopping test ..."
+					count tries)
+		 while (< count 10))
+	   10))
       ;; (delete-package pkg-name)
       ))
   nil)
@@ -624,6 +628,17 @@
   (with-standard-io-syntax
    (let ((*package* (find-package "CL-TEST")))
      (write-to-string 'x :case :upcase :readably nil)))
+  "X")
+
+(deftest print.symbol.prefix.6b
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize speed (safety 0)))
+       (with-standard-io-syntax
+	(let ((*package* (find-package "CL-TEST")))
+	  (write-to-string 'cl-test::x :case :upcase :readably nil))))))
   "X")
 
 (deftest print.symbol.prefix.7
