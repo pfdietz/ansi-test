@@ -319,7 +319,7 @@
      (type-error-expected-type c nil)))
   program-error)
 
-;;; Tests of env arguments to typep, subtypep
+;;; Tests of env arguments to typep
 
 (deftest typep.env.1
   (notnot-mv (typep 0 'bit nil))

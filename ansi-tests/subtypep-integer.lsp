@@ -35,32 +35,128 @@
   (subtypep* '(integer 10 100) 'integer)
   t t)
 
+(deftest subtypep.integer.3a
+  (subtypep* '(integer 10 100) '(integer))
+  t t)
+
+(deftest subtypep.integer.3b
+  (subtypep* '(integer 10 100) '(integer *))
+  t t)
+
+(deftest subtypep.integer.3c
+  (subtypep* '(integer 10 100) '(integer * *))
+  t t)
+
 (deftest subtypep.integer.4
   (subtypep* 'integer '(integer 10 100))
+  nil t)
+
+(deftest subtypep.integer.4a
+  (subtypep* '(integer) '(integer 10 100))
+  nil t)
+
+(deftest subtypep.integer.4b
+  (subtypep* '(integer *) '(integer 10 100))
+  nil t)
+
+(deftest subtypep.integer.4c
+  (subtypep* '(integer * *) '(integer 10 100))
   nil t)
 
 (deftest subtypep.integer.5
   (subtypep* '(integer 10 *) 'integer)
   t t)
 
+(deftest subtypep.integer.5a
+  (subtypep* '(integer 10 *) '(integer))
+  t t)
+
+(deftest subtypep.integer.5b
+  (subtypep* '(integer 10 *) '(integer *))
+  t t)
+
+(deftest subtypep.integer.5c
+  (subtypep* '(integer 10 *) '(integer * *))
+  t t)
+
 (deftest subtypep.integer.6
   (subtypep* 'integer '(integer 10 *))
+  nil t)
+
+(deftest subtypep.integer.6a
+  (subtypep* '(integer) '(integer 10 *))
+  nil t)
+
+(deftest subtypep.integer.6b
+  (subtypep* '(integer *) '(integer 10 *))
+  nil t)
+
+(deftest subtypep.integer.6c
+  (subtypep* '(integer * *) '(integer 10 *))
   nil t)
 
 (deftest subtypep.integer.7
   (subtypep* '(integer 10) 'integer)
   t t)
 
+(deftest subtypep.integer.7a
+  (subtypep* '(integer 10) '(integer))
+  t t)
+
+(deftest subtypep.integer.7b
+  (subtypep* '(integer 10) '(integer *))
+  t t)
+
+(deftest subtypep.integer.7c
+  (subtypep* '(integer 10) '(integer * *))
+  t t)
+
 (deftest subtypep.integer.8
   (subtypep* 'integer '(integer 10))
+  nil t)
+
+(deftest subtypep.integer.8a
+  (subtypep* '(integer) '(integer 10))
+  nil t)
+
+(deftest subtypep.integer.8b
+  (subtypep* '(integer *) '(integer 10))
+  nil t)
+
+(deftest subtypep.integer.8c
+  (subtypep* '(integer * *) '(integer 10))
   nil t)
 
 (deftest subtypep.integer.9
   (subtypep* '(integer * 10) 'integer)
   t t)
 
+(deftest subtypep.integer.9a
+  (subtypep* '(integer * 10) '(integer))
+  t t)
+
+(deftest subtypep.integer.9b
+  (subtypep* '(integer * 10) '(integer *))
+  t t)
+
+(deftest subtypep.integer.9c
+  (subtypep* '(integer * 10) '(integer * *))
+  t t)
+
 (deftest subtypep.integer.10
   (subtypep* 'integer '(integer * 10))
+  nil t)
+
+(deftest subtypep.integer.10a
+  (subtypep* '(integer) '(integer * 10))
+  nil t)
+
+(deftest subtypep.integer.10b
+  (subtypep* '(integer *) '(integer * 10))
+  nil t)
+
+(deftest subtypep.integer.10c
+  (subtypep* '(integer * *) '(integer * 10))
   nil t)
 
 (deftest subtypep.integer.11
@@ -156,20 +252,159 @@
    '(or (integer -100 0) (integer 11 100)))
   nil)
 
-(deftest subtypep.integer.31
+;;;  Relations between integer and real types
+
+(deftest subtypep.integer.real.1
   (check-equivalence
    '(and integer (real 4 10))
    '(integer 4 10))
   nil)
 
-(deftest subtypep.integer.32
+(deftest subtypep.integer.real.2
   (check-equivalence
    '(and (integer 4 *) (real * 10))
    '(integer 4 10))
   nil)
 
-(deftest subtypep.integer.33
+(deftest subtypep.integer.real.3
   (check-equivalence
    '(and (integer * 10) (real 4))
    '(integer 4 10))
+  nil)
+
+(deftest subtypep.integer.real.4
+  (loop for int-type in '(integer (integer) (integer *) (integer * *))
+	append (loop for real-type in '(real (real) (real *) (real * *))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type real-type))
+				   '(t t))
+		     collect (list int-type real-type)))
+  nil)
+
+(deftest subtypep.integer.real.5
+  (loop for int-type in '((integer 10) (integer 10 *))
+	append (loop for real-type in '(real (real) (real *) (real * *)
+					     (real 10.0) (real 10.0 *)
+					     (real 10) (real 10 *))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type real-type))
+				   '(t t))
+		     collect (list int-type real-type)))
+  nil)
+
+(deftest subtypep.integer.real.6
+  (loop for int-type in '((integer * 10) (integer * 5))
+	append (loop for real-type in '(real (real) (real *) (real * *)
+					     (real * 10.0)
+					    (real * 10) (real * 1000000000000))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type real-type))
+				   '(t t))
+		     collect (list int-type real-type)))
+  nil)
+
+(deftest subtypep.integer.real.7
+  (loop for int-type in '((integer 0 10) (integer 2 5))
+	append (loop for real-type in '(real (real) (real *) (real * *)
+					    (real * 10) (real * 1000000000000)
+					    (real -10) (real -10.0)
+					    (real -10 *) (real -10.0 *)
+					    (real 0) (real 0.0)
+					    (real 0 10) (real * 10)
+					    (real 0 *) (real 0 10))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type real-type))
+				   '(t t))
+		     collect (list int-type real-type)))
+  nil)
+
+
+;;; Between integer and rational types
+
+(deftest subtypep.integer.rational.1
+  (check-equivalence
+   '(and integer (rational 4 10))
+   '(integer 4 10))
+  nil)
+
+(deftest subtypep.integer.rational.2
+  (check-equivalence
+   '(and (integer 4 *) (rational * 10))
+   '(integer 4 10))
+  nil)
+
+(deftest subtypep.integer.rational.3
+  (check-equivalence
+   '(and (integer * 10) (rational 4))
+   '(integer 4 10))
+  nil)
+
+
+
+(deftest subtypep.integer.rational.4
+  (loop for int-type in '(integer (integer) (integer *) (integer * *))
+	append (loop for rational-type
+		     in '(rational (rational) (rational *) (rational * *))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type rational-type))
+				   '(t t))
+		     collect (list int-type rational-type)))
+  nil)
+
+(deftest subtypep.integer.rational.5
+  (loop for int-type in '((integer 10) (integer 10 *))
+	append (loop for rational-type
+		     in '(rational (rational) (rational *) (rational * *)
+				   (rational 19/2) (rational 19/2 *)
+				   (rational 10) (rational 10 *))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type rational-type))
+				   '(t t))
+		     collect (list int-type rational-type)))
+  nil)
+
+(deftest subtypep.integer.rational.6
+  (loop for int-type in '((integer * 10) (integer * 5))
+	append (loop for rational-type
+		     in '(rational (rational) (rational *) (rational * *)
+				   (rational * 21/2)
+				   (rational * 10) (rational * 1000000000000))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type rational-type))
+				   '(t t))
+		     collect (list int-type rational-type)))
+  nil)
+
+(deftest subtypep.integer.rational.7
+  (loop for int-type in '((integer 0 10) (integer 2 5))
+	append (loop for rational-type in
+		     '(rational (rational) (rational *) (rational * *)
+				(rational * 10) (rational * 1000000000000)
+				(rational -1) (rational -1/2)
+				(rational -1 *) (rational -1/2 *)
+				(rational 0)
+				(rational 0 10) (rational * 10)
+				(rational 0 *) (rational 0 10))
+		     unless (equal (multiple-value-list
+				    (subtypep* int-type rational-type))
+				   '(t t))
+		     collect (list int-type rational-type)))
+  nil)
+
+(deftest subtypep.integer.rational.8
+  (check-equivalence
+   '(and integer (rational (4) 10))
+   '(integer 5 10))
+  nil)
+
+(deftest subtypep.integer.rational.9
+  (check-equivalence
+   '(and (integer 4 *) (rational * (10)))
+   '(integer 4 9))
+  nil)
+
+(deftest subtypep.integer.rational.10
+  (check-equivalence
+   '(and (integer * 10) (rational (4)))
+   '(integer 5 10))
   nil)

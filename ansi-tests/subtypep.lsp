@@ -115,3 +115,17 @@
       (subtypep* 'extended-char nil)
     (values t t))
   t t)
+
+(deftest subtypep.and/or.1
+  (check-equivalence
+   '(and (or symbol (integer 0 10))
+	 (or symbol (integer 15 25)))
+   '(or symbol (integer 10 15)))
+  nil)
+
+(deftest subtypep.and/or.2
+  (check-equivalence
+   '(and (or (not symbol) (integer 0 10))
+	 (or symbol (integer 11 25)))
+   '(integer 11 25))
+  nil)
