@@ -30,7 +30,7 @@
       (import s kwp)
       ;; Check that it's a keyword
       (values
-       (eql (symbol-package s) kwp)
+       (eqlt (symbol-package s) kwp)
        (eqlt (find-symbol name kwp) s)
        (nth-value 1 (find-symbol name kwp))
        (notnot (typep s 'keyword))
