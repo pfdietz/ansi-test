@@ -550,6 +550,38 @@
   (t t)
   z z)
 
+;;; Before methods fill in slots before the default system method
+
+(defclass shared-init-class-07 ()
+  ((a :initform 'x)
+   (b :initform 'y)))
+
+(defmethod shared-initialize :before ((obj shared-init-class-07) slot-names &rest args)
+  (declare (ignore args slot-names))
+  (setf (slot-value obj 'a) 'foo)
+  obj)
+
+(deftest shared-initialize.7.1
+  (let* ((class (find-class 'shared-init-class-07))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)))
+  (nil nil) t (t nil) foo)
+
+(deftest shared-initialize.7.2
+  (let* ((class (find-class 'shared-init-class-07))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj t))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil) t (t t) foo y)
+
 ;;; Error tests
 
 (deftest shared-initialize.error.1
