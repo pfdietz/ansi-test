@@ -964,8 +964,7 @@
 	  (mapc try-fn args)
 	  (prune-fn form try-fn))
 
-	 ((identity values progn
-	       ignore-errors cl:handler-case restart-case locally)
+	 ((identity values ignore-errors cl:handler-case restart-case locally)
 	  (unless (and (consp args)
 		       (consp (car args))
 		       (eql (caar args) 'tagbody))
@@ -1306,7 +1305,25 @@
 	 ((tagbody)
 	  (try 0)
 	  (prune-tagbody form try-fn))
-	 
+
+	 ((progn)
+	  (when (null args) (try nil))
+	  (try (car (last args)))
+	  (loop for i from 0 below (1- (length args))
+		for a in args
+		do (try `(progn ,@(subseq args 0 i)
+				,@(subseq args (1+ i))))
+		do (when (and (consp a)
+			      (or
+			       (eq (car a) 'progn)
+			       (and (eq (car a) 'tagbody)
+				    (every #'consp (cdr a)))))
+		     (try `(progn ,@(subseq args 0 i)
+				  ,@(copy-list (cdr a))
+				  ,@(subseq args (1+ i))))))
+	  (prune-fn form try-fn))
+	    
+	  
 	 (otherwise
 	  (try 0)
 	  (prune-fn form try-fn))
