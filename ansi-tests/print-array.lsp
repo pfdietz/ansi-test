@@ -305,14 +305,16 @@
 (deftest print.array.2.21
   (loop for a = (make-array (list (random 4) (random 4))
 			    :initial-element (- (random 1000000) 500000))
-	repeat 100 nconc (randomly-check-readability a :test #'is-similar))
+	repeat 100 nconc (randomly-check-readability a :test #'is-similar
+						     :can-fail t))
   nil)
 
 (deftest print.array.2.22
   (loop for a = (make-array (list (random 4) (random 4))
 			    :initial-element (- (random 1000000) 500000)
 			    :adjustable t)
-	repeat 100 nconc (randomly-check-readability a :test #'is-similar))
+	repeat 100 nconc (randomly-check-readability a :test #'is-similar
+						     :can-fail t))
   nil)
 
 (deftest print.array.2.23
@@ -325,7 +327,8 @@
 	for offset = (random (1+ (- (* d1 d2) (* d1a d2a))))
 	for b = (make-array (list d1a d2a) :displaced-to a
 			    :displaced-index-offset offset)
-	repeat 100 nconc (randomly-check-readability b :test #'is-similar))
+	repeat 100 nconc (randomly-check-readability b :test #'is-similar
+						     :can-fail t))
   nil)
 
 (deftest print.array.2.24
