@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "search-aux.lsp")
+
 (deftest search-vector.1
   (let ((target *searched-vector*)
 	(pat #(a)))

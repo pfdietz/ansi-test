@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "search-aux.lsp")
+
 ;;; The next test was busted due to to a stupid cut and paste
 ;;; error.  The loop terminates immediately, doing nothing
 ;;; useful. -- PFD

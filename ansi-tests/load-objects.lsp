@@ -51,5 +51,6 @@
 (load "define-method-combination.lsp")
 (load "find-method.lsp")
 (load "add-method.lsp")
-(load "unbound-slot.lsp")
 (load "class-name.lsp")
+(load "class-of.lsp")
+(load "unbound-slot.lsp")
