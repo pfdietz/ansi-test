@@ -1472,3 +1472,12 @@
 		   373146181 115)))
    0 0)
   373146181)
+
+(deftest misc.118
+  (funcall
+   (compile nil '(lambda (a)
+		   (declare (type (integer 0 10000) a))
+		   (if (or (or nil (not (or (not (or a nil)) t))) a) a 9376)))
+   0)
+  0)
+
