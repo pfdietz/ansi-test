@@ -59,7 +59,7 @@
 (defclass slot-exists-p-class-02 ()
   ((a :type t) (b :type nil) (c :type symbol) (d :type cons)
    (e :type float) (f :type single-float) (g :type short-float)
-   (h :type double-float) (i :type long-float) (j :type char)
+   (h :type double-float) (i :type long-float) (j :type character)
    (k :type base-char) (l :type rational) (m :type ratio) (n :type integer)
    (o :type fixnum) (p :type complex) (q :type condition)))
 
