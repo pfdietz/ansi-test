@@ -9168,5 +9168,17 @@ Broken at C::WT-MAKE-CLOSURE.
     (aref r))
   -18)
 
-  
+;;; ABCL (25 Dec 2004)
+;;; Class verification failed: (class: org/armedbear/lisp/out, method: execute signature: (Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;) Expecting to find integer on stack
 
+(deftest misc.493
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (b)
+			(declare (optimize (speed 2) (debug 1) (safety 3)
+					   (compilation-speed 3) (space 1)))
+			(aref #(41397376227 18660605846 49244777443) (min 2 (max 0 b)))))
+	
+	-71))
+  41397376227)
