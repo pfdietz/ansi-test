@@ -11,12 +11,16 @@
 
 (deftest format.f.1
   (let ((*print-readably* nil))
-    (loop for x in (remove-duplicates '(0.0s0 0.0f0 0.0d0 0.0l0
-				       -0.0s0 -0.0f0 -0.0d0 -0.0l0))
-	  for s1 = (format nil "~f" x)
-	  for s2 = (prin1-to-string x)
-	  unless (string=t s1 s2)
-	  collect (list x s1 s2)))
+    (loop
+     for type in '(short-float single-float double-float long-float
+		   short-float single-float double-float long-float)
+     for x in '(0.0s0 0.0f0 0.0d0 0.0l0
+		      -0.0s0 -0.0f0 -0.0d0 -0.0l0)
+     for s1 = (format nil "~f" x)
+     for s2 = (let ((*read-default-float-format* type))
+		(prin1-to-string x))
+     unless (string=t s1 s2)
+     collect (list x type s1 s2)))
   nil)
 
 (deftest format.f.2
