@@ -33,9 +33,16 @@
   (get-properties '("aa" b c d) (list (copy-seq "aa")))
   nil nil nil)
 
+;;; I removed the next test (noticed by Duane Rettig) because
+;;; the non-eqness of numbers may not be necesarily preserved.
+;;; The standard says numbers may be copied at any time, and
+;;; this might mean eql numbers are copied to a canonical eq
+;;; value
+#|
 (deftest get-properties.8
   (get-properties '(1000000000000 b c d) (list (1+ 999999999999)))
   nil nil nil)
+|#
 
 (deftest get-properties.9
   (let* ((x (copy-list '(a b c d e f g h a c)))
