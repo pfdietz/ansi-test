@@ -14,4 +14,5 @@
 (load "subtypep-array.lsp")
 
 (load "deftype.lsp")
+(load "standard-generic-function.lsp")
 

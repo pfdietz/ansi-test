@@ -751,4 +751,36 @@
     (defgeneric.fun.31 'a 'b))
   (a b))
 
+(deftest defgeneric.32
+  (progn
+    (defgeneric defgeneric.fun.32 (x) (:method ((x symbol)) :bad))
+    (defgeneric defgeneric.fun.32 (x) (:method ((x t)) :good))
+    (defgeneric.fun.32 'x))
+  :good)
+
+(deftest defgeneric.33
+  (let ((fn
+	 (eval
+	  '(defgeneric (setf defgeneric.fun.33) (x y &rest args)
+	     (:method (x (y cons) &rest args)
+		      (assert (null args)) (setf (car y) x))
+	     (:method (x (y array) &rest args)
+		      (setf (apply #'aref y args) x))))))
+    (values
+     (let ((z (list 'a 'b)))
+       (list
+	(setf (defgeneric.fun.33 z) 'c)
+	z))
+     (let ((a (make-array '(10) :initial-element nil)))
+       (list
+	(setf (defgeneric.fun.33 a 5) 'd)
+	a))))
+  (c (c b))
+  (d #(nil nil nil nil nil d nil nil nil nil)))
+
+(deftest defgeneric.34
+  (let ((fn (eval '(defgeneric #:defgeneric.fun.34 (x)
+		     (:method ((x t)) (list x :good))))))
+    (funcall fn 10))
+  (10 :good))
 
