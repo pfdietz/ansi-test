@@ -12,6 +12,4 @@
 (load "stream-element-type.lsp")
 (load "streamp.lsp")
 (load "read-byte.lsp")
-
-
-
+(load "peek-char.lsp")
