@@ -134,7 +134,7 @@
 (deftest gethash.zero.4
   (loop for pz in '(0.0s0 0.0f0 0.0d0 0.0l0)
 	for nz = (- pz)
-	for result = (let ((table (make-hash-table :test 'equal)))
+	for result = (let ((table (make-hash-table :test 'equalp)))
 		       (list
 			(setf (gethash pz table) :x)
 			(gethash pz table)
