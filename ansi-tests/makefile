@@ -30,8 +30,10 @@ random-test:
 
 clean:
 	@rm -f test.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
-	@rm -rf scratch/
-	@rm -f foo.txt foo.lsp file-that-was-renamed.txt tmp.dat tmp2.dat temp.dat
-	@rm -f gazonk*
+	@rm -rf scratch/ scratch.txt
+	@rm -f foo.txt foo.lsp foo.dat
+	@rm -f tmp.txt tmp.dat tmp2.dat temp.dat
+	@rm -f gazonk* out.class
 	@rm -rf TMP/
+	@rm -f "CLTEST:file-that-was-renamed.txt" file-that-was-renamed.txt
 
