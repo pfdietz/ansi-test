@@ -301,6 +301,10 @@
    end-of-file)
   t)
 
+;;; There was a consensus on comp.lang.lisp that the requirement
+;;; that an end-of-file error be thrown in the following case
+;;; is a spec bug
+#|
 (deftest peek-char.error.6
   (signals-error
    (with-input-from-string
@@ -308,3 +312,4 @@
     (peek-char nil s nil nil t))
    end-of-file)
   t)
+|#
