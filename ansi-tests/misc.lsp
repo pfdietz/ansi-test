@@ -1269,5 +1269,48 @@
    259448422916 173715)
   259448422916)
 
+(deftest misc.102
+  (funcall
+   (compile nil '(lambda (b)
+		   (declare (type (integer -1598566306 2941) b))
+		   (declare (optimize (speed 3)))
+		   (max -148949 (ignore-errors b))))
+   0)
+  0)
 
+(deftest misc.103
+  (funcall
+   (compile nil '(lambda (a b)
+		   (min -80
+			(abs
+			 (ignore-errors
+			   (+
+			    (logeqv b
+				    (block b6
+				      (return-from b6
+					(load-time-value -6876935))))
+			    (if (logbitp 1 a) b (setq a -1522022182249))))))))
+   -1802767029877 -12374959963)
+  -80)
 
+(deftest misc.104
+  (funcall
+   (compile nil '(lambda (a) (declare (type (integer 55400028 60748067) a))
+		   (lognand 1505 (ash a (let () 40)))))
+   58194485)
+  -1)
+
+(deftest misc.105
+  (funcall
+   (compile nil '(lambda (b c)
+		   (declare (type (integer -4 -3) c))
+		   (block b7
+		     (flet ((%f1 (f1-1 f1-2 f1-3)
+				 (if (logbitp 0 (return-from b7
+						  (- -815145138 f1-2)))
+				     (return-from b7 -2611670)
+				   99345)))
+		       (let ((v2 (%f1 -2464 (%f1 -1146 c c) -2)))
+			 b)))))
+   2950453607 -4)
+  -815145134)
