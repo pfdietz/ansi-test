@@ -100,8 +100,10 @@
 	 (*print-right-margin* 100))
      (with-output-to-string
        (os)
-       (with-open-stream (*terminal-io* (make-two-way-stream (make-string-input-stream "") os))
-			 (pprint-tabular t '(1 2 3) t nil 1)))))
+       (with-input-from-string
+	(is "")
+	(with-open-stream (*terminal-io* (make-two-way-stream is os))
+			  (pprint-tabular t '(1 2 3) t nil 1))))))
   "(1 2 3)")
 
 (deftest pprint-tabular.24

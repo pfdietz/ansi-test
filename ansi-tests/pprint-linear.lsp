@@ -68,8 +68,10 @@
 	 (*print-right-margin* 100))
      (with-output-to-string
        (os)
-       (with-open-stream (*terminal-io* (make-two-way-stream (make-string-input-stream "") os))
-			 (pprint-linear t '(1 2 3))))))
+       (with-input-from-string
+	(is "")
+	(with-open-stream (*terminal-io* (make-two-way-stream is os))
+			  (pprint-linear t '(1 2 3)))))))
   "(1 2 3)")
 
 (deftest pprint-linear.11
