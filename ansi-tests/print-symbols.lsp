@@ -7,16 +7,17 @@
 
 ;;; Symbol printing when escaping is off
 
+(defun print.symbol.fn (sym case *print-case* expected)
+  (setf (readtable-case *readtable*) case)
+  (let ((str (with-output-to-string (s) (princ sym s))))
+    (or (equalt str expected)
+	(list str expected))))
+
 (deftest print.symbol.1
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-		(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|XYZ| :upcase :upcase "XYZ")
 	(%p '|XYZ| :upcase :downcase "xyz")
@@ -36,12 +37,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-		(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|xyz| :upcase :upcase "xyz")
 	(%p '|xyz| :upcase :downcase "xyz")
@@ -61,12 +57,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-		(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|Xyz| :upcase :upcase "Xyz")
 	(%p '|Xyz| :upcase :downcase "xyz")
@@ -86,12 +77,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-		(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|xYZ| :upcase :upcase "xYZ")
 	(%p '|xYZ| :upcase :downcase "xyz")
@@ -111,12 +97,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-		(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|X1Z| :upcase :upcase "X1Z")
 	(%p '|X1Z| :upcase :downcase "x1z")
@@ -136,12 +117,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-			(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|x1z| :upcase :upcase "x1z")
 	(%p '|x1z| :upcase :downcase "x1z")
@@ -161,12 +137,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-		(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|X1z| :upcase :upcase "X1z")
 	(%p '|X1z| :upcase :downcase "x1z")
@@ -186,12 +157,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (sym case *print-case* expected)
-		(setf (readtable-case *readtable*) case)
-		(let ((str
-		       (with-output-to-string (s) (princ sym s))))
-		  (or (equalt str expected)
-		      (list str expected)))))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
        (values
 	(%p '|x1Z| :upcase :upcase "x1Z")
 	(%p '|x1Z| :upcase :downcase "x1z")
