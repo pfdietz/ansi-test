@@ -194,6 +194,17 @@
   (concatenate '(array nil (*)))
   "")
 
+(deftest concatenate.33
+  (do-special-strings
+   (s "abc" nil)
+   (assert (string= (concatenate 'string s s s) "abcabcabc"))
+   (assert (string= (concatenate 'string "xy" s) "xyabc"))
+   (assert (string= (concatenate 'simple-string s "z" s "w" s) "abczabcwabc"))
+   (assert (string= (concatenate 'base-string s "z" s "w" s) "abczabcwabc"))
+   (assert (string= (concatenate 'simple-base-string s "z" s "w" s) "abczabcwabc"))
+   (assert (string= (concatenate '(vector character) s "z" s "w" s) "abczabcwabc")))
+  nil)
+		     
 (deftest concatenate.order.1
   (let ((i 0) w x y z)
     (values

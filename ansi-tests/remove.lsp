@@ -323,6 +323,20 @@
   (remove #\a (copy-seq "bcd") :count -1)
   "bcd")
 
+(deftest remove-string.4
+  (do-special-strings
+   (s "abcdbad" nil)
+   (let ((s2 (remove #\b s)))
+     (assert (equal (array-element-type s) (array-element-type s2)))
+     (assert (string= s2 "acdad")))
+   (let ((s2 (remove #\b s :count 1)))
+     (assert (equal (array-element-type s) (array-element-type s2)))
+     (assert (string= s2 "acdbad")))
+   (let ((s2 (remove #\b s :count 1 :from-end t)))
+     (assert (equal (array-element-type s) (array-element-type s2)))
+     (assert (string= s2 "abcdad"))))
+  nil)
+
 (deftest delete-vector.1
   (delete 'a (vector 'b 'c 'd))
   #(b c d))
@@ -346,6 +360,30 @@
 (deftest delete-string.3
   (delete #\a (copy-seq "bcd") :count -1)
   "bcd")
+
+(deftest delete-string.4
+  (do-special-strings
+   (s "abcdbad" nil)
+   (let ((s2 (delete #\b s)))
+     (assert (equal (array-element-type s) (array-element-type s2)))
+     (assert (string= s2 "acdad"))))
+  nil)
+
+(deftest delete-string.5
+  (do-special-strings
+   (s "abcdbad" nil)
+   (let ((s2 (delete #\b s :count 1)))
+     (assert (equal (array-element-type s) (array-element-type s2)))
+     (assert (string= s2 "acdbad"))))
+  nil)
+
+(deftest delete-string.6
+  (do-special-strings
+   (s "abcdbad" nil)
+   (let ((s2 (delete #\b s :count 1 :from-end t)))
+     (assert (equal (array-element-type s) (array-element-type s2)))
+     (assert (string= s2 "abcdad"))))
+  nil)
 
 (deftest remove-bit-vector.1
   (remove 0 (copy-seq #*00011101101))
@@ -865,3 +903,120 @@
 (deftest delete.error.10
   (signals-error (delete 'a (list 'a 'b 'c) :key #'car) type-error)
   t)
+
+;;; More specialized string tests
+
+(deftest remove-if-string.1
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (remove-if #'alpha-char-p s)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "1234"))
+     (assert (string= s "ab1c23def4"))))
+  nil)
+
+(deftest remove-if-string.2
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (remove-if #'alpha-char-p s :count 3)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "123def4"))
+     (assert (string= s "ab1c23def4"))))
+  nil)
+
+(deftest remove-if-string.3
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (remove-if #'alpha-char-p s :count 3 :from-end t)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "ab1c234"))
+     (assert (string= s "ab1c23def4"))))
+  nil)
+
+(deftest remove-if-not-string.1
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (remove-if-not #'digit-char-p s)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "1234"))
+     (assert (string= s "ab1c23def4"))))
+  nil)
+
+(deftest remove-if-not-string.2
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (remove-if-not #'digit-char-p s :count 3)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "123def4"))
+     (assert (string= s "ab1c23def4"))))
+  nil)
+
+(deftest remove-if-not-string.3
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (remove-if-not #'digit-char-p s :count 3 :from-end t)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "ab1c234"))
+     (assert (string= s "ab1c23def4"))))
+  nil)
+
+
+(deftest delete-if-string.1
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (delete-if #'alpha-char-p s)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "1234"))))
+  nil)
+
+(deftest delete-if-string.2
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (delete-if #'alpha-char-p s :count 3)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "123def4"))))
+  nil)
+
+(deftest delete-if-string.3
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (delete-if #'alpha-char-p s :count 3 :from-end t)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "ab1c234"))))
+  nil)
+
+(deftest delete-if-not-string.1
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (delete-if-not #'digit-char-p s)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "1234"))))
+  nil)
+
+(deftest delete-if-not-string.2
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (delete-if-not #'digit-char-p s :count 3)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "123def4"))))
+  nil)
+
+(deftest delete-if-not-string.3
+  (do-special-strings
+   (s "ab1c23def4" nil)
+   (let ((s2 (delete-if-not #'digit-char-p s :count 3 :from-end t)))
+     (assert (equal (array-element-type s)
+		    (array-element-type s2)))
+     (assert (string= s2 "ab1c234"))))
+  nil)

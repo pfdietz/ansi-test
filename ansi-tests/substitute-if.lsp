@@ -292,6 +292,26 @@
     result)
   #(a b z c b))
 
+(deftest substitute-if-vector.32
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (values
+     (substitute-if 'x (is-eql-p 'c) v2 :count 1)
+     v1))
+  #(d a b x d a b c)
+  #(a b c d a b c d a b c d a b c d))
+
+(deftest substitute-if-vector.33
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (values
+     (substitute-if 'x (is-eql-p 'c) v2 :count 1 :from-end t)
+     v1))
+  #(d a b c d a b x)
+  #(a b c d a b c d a b c d a b c d))
+
 ;;; Tests on strings
 
 (deftest substitute-if-string.1
@@ -691,7 +711,18 @@
 	 result))
   "01a2342015")
 
-(deftest substitute-if-bit-vector.26
+(deftest substitute-if-string.26
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (substitute-if #\! (is-eql-p #\a) s) "xyz!bcxyz!bc"))
+   (assert (string= (substitute-if #\! (is-eql-p #\a) s :count 1) "xyz!bcxyzabc"))
+   (assert (string= (substitute-if #\! (is-eql-p #\a) s :count 1 :from-end t) "xyzabcxyz!bc"))
+   (assert (string= s "xyzabcxyzabc")))
+  nil)
+
+;;; More bit vector tests
+
+(deftest substitute-if-bit-vector.22
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 (is-eql-p 1) x :key #'1+)))
@@ -699,7 +730,7 @@
 	 result))
   #*11111111111111111)
     
-(deftest substitute-if-bit-vector.27
+(deftest substitute-if-bit-vector.23
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 (is-eql-p 1) x :key #'1+ :start 1 :end 10)))
@@ -707,33 +738,35 @@
 	 result))
   #*01111111111010110)
 
-(deftest substitute-if-bit-vector.30
+(deftest substitute-if-bit-vector.24
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
 		       :fill-pointer 5 :element-type 'bit))
 	 (result (substitute-if 1 #'zerop x)))
     result)
   #*11111)
 
-(deftest substitute-if-bit-vector.31
+(deftest substitute-if-bit-vector.25
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
 		       :fill-pointer 5 :element-type 'bit))
 	 (result (substitute-if 1 #'zerop x :from-end t)))
     result)
   #*11111)
 
-(deftest substitute-if-bit-vector.32
+(deftest substitute-if-bit-vector.26
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
 		       :fill-pointer 5 :element-type 'bit))
 	 (result (substitute-if 1 #'zerop x :count 1)))
     result)
   #*11011)
 
-(deftest substitute-if-bit-vector.33
+(deftest substitute-if-bit-vector.27
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
 		       :fill-pointer 5 :element-type 'bit))
 	 (result (substitute-if 1 #'zerop x :from-end t :count 1)))
     result)
   #*01111)
+
+;;; Order of evaluation tests
 
 (deftest substitute-if.order.1
   (let ((i 0) a b c d e f g h)

@@ -484,6 +484,11 @@
    (nil #\6)
    (#\6)))
 
+(deftest find-if-not-string.19
+  (do-special-strings
+   (s "abc1def" nil)
+   (assert (eql (find-if-not #'alpha-char-p s) #\1)))
+  nil)
 
 ;;; Keyword tests
 

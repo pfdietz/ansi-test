@@ -507,6 +507,12 @@
      ))
   #\2 #\4 #\1 #\5)
 
+(deftest find-if-string.20
+  (do-special-strings
+   (s "123a456" nil)
+   (assert (eql (find-if #'alpha-char-p s) #\a)))
+  nil)
+
 ;;; Keyword tests
 
 (deftest find-if.allow-other-keys.1

@@ -244,6 +244,20 @@
     result)
   #(a b z c b))
 
+(deftest nsubstitute-if-not-vector.32
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (nsubstitute-if-not 'x (is-not-eql-p 'c) v2 :count 1))
+  #(d a b x d a b c))
+
+(deftest nsubstitute-if-not-vector.33
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (nsubstitute-if-not 'x (is-not-eql-p 'c) v2 :count 1 :from-end t))
+  #(d a b c d a b x))
+
 ;;; Tests on strings
 
 (deftest nsubstitute-if-not-string.1
@@ -380,6 +394,24 @@
 				    :from-end t :count 1)))
     result)
   "abzcb")
+
+(deftest nsubstitute-if-not-string.32
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (nsubstitute-if-not #\! (is-not-eql-p #\a) s) "xyz!bcxyz!bc")))
+  nil)
+
+(deftest nsubstitute-if-not-string.33
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (nsubstitute-if-not #\! (is-not-eql-p #\a) s :count 1) "xyz!bcxyzabc")))
+  nil)
+
+(deftest nsubstitute-if-not-string.34
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (nsubstitute-if-not #\! (is-not-eql-p #\a) s :count 1 :from-end t) "xyzabcxyz!bc")))
+  nil)
 
 
 ;;; Tests on bit-vectors

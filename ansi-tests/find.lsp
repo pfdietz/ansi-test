@@ -781,6 +781,12 @@
   (find #\k "abcdmnop" :test-not #'char>=)
   #\m)
 
+(deftest find-string.28
+  (do-special-strings
+   (s "abcdef" nil)
+   (assert (char= (find #\c s :test #'char<) #\d)))
+  nil)
+
 ;;; Test & test not
 
 (defharmless find-list.test-and-test-not.1

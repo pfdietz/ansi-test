@@ -319,6 +319,36 @@
     (merge 'string x nil #'char<))
   "adgkm")
 
+(deftest merge-string.19
+  (do-special-strings
+   (s "ace" nil)
+   (assert (string= (merge 'string s (copy-seq "bdf") #'char<) "abcdef")))
+  nil)
+
+(deftest merge-string.20
+  (do-special-strings
+   (s "ace" nil)
+   (assert (string= (merge 'base-string (copy-seq "bdf") s #'char<) "abcdef")))
+  nil)
+
+(deftest merge-string.21
+  (do-special-strings
+   (s "ace" nil)
+   (assert (string= (merge 'simple-string s (copy-seq "bdf") #'char<) "abcdef")))
+  nil)
+
+(deftest merge-string.22
+  (do-special-strings
+   (s "ace" nil)
+   (assert (string= (merge 'simple-base-string s (copy-seq "bdf") #'char<) "abcdef")))
+  nil)
+
+(deftest merge-string.23
+  (do-special-strings
+   (s "ace" nil)
+   (assert (string= (merge '(vector character) s (copy-seq "bdf") #'char<) "abcdef")))
+  nil)
+
 ;;; Tests for bit vectors
 
 (deftest merge-bit-vector.1

@@ -805,6 +805,27 @@
     result)
   #((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
+(deftest nsubstitute-vector.32
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (values
+     (nsubstitute 'x 'c v2 :count 1)
+     v1))
+  #(d a b x d a b c)
+  #(a b c d a b x d a b c d a b c d))
+
+(deftest nsubstitute-vector.33
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (values
+     (nsubstitute 'x 'c v2 :count 1 :from-end t)
+     v1))
+  #(d a b c d a b x)
+  #(a b c d a b c d a b x d a b c d))
+
+
 (deftest nsubstitute-string.24
   (let* ((orig "0102342015")
 	 (x (copy-seq orig))
@@ -832,6 +853,29 @@
 	 (result (nsubstitute #\a #\1 x :key #'nextdigit :test-not #'eql)))
     result)
   "0a0aaaa0aa")
+
+(deftest nsubstitute-string.32
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (nsubstitute #\! #\a s) "xyz!bcxyz!bc"))
+   (assert (string= s "xyz!bcxyz!bc")))
+  nil)
+
+(deftest nsubstitute-string.33
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (nsubstitute #\! #\a s :count 1) "xyz!bcxyzabc"))
+   (assert (string= s "xyz!bcxyzabc")))
+  nil)
+
+(deftest nsubstitute-string.34
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (nsubstitute #\! #\a s :count 1 :from-end t) "xyzabcxyz!bc"))
+   (assert (string= s "xyzabcxyz!bc")))
+  nil)
+
+;;; More bit vector tests
 
 (deftest nsubstitute-bit-vector.30
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)

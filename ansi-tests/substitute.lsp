@@ -435,6 +435,26 @@
     result)
   #(a b z c b))
 
+(deftest substitute-vector.32
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (values
+     (substitute 'x 'c v2 :count 1)
+     v1))
+  #(d a b x d a b c)
+  #(a b c d a b c d a b c d a b c d))
+
+(deftest substitute-vector.33
+  (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (values
+     (substitute 'x 'c v2 :count 1 :from-end t)
+     v1))
+  #(d a b c d a b x)
+  #(a b c d a b c d a b c d a b c d))
+
 ;;; Tests on strings
 
 (deftest substitute-string.1
@@ -681,6 +701,15 @@
 	 (result (substitute #\z #\a x :from-end t :count 1)))
     result)
   "abzcb")
+
+(deftest substitute-string.32
+  (do-special-strings
+   (s "xyzabcxyzabc" nil)
+   (assert (string= (substitute #\! #\a s) "xyz!bcxyz!bc"))
+   (assert (string= (substitute #\! #\a s :count 1) "xyz!bcxyzabc"))
+   (assert (string= (substitute #\! #\a s :count 1 :from-end t) "xyzabcxyz!bc"))
+   (assert (string= s "xyzabcxyzabc")))
+  nil)
 
 ;;; Tests on bit-vectors
 

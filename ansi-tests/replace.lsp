@@ -586,6 +586,45 @@
   t
   "aabcef")
 
+(deftest replace-string.22
+  (do-special-strings
+   (s "abcdefg" nil)
+   (assert (eq s (replace s "XYZ")))
+   (assert (string= s "XYZdefg")))
+  nil)
+
+(deftest replace-string.23
+  (do-special-strings
+   (s "abcdefg" nil)
+   (assert (eq s (replace s "XYZ" :start1 1)))
+   (assert (string= s "aXYZefg")))
+  nil)
+
+(deftest replace-string.24
+  (do-special-strings
+   (s "abcdefg" nil)
+   (assert (eq s (replace s "XYZ" :start1 1 :end2 2)))
+   (assert (string= s "aXYdefg")))
+  nil)
+
+(deftest replace-string.25
+  (do-special-strings
+   (s "abcdefg" nil)
+   (assert (eq s (replace s "XYZ" :end1 2)))
+   (assert (string= s "XYcdefg")))
+  nil)
+
+(deftest replace-string.26
+  (do-special-strings
+   (s "abcdefg" nil)
+   (assert (eq s (replace s "XYZ" :start2 1)))
+   (assert (string= s "YZcdefg")))
+  nil)
+
+
+
+
+
 ;;; Order of evaluation tests
 
 (deftest replace.order.1
