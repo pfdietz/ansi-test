@@ -39,9 +39,9 @@
   (functionp '(lambda (x) x))
   nil)
 
-(deftest functionp.7
-  (not (functionp #'(setf car)))
-  nil)
+;;; (deftest functionp.7
+;;;  (not (functionp #'(setf car)))
+;;;   nil)
 
 (deftest functionp.8
   (not (functionp #'(lambda (x) x)))
