@@ -18,3 +18,5 @@
 (load "terpri.lsp")
 (load "fresh-line.lsp")
 (load "unread-char.lsp")
+(load "write-char.lsp")
+(load "read-line.lsp")
