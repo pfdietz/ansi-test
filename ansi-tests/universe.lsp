@@ -286,6 +286,14 @@
      (make-bar-structure :x 1 :y 'a :z nil)
      ))
 
+(defvar *functions*
+  (list #'cons #'car #'append #'values
+	(macro-function 'cond)
+	#'(lambda (x) x)))
+
+(defvar *random-states*
+  (list (make-random-state)))
+
 (defvar *universe*
     (remove-duplicates
      (append
@@ -302,5 +310,7 @@
       *streams*
       *readtables*
       *structures*
+      *functions*
+      *random-states*
       nil)))
 

@@ -212,10 +212,9 @@
   0)
 |#
 
-(deftest types-5
+(deftest simple-base-string-is-sequence
     (subtypep* 'simple-base-string 'sequence)
   t t)
-
 
 (deftest types-6
     (types-6-body)
@@ -270,6 +269,18 @@
 (deftest types-9a
     (types-9a-body)
   0)
+
+;;;
+;;; Check that disjointness of types in *disjoint-types-list*
+;;; is respected by all the elements of *universe*
+;;;
+(deftest universe-elements-in-at-most-one-disjoint-type
+  (loop for e in *universe*
+	for types = (remove-if-not #'(lambda (x) (typep e x))
+				   *disjoint-types-list*)
+	when (> (length types) 1)
+	collect (list e types))
+  nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; deftype
