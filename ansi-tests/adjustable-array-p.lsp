@@ -40,8 +40,11 @@
   type-error)
 
 (deftest adjustable-array-p.error.4
-  (loop for e in *mini-universe*
-	unless (or (typep e 'array)
-		   (eq 'type-error (classify-error** `(adjustable-array-p ',e))))
-	collect e)
+  (let (why)
+    (loop for e in *mini-universe*
+	  unless (or (typep e 'array)
+		     (eq 'type-error 
+			 (setq why (classify-error**
+				    `(adjustable-array-p ',e)))))
+	  collect (list e why)))
   nil)

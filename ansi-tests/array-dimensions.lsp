@@ -50,9 +50,11 @@
   program-error)
 
 (deftest array-dimensions.error.3
-  (loop for e in *mini-universe*
-	unless (or (typep e 'array)
-		   (eq 'type-error
-		       (classify-error** `(array-dimensions ',e))))
-	collect e)
+  (let (why)
+    (loop for e in *mini-universe*
+	  unless (or (typep e 'array)
+		     (eq 'type-error
+			 (setq why (classify-error**
+				    `(array-dimensions ',e)))))
+	  collect (list e why)))
   nil)

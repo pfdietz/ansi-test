@@ -38,23 +38,15 @@
   program-error)
 
 (deftest array-total-size.error.3
-  (loop for e in *mini-universe*
-	when (and (not (typep e 'array))
-		  (not (eql (classify-error** `(array-total-size ',e))
-			    'type-error)))
-	collect e)
+  (let (why)
+    (loop for e in *mini-universe*
+	  when (and (not (typep e 'array))
+		    (not (eql (setq why 
+				    (classify-error** `(array-total-size ',e)))
+			      'type-error)))
+	collect (list e why)))
   nil)
 
 (deftest array-total-size.error.4
   (classify-error (array-total-size 0))
   type-error)
-
-
-
-
-
-
-
-
-
-

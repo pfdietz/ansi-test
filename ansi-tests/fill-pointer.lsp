@@ -24,7 +24,35 @@
      a))
   5 6 #(1 2 3 4 5 6))
 
+;;; Error tests
 
+(deftest fill-pointer.error.1
+  (classify-error (fill-pointer))
+  program-error)
 
+(deftest fill-pointer.error.2
+  (classify-error (fill-pointer (make-array '(10) :fill-pointer 4)
+				nil))
+  program-error)
 
+(deftest fill-pointer.error.3
+  (classify-error (fill-pointer (make-array '(10) :fill-pointer nil)))
+  type-error)
 
+(deftest fill-pointer.error.4
+  (classify-error (fill-pointer #0aNIL))
+  type-error)
+
+(deftest fill-pointer.error.5
+  (classify-error (fill-pointer #2a((a b c)(d e f))))
+  type-error)
+
+(deftest fill-pointer.error.6
+  (let (why)
+    (loop for e in *mini-universe*
+	  when (and (or (not (typep e 'vector))
+			(not (array-has-fill-pointer-p e)))
+		    (not (eql (setq why (classify-error** `(fill-pointer ',e)))
+			      'type-error)))
+	  collect (list e why)))
+  nil)

@@ -105,9 +105,11 @@
   program-error)
 
 (deftest array-displacement.error.3
-  (loop for e in *mini-universe*
-	unless (or (typep e 'array)
-		   (eq 'type-error
-		       (classify-error** `(array-displacement ',e))))
-	collect e)
+  (let (why)
+    (loop for e in *mini-universe*
+	  unless (or (typep e 'array)
+		     (eq 'type-error
+			 (setq why (classify-error**
+				    `(array-displacement ',e)))))
+	collect (list e why)))
   nil)
