@@ -30,3 +30,39 @@
 		    (declare (ignore os))
 		    (values 'a 'b))
   a b)
+
+(deftest with-open-stream.6
+  (let ((s (make-string-output-stream)))
+    (values
+     (with-open-stream (os s))
+     (notnot (typep s 'string-stream))
+     (open-stream-p s)))
+  nil t nil)
+
+(deftest with-open-stream.7
+  (let ((s (make-string-input-stream "123")))
+    (values
+     (with-open-stream (is s) (read-char s))
+     (notnot (typep s 'string-stream))
+     (open-stream-p s)))
+  #\1 t nil)
+
+(deftest with-open-stream.8
+  (let ((s (make-string-output-stream)))
+    (values
+     (block done
+      (with-open-stream (os s) (return-from done nil)))
+     (notnot (typep s 'string-stream))
+     (open-stream-p s)))
+  nil t nil)
+
+(deftest with-open-stream.9
+  (let ((s (make-string-output-stream)))
+    (values
+     (catch 'done
+      (with-open-stream (os s) (throw 'done nil)))
+     (notnot (typep s 'string-stream))
+     (open-stream-p s)))
+  nil t nil)
+
+
