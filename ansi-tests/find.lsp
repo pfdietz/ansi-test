@@ -720,7 +720,7 @@
 
 (deftest find-error.4
   (locally (declare (optimize (safety 3)))
-	   (handler-case (find 'a '(a b c . d))
+	   (handler-case (find 'e '(a b c . d))
 			 (type-error () :type-error)
 			 (error (c) c)))
   :type-error)

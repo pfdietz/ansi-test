@@ -586,7 +586,7 @@
 
 (deftest position-error.4
   (locally (declare (optimize (safety 3)))
-	   (handler-case (position 'a '(a b c . d))
+	   (handler-case (position 'e '(a b c . d))
 			 (type-error () :type-error)
 			 (error (c) c)))
   :type-error)

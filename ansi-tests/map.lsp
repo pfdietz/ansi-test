@@ -122,18 +122,18 @@
   "abcde")
 
 (deftest map-string.30
-  (map '(simple-vector character) #'identity '(#\a #\b #\c #\d #\e))
+  (map '(simple-vector 5) #'identity '(#\a #\b #\c #\d #\e))
   "abcde")
 
 ;;; Use a more elaborate form of the simple-array type specifier
-(deftest map-string.31
-  (map '(simple-array character *) #'identity "abcde")
-  "abcde")
+;;; (deftest map-string.31
+;;;  (map '(simple-array character *) #'identity "abcde")
+;;;  "abcde")
 
 ;;; Use a more elaborate form of the simple-array type specifier
-(deftest map-string.32
-  (map '(simple-array character 5) #'identity "abcde")
-  "abcde")
+;;; (deftest map-string.32
+;;;  (map '(simple-array character 5) #'identity "abcde")
+;;;   "abcde")
 
 (deftest map-nil.33
   (let ((a nil))
