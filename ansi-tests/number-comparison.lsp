@@ -157,6 +157,47 @@
 	  collect (list a b c d)))
   nil)
 
+;;; Comparison of a rational with a float
+
+(deftest =.17
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-epsilon single-float-epsilon
+			 double-float-epsilon long-float-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat+rat/i = (+ xrat rat/i)
+		nconc
+		(if (= x xrat+rat/i)
+		    (list (list x i  xrat+rat/i))
+		  nil))))
+  nil)
+
+(deftest =.18
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-negative-epsilon single-float-negative-epsilon
+			 double-float-negative-epsilon long-float-negative-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat-rat/i = (- xrat rat/i)
+		nconc
+		(if (= x xrat-rat/i)
+		    (list (list x i xrat-rat/i))
+		  nil))))
+  nil)
+
+
 (deftest =.order.1
   (let ((i 0) x y)
     (values
@@ -299,6 +340,45 @@
 		when (/= x y)
 		collect (list x y))))
   nil)
+
+(deftest /=.17
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-epsilon single-float-epsilon
+			 double-float-epsilon long-float-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat+rat/i = (+ xrat rat/i)
+		nconc
+		(if (/= x xrat+rat/i)
+		    nil
+		    (list (list x i  xrat+rat/i))))))
+  nil)
+
+(deftest /=.18
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-negative-epsilon single-float-negative-epsilon
+			 double-float-negative-epsilon long-float-negative-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat-rat/i = (- xrat rat/i)
+		nconc
+		(if (/= x xrat-rat/i)
+		    nil
+		    (list (list x i xrat-rat/i))))))
+  nil)
+
 
 (deftest /=.order.1
   (let ((i 0) x y)
@@ -511,6 +591,45 @@
 		  (< x (- x))))
   t)
 
+(deftest <.17
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-epsilon single-float-epsilon
+			 double-float-epsilon long-float-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat+rat/i = (+ xrat rat/i)
+		nconc
+		(if (< x xrat+rat/i)
+		    nil
+		    (list (list x i  xrat+rat/i))))))
+  nil)
+
+(deftest <.18
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-negative-epsilon single-float-negative-epsilon
+			 double-float-negative-epsilon long-float-negative-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat-rat/i = (- xrat rat/i)
+		nconc
+		(if (< x xrat-rat/i)
+		    (list (list x i xrat-rat/i))
+		  nil))))
+  nil)
+
+
 (deftest <.order.1
   (let ((i 0) x y)
     (values
@@ -718,6 +837,44 @@
 		    (<= x (- x))))
   t)
 
+(deftest <=.17
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-epsilon single-float-epsilon
+			 double-float-epsilon long-float-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat+rat/i = (+ xrat rat/i)
+		nconc
+		(if (<= x xrat+rat/i)
+		    nil
+		    (list (list x i  xrat+rat/i))))))
+  nil)
+
+(deftest <=.18
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-negative-epsilon single-float-negative-epsilon
+			 double-float-negative-epsilon long-float-negative-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat-rat/i = (- xrat rat/i)
+		nconc
+		(if (<= x xrat-rat/i)
+		    (list (list x i xrat-rat/i))
+		  nil))))
+  nil)
+
 (deftest <=.order.1
   (let ((i 0) x y)
     (values
@@ -807,6 +964,44 @@
 	never (or (> (- x) x)
 		  (> x (- x))))
   t)
+
+(deftest >.17
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-epsilon single-float-epsilon
+			 double-float-epsilon long-float-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat+rat/i = (+ xrat rat/i)
+		nconc
+		(if (> x xrat+rat/i)
+		    (list (list x i  xrat+rat/i))
+		  nil))))
+  nil)
+
+(deftest >.18
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-negative-epsilon single-float-negative-epsilon
+			 double-float-negative-epsilon long-float-negative-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat-rat/i = (- xrat rat/i)
+		nconc
+		(if (> x xrat-rat/i)
+		    nil
+		    (list (list x i  xrat-rat/i))))))
+  nil)
 
 (deftest >.order.1
   (let ((i 0) x y)
@@ -899,6 +1094,45 @@
 	always (and (>= (- x) x)
 		    (>= x (- x))))
   t)
+
+
+(deftest >=.17
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-epsilon single-float-epsilon
+			 double-float-epsilon long-float-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat+rat/i = (+ xrat rat/i)
+		nconc
+		(if (>= x xrat+rat/i)
+		    (list (list x i  xrat+rat/i))
+		  nil))))
+  nil)
+
+(deftest >=.18
+  (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for eps in (list short-float-negative-epsilon single-float-negative-epsilon
+			 double-float-negative-epsilon long-float-negative-epsilon)
+	for exp = (nth-value 1 (decode-float eps))
+	for radix = (float-radix eps)
+	when (< (* (log radix 2) exp) 1000)
+	nconc
+	(let* ((rat (rational eps))
+	       (xrat (rational x)))
+	  (loop for i from 2 to 100
+		for rat/i = (/ rat i)
+		for xrat-rat/i = (- xrat rat/i)
+		nconc
+		(if (>= x xrat-rat/i)
+		    nil
+		    (list (list x i xrat-rat/i))))))
+  nil)
 
 (deftest >=.order.1
   (let ((i 0) x y)
