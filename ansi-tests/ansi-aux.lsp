@@ -1056,11 +1056,3 @@ the condition to go uncaught if it cannot be classified."
   (handler-case
    (progn (string x) t)
    (error nil)))
-
-
-;;; Define a test using standard io syntax
-
-(defmacro def-syntax-test (name form &body expected-results)
-  `(deftest ,name
-     (with-standard-io-syntax (let ((*package* (find-package :cl-test))) ,form))
-     ,@expected-results))

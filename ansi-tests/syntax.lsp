@@ -5,7 +5,8 @@
 
 (in-package :cl-test)
 
-;;; Test that 
+(compile-and-load "reader-aux.lsp")
+
 (def-syntax-test syntax.whitespace.1
   ;; Check that various standard or semistandard characters are whitespace[2]
   (let ((names '("Tab" "Newline" "Linefeed" "Space" "Return" "Page")))
@@ -300,13 +301,6 @@
 
 ;;; Tess of #(...)
 
-(defmacro def-syntax-vector-test (name form &body expected-elements)
-  `(def-syntax-test ,name
-     (let ((v (read-from-string ,form)))
-       (assert (simple-vector-p v))
-       v)
-     ,(apply #'vector expected-elements)))
-
 (def-syntax-vector-test syntax.sharp-left-paren.1
   "#()")
 
@@ -346,13 +340,6 @@
   t)
 
 ;;; Tests of #*
-
-(defmacro def-syntax-bit-vector-test (name form &body expected-elements)
-  `(def-syntax-test ,name
-     (let ((v (read-from-string ,form)))
-       (assert (simple-bit-vector-p v))
-       v)
-     ,(make-array (length expected-elements) :element-type 'bit :initial-contents expected-elements)))
 
 (def-syntax-bit-vector-test syntax.sharp-asterisk.1
   "#*")
@@ -415,14 +402,6 @@
   t)
 
 ;;; Tests of #: ...
-
-(defmacro def-syntax-unintern-test (name string)
-  `(deftest ,name
-     (let ((s (read-from-string ,(concatenate 'string "#:" string))))
-       (values
-	(symbol-package s)
-	(symbol-name s)))
-     nil ,(string-upcase string)))
 
 ; (def-syntax-unintern-test syntax.sharp-colon.1 "")
 (def-syntax-unintern-test syntax.sharp-colon.2 "#")
@@ -695,16 +674,6 @@
 
 ;;; Tests of #a
 
-(defmacro def-syntax-array-test (name form expected-result)
-  `(def-syntax-test ,name
-     (let ((v (read-from-string ,form)))
-       (assert (typep v 'simple-array))
-       (assert (not (array-has-fill-pointer-p v)))
-       (assert (eql (array-element-type v)
-		    (upgraded-array-element-type t)))
-       v)
-     ,(eval expected-result)))
-
 (def-syntax-array-test syntax.sharp-a.1
   "#0anil"
   (make-array nil :initial-element nil))
@@ -822,8 +791,9 @@
 
 ;;; Tests of #S
 
-(defstruct syntax-test-struct-1
-  a b c)
+(unless (find-class 'syntax-test-struct-1)
+  (defstruct syntax-test-struct-1
+    a b c))
 
 (def-syntax-test syntax.sharp-s.1
   (let ((v (read-from-string "#s(syntax-test-struct-1)")))
@@ -937,6 +907,194 @@
     (read-from-string "#p\"syntax.lsp\""))
   #.(parse-namestring "syntax.lsp") 14)
 
+(def-syntax-test syntax.sharp-p.5
+  (read-from-string "#P#.(make-array '(10) :initial-contents \"syntax.lsp\" :element-type 'base-char)")
+  #.(parse-namestring "syntax.lsp") 78)
+
+;;; #<number># and #<number>=
+
+(def-syntax-test syntax.sharp-circle.1
+  (let ((x (read-from-string "(#1=(17) #1#)")))
+    (assert (eq (car x) (cadr x)))
+    x)
+  ((17) (17)))
+
+(def-syntax-test syntax.sharp-circle.2
+  (let ((x (read-from-string "(#0=(17) #0#)")))
+    (assert (eq (car x) (cadr x)))
+    x)
+  ((17) (17)))
+
+(def-syntax-test syntax.sharp-circle.3
+  (let ((x (read-from-string "(#123456789123456789=(17) #123456789123456789#)")))
+    (assert (eq (car x) (cadr x)))
+    x)
+  ((17) (17)))
+
+(def-syntax-test syntax.sharp-circle.4
+  (let ((x (read-from-string "#1=(A B . #1#)")))
+    (assert (eq (cddr x) x))
+    (values (car x) (cadr x)))
+  a b)
+
+(def-syntax-test syntax.sharp-circle.5
+  (let ((x (read-from-string "#1=#(A B #1#)")))
+    (assert (typep x '(simple-vector 3)))
+    (assert (eq (elt x 2) x))
+    (values (elt x 0) (elt x 1)))
+  a b)
+
+(def-syntax-test syntax.sharp-circle.6
+  (let ((x (read-from-string "((#1=(17)) #1#)")))
+    (assert (eq (caar x) (cadr x)))
+    x)
+  (((17)) (17)))
+
+(def-syntax-test syntax.sharp-circle.7
+  (let ((x (read-from-string "((#1=#2=(:x)) #1# #2#)")))
+    (assert (eq (caar x) (cadr x)))
+    (assert (eq (caar x) (caddr x)))
+    x)
+  (((:x)) (:x) (:x)))
+
+;;; #+
+
+(def-syntax-test syntax.sharp-plus.1
+  (let ((*features* nil))
+    (read-from-string "#+X :bad :good"))
+  :good 14)
+
+(def-syntax-test syntax.sharp-plus.2
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+X :good :bad"))
+  :good 10)
+
+(def-syntax-test syntax.sharp-plus.3
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+:x :good :bad"))
+  :good 11)
+
+(def-syntax-test syntax.sharp-plus.4
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(and):good :bad"))
+  :good 13)
+
+(def-syntax-test syntax.sharp-plus.5
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(:and):good :bad"))
+  :good 14)
+
+(def-syntax-test syntax.sharp-plus.6
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(or) :bad :good"))
+  :good 17)
+
+(def-syntax-test syntax.sharp-plus.7
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(:or) :bad :good"))
+  :good 18)
+
+(def-syntax-test syntax.sharp-plus.8
+  (let ((*features* '(x)))
+    (read-from-string "#+X :bad :good"))
+  :good 14)
+
+(def-syntax-test syntax.sharp-plus.9
+  (let ((*features* '(x)))
+    (read-from-string "#+CL-TEST::X :good :bad"))
+  :good 19)
+
+(def-syntax-test syntax.sharp-plus.10
+  (let ((*features* nil))
+    (read-from-string "#+(not x) :good :bad"))
+  :good 16)
+
+(def-syntax-test syntax.sharp-plus.11
+  (let ((*features* '(:x)))
+    (read-from-string "#+(not x) :bad :good"))
+  :good 20)
+
+(def-syntax-test syntax.sharp-plus.12
+  (let ((*features* nil))
+    (read-from-string "#+(:not :x) :good :bad"))
+  :good 18)
+
+(def-syntax-test syntax.sharp-plus.13
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(and a b) :good :bad"))
+  :good 18)
+
+(def-syntax-test syntax.sharp-plus.14
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(and a c) :bad :good"))
+  :good 22)
+
+(def-syntax-test syntax.sharp-plus.15
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(or c b) :good :bad"))
+  :good 17)
+
+(def-syntax-test syntax.sharp-plus.16
+  (let ((*features* '(:a :x :b)))
+    (read-from-string "#+(or c d) :bad :good"))
+  :good 21)
+
+;;; Tests of #| |#
+
+(def-syntax-test syntax.sharp-bar.1
+  (read-from-string "#||#1")
+  1 5)
+
+(def-syntax-test syntax.sharp-bar.2
+  (read-from-string "1#||#2")
+  |1##2| 6)
+
+(def-syntax-test syntax.sharp-bar.3
+  (read-from-string "#| #| |# |#1")
+  1 12)
+
+(def-syntax-test syntax.sharp-bar.4
+  (read-from-string "#| ; |#1")
+  1 8)
+
+(def-syntax-test syntax.sharp-bar.5
+  (read-from-string "#| ( |#1")
+  1 8)
+
+(def-syntax-test syntax.sharp-bar.6
+  (read-from-string "#| # |#1")
+  1 8)
+
+(def-syntax-test syntax.sharp-bar.7
+  (read-from-string "#| .. |#1")
+  1 9)
+
+(def-syntax-test syntax.sharp-bar.8
+  (loop for c across +standard-chars+
+	for s = (concatenate 'string "\#| " (string c) " |\#1")
+	for vals = (multiple-value-list (read-from-string s))
+	unless (equal vals '(1 8))
+	collect (list c s vals))
+  nil)
+
+(def-syntax-test syntax.sharp-bar.9
+  (loop for i below (min (ash 1 16) char-code-limit)
+	for c = (code-char i)
+	for s = (and c (concatenate 'string "\#| " (string c) " |\#1"))
+	for vals = (and c (multiple-value-list (read-from-string s)))
+	unless (or (not c) (equal vals '(1 8)))
+	collect (list i c s vals))
+  nil)
+
+(def-syntax-test syntax.sharp-bar.10
+  (loop for i = (random (min (ash 1 24) char-code-limit))
+	for c = (code-char i)
+	for s = (and c (concatenate 'string "\#| " (string c) " |\#1"))
+	for vals = (and c (multiple-value-list (read-from-string s)))
+	repeat 1000
+	unless (or (not c) (equal vals '(1 8)))
+	collect (list i c s vals))
+  nil)
 
 ;;;; Various error cases
 
@@ -962,3 +1120,20 @@
 (def-syntax-test syntax.sharp-close-paren.1
   (signals-error (read-from-string "#)" nil nil) reader-error)
   t)
+
+(def-syntax-test syntax.single-escape-eof.1
+  (signals-error (read-from-string "\\") end-of-file)
+  t)
+
+(def-syntax-test syntax.single-escape-eof.2
+  (signals-error (read-from-string "\\" nil nil) end-of-file)
+  t)
+
+(def-syntax-test syntax.multiple-escape-eof.1
+  (signals-error (read-from-string "|") end-of-file)
+  t)
+
+(def-syntax-test syntax.multiple-escape-eof.2
+  (signals-error (read-from-string "|" nil nil) end-of-file)
+  t)
+
