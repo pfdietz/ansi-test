@@ -137,3 +137,19 @@
      (setf (defsetf.5-accessor x) 'c)
      x))
   c (c . b))
+
+;;; Test that the defsetf expansion function is defined in the same
+;;; lexical environment that the defsetf appears in
+
+(defun defsetf.6-accessor (x) (car x))
+
+(let ((z 'car))
+  (defsetf defsetf.6-accessor (y) (val)
+    `(setf (,z ,y) ,val)))
+
+(deftest defsetf.6a
+  (let ((x (cons 'a 'b)))
+    (values
+     (setf (defsetf.6-accessor x) 'c)
+     x))
+  c (c . b))
