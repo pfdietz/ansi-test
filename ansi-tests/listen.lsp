@@ -22,7 +22,8 @@
   t)
 
 (deftest listen.5
-  (progn (clear-input) (listen))
+  (when (interactive-stream-p *standard-input*)
+    (clear-input) (listen))
   nil)
 
 (deftest listen.6
