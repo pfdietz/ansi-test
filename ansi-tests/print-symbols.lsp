@@ -208,4 +208,50 @@
   t t t t t t t t t t t t)
 
 ;;; To add -- symbol printing when escaping is enabled
-;;; To add -- randomized symbol printing
+
+;;; Randomized printing tests
+
+(deftest print.symbol.random.1
+  (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
+    (when (find-package pkg-name)
+      (delete-package pkg-name))
+    (prog1
+	(let ((*package* (make-package pkg-name)))
+	  (loop for c across +standard-chars+
+		nconc
+		(loop repeat 50
+		      nconc (randomly-check-readability (intern (string c))))))
+;;      (delete-package pkg-name)
+      ))
+  nil)
+
+(deftest print.symbol.random.2
+  (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
+    (when (find-package pkg-name)
+      (delete-package pkg-name))
+    (prog1
+	(let ((*package* (make-package pkg-name)))
+	  (loop for c1 = (random-from-seq +standard-chars+)
+		for c2 = (random-from-seq +standard-chars+)
+		for string = (concatenate 'string (string c1) (string c2))
+		repeat 10000
+		nconc (randomly-check-readability (intern string))))
+      ;; (delete-package pkg-name)
+      ))
+  nil)
+
+(deftest print.symbol.random.3
+  (let ((result nil) (count 0))
+    (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
+      (when (find-package pkg-name)
+	(delete-package pkg-name)))
+    (block done
+      (do-all-symbols (s)
+	(when (symbol-package s)
+	  (let ((problem (randomly-check-readability s)))
+	    (when problem
+	      (setf result (nconc problem result))
+	      (when (= (incf count) 100) (return-from done)))))))
+    (reverse result))
+  nil)
+
