@@ -70,8 +70,13 @@
 	 (equal (package-used-by-list p)      nil)
 	 (equal (package-nicknames p)	nil)
 	 (equal (package-shadowing-symbols p) nil)
-	 (equal (documentation p t) "This is a doc string")
-	 t))))
+	 ;; The spec says implementations are free to discard
+	 ;; documentations, so this next form was wrong.
+	 ;; Instead, we'll just computation DOCUMENTATION
+	 ;; and throw away the value.
+	 ;; (equal (documentation p t) "This is a doc string")
+	 (progn (documentation p t) t)
+	 ))))
   t)
 
 ;; Check use argument

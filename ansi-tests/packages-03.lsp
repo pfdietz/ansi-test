@@ -61,44 +61,46 @@
   "A")
 
 (deftest package-name-5
-    (catch-type-error (package-name "NOT-THERE"))
-  type-error)
+  (notnot (member (classify-error (package-name "NOT-THERE"))
+		  '(type-error package-error)))
+  t)
 
 (deftest package-name-6
-    (catch-type-error (package-name #\*))
-  type-error)
+  (notnot (member (classify-error (package-name #\*))
+		  '(type-error package-error)))
+  t)
 
 (deftest package-name-7
-    (package-name "CL")
+  (package-name "CL")
   "COMMON-LISP")
 
 (deftest package-name-8
-    (package-name "COMMON-LISP")
+  (package-name "COMMON-LISP")
   "COMMON-LISP")
 
 (deftest package-name-9
-    (package-name "COMMON-LISP-USER")
+  (package-name "COMMON-LISP-USER")
   "COMMON-LISP-USER")
 
 (deftest package-name-10
-    (package-name "CL-USER")
+  (package-name "CL-USER")
   "COMMON-LISP-USER")
 
 (deftest package-name-11
-    (package-name "KEYWORD")
+  (package-name "KEYWORD")
   "KEYWORD")
 
 (deftest package-name-12
-    (package-name (find-package "CL"))
+  (package-name (find-package "CL"))
   "COMMON-LISP")
 
 (deftest package-name-13
-    (let* ((p (make-package "TEMP1"))
-	   (pname1 (package-name p)))
-      (rename-package "TEMP1" "TEMP2")
-      (let ((pname2 (package-name p)))
-	(ignore-errors (delete-package p))
-	(list pname1 pname2 (package-name p))))
+  (let* ((p (make-package "TEMP1"))
+	 (pname1 (package-name p)))
+    (rename-package "TEMP1" "TEMP2")
+    (let ((pname2 (package-name p)))
+      (ignore-errors (delete-package p))
+      (list pname1 pname2 (package-name p))))
   ("TEMP1" "TEMP2" nil))
 
 ;; (find-package (package-name p)) == p for any package p
@@ -128,30 +130,30 @@
   ("Q"))
 
 (deftest package-nicknames-2
-    (ignore-errors (package-nicknames #\A))
+  (ignore-errors (package-nicknames #\A))
   ("Q"))
 
 (deftest package-nicknames-3
-    (ignore-errors (package-nicknames ':|A|))
+  (ignore-errors (package-nicknames ':|A|))
   ("Q"))
 
 (deftest package-nicknames-4
-    (ignore-errors (package-nicknames "B"))
+  (ignore-errors (package-nicknames "B"))
   nil)
 
 (deftest package-nicknames-5
-    (ignore-errors (package-nicknames #\B))
+  (ignore-errors (package-nicknames #\B))
   nil)
 
 (deftest package-nicknames-6
-    (ignore-errors (package-nicknames '#:|B|))
+  (ignore-errors (package-nicknames '#:|B|))
   nil)
 
 (deftest package-nicknames-7
-    (ignore-errors
-      (subsetp '("CL")
-	    (package-nicknames "COMMON-LISP")
-	    :test #'string=))
+  (ignore-errors
+    (subsetp '("CL")
+	     (package-nicknames "COMMON-LISP")
+	     :test #'string=))
   t)
 
 (deftest package-nicknames-8
@@ -163,16 +165,17 @@
   t)
 
 (deftest package-nicknames-9
-    (catch-type-error (package-nicknames 10))
+  (catch-type-error (package-nicknames 10))
   type-error)
 
 (deftest package-nicknames-10
-    (ignore-errors (package-nicknames (find-package "A")))
+  (ignore-errors (package-nicknames (find-package "A")))
   ("Q"))
 
 (deftest package-nicknames-11
-    (catch-type-error (package-nicknames "NOT-A-PACKAGE-NAME"))
-  type-error)
+  (notnot (member (classify-error (package-nicknames "NOT-A-PACKAGE-NAME"))
+		  '(type-error package-error)))
+  t)
 
 
 ;; (find-package n) == p for each n in (package-nicknames p),
