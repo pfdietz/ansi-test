@@ -1,6 +1,7 @@
 ;;; Load individual test files
 
 ;;; Tests of symbols
+(compile-and-load "cl-symbols-aux.lsp")
 (load "cl-symbol-names.lsp")
 (load "cl-symbols.lsp")
 
@@ -8,6 +9,7 @@
 (load "eval.lsp")
 (load "eval-and-compile.lsp")
 (load "compile.lsp")
+(load "lambda.lsp")
 
 ;;; Tests of data and control flow
 

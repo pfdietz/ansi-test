@@ -356,6 +356,8 @@ the condition to go uncaught if it cannot be classified."
 (defun is-t-or-nil (e)
   (or (eqt e t) (eqt e nil)))
 
+(declaim (special *subtype-table*))
+
 (defun types-6-body ()
   (loop
       for p in *subtype-table* count

@@ -9,34 +9,6 @@
 
 (declaim (optimize (safety 3)))
 
-(defun is-external-symbol-of (sym package)
-  (multiple-value-bind (sym2 status)
-      (find-symbol (symbol-name sym) package)
-    (and (eqt sym sym2)
-	 (eqt status :external))))
-
-(defun test-if-not-in-cl-package (str)
-  (multiple-value-bind (sym status)
-      (find-symbol (string-upcase str) 'common-lisp)
-      (declare (ignore sym))
-      (or
-       ;; Symbol not present in the common lisp package
-       (not status)
-       ;; Check if it has any properties whose indicators are
-       ;; external in any of the standard packages or are accessible
-       ;; in CL-USER
-       (and (eqt status :external)
-	    (let ((plist (symbol-plist sym)))
-	      (loop for e = plist then (cddr e)
-		    while e
-		    for indicator = (car e)
-		    when (and (symbolp indicator)
-			      (or (is-external-symbol-of indicator "COMMON-LISP")
-				  (is-external-symbol-of indicator "KEYWORD")
-				  (eqt indicator (find-symbol (symbol-name indicator)
-							     "COMMON-LISP-USER"))))
-		    collect indicator))))))
-
 ;;; Test for the presence of every darned symbol
 ;;; the standard says should be in the CL package.
 ;;; Also, test that they have no prohibited plist indicators (section 11.1.2.1.1)
@@ -1100,9 +1072,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; symbol-name
 
-(defun safe-symbol-name (sym)
-  (catch-type-error (symbol-name sym)))
-
 (deftest symbol-name-1
   (safe-symbol-name '|ABCD|)
   "ABCD")
@@ -1166,9 +1135,6 @@
 (deftest make-symbol-8
   (symbol-plist (make-symbol "C"))
   nil)
-
-(defun safe-make-symbol (name)
-  (catch-type-error (make-symbol name)))
 
 (deftest make-symbol-9
   (safe-make-symbol nil)
@@ -1404,3 +1370,51 @@
 (deftest gensym-19
     (catch-type-error (gensym #\x))
   type-error)
+
+;;;;;;;;;;;;;;;;;;;;
+
+;;; Tests of CL package constraints from section 11.1.2.1.1
+
+;;; Check that all symbols listed as 'functions' or 'accessors'
+;;; are indeed functions.
+
+(deftest cl-function-symbols.1
+  (loop
+   for s in (append *cl-function-symbols* *cl-accessor-symbols*)
+   when (or (not (fboundp s))
+	    (macro-function s)
+	    (special-operator-p s)
+	    (not (symbol-function s)))
+   collect s)
+  nil)
+
+;;; Check that all symols listed as 'macros' are macros.
+
+(deftest cl-macro-symbols.1
+  (loop
+   for s in *cl-macro-symbols*
+   when (or (not (fboundp s))
+	    (not (macro-function s)))
+   collect s)
+  nil)
+
+;;; Check that all constants are indeed constant
+
+(deftest cl-constant-symbols.1
+  (loop
+   for s in *cl-constant-symbols*
+   when (or (not (boundp s))
+	    (not (constantp s)))
+   collect s)
+  nil)
+
+;;; Check that all global variables have values
+
+(deftest cl-variable-symbols.1
+  (loop
+   for s in *cl-variable-symbols*
+   when (not (boundp s))
+   collect s)
+  nil)
+
+	    
