@@ -82,6 +82,15 @@
 	collect (list x r))
   nil)
 
+(deftest random.8
+  (let* ((f1 '(lambda (x) (random (if x 10 20))))
+	 (f2 (compile nil f1)))
+    (values
+     (loop repeat 100 always (<= 0 (funcall f2 t) 9))
+     (loop repeat 100 always (<= 0 (funcall f2 nil) 19))))
+  t t)
+    
+
 ;;; Do more statistical tests here
 
 	
