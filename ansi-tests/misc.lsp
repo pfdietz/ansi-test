@@ -6538,3 +6538,22 @@ Broken at C::WT-C-INLINE-LOC.
     -7 772373806))
   1)
 
+;;; Incorrect return value
+(deftest misc.354
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -1309 67082465417) a))
+       (declare (type (integer -7824641338734 -832606641) b))
+       (declare (type (integer 7473698771 3542216118742) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 3) (space 2) (safety 1) (debug 3)
+			  (compilation-speed 2)))
+       (+ 0
+	  (progn (tagbody (if (if (>= b (go 3)) nil t) a c)
+			  3)
+		 0))))
+   29329060987 -4964942044116 512158612507)
+  0)
+
