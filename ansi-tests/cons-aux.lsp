@@ -68,12 +68,17 @@
 	for args = (make-random-set-exclusive-or-input n)
 	for set1 = (car args)
 	for set2 = (cadr args)
-	for result1 = (sort (copy-list (apply #'my-set-exclusive-or args))
-			    #'<)
-	for result2 = (sort (copy-list (apply fn
-					      (copy-list set1)
-					      (copy-list set2)
-					      (cddr args)))
-			    #'<)
+	for result1 = (apply #'remove-duplicates
+			     (sort (copy-list (apply #'my-set-exclusive-or args))
+				   #'<)
+			     (cddr args))
+	for result2 = (apply #'remove-duplicates
+			     (sort (copy-list (apply fn
+						     (copy-list set1)
+						     (copy-list set2)
+						     (cddr args)))
+				   #'<)
+			     (cddr args))
 	unless (equal result1 result2)
-	return (list (list 'sort (cons fn args) '<) "actual: " result2 "should be: " result1)))
+	return (list (list 'remove-duplicates (list 'sort (cons fn args) '<) "...")
+		     "actual: " result2 "should be: " result1)))
