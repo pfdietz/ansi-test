@@ -316,3 +316,17 @@
 (defparameter type-and-class-macros
   (not (macro-function 'deftype))
   nil)
+
+;;; Special cases of types-6 that are/were causing problems in CMU CL
+
+(deftest keyword-is-subtype-of-atom
+  (subtypep* 'keyword 'atom)
+  t t)
+
+(deftest ratio-is-subtype-of-atom
+  (subtypep* 'ratio 'atom)
+  t t)
+
+(deftest extended-char-is-subtype-of-atom
+  (subtypep* 'extended-char 'atom)
+  t t)
