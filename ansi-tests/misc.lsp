@@ -10119,7 +10119,7 @@ Broken at C::WT-MAKE-CLOSURE.
 		(type symbol p2))
        (and :a (the (eql t) p2))))
    t)
-  :a)
+  t)
 
 (deftest misc.550
   (funcall
@@ -10157,3 +10157,16 @@ Broken at C::WT-MAKE-CLOSURE.
        (logbitp (the (integer -780969457 *) p1) 9)))
    26)
   nil)
+
+;;; ecls
+;;; REAL is not of type REAL.
+
+(deftest misc.553
+  (funcall (compile nil '(lambda (x) (declare (type (eql #c(1.0 2.0)) x)) x))
+	   #c(1.0 2.0))
+  #c(1.0 2.0))
+
+;;; 1 is not of type SEQUENCE
+(deftest misc.554
+  (funcall (compile nil '(lambda (x) (declare (type (array t 1) x)) x)) #(a))
+  #(a))
