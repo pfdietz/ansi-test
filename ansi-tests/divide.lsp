@@ -115,12 +115,11 @@
 	for zero = (float 0.0 bound)
 	nconc
 	(loop for i = (1+ (random bound))
-	      for j = (1+ (random bound))
 	      for c = (complex i zero)
 	      for q = (/ c c)
 	      repeat 100
 	      unless (eql q (complex one zero))
-	      collect (list i j c q)))
+	      collect (list i c q (complex one zero))))
   nil)
 
 
@@ -176,12 +175,12 @@
 (deftest /.12
   (loop for type in '(short-float single-float double-float long-float)
 	for lower in (mapcar
-		     #'rational
+		     #'rational-safely
 		     (list
 		      least-positive-short-float least-positive-single-float
 		      least-positive-double-float least-positive-long-float))
 	for upper in (mapcar
-		     #'rational
+		     #'rational-safely
 		     (list
 		      most-positive-short-float most-positive-single-float
 		      most-positive-double-float most-positive-long-float))
@@ -205,9 +204,3 @@
 		(eql (/ frneg) frpos)))
 	 collect (list i rpos rneg (float rpos one) (float rneg one))))
   nil)
-
-
-	 
-	 
-
-	

@@ -356,7 +356,7 @@
 	 unless (and (eql prod (complex (coerce (- 1 (* i j)) type)
 					(coerce (+ i j) type)))
 		     (eql prod (* cy cx)))
-	 collect (list i j x y (* cx cy))))
+	 collect (list type i j x y (* cx cy))))
   nil)
 
 (deftest times.order.1

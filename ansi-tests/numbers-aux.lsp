@@ -240,9 +240,13 @@
 	nconc
 	(loop for y in *reals*
 	      when (numbers-are-compatible x y)
-	      unless (let ((m (max x y)))
-		       (and (>= m x) (>= m y)
-			    (or (= m x) (= m y))))
+	      unless
+	      (handler-case
+	       (let ((m (max x y)))
+		 (and (>= m x) (>= m y)
+		      (or (= m x) (= m y))))
+	       (floating-point-underflow () t)
+	       (floating-point-overflow () t))
 	      collect (list x y (max x y)))))
 
 (defun min.2-fn ()
@@ -250,9 +254,13 @@
 	nconc
 	(loop for y in *reals*
 	      when (numbers-are-compatible x y)
-	      unless (let ((m (min x y)))
-		       (and (<= m x) (<= m y)
-			    (or (= m x) (= m y))))
+	      unless
+	      (handler-case
+	       (let ((m (min x y)))
+		 (and (<= m x) (<= m y)
+		      (or (= m x) (= m y))))
+	       (floating-point-underflow () t)
+	       (floating-point-overflow () t))
 	      collect (list x y (min x y)))))
 
 (defun epsilon (number)

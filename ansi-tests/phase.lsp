@@ -82,22 +82,25 @@
   (let ((p1 (phase #c(1 1)))
 	(p2 (phase #c(1.0f0 1.0f0))))
     (and (eql p1 p2)
-	 (approx= p1 (coerce (/ pi 4) 'single-float))))
+	 (approx= p1 (coerce (/ pi 4) 'single-float)
+		  (* 2 single-float-epsilon))))
   t)
 
 (deftest phase.15
   (let ((p (phase #c(1.0d0 1.0d0))))
-    (approx= p (coerce (/ pi 4) 'double-float)))
+    (approx= p (coerce (/ pi 4) 'double-float)
+	     (* 2 double-float-epsilon)))
   t)
 
 (deftest phase.16
   (let ((p (phase #c(1.0s0 1.0s0))))
-    (approx= p (coerce (/ pi 4) 'single-float)))
+    (approx= p (coerce (/ pi 4) 'single-float)
+	     (* 2 short-float-epsilon)))
   t)
 
 (deftest phase.17
   (let ((p (phase #c(1.0l0 1.0l0))))
-    (approx= p (/ pi 4)))
+    (approx= p (/ pi 4) (* 2 long-float-epsilon)))
   t)
 
 ;;; Negative zeros

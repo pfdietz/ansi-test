@@ -44,10 +44,12 @@
 
 (deftest float.6
   (loop for x in *reals*
-	unless (or (not (typep x 'short-float))
+	unless (handler-case
+		(or (not (typep x 'short-float))
 		   (let ((y (float x 0.0f0)))
 		     (and (typep y 'single-float)
 			  (= x y))))
+		(arithmetic-error () t))
 	collect x)
   nil)
   

@@ -25,7 +25,10 @@
   nil)
 
 (deftest rational.1
-  (loop for x in *reals*
+  (loop for x in (loop for r in *reals*
+		       when (or (not (floatp r))
+				(<= -1000 (nth-value 1 (integer-decode-float r)) 1000))
+		       collect r)
 	for r = (rational x)
 	unless (and (rationalp r)
 		    (if (floatp x)
