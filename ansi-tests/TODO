@@ -74,6 +74,7 @@ Got:      0
   for key and optional arguments, if they do not already exist
 
 21. The random tester showed (SETF AREF) wasn't being tested enough.  Add tests.
+
 22. Add more symbol printing tests.  In particular, there doesn't appear to
  be a test that (princ :foo) >> :FOO  (noticed by PG in ABCL)
 
@@ -83,3 +84,9 @@ Got:      0
 
 25. Add test that the form in an EQL parameter specializer is evaluated only
   once, at method definition time.
+
+26. Test that various builtin functions, when compiled with type declarations
+  on parameters, do the right thing.  Probably the best way to do this is
+  a collection of random test harnesses.
+
+27. Be sure the various string operations work on non-simple strings.
