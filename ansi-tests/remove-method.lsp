@@ -148,7 +148,7 @@
      (mapcar #'remove-meth-gf-01 '(10 20.0))))
   (10 20.0) (11 21.0) (9 21.0) t (9 20.0) t (10 20.0))
 
-(deftest remove-method.7
+(deftest remove-method.8
   (let (meth1 meth2)
     (values
      (mapcar #'remove-meth-gf-01 '(10 20.0))
@@ -178,7 +178,7 @@
 (defparameter *remove-meth-gf-03-method-t*
   (defmethod remove-meth-gf-03 ((x t)) (list *rmgf-03-var* x)))
 
-(deftest remove-method.8
+(deftest remove-method.9
   (let (meth (*rmgf-03-var* 0))
     (values
      (mapcar #'remove-meth-gf-03 '(5 a))
@@ -193,7 +193,7 @@
   t
   ((1 5) (1 a)))
 
-(deftest remove-method.9
+(deftest remove-method.10
   (let (meth (*rmgf-03-var* 0))
     (values
      (mapcar #'remove-meth-gf-03 '(5 a))
@@ -207,3 +207,20 @@
   ((0 5) (1 a))
   t
   ((1 5) (1 a)))
+
+(deftest remove-method.11
+  (let (meth (*rmgf-03-var* 0))
+    (values
+     (mapcar #'remove-meth-gf-03 '(5 a))
+     (progn
+       (setf meth (eval '(defmethod remove-meth-gf-03 :around ((x number))
+			   (incf *rmgf-03-var*)
+			   (prog1 (call-next-method)
+			     (decf *rmgf-03-var*)))))
+       (mapcar #'remove-meth-gf-03 '(5 a)))
+     (eqt *remove-meth-gf-03* (remove-method *remove-meth-gf-03* meth))
+     (mapcar #'remove-meth-gf-03 '(5 a))))
+  ((0 5) (0 a))
+  ((1 5) (0 a))
+  t
+  ((0 5) (0 a)))
