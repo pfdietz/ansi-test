@@ -31,6 +31,7 @@
 (load "macrolet.lsp")
 (load "progv.lsp")
 (load "tagbody.lsp")
+(load "unwind-protect.lsp")
 
 
 ;;; Tests of conses
