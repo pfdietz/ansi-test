@@ -6419,3 +6419,15 @@ Broken at C::WT-C-INLINE-LOC.
 		     (boole boole-xor (logxor (return-from b2 0)) 0)))
 		0))))
   0)
+
+;;; Wrong result
+(deftest misc.348
+  (funcall
+   (compile
+    nil
+    '(lambda (a c)
+       (declare (optimize (speed 1) (space 0) (safety 2) (debug 3)
+			  (compilation-speed 1)))
+       (max (conjugate (setq a -4178265097)) (if (> c 0) 0 a))))
+   -2408319173 -4307532101272)
+  -4178265097)
