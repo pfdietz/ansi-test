@@ -297,6 +297,8 @@
 	 (notnot (every #'eql seq vals))))))
   t)
 
+;;; Add -- tests for when the filespec is a stream
+
 ;;; Tests of file creation
 
 (defmacro def-open-output-test
@@ -330,43 +332,35 @@
 (compile 'def-open-output-test)
 
 (def-open-output-test open.output.1 ()
-  (progn (close s) (with-open-file (is #p"tmp.dat")
-				   (let ((seq (copy-seq "          ")))
-				     (read-sequence seq is)
-				     seq)))
+  (progn (close s)
+	 (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
   ("abcdefghij"))
 
 (def-open-output-test open.output.2 ()
-  (progn (close s) (with-open-file (is "tmp.dat")
-				   (let ((seq (copy-seq "          ")))
-				     (read-sequence seq is)
-				     seq)))
+  (progn (close s)
+	 (with-open-file (is "tmp.dat") (values (read-line is nil))))
   ("abcdefghij")
   :pathname "tmp.dat")
 
 (def-open-output-test open.output.3
   ()
-  (progn (close s) (with-open-file (is (logical-pathname "CLTEST:TMP.DAT"))
-				   (let ((seq (copy-seq "          ")))
-				     (read-sequence seq is)
-				     seq)))
+  (progn (close s)
+	 (with-open-file (is (logical-pathname "CLTEST:TMP.DAT"))
+			 (values (read-line is nil))))
   ("abcdefghij")
   :pathname (logical-pathname "CLTEST:TMP.DAT"))
 
 (def-open-output-test open.output.4 ()
-  (progn (close s) (with-open-file (is #p"tmp.dat")
-				   (let ((seq (copy-seq "          ")))
-				     (read-sequence seq is)
-				     seq)))
+  (progn (close s)
+	 (with-open-file (is #p"tmp.dat" :element-type 'character)
+			 (values (read-line is nil))))
   ("abcdefghij")
   :element-type character)
 
 (def-open-output-test open.output.5 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
 				       :element-type 'base-char)
-				   (let ((seq (copy-seq "          ")))
-				     (read-sequence seq is)
-				     seq)))
+				   (values (read-line is nil))))
   ("abcdefghij")
   :element-type base-char)
 
@@ -496,3 +490,119 @@
 				     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 100))
+
+(deftest open.output.20
+  (let ((pn #p"tmp.dat"))
+    (with-open-file (s pn :direction :output :if-exists :supersede))
+    (open pn :direction :output :if-exists nil))
+  nil)
+
+(def-open-test open.output.21 (:if-exists :new-version :direction :output)
+  (progn (write-sequence "wxyz" s)
+	 (close s)
+	 (with-open-file
+	  (s pn :direction :input)
+	  (values (read-line s nil))))
+  ("wxyz"))
+
+(def-open-test open.output.22 (:if-exists :rename :direction :output)
+  (progn (write-sequence "wxyz" s)
+	 (close s)
+	 (with-open-file
+	  (s pn :direction :input)
+	  (values (read-line s nil))))
+  ("wxyz"))
+
+(def-open-test open.output.23 (:if-exists :rename-and-delete
+					  :direction :output)
+  (progn (write-sequence "wxyz" s)
+	 (close s)
+	 (with-open-file
+	  (s pn :direction :input)
+	  (values (read-line s nil))))
+  ("wxyz"))
+
+(def-open-test open.output.24 (:if-exists :overwrite
+					  :direction :output)
+  (progn (write-sequence "wxyz" s)
+	 (close s)
+	 (with-open-file
+	  (s pn :direction :input)
+	  (values (read-line s nil))))
+  ("wxyzefghij"))
+
+(def-open-test open.output.25 (:if-exists :append
+					  :direction :output)
+  (progn (write-sequence "wxyz" s)
+	 (close s)
+	 (with-open-file
+	  (s pn :direction :input)
+	  (values (read-line s nil))))
+  ("abcdefghijwxyz"))
+
+(def-open-test open.output.26 (:if-exists :supersede
+					  :direction :output)
+  (progn (write-sequence "wxyz" s)
+	 (close s)
+	 (with-open-file
+	  (s pn :direction :input)
+	  (values (read-line s nil))))
+  ("wxyz"))
+
+(def-open-output-test open.output.27 (:if-does-not-exist :create
+							 :direction :output)
+  (progn (close s)
+	 (with-open-file
+	  (is pn :direction :input)
+	  (values (read-line is nil))))
+  ("abcdefghij"))
+
+(deftest open.output.28
+  (let ((pn #p"tmp.dat"))
+    (when (probe-file pn) (delete-file pn))
+    (open pn :direction :output :if-does-not-exist nil))
+  nil)
+
+(def-open-output-test open.output.28 (:external-format :default)
+  (progn (close s)
+	 (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
+  ("abcdefghij"))
+
+(def-open-output-test open.output.29
+  (:external-format (prog1
+		      (with-open-file (s "foo.dat" :direction :output
+					 :if-exists :supersede)
+				      (stream-external-format s))
+		      (delete-file "foo.dat")))
+  (progn (close s)
+	 (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
+  ("abcdefghij"))
+
+;;; Default behavior of open :if-exists is :create when the version
+;;; of the filespec is :newest
+
+(deftest open.output.30
+  (let ((pn (make-pathname :name "tmp" :type "dat" :version :newest)))
+    (or (not (eql (pathname-version pn) :newest))
+	(progn
+	  ;; Create file
+	  (let ((s1 (open pn :direction :output :if-exists :overwrite
+			  :if-does-not-exist :create)))
+	    (unwind-protect
+		;; Now try again
+		(let ((s2 (open pn :direction :output)))
+		  (unwind-protect
+		      (write-line "abcdef" s2)
+		    (close s2))
+		  (setq s2 (open s1 :direction :input))
+		   (equalt (read-line s2 nil) "abcdef")
+		   )
+	      (close s1)
+	      )))))
+  t)		
+	    
+
+;;; Add -- tests for when the filespec is a stream
+
+
+;;; Tests of bidirectional IO
