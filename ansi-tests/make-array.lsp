@@ -266,6 +266,17 @@
   (make-array-with-checks '(5) :initial-element 'a :displaced-to nil)
   #(a a a a a))
 
+(deftest make-array.25
+  (make-array '(4) :initial-element 'x :nonsense-argument t
+	      :allow-other-keys t)
+  #(x x x x))
+
+(deftest make-array.26
+  (make-array '(4) :initial-element 'x
+	      :allow-other-keys nil)
+  #(x x x x))
+
+
 
 ;;; Adjustable arrays
 
@@ -462,3 +473,27 @@
 			    :displaced-to a
 			    :displaced-index-offset 10))
   "")
+
+;;; Multidimensional displaced arrays
+
+(deftest make-array.displaced.17
+  (let ((a (make-array '(3 4) :initial-contents '((1 2 3 4) (5 6 7 8)
+						  (9 10 11 12)))))
+    (make-array-with-checks '(8) :displaced-to a))
+  #(1 2 3 4 5 6 7 8))
+
+(deftest make-array.displaced.18
+  (let ((a (make-array '(3 4) :initial-contents '((1 2 3 4) (5 6 7 8)
+						  (9 10 11 12)))))
+    (make-array-with-checks '(8) :displaced-to a
+			    :displaced-index-offset 3))
+  #(4 5 6 7 8 9 10 11))
+
+(deftest make-array.displaced.19
+  (let ((a (make-array '(3 4) :initial-contents '((1 2 3 4) (5 6 7 8)
+						  (9 10 11 12)))))
+    (make-array-with-checks '(2 4) :displaced-to a
+			    :displaced-index-offset 4))
+  #2a((5 6 7 8) (9 10 11 12)))
+
+
