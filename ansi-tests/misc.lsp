@@ -8861,3 +8861,90 @@ Broken at C::WT-MAKE-CLOSURE.
 			   (isqrt x)))
 	   4)
   2)
+
+;;; gcl 24 Dec 2004
+;;; Incorrect results (these may all be related)
+;;; These are also produced by the special purpose tester in random-type-prop.lsp
+
+(deftest misc.467
+  (funcall
+   (compile nil '(lambda (p2 p3)
+		   (declare (optimize speed (safety 1))
+			    (type (integer -990888631320) p2)
+			    (type (integer -20346 -19755) p3))
+		   (+ -77 (the (integer * -990888630255) p2) p3)))
+   -990888630272 -19756)
+  -990888650105)
+
+(deftest misc.468
+  (funcall
+   (compile nil '(lambda (p2 p3)
+		   (declare (optimize speed (safety 1))
+			    (type (integer * 151075404030) p2)
+			    (type (integer 6515518 *) p3))
+		   (- 12967657127936 (the (eql 151075403520) p2)
+		      (the (member 6515658 -14) p3))))
+   151075403520 6515658)
+  12816575208758)
+
+(deftest misc.469
+  (funcall
+   (compile nil '(lambda (p2)
+		   (declare (optimize speed (safety 1)) (type integer p2))
+		   (+ 30926 (the (integer -4025987543018 *) p2))))
+   -4025817763840)
+  -4025817732914)
+
+(deftest misc.470
+  (funcall
+   (compile nil '(lambda (p2)
+		   (declare (optimize speed (safety 1))
+			    (type (integer 3689224658939 *) p2))
+		   (+ -1071 (the (integer * 3689229115390) p2))))
+   3689228853248)
+  3689228852177)
+
+(deftest misc.471
+  (funcall
+   (compile nil '(lambda (p1 p2)
+		   (declare (optimize speed (safety 1))
+			    (type (integer -9024844 230253450) p1)
+			    (type (eql 35716681856) p2))
+		   (* p1 (the (integer * 35716681856) p2))))
+   -9024809 35716681856)
+  -322336231864165504)
+
+(deftest misc.472
+  (funcall
+   (compile nil '(lambda (p1 p2)
+		   (declare (optimize speed (safety 1))
+			    (type (integer -785238 -80) p1)
+			    (type (eql -523213622272) p2))
+		   (min p1 (the integer p2))))
+   -259 -523213622272)
+  -523213622272)
+
+(deftest misc.473
+  (funcall
+   (compile nil '(lambda (p2)
+		   (declare (optimize speed (safety 1))
+			    (type (integer * 65861934352) p2))
+		   (max 23939 (the (integer 64863825609 65878336765) p2))))
+   65861912512)
+  65861912512)
+
+(deftest misc.474
+  (funcall
+   (compile nil '(lambda (p1)
+		   (declare (optimize speed (safety 1))
+			    (type (integer -6750156308) p1))
+		   (logand (the signed-byte p1) -540165229)))
+   -6750156304)
+  -7289140848)
+  
+    
+
+		   
+		   
+
+	    
