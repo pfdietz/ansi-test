@@ -76,6 +76,9 @@
 	  (ignore-errors (delete-package p)))))
   t)
 
+;;; This test is screwed up because of something I don't
+;;; understand about how to handle continuable errors
+
 (deftest make-package-6
     (progn
       (ignore-errors (delete-package #\X))
