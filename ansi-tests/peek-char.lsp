@@ -120,3 +120,108 @@
     (peek-char t s)
     (read-char s)))
   #\a #\a #\b #\b #\c #\c)
+
+(deftest peek-char.9
+  (with-input-from-string
+   (*standard-input* " a bCcde")
+   (values
+    (peek-char #\c)
+    (read-char)
+    (read-char)))
+  #\c #\c #\d)
+
+(deftest peek-char.10
+  (with-input-from-string
+   (*standard-input* "  ; foo")
+   (values
+    (peek-char t)
+    (read-char)))
+  #\; #\;)
+
+(deftest peek-char.11
+  (with-input-from-string
+   (s "")
+   (peek-char nil s nil))
+  nil)
+
+(deftest peek-char.12
+  (with-input-from-string
+   (s "")
+   (peek-char nil s nil 'foo))
+  foo)
+
+(deftest peek-char.13
+  (with-input-from-string
+   (s "   ")
+   (peek-char t s nil))
+  nil)
+
+(deftest peek-char.14
+  (with-input-from-string
+   (s "   ")
+   (peek-char t s nil 'foo))
+  foo)
+
+(deftest peek-char.15
+  (with-input-from-string
+   (s "ab c d")
+   (peek-char #\z s nil))
+  nil)
+
+(deftest peek-char.16
+  (with-input-from-string
+   (s "ab c d")
+   (peek-char #\z s nil 'foo))
+  foo)
+
+
+;;; Error tests
+
+(deftest peek-char.error.1
+  (signals-error
+   (with-input-from-string
+    (s "abc")
+    (peek-char s nil nil nil nil 'nonsense))
+   program-error)
+  t)
+
+
+(deftest peek-char.error.2
+  (signals-error
+   (with-input-from-string
+    (*standard-input* "")
+    (peek-char))
+   end-of-file)
+  t)
+
+(deftest peek-char.error.3
+  (signals-error
+   (with-input-from-string
+    (s "")
+    (peek-char nil s))
+   end-of-file)
+  t)
+
+(deftest peek-char.error.4
+  (signals-error
+   (with-input-from-string
+    (s " ")
+    (peek-char t s))
+   end-of-file)
+  t)
+
+(deftest peek-char.error.5
+  (signals-error
+   (with-input-from-string
+    (s "abcd")
+    (peek-char #\z s))
+   end-of-file)
+  t)
+
+(deftest peek-char.error.6
+  (signals-error
+   (with-input-from-string
+    (s "")
+    (peek-char nil s nil nil t))
+   end-of-file)
+  t)
