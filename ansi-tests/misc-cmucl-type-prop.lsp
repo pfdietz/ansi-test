@@ -246,7 +246,7 @@
 					  (declare (optimize (speed 2) (safety 3) (debug 3) (space 3))
 						   (type (rational -1255531/68466 4) p1))
 					  (+ p1 41888.98682005542d0)))
-			  -1255531/6846)
+			  -1255531/68466)
 		 'double-float))
   t)
 
