@@ -1018,14 +1018,12 @@ the condition to go uncaught if it cannot be classified."
   (let ((num 0))
     (declare (fixnum num))
     (do-symbols (s p num)
-      s
       (incf num))))
 
 (defun num-external-symbols-in-package (p)
   (let ((num 0))
     (declare (fixnum num))
     (do-external-symbols (s p num)
-      s		 
       (incf num))))
 
 (defun safely-delete-package (package-designator)
