@@ -78,7 +78,7 @@
        (let ((s (open pn ,@args)))
 	 (unwind-protect
 	     (progn
-	       (assert (open-stream-p s))n
+	       (assert (open-stream-p s))
 	       (assert (typep s 'file-stream))
 	       ,@(unless (member element-type '(signed-byte unsigned-byte))
 		   `((assert (subtypep ',element-type
