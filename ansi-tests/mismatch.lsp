@@ -54,11 +54,11 @@
   2)
 
 (deftest mismatch-list.13
-  (mismatch '(1 2 3 4) '(1 2 3 4) :test 'eq)
+  (mismatch '(1 2 3 4) '(1 2 3 4) :test 'eql)
   nil)
 
 (deftest mismatch-list.14
-  (mismatch '(1 2 3 4) '(5 6 7 8) :test-not 'eq)
+  (mismatch '(1 2 3 4) '(5 6 7 8) :test-not 'eql)
   nil)
 
 (deftest mismatch-list.15
@@ -78,7 +78,7 @@
   7)
 
 (deftest mismatch-list.19
-  (mismatch '(1 1 1) '(2 2 2 2 2 1 2 2) :from-end t :test-not 'eq)
+  (mismatch '(1 1 1) '(2 2 2 2 2 1 2 2) :from-end t :test-not 'eql)
   1)
 
 (deftest mismatch-list.20
@@ -144,11 +144,11 @@
   2)
 
 (deftest mismatch-vector.13
-  (mismatch #(1 2 3 4) #(1 2 3 4) :test 'eq)
+  (mismatch #(1 2 3 4) #(1 2 3 4) :test 'eql)
   nil)
 
 (deftest mismatch-vector.14
-  (mismatch #(1 2 3 4) #(5 6 7 8) :test-not 'eq)
+  (mismatch #(1 2 3 4) #(5 6 7 8) :test-not 'eql)
   nil)
 
 (deftest mismatch-vector.15
@@ -168,7 +168,7 @@
   7)
 
 (deftest mismatch-vector.19
-  (mismatch #(1 1 1) #(2 2 2 2 2 1 2 2) :from-end t :test-not 'eq)
+  (mismatch #(1 1 1) #(2 2 2 2 2 1 2 2) :from-end t :test-not 'eql)
   1)
 
 (deftest mismatch-vector.20
@@ -301,7 +301,7 @@
   nil)
 
 (deftest mismatch-bit-vector.11b
-  (mismatch #*0101 #*1010 :key #'evenp :test-not 'eq)
+  (mismatch #*0101 #*1010 :key #'evenp :test-not 'eql)
   nil)
 
 (deftest mismatch-bit-vector.11c
@@ -325,11 +325,11 @@
   2)
 
 (deftest mismatch-bit-vector.13
-  (mismatch #*0001 #*0001 :test 'eq)
+  (mismatch #*0001 #*0001 :test 'eql)
   nil)
 
 (deftest mismatch-bit-vector.14
-  (mismatch '#*10001 #*01110 :test-not 'eq)
+  (mismatch '#*10001 #*01110 :test-not 'eql)
   nil)
 
 (deftest mismatch-bit-vector.15
@@ -349,7 +349,7 @@
   7)
 
 (deftest mismatch-bit-vector.19
-  (mismatch #*000 #*11111011 :from-end t :test-not 'eq)
+  (mismatch #*000 #*11111011 :from-end t :test-not 'eql)
   1)
 
 (deftest mismatch-bit-vector.20
@@ -497,7 +497,7 @@
   nil)
 
 (deftest mismatch-string.11b
-  (mismatch "0101" "1010" :key #'evendigitp :test-not 'eq)
+  (mismatch "0101" "1010" :key #'evendigitp :test-not 'eql)
   nil)
 
 (deftest mismatch-string.11c
@@ -509,7 +509,7 @@
   4)
 
 (deftest mismatch-string.11e
-  (mismatch "0101" '(#\1 #\0 #\1 #\0) :key #'evendigitp :test-not 'eq)
+  (mismatch "0101" '(#\1 #\0 #\1 #\0) :key #'evendigitp :test-not 'eql)
   nil)
 
 (deftest mismatch-string.12
@@ -525,11 +525,11 @@
   2)
 
 (deftest mismatch-string.13
-  (mismatch "0001" "0001" :test 'eq)
+  (mismatch "0001" "0001" :test 'eql)
   nil)
 
 (deftest mismatch-string.14
-  (mismatch "10001" "01110" :test-not 'eq)
+  (mismatch "10001" "01110" :test-not 'eql)
   nil)
 
 (deftest mismatch-string.15
@@ -549,7 +549,7 @@
   7)
 
 (deftest mismatch-string.19
-  (mismatch "000" "11111011" :from-end t :test-not 'eq)
+  (mismatch "000" "11111011" :from-end t :test-not 'eql)
   1)
 
 (deftest mismatch-string.20

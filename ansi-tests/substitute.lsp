@@ -190,7 +190,7 @@
 (deftest substitute-list.26
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (substitute '(a 10) 'a x :key #'car :test (complement #'eq))))
+	 (result (substitute '(a 10) 'a x :key #'car :test (complement #'eql))))
     (and (equal orig x)
 	 result))
   ((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
@@ -198,7 +198,7 @@
 (deftest substitute-list.27
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (substitute '(a 10) 'a x :key #'car :test-not #'eq)))
+	 (result (substitute '(a 10) 'a x :key #'car :test-not #'eql)))
     (and (equal orig x)
 	 result))
   ((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))    
@@ -394,7 +394,7 @@
 (deftest substitute-vector.26
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (substitute '(a 10) 'a x :key #'car :test (complement #'eq))))
+	 (result (substitute '(a 10) 'a x :key #'car :test (complement #'eql))))
     (and (equalp orig x)
 	 result))
   #((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
@@ -402,7 +402,7 @@
 (deftest substitute-vector.27
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (substitute '(a 10) 'a x :key #'car :test-not #'eq)))
+	 (result (substitute '(a 10) 'a x :key #'car :test-not #'eql)))
     (and (equalp orig x)
 	 result))
   #((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
@@ -641,7 +641,7 @@
 (deftest substitute-string.26
   (let* ((orig "0102342015")
 	 (x (copy-seq orig))
-	 (result (substitute #\a #\1 x :key #'nextdigit :test (complement #'eq))))
+	 (result (substitute #\a #\1 x :key #'nextdigit :test (complement #'eql))))
     (and (equalp orig x)
 	 result))
   "0a0aaaa0aa")
@@ -649,7 +649,7 @@
 (deftest substitute-string.27
   (let* ((orig "0102342015")
 	 (x (copy-seq orig))
-	 (result (substitute #\a #\1 x :key #'nextdigit :test-not #'eq)))
+	 (result (substitute #\a #\1 x :key #'nextdigit :test-not #'eql)))
     (and (equalp orig x)
 	 result))
    "0a0aaaa0aa")
@@ -925,7 +925,7 @@
 (deftest substitute-bit-vector.28
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
-	 (result (substitute 0 1 x :key #'1+ :test (complement #'eq))))
+	 (result (substitute 0 1 x :key #'1+ :test (complement #'eql))))
     (and (equalp orig x)
 	 result))
   #*00000000000000000)
@@ -933,7 +933,7 @@
 (deftest substitute-bit-vector.29
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
-	 (result (substitute 0 1 x :key #'1+ :test-not #'eq)))
+	 (result (substitute 0 1 x :key #'1+ :test-not #'eql)))
     (and (equalp orig x)
 	 result))
   #*00000000000000000)

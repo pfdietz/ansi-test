@@ -206,7 +206,7 @@
     (values
      (rassoc (progn (setf x (incf i)) 'c)
 	     (progn (setf y (incf i)) '((1 . a) (2 . b) (3 . c) (4 . c)))
-	     :test (progn (setf z (incf i)) #'eq))
+	     :test (progn (setf z (incf i)) #'eql))
      i x y z))
   (3 . c) 3 1 2 3)
 
@@ -215,7 +215,7 @@
     (values
      (rassoc (progn (setf x (incf i)) 'c)
 	    (progn (setf y (incf i)) '((1 . a) (2 . b) (3 . c) (4 . c)))
-	    :test #'eq)
+	    :test #'eql)
      i x y))
   (3 . c) 2 1 2)
 

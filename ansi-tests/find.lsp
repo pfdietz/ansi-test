@@ -82,53 +82,53 @@
   4)
 
 (deftest find-list.14
-  (find 'a '(a a b a c e d a f a) :test (complement #'eq))
+  (find 'a '(a a b a c e d a f a) :test (complement #'eql))
   b)
 
 (deftest find-list.15
-  (find 'a '(a a b a c e d a f a) :test (complement #'eq)
+  (find 'a '(a a b a c e d a f a) :test (complement #'eql)
 	    :from-end t)
   f)
 
 (deftest find-list.16
-  (find 'a '(a a b a c e d a f a) :test-not #'eq)
+  (find 'a '(a a b a c e d a f a) :test-not #'eql)
   b)
 
 (deftest find-list.17
-  (find 'a '(a a b a c e d a f a) :test-not 'eq
+  (find 'a '(a a b a c e d a f a) :test-not 'eql
 	    :from-end t)
   f)
 
 (deftest find-list.18
-  (find 'a '(a a b a c e d a f a) :test-not 'eq)
+  (find 'a '(a a b a c e d a f a) :test-not 'eql)
   b)
 
 (deftest find-list.19
-  (find 'a '(a a b a c e d a f a) :test-not #'eq
+  (find 'a '(a a b a c e d a f a) :test-not #'eql
 	    :from-end t)
   f)
 
 (deftest find-list.20
-  (find 'a '(a a b a c e d a f a) :test-not #'eq)
+  (find 'a '(a a b a c e d a f a) :test-not #'eql)
   b)
 
 (deftest find-list.21
-  (find 'a '(a a b a c e d a f a) :test #'eq
+  (find 'a '(a a b a c e d a f a) :test #'eql
 	    :start 2)
   a)
 
 (deftest find-list.22
-  (find 'a '(a a b a c e d a f a) :test #'eq
+  (find 'a '(a a b a c e d a f a) :test #'eql
 	    :start 2 :end nil)
   a)
 
 (deftest find-list.23
-  (find 'a '(a a b a c e d a f a) :test-not #'eq
+  (find 'a '(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5)
   b)
 
 (deftest find-list.24
-  (find 'a '(a a b a c e d a f a) :test-not #'eq
+  (find 'a '(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   c)
 
@@ -237,53 +237,53 @@
   4)
 
 (deftest find-vector.14
-  (find 'a #(a a b a c e d a f a) :test (complement #'eq))
+  (find 'a #(a a b a c e d a f a) :test (complement #'eql))
   b)
 
 (deftest find-vector.15
-  (find 'a #(a a b a c e d a f a) :test (complement #'eq)
+  (find 'a #(a a b a c e d a f a) :test (complement #'eql)
 	    :from-end t)
   f)
 
 (deftest find-vector.16
-  (find 'a #(a a b a c e d a f a) :test-not #'eq)
+  (find 'a #(a a b a c e d a f a) :test-not #'eql)
   b)
 
 (deftest find-vector.17
-  (find 'a #(a a b a c e d a f a) :test-not 'eq
+  (find 'a #(a a b a c e d a f a) :test-not 'eql
 	    :from-end t)
   f)
 
 (deftest find-vector.18
-  (find 'a #(a a b a c e d a f a) :test-not 'eq)
+  (find 'a #(a a b a c e d a f a) :test-not 'eql)
   b)
 
 (deftest find-vector.19
-  (find 'a #(a a b a c e d a f a) :test-not #'eq
+  (find 'a #(a a b a c e d a f a) :test-not #'eql
 	    :from-end t)
   f)
 
 (deftest find-vector.20
-  (find 'a #(a a b a c e d a f a) :test-not #'eq)
+  (find 'a #(a a b a c e d a f a) :test-not #'eql)
   b)
 
 (deftest find-vector.21
-  (find 'a #(a a b a c e d a f a) :test #'eq
+  (find 'a #(a a b a c e d a f a) :test #'eql
 	    :start 2)
   a)
 
 (deftest find-vector.22
-  (find 'a #(a a b a c e d a f a) :test #'eq
+  (find 'a #(a a b a c e d a f a) :test #'eql
 	    :start 2 :end nil)
   a)
 
 (deftest find-vector.23
-  (find 'a #(a a b a c e d a f a) :test-not #'eq
+  (find 'a #(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5)
   b)
 
 (deftest find-vector.24
-  (find 'a #(a a b a c e d a f a) :test-not #'eq
+  (find 'a #(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   c)
 
@@ -435,120 +435,120 @@
   1)
 
 (deftest find-bit-vector.14
-  (find 0 #*0010111010 :test (complement #'eq))
+  (find 0 #*0010111010 :test (complement #'eql))
   1)
 
 (deftest find-bit-vector.15
-  (find 0 #*0010111010 :test (complement #'eq)
+  (find 0 #*0010111010 :test (complement #'eql)
 	    :from-end t)
   1)
 
 (deftest find-bit-vector.16
-  (find 0 #*0010111010 :test-not #'eq)
+  (find 0 #*0010111010 :test-not #'eql)
   1)
 
 (deftest find-bit-vector.16a
-  (find 1 #*111111111111 :test-not #'eq)
+  (find 1 #*111111111111 :test-not #'eql)
   nil)
 
 (deftest find-bit-vector.16b
-  (find 0 #*0000000 :test-not #'eq)
+  (find 0 #*0000000 :test-not #'eql)
   nil)
 
 (deftest find-bit-vector.17
-  (find 0 #*001011101 :test-not 'eq
+  (find 0 #*001011101 :test-not 'eql
 	:from-end t)
   1)
 
 (deftest find-bit-vector.17a
-  (find 0 #*0000000 :test-not 'eq
+  (find 0 #*0000000 :test-not 'eql
 	:from-end t)
   nil)
 
 (deftest find-bit-vector.17b
-  (find 1 #*111111111111 :test-not 'eq
+  (find 1 #*111111111111 :test-not 'eql
 	:from-end t)
   nil)
 
 (deftest find-bit-vector.18
-  (find 0 #*00101110 :test-not 'eq)
+  (find 0 #*00101110 :test-not 'eql)
   1)
 
 (deftest find-bit-vector.18a
-  (find 0 #*00000000 :test-not 'eq)
+  (find 0 #*00000000 :test-not 'eql)
   nil)
 
 (deftest find-bit-vector.19
-  (find 0 #*00101110 :test-not #'eq
+  (find 0 #*00101110 :test-not #'eql
 	    :from-end t)
   1)
 
 (deftest find-bit-vector.19a
-  (find 0 #*00000000 :test-not #'eq
+  (find 0 #*00000000 :test-not #'eql
 	:from-end t)
   nil)
 
 (deftest find-bit-vector.20
-  (find 0 #*00101110 :test-not #'eq)
+  (find 0 #*00101110 :test-not #'eql)
   1)
 
 (deftest find-bit-vector.21
-  (find 0 #*00101110 :test #'eq
+  (find 0 #*00101110 :test #'eql
 	:start 2)
   0)
 
 (deftest find-bit-vector.21a
-  (find 0 #*00111111 :test #'eq
+  (find 0 #*00111111 :test #'eql
 	:start 2)
   nil)
 
 (deftest find-bit-vector.21b
-  (find 1 #*00111111 :test #'eq
+  (find 1 #*00111111 :test #'eql
 	:start 2)
   1)
 
 (deftest find-bit-vector.22
-  (find 0 #*00101110 :test #'eq
+  (find 0 #*00101110 :test #'eql
 	:start 2 :end nil)
   0)
 
 (deftest find-bit-vector.22a
-  (find 0 #*001111111 :test #'eq
+  (find 0 #*001111111 :test #'eql
 	:start 2 :end nil)
   nil)
 
 (deftest find-bit-vector.22b
-  (find 1 #*001111111 :test #'eq
+  (find 1 #*001111111 :test #'eql
 	:start 2 :end nil)
   1)
 
 (deftest find-bit-vector.23
-  (find 0 #*00101110 :test-not #'eq
+  (find 0 #*00101110 :test-not #'eql
 	:start 0 :end 5)
   1)
 
 (deftest find-bit-vector.23a
-  (find 0 #*00000111 :test-not #'eq
+  (find 0 #*00000111 :test-not #'eql
 	:start 0 :end 5)
   nil)
 
 (deftest find-bit-vector.23b
-  (find 0 #*00001000 :test-not #'eq
+  (find 0 #*00001000 :test-not #'eql
 	:start 0 :end 5)
   1)
 
 (deftest find-bit-vector.24
-  (find 0 #*00101110 :test-not #'eq
+  (find 0 #*00101110 :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   1)
 
 (deftest find-bit-vector.24a
-  (find 0 #*0000001111 :test-not #'eq
+  (find 0 #*0000001111 :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   nil)
 
 (deftest find-bit-vector.24b
-  (find 0 #*0000100 :test-not #'eq
+  (find 0 #*0000100 :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   1)
 
@@ -679,34 +679,34 @@
   #\4)
 
 (deftest find-string.14
-  (find #\a "aabacedafa" :test (complement #'eq))
+  (find #\a "aabacedafa" :test (complement #'eql))
   #\b)
 
 (deftest find-string.15
-  (find #\a "aabacedafa" :test (complement #'eq)
+  (find #\a "aabacedafa" :test (complement #'eql)
 	    :from-end t)
   #\f)
 
 (deftest find-string.16
-  (find #\a "aabacedafa" :test-not #'eq)
+  (find #\a "aabacedafa" :test-not #'eql)
   #\b)
 
 (deftest find-string.17
-  (find #\a "aabacedafa" :test-not 'eq
+  (find #\a "aabacedafa" :test-not 'eql
 	    :from-end t)
   #\f)
 
 (deftest find-string.18
-  (find #\a "aabacedafa" :test-not 'eq)
+  (find #\a "aabacedafa" :test-not 'eql)
   #\b)
 
 (deftest find-string.19
-  (find #\a "aabacedafa" :test-not #'eq
+  (find #\a "aabacedafa" :test-not #'eql
 	    :from-end t)
   #\f)
 
 (deftest find-string.20
-  (find #\a "aabacedafa" :test-not #'eq)
+  (find #\a "aabacedafa" :test-not #'eql)
   #\b)
 
 (deftest find-string.21

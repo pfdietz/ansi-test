@@ -106,18 +106,18 @@
 (deftest search-vector.11
   (let ((target *searched-vector*))
     (loop for pat in *pattern-subvectors*
-	  for pos = (search pat target :start2 20 :test (complement #'eq))
+	  for pos = (search pat target :start2 20 :test (complement #'eql))
 	  unless (search-check pat target pos :start2 20
-			       :test (complement #'eq))
+			       :test (complement #'eql))
 	  collect pat))
   nil)
 
 (deftest search-vector.12
   (let ((target *searched-vector*))
     (loop for pat in *pattern-subvectors*
-	  for pos = (search pat target :from-end t :start2 20 :test-not #'eq)
+	  for pos = (search pat target :from-end t :start2 20 :test-not #'eql)
 	  unless (search-check pat target pos :from-end t
-			       :start2 20 :test (complement #'eq))
+			       :start2 20 :test (complement #'eql))
 	  collect pat))
   nil)
 
@@ -126,10 +126,10 @@
     (loop for pat in *pattern-subvectors*
 	  when (and (> (length pat) 0)
 		    (let ((pos (search pat target :start1 1
-				       :test (complement #'eq))))
+				       :test (complement #'eql))))
 		      (not (search-check pat target pos
 					 :start1 1
-					 :test (complement #'eq)))))
+					 :test (complement #'eql)))))
 	  collect pat))
   nil)
 
@@ -139,10 +139,10 @@
 	  when (let ((len (length pat)))
 		 (and (> len 0)
 		      (let ((pos (search pat target :end1 (1- len)
-					 :test (complement #'eq))))
+					 :test (complement #'eql))))
 		      (not (search-check pat target pos
 					 :end1 (1- len)
-					 :test (complement #'eq))))))
+					 :test (complement #'eql))))))
 	  collect pat))
   nil)
 

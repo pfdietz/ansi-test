@@ -82,53 +82,53 @@
   6)
 
 (deftest position-list.14
-  (position 'a '(a a b a c e d a f a) :test (complement #'eq))
+  (position 'a '(a a b a c e d a f a) :test (complement #'eql))
   2)
 
 (deftest position-list.15
-  (position 'a '(a a b a c e d a f a) :test (complement #'eq)
+  (position 'a '(a a b a c e d a f a) :test (complement #'eql)
 	    :from-end t)
   8)
 
 (deftest position-list.16
-  (position 'a '(a a b a c e d a f a) :test-not #'eq)
+  (position 'a '(a a b a c e d a f a) :test-not #'eql)
   2)
 
 (deftest position-list.17
-  (position 'a '(a a b a c e d a f a) :test-not 'eq
+  (position 'a '(a a b a c e d a f a) :test-not 'eql
 	    :from-end t)
   8)
 
 (deftest position-list.18
-  (position 'a '(a a b a c e d a f a) :test-not 'eq)
+  (position 'a '(a a b a c e d a f a) :test-not 'eql)
   2)
 
 (deftest position-list.19
-  (position 'a '(a a b a c e d a f a) :test-not #'eq
+  (position 'a '(a a b a c e d a f a) :test-not #'eql
 	    :from-end t)
   8)
 
 (deftest position-list.20
-  (position 'a '(a a b a c e d a f a) :test-not #'eq)
+  (position 'a '(a a b a c e d a f a) :test-not #'eql)
   2)
 
 (deftest position-list.21
-  (position 'a '(a a b a c e d a f a) :test #'eq
+  (position 'a '(a a b a c e d a f a) :test #'eql
 	    :start 2)
   3)
 
 (deftest position-list.22
-  (position 'a '(a a b a c e d a f a) :test #'eq
+  (position 'a '(a a b a c e d a f a) :test #'eql
 	    :start 2 :end nil)
   3)
 
 (deftest position-list.23
-  (position 'a '(a a b a c e d a f a) :test-not #'eq
+  (position 'a '(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5)
   2)
 
 (deftest position-list.24
-  (position 'a '(a a b a c e d a f a) :test-not #'eq
+  (position 'a '(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   4)
 
@@ -229,53 +229,53 @@
   6)
 
 (deftest position-vector.14
-  (position 'a #(a a b a c e d a f a) :test (complement #'eq))
+  (position 'a #(a a b a c e d a f a) :test (complement #'eql))
   2)
 
 (deftest position-vector.15
-  (position 'a #(a a b a c e d a f a) :test (complement #'eq)
+  (position 'a #(a a b a c e d a f a) :test (complement #'eql)
 	    :from-end t)
   8)
 
 (deftest position-vector.16
-  (position 'a #(a a b a c e d a f a) :test-not #'eq)
+  (position 'a #(a a b a c e d a f a) :test-not #'eql)
   2)
 
 (deftest position-vector.17
-  (position 'a #(a a b a c e d a f a) :test-not 'eq
+  (position 'a #(a a b a c e d a f a) :test-not 'eql
 	    :from-end t)
   8)
 
 (deftest position-vector.18
-  (position 'a #(a a b a c e d a f a) :test-not 'eq)
+  (position 'a #(a a b a c e d a f a) :test-not 'eql)
   2)
 
 (deftest position-vector.19
-  (position 'a #(a a b a c e d a f a) :test-not #'eq
+  (position 'a #(a a b a c e d a f a) :test-not #'eql
 	    :from-end t)
   8)
 
 (deftest position-vector.20
-  (position 'a #(a a b a c e d a f a) :test-not #'eq)
+  (position 'a #(a a b a c e d a f a) :test-not #'eql)
   2)
 
 (deftest position-vector.21
-  (position 'a #(a a b a c e d a f a) :test #'eq
+  (position 'a #(a a b a c e d a f a) :test #'eql
 	    :start 2)
   3)
 
 (deftest position-vector.22
-  (position 'a #(a a b a c e d a f a) :test #'eq
+  (position 'a #(a a b a c e d a f a) :test #'eql
 	    :start 2 :end nil)
   3)
 
 (deftest position-vector.23
-  (position 'a #(a a b a c e d a f a) :test-not #'eq
+  (position 'a #(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5)
   2)
 
 (deftest position-vector.24
-  (position 'a #(a a b a c e d a f a) :test-not #'eq
+  (position 'a #(a a b a c e d a f a) :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   4)
 
@@ -392,53 +392,53 @@
   6)
 
 (deftest position-bit-vector.14
-  (position 0 #*0010111010 :test (complement #'eq))
+  (position 0 #*0010111010 :test (complement #'eql))
   2)
 
 (deftest position-bit-vector.15
-  (position 0 #*0010111010 :test (complement #'eq)
+  (position 0 #*0010111010 :test (complement #'eql)
 	    :from-end t)
   8)
 
 (deftest position-bit-vector.16
-  (position 0 #*0010111010 :test-not #'eq)
+  (position 0 #*0010111010 :test-not #'eql)
   2)
 
 (deftest position-bit-vector.17
-  (position 0 #*001011101 :test-not 'eq
+  (position 0 #*001011101 :test-not 'eql
 	    :from-end t)
   8)
 
 (deftest position-bit-vector.18
-  (position 0 #*00101110 :test-not 'eq)
+  (position 0 #*00101110 :test-not 'eql)
   2)
 
 (deftest position-bit-vector.19
-  (position 0 #*00101110 :test-not #'eq
+  (position 0 #*00101110 :test-not #'eql
 	    :from-end t)
   6)
 
 (deftest position-bit-vector.20
-  (position 0 #*00101110 :test-not #'eq)
+  (position 0 #*00101110 :test-not #'eql)
   2)
 
 (deftest position-bit-vector.21
-  (position 0 #*00101110 :test #'eq
+  (position 0 #*00101110 :test #'eql
 	    :start 2)
   3)
 
 (deftest position-bit-vector.22
-  (position 0 #*00101110 :test #'eq
+  (position 0 #*00101110 :test #'eql
 	    :start 2 :end nil)
   3)
 
 (deftest position-bit-vector.23
-  (position 0 #*00101110 :test-not #'eq
+  (position 0 #*00101110 :test-not #'eql
 	    :start 0 :end 5)
   2)
 
 (deftest position-bit-vector.24
-  (position 0 #*00101110 :test-not #'eq
+  (position 0 #*00101110 :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   4)
 
@@ -562,53 +562,53 @@
   6)
 
 (deftest position-string.14
-  (position #\a "aabacedafa" :test (complement #'eq))
+  (position #\a "aabacedafa" :test (complement #'eql))
   2)
 
 (deftest position-string.15
-  (position #\a "aabacedafa" :test (complement #'eq)
+  (position #\a "aabacedafa" :test (complement #'eql)
 	    :from-end t)
   8)
 
 (deftest position-string.16
-  (position #\a "aabacedafa" :test-not #'eq)
+  (position #\a "aabacedafa" :test-not #'eql)
   2)
 
 (deftest position-string.17
-  (position #\a "aabacedafa" :test-not 'eq
+  (position #\a "aabacedafa" :test-not 'eql
 	    :from-end t)
   8)
 
 (deftest position-string.18
-  (position #\a "aabacedafa" :test-not 'eq)
+  (position #\a "aabacedafa" :test-not 'eql)
   2)
 
 (deftest position-string.19
-  (position #\a "aabacedafa" :test-not #'eq
+  (position #\a "aabacedafa" :test-not #'eql
 	    :from-end t)
   8)
 
 (deftest position-string.20
-  (position #\a "aabacedafa" :test-not #'eq)
+  (position #\a "aabacedafa" :test-not #'eql)
   2)
 
 (deftest position-string.21
-  (position #\a "aabacedafa" :test #'eq
+  (position #\a "aabacedafa" :test #'eql
 	    :start 2)
   3)
 
 (deftest position-string.22
-  (position #\a "aabacedafa" :test #'eq
+  (position #\a "aabacedafa" :test #'eql
 	    :start 2 :end nil)
   3)
 
 (deftest position-string.23
-  (position #\a "aabacedafa" :test-not #'eq
+  (position #\a "aabacedafa" :test-not #'eql
 	    :start 0 :end 5)
   2)
 
 (deftest position-string.24
-  (position #\a "aabacedafa" :test-not #'eq
+  (position #\a "aabacedafa" :test-not #'eql
 	    :start 0 :end 5 :from-end t)
   4)
 

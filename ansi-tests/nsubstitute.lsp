@@ -741,14 +741,14 @@
 (deftest nsubstitute-list.26
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eq))))
+	 (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eql))))
     result)
   ((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
 (deftest nsubstitute-list.27
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eq)))
+	 (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eql)))
     result)
   ((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))    
 
@@ -769,14 +769,14 @@
 (deftest nsubstitute-vector.26
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eq))))
+	 (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eql))))
     result)
   #((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
 (deftest nsubstitute-vector.27
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eq)))
+	 (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eql)))
     result)
   #((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
@@ -797,14 +797,14 @@
 (deftest nsubstitute-string.26
   (let* ((orig "0102342015")
 	 (x (copy-seq orig))
-	 (result (nsubstitute #\a #\1 x :key #'nextdigit :test (complement #'eq))))
+	 (result (nsubstitute #\a #\1 x :key #'nextdigit :test (complement #'eql))))
     result)
   "0a0aaaa0aa")
 
 (deftest nsubstitute-string.27
   (let* ((orig "0102342015")
 	 (x (copy-seq orig))
-	 (result (nsubstitute #\a #\1 x :key #'nextdigit :test-not #'eq)))
+	 (result (nsubstitute #\a #\1 x :key #'nextdigit :test-not #'eql)))
     result)
   "0a0aaaa0aa")
 

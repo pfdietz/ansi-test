@@ -10,11 +10,11 @@
   2)
 
 (deftest count-list.2
-  (count 'a '(a b c d e a e f) :test #'eq)
+  (count 'a '(a b c d e a e f) :test #'eql)
   2)
 
 (deftest count-list.3
-  (count 'a '(a b c d e a e f) :test 'eq)
+  (count 'a '(a b c d e a e f) :test 'eql)
   2)
 
 (deftest count-list.4
@@ -71,7 +71,7 @@
   7)
 
 (deftest count-list.15
-  (count 1 '(1 1 1 1 1 2 1 1)  :test-not #'eq)
+  (count 1 '(1 1 1 1 1 2 1 1)  :test-not #'eql)
   1)
 
 (deftest count-list.16
@@ -86,11 +86,11 @@
   2)
 
 (deftest count-vector.2
-  (count 'a #(a b c d e a e f) :test #'eq)
+  (count 'a #(a b c d e a e f) :test #'eql)
   2)
 
 (deftest count-vector.3
-  (count 'a #(a b c d e a e f) :test 'eq)
+  (count 'a #(a b c d e a e f) :test 'eql)
   2)
 
 (deftest count-vector.4
@@ -147,7 +147,7 @@
   7)
 
 (deftest count-vector.15
-  (count 1 #(1 1 1 1 1 2 1 1)  :test-not #'eq)
+  (count 1 #(1 1 1 1 1 2 1 1)  :test-not #'eql)
   1)
 
 (deftest count-vector16
@@ -165,13 +165,13 @@
 (deftest count-filled-vector.2
   (count 'a (make-array 8 :initial-contents '(a b c d e a e f)
 			:fill-pointer t)
-	 :test #'eq)
+	 :test #'eql)
   2)
 
 (deftest count-filled-vector.3
   (count 'a (make-array 8 :initial-contents '(a b c d e a e f)
 			:fill-pointer t)
-	 :test 'eq)
+	 :test 'eql)
   2)
 
 (deftest count-filled-vector.4
@@ -250,7 +250,7 @@
 (deftest count-filled-vector.15
   (count 1 (make-array 8 :initial-contents '(1 1 1 1 1 2 1 1)
 		       :fill-pointer t)
-	 :test-not #'eq)
+	 :test-not #'eql)
   1)
 
 (deftest count-filled-vector.16
@@ -291,11 +291,11 @@
   7)
 
 (deftest count-bit-vector.2
-  (count 1 #*00101100011011000 :test #'eq)
+  (count 1 #*00101100011011000 :test #'eql)
   7)
 
 (deftest count-bit-vector.3
-  (count 1 #*00101100011011000 :test 'eq)
+  (count 1 #*00101100011011000 :test 'eql)
   7)
 
 (deftest count-bit-vector.4
@@ -348,7 +348,7 @@
   7)
 
 (deftest count-bit-vector.15
-  (count 1 #*11111011  :test-not #'eq)
+  (count 1 #*11111011  :test-not #'eql)
   1)
 
 (deftest count-bit-vector.16
@@ -392,11 +392,11 @@
   7)
 
 (deftest count-string.2
-  (count #\1 "00101100011011000" :test #'eq)
+  (count #\1 "00101100011011000" :test #'eql)
   7)
 
 (deftest count-string.3
-  (count #\1 "00101100011011000" :test 'eq)
+  (count #\1 "00101100011011000" :test 'eql)
   7)
 
 (deftest count-string.4
@@ -451,7 +451,7 @@
   7)
 
 (deftest count-string.15
-  (count #\1 "11111011"  :test-not #'eq)
+  (count #\1 "11111011"  :test-not #'eql)
   1)
 
 (deftest count-string.16

@@ -94,18 +94,18 @@
 (deftest search-list.11
   (let ((target *searched-list*))
     (loop for pat in *pattern-sublists*
-	  for pos = (search pat target :start2 20 :test (complement #'eq))
+	  for pos = (search pat target :start2 20 :test (complement #'eql))
 	  unless (search-check pat target pos :start2 20
-			       :test (complement #'eq))
+			       :test (complement #'eql))
 	  collect pat))
   nil)
 
 (deftest search-list.12
   (let ((target *searched-list*))
     (loop for pat in *pattern-sublists*
-	  for pos = (search pat target :from-end t :start2 20 :test-not #'eq)
+	  for pos = (search pat target :from-end t :start2 20 :test-not #'eql)
 	  unless (search-check pat target pos :from-end t
-			       :start2 20 :test (complement #'eq))
+			       :start2 20 :test (complement #'eql))
 	  collect pat))
   nil)
 
@@ -114,10 +114,10 @@
     (loop for pat in *pattern-sublists*
 	  when (and (> (length pat) 0)
 		    (let ((pos (search pat target :start1 1
-				       :test (complement #'eq))))
+				       :test (complement #'eql))))
 		      (not (search-check pat target pos
 					 :start1 1
-					 :test (complement #'eq)))))
+					 :test (complement #'eql)))))
 	  collect pat))
   nil)
 
@@ -127,10 +127,10 @@
 	  when (let ((len (length pat)))
 		 (and (> len 0)
 		      (let ((pos (search pat target :end1 (1- len)
-					 :test (complement #'eq))))
+					 :test (complement #'eql))))
 		      (not (search-check pat target pos
 					 :end1 (1- len)
-					 :test (complement #'eq))))))
+					 :test (complement #'eql))))))
 	  collect pat))
   nil)
 
@@ -212,7 +212,7 @@
       :start2 (progn (setf f (incf i)) 1)
       :end2 (progn (setf g (incf i)) 8)
       :key (progn (setf h (incf i)) #'identity)
-      :test (progn (setf j (incf i)) #'eq)
+      :test (progn (setf j (incf i)) #'eql)
       )
      i a b c d e f g h j))
   4 9 1 2 3 4 5 6 7 8 9)
@@ -223,7 +223,7 @@
      (search
       (progn (setf a (incf i)) '(nil a b nil))
       (progn (setf b (incf i)) '(z z z a a b b z z z))
-      :test-not (progn (setf c (incf i)) (complement #'eq))
+      :test-not (progn (setf c (incf i)) (complement #'eql))
       :key (progn (setf d (incf i)) #'identity)
       :end2 (progn (setf e (incf i)) 8)
       :start2 (progn (setf f (incf i)) 1)
