@@ -5102,3 +5102,695 @@ Broken at C::WT-C-INLINE-LOC.
 	0)))
    794801 211700 -1246335)
   7)
+
+
+
+(deftest misc.296
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -2016726144 234357120) A))
+          (DECLARE (TYPE (INTEGER -10569521299456 -1307998945280) B))
+          (DECLARE (TYPE (INTEGER -45429002240 -17228484608) C))
+          (DECLARE (TYPE (INTEGER 228451840 1454976512) D))
+          (DECLARE (TYPE (INTEGER -4797 -2609) E))
+          (DECLARE (TYPE (INTEGER -21 36300536) F))
+          (DECLARE (TYPE (INTEGER -15983530 31646604) G))
+          (DECLARE (TYPE (INTEGER -208720272 -357) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 0)
+                       (COMPILATION-SPEED 3)))
+          (EXPT (LABELS ((%F14 (F14-1 F14-2)
+                               (PROGN
+                                 (TAGBODY
+                                   (+
+                                    (UNWIND-PROTECT
+                                      (LABELS ((%F1 (F1-1) (GO TAG1)))
+                                        (LET ((*S6* (%F1 D))) 0))))
+                                   TAG1
+                                   (+
+                                    (CONDITIONS:HANDLER-BIND ()
+                                      (IF (<= -11215713 -819)
+                                       (INTEGER-LENGTH
+                                        (FLOOR (CONJUGATE F14-1)
+                                         (MAX 12
+                                          (CEILING
+                                           (BLOCK B2
+                                             (CATCH 'CT2
+                                               (IGNORE-ERRORS
+                                                (FLET
+                                                 ((%F13 (F13-1)
+                                                   (LOGIOR 87 F14-2)))
+                                                  F14-1))))))))
+                                       (PROGV '(*S8*) (LIST 472865632)
+                                         *S8*)))))
+                                 0)))
+                  (%F14 0 0))
+                0)))
+   -28594854 -3859203606860 -40757449218 894599577 -4163 11621230
+   29558853 -92216802)
+  1)
+
+
+(deftest misc.297
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -4354712743936 666241234) A))
+          (DECLARE (TYPE (INTEGER -23496787232 13342697120) B))
+          (DECLARE (TYPE (INTEGER -6834570 6274788) C))
+          (DECLARE (TYPE (INTEGER -1988742 -250650) D))
+          (DECLARE (TYPE (INTEGER 10523345 10868247) E))
+          (DECLARE (TYPE (INTEGER -489185 -46267) F))
+          (DECLARE (TYPE (INTEGER -627627253760 226529) G))
+          (DECLARE (TYPE (INTEGER -1039260485 -22498) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 2) (DEBUG 2)
+                       (COMPILATION-SPEED 0)))
+          (LABELS ((%F7 (F7-1 F7-2 F7-3 &OPTIONAL (F7-4 0) (F7-5 0)
+                              (F7-6 (LABELS
+                                     ((%F6 (F6-1)
+                                       (LABELS ((%F9 (F9-1) 0))
+                                         (PROGN
+                                           (TAGBODY
+                                             (UNWIND-PROTECT
+                                               (IF (%F9 (GO TAG4)) 0 0))
+                                             TAG4
+                                             (CONDITIONS:HANDLER-CASE
+                                              0))
+                                           H))))
+                                      (APPLY #'%F6 0 NIL))))
+                        0))
+            (%F7 0 D 0 F D))))
+    -4319330882538 -3195059121 -2799927 -1466395 10630639 -224479
+    -502579707077 -985908422)
+   0)
+
+(deftest misc.298
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER 1296736620544 1680954654720) A))
+          (DECLARE (TYPE (INTEGER -2 -2) B))
+          (DECLARE (TYPE (INTEGER 1 42303) C))
+          (DECLARE (TYPE (INTEGER -38881008000 1333202563072) D))
+          (DECLARE (TYPE (INTEGER -435684 1289298) E))
+          (DECLARE (TYPE (INTEGER -164302654464 -10150328832) F))
+          (DECLARE (TYPE (INTEGER 30759259904 38429537792) G))
+          (DECLARE (TYPE (INTEGER -1628949299200 -47724342) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 1) (SAFETY 0) (DEBUG 0)
+                       (COMPILATION-SPEED 1)))
+          (PROGN
+            (TAGBODY
+              (LET ((V9 (UNWIND-PROTECT (GO 0)))) 0)
+              0
+              (NUMERATOR (FUNCALL (CONSTANTLY 0) (LOGORC2 0 0) 0)))
+            0)))
+   1451922002679 -2 285 1067997670626 1115209 -37445463114
+         36530345360 -80501559891)
+   0)
+
+(deftest misc.299
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -1814 3348) A))
+          (DECLARE (TYPE (INTEGER -32239015 12) B))
+          (DECLARE (TYPE (INTEGER 128412 101411593) C))
+          (DECLARE (TYPE (INTEGER -329076792320 -22) D))
+          (DECLARE (TYPE (INTEGER 77651198 86069496) E))
+          (DECLARE (TYPE (INTEGER -4616 3453771) F))
+          (DECLARE (TYPE (INTEGER -14889981824 53610580608) G))
+          (DECLARE (TYPE (INTEGER -1049733788 46605484288) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 3) (DEBUG 2)
+                       (COMPILATION-SPEED 2)))
+          (CONJUGATE
+              (PROGN
+                (TAGBODY
+                  (FLET ((%F3 NIL 0))
+                    (UNWIND-PROTECT
+                      (FLET ((%F10 (F10-1) (LET ((*S6* (%F3))) (GO 6))))
+                        (FUNCALL #'%F10 F))))
+                  6
+                  (LET ((*S1* (RESTART-BIND ()
+                                (LABELS ((%F1 (F1-1) 3136))
+                                  (LET ()
+                                    (PROGV '(*S5* *S1*)
+                                     (LIST
+                                      (LABELS
+                                       ((%F2 NIL (CATCH 'CT8 -11)))
+                                        -70941710)
+                                      (IF NIL (%F1 -1) 87))
+                                      (PROGN
+                                        (TAGBODY
+                                          (%F1 *S1*)
+                                          3
+                                          (BLOCK B2 (PROGN A))
+                                          TAG3)
+                                        H)))))))
+                    0))
+                0))))
+   1555 -22062210 85224215 -161218251003 78463284 730073
+   33930166854 37839245921)
+   0)
+
+(deftest misc.300
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -29429 -3320) A))
+          (DECLARE (TYPE (INTEGER -407874593 279639852) B))
+          (DECLARE (TYPE (INTEGER -542849760256 3344389718016) C))
+          (DECLARE (TYPE (INTEGER -2 12012755) D))
+          (DECLARE (TYPE (INTEGER -248 -228) E))
+          (DECLARE (TYPE (INTEGER 5 15636824592) F))
+          (DECLARE (TYPE (INTEGER 21039 21595) G))
+          (DECLARE (TYPE (INTEGER -1867743555584 -1621183025152) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 1) (DEBUG 2)
+                       (COMPILATION-SPEED 3)))
+          (LABELS ((%F12 (F12-1 F12-2 F12-3) 0))
+            (LABELS ((%F17 (F17-1)
+                           (PROGN
+                             (TAGBODY
+                               (MAX (APPLY (CONSTANTLY 0)
+                                     (LIST
+                                      (%F12 (UNWIND-PROTECT (GO TAG1))
+                                       0 D)
+                                      0 F)))
+                               TAG1
+                               (DPB (REALPART
+                                     (EXPT
+                                      (ROUND
+                                       (RETURN-FROM %F17
+                                         (RESTART-BIND ()
+                                           (COMPLEX E 0)))
+                                       (MAX 40 0))
+                                      0))
+                                    (BYTE 0 0) 0))
+                             0)))
+              (%F12 0 (%F17 0) 0)))))
+   -6416 -274982013 2946309248013 1724720 -228 5782683458 21484
+   -1681168611256)
+  0)
+
+
+(deftest misc.301
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -1814 3348) A))
+          (DECLARE (TYPE (INTEGER -32239015 12) B))
+          (DECLARE (TYPE (INTEGER 128412 101411593) C))
+          (DECLARE (TYPE (INTEGER -329076792320 -22) D))
+          (DECLARE (TYPE (INTEGER 77651198 86069496) E))
+          (DECLARE (TYPE (INTEGER -4616 3453771) F))
+          (DECLARE (TYPE (INTEGER -14889981824 53610580608) G))
+          (DECLARE (TYPE (INTEGER -1049733788 46605484288) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 3) (DEBUG 2)
+                       (COMPILATION-SPEED 2)))
+          (CONJUGATE
+              (PROGN
+                (TAGBODY
+                  (FLET ((%F3 NIL 0))
+                    (UNWIND-PROTECT
+                      (FLET ((%F10 (F10-1) (LET ((*S6* (%F3))) (GO 6))))
+                        (FUNCALL #'%F10 F))))
+                  6
+                  (LET ((*S1* (RESTART-BIND ()
+                                (LABELS ((%F1 (F1-1) 3136))
+                                  (LET ()
+                                    (PROGV '(*S5* *S1*)
+                                     (LIST
+                                      (LABELS
+                                       ((%F2 NIL (CATCH 'CT8 -11)))
+                                        -70941710)
+                                      (IF NIL (%F1 -1) 87))
+                                      (PROGN
+                                        (TAGBODY
+                                          (%F1 *S1*)
+                                          3
+                                          (BLOCK B2 (PROGN A))
+                                          TAG3)
+                                        H)))))))
+                    0))
+                0))))
+   1555 -22062210 85224215 -161218251003 78463284 730073
+   33930166854 37839245921)
+  0)
+
+(deftest misc.302
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -206837809920 -126404559104) A))
+          (DECLARE (TYPE (INTEGER -277874608640 -63724432) B))
+          (DECLARE (TYPE (INTEGER -2 0) C))
+          (DECLARE (TYPE (INTEGER -5992710 9946878) D))
+          (DECLARE (TYPE (INTEGER -4345390743552 -76504514048) E))
+          (DECLARE (TYPE (INTEGER -330 3826137) F))
+          (DECLARE (TYPE (INTEGER -517792898560 -1193868) G))
+          (DECLARE (TYPE (INTEGER 2018 98092396) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 2) (SAFETY 2) (DEBUG 1)
+                       (COMPILATION-SPEED 1)))
+          (FLET ((%F12 (F12-1 F12-2 &OPTIONAL (F12-3 0)
+                              (F12-4 (PROGN
+                                       (TAGBODY
+                                         (UNWIND-PROTECT (GO TAG6))
+                                         TAG6)
+                                       (FLET ((%F1 (F1-1 F1-2) 0))
+                                         (APPLY #'%F1 0 0 (LIST))))))
+                       0))
+            (%F12 0 E))))
+   -195379170409 -30212852077 -1 -2082141 -1686846623470 360505
+   -324299330279 37218064)
+  0)
+
+(deftest misc.303
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -55724018 0) A))
+          (DECLARE (TYPE (INTEGER -4929718 2777256) B))
+          (DECLARE (TYPE (INTEGER 18939493568 24064422528) C))
+          (DECLARE (TYPE (INTEGER -13157393 112210531) D))
+          (DECLARE (TYPE (INTEGER -75775 -4883) E))
+          (DECLARE (TYPE (INTEGER 5071 1584913674240) F))
+          (DECLARE (TYPE (INTEGER -1 -1) G))
+          (DECLARE (TYPE (INTEGER -100 7017454141440) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 1)
+                       (COMPILATION-SPEED 1)))
+          (LABELS ((%F7 (F7-1 &OPTIONAL (F7-2 0) (F7-3 0) (F7-4 0)) 0))
+            (PROGN
+              (DENOMINATOR
+                  (PROGN
+                    (LET ((*S6* (PROGN
+                                  (TAGBODY
+                                    (UNWIND-PROTECT
+                                      (%F7 0 0 (GO TAG6) D))
+                                    TAG6
+                                    (RESTART-CASE 0))
+                                  0)))
+                      0)
+                    0))
+              0))))
+   -23410726 -4342503 20297113275 80145634 -17664 937086103773 -1
+   2923877584757)
+  0)
+
+(deftest misc.304
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -11679 1672) A))
+          (DECLARE (TYPE (INTEGER -359757 -216048) B))
+          (DECLARE (TYPE (INTEGER -46345706880 -1824) C))
+          (DECLARE (TYPE (INTEGER -18 18) D))
+          (DECLARE (TYPE (INTEGER -70852138 427028370944) E))
+          (DECLARE (TYPE (INTEGER -428904547840 535369082368) F))
+          (DECLARE (TYPE (INTEGER -4372225 83) G))
+          (DECLARE (TYPE (INTEGER -2 0) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 3) (DEBUG 0)
+                       (COMPILATION-SPEED 1)))
+          (LABELS ((%F1 (F1-1 F1-2 F1-3) 0))
+            (RATIONALIZE
+                (%F1 (PROGN
+                       (TAGBODY
+                         (LET ((V3 (%F1 (UNWIND-PROTECT (GO TAG2)) B 0)))
+                           0)
+                         TAG2)
+                       0)
+                     H (CONDITIONS:HANDLER-CASE 0))))))
+   -7209 -223767 -42093806027 -9 132172281069 138363461574
+   -3751010 0)
+  0)
+
+(deftest misc.305
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -438 247) A))
+          (DECLARE (TYPE (INTEGER -93662232 112841) B))
+          (DECLARE (TYPE (INTEGER 8769 2766606) C))
+          (DECLARE (TYPE (INTEGER -33007133760 32531429568) D))
+          (DECLARE (TYPE (INTEGER 419 3712) E))
+          (DECLARE (TYPE (INTEGER 1628 20513914304) F))
+          (DECLARE (TYPE (INTEGER -1347290 47) G))
+          (DECLARE (TYPE (INTEGER -12 3030073088) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 3) (SAFETY 0) (DEBUG 3)
+                       (COMPILATION-SPEED 0)))
+          (FLET ((%F5 (F5-1 F5-2 &OPTIONAL (F5-3 0) (F5-4 0) (F5-5 0))
+                      (PROGN
+                        (TAGBODY (UNWIND-PROTECT (GO TAG1)) TAG1)
+                        (COERCE (LET* ((*S4*
+                                        (FLET
+                                         ((%F1 NIL
+                                           (LET*
+                                            ((V7 (DPB 0 (BYTE 0 0) C)))
+                                             A)))
+                                          (PROGV '(*S6* *S7*)
+                                           (LIST (%F1) 0)
+                                            G))))
+                                  C)
+                                'INTEGER))))
+            (IF (%F5 D 0 E 0 0) H 0))))
+   -58 -22237190 2055343 -8144832891 1213 19038103159 -1009345
+   929619162)
+  929619162)
+
+(deftest misc.306
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER 261 234565) A))
+          (DECLARE (TYPE (INTEGER -1454263719936 -3279802168) B))
+          (DECLARE (TYPE (INTEGER -1251120498 -49518770) C))
+          (DECLARE (TYPE (INTEGER 0 369) D))
+          (DECLARE (TYPE (INTEGER -12465203856 -45) E))
+          (DECLARE (TYPE (INTEGER -94321486 -91941853) F))
+          (DECLARE (TYPE (INTEGER -16528338864 11322249648) G))
+          (DECLARE (TYPE (INTEGER -1230549 -1143976) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 0) (DEBUG 0)
+                       (COMPILATION-SPEED 0)))
+          (DENOMINATOR
+              (PROGN
+                (TAGBODY (UNWIND-PROTECT (GO TAG7)) TAG7)
+                (LOGXOR F
+                        (MULTIPLE-VALUE-BIND (*S4*)
+                            (LOGXOR 0 (EXPT -2 1))
+                          (TRUNCATE 0)))))))
+   130724 -736795298357 -1221747467 326 -9775240900 -94105708
+   -2273680158 -1156846)
+  1)
+
+(deftest misc.307
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -2903632 1282236) A))
+          (DECLARE (TYPE (INTEGER 7 10741) B))
+          (DECLARE (TYPE (INTEGER -249635 214804) C))
+          (DECLARE (TYPE (INTEGER -50422 10469) D))
+          (DECLARE (TYPE (INTEGER -52337314 10771161) E))
+          (DECLARE (TYPE (INTEGER 0 5333060) F))
+          (DECLARE (TYPE (INTEGER -1 0) G))
+          (DECLARE (TYPE (INTEGER 1595835 4577573) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 3)
+                       (COMPILATION-SPEED 1)))
+          (FLET ((%F11 (F11-1 F11-2) 0))
+            (%F11 0
+                  (UNWIND-PROTECT
+                    E
+                    (PROGN
+                      (TAGBODY
+                        (LET* ((V4 (PROGN (UNWIND-PROTECT (GO 0)) 0)))
+                          0)
+                        0)
+                      (LOGAND (CONDITIONS:HANDLER-BIND ()
+                                (LOGAND -15 -2 32578787 10349 E
+                                        -24781944 -8)))))))))
+   60336 1625 124302 -33193 -8095855 4995857 0 4572381)
+  0)
+
+(deftest misc.308
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -2806612475904 8750665416704) A))
+          (DECLARE (TYPE (INTEGER -3 10) B))
+          (DECLARE (TYPE (INTEGER -94336824 116591592) C))
+          (DECLARE (TYPE (INTEGER 456813135872 903636350976) D))
+          (DECLARE (TYPE (INTEGER -2364199833600 -172353318912) E))
+          (DECLARE (TYPE (INTEGER 717 1760915) F))
+          (DECLARE (TYPE (INTEGER -21 105) G))
+          (DECLARE (TYPE (INTEGER -3579048169472 -346272903168) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 0) (DEBUG 0)
+                       (COMPILATION-SPEED 0)))
+          (LABELS ((%F7 (F7-1)
+                        (MULTIPLE-VALUE-PROG1 0
+                          0
+                          (RETURN-FROM %F7 (MASK-FIELD (BYTE 0 0) 0)))))
+            (UNWIND-PROTECT (%F7 0)))))
+   1951007924893 10 -49879990 614214833752 -1808568999586 1282634
+   99 -2783010573143)
+  0)
+
+(deftest misc.309
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -521338 12) A))
+          (DECLARE (TYPE (INTEGER -1787856009216 1182078822400) B))
+          (DECLARE (TYPE (INTEGER -3313 28535137344) C))
+          (DECLARE (TYPE (INTEGER -38914612 -25121536) D))
+          (DECLARE (TYPE (INTEGER 403073126400 2632230309888) E))
+          (DECLARE (TYPE (INTEGER -39663606528 -1238304) F))
+          (DECLARE (TYPE (INTEGER -103560 -70383) G))
+          (DECLARE (TYPE (INTEGER -894 -227) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 1) (SAFETY 1) (DEBUG 3)
+                       (COMPILATION-SPEED 2)))
+          (BLOCK B8
+            (MULTIPLE-VALUE-PROG1
+                (LOGAND (LOGIOR 0
+                                (IF (LOGBITP 0 0) 0
+                                    (MULTIPLE-VALUE-BIND (V2) 0 0))))
+              (GCD (LET* ((*S4* 0))
+                     (LOGIOR 0
+                             (RETURN-FROM B8
+                               (LET ((*S8* 0)) (ROUND 0))))))
+              0
+              0))))
+   -275760 -565946697213 9650536069 -37585973 1536165173011
+   -12895970021 -102192 -534)
+  0 0)
+
+
+(deftest misc.310
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -2016726144 234357120) A))
+          (DECLARE (TYPE (INTEGER -10569521299456 -1307998945280) B))
+          (DECLARE (TYPE (INTEGER -45429002240 -17228484608) C))
+          (DECLARE (TYPE (INTEGER 228451840 1454976512) D))
+          (DECLARE (TYPE (INTEGER -4797 -2609) E))
+          (DECLARE (TYPE (INTEGER -21 36300536) F))
+          (DECLARE (TYPE (INTEGER -15983530 31646604) G))
+          (DECLARE (TYPE (INTEGER -208720272 -357) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 0)
+                       (COMPILATION-SPEED 3)))
+          (EXPT (LABELS ((%F14 (F14-1 F14-2)
+                               (PROGN
+                                 (TAGBODY
+                                   (+
+                                    (UNWIND-PROTECT
+                                      (LABELS ((%F1 (F1-1) (GO TAG1)))
+                                        (LET ((*S6* (%F1 D))) 0))))
+                                   TAG1
+                                   (+
+                                    (CONDITIONS:HANDLER-BIND ()
+                                      (IF (<= -11215713 -819)
+                                       (INTEGER-LENGTH
+                                        (FLOOR (CONJUGATE F14-1)
+                                         (MAX 12
+                                          (CEILING
+                                           (BLOCK B2
+                                             (CATCH 'CT2
+                                               (IGNORE-ERRORS
+                                                (FLET
+                                                 ((%F13 (F13-1)
+                                                   (LOGIOR 87 F14-2)))
+                                                  F14-1))))))))
+                                       (PROGV '(*S8*) (LIST 472865632)
+                                         *S8*)))))
+                                 0)))
+                  (%F14 0 0))
+                0)))
+   -28594854 -3859203606860 -40757449218 894599577 -4163 11621230
+   29558853 -92216802)
+  1)
+
+(deftest misc.311
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -1203392327680 -3017953) A))
+          (DECLARE (TYPE (INTEGER -34222 -1) B))
+          (DECLARE (TYPE (INTEGER -871294987 19) C))
+          (DECLARE (TYPE (INTEGER 717979131904 3341735845888) D))
+          (DECLARE (TYPE (INTEGER -7521858 3) E))
+          (DECLARE (TYPE (INTEGER -52 49) F))
+          (DECLARE (TYPE (INTEGER 18 43) G))
+          (DECLARE (TYPE (INTEGER -503567246 -46) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 1) (DEBUG 2)
+                       (COMPILATION-SPEED 2)))
+          (LABELS ((%F2 (F2-1 F2-2 F2-3 &OPTIONAL
+                              (F2-4 (LET
+                                     ((*S6*
+                                       (PROGN
+                                         (TAGBODY
+                                           (FLET
+                                            ((%F17 (F17-1 F17-2 F17-3)
+                                              (GO 6)))
+                                             (%F17 0 B 0))
+                                           6)
+                                         0)))
+                                      (COMPLEX
+                                       (PROGN
+                                         (TAGBODY
+                                           (LABELS
+                                            ((%F18
+                                              (F18-1 F18-2 &OPTIONAL
+                                               (F18-3 0) (F18-4 F))
+                                              0))
+                                             (APPLY #'%F18 G 0 0
+                                              (LIST)))
+                                           0)
+                                         0)
+                                       0)))
+                              (F2-5 0) (F2-6 0))
+                        0))
+            (%F2 0 0 F))))
+   -738307241633 -25016 -846570136 2181696281793 -983259 24 36
+   -185316211)
+  0)
+
+
+(deftest misc.312
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -18334222 14354736) A))
+          (DECLARE (TYPE (INTEGER 11163582 6421184978944) B))
+          (DECLARE (TYPE (INTEGER -13690431913984 -64765792960) C))
+          (DECLARE (TYPE (INTEGER -12750925 31112834) D))
+          (DECLARE (TYPE (INTEGER -5188669232 2246825616) E))
+          (DECLARE (TYPE (INTEGER -31235593088 -134) F))
+          (DECLARE (TYPE (INTEGER -1 -1) G))
+          (DECLARE (TYPE (INTEGER -647589424 12392126736) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 2) (SAFETY 1) (DEBUG 1)
+                       (COMPILATION-SPEED 1)))
+          (LET ((*S4* (IF (PROGN
+                            (TAGBODY (UNWIND-PROTECT (GO 2)) 2)
+                            0)
+                          (NUMERATOR
+                              (LET* ((V1
+                                      (LET ((*S6* 0))
+                                        (LOGAND B
+                                         (RATIONALIZE
+                                          (COERCE 0 'INTEGER))))))
+                                0))
+                          0)))
+            0)))
+   7112398 3547401482305 -12827294644277 23312291 -444957551
+   -5443955020 -1 4998457143)
+  0)
+
+(deftest misc.313
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER 55474 401001) A))
+          (DECLARE (TYPE (INTEGER -8359558987776 8684176949248) B))
+          (DECLARE (TYPE (INTEGER -54332 116292) C))
+          (DECLARE (TYPE (INTEGER 0 0) D))
+          (DECLARE (TYPE (INTEGER -609311104000 959776553984) E))
+          (DECLARE (TYPE (INTEGER -2031580 3834807) F))
+          (DECLARE (TYPE (INTEGER -10955 2549) G))
+          (DECLARE (TYPE (INTEGER -8362590032 -210369) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 1) (DEBUG 0)
+                       (COMPILATION-SPEED 1)))
+          (DOTIMES (IV1 3 0)
+            (LABELS ((%F6 (F6-1 F6-2 F6-3 &OPTIONAL
+                                (F6-4 (FLET
+                                       ((%F3
+                                         (F3-1 F3-2 F3-3 &OPTIONAL
+                                          (F3-4 0))
+                                         (FLET ((%F11 NIL 0))
+                                           (ASH
+                                            (PROGN
+                                              (TAGBODY
+                                                (LABELS
+                                                 ((%F3
+                                                   (F3-1 &OPTIONAL
+                                                    (F3-2 (GO TAG4)))
+                                                   0))
+                                                  (%F3 0))
+                                                TAG4)
+                                              0)
+                                            (MIN 42
+                                             (CONJUGATE
+                                              (COERCE
+                                               (CONJUGATE
+                                                (LET ((V9 (%F11)))
+                                                  F3-1))
+                                               'INTEGER)))))))
+                                        (%F3 C 0 A)))
+                                (F6-5 0))
+                          0))
+              (APPLY #'%F6 0 0 H NIL)))))
+   93287 3146418586486 -51786 0 -63479145888 1935918 -10058 -2033798238)
+  0)
+
+(deftest misc.314
+  (funcall
+   (compile
+    nil
+    '(LAMBDA (A B C D E F G H)
+          (DECLARE (TYPE (INTEGER -176150296 698) A))
+          (DECLARE (TYPE (INTEGER -62799871488 -56234210816) B))
+          (DECLARE (TYPE (INTEGER -1 1) C))
+          (DECLARE (TYPE (INTEGER 31 215808) D))
+          (DECLARE (TYPE (INTEGER -3 -1) E))
+          (DECLARE (TYPE (INTEGER -3 3387651) F))
+          (DECLARE (TYPE (INTEGER -14370846720 -56648624) G))
+          (DECLARE (TYPE (INTEGER -8316238784 -6221617344) H))
+          (DECLARE (IGNORABLE A B C D E F G H))
+          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 1) (SAFETY 1) (DEBUG 2)
+                       (COMPILATION-SPEED 2)))
+          (PROGN
+            (TAGBODY
+              (UNWIND-PROTECT
+                (LET ((V10 (LET* ((V7 (IF (GO TAG6) 0 0))) 0))) 0))
+              TAG6
+              (LET ((V7 (FLET ((%F11 NIL 0))
+                          (FLET ((%F13 (F13-1 F13-2 F13-3) F13-2))
+                            (FUNCALL #'%F13 0 A (%F11))))))
+                0))
+            0)))
+   -90583503 -61289371485 -1 175888 -3 3257970 -3264725617  -6816839328)
+  0)
+
