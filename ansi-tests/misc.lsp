@@ -3014,4 +3014,60 @@
    3040851270 1664281 -1340106197)
   0)
 
+;;; sbcl 0.8.5.42
+;;; invalid number of arguments: 1
+;;; ("XEP for LABELS CL-TEST::%F10" ...
+
+(deftest misc.185
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 5 155656586618) a))
+       (declare (type (integer -15492 196529) b))
+       (declare (type (integer 7 10) c))
+       (declare (optimize (speed 3)))
+       (declare (optimize (safety 1)))
+       (declare (optimize (debug 1)))
+       (flet ((%f3
+	       (f3-1 f3-2 f3-3
+                     &optional (f3-4 a) (f3-5 0)
+                     (f3-6
+                      (labels ((%f10 (f10-1 f10-2 f10-3)
+				     0))
+                        (apply #'%f10
+                               0
+                               a
+                               (- (if (equal a b) b (%f10 c a 0))
+                                  (catch 'ct2 (throw 'ct2 c)))
+                               nil))))
+	       0))
+	 (%f3 (%f3 (%f3 b 0 0 0) a 0) a b b b c))))
+   5 0 7)
+  0)
+
+(deftest misc.185a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -1304066 1995764) a))
+       (declare (type (integer -52262604195 5419515202) b))
+       (declare (type (integer -13 94521) c))
+       (declare (optimize (speed 3)))
+       (declare (optimize (safety 1)))
+       (declare (optimize (debug 1)))
+       (flet ((%f13 (f13-1 f13-2 f13-3)
+		    0))
+	 (apply #'%f13
+		(%f13 b 0 0)
+		(catch 729 0)
+		(catch 'ct2 (throw 'ct2 c))
+		nil))))
+   0 0 0)
+  0)
+
+
+
+    
 
