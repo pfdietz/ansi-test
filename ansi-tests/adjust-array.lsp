@@ -496,17 +496,184 @@
                                     "78912000" "00000000" "00000000")
 		:element-type 'character))
 
-;;; Add displaced string tests, adjustable string tests
+;;; FIXME: Add adjustable string tests
 
-;;; Bit vector tests
+;;; FIXME: Add bit vector tests
 
+(def-adjust-array-test adjust-array.bit-vector.1
+  (5 :element-type 'bit :initial-contents #*01100)
+  (4 :element-type 'bit)
+  #*0110)
 
+(def-adjust-array-test adjust-array.bit-vector.2
+  (5 :element-type 'bit :initial-contents #*01100)
+  (8 :element-type 'bit :initial-element 1)
+  #*01100111)
 
-;;; FIXME.  Tests for:
-;;;  strings/character arrays
-;;;  bit vectors/arrays
-;;;  specialized integer arrays
-;;;  float arrays
+(def-adjust-array-test adjust-array.bit-vector.3
+  (5 :element-type 'bit :initial-contents #*01100)
+  (4 :element-type 'bit :initial-contents #*1011)
+  #*1011)
+
+(def-adjust-array-test adjust-array..bit-vector.4
+  (5 :element-type 'bit :initial-contents #*01100)
+  (8 :element-type 'bit :initial-contents #*11110000)
+  #*11110000)
+
+(def-adjust-array-fp-test adjust-array.bit-vector.5
+  (5 :element-type 'bit :initial-contents #*01100 :fill-pointer 3)
+  (4 :element-type 'bit)
+  (assert (eql (aref a2 3) 0))
+  3 #*011)
+
+(def-adjust-array-fp-test adjust-array.bit-vector.6
+  (5 :element-type 'bit :initial-contents #*01100 :fill-pointer 3)
+  (4 :element-type 'bit :fill-pointer nil)
+  (assert (eql (aref a2 3) 0))
+  3 #*011)
+
+(def-adjust-array-fp-test adjust-array.bit-vector.7
+  (5 :element-type 'bit :initial-contents #*01100 :fill-pointer 3)
+  (4 :element-type 'bit :fill-pointer t)
+  nil
+  4 #*0110)
+
+(def-adjust-array-fp-test adjust-array.bit-vector.8
+  (5 :element-type 'bit :initial-contents #*01100 :fill-pointer 3)
+  (4 :element-type 'bit :fill-pointer 2)
+  (progn (assert (eql (aref a2 2) 1))
+	 (assert (eql (aref a2 3) 0)))
+  2 #*01)
+
+(def-adjust-array-fp-test adjust-array.bit-vector.9
+  (5 :element-type 'bit :initial-contents #*01100 :fill-pointer 3)
+  (8 :element-type 'bit :fill-pointer 5 :initial-element 1)
+  (assert (equal (list (aref a2 5) (aref a2 6) (aref a2 7))
+		 '(1 1 1)))
+  5 #*01100)
+
+(deftest adjust-array.bit-vector.10
+  (let* ((a1 (make-array 5 :element-type 'bit :initial-contents #*01100))
+	 (a2 (adjust-array a1 4 :displaced-to nil :element-type 'bit)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (not (array-displacement a2)))
+    a2)
+  #*0110)
+
+(deftest adjust-array.bit-vector.11
+  (let* ((a0 (make-array 7 :initial-contents #*0011001 :element-type 'bit))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'bit))
+	 (a2 (adjust-array a1 4 :element-type 'bit)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (not (array-displacement a2)))
+    a2)
+  #*0110)
+
+(deftest adjust-array.bit-vector.12
+  (let* ((a0 (make-array 7 :initial-contents #*1010101 :element-type 'bit))
+	 (a1 (make-array 5 :initial-contents #*01100 :element-type 'bit))
+	 (a2 (adjust-array a1 4 :displaced-to a0 :element-type 'bit)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (equal (multiple-value-list (array-displacement a2))
+		   (list a0 0)))
+    a2)
+  #*1010)
+
+(deftest adjust-array.bit-vector.13
+  (let* ((a0 (make-array 7 :initial-contents #*1011101 :element-type 'bit))
+	 (a1 (make-array 5 :initial-contents #*01100 :element-type 'bit))
+	 (a2 (adjust-array a1 4 :displaced-to a0
+			   :displaced-index-offset 2
+			   :element-type 'bit)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (equal (multiple-value-list (array-displacement a2))
+		   (list a0 2)))
+    a2)
+  #*1110)
+
+(deftest adjust-array.bit-vector.14
+  (let* ((a0 (make-array 7 :initial-contents #*1011001 :element-type 'bit))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'bit))
+	 (a2 (adjust-array a1 4 :displaced-to a0 :element-type 'bit)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (equal (multiple-value-list (array-displacement a2))
+		   (list a0 0)))
+    a2)
+  #*1011)
+
+(deftest adjust-array.bit-vector.15
+  (let* ((a0 (make-array 7 :initial-contents #*1100010 :element-type 'bit))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'bit))
+	 (a2 (make-array 4 :displaced-to a1 :displaced-index-offset 1
+			 :element-type 'bit))
+	 (a3 (adjust-array a2 4 :displaced-to a1 :element-type 'bit)))
+    a3)
+  #*1000)
+
+(deftest adjust-array.bit-vector.16
+  (let* ((a0 (make-array 7 :initial-contents #*1011011 :element-type 'bit))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'bit))
+	 (a2 (adjust-array a1 5 :displaced-to a0 :element-type 'bit)))
+    a2)
+  #*10110)
+
+(def-adjust-array-test adjust-array.bit-vector.17
+  (nil :initial-element 0 :element-type 'bit)
+  (nil)
+  #.(make-array nil :initial-element 0 :element-type 'bit))
+
+(def-adjust-array-test adjust-array.bit-vector.18
+  (nil :initial-element 0 :element-type 'bit)
+  (nil :initial-contents 1 :element-type 'bit)
+  #.(make-array nil :initial-element 1 :element-type 'bit))
+
+(def-adjust-array-test adjust-array.bit-vector.19
+  (nil :initial-element 1 :element-type 'bit)
+  (nil :initial-element 0 :element-type 'bit)
+  #.(make-array nil :initial-element 1 :element-type 'bit))
+
+(deftest adjust-array.bit-vector.20
+  (let* ((a0 (make-array nil :initial-element 1 :element-type 'bit))
+	 (a1 (make-array nil :displaced-to a0 :element-type 'bit))
+	 (a2 (adjust-array a1 nil :element-type 'bit)))
+    a2)
+   #.(make-array nil :initial-element 1 :element-type 'bit))
+
+;; 2-d arrays
+
+(def-adjust-array-test adjust-array.bit-vector.21
+  ('(4 5) :initial-contents '(#*11100 #*00110 #*00001 #*11111)
+   :element-type 'bit)
+  ('(2 3))
+  #.(make-array '(2 3) :initial-contents '(#*111 #*001)
+		:element-type 'bit))
+
+(def-adjust-array-test adjust-array.bit-vector.22
+  ('(4 5) :initial-contents  '(#*11100 #*00110 #*00001 #*11111)
+   :element-type 'bit)
+  ('(6 8) :initial-element 0 :element-type 'bit)
+  #.(make-array '(6 8)
+		:initial-contents '(#*11100000 #*00110000 #*00001000
+                                    #*11111000 #*00000000 #*00000000)
+		:element-type 'bit))
+
+;;; FIXME. specialized integer array tests
+
+;;; FIXNME float array tests
 
 ;;; Error cases
 
