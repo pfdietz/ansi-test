@@ -21,3 +21,4 @@
 (load "write-char.lsp")
 (load "read-line.lsp")
 (load "write-string.lsp")
+(load "write-line.lsp")
