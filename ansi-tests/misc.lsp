@@ -8662,7 +8662,7 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;; sbcl 0.8.17.24
 ;;; Bugs in the just-introduced fixnum arithmetic transforms
 
-;;; LOGAND bug
+;;; LOGAND (?) bug
 
 (deftest misc.455
   (funcall
@@ -8698,13 +8698,47 @@ Broken at C::WT-MAKE-CLOSURE.
     '(lambda (a b)
        (declare (type (integer -455461 343063) a))
        (declare (type (integer -1020097 -12430) b))
-       (declare (ignorable a b))
-       (declare
-	(optimize (speed 3)
-		  (space 0)
-		  (compilation-speed 3)
-		  (debug 0)
-		  (safety 3)))
+       (declare (optimize (speed 3) (space 0) (compilation-speed 3)
+			  (debug 0) (safety 3)))
        (deposit-field (* (logeqv a a) b) (byte 6 24) 0)))
    -212811 -985078)
   0)
+
+;;; LDB, *
+
+(deftest misc.458
+  (funcall
+   (compile
+    nil
+    ' (lambda (a)
+           (declare (type (integer -8175 27760966190) a))
+           (declare (optimize
+		     ;; The next optimize declaration is necessary
+		     ;; for the bug to occur in sbcl 0.8.17.24
+		     #+sbcl (sb-c:insert-step-conditions 0)
+		     (space 2) (speed 0) (compilation-speed 1)
+		     (safety 0) (debug 3)))
+           (ldb (byte 29 0) (* a a))))
+   14774118941)
+  101418825)
+
+;;; LOGAND, +
+
+(deftest misc.459
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+           (declare (type (integer -32933298905 -168011) a))
+           (declare (type (integer -190015111797 16) b))
+           (declare
+            (optimize (speed 2)
+                      (compilation-speed 0)
+                      (space 0)
+                      (safety 1)
+                      (debug 0)
+                      ; (sb-c:insert-step-conditions 0)
+		      ))
+           (logand (+ b -9255) a 63)))
+   -8166030199 -45872222127)
+  8)
