@@ -9811,7 +9811,7 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;; The value 46790178 is not of type (INTEGER 46790178 46790178).
 
 (deftest misc.529
-  (let* ((x -2367.3296)
+  (let* ((x -2367.3296f0)
 	 (y 46790178)
 	 (form `(lambda (r p2)
 		  (declare (optimize speed (safety 1))
@@ -10216,7 +10216,68 @@ Broken at C::WT-MAKE-CLOSURE.
      nil
      '(lambda (p1)
 	(declare (optimize (speed 3) (safety 0) (debug 3) (space 1))
-		 (type (member -94430.086) p1))
-	(floor (the short-float p1) 19311235)))
-    -94430.086))
+		 (type (member -94430.086f0) p1))
+	(floor (the single-float p1) 19311235)))
+    -94430.086f0))
   -1)
+
+; FFLOOR
+; Wrong return value
+(deftest misc.558
+  (values
+   (funcall
+    (compile
+     nil
+     '(lambda (p1)
+	      (declare (optimize (speed 1) (safety 2)
+				 (debug 2) (space 3))
+		       (type (eql -39466.56f0) p1))
+	      (ffloor p1 305598613)))
+    -39466.56f0))
+  -1.0f0)
+
+; CEILING
+;  invalid number of arguments: 1
+(deftest misc.559
+  (values
+   (funcall
+    (compile
+     nil
+     '(lambda (p1)
+	(declare (optimize (speed 1) (safety 1) (debug 1) (space 2))
+		 (type (eql -83232.09f0) p1))
+	(ceiling p1 -83381228)))
+    -83232.09f0))
+  1)
+
+; wrong return value
+(deftest misc.560
+  (values
+   (funcall
+    (compile
+     nil
+     '(lambda (p1)
+	(declare (optimize (speed 1) (safety 1)
+			   (debug 1) (space 0))
+		 (type (member -66414.414f0) p1))
+	(ceiling p1 -63019173f0)))
+    -66414.414f0))
+  1)
+
+; FCEILING
+; wrong return value
+(deftest misc.561
+  (values
+   (funcall
+    (compile
+     nil
+     '(lambda (p1)
+	(declare (optimize (speed 0) (safety 1)
+			   (debug 0) (space 1))
+		 (type (eql 20851.398f0) p1))
+	(fceiling p1 80839863)))
+    20851.398f0))
+  1.0f0)
+
+
+
