@@ -9525,3 +9525,14 @@ Broken at C::WT-MAKE-CLOSURE.
                      (setq y (1+ v9)))))
    -1209913207)
   -2419826413)
+
+(deftest misc.516
+  (funcall
+   (compile nil '(lambda ()
+			 (declare (optimize (space 0) (debug 0) (safety 2)
+					    (compilation-speed 3) (speed 1)))
+			 (let ((*s2* (* -507991378 14)))
+			      (declare (dynamic-extent *s2*))
+			      (1+ *s2*)))))
+  -7111879291)
+
