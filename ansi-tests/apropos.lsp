@@ -62,6 +62,13 @@
     (notnot (search "CAR" s :test #'string-equal)))
   t)
 
+(deftest apropos.8
+  (let ((s (with-output-to-string
+	     (*standard-output*)
+	     (assert (null (multiple-value-list (apropos "CAR" nil)))))))
+    (notnot (search "CAR" s :test #'string-equal)))
+  t)
+
 ;;; Error tests
 
 (deftest apropos.error.1
