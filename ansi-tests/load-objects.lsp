@@ -48,3 +48,4 @@
 (load "compute-applicable-methods.lsp")
 (load "find-method.lsp")
 (load "add-method.lsp")
+(load "unbound-slot.lsp")
