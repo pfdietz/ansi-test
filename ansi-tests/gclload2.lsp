@@ -27,6 +27,8 @@
 (load "lambda-parameters-limit.lsp")
 (load "let.lsp")
 (load "macrolet.lsp")
+(load "progv.lsp")
+
 
 ;;; Tests of conses
 

@@ -65,6 +65,15 @@
 	  x))
   (1 nil 1))
 
+(deftest let.12
+  (let ((x 0))
+    (values
+     (let ((x 20)
+	   (x (1+ x)))
+       x)
+     x))
+  1 0)
+
 (deftest let.13
   (flet ((%f () (declare (special x))
 	     (if (boundp 'x) x 10)))
