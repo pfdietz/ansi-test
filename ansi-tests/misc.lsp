@@ -1351,3 +1351,43 @@
 		   (block b7 (- b (ignore-errors (return-from b7 57876))))))
    10)
   57876)
+
+;;; "The assertion (C::CONSTANT-CONTINUATION-P C::CONT) failed." (cmucl)
+(deftest misc.109
+  (funcall (compile
+	    nil
+	    '(lambda ()
+	       (load-time-value
+		(block b4
+		  (* (return-from b4 -27)
+		     (block b5
+		       (return-from b4
+			 (return-from b5
+			   (ignore-errors (unwind-protect
+					      (return-from b5 0))))))))))))
+  -27)
+
+;;; This bug was occuring a lot in sbcl, and now occurs in cmucl too
+(deftest misc.110
+  (funcall
+   (compile nil
+	    '(lambda (c)
+	       (declare (type (integer -1441970837 -427) c))
+	       (declare (optimize (speed 3)))
+	       (declare (optimize (safety 1)))
+	       (declare (optimize (debug 1)))
+	       (block b7 (abs (min c (ignore-errors (return-from b7 c)))))))
+   -500)
+  -500)
+
+;;; CLISP (2.31+) compiler bug
+
+(deftest misc.111
+  (funcall
+   (compile nil
+            '(lambda (a c)
+               (if (or (ldb-test (byte 12 18) a)
+                       (not (and t (not (if (not (and c t)) nil nil)))))
+                   170 -110730)))
+   3035465333 1919088834)
+  170)
