@@ -1045,3 +1045,10 @@ the condition to go uncaught if it cannot be classified."
 			    :fill ,fill :adjust ,adjust
 			    :etype ,etype :displace ,displace)))
 		 ,@forms))))))))
+
+;;; Return T if arg X is a string designator in this implementation
+
+(defun string-designator-p (x)
+  (handler-case
+   (progn (string x) t)
+   (error nil)))
