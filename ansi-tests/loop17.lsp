@@ -38,7 +38,7 @@
 
 (deftest loop.17.4
   (loop
-   (return 'a)
+   doing (return 'a)
    finally (return 'b))
   a)
 
