@@ -22,13 +22,19 @@
 ;;; the object and the printer variable bindings otherwise.  They key
 ;;; argument TEST is used to compared the reread object and obj.
 
+(defparameter *random-read-check-debug* nil
+  "When set to true, RANDOMLY-CHECK-READABILITY will dump out parameter
+   settings before trying a test.  This is intended for cases where the
+   error that occurs is fatal.")
+
 (defun randomly-check-readability (obj &key
 				       (can-fail nil)
 				       (test #'equal)
 				       (readable t)
 				       (circle nil circle-p)
 				       (escape nil escape-p)
-				       (gensym nil gensym-p))
+				       (gensym nil gensym-p)
+				       (debug *random-read-check-debug*))
   (declare (type function test))
   ;; Generate random printer-control values
   (with-standard-io-syntax
@@ -52,41 +58,47 @@
 	 (*readtable* (copy-readtable))
 	 (readcase (random-from-seq #(:upcase :downcase :preserve :invert)))
 	 )
-     (setf (readtable-case *readtable*) readcase)
-     (let* ((str (handler-case
-		  (with-output-to-string (s) (write obj :stream s))
-		  (print-not-readable
-		   ()
-		   (if can-fail
-		       (return-from randomly-check-readability nil)
-		     ":print-not-readable-error"))))
-	    (obj2 (let ((*read-base* *print-base*))
-		    (handler-case
-		     (let ((*readtable* (if *print-readably*
-					    (copy-readtable nil)
-					  *readtable*)))
-		       (read-from-string str))
-		     (reader-error () :error)))))
-       (unless (funcall test obj obj2)
-	 (list
-	  (list obj str obj2
-		(list '*print-readably* *print-readably*)
-		(list '*print-array* *print-array*)
-		(list '*print-base* *print-base*)
-		(list '*print-radix* *print-radix*)
-		(list '*print-case* *print-case*)
-		(list '*print-circle* *print-circle*)
-		(list '*print-escape* *print-escape*)
-		(list '*print-gensym* *print-gensym*)
-		(list '*print-level* *print-level*)
-		(list '*print-length* *print-length*)
-		(list '*print-lines* *print-lines*)
-		(list '*print-miser-width* *print-miser-width*)
-		(list '*print-pretty* *print-pretty*)
-		(list '*print-right-margin* *print-right-margin*)
-		(list '*read-default-float-format* *read-default-float-format*)
-		(list 'readtable-case readcase)
-		)))))))
+     (flet ((%params ()
+		     (list (list '*print-readably* *print-readably*)
+			   (list '*print-array* *print-array*)
+			   (list '*print-base* *print-base*)
+			   (list '*print-radix* *print-radix*)
+			   (list '*print-case* *print-case*)
+			   (list '*print-circle* *print-circle*)
+			   (list '*print-escape* *print-escape*)
+			   (list '*print-gensym* *print-gensym*)
+			   (list '*print-level* *print-level*)
+			   (list '*print-length* *print-length*)
+			   (list '*print-lines* *print-lines*)
+			   (list '*print-miser-width* *print-miser-width*)
+			   (list '*print-pretty* *print-pretty*)
+			   (list '*print-right-margin* *print-right-margin*)
+			   (list '*read-default-float-format* *read-default-float-format*)
+			   (list 'readtable-case readcase))))
+       (when debug
+	 (let ((params (%params)))
+	   (with-standard-io-syntax (format *debug-io* "~%~A~%" params)))
+	 (finish-output *debug-io*))
+       
+       (setf (readtable-case *readtable*) readcase)
+       (let* ((str (handler-case
+		    (with-output-to-string (s) (write obj :stream s))
+		    (print-not-readable
+		     ()
+		     (if can-fail
+			 (return-from randomly-check-readability nil)
+		       ":print-not-readable-error"))))
+	      (obj2 (let ((*read-base* *print-base*))
+		      (handler-case
+		       (let ((*readtable* (if *print-readably*
+					      (copy-readtable nil)
+					    *readtable*)))
+			 (read-from-string str))
+		       (reader-error () :error)))))
+	 (unless (funcall test obj obj2)
+	   (list
+	    (list* obj str obj2 (%params)
+		   ))))))))
 
 (defun parse-escaped-string (string)
   "Parse a string into a list of either characters (representing
