@@ -4908,5 +4908,46 @@ Broken at C::WT-C-INLINE-LOC.
    17)
   nil)
 
+;;; sbcl 0.8.8.23.stack.2
+;;; The value -1 is not of type (MOD 536870911).
 
+(deftest misc.292
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare
+	(optimize (speed 3) (space 2) (safety 3) (debug 0)
+		  (compilation-speed 1)))
+       (flet ((%f15 (f15-1 f15-2 f15-3)
+		    (apply (constantly 0)
+			   0
+			   0
+			   (ignore-errors
+			     (let ((v10 (apply (constantly 0)
+					       b a (max 0 c) nil)))
+			       0))
+			   nil)))
+	 (flet ((%f14 (f14-1 &optional (f14-2 b) (f14-3 0) (f14-4 0))
+		      (%f15 0 0 b)))
+	   (%f14 0 c)))))
+   1 2 3)
+  0)
 
+;;; failed AVER: "(NOT (MEMQ PUSH END-STACK))"
+
+(deftest misc.293
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 2) (space 1) (safety 3) (debug 3)
+			  (compilation-speed 3)))
+       (let ((v6
+	      (labels ((%f9 (f9-1)
+			    (multiple-value-prog1 0 (return-from %f9 0) a)))
+		(let ((*s4* (%f9 0)))
+		  0))))
+	 0)))
+   1)
+  0)
