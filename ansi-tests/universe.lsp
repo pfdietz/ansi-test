@@ -250,6 +250,12 @@
 	       for d in *array-dimensions*
 	       collect (make-array d :element-type tp)))
 
+     ;; More typed arrays
+     (loop for i from 1 to 64
+	   append
+	   (list (make-array 10 :element-type `(unsigned-byte ,i))
+		 (make-array 10 :element-type `(signed-byte ,i))))
+
      ;; adjustable arrays
      (loop
        for d in *array-dimensions*
