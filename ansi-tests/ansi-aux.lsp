@@ -37,7 +37,7 @@
   (etypecase fn
     (function fn)
     (symbol (symbol-function fn))
-    ((cons (eql setf) symbol) (fdefinition fn))))    
+    ((cons (eql setf) (cons symbol nil)) (fdefinition fn))))
 
 ;;; Macro to check that a function is returning a specified number of values
 ;;; (defaults to 1)
