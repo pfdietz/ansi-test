@@ -6,6 +6,6 @@
 (in-package :cl-test)
 
 (deftest subtypep-function.1
-  (check-all-subtypep t '(function (t) t))
+  (check-all-not-subtypep t '(function (t) t))
   nil)
 
