@@ -1738,3 +1738,126 @@
 		 (multiple-value-call #'%f15 (values -2688612)))))
    1 2 3)
   -2688612)
+
+;;; ACL 6.2 (x86 linux trial) bugs
+;;; With optional flet/labels parameters, there's a very high frequency bug
+;;; causing the compiler error "Error: `:INFERRED' is not of the expected
+;;; type `NUMBER'".  The following tests show this bug.
+
+(deftest misc.134
+  (funcall
+   (compile nil
+	    '(lambda (b)
+	       (labels ((%f5 (f5-1 f5-2 f5-3 &optional (f5-4 0)
+				   (f5-5
+				    (flet ((%f13 (f13-1)
+						 (return-from %f13 b))) b)))
+			     900654472))
+		 183301)))
+   13775799184)
+  183301)
+
+(deftest misc.135
+  (funcall
+   (compile nil
+	    '(lambda (a b)
+	       (labels ((%f4 (&optional (f4-1 (labels ((%f17 nil a)) b)))
+			     -14806404))
+		 190134)))
+   1783745644 268410629)
+  190134)
+
+(deftest misc.136
+  (funcall
+   (compile nil
+	    '(lambda (c)
+	       (flet ((%f17 (&optional
+			     (f17-1 (flet ((%f9 nil c)) 73574919)))
+			    643))
+		 1039017546)))
+   0)
+  1039017546)
+
+;;; And these caused segfaults
+
+(deftest misc.137
+  (funcall
+   (compile nil
+	    '(lambda ()
+	       (declare (optimize (speed 3)))
+	       (declare (optimize (safety 1)))
+	       (flet ((%f16 (&optional
+			     (f16-2 (lognor -3897747
+					    (if nil -1 -127228378))))
+			    10))
+		 20))))
+  20)
+
+(deftest misc.138
+  (funcall
+   (compile nil
+	    '(lambda (c)
+	       (declare (type (integer 2996 39280) c))
+	       (declare (optimize (speed 3)))
+	       (declare (optimize (safety 1)))
+	       (if (zerop (labels ((%f8 (&optional
+					 (f8-2 (logorc2 c -161957)))
+					2176))
+			    3))
+		   c c)))
+   0)
+  0)
+
+;;; Lispworks 4.2 (x86 linux personal edition) failures
+
+
+(deftest misc.139
+  (let* ((fn1
+	  '(lambda (c)
+	     (declare (optimize (speed 3)))
+	     (logior (labels ((%f1 (f1-1 &optional (f1-2 (setq c 7))) f1-1))
+		       (%f1 774 3616592)) c)))
+	 (fn2
+	  '(lambda (c)
+	     (logior (labels ((%f1 (f1-1 &optional (f1-2 (setq c 7))) f1-1))
+		       (%f1 774 3616592)) c)))
+	 (vals '(-3))
+	 (v1 (apply (compile nil fn1) vals))
+	 (v2 (apply (compile nil fn2) vals)))
+    (if (eql v1 v2) :good (list v1 v2)))
+  :good)
+
+(deftest misc.140
+  (funcall
+   (compile nil
+	    '(lambda (a)
+	       (ldb (byte 24 20)
+		    (labels ((%f12 (&optional (f12-1 149) (f12-2 -3894159)) 34068))
+		      (let* ((v4 (%f12))) a)))))
+   -1)
+  16777215)
+ 
+
+;;; In Lispworks 4.2 (x86 linux personal edition)
+;;; 'Error: *** Ran out of patterns in (MOVE) for (edi NIL)'
+
+(deftest misc.141
+  (funcall
+   (compile nil
+	    '(lambda () (labels ((%f11 (&optional (f11-3 (restart-case 0))) f11-3))
+			  (%f11 1)))))
+  1)
+
+(deftest misc.142
+  (funcall
+   (compile nil
+	    '(lambda ()
+	       (labels ((%f15 (&optional (f15-3 (block b1 (+ 1 (return-from b1 -10)))))
+			      f15-3))
+		 (%f15)))))
+  -10)
+
+
+
+   
+
