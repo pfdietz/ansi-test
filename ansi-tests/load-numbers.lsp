@@ -7,5 +7,3 @@
 
 (compile-and-load "numbers-aux.lsp")
 (load "number-comparison.lsp")
-
-
