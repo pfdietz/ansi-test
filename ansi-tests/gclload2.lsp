@@ -76,3 +76,7 @@
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
 (load "misc.lsp")
+
+;;; Misc. tests dealing with type propagation in CMUCL
+(load "misc-cmucl-type-prop.lsp")
+
