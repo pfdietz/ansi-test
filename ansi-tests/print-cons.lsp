@@ -70,7 +70,7 @@
 (deftest print.cons.random.2
   (loop repeat 50
 	nconc
-	(let* ((n 50)
+	(let* ((n 20)
 	       (conses (apply #'vector
 			      (loop repeat n collect (cons nil nil)))))
 	  (loop for x across conses
