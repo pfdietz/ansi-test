@@ -574,11 +574,11 @@
   t)
 
 (deftest char-name.2
-  (string= (char-name #\Space) "Space")
+  (notnot-mv (string= (char-name #\Space) "Space"))
   t)
 
 (deftest char-name.3
-  (string= (char-name #\Newline) "Newline")
+  (notnot-mv (string= (char-name #\Newline) "Newline"))
   t)
 
 ;;; Check that the names of various semi-standard characters are
