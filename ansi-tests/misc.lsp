@@ -6557,3 +6557,20 @@ Broken at C::WT-C-INLINE-LOC.
    29329060987 -4964942044116 512158612507)
   0)
 
+(deftest misc.355
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (type (integer -1390043946499 -115168466439) c))
+       (declare (optimize (speed 2) (space 0) (safety 0) (debug 1)
+			  (compilation-speed 2)))
+       (+ 0
+	  (coerce (progn (tagbody (if (<= -1 (go tag1)) 0 c)
+				  tag1)
+			 0)
+		  'integer))))
+   -115168466439)
+  0)
+
+
