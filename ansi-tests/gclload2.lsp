@@ -133,7 +133,15 @@
 (load "cons-test-25.lsp")
 
 ;;; Tests on arrays
+(compile-and-load "array-aux.lsp")
 (load "make-array.lsp")
+(load "adjustable-array-p.lsp")
+(load "array-displacement.lsp")
+(load "adjustable-array-p.lsp")
+(load "array-dimension.lsp")
+(load "array-dimensions.lsp")
+(load "array-in-bounds-p.lsp")
+(load "array-rank.lsp")
 
 ;;; Tests of packages
 

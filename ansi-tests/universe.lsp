@@ -314,3 +314,23 @@
       *random-states*
       nil)))
 
+(defvar *mini-universe*
+  (remove-duplicates
+   (mapcar #'first
+	   (list *symbols*
+		 *numbers*
+		 *characters*
+		 (mapcar #'copy-seq *strings*)
+		 *conses*
+		 *condition-objects*
+		 *package-objects*
+		 *arrays*
+		 *hash-tables*
+		 *pathnames*
+		 *streams*
+		 *readtables*
+		 *structures*
+		 *functions*
+		 *random-states*))))
+
+

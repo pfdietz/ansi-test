@@ -5,77 +5,7 @@
 
 (in-package :cl-test)
 
-(defun make-array-check-upgrading (type)
-  (subtypep* type (array-element-type (make-array 0 :element-type type))))
-
-(defun make-array-with-checks (dimensions
-			       &rest options
-			       &key
-			       (element-type t element-type-p)
-			       (initial-contents nil intial-contents-p)
-			       (initial-element nil initial-element-p)
-			       (adjustable nil)
-			       (fill-pointer nil)
-			       (displaced-to nil)
-			       (displaced-index-offset 0 dio-p)
-			       &aux
-			       (dimensions-list (if (listp dimensions)
-						    dimensions
-						  (list dimensions))))
-  "Call MAKE-ARRAY and do sanity tests on the output."
-  (let ((a (apply #'make-array dimensions options)))
-    (cond
-     ((not (typep a 'array)) :fail-not-array)
-     ((and (eq t element-type)
-	   (not adjustable)
-	   (not fill-pointer)
-	   (not displaced-to)
-	   (not (typep a 'simple-array)))
-      :fail-not-simple-array)
-     ((and (eq (length dimensions-list) 1) 
-	   (cond
-	    ((not (typep a 'vector))
-	     :fail-not-vector)
-	    ((and (subtypep 'bit element-type)
-		  (subtypep element-type 'bit)
-		  (or (not (bit-vector-p a))
-		      (not (typep a 'bit-vector))))
-	     :fail-not-bit-vector)
-	    ((and (not adjustable)
-		  (not fill-pointer)
-		  (not displaced-to)
-		  (cond
-		   ((and (eq t element-type)
-			 (or (not (simple-vector-p a))
-			     (not (typep a 'simple-vector))))
-		    :fail-not-simple-vector)
-		   ((and (subtypep 'bit element-type)
-			 (subtypep element-type 'bit)
-			 (or (not (simple-bit-vector-p a))
-			     (not (typep a 'simple-bit-vector))))
-		    :fail-not-simple-bit-vector) ))) )))
-     ((not (equal (array-dimensions a) dimensions-list))
-      :fail-array-dimensions)
-     ((not (equal (array-rank a) (length dimensions-list)))
-      :fail-array-rank)
-     ((multiple-value-bind (sub good)
-	  (subtypep element-type (array-element-type a))
-	(and good
-	     (not sub)
-	     :failed-array-element-type)))
-     ((and adjustable
-	   (not (adjustable-array-p a))
-	   :fail-adjustable))
-     ((and fill-pointer
-	   (not (array-has-fill-pointer-p a))
-	   :fail-has-fill-pointer))
-     ((and (integerp fill-pointer)
-	   (not (eql fill-pointer (fill-pointer a)))
-	   :fail-fill-pointer-1))
-     ((and (eq fill-pointer t)
-	   (not (eql (first dimensions-list) (fill-pointer a)))
-	   :fail-fill-pointer-2))
-     (t a))))
+;;; See array-aux.lsp for auxiliary functions
 
 (deftest make-array.1
   (let ((a (make-array-with-checks 10)))
@@ -283,6 +213,17 @@
 	      :nonsense-argument t)
   #(x x x x))
 
+(deftest make-array.28
+  (let ((*package* (find-package :cl-test)))
+    (let ((len (1- (min 10000 array-rank-limit))))
+      (equalpt (make-array (make-list len :initial-element 1) :initial-element 'x)
+	       (read-from-string (concatenate
+				  'string
+				  (format nil "#~dA" len)
+				  (make-string len :initial-element #\()
+				  "x"
+				  (make-string len :initial-element #\)))))))
+  t)
 
 ;;; Adjustable arrays
 
@@ -560,6 +501,44 @@
 			    :fill-pointer 8
 			    :adjustable t))
   #(f g h i j k l m))
+
+(deftest make-array.displaced.27
+  (let ((a (make-array '(10)
+		       :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+		       :fill-pointer t)))
+    (make-array-with-checks '(2 4) :displaced-to a))
+  #2a((1 2 3 4) (5 6 7 8)))
+
+(deftest make-array.displaced.28
+  (let ((a (make-array '(10)
+		       :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+		       :fill-pointer 4)))
+    (make-array-with-checks '(2 4) :displaced-to a))
+  #2a((1 2 3 4) (5 6 7 8)))
+
+(deftest make-array.displaced.29
+  (let ((a (make-array '(10) :initial-element 0)))
+    (prog1
+	(make-array-with-checks '(2 4) :displaced-to a)
+      (loop for i below 10 do (setf (aref a i) (1+ i)))))
+  #2a((1 2 3 4) (5 6 7 8)))
+
+(deftest make-array.displaced.30
+  (let* ((a1 (make-array '(10) :initial-element 0))
+	 (a2 (make-array '(10) :displaced-to a1)))
+    (prog1
+	(make-array-with-checks '(2 4) :displaced-to a2)
+      (loop for i below 10 do (setf (aref a2 i) (1+ i)))))
+  #2a((1 2 3 4) (5 6 7 8)))
+
+(deftest make-array.displaced.31
+  (let* ((a1 (make-array '(10) :initial-element 0))
+	 (a2 (make-array '(10) :displaced-to a1)))
+    (prog1
+	(make-array-with-checks '(2 4) :displaced-to a2)
+      (loop for i below 10 do (setf (aref a1 i) (1+ i)))))
+  #2a((1 2 3 4) (5 6 7 8)))
+
 
 ;;; Keywords tests
 

@@ -144,6 +144,11 @@ the condition to go uncaught if it cannot be classified."
      (package-error () 'package-error)
      (type-error    () 'type-error)
      (control-error () 'control-error)
+     (stream-error  () 'stream-error)
+     (reader-error  () 'reader-error)
+     (file-error    () 'file-error)
+     (control-error () 'control-error)
+     (cell-error    () 'cell-error)
   )))
 
 (defun classify-error** (form)
