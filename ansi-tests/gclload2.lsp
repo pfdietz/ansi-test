@@ -104,6 +104,11 @@
 (load "loop16.lsp")
 (load "loop17.lsp")
 
+;;; Tests of conditions
+(load "condition.lsp")
+(load "cell-error-name.lsp")
+(load "assert.lsp")
+
 ;;; Tests of conses
 
 (load "cons-test-01.lsp")
@@ -177,6 +182,12 @@
 (load "bit-not.lsp")
 (load "bit-vector-p.lsp")
 (load "simple-bit-vector-p.lsp")
+
+;;; Tests of hash tables
+
+(load "hash-table.lsp")
+(load "make-hash-table.lsp")
+  ; More to come
 
 ;;; Tests of packages
 

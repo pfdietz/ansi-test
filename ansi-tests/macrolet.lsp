@@ -129,3 +129,13 @@
 		      (if (eq y 'a) 1 2))))
       (foo a)))
   2)
+
+(deftest macrolet.14
+  (symbol-macrolet ((a b))
+    (macrolet ((foo (x &environment env)
+		    (let ((y (macroexpand-1 x env)))
+		      (if (eq y 'a) 1 2))))
+      (foo a)))
+  2)
+
+

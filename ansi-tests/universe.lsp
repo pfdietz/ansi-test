@@ -40,22 +40,18 @@
       warning))
 
 (defvar *condition-objects*
-    (loop
-	for tp in *condition-types* append
-	  (handler-case
-	      (list (make-condition tp))
-	    (error () nil))))
+  (loop for tp in *condition-types* append
+	(handler-case (list (make-condition tp))
+		      (error () nil))))
 
 (defvar *standard-package-names*
-    '("COMMON-LISP" "COMMON-LISP-USER" "KEYWORD"))
+  '("COMMON-LISP" "COMMON-LISP-USER" "KEYWORD"))
 
 (defvar *package-objects*
-    (loop
-	for pname in *standard-package-names* append
-	  (handler-case
-	      (let ((pkg (find-package pname)))
-		(and pkg (list pkg)))
-	    (error () nil))))
+  (loop for pname in *standard-package-names* append
+	(handler-case (let ((pkg (find-package pname)))
+			(and pkg (list pkg)))
+		      (error () nil))))
 
 (defvar *integers*
     (remove-duplicates
@@ -76,6 +72,7 @@
 
 (defvar *floats*
     (list
+     PI
      MOST-POSITIVE-SHORT-FLOAT LEAST-POSITIVE-SHORT-FLOAT
      LEAST-POSITIVE-NORMALIZED-SHORT-FLOAT MOST-POSITIVE-DOUBLE-FLOAT
      LEAST-POSITIVE-DOUBLE-FLOAT LEAST-POSITIVE-NORMALIZED-DOUBLE-FLOAT
@@ -157,7 +154,8 @@
 	    do (let ((c (code-char i)))
 		 (when c
 		   (setf (elt s i) c))))
-	s))))
+	s)
+      )))
 
 (defvar *conses*
     (list
@@ -180,9 +178,7 @@
 (defvar *booleans* '(nil t))
 (defvar *keywords* '(:a :b :|| :|a| :|1234|))
 (defvar *uninterned-symbols*
-    (list '#:nil '#:t '#:foo
-	  #-CMU '#:||
-	  ))
+  (list '#:nil '#:t '#:foo '#:||))
 (defvar *cl-test-symbols*
     `(,(intern "a" :cl-test)
       ,(intern "" :cl-test)
@@ -213,8 +209,10 @@
 
 (defvar *array-dimensions*
     (loop
-	for i from 1 to 8 collect
+	for i from 0 to 8 collect
 	  (loop for j from 1 to i collect 2)))
+
+(defvar *default-array-target* (make-array '(300)))
 
 (defvar *arrays*
     (append
@@ -233,6 +231,50 @@
      (loop
        for d in *array-dimensions*
 	 collect (make-array d :adjustable t))
+
+     ;; Displaced arrays
+     (loop
+      for d in *array-dimensions*
+      for i from 1
+      collect (make-array d :displaced-to *default-array-target*
+			  :displaced-index-offset i))
+
+     (list
+      #()
+      #*
+      #*00000
+      #*1010101010101101)
+
+     ;; Integer arrays
+     (list
+      (make-array '(10) :element-type '(integer 0 (256))
+		  :initial-contents '(8 9 10 11 12 1 2 3 4 5))
+      (make-array '(10) :element-type '(integer -128 (128))
+		  :initial-contents '(8 9 -10 11 -12 1 -2 -3 4 5))
+      (make-array '(6) :element-type '(integer 0 (#.(ash 1 16)))
+		  :initial-contents '(5 9 100 1312 23432 87))
+      (make-array '(4) :element-type '(integer 0 (#.(ash 1 28)))
+		  :initial-contents '(100000 231213 8123712 19))
+      (make-array '(4) :element-type '(integer 0 (#.(ash 1 32)))
+		  :initial-contents '(#.(1- (ash 1 32)) 0 872312 10000000))
+      
+      (make-array nil :element-type '(integer 0 (256))
+		  :initial-element 14)
+      (make-array '(2 2) :element-type '(integer 0 (256))
+		  :initial-contents '((34 98)(14 119)))
+      )
+
+     ;; Float arrays
+     (list
+      (make-array '(5) :element-type 'short-float
+		  :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0))
+      (make-array '(5) :element-type 'single-float
+		  :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0))
+      (make-array '(5) :element-type 'double-float
+		  :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0))
+      (make-array '(5) :element-type 'long-float
+		  :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0))
+      )
      
      ;; more kinds of arrays here later
      ))

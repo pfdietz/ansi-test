@@ -1450,7 +1450,6 @@
    when (not (boundp s))
    collect s)
   nil)
-
 	    
 ;;; Check that all types that are classes name classes.
 
@@ -1458,12 +1457,40 @@
 ;;;  a corresponding class with the same proper name as the type.
 ;;;  These type specifiers are listed in Figure 4-8." -- section 4.3.7
 
-(deftest cl-types-that-are-classes-symbols.1
+(deftest cl-types-that-are-classes.1
   ;; Collect class names that violate the condition in the
   ;; above quotation.
   (loop
    for s in *cl-types-that-are-classes-symbols*
    for c = (find-class s nil)
+   unless (and c
+	       (eq (class-name c) s)
+	       (typep c 'class))
+   collect s)
+  nil)
+
+
+(deftest cl-types-that-are-classes.2
+  ;; The same as cl-types-that-are-classes.1
+  ;; with an environment argument
+  (loop
+   for s in *cl-types-that-are-classes-symbols*
+   for c = (find-class s nil nil)
+   unless (and c
+	       (eq (class-name c) s)
+	       (typep c 'class))
+   collect s)
+  nil)
+
+(deftest cl-types-that-are-classes.3
+  ;; The same as cl-types-that-are-classes.1,
+  ;; with an environment argument
+  (loop
+   for s in *cl-types-that-are-classes-symbols*
+   for c = (eval `(macrolet ((%foo (&environment env)
+				   (list 'quote
+					 (find-class ',s nil env))))
+		    (%foo)))
    unless (and c
 	       (eq (class-name c) s)
 	       (typep c 'class))
