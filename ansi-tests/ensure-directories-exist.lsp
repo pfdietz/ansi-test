@@ -129,7 +129,7 @@
        (length results)
        (notnot created)
        (equalt pn result-pn)
-       (notnot (probe-file subdir))
+       (notnot (probe-file pn))
        verbosity
        )))
   2 t t t "")
