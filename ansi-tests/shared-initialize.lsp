@@ -344,3 +344,31 @@
   (t nil t nil)
   (91 17))
 
+(deftest shared-initialize.4.7
+  (let ((obj (allocate-instance (find-class 'shared-init-class-04b))))
+    (values
+     (eqt obj (shared-initialize obj '(c)))
+     (map-slot-boundp* obj '(a b c d))
+     (slot-value obj 'c)))
+  t
+  (nil nil t nil)
+  17)
+
+;;; shared-initialize and class slots
+
+(defclass shared-init-class-05 ()
+  ((a :initarg :a :allocation :class)
+   (b :initarg :b :initform 'foo :allocation :class)))
+
+(deftest shared-initialize.5.1
+  (let* ((class (find-class 'shared-init-class-05))
+	 (obj (allocate-instance class)))
+    (slot-makunbound obj 'a)
+    (slot-makunbound obj 'b)
+    (values
+     (eqt obj (shared-initialize obj t))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'b)))
+  t
+  (nil t)
+  foo)
