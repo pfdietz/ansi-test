@@ -3,6 +3,8 @@
 ;;;; Created:  Sat Sep 14 11:46:05 2002
 ;;;; Contains: Tests for REMOVE
 
+(compile-and-load "remove-aux.lsp")
+
 (in-package :cl-test)
 
 (deftest remove-list.1
