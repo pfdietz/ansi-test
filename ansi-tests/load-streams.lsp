@@ -14,3 +14,4 @@
 (load "read-byte.lsp")
 (load "peek-char.lsp")
 (load "read-char.lsp")
+(load "unread-char.lsp")
