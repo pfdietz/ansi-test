@@ -9554,7 +9554,6 @@ Broken at C::WT-MAKE-CLOSURE.
   0)
 
 ;;; Incorrect return value
-;;; (This also causes an error in CLISP)
 
 (deftest misc.518
   (funcall
