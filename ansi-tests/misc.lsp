@@ -4322,9 +4322,9 @@
     nil
     '(lambda ()
        (declare (optimize (speed 1) (space 2) (safety 1) (debug 1)
-			  (compilation-speed 0)))
+                          (compilation-speed 0)))
        (let ((*s4* :right))
-	 (declare (special *s4*))
-	 (progv '(*s4*) (list :wrong1) (setq *s4* :wrong2))
-	 *s4*))))
+         (declare (special *s4*))
+         (progv '(*s4*) (list :wrong1) (setq *s4* :wrong2))
+         *s4*))))
   :right)
