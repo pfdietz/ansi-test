@@ -27,7 +27,7 @@
   t)
 
 (deftest expt.3
-  (loop for i = (random 10000.0s0)
+  (loop for i = (random 1.0s3)
 	repeat 1000
 	always (eql (expt i 0) 1.0s0))
   t)
@@ -39,19 +39,50 @@
   t)
 
 (deftest expt.5
-  (loop for i = (random 1.0d20)
+  (loop for i = (random 1.0d10)
 	repeat 1000
 	always (eql (expt i 0) 1.0d0))
   t)
 
 (deftest expt.6
-  (loop for i = (random 1.0l50)
+  (loop for i = (random 1.0l10)
 	repeat 1000
 	always (eql (expt i 0) 1.0l0))
   t)
 
+(deftest expt.7
+  (loop for i from -1000 to 1000
+	for c = (complex i i)
+	always (eql (expt c 0) 1))
+  t)
 
+(deftest expt.8
+  (loop for i = (random 1.0s3)
+	for c = (complex i i)
+	repeat 1000
+	always (eql (expt c 0) #c(1.0s0 0.0s0)))
+  t)
 
+(deftest expt.9
+  (loop for i = (random 1.0f6)
+	for c = (complex i i)
+	repeat 1000
+	always (eql (expt c 0) #c(1.0f0 0.0f0)))
+  t)
+
+(deftest expt.10
+  (loop for i = (random 1.0d10)
+	for c = (complex i i)
+	repeat 1000
+	always (eql (expt c 0) #c(1.0d0 0.0d0)))
+  t)
+
+(deftest expt.11
+  (loop for i = (random 1.0l10)
+	for c = (complex i i)
+	repeat 1000
+	always (eql (expt c 0) #c(1.0l0 0.0l0)))
+  t)
 
 
 
