@@ -9,7 +9,7 @@
   (let ((target *searched-vector*)
 	(pat #(a)))
     (loop for i from 0 to (1- (length target))
-	  for tail on target
+	  for tail = (subseq target i)
 	  always
 	  (let ((pos (search pat tail)))
 	    (search-check pat tail pos))))
