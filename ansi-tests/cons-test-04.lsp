@@ -410,3 +410,8 @@
 (deftest adjoin.error.9
   (classify-error (adjoin 'a '(b c) :key #'cons))
   program-error)
+
+(deftest adjoin.error.10
+  (classify-error (adjoin 'a (list* 'b 'c 'd)))
+  type-error)
+

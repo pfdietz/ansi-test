@@ -79,15 +79,15 @@
   program-error)
 
 (deftest get-properties.error.4
-  (classify-error (get-properties '(a 1 b 2 c 3) '(a . b)))
+  (classify-error (get-properties '(a 1 b 2 c 3) '(x . y)))
   type-error)
 
 (deftest get-properties.error.5
-  (classify-error (get-properties '(a 1 b 2 c 3 . d) '(a z)))
+  (classify-error (get-properties '(a 1 b 2 c 3 . d) '(x y)))
   type-error)
 
 (deftest get-properties.error.6
-  (classify-error (get-properties '(a 1 b 2 c . d) '(a z)))
+  (classify-error (get-properties '(a 1 b 2 c . d) '(x y)))
   type-error)
 
 	   
