@@ -217,6 +217,8 @@ the condition to go uncaught if it cannot be classified."
 (defun string-invertcase (s)
   (map 'string #'char-invertcase s))
 
+(defun symbol< (x &rest args)
+  (apply #'string< (symbol-name x) (mapcar #'symbol-name args)))
 
 (defun random-from-seq (seq)
   "Generate a random member of a sequence."
