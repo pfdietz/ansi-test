@@ -4328,3 +4328,20 @@
          (progv '(*s4*) (list :wrong1) (setq *s4* :wrong2))
          *s4*))))
   :right)
+
+;;; sbcl 0.8.7.5
+;;; The value 215067723 is not of type (INTEGER 177547470 226026978).
+
+(deftest misc.259
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+         (declare (type (integer 177547470 226026978) a))
+         (declare (optimize (speed 3) (space 0) (safety 0) (debug 0)
+			    (compilation-speed 1)))
+         (logand a (* a 438810))))
+   215067723)
+  13739018)
+
+
