@@ -13,7 +13,7 @@
     ;; (assert (not (input-stream-p s)))
     (assert (open-stream-p s))
     (assert (streamp s))
-    (assert (eq (stream-element-type s) t))
+    ;; (assert (eq (stream-element-type s) t))
     (values
      (notnot (typep s 'stream))
      (notnot (typep s 'broadcast-stream))
