@@ -33,11 +33,14 @@
 
 (defun make-struct-field-fn (conc-name field-name)
   "Make field accessor for a field in a structure"
-  (assert (typep conc-name '(or string symbol character)))
-  (assert (typep field-name '(or string symbol character)))
-  (setf conc-name (string conc-name))
-  (setf field-name (string field-name))
-  (intern (concatenate 'string conc-name field-name)))
+  (cond
+   ((null conc-name) field-name)
+   (t
+    (assert (typep conc-name '(or string symbol character)))
+    (assert (typep field-name '(or string symbol character)))
+    (setf conc-name (string conc-name))
+    (setf field-name (string field-name))
+    (intern (concatenate 'string conc-name field-name)))))
 
 (defun make-struct-make-fn (structure-name)
   "Make the make- function for a structure"
@@ -136,6 +139,7 @@ do the defstruct."
 	 (name (if (consp name-and-options)
 		   (car name-and-options)
 		 name-and-options))
+
 	 ;; The options list, or NIL if there were no options
 	 (options (if (consp name-and-options)
 		      (cdr name-and-options)
@@ -165,6 +169,12 @@ do the defstruct."
 	 ;; Symbol obtained by prepending MAKE- to the name symbol
 	 (make-fn (make-struct-make-fn name))
 
+	 ;; The type option, if specified
+	 (type-option (find-option options :type))
+	 (struct-type (second type-option))
+
+	 (named-option (find-option options :named))
+
 	 ;; The :predicate option entry from OPTIONS, or NIL if none
 	 (predicate-option (find-option options :predicate))
 
@@ -172,6 +182,7 @@ do the defstruct."
 	 ;; one specified in the :predicate option
 	 (p-fn-default (make-struct-p-fn name))
 	 (p-fn (cond
+		((and type-option (not named-option)) nil)
 		((or (eq predicate-option :predicate)
 		     (null (cdr predicate-option)))
 		 p-fn-default)
@@ -194,16 +205,18 @@ do the defstruct."
 	 (conc-option (find-option options :conc-name))
 	 ;; String to be prepended to slot names to get the
 	 ;; slot accessor function
-	 (conc-prefix-default
-	  (concatenate 'string (string name) "-"))
+	 (conc-prefix-default (concatenate 'string (string name) "-"))
 	 (conc-prefix (cond
 		       ((null conc-option)
 			conc-prefix-default)
 		       ((or (eq conc-option :conc-name)
 			    (null (cadr conc-option)))
-			"")
+			nil)
 		       (t (string (cadr conc-option)))))
 
+	 (initial-offset-option (find-option options :initial-offset))
+	 (initial-offset (second initial-offset-option))
+	 
 	 ;; Accessor names
 	 (field-fns
 	  (loop for slot-name in slot-names
@@ -230,7 +243,9 @@ do the defstruct."
 	 (and (fboundp (quote ,make-fn))
 	      (functionp (function ,make-fn))
 	      (symbol-function (quote ,make-fn))
-	      (notnot (typep (,make-fn) (quote ,name))))
+	      ,@(unless type-option
+		  `((typep (,make-fn) (quote ,name))))
+	      t)
 	 t)
 
        ;; Test that the predicate exists
@@ -249,10 +264,11 @@ do the defstruct."
 	       (count-if (function ,p-fn) *universe*)
 	       0)))
 
-       (deftest ,(make-struct-test-name name 4)
-	 (count-if (function (lambda (x) (typep x (quote ,name))))
-		   *universe*)
-	 0)
+       ,@(unless type-option
+	   `((deftest ,(make-struct-test-name name 4)
+	       (count-if (function (lambda (x) (typep x (quote ,name))))
+			 *universe*)
+	       0)))
 
        ;; Check that the fields can be read after being initialized
        (deftest ,(make-struct-test-name name 5)

@@ -175,6 +175,39 @@
   (b29 'xx  :read-only 1)
   c29)
 
+(defstruct-with-tests struct-test-30 #:a30 #:b30)
+(defstruct-with-tests #:struct-test-31 a31 b31)
+
+(defpackage struct-test-package (:use))
+
+(defstruct-with-tests struct-test-32
+  struct-test-package::a32 struct-test-package::b32)
+
+;;; If the :conc-name option is given no argument or
+;;; a nil argument, the accessor names are the same as
+;;; slot names.  Note that this is different from prepending
+;;; an empty string, since that may get you a name in
+;;; a different package.
+
+(defstruct-with-tests (struct-test-33 (:conc-name))
+  struct-test-package::a33 struct-test-package::b33)
+(defstruct-with-tests (struct-test-34 :conc-name)
+  struct-test-package::a34 struct-test-package::b34)
+(defstruct-with-tests (struct-test-35 (:conc-name nil))
+  struct-test-package::a35 struct-test-package::b35)
+
+(defstruct-with-tests (struct-test-36 (:conc-name ""))
+  struct-test-package::st36-a36 struct-test-package::st26-b36)
+
+;;; List structures
+
+(defstruct-with-tests (struct-test-37 (:type list)) a37 b37 c37)
+(defstruct-with-tests (struct-test-38 (:type list) :named) a38 b38 c38)
+(defstruct-with-tests (struct-test-39 (:predicate nil)
+				      (:type list) :named)
+  a39 b39 c39)
+
+
 
 
 
