@@ -10,4 +10,5 @@
 (load "features.lsp")
 (load "room.lsp")
 (load "time.lsp")
+(load "trace.lsp")
 (load "user-homedir-pathname.lsp")
