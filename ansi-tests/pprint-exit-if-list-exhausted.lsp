@@ -160,40 +160,114 @@
   "{...}")
 
 (deftest pprint-pop.5
-  (with-standard-io-syntax
-   (let ((*print-pretty* t)
-	 (*print-escape* nil)
-	 (*print-right-margin* 100)
-	 (*print-readably* nil)
-	 (*print-length* 2))
-     (with-output-to-string
-       (os)
-       (pprint-logical-block
-	(os '(1 2 3 4 5) :prefix "{" :suffix "}")
-	(pprint-exit-if-list-exhausted)
-	(write (pprint-pop) :stream os)
-	(loop (write #\Space :stream os)
-	      (pprint-exit-if-list-exhausted)
-	      (write (pprint-pop) :stream os))))))
-  "{1 2 ...}")
+  (flet ((%f (len)
+	     (with-standard-io-syntax
+	      (let ((*print-pretty* t)
+		    (*print-escape* nil)
+		    (*print-right-margin* 100)
+		    (*print-readably* nil)
+		    (*print-length* len))
+		(with-output-to-string
+		  (os)
+		  (pprint-logical-block
+		   (os '(1 2 3 4 5) :prefix "{" :suffix "}")
+		   (pprint-exit-if-list-exhausted)
+		   (write (pprint-pop) :stream os)
+		   (loop (pprint-exit-if-list-exhausted)
+			 (write #\Space :stream os)
+			 (write (pprint-pop) :stream os))))))))
+    (values (%f 0) (%f 1) (%f 2) (%f 3) (%f 4) (%f 5) (%f 6)))
+  "{...}"
+  "{1 ...}"
+  "{1 2 ...}"
+  "{1 2 3 ...}"
+  "{1 2 3 4 ...}"
+  "{1 2 3 4 5}"
+  "{1 2 3 4 5}")
 
 (deftest pprint-pop.6
-  (with-standard-io-syntax
-   (let ((*print-pretty* t)
-	 (*print-escape* nil)
-	 (*print-right-margin* 100)
-	 (*print-readably* nil)
-	 (*print-length* 2))
-     (with-output-to-string
-       (os)
-       (pprint-logical-block
-	(os '(1 2 . 3) :prefix "{" :suffix "}")
-	(pprint-exit-if-list-exhausted)
-	(write (pprint-pop) :stream os)
-	(loop (write #\Space :stream os)
-	      (pprint-exit-if-list-exhausted)
-	      (write (pprint-pop) :stream os))))))
+  (flet ((%f (len)
+	     (with-standard-io-syntax
+	      (let ((*print-pretty* t)
+		    (*print-escape* nil)
+		    (*print-right-margin* 100)
+		    (*print-readably* nil)
+		    (*print-length* len))
+		(with-output-to-string
+		  (os)
+		  (pprint-logical-block
+		   (os '(1 2 . 3) :prefix "{" :suffix "}")
+		   (pprint-exit-if-list-exhausted)
+		   (write (pprint-pop) :stream os)
+		   (loop (pprint-exit-if-list-exhausted)
+			 (write #\Space :stream os)
+			 (write (pprint-pop) :stream os))))))))
+    (values (%f 0) (%f 1) (%f 2) (%f 3) (%f 4)))
+  "{...}"
+  "{1 ...}"
+  "{1 2 . 3}"
+  "{1 2 . 3}"
   "{1 2 . 3}")
+
+;;; pprint-pop and circularity/sharing
+
+(deftest pprint-pop.7
+  (flet ((%f (len)
+	     (with-standard-io-syntax
+	      (let ((*print-pretty* t)
+		    (*print-escape* nil)
+		    (*print-right-margin* 100)
+		    (*print-readably* nil)
+		    (*print-length* len)
+		    (*print-circle* t))
+		(with-output-to-string
+		  (os)
+		  (let* ((tail (list 1))
+			 (x (list* tail 2 tail)))
+		    (pprint-logical-block
+		     (os x :prefix "<" :suffix ">")
+		     (pprint-exit-if-list-exhausted)
+		     (write (pprint-pop) :stream os)
+		     (loop (pprint-exit-if-list-exhausted)
+			   (write #\Space :stream os)
+			   (write (pprint-pop) :stream os)))))))))
+    (values (%f nil) (%f 0) (%f 1) (%f 2) (%f 3) (%f 4)))
+  "<#1=(1) 2 . #1#>"
+  "<...>"
+  "<(1) ...>"
+  "<(1) 2 ...>"
+  "<#1=(1) 2 . #1#>"
+  "<#1=(1) 2 . #1#>")
+
+(deftest pprint-pop.8
+  (flet ((%f (len)
+	     (with-standard-io-syntax
+	      (let ((*print-pretty* t)
+		    (*print-escape* nil)
+		    (*print-right-margin* 100)
+		    (*print-readably* nil)
+		    (*print-length* len)
+		    (*print-circle* t))
+		(with-output-to-string
+		  (os)
+		  (let* ((tail (list 2))
+			 (x (list* 1 tail)))
+		    (setf (cdr tail) tail)
+		    (pprint-logical-block
+		     (os x :prefix "[[" :suffix "]]")
+		     (pprint-exit-if-list-exhausted)
+		     (write (pprint-pop) :stream os)
+		     (loop (pprint-exit-if-list-exhausted)
+			   (write #\Space :stream os)
+			   (write (pprint-pop) :stream os)))))))))
+    (values (%f 0) (%f 1) (%f 2) (%f 3) (%f 10) (%f 20)))
+  "[[...]]"
+  "[[1 ...]]"
+  "[[1 2 ...]]"
+  "[[1 . #1=(2 . #1#)]]"
+  "[[1 . #1=(2 . #1#)]]"
+  "[[1 . #1=(2 . #1#)]]")
+
 
 ;;; Error cases
 
