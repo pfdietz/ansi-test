@@ -245,3 +245,7 @@
      until (eql one (+ one next-eps))
      do (setq eps next-eps)
      finally (return (values i eps (float eps one))))))
+
+;;; Approximate equality function
+(defun approx= (x y &optional (eps (epsilon x)))
+  (<= (abs (/ (- x y) (max (abs x) 1))) eps))

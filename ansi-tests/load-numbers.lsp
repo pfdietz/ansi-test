@@ -43,6 +43,11 @@
 (load "random-state-p.lsp")
 (load "make-random-state.lsp")
 (load "numberp.lsp")
+(load "cis.lsp")
+(load "complex.lsp")
+(load "complexp.lsp")
+(load "conjugate.lsp")
+(load "phase.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
