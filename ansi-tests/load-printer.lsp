@@ -12,4 +12,5 @@
 (load "print-integers.lsp")
 (load "print-ratios.lsp")
 (load "print-floats.lsp")
+(load "print-complex.lsp")
 
