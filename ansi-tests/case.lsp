@@ -166,3 +166,6 @@
   (case 'a (b 'b) (otherwise))
   nil)
 
+(deftest case.error.1
+  (classify-error (case))
+  program-error)

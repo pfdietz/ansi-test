@@ -64,11 +64,17 @@
     (ctypecase x (integer) (t 'a)))
   nil)
 
+(deftest ctypecase.12
+  (let ((x 1))
+    (values
+     (handler-bind
+      ((type-error #'(lambda (c) (store-value 'a c))))
+      (ctypecase x
+       (symbol :good)
+       (float :bad)))
+     x))
+  :good a)
 
-
-
-    
-
-
-
-
+(deftest ctypecase.error.1
+  (classify-error (ctypecase))
+  program-error)

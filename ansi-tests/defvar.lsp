@@ -1,4 +1,4 @@
-;-*- Mode:     Lisp -*-
+`;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Thu Oct 10 23:21:50 2002
 ;;;; Contains: Tests for DEFVAR
@@ -53,3 +53,12 @@
   "And ever."
   200
   0)
+
+(deftest defvar.error.1
+  (classify-error (defvar))
+  program-error)
+
+(deftest defvar.error.2
+  (classify-error (defvar *ignored-defvar-name* nil "documentation"
+		    "illegal extra argument"))
+  program-error)

@@ -64,3 +64,12 @@
 		  (cerror "Wooo" 'simple-error)
 		  10))
   10)
+
+
+(deftest cerror.error.1
+  (classify-error (cerror))
+  program-error)
+
+(deftest cerror.error.2
+  (classify-error (cerror "foo"))
+  program-error)

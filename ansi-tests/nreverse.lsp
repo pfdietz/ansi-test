@@ -86,6 +86,13 @@
     y)
   "edcba")
 
+(deftest nreverse.order.1
+  (let ((i 0))
+    (values
+     (nreverse (progn (incf i) (list 'a 'b 'c 'd)))
+     i))
+  (d c b a) 1)
+
 (deftest nreverse.error.1
   (classify-error (nreverse 'a))
   type-error)

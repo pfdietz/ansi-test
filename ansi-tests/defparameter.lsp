@@ -51,4 +51,19 @@
   "And ever."
   300)
 
+(deftest defparameter.error.1
+  (classify-error (defparameter))
+  program-error)
+
+(deftest defparameter.error.2
+  (classify-error (defparameter *ignored-defparameter-name*))
+  program-error)
+
+(deftest defparameter.error.3
+  (classify-error (defparameter *ignored-defparameter-name* nil
+		    "documentation"
+		    "illegal extra argument"))
+  program-error)
+
+
   

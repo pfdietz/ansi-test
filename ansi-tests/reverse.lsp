@@ -89,6 +89,13 @@
     y)
   "edcba")
 
+(deftest reverse.order.1
+  (let ((i 0))
+    (values
+     (reverse (progn (incf i) (list 'a 'b 'c 'd)))
+     i))
+  (d c b a) 1)
+
 ;;; Error cases
 
 (deftest reverse.error.1

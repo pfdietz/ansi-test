@@ -80,12 +80,20 @@
   (destructuring-bind ((&key a b c)) '((:c 1 :b 2)) (values a b c))
   nil 2 1)
 
+;;; Error cases
 
-		      
+(deftest destructuring-bind.error.1
+  (classify-error (destructuring-bind (a b c) nil (list a b c)))
+  program-error)
 
+(deftest destructuring-bind.error.2
+  (classify-error (destructuring-bind ((a b c)) nil (list a b c)))
+  program-error)
 
+(deftest destructuring-bind.error.3
+  (classify-error (destructuring-bind (a b) 'x (list a b)))
+  program-error)
 
-
-
-
-
+(deftest destructuring-bind.error.4
+  (classify-error (destructuring-bind (a . b) 'x (list a b)))
+  program-error)

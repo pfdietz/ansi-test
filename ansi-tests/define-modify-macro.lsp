@@ -63,3 +63,21 @@
 	i))))
   new-incf2
   (3 #(0 0 3 0 0) 3))
+
+(deftest define-modify-macro.error.1
+  (classify-error (define-modify-macro))
+  program-error)
+
+(deftest define-modify-macro.error.2
+  (classify-error (define-modify-macro dfm-error-1))
+  program-error)
+
+(deftest define-modify-macro.error.2
+  (classify-error (define-modify-macro dfm-error-2 ()))
+  program-error)
+
+(deftest define-modify-macro.error.3
+  (classify-error (define-modify-macro dfm-error-2 () nil "Documentation"
+		    "extra illegal argument"))
+  program-error)
+

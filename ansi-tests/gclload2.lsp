@@ -34,6 +34,7 @@
 (load "defconstant.lsp")
 (load "define-modify-macro.lsp")
 (load "defparameter.lsp")
+(load "defun.lsp")
 (load "defvar.lsp")
 (load "destructuring-bind.lsp")
 (load "ecase.lsp")

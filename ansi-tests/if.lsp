@@ -29,4 +29,20 @@
 
 (deftest if.7 (if nil 'a (values)))
 
+(deftest if.order.1
+  (let ((i 0))
+    (values (if (= (incf i) 1) 't nil) i))
+  t 1)
+
+(deftest if.error.1
+  (classify-error (if))
+  program-error)
+
+(deftest if.error.2
+  (classify-error (if t 1 2 3))
+  program-error)
+
+
+
+
   

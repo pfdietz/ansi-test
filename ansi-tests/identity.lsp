@@ -20,6 +20,11 @@
     (eqlt x (check-values (identity x))))
   t)
 
+(deftest identity.order.1
+  (let ((i 0))
+    (values (identity (incf i)) i))
+  1 1)
+
 (deftest identity.error.1
   (classify-error (identity))
   program-error)

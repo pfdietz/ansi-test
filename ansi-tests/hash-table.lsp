@@ -51,6 +51,20 @@
 	always (if p q (not q)))
   t)
 
+(deftest hash-table-p.3
+  (let ((i 0))
+    (values (hash-table-p (incf i)) i))
+  nil 1)
+
+(deftest hash-table-p.error.1
+  (classify-error (hash-table-p))
+  program-error)
+
+(deftest hash-table-p.error.2
+  (classify-error (let ((h (make-hash-table))) (hash-table-p h nil)))
+  program-error)
+
+
 
 	     
 

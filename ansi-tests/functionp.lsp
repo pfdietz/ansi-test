@@ -80,6 +80,13 @@
   (flet ((%f () nil)) (not-mv (functionp #'%f)))
   nil)
 
+(deftest functionp.order.1
+  (let ((i 0))
+    (values
+     (notnot (functionp (progn (incf i) #'cons)))
+     i))
+  t 1)
+
 (deftest functionp.error.1
   (classify-error (functionp))
   program-error)

@@ -21,6 +21,12 @@
 		(notnot (second ret-vals))))))
   3 t)
 
+(deftest function-lambda-expression.order.1
+  (let ((i 0))
+    (function-lambda-expression (progn (incf i) #'cons))
+    i)
+  1)
+
 (deftest function-lambda-expression.error.1
   (classify-error (function-lambda-expression))
   program-error)

@@ -167,8 +167,23 @@
   y b)
 
 (deftest ccase.30
-  (ccase 'a (a))
+  (let ((x 'a))
+    (ccase x (a)))
   nil)
 
-;;; Need to add tests for continuability of the error,
-;;; and resetting of the place.
+(deftest ccase.31
+  (handler-bind
+   ((type-error #'(lambda (c) (store-value 7 c))))
+   (let ((x 0))
+     (ccase x
+      (1 :bad)
+      (7 :good)
+      (2 nil))))
+  :good)
+
+(deftest ccase.error.1
+  (classify-error (ccase))
+  program-error)
+
+
+    
