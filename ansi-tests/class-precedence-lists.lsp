@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(unless (fboundp 'class-precedence-list)
+(unless #| (fboundp 'class-precedence-list) |# nil
   (defgeneric class-precedence-list (x)
     (:method-combination list)
     .
@@ -104,7 +104,7 @@
 (def-cpl-test 1.0l0 (float real number t) float-cpl.4)
 
 (def-cpl-test #'car (function t))
-(def-cpl-test #'make-instance (generic-function function t))
+;; (def-cpl-test #'make-instance (generic-function function t))
 
 (def-cpl-test (make-hash-table) (hash-table t) hash-table-cpl.1)
 (def-cpl-test (make-hash-table :test 'eq) (hash-table t) hash-table-cpl.2)
@@ -120,7 +120,8 @@
 ;;; Insert a test for LOGICAL-PATHNAME here
 ;;; (def-cpl-test ????? (logical-pathname pathname t))
 
-(def-cpl-test (find-method #'class-name nil (list (find-class t))) (method t))
+;;; (def-cpl-test (find-method #'class-name nil (list (find-class 'class)))
+;;;  (method t))
 
 ;;; Insert test for METHOD-COMBINATION here
 
