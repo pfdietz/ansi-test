@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "printer-aux.lsp")
+
 (deftest print.short-float.1
   (with-standard-io-syntax
    (let ((*print-readably* nil)
@@ -21,7 +23,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*read-default-float-format* 'short-float))
-     (loop for i = (- (random 20000001) 10000000)
+     (loop for i = (- (random 20000000) 10000000)
 	   for f = (float i 0.0s0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
@@ -66,7 +68,7 @@
 	       (with-standard-io-syntax
 		(let ((*print-readably* nil)
 		      (*read-default-float-format* type))
-		  (loop for i = (- (random 20000001) 10000000)
+		  (loop for i = (- (random 20000000) 10000000)
 			for f = (float i 0.0s0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
 			for len1 = (length s1)
@@ -116,7 +118,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*read-default-float-format* 'single-float))
-     (loop for i = (- (random 20000001) 10000000)
+     (loop for i = (- (random 20000000) 10000000)
 	   for f = (float i 0.0f0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
@@ -161,7 +163,7 @@
 	       (with-standard-io-syntax
 		(let ((*print-readably* nil)
 		      (*read-default-float-format* type))
-		  (loop for i = (- (random 20000001) 10000000)
+		  (loop for i = (- (random 20000000) 10000000)
 			for f = (float i 0.0f0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
 			for len1 = (length s1)
@@ -211,7 +213,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*read-default-float-format* 'double-float))
-     (loop for i = (- (random 20000001) 10000000)
+     (loop for i = (- (random 20000000) 10000000)
 	   for f = (float i 0.0d0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
@@ -256,7 +258,7 @@
 	       (with-standard-io-syntax
 		(let ((*print-readably* nil)
 		      (*read-default-float-format* type))
-		  (loop for i = (- (random 20000001) 10000000)
+		  (loop for i = (- (random 20000000) 10000000)
 			for f = (float i 0.0d0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
 			for len1 = (length s1)
@@ -306,7 +308,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*read-default-float-format* 'long-float))
-     (loop for i = (- (random 20000001) 10000000)
+     (loop for i = (- (random 20000000) 10000000)
 	   for f = (float i 0.0l0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
@@ -351,7 +353,7 @@
 	       (with-standard-io-syntax
 		(let ((*print-readably* nil)
 		      (*read-default-float-format* type))
-		  (loop for i = (- (random 20000001) 10000000)
+		  (loop for i = (- (random 20000000) 10000000)
 			for f = (float i 0.0l0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
 			for len1 = (length s1)
