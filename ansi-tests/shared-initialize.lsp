@@ -641,7 +641,7 @@
    (b :initform 'y)))
 
 (deftest shared-initialize.9.1
-  (let* ((class (find-class 'shared-init-class-08))
+  (let* ((class (find-class 'shared-init-class-09))
 	 (obj (allocate-instance class)))
     (slot-makunbound obj 'a)
     (values
