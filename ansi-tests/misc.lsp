@@ -622,7 +622,7 @@
    (compile
     nil
     '(lambda (x)
-       (declare (type -100 100) x)
+       (declare (type (integer -100 100) x))
        (ldb (byte 1 32) x)))
    -1)
   1)
@@ -713,3 +713,53 @@
 			    (rem b (min -16 0))))
 	   108251912)
   8)
+  
+(deftest misc.53
+  (funcall
+   (compile nil '(lambda ()
+		   (let (x)
+		     (block nil
+		       (flet ((%f (y z) (if (> y z) (setq x y) (setq x z))))
+			 (%f 1 2)
+			 (%f (return 14) 2)))
+		     x))))
+  2)
+
+(deftest misc.54
+  (funcall
+   (compile nil '(lambda (a c)
+		   (declare (type (integer 8 117873977) a)
+			    (type (integer -131828754 234037511) c)
+			    (optimize (speed 3) (safety 1) (debug 1)))
+		   (* (mod (signum a) (max 50 -358301))
+		      (* -2320445737132
+			 (* (* a (deposit-field a (byte 32 19) a)) c)))))
+   11386 165297671)
+  -49725654774521915007942373712)
+
+(deftest misc.55
+  (funcall
+   (compile nil '(lambda (a b c)
+		   (declare (type (integer -5498929 389890) a)
+			    (type (integer -5029571274946 48793670) b)
+			    (type (integer 9221496 260169518304) c)
+			    (ignorable a b c)
+			    (optimize (speed 3) (safety 1) (debug 1)))
+		   (- (mod 1020122 (min -49 -420))
+		      (logandc1
+		       (block b2
+			 (mod c (min -49 (if t (return-from b2 1582) b))))
+		       (labels ((%f14 () (mod a (max 76 8))))
+			 b)))))
+   -1893077 -2965238893954 30902744890)
+  2965238894454)
+
+(deftest misc.56
+  (funcall
+   (compile nil '(lambda (a c)
+		   (declare (type (integer -8691408487404 -9) a)
+			    (type (integer 266003133 2112105962) c)
+			    (optimize (speed 3) (safety 1) (debug 1)))
+		   (truncate (max (round a) c) (* (* a a) a))))
+   -10 1000)
+  -1 0)
