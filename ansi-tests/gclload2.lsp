@@ -68,10 +68,11 @@
 (load "load-reader.lsp")
 
 ;;; Tests of system construction, environment
-(load "features.lsp")
 (load "disassemble.lsp")
-(load "room.lsp")
 (load "environment-functions.lsp")
+(load "features.lsp")
+(load "room.lsp")
+(load "time.lsp")
 (load "user-homedir-pathname.lsp")
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
