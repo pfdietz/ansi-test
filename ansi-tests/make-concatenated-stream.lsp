@@ -259,6 +259,42 @@
       (open-stream-p s))))
   t t t t nil)
 
+(deftest make-concatenated-stream.28
+  (with-input-from-string
+   (s1 "a")
+   (let ((s (make-concatenated-stream s1)))
+     (notnot-mv (listen s))))
+  t)
+
+(deftest make-concatenated-stream.28
+  (listen (make-concatenated-stream))
+  nil)
+
+(deftest make-concatenated-stream.29
+  (with-input-from-string
+   (s1 "")
+   (let ((s (make-concatenated-stream s1)))
+     (listen s)))
+  nil)
+
+(deftest make-concatenated-stream.30
+  (with-input-from-string
+   (s1 "")
+   (with-input-from-string
+    (s2 "a")
+    (let ((s (make-concatenated-stream s1 s2)))
+      (notnot-mv (listen s)))))
+  t)
+
+(deftest make-concatenated-stream.31
+  (with-input-from-string
+   (s1 "")
+   (with-input-from-string
+    (s2 "")
+    (let ((s (make-concatenated-stream s1 s2)))
+      (listen s))))
+  nil)
+
 ;;; Error cases
 
 (deftest make-concatenated-stream.error.1
