@@ -11,6 +11,7 @@
 (load "places.lsp")
 (load "block.lsp")
 (load "call-arguments-limit.lsp")
+(load "catch.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
 (load "defconstant.lsp")

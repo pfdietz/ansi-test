@@ -38,5 +38,28 @@
     'bad)
   good)
 
+(deftest block.6
+  (block b1
+    (return-from b1 (values))
+    1))
 
-      
+(deftest block.7
+  (block b1
+    (return-from b1 (values 1 2 3 4))
+    1)
+  1 2 3 4)
+
+(deftest block.8
+  (block foo)
+  nil)
+
+(deftest block.9
+  (block foo (values 'a 'b) (values 'c 'd))
+  c d)
+
+(deftest block.10
+  (block done
+    (flet ((%f (x) (return-from done x)))
+      (block done (mapcar #'%f '(good bad bad))))
+    'bad)
+  good)

@@ -84,7 +84,9 @@ the condition to go uncaught if it cannot be classified."
   (handler-case ,form
      (undefined-function () 'undefined-function)
      (program-error () 'program-error)
-     (type-error    () 'type-error))))
+     (type-error    () 'type-error)
+     (control-error () 'control-error)
+  )))
 
 ;;;
 ;;; A scaffold is a structure that is used to remember the object
