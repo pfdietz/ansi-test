@@ -1338,7 +1338,8 @@
 	       (floor
 		(labels ((%f2 ()
 			      (block b6
-				(ignore-errors (return-from b6 (if (= c 8) b 82674))))))
+				(ignore-errors (return-from b6
+						 (if (= c 8) b 82674))))))
 		  (%f2)))))
    22992834060 -5833)
   82674 0)
@@ -1374,8 +1375,6 @@
 	    '(lambda (c)
 	       (declare (type (integer -1441970837 -427) c))
 	       (declare (optimize (speed 3)))
-	       (declare (optimize (safety 1)))
-	       (declare (optimize (debug 1)))
 	       (block b7 (abs (min c (ignore-errors (return-from b7 c)))))))
    -500)
   -500)
@@ -1391,3 +1390,33 @@
                    170 -110730)))
    3035465333 1919088834)
   170)
+
+;;; sbcl (0.8.5.8) "The value NIL is not of type SB-C::IR2-LVAR."
+
+(deftest misc.112
+  (funcall
+   (compile nil '(lambda (a)
+                   (declare (type (integer -944 -472) a))
+                   (declare (optimize (speed 3)))
+                   (round
+                    (block b3
+                      (return-from b3
+                        (if (= 55957 a) -117 (ignore-errors
+                                               (return-from b3 a))))))))
+   -589)
+  -117 0)
+
+;;; sbcl (0.8.5.8) "The value NIL is not of type SB-C::CTRAN"
+
+(deftest misc.113
+  (funcall
+   (compile nil '(lambda (b c)
+		   (if (or (ldb-test (byte 8 10) b) t)
+		       c
+		     (min (if (<= -6467 c) c 6)
+			  (flet ((%f3 (f3-1 f3-2)
+				      f3-1))
+			    (multiple-value-call #'%f3 (values b 107)))))))
+   -238 -23658556)
+  -23658556)
+
