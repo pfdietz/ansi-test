@@ -39,9 +39,9 @@
   nil 1)
 
 (deftest listp.error.1
-  (classify-error (listp))
-  program-error)
+  (signals-error (listp) program-error)
+  t)
 
 (deftest listp.error.2
-  (classify-error (listp nil nil))
-  program-error)
+  (signals-error (listp nil nil) program-error)
+  t)

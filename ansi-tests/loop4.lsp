@@ -39,19 +39,22 @@
 ;;; Error cases
 
 (deftest loop.4.6
-  (classify-error
+  (signals-error
    (loop for (x . x) = '(nil nil nil)
-	 until x count t))
-  program-error)
+	 until x count t)
+   program-error)
+  t)
 
 (deftest loop.4.7
-  (classify-error*
+  (signals-error
    (macroexpand '(loop for (x . x) = '(nil nil nil)
-		       until x count t)))
-  program-error)
+		       until x count t))
+   program-error)
+  t)
 
 (deftest loop.4.8
-  (classify-error*
+  (signals-error
    (macroexpand '(loop for x = '(nil nil nil)
-		       for x = 1 count x until t)))
-  program-error)
+		       for x = 1 count x until t))
+   program-error)
+  t)

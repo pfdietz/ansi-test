@@ -105,7 +105,7 @@
 ;;; in LET forms.
 (deftest let.15
   (loop for s in *cl-non-variable-constant-symbols*
-	for form = `(classify-error (let ((,s 17)) ,s))
+	for form = `(ignore-errors (let ((,s 17)) ,s))
 	unless (eql (eval form) 17)
 	collect s)
   nil)
@@ -214,7 +214,7 @@
 ;;; in LET* forms.
 (deftest let*.15
   (loop for s in *cl-non-variable-constant-symbols*
-	for form = `(classify-error (let* ((,s 17)) ,s))
+	for form = `(ignore-errors (let* ((,s 17)) ,s))
 	unless (eql (eval form) 17)
 	collect s)
   nil)

@@ -7,20 +7,24 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest lognot.error.1
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (lognot ',x))) 'type-error))
+		   (eval `(signals-error (lognot ',x) type-error)))
 	collect x)
   nil)
 
 (deftest lognot.error.2
-  (classify-error (lognot))
-  program-error)
+  (signals-error (lognot) program-error)
+  t)
 
 (deftest lognot.error.3
-  (classify-error (lognot 0 0))
-  program-error)
+  (signals-error (lognot 0 0) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest lognot.1
   (lognot 0)

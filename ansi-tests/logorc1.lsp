@@ -7,31 +7,35 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest logorc1.error.1
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logorc1 ',x 0))) 'type-error))
+		   (eval `(signals-error (logorc1 ',x 0) type-error)))
 	collect x)
   nil)
 
 (deftest logorc1.error.2
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logorc1 0 ',x))) 'type-error))
+		   (eval `(signals-error (logorc1 0 ',x) type-error)))
 	collect x)
   nil)
 
 (deftest logorc1.error.3
-  (classify-error (logorc1))
-  program-error)
+  (signals-error (logorc1) program-error)
+  t)
 
 (deftest logorc1.error.4
-  (classify-error (logorc1 0))
-  program-error)
+  (signals-error (logorc1 0) program-error)
+  t)
 
 (deftest logorc1.error.5
-  (classify-error (logorc1 1 2 3))
-  program-error)
+  (signals-error (logorc1 1 2 3) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest logorc1.1
   (logorc1 0 0)

@@ -147,26 +147,31 @@
 ;;; Error cases
 
 (deftest loop.5.error.1
-  (classify-error
-   (loop for (e . e) across (vector '(x . y) '(u . v)) collect e))
-  program-error)
+  (signals-error
+   (loop for (e . e) across (vector '(x . y) '(u . v)) collect e)
+   program-error)
+  t)
 
 (deftest loop.5.error.2
-  (classify-error
+  (signals-error
    (loop for e across (vector '(x . y) '(u . v))
-	 for e from 1 to 5 collect e))
-  program-error)
+	 for e from 1 to 5 collect e)
+   program-error)
+  t)
 
 (deftest loop.5.error.3
-  (classify-error*
-   (macroexpand 
-    '(loop for (e . e) across (vector '(x . y) '(u . v)) collect e)))
-  program-error)
+  (signals-error
+   (macroexpand
+    '(loop for (e . e) across (vector '(x . y) '(u . v)) collect e))
+   program-error)
+  t)
 
 (deftest loop.5.error.4
-  (classify-error*
+  (signals-error
    (macroexpand
     '(loop for e across (vector '(x . y) '(u . v))
-	   for e from 1 to 5 collect e)))
-  program-error)
+	   for e from 1 to 5 collect e))
+   program-error)
+  t)
+
 

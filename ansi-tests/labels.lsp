@@ -74,32 +74,36 @@
 ;;; Unknown keyword parameter should throw a program-error in safe code
 ;;; (section 3.5.1.4)
 (deftest labels.12
-  (classify-error
-   (labels ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :c 4)))
-  program-error)
+  (signals-error
+   (labels ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :c 4))
+   program-error)
+  t)
 
 ;;; Odd # of keyword args should throw a program-error in safe code
 ;;; (section 3.5.1.6)
 (deftest labels.13
-  (classify-error
-   (labels ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :a)))
-  program-error)
+  (signals-error
+   (labels ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :a))
+   program-error)
+  t)
 
 ;;; Too few arguments (section 3.5.1.2)
 (deftest labels.14
-  (classify-error (labels ((%f (a) a)) (%f)))
-  program-error)
+  (signals-error (labels ((%f (a) a)) (%f))
+		 program-error)
+  t)
 
 ;;; Too many arguments (section 3.5.1.3)
 (deftest labels.15
-  (classify-error (labels ((%f (a) a)) (%f 1 2)))
-  program-error)
+  (signals-error (labels ((%f (a) a)) (%f 1 2))
+		 program-error)
+  t)
 
 ;;; Invalid keyword argument (section 3.5.1.5)
 (deftest labels.16
-  (classify-error (labels ((%f (&key a) a)) (%f '(foo))))
-  program-error)
-
+  (signals-error (labels ((%f (&key a) a)) (%f '(foo)))
+		 program-error)
+  t)
 
 ;;; Definition of a (setf ...) function
 
@@ -179,18 +183,18 @@
 
 (deftest labels.24
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(classify-error (labels ((,s (x) (foo (1- x)))
-					     (foo (y)
-						  (if (<= y 0) 'a
-						    (,s (1- y)))))
-				      (,s 10)))
+	for form = `(ignore-errors (labels ((,s (x) (foo (1- x)))
+					    (foo (y)
+						 (if (<= y 0) 'a
+						   (,s (1- y)))))
+				     (,s 10)))
 	unless (eq (eval form) 'a)
 	collect s)
   nil)
 
 (deftest labels.25
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(classify-error
+	for form = `(ignore-errors
 		     (labels ((,s (x) (foo (1- x)))
 			      (foo (y)
 				   (if (<= y 0) 'a
@@ -204,7 +208,7 @@
 
 (deftest labels.26
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(classify-error
+	for form = `(ignore-errors
 		     (labels (((setf ,s) (&rest args)
 			       (declare (ignore args))
 			       'a))

@@ -11,7 +11,7 @@
 (deftest lcm.error.1
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (lcm ',x))) 'type-error))
+		   (eval `(signals-error (lcm ',x) type-error)))
 	collect x)
   nil)
 

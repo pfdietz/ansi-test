@@ -262,13 +262,16 @@
   10)
 
 (deftest lambda.error.1
-  (classify-error (funcall (macro-function 'lambda)))
-  program-error)
+  (signals-error (funcall (macro-function 'lambda))
+		 program-error)
+  t)
 
 (deftest lambda.error.2
-  (classify-error (funcall (macro-function 'lambda) '(lambda ())))
-  program-error)
+  (signals-error (funcall (macro-function 'lambda) '(lambda ()))
+		 program-error)
+  t)
 
 (deftest lambda.error.3
-  (classify-error (funcall (macro-function 'lambda) '(lambda ()) nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'lambda) '(lambda ()) nil nil)
+		 program-error)
+  t)

@@ -7,20 +7,23 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest logand.error.1
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logand ',x))) 'type-error))
+		   (eval `(signals-error (logand ',x) type-error)))
 	collect x)
   nil)
 
 (deftest logand.error.2
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logand 0 ',x))) 'type-error))
+		   (eval `(signals-error (logand 0 ',x) type-error)))
 	collect x)
   nil)
 
+;;; Non-error tests
 
 (deftest logand.1
   (logand)

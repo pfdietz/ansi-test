@@ -126,23 +126,28 @@
 (deftest loop.7.18
   (let ()
     (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
-    (classify-error
-     (loop for x being each symbol of "LOOP.MISSING.PACKAGE" collect x)))
-  package-error)
+    (signals-error
+     (loop for x being each symbol of "LOOP.MISSING.PACKAGE" collect x)
+     package-error))
+  t)
 
 (deftest loop.7.19
   (let ()
     (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
-    (classify-error
-     (loop for x being each present-symbol of "LOOP.MISSING.PACKAGE" collect x)))
-  package-error)
+    (signals-error
+     (loop for x being each present-symbol of "LOOP.MISSING.PACKAGE"
+	   collect x)
+     package-error))
+  t)
 
 (deftest loop.7.20
   (let ()
     (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
-    (classify-error
-     (loop for x being each external-symbol of "LOOP.MISSING.PACKAGE" collect x)))
-  package-error)
+    (signals-error
+     (loop for x being each external-symbol of "LOOP.MISSING.PACKAGE"
+	   collect x)
+     package-error))
+  t)
 
 ;;; NIL d-var-specs
 

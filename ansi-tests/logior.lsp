@@ -9,20 +9,23 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest logior.error.1
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logior ',x))) 'type-error))
+		   (eval `(signals-error (logior ',x) type-error)))
 	collect x)
   nil)
 
 (deftest logior.error.2
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logior 0 ',x))) 'type-error))
+		   (eval `(signals-error (logior 0 ',x) type-error)))
 	collect x)
   nil)
 
+;;; Non-error tests
 
 (deftest logior.1
   (logior)

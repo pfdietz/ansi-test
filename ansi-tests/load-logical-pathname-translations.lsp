@@ -23,9 +23,12 @@
   :good)
 
 (deftest load-logical-pathname-translations.error.2
-  (classify-error (load-logical-pathname-translations))
-  program-error)
+  (signals-error (load-logical-pathname-translations)
+		 program-error)
+  t)
 
 (deftest load-logical-pathname-translations.error.3
-  (classify-error (load-logical-pathname-translations "CLTESTROOT" nil))
-  program-error)
+  (signals-error (load-logical-pathname-translations "CLTESTROOT" nil)
+		 program-error)
+  t)
+

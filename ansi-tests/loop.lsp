@@ -65,22 +65,19 @@
 		 (let ((mfn (macro-function 'loop-finish env)))
 		   (cond
 		    ((not mfn) '(return-from done :fail1))
-		    ((not (eqt (eval `(classify-error (funcall ,mfn)))
-			       'program-error))
+		    ((not (eval `(signals-error (funcall ,mfn)
+						program-error)))
 		     '(return-from done :fail2))
-		    ((not (eqt (eval `(classify-error (funcall ,mfn
-						      '(loop-finish))))
-			       'program-error))
+		    ((not (eval `(signals-error (funcall ,mfn
+							 '(loop-finish))
+						program-error)))
 		     '(return-from done :fail3))
 		       
-		    ((not (eqt (eval `(classify-error (funcall ,mfn
-							       '(loop-finish)
-							       nil nil)))
-			       'program-error))
+		    ((not (eval `(signals-error (funcall ,mfn
+							 '(loop-finish)
+							 nil nil)
+						program-error)))
 		     '(return-from done :fail4))
 		    (t '(return-from done :good))))))
 	  (%m))))
   :good)
-
-		       
-		   

@@ -5,17 +5,21 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest ldb.error.1
-  (classify-error (ldb))
-  program-error)
+  (signals-error (ldb) program-error)
+  t)
 
 (deftest ldb.error.2
-  (classify-error (ldb (byte 1 1)))
-  program-error)
+  (signals-error (ldb (byte 1 1)) program-error)
+  t)
 
 (deftest ldb.error.3
-  (classify-error (ldb (byte 1 1) -1 0))
-  program-error)
+  (signals-error (ldb (byte 1 1) -1 0) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest ldb.1
   (loop for x = (random-fixnum)

@@ -108,38 +108,39 @@
 ;; Error checking
 
 (deftest ldiff.error.1
-  (classify-error (ldiff 10 'a))
-  type-error)
+  (signals-error (ldiff 10 'a) type-error)
+  t)
 
 ;; Single atoms are not dotted lists, so the next
 ;; case should be a type-error
 (deftest ldiff.error.2
-  (classify-error (ldiff 'a 'a))
-  type-error)
+  (signals-error (ldiff 'a 'a) type-error)
+  t)
 
 (deftest ldiff.error.3
-  (classify-error (ldiff (make-array '(10) :initial-element 'a) '(a)))
-  type-error)
+  (signals-error (ldiff (make-array '(10) :initial-element 'a) '(a))
+		 type-error)
+  t)
 
 (deftest ldiff.error.4
-    (classify-error (ldiff 1.23 t))
-  type-error)
+  (signals-error (ldiff 1.23 t) type-error)
+  t)
 
 (deftest ldiff.error.5
-    (classify-error (ldiff #\w 'a))
-  type-error)
+  (signals-error (ldiff #\w 'a) type-error)
+  t)
 
 (deftest ldiff.error.6
-  (classify-error (ldiff))
-  program-error)
+  (signals-error (ldiff) program-error)
+  t)
 
 (deftest ldiff.error.7
-  (classify-error (ldiff nil))
-  program-error)
+  (signals-error (ldiff nil) program-error)
+  t)
 
 (deftest ldiff.error.8
-  (classify-error (ldiff nil nil nil))
-  program-error)
+  (signals-error (ldiff nil nil nil) program-error)
+  t)
 
 ;; Note!  The spec is ambiguous on whether this next test
 ;; is correct.  The spec says that ldiff should be prepared
@@ -159,6 +160,6 @@
 			(catch-type-error (ldiff x x)))))))
 
 (deftest ldiff-12
-    (ldiff-12-body)
+  (ldiff-12-body)
   0)
 |#

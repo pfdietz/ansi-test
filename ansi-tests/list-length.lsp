@@ -46,25 +46,25 @@
   0)
 
 (deftest list-length.error.2
-  (classify-error (list-length))
-  program-error)
+  (signals-error (list-length) program-error)
+  t)
 
 (deftest list-length.error.3
-  (classify-error (list-length nil nil))
-  program-error)
+  (signals-error (list-length nil nil) program-error)
+  t)
 
 (deftest list-length.error.4
-  (classify-error (list-length 'a))
-  type-error)
+  (signals-error (list-length 'a) type-error)
+  t)
 
 (deftest list-length.error.5
-  (classify-error (locally (list-length 'a) t))
-  type-error)
+  (signals-error (locally (list-length 'a) t) type-error)
+  t)
 
 (deftest list-length-symbol
-  (classify-error (list-length 'a))
-  type-error)
+  (signals-error (list-length 'a) type-error)
+  t)
 
 (deftest list-length-dotted-list
-  (classify-error (list-length (copy-tree '(a b c d . e))))
-  type-error)
+  (signals-error (list-length (copy-tree '(a b c d . e))) type-error)
+  t)

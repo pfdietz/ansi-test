@@ -18,9 +18,8 @@
 	unless (or (stringp x)
 		   (typep x 'stream)
 		   (typep x 'logical-pathname)
-		   (eq
-		    (eval `(classify-error (logical-pathname ',x)))
-		    'type-error))
+		   (eval `(signals-error (logical-pathname ',x)
+					 type-error)))
 	collect x)
   nil)
 

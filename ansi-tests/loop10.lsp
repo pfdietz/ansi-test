@@ -60,18 +60,20 @@
   4.0)
 
 (deftest loop.10.9
-  (classify-error
+  (signals-error
    (loop with foo = 10
 	 for x in '(a b c) count x into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 (deftest loop.10.10
-  (classify-error
+  (signals-error
    (loop with foo = 10
 	 for x in '(a b c) counting x into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 (declaim (special *loop-count-var*))
 
@@ -184,18 +186,20 @@
   10 100)
 
 (deftest loop.10.37
-  (classify-error
+  (signals-error
    (loop with foo = 100
 	 for i from 1 to 10 maximize i into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 (deftest loop.10.38
-  (classify-error
+  (signals-error
    (loop with foo = 100
 	 for i from 1 to 10 maximizing i into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 
 (deftest loop.10.39
@@ -286,18 +290,20 @@
   4 100)
 
 (deftest loop.10.57
-  (classify-error
+  (signals-error
    (loop with foo = 100
 	 for i from 1 to 10 minimize i into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 (deftest loop.10.58
-  (classify-error
+  (signals-error
    (loop with foo = 100
 	 for i from 1 to 10 minimizing i into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 (deftest loop.10.58a
   (loop for x in '(1 2 3) minimize (return 10))
@@ -400,18 +406,20 @@
   10 100)
 
 (deftest loop.10.85
-  (classify-error
+  (signals-error
    (loop with foo = 100
 	 for i from 1 to 4 sum i into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 (deftest loop.10.86
-  (classify-error
+  (signals-error
    (loop with foo = 100
 	 for i from 1 to 4 summing i into foo
-	 finally (return foo)))
-  program-error)
+	 finally (return foo))
+   program-error)
+  t)
 
 (deftest loop.10.87
   (loop for i from 1 to 4

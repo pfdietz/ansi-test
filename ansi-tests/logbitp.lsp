@@ -7,28 +7,32 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest logbitp.error.1
-  (classify-error (logbitp))
-  program-error)
+  (signals-error (logbitp) program-error)
+  t)
 
 (deftest logbitp.error.2
-  (classify-error (logbitp 0))
-  program-error)
+  (signals-error (logbitp 0) program-error)
+  t)
 
 (deftest logbitp.error.3
-  (classify-error (logbitp 0 0 0))
-  program-error)
+  (signals-error (logbitp 0 0 0) program-error)
+  t)
 
 (deftest logbitp.error.4
-  (classify-error (logbitp -1 0))
-  type-error)
+  (signals-error (logbitp -1 0) type-error)
+  t)
 
 (deftest logbitp.error.5
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logbitp 0 ',x))) 'type-error))
+		   (eval `(signals-error (logbitp 0 ',x) type-error)))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest logbitp.1
   (loop for x in *integers*

@@ -5,20 +5,24 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest logcount.error.1
-  (classify-error (logcount))
-  program-error)
+  (signals-error (logcount) program-error)
+  t)
 
 (deftest logcount.error.2
-  (classify-error (logcount 0 nil))
-  program-error)
+  (signals-error (logcount 0 nil) program-error)
+  t)
 
 (deftest logcount.error.3
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (logcount ',x))) 'type-error))
+		   (eval `(signals-error (logcount ',x) type-error)))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest logcount.1
   (logcount 0)

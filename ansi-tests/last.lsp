@@ -79,33 +79,35 @@
   (d) 1)
 
 (deftest last.error.1
-  (classify-error (last (list 'a 'b 'c) -1))
-  type-error)
+  (signals-error (last (list 'a 'b 'c) -1) type-error)
+  t)
 
 (deftest last.error.2
-  (classify-error (last (list 'a 'b 'c) 'a))
-  type-error)
+  (signals-error (last (list 'a 'b 'c) 'a) type-error)
+  t)
 
 (deftest last.error.3
-  (classify-error (last (list 'a 'b 'c) 10.0))
-  type-error)
+  (signals-error (last (list 'a 'b 'c) 10.0) type-error)
+  t)
 
 (deftest last.error.4
-  (classify-error (last (list 'a 'b 'c) -10.0))
-  type-error)
+  (signals-error (last (list 'a 'b 'c) -10.0) type-error)
+  t)
 
 (deftest last.error.5
-  (classify-error (last (list 'a 'b 'c) #\w))
-  type-error)
+  (signals-error (last (list 'a 'b 'c) #\w) type-error)
+  t)
 
 (deftest last.error.6
-  (classify-error (last))
-  program-error)
+  (signals-error (last) program-error)
+  t)
 
 (deftest last.error.7
-  (classify-error (last '(a b c) 2 nil))
-  program-error)
+  (signals-error (last '(a b c) 2 nil) program-error)
+  t)
 
 (deftest last.error.8
-  (classify-error (locally (last (list 'a 'b 'c) 'a) t))
-  type-error)
+  (signals-error (locally (last (list 'a 'b 'c) 'a) t)
+		 type-error)
+  t)
+

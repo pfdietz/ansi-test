@@ -256,39 +256,40 @@
 ;;; Error tests
 
 (deftest loop.6.error.1
-  (classify-error
+  (signals-error
    (loop for k from 1 to 10
 	 for k being the hash-keys of *loop.6.hash.1*
-	 count t))
-  program-error)
+	 count t)
+   program-error)
+  t)
 
 (deftest loop.6.error.2
-  (classify-error
+  (signals-error
    (loop for k being the hash-keys of *loop.6.hash.1*
 	 for k from 1 to 10
-	 count t))
-  program-error)
+	 count t)
+   program-error)
+  t)
 
 (deftest loop.6.error.3
-  (classify-error
+  (signals-error
    (loop for (k . k) being the hash-keys of *loop.6.hash.3*
-	 count t))
-  program-error)
+	 count t)
+   program-error)
+  t)
 
 (deftest loop.6.error.4
-  (classify-error
+  (signals-error
    (loop for k being the hash-keys of *loop.6.hash.3*
 	 using (hash-value k)
-	 count t))
-  program-error)
+	 count t)
+   program-error)
+  t)
 
 (deftest loop.6.error.5
-  (classify-error
+  (signals-error
    (loop for k being the hash-values of *loop.6.hash.3*
 	 using (hash-key k)
-	 count t))
-  program-error)
-
-
-
-
+	 count t)
+   program-error)
+  t)
