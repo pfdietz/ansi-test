@@ -94,7 +94,31 @@
 	   append (check-disjointness `(array ,etp1) `(array ,etp2)))))
   nil)
 
-		 
+(deftest subtypep.array.8
+  (let ((limit (min 16 array-rank-limit)))
+    (loop for i below limit
+	  for type1 = `(array t ,i)
+	  nconc
+	  (loop for j below limit
+		for type2 = `(array t ,j)
+		when (and (/= i j)
+			  (subtypep type1 type2))
+		collect (list type1 type2))))
+  nil)
+
+(deftest subtypep.array.9
+  (let ((limit (min 16 array-rank-limit)))
+    (loop for i below limit
+	  for type1 = `(array t ,(make-list i :initial-element 1))
+	  nconc
+	  (loop for j below limit
+		for type2 = `(array t ,(make-list j :initial-element 1))
+		when (and (/= i j)
+			  (subtypep type1 type2))
+		collect (list type1 type2))))
+  nil)
+
+
 
 ;;;; Tests on the definitions of various vector types
 
