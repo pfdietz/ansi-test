@@ -163,6 +163,52 @@
   (map 'cons #'identity '(a b c))
   (a b c))
 
+(deftest map.37
+  (map 'simple-string #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.38
+  (map '(simple-string) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.39
+  (map '(simple-string *) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.40
+  (map '(simple-string 3) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.41
+  (map '(base-string) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.42
+  (map '(base-string *) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.43
+  (map '(base-string 3) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.44
+  (map 'simple-base-string #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.45
+  (map '(simple-base-string) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.46
+  (map '(simple-base-string *) #'identity '(#\a #\b #\c))
+  "abc")
+
+(deftest map.47
+  (map '(simple-base-string 3) #'identity '(#\a #\b #\c))
+  "abc")
+
+;;; Error tests
+
 (deftest map.error.1
   (handler-case (progn (proclaim '(optimize (safety 3)))
 		       (eval '(map 'symbol #'identity '(a b c))))
