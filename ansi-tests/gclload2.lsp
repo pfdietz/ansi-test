@@ -139,6 +139,8 @@
 (load "array-as-class.lsp")
 (load "simple-array.lsp")
 (load "simple-array-t.lsp")
+(load "bit-vector.lsp")
+(load "simple-bit-vector.lsp")
 (load "make-array.lsp")
 (load "adjustable-array-p.lsp")
 (load "array-displacement.lsp")
@@ -159,6 +161,9 @@
 (load "vector-pop.lsp")
 (load "vector-push.lsp")
 (load "vector-push-extend.lsp")
+(load "vectorp.lsp")
+(load "bit.lsp")
+(load "sbit.lsp")
 
 ;;; Tests of packages
 

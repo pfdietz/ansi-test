@@ -103,17 +103,17 @@
      ;; If the array is a vector, check that...
      ((and (eql rank 1) 
 	   (cond
-	    ;; It's in type vector
+	    ;; ...It's in type vector
 	    ((not (typep a 'vector))
 	     :fail-not-vector)
-	    ;; If the element type is a subtype of BIT, then it's a
+	    ;; ...If the element type is a subtype of BIT, then it's a
 	    ;; bit vector...
 	    ((and (subtypep 'bit element-type)
 		  (subtypep element-type 'bit)
 		  (or (not (bit-vector-p a))
 		      (not (typep a 'bit-vector))))
 	     :fail-not-bit-vector)
-	    ;; If not adjustable, fill pointered, or displaced,
+	    ;; ...If not adjustable, fill pointered, or displaced,
 	    ;; then it's a simple vector or simple bit vector
 	    ;; (if the element-type is appropriate)
 	    ((and (not adjustable)
