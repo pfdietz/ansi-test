@@ -275,6 +275,8 @@
      (4
       (make-random-integer-unwind-protect-form size))
 
+     (5 (make-random-integer-mapping-form size))
+
      ;; prog1, multiple-value-prog1
      (4
       (let* ((op (random-from-seq #(prog1 multiple-value-prog1)))
@@ -599,6 +601,26 @@
 			       *vars*))
 	       (body-form (make-random-integer-form s2)))
 	  `(progv ',vars (list ,@var-forms) ,body-form))))))
+
+(defun make-random-integer-mapping-form (size)
+  (rcase
+   (1 ;; reduce
+    (let ((sizes (random-partition (1- size) (1+ (random (min 10 (max 1 size))))))
+	  (op (random-from-seq #(+ - * logand logxor logior max min))))
+      `(reduce (function ,op) (list ,@(mapcar #'make-random-integer-form sizes)))))
+   (1 ;; reduce with lambda form
+    (destructuring-bind (size1 size2) (random-partition (1- size) 2)
+      (let* ((vars '(lv1 lv2 lv3 lv4 lv5 lv6))
+	     (var1 (random-from-seq vars))
+	     (var2 (random-from-seq (remove var1 vars)))
+	     (form (let ((*vars* (list*
+				  (make-var-desc :name var1 :type '(integer * *))
+				  (make-var-desc :name var2 :type '(integer * *))
+				  *vars*)))
+		     (make-random-integer-form size1)))
+	     (sizes (random-partition size2 (1+ (random (min 10 (max 1 size2))))))
+	     (args (mapcar #'make-random-integer-form sizes)))
+	`(reduce (function (lambda (,var1 ,var2) ,form)) (list ,@args)))))))		    
 
 (defun make-random-integer-setq-form (size)
   (if *vars*
@@ -1477,6 +1499,35 @@
 			#'prune
 			#'(lambda (args)
 			    (try `(funcall ,fn ,@args))))))
+
+	 ((reduce)
+	  (try 0)
+	  (let ((arg1 (car args))
+		(arg2 (cadr args))
+		(rest (cddr args)))
+	    (when (and (null (cddr args))
+		       (consp arg1)
+		       (eql (car arg1) 'function))
+	      (let ((arg1.2 (cadr arg1)))
+		(when (and (consp arg1.2)
+			   (eql (car arg1.2) 'lambda))
+		  (let ((largs (cadr arg1.2))
+			(body (cddr arg1.2)))
+		    (when (null (cdr body))
+		      (prune (car body)
+			     #'(lambda (bform)
+				 (try `(reduce (function (lambda ,largs ,bform))
+					       ,arg2 ,@rest)))))))))
+	    (when (consp arg2)
+	      (case (car arg2)
+		((list)
+		 (let ((arg2.rest (cdr arg2)))
+		   (prune-list arg2.rest
+			       #'prune
+			       #'(lambda (args)
+				   (try `(reduce ,arg1
+						 (list ,@args)
+						 ,@rest))))))))))
 
 	 ((apply)
 	  (try 0)
