@@ -246,6 +246,7 @@
 ;;; Tests of types and classes
 
 (load "types-and-class.lsp")
+(load "types-and-class-2.lsp")
 (load "coerce.lsp")
 (load "subtypep.lsp")
 

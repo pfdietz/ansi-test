@@ -333,10 +333,22 @@ the condition to go uncaught if it cannot be classified."
 ;;; This auxiliary function returns booleans instead
 ;;; (which makes it easier to write tests).
 ;;;
-(defun subtypep* (obj type)
+(defun subtypep* (type1 type2)
   (apply #'values
 	 (mapcar #'notnot
-		 (multiple-value-list (subtypep obj type)))))
+		 (multiple-value-list (subtypep type1 type2)))))
+
+(defun subtypep*-or-fail (type1 type2)
+  (let ((results (multiple-value-list (subtypep type1 type2))))
+    (and (= (length results) 2)
+	 (or (not (second results))
+	     (notnot (first results))))))
+
+(defun subtypep*-not-or-fail (type1 type2)
+  (let ((results (multiple-value-list (subtypep type1 type2))))
+    (and (= (length results) 2)
+	 (or (not (second results))
+	     (not (first results))))))
 
 ;;; (eval-when (load eval compile)
 ;;;   (unless (fboundp 'complement)

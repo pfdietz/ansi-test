@@ -130,6 +130,8 @@
    'bignum)
   nil)
 
+;;;;;;;
+
 (deftest subtypep.integer.1
   (subtypep* '(integer 0 10) '(integer 0 20))
   t t)
@@ -137,6 +139,96 @@
 (deftest subtypep.integer.2
   (subtypep* '(integer 0 10) '(integer 0 (10)))
   nil t)
+
+(deftest subtypep.integer.3
+  (subtypep* '(integer 10 100) 'integer)
+  t t)
+
+(deftest subtypep.integer.4
+  (subtypep* 'integer '(integer 10 100))
+  nil t)
+
+(deftest subtypep.integer.5
+  (subtypep* '(integer 10 *) 'integer)
+  t t)
+
+(deftest subtypep.integer.6
+  (subtypep* 'integer '(integer 10 *))
+  nil t)
+
+(deftest subtypep.integer.7
+  (subtypep* '(integer 10) 'integer)
+  t t)
+
+(deftest subtypep.integer.8
+  (subtypep* 'integer '(integer 10))
+  nil t)
+
+(deftest subtypep.integer.9
+  (subtypep* '(integer * 10) 'integer)
+  t t)
+
+(deftest subtypep.integer.10
+  (subtypep* 'integer '(integer * 10))
+  nil t)
+
+(deftest subtypep.integer.11
+  (subtypep* '(integer 10) '(integer 5))
+  t t)
+
+(deftest subtypep.integer.12
+  (subtypep* '(integer 5) '(integer 10))
+  nil t)
+
+(deftest subtypep.integer.13
+  (subtypep* '(integer 10 *) '(integer 5))
+  t t)
+
+(deftest subtypep.integer.14
+  (subtypep* '(integer 5) '(integer 10 *))
+  nil t)
+
+(deftest subtypep.integer.15
+  (subtypep* '(integer 10) '(integer 5 *))
+  t t)
+
+(deftest subtypep.integer.16
+  (subtypep* '(integer 5 *) '(integer 10))
+  nil t)
+
+(deftest subtypep.integer.17
+  (subtypep* '(integer 10 *) '(integer 5 *))
+  t t)
+
+(deftest subtypep.integer.18
+  (subtypep* '(integer 5 *) '(integer 10 *))
+  nil t)
+
+(deftest subtypep.integer.19
+  (subtypep* '(integer * 5) '(integer * 10))
+  t t)
+
+(deftest subtypep.integer.20
+  (subtypep* '(integer * 10) '(integer * 5))
+  nil t)
+
+(deftest subtypep.integer.21
+  (subtypep* '(integer 10 *) '(integer * 10))
+  nil t)
+
+(deftest subtypep.integer.22
+  (subtypep* '(integer * 10) '(integer 10 *))
+  nil t)
+
+(deftest subtypep.integer.23
+  (check-equivalence '(integer (9)) '(integer 10))
+  nil)
+
+(deftest subtypep.integer.24
+  (check-equivalence '(integer * (11)) '(integer * 10))
+  nil)
+
+;;;;;;;
 
 (deftest subtypep.float.1
   (loop for tp in +float-types+
@@ -256,3 +348,73 @@
 	collect t1)
   nil)
 
+;;; SUBTYPEP on MEMBER types
+
+(deftest subtypep.member.1
+  (subtypep*-or-fail '(member a b c) '(member a b c d))
+  t)
+
+(deftest subtypep.member.2
+  (subtypep*-not-or-fail '(member a b c) '(member a b))
+  t)
+
+(deftest subtypep.member.3
+  (check-equivalence '(member) nil)
+  nil)
+
+(deftest subtypep.member.4
+  (subtypep*-or-fail '(eql b) '(member a b c))
+  t)
+
+(deftest subtypep.member.5
+  (subtypep*-or-fail '(member a b c d e) 'symbol)
+  t)
+
+(deftest subtypep.member.6
+  (subtypep*-not-or-fail '(member a b 10 d e) 'symbol)
+  t)
+
+(deftest subtypep.member.7
+  (subtypep*-or-fail 'null '(member a b nil c d e))
+  t)
+
+(deftest subtypep.member.8
+  (subtypep*-not-or-fail 'null '(member a b c d e))
+  t)
+
+(deftest subtypep.member.9
+  (let ((b1 (1+ most-positive-fixnum))
+	(b2 (1+ most-positive-fixnum)))
+    (subtypep*-or-fail `(member 10 ,b1 20) `(member 10 20 ,b2)))
+  t)
+
+(deftest subtypep.member.10
+  (subtypep*-or-fail '(member :a :b :c) 'keyword)
+  t)
+
+(deftest subtypep.member.11
+  (let ((b1 (copy-list '(a)))
+	(b2 (copy-list '(a))))
+    (subtypep*-not-or-fail `(member 10 ,b1 20) `(member 10 20 ,b2)))
+  t)
+
+(deftest subtypep.member.12
+  (let ((b1 '(a)))
+    (subtypep*-or-fail `(member 10 ,b1 20) `(member 10 20 ,b1)))
+  t)
+
+(deftest subtypep.member.13
+  (subtypep*-or-fail '(member 10 20 30) '(integer 0 100))
+  t)
+
+(deftest subtypep.member.14
+  (subtypep*-or-fail '(integer 3 6) '(member 0 1 2 3 4 5 6 7 8 100))
+  t)
+
+(deftest subtypep.member.15
+  (subtypep*-not-or-fail '(integer 3 6) '(member 0 1 2 3 5 6 7 8))
+  t)
+
+(deftest subtypep.member.16
+  (check-equivalence '(integer 2 5) '(member 2 5 4 3))
+  nil)
