@@ -138,15 +138,17 @@
      (40
       (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn floor
 				     ceiling truncate round realpart imagpart
-				     integer-length logcount values))))
+				     integer-length logcount values multiple-value-prog1
+				     prog1 unwind-protect))))
 	`(,op ,(make-random-integer-form (1- size)))))
      (2 `(isqrt (abs ,(make-random-integer-form (- size 2)))))
-#|     (3
+
+     (2
       (destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
 	`(ash ,(make-random-integer-form s1)
 	      (min ,(random 100)
-		   ,(make-random-integer-form s2))))) |#
+		   ,(make-random-integer-form s2)))))
      
      ;; binary floor, ceiling, truncate, round
      (4
@@ -161,7 +163,7 @@
 			,(make-random-integer-form s2))))))
 	    
      ;; Binary op
-     (80
+     (60
       (let* ((op (random-from-seq
 		  '(+ - * * logand min max min max ;; gcd lcm
 		      ;; #-:allegro
@@ -572,7 +574,7 @@
 	  (try -1)
 	  (prune-fn form try-fn))
 	 
-	 ((abs 1+ 1- identity values progn)
+	 ((abs 1+ 1- identity values progn prog1 multiple-value-prog1 unwind-protect)
 	  (mapc #'try args)
 	  (prune-fn form try-fn))
 	 
