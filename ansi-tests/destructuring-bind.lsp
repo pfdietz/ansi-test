@@ -100,6 +100,13 @@
     (values x y z))
   1 2 3)
 
+(deftest destructuring-bind.22
+  (destructuring-bind (x y &key) '(1 2) (values x y))
+  1 2)
+
+(deftest destructuring-bind.23
+  (destructuring-bind (&rest x &key) '(1) x)
+  (1))
 
 ;;; Error cases
 
