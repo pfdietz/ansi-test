@@ -202,9 +202,22 @@
     (invoke-restart 'foo)))
   program-error)
 
-;;; Must still add interactive-function tests
+(deftest restart-bind.23
+  (restart-bind
+   ((foo #'(lambda () 'good)))
+   (invoke-restart-interactively 'foo))
+  good)
 
-
-
-
+(deftest restart-bind.24
+  (let ((i 0))
+    (values
+     (restart-bind
+      ((foo
+	#'(lambda (x y z) (list z y x))
+	:interactive-function (progn (incf i)
+				     #'(lambda () (list 'a 'b 'c)))))
+      (invoke-restart-interactively 'foo))
+     i))
+  (c b a)
+  1)
 

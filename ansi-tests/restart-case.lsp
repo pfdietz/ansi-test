@@ -264,6 +264,30 @@
 	 (foo () 'good))))))
   good)
 
+(deftest restart-case.32
+  (restart-case
+   (invoke-restart-interactively 'foo)
+   (foo () 'good))
+  good)
+
+(deftest restart-case.33
+  (restart-case
+   (invoke-restart-interactively 'foo)
+   (foo (w x y z)
+	:interactive (lambda () (list 'a 'b 'c 'd))
+	(list x w z y)))
+  (b a d c))
+
+(deftest restart-case.34
+  (flet ((%f () (list 'a 'b 'c 'd)))
+    (restart-case
+     (invoke-restart-interactively 'foo)
+     (foo (w x y z)
+	  :interactive %f
+	  (list x w z y))))
+  (b a d c))
+
+
 
 
 
