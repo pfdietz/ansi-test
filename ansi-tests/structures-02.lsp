@@ -135,5 +135,7 @@
 (defstruct-with-tests (struct-test-09 (:conc-name nil)) a09 b09)
 (defstruct-with-tests (struct-test-10 (:conc-name "")) a10 b10)
 (defstruct-with-tests (struct-test-11 (:conc-name "BLAH-")) a11 b11)
+(defstruct-with-tests (struct-test-12 (:conc-name BLAH-)) a12 b12)
+(defstruct-with-tests (struct-test-13 (:conc-name #\X)) foo-a13 foo-b13)
 
-;;; More to come...
+;;; More to come
