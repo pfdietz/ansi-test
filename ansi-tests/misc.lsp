@@ -1327,5 +1327,18 @@
     (misc.106-fn -30271 -1 -3043))
   -30271)
 
-    
-
+ ;;; "The value NIL is not of type SB-C::IR2-LVAR." (sbcl 0.8.4.40)
+(deftest misc.107
+  (funcall
+   (compile nil
+	    '(lambda (b c)
+	       (declare (type (integer -29742055786 23602182204) b))
+	       (declare (type (integer -7409 -2075) c))
+	       (declare (optimize (speed 3)))
+	       (floor
+		(labels ((%f2 ()
+			      (block b6
+				(ignore-errors (return-from b6 (if (= c 8) b 82674))))))
+		  (%f2)))))
+   22992834060 -5833)
+  82674)
