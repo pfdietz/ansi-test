@@ -2,7 +2,8 @@ LISP=gcl
 ACL=~/acl62_trial/alisp
 
 test:
-	echo "(load \"gclload.lsp\")" | gcl | tee test.out
+	rmdir scratch
+	echo "(load \"gclload.lsp\")" | $(LISP) | tee test.out
 
 test-unixport:
 	echo "(load \"gclload.lsp\")" | ../unixport/saved_ansi_gcl | tee test.out
