@@ -93,6 +93,15 @@
      (return-from done 'good)))
   good)
 
+(deftest typecase.18
+  (loop for x in '(a 1 1.4 "c")
+	collect (typecase x
+		  (t :good)
+		  (otherwise :bad)))
+  (:good :good :good :good))
+
+;;; Error cases
+
 (deftest typecase.error.1
   (signals-error (funcall (macro-function 'typecase)) program-error)
   t)
