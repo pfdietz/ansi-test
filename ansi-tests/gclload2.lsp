@@ -10,6 +10,7 @@
 (load "complement.lsp")
 (load "function.lsp")
 (load "functionp.lsp")
+(load "lambda-list-keywords.lsp")
 
 ;;; Tests of conses
 
