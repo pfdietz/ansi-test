@@ -6,73 +6,77 @@
 (in-package :cl-test)
 
 (deftest copy-pprint-dispatch.1
-  (let ((obj '(foo bar))
-	(*package* (find-package :cl-test))
-	(*print-pretty* t))
-    (values
-     (prin1-to-string obj)
-     (let ((*print-pprint-dispatch* (copy-pprint-dispatch)))
-       (set-pprint-dispatch
-	`(eql ,obj)
-	#'(lambda (s obj2) (let ((*print-pretty* nil))
-			     (format s "#.'~S" obj2))))
-       (prin1-to-string obj))
-     (prin1-to-string obj)))
+  (with-standard-io-syntax
+   (let ((obj '(foo bar))
+	 (*package* (find-package :cl-test))
+	 (*print-pretty* t))
+     (values
+      (prin1-to-string obj)
+      (let ((*print-pprint-dispatch* (copy-pprint-dispatch)))
+	(set-pprint-dispatch
+	 `(eql ,obj)
+	 #'(lambda (s obj2) (let ((*print-pretty* nil))
+			      (format s "#.'~S" obj2))))
+	(prin1-to-string obj))
+     (prin1-to-string obj))))
   "(FOO BAR)"
   "#.'(FOO BAR)"
   "(FOO BAR)")
 
 (deftest copy-pprint-dispatch.2
-  (let ((obj '(foo bar))
-	(*package* (find-package :cl-test))
-	(*print-pretty* t))
-    (values
-     (prin1-to-string obj)
-     (let ((*print-pprint-dispatch* (copy-pprint-dispatch
-				     *print-pprint-dispatch*)))
-       (set-pprint-dispatch
-	`(eql ,obj)
-	#'(lambda (s obj2) (let ((*print-pretty* nil))
-			     (format s "#.'~S" obj2))))
-       (prin1-to-string obj))
-     (prin1-to-string obj)))
+  (with-standard-io-syntax
+   (let ((obj '(foo bar))
+	 (*package* (find-package :cl-test))
+	 (*print-pretty* t))
+     (values
+      (prin1-to-string obj)
+      (let ((*print-pprint-dispatch* (copy-pprint-dispatch
+				      *print-pprint-dispatch*)))
+	(set-pprint-dispatch
+	 `(eql ,obj)
+	 #'(lambda (s obj2) (let ((*print-pretty* nil))
+			      (format s "#.'~S" obj2))))
+	(prin1-to-string obj))
+      (prin1-to-string obj))))
   "(FOO BAR)"
   "#.'(FOO BAR)"
   "(FOO BAR)")
 
 (deftest copy-pprint-dispatch.3
-  (let ((obj '(foo bar))
-	(*package* (find-package :cl-test))
-	(*print-pretty* t))
-    (values
-     (prin1-to-string obj)
-     (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil)))
-       (set-pprint-dispatch
-	`(eql ,obj)
-	#'(lambda (s obj2) (let ((*print-pretty* nil))
-			     (format s "#.'~S" obj2))))
-       (prin1-to-string obj))
-     (prin1-to-string obj)))
+  (with-standard-io-syntax
+   (let ((obj '(foo bar))
+	 (*package* (find-package :cl-test))
+	 (*print-pretty* t))
+     (values
+      (prin1-to-string obj)
+      (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil)))
+	(set-pprint-dispatch
+	 `(eql ,obj)
+	 #'(lambda (s obj2) (let ((*print-pretty* nil))
+			      (format s "#.'~S" obj2))))
+	(prin1-to-string obj))
+      (prin1-to-string obj))))
   "(FOO BAR)"
   "#.'(FOO BAR)"
   "(FOO BAR)")
 
 (deftest copy-pprint-dispatch.4
-  (let ((obj '(foo bar))
-	(*package* (find-package :cl-test))
-	(*print-pretty* t))
-    (values
-     (prin1-to-string obj)
-     (let ((table (copy-pprint-dispatch)))
-       (set-pprint-dispatch
-	`(eql ,obj)
-	#'(lambda (s obj2) (let ((*print-pretty* nil))
-			     (format s "#.'~S" obj2)))
-	0
-	table)
-       (let ((*print-pprint-dispatch* (copy-pprint-dispatch table)))
-	 (prin1-to-string obj)))
-     (prin1-to-string obj)))
+  (with-standard-io-syntax
+   (let ((obj '(foo bar))
+	 (*package* (find-package :cl-test))
+	 (*print-pretty* t))
+     (values
+      (prin1-to-string obj)
+      (let ((table (copy-pprint-dispatch)))
+	(set-pprint-dispatch
+	 `(eql ,obj)
+	 #'(lambda (s obj2) (let ((*print-pretty* nil))
+			      (format s "#.'~S" obj2)))
+	 0
+	 table)
+	(let ((*print-pprint-dispatch* (copy-pprint-dispatch table)))
+	  (prin1-to-string obj)))
+      (prin1-to-string obj))))
   "(FOO BAR)"
   "#.'(FOO BAR)"
   "(FOO BAR)")
