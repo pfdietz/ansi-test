@@ -10145,6 +10145,14 @@ Broken at C::WT-MAKE-CLOSURE.
    '+ 823)
   3775)
 
+(deftest misc.551a
+  (funcall
+   (compile nil '(lambda (x) (declare (optimize (speed 2))
+				      (type symbol x))
+		   (the (eql t) x)))
+   t)
+  t)
+
 ;;; cmucl (mar 2005 snapshot)
 
 (deftest misc.552
@@ -10170,3 +10178,45 @@ Broken at C::WT-MAKE-CLOSURE.
 (deftest misc.554
   (funcall (compile nil '(lambda (x) (declare (type (array t 1) x)) x)) #(a))
   #(a))
+
+;;; sbcl 5 Mar 2005
+;;; failed AVER: "(EQ CHECK SIMPLE)"
+
+(deftest misc.555
+  (notnot
+   (funcall
+    (compile nil '(lambda (p1)
+		    (declare (optimize (speed 1) (safety 2) (debug 2) (space 0))
+			     (type keyword p1))
+		    (keywordp p1)))
+    :c))
+  t)
+
+; Problem with FLOOR
+; Wrong return value
+(deftest misc.556
+  (values
+   (funcall
+    (compile nil '(lambda (p1 p2)
+		    (declare
+		     (optimize (speed 1) (safety 0)
+			       (debug 0) (space 0))
+		     (type (member 8174.8604) p1)
+		     (type (member -95195347) p2))
+		    (floor p1 p2)))
+    8174.8604 -95195347))
+  -1)
+
+;  invalid number of arguments: 1
+; (possible removal of code due to type fumble)
+(deftest misc.557
+  (values
+   (funcall
+    (compile
+     nil
+     '(lambda (p1)
+	(declare (optimize (speed 3) (safety 0) (debug 3) (space 1))
+		 (type (member -94430.086) p1))
+	(floor (the short-float p1) 19311235)))
+    -94430.086))
+  -1)
