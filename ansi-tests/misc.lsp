@@ -9416,3 +9416,105 @@ Broken at C::WT-MAKE-CLOSURE.
 			       -34832621))))))
 	-26788929))
   116871)
+
+(deftest misc.510
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -2827 3400) a))
+			(declare (optimize (compilation-speed 1) (space 3) (debug 1)
+					   (safety 0) (speed 1)))
+			(logand (the integer (dotimes (iv4 2 a) (progn iv4))))))
+	155))
+  155)
+
+(deftest misc.511
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer 18967 23584) a))
+			(declare (ignorable a))
+			(declare (optimize (space 1) (speed 1) (debug 1)
+					   (compilation-speed 3) (safety 1)))
+			(the integer
+			  (values (loop for lv4 below 2 count (find a '(16389)))))))
+	21352))
+  0)
+
+;;; Inconsistent stack height
+
+(deftest misc.512
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer 1 188902468) a))
+			(declare (ignorable a))
+			(declare (optimize (space 2) (speed 3) (safety 3)
+					   (compilation-speed 0) (debug 2)))
+			(catch 'ct6
+			  (the integer
+			    (let* ((v3 (signum (ignore-errors a))))
+			      (declare (dynamic-extent v3))
+			      (throw 'ct6
+				     (round (case (prog2
+						      (lognor 290171664 v3)
+						      -3512003993
+						    -550842867)
+					      ((4) (* 1 4092))
+					      ((21 220 225)
+					       (block b1
+						 (setf v3
+						       (let* ((v9 v3))
+							 a))))
+					      (t -639367819)))))))))
+	49008586))
+  -639367819
+  0)
+
+;;; COMPILE-FORM: unsupported special operator LET*
+;;; Associated with 'THE' operator
+
+(deftest misc.513
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -2 75025568) a))
+			(declare (ignorable a))
+			(declare (optimize (space 0) (compilation-speed 0) (safety 0)
+					   (speed 2) (debug 2)))
+			(let* ((v8
+				(cons (the integer
+					(prog2 a
+					    -1558460
+					  a
+					  (ignore-errors (progn (tagbody) -49510826))
+					  a))
+				      0)))
+			  0)))
+	68043554))
+  0)
+
+(deftest misc.514
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -6844832476 188341751) a))
+			(declare (optimize (speed 3) (debug 1) (safety 0) (space 3)
+					   (compilation-speed 1)))
+			(the integer (multiple-value-setq (a) -96073358))))
+	-3792864899))
+  -96073358)
+
+
+
+
+
+
+
+	
+		 
