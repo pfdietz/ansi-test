@@ -10,6 +10,21 @@
 	always (eql x (logical-pathname x)))
   t)
 
+(deftest logical-pathname.2
+  (notnot-mv (typep (logical-pathname "CLTEST:FOO") 'logical-pathname))
+  t)
+
+(deftest logical-pathname.3
+  (let ((name "CLTEST:TEMP.DAT.NEWEST"))
+    (with-open-file
+     (s (logical-pathname name)
+	:direction :output
+	:if-exists :supersede
+	:if-does-not-exist :create)
+     (or (equalt (logical-pathname s) (logical-pathname name))
+	 (list (logical-pathname s) (logical-pathname name)))))
+  t)
+
 
 ;;; Error tests
 
@@ -35,3 +50,47 @@
    type-error)
   t)
 
+(deftest logical-pathname.error.4
+  (signals-error
+   (with-open-stream
+    (is (make-concatenated-stream))
+    (with-open-stream
+     (os (make-broadcast-stream))
+     (with-open-stream
+      (s (make-two-way-stream is os))
+      (logical-pathname s))))
+   type-error)
+  t)
+
+(deftest logical-pathname.error.5
+  (signals-error
+   (with-open-stream
+    (is (make-concatenated-stream))
+    (with-open-stream
+     (os (make-broadcast-stream))
+     (with-open-stream
+      (s (make-echo-stream is os))
+      (logical-pathname s))))
+   type-error)
+  t)
+
+(deftest logical-pathname.error.6
+  (signals-error (with-open-stream (s (make-broadcast-stream)) (logical-pathname s)) type-error)
+  t)
+
+(deftest logical-pathname.error.7
+  (signals-error (with-open-stream (s (make-concatenated-stream)) (logical-pathname s)) type-error)
+  t)
+
+(deftest logical-pathname.error.8
+  (signals-error (with-open-stream (s (make-string-input-stream "foo"))
+				   (logical-pathname s)) type-error)
+  t)
+
+(deftest logical-pathname.error.9
+  (signals-error (with-output-to-string (s) (logical-pathname s)) type-error)
+  t)
+
+(deftest logical-pathname.error.10
+  (signals-error (logical-pathname "CLROOT:%") type-error)
+  t)
