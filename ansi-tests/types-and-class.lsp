@@ -185,6 +185,18 @@
   (check-disjointness 'integer 'ratio)
   nil)
 
+(deftest fixnum-and-ratio-are-disjoint
+  (check-disjointness 'fixnum 'ratio)
+  nil)
+
+(deftest byte8-and-ratio-are-disjoint
+  (check-disjointness '(unsigned-byte 8) 'ratio)
+  nil)
+
+(deftest bit-and-ratio-are-disjoint
+  (check-disjointness 'bit 'ratio)
+  nil)
+
 (deftest integer-and-float-are-disjoint
   (check-disjointness 'integer 'float)
   nil)
@@ -196,6 +208,11 @@
 (deftest complex-and-float-are-disjoint
   (check-disjointness 'complex 'float)
   nil)
+
+(deftest integer-subranges-are-disjoint
+  (check-disjointness '(integer 0 (10)) '(integer 10 (20)))
+  nil)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; deftype

@@ -1,6 +1,8 @@
 (in-package "COMMON-LISP-USER")
 
+
 (eval-when (load eval compile)
+  (intern "==>" "CL-USER")
   (unless (fboundp 'compile-file-pathname)
     (defun compile-file-pathname (pathname)
       (make-pathname :defaults pathname :type "o"))))

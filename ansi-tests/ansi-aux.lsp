@@ -153,20 +153,14 @@ Results: ~A~%" expected-number form n results))))
 (defun check-subtypep (type1 type2 is-sub &optional should-be-valid)
   (multiple-value-bind
       (sub valid)
-      (subtypep* type1 type2)
-    (cond
-     (valid
-      (cond
-       ((and sub (not is-sub))
-	`((SUBTYPEP ',type1 ',type2)
-	  "==> <true>, <true>, expected NIL."))
-       ((and (not sub) is-sub)
-	`((SUBTYPEP ',type1 ',type2)
-	  "==> <false>, <true>, expected <true>."))
-       (t nil)))
-     (should-be-valid
-      `((SUBTYPEP ',type1 ',type2) "did not succeed but should have."))
-     (t nil))))	 
+      (subtypep type1 type2)
+    (unless (constantp type1) (setq type1 (list 'quote type1)))
+    (unless (constantp type2) (setq type2 (list 'quote type2)))
+    (if (or (and valid sub (not is-sub))
+	    (and valid (not sub) is-sub)
+	    (and (not valid) should-be-valid))
+	`((SUBTYPEP ,type1 ,type2) cl-user::==> ,sub ,valid)
+      nil)))
 
 (defun check-type-predicate (P TYPE)
   "Check that a predicate P is the same as #'(lambda (x) (typep x TYPE))

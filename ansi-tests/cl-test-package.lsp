@@ -7,7 +7,7 @@
   (:use :cl :rt)
   #+gcl (:use defpackage)
   (:nicknames)
-  (:import-from "COMMON-LISP-USER" "COMPILE-AND-LOAD")
+  (:import-from "COMMON-LISP-USER" "COMPILE-AND-LOAD" "==>")
   (:export))
 
 #+cmu (import 'cl::quit :cl-test)
