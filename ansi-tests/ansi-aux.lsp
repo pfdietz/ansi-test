@@ -12,6 +12,37 @@
 
 (defun notnot (x) (not (not x)))
 
+(defmacro notnot-mv (form)
+  `(apply #'values (mapcar #'notnot (multiple-value-list ,form))))
+
+;;; Macro to check that a function is returning a single value
+(defmacro check-value (form &optional (num 1))
+  (let ((v (gensym))
+	(n (gensym)))
+   `(let ((,v ,form)
+	  (,n ,num))
+      (check-values-length ,v ,n ',form)
+      (car ,v))))
+
+(defun check-values-length (results expected-number form)
+  (declare (type fixnum expected-number))
+  (let ((n expected-number))
+    (declare (type fixnum n))
+    (dolist (e results)
+      (declare (ignore e))
+      (decf n))
+    (unless (= n 0)
+      (error "Expected ~A results from ~A, got ~A results instead.~%~
+Results: ~A~%" expected-number form n results))))
+
+;;; Do multiple-value-bind, but check # of arguments
+(defmacro multiple-value-bind* ((&rest vars) form &body body)
+  (let ((len (length vars))
+	(v (gensym)))
+    `(let ((,v (multiple-value-list ,form)))
+       (check-values-length ,v ,len ',form)
+       (destructuring-bind ,vars ,v ,@body))))
+  
 ;;; Comparison functions that are like various builtins,
 ;;; but are guaranteed to return T for true.
 
@@ -33,7 +64,7 @@
 
 (defun =t (x &rest args)
   "Like =, but guaranteed to return T for true."
-  (apply #'values (mapcar #'notnot (multiple-value-list (apply #'= args)))))
+  (apply #'values (mapcar #'notnot (multiple-value-list (apply #'=  x args)))))
 
 (defun make-int-list (n)
   (loop for i from 0 below n collect i))
@@ -994,7 +1025,7 @@ the condition to go uncaught if it cannot be classified."
   (let ((num 0))
     (declare (fixnum num))
     (do-external-symbols (s p num)
-      s
+      s		 
       (incf num))))
 
 (defun safely-delete-package (package-designator)
