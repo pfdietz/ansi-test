@@ -82,7 +82,8 @@ Got:      0
   what the failures mean.
 
 24. Add tests of very large (non-floatable) rationals with floats, if they
-  are not already present.
+  are not already present. (done for bignums, non-integer rational tests
+  still required.)
 
 25. Add test that the form in an EQL parameter specializer is evaluated only
   once, at method definition time.
