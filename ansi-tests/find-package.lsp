@@ -115,7 +115,7 @@
   t)
 
 (deftest find-package.16
-  (let* ((name (make-array '(10) :initial-contents "KEYWORDXYZ"
+  (let* ((name (make-array '(7) :initial-contents "KEYWORD"
 			   :adjustable t
 			   :element-type 'base-char))
 	 (p (find-package name)))
