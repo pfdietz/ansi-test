@@ -34,8 +34,8 @@
 (defvar *print-circle-on-failure* nil
   "Failure reports are printed with *PRINT-CIRCLE* bound to this value.")
 
-(defvar *compile-tests* nil "When true, compile the tests before running
-them.")
+(defvar *compile-tests* nil "When true, compile the tests before running them.")
+(defvar *expanded-eval* nil "When true, convert the tests into a form that is less likely to have compiler optimizations.")
 (defvar *optimization-settings* '((safety 3)))
 
 (defvar *expected-failures* nil
@@ -170,16 +170,21 @@ them.")
 	(setf r
 	      (flet ((%do
 		      ()
-		      (if *compile-tests*
-			  (multiple-value-list
-			   (funcall (compile
-				     nil
-				     `(lambda ()
-					(declare
-					 (optimize ,@*optimization-settings*))
-					,(form entry)))))
+		      (cond
+		       (*compile-tests*
 			(multiple-value-list
-			 (eval (form entry))))))
+			 (funcall (compile
+				   nil
+				   `(lambda ()
+				      (declare
+				       (optimize ,@*optimization-settings*))
+				      ,(form entry))))))
+		       (*expanded-eval*
+			(multiple-value-list
+			 (expanded-eval (form entry))))
+		       (t
+			(multiple-value-list
+			 (eval (form entry)))))))
 		(if *catch-errors*
 		    (handler-bind
 		     (#-ecl (style-warning #'muffle-warning)
@@ -207,6 +212,40 @@ them.")
                       ~{~S~^~%~15t~}.~%"
 		  (length r) r)))))
   (when (not (pend entry)) *test*))
+
+(defun expanded-eval (form)
+  "Split off top level of a form and eval separately.  This reduces the chance that
+   compiler optimizations will fold away runtime computation."
+  (if (not (consp form))
+      (eval form)
+   (let ((op (car form)))
+     (cond
+      ((eq op 'let)
+       (let* ((bindings (loop for b in (cadr form)
+			      collect (if (consp b) b (list b nil))))
+	      (vars (mapcar #'car bindings))
+	      (binding-forms (mapcar #'cadr bindings)))
+	 (apply
+	  (eval `(lambda ,vars ,@(cddr form)))
+	  (mapcar #'eval binding-forms))))
+      ((and (eq op 'let*) (cadr form))
+       (let* ((bindings (loop for b in (cadr form)
+			      collect (if (consp b) b (list b nil))))
+	      (vars (mapcar #'car bindings))
+	      (binding-forms (mapcar #'cadr bindings)))
+	 (funcall
+	  (eval `(lambda (,(car vars) &aux ,@(cdr bindings)) ,@(cddr form)))
+	  (eval (car binding-forms)))))
+      ((eq op 'progn)
+       (loop for e on (cdr form)
+	     do (if (null (cdr e)) (return (eval (car e)))
+		  (eval (car e)))))
+      ((and (symbolp op) (fboundp op)
+	    (not (macro-function op))
+	    (not (special-operator-p op)))
+       (apply (symbol-function op)
+	      (mapcar #'eval (cdr form))))
+      (t (eval form))))))
 
 (defun continue-testing ()
   (if *in-test*
