@@ -28,6 +28,11 @@
 		  t t))
        ,@(loop for parent in (adjoin 'condition parents)
 	       collect
+	       `(deftest ,(make-def-cond-name name "IS-SUBTYPE-OF-2/" parent)
+		  (check-all-subtypep ',name-symbol ',parent)
+		  nil))
+       ,@(loop for parent in (adjoin 'condition parents)
+	       collect
 	       `(deftest ,(make-def-cond-name name
 					      "IS-NOT-SUPERTYPE-OF/" parent)
 		  (subtypep* ',parent ',name-symbol)
@@ -37,6 +42,26 @@
 	       `(deftest ,(make-def-cond-name name "IS-A/" parent)
 		  (let ((c (make-condition ',name-symbol)))
 		    (notnot-mv (typep c ',parent)))
+		  t))
+       ,@(loop for parent in (adjoin 'condition parents)
+	       collect
+	       `(deftest ,(make-def-cond-name name "IS-SUBCLASS-OF/" parent)
+		  (subtypep* (find-class ',name-symbol)
+			     (find-class ',parent))
+		  t t))
+       ,@(loop for parent in (adjoin 'condition parents)
+	       collect
+	       `(deftest ,(make-def-cond-name name
+					      "IS-NOT-SUPERCLASS-OF/" parent)
+		  (subtypep* (find-class ',parent)
+			     (find-class ',name-symbol))
+		  nil t))
+       ,@(loop for parent in (adjoin 'condition parents)
+	       collect
+	       `(deftest ,(make-def-cond-name name "IS-A-MEMBER-OF-CLASS/"
+					      parent)
+		  (let ((c (make-condition ',name-symbol)))
+		    (notnot-mv (typep c (find-class ',parent))))
 		  t))
        )))
 
