@@ -5,6 +5,11 @@
 
 (in-package :cl-test)
 
+(defun char-type-error-check (fn)
+  (loop for x in *universe*
+	always (or (characterp x)
+		   (eq (catch-type-error (funcall fn x)) 'type-error))))
+
 (deftest character-class.1
   (subtypep 'character t)
   t t)
@@ -113,11 +118,7 @@
   t)
 
 (deftest alpha-char-p.3
-  (loop for x in *universe*
-	always (if (characterp x)
-		   (or (find x +alpha-chars+)
-		       (not (alpha-char-p x)))
-		 (eql (catch-type-error (alpha-char-p x)) 'type-error)))
+  (char-type-error-check #'alpha-char-p)
   t)
 
 (deftest alphanumericp.1
@@ -132,12 +133,9 @@
   t)
 
 (deftest alphanumericp.3
-  (loop for x in *universe*
-	always (if (characterp x)
-		   (or (find x +alphanumeric-chars+)
-		       (not (alphanumericp x)))
-		 (eql (catch-type-error (alphanumericp x)) 'type-error)))
+  (char-type-error-check #'alphanumericp)
   t)
+
 
 (deftest alphanumericp.4
   (loop for x in *universe*
@@ -234,9 +232,7 @@
   nil)
 
 (deftest graphic-char.3
-  (loop for x in *universe*
-	never (and (not (characterp x))
-		   (not (eq (catch-type-error (graphic-char-p x)) 'type-error))))
+  (char-type-error-check #'graphic-char-p)
   t)
 
 (deftest standard-char-p.1
@@ -259,7 +255,218 @@
   t)
 
 (deftest standard-char-p.3
+  (char-type-error-check #'standard-char-p)
+  t)
+
+(deftest char-upcase.1
   (loop for x in *universe*
-	always (or (characterp x)
-		   (eq (catch-type-error (standard-char-p x)) 'type-error)))
+	always
+	(or (not (characterp x))
+	    (let ((u (char-upcase x))) 
+	      (and
+	       (or (lower-case-p x) (eql u x))
+	       (eql u (char-upcase u))))))
+  t)
+
+(deftest char-upcase.2
+  (loop for i from 0 below (min 65536 char-code-limit)
+	for x = (code-char i)
+	always
+	(or (not x)
+	    (let ((u (char-upcase x)))
+	      (and
+	       (or (lower-case-p x) (eql u x))
+	       (eql u (char-upcase u))))))
+  t)
+
+(deftest char-upcase.3
+  (map 'string #'char-upcase +alpha-chars+)
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+(deftest char-upcase.4
+  (char-type-error-check #'char-upcase)
+  t)	
+
+(deftest char-downcase.1
+  (loop for x in *universe*
+	always
+	(or (not (characterp x))
+	    (let ((u (char-downcase x))) 
+	      (and
+	       (or (upper-case-p x) (eql u x))
+	       (eql u (char-downcase u))))))
+  t)
+
+(deftest char-downcase.2
+  (loop for i from 0 below (min 65536 char-code-limit)
+	for x = (code-char i)
+	always
+	(or (not x)
+	    (let ((u (char-downcase x)))
+	      (and
+	       (or (upper-case-p x) (eql u x))
+	       (eql u (char-downcase u))))))
+  t)
+
+(deftest char-downcase.3
+  (map 'string #'char-downcase +alpha-chars+)
+  "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz")
+
+(deftest char-downcase.4
+  (char-type-error-check #'char-downcase)
+  t)
+
+(deftest upper-case-p.1
+  (find-if-not #'upper-case-p +standard-chars+ :start 26 :end 52)
+  nil)
+
+(deftest upper-case-p.2
+  (find-if #'upper-case-p +standard-chars+ :end 26)
+  nil)
+
+(deftest upper-case-p.3
+  (find #'upper-case-p +standard-chars+ :start 52)
+  nil)
+
+(deftest upper-case-p.4
+  (char-type-error-check #'upper-case-p)
+  t)
+
+(deftest lower-case-p.1
+  (find-if-not #'lower-case-p +standard-chars+ :end 26)
+  nil)
+
+(deftest lower-case-p.2
+  (find-if #'lower-case-p +standard-chars+ :start 26)
+  nil)
+
+(deftest lower-case-p.3
+  (char-type-error-check #'lower-case-p)
+  t)
+
+(deftest both-case-p.1
+  (loop for x in *universe*
+	always (or (not (characterp x))
+		   (if (both-case-p x)
+		       (and (graphic-char-p x)
+			    (or (upper-case-p x)
+				(lower-case-p x)))
+		     (not (or (upper-case-p x)
+			      (lower-case-p x))))))
+  t)
+
+(deftest both-case-p.2
+  (loop for i from 0 below (min 65536 char-code-limit)
+	for x = (code-char i)
+	always (or (not (characterp x))
+		   (if (both-case-p x)
+		       (and (graphic-char-p x)
+			    (or (upper-case-p x)
+				(lower-case-p x)))
+		     (not (or (upper-case-p x)
+			      (lower-case-p x))))))
+  t)
+
+(deftest both-case-p.3
+  (char-type-error-check #'both-case-p)
+  t)
+
+(deftest char-code.1
+  (char-type-error-check #'char-code)
+  t)
+
+(deftest char-code.2
+  (loop for i from 0 below (min 65536 char-code-limit)
+	for c = (code-char i)
+	always (or (not c)
+		   (eql (char-code c) i)))
+  t)
+
+(deftest code-char.1
+  (loop for x across +standard-chars+
+	always (eql (code-char (char-code x)) x))
+  t)
+
+(deftest char-int.1
+  (loop for x across +standard-chars+
+	always (eql (char-int x) (char-code x)))
+  t)
+
+(deftest char-int.2
+  (let ((c->i (make-hash-table :test #'equal))
+	(i->c (make-hash-table :test #'eql)))
+    (flet ((%insert
+	    (c)
+	    (or (not (characterp c))
+		(let* ((i (char-int c))
+		       (j (gethash c c->i))
+		       (d (gethash i i->c)))
+		  (and
+		   (or (null j) (eql j i))
+		   (or (null d) (char= c d))
+		   (progn
+		     (setf (gethash c c->i) i)
+		     (setf (gethash i i->c) c)
+		     t))))))
+      (and
+       (loop for i from 0 below char-code-limit
+	     always (%insert (code-char i)))
+       (every #'%insert +standard-chars+)
+       (every #'%insert *universe*))))
+  t)
+
+(deftest char-name.1
+  (flet ((%check
+	  (c)
+	  (or (not (characterp c))
+	      (let ((name (char-name c)))
+		(or (null name)
+		    (and (stringp name)
+			 (eql c (name-char name))))))))
+    (and
+     (loop for i from 0 below char-code-limit
+	   always (%check (code-char i)))
+     (every #'%check +standard-chars+)
+     (every #'%check *universe*)))
+  t)
+
+(deftest char-name.2
+  (string= (char-name #\Space) "Space")
+  t)
+
+(deftest char-name.3
+  (string= (char-name #\Newline) "Newline")
+  t)
+
+(deftest char-name.4
+  (loop for s in '("Rubout" "Page" "Backspace" "Return" "Tab" "Linefeed")
+	for c = (name-char s)
+	unless (or (not c) (string= (char-name c) s))
+	collect (list s c (char-name c)))
+  nil)
+
+(deftest char-name.5
+  (char-type-error-check #'char-name)
+  t)
+
+(deftest name-char.1
+  (loop for x in *universe*
+	for s = (catch-type-error (string x))
+	always
+	(or (eql s 'type-error)
+	    (let ((c (name-char x)))
+	      (or (not c)
+		  (characterp c)
+		  (string-equal (char-name c) s)))))
+  t)
+
+(deftest name-char.2
+  (loop for s in '("RubOut" "PAGe" "BacKspace" "RetUrn" "Tab" "LineFeed"
+		   "SpaCE" "NewLine")
+	always
+	(let ((c1 (name-char (string-upcase s)))
+	      (c2 (name-char (string-downcase s)))
+	      (c3 (name-char (string-capitalize s)))
+	      (c4 (name-char s)))
+	  (and (eql c1 c2) (eql c2 c3) (eql c3 c4))))
   t)

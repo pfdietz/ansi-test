@@ -32,8 +32,7 @@
 ;;; Tests of packages
 
 #|
-(compile-file "packages-00.lsp")
-(load "packages-00.o")
+(compile-and-load "packages-00.lsp")
 (load "packages-01.lsp")
 (load "packages-02.lsp")
 (load "packages-03.lsp")
@@ -76,8 +75,7 @@
 (load "find-if.lsp")
 (load "find-if-not.lsp")
 (load "position.lsp")
-(compile-file "search-aux.lsp")
-(load "search-aux.o")
+(compile-and-load "search-aux.lsp")
 (load "search-list.lsp")
 (load "search-vector.lsp")
 (load "search-bitvector.lsp")
@@ -129,4 +127,8 @@
 (compile-and-load "string-aux.lsp")
 (load "string-comparisons.lsp")
 (load "make-string.lsp")
+
+;;; Tests for character functions
+(load "character.lsp")
+
 
