@@ -71,4 +71,52 @@
 	   (probe-file old-truename)
 	   (notnot (probe-file new-truename))))))
   t t nil t t nil t)
-    
+
+(deftest rename-file.4
+  (let ((pn1 "file-to-be-renamed.txt")
+	(pn2 "file-that-was-renamed.txt"))
+    (when (probe-file pn1)
+      (delete-file pn1))
+    (when (probe-file pn2)
+      (delete-file pn2))
+    (let ((s (open pn1 :direction :output)))
+      (format s "Whatever~%")
+      (close s)
+      (let ((results (multiple-value-list (rename-file s pn2))))
+	(destructuring-bind (defaulted-new-name old-truename new-truename)
+	    results
+	  (values
+	   (=t (length results) 3)
+	   (probe-file pn1)
+	   (notnot (probe-file pn2))
+	   (notnot (probe-file defaulted-new-name))
+	   (probe-file old-truename)
+	   (notnot (probe-file new-truename)))))))
+  t nil t t nil t)
+
+(deftest rename-file.5
+  (let ((pn1 "CLTEST:file-to-be-renamed.txt")
+	(pn2 "CLTEST:file-that-was-renamed.txt"))
+    (when (probe-file pn1)
+      (delete-file pn1))
+    (when (probe-file pn2)
+      (delete-file pn2))
+    (with-open-file (s pn1 :direction :output) (format s "Whatever~%"))
+    (let ((results (multiple-value-list (rename-file pn1 pn2))))
+      (destructuring-bind (defaulted-new-name old-truename new-truename)
+	  results
+	  (values
+	   (=t (length results) 3)
+	   (probe-file pn1)
+	   (notnot (probe-file pn2))
+	   (notnot (probe-file defaulted-new-name))
+	   (probe-file old-truename)
+	   (notnot (probe-file new-truename))))))
+  t nil t t nil t)
+
+;;;
+
+(deftest rename-file.error.1
+  (classify-error (rename-file))
+  program-error)
+
