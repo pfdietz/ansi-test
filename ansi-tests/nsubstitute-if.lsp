@@ -10,55 +10,55 @@
   nil)
 
 (deftest nsubstitute-if-list.2
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x) x)
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x) x)
   (b b b c))
 
 (deftest nsubstitute-if-list.3
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count nil))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count nil))
   (b b b c))
 
 (deftest nsubstitute-if-list.4
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 2))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 2))
   (b b b c))
 
 (deftest nsubstitute-if-list.5
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 1))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 1))
   (b b a c))
 
 (deftest nsubstitute-if-list.6
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 0))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 0))
   (a b a c))
 
 (deftest nsubstitute-if-list.7
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count -1))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count -1))
   (a b a c))
 
 (deftest nsubstitute-if-list.8
-  (nsubstitute-if 'b (is-eq-p 'a) nil :from-end t)
+  (nsubstitute-if 'b (is-eql-p 'a) nil :from-end t)
   nil)
 
 (deftest nsubstitute-if-list.9
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :from-end t))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :from-end t))
   (b b b c))
 
 (deftest nsubstitute-if-list.10
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :from-end t :count nil))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :from-end t :count nil))
   (b b b c))
 
 (deftest nsubstitute-if-list.11
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 2 :from-end t))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 2 :from-end t))
   (b b b c))
 
 (deftest nsubstitute-if-list.12
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 1 :from-end t))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 1 :from-end t))
   (a b b c))
 
 (deftest nsubstitute-if-list.13
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 0 :from-end t))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 0 :from-end t))
   (a b a c))
 
 (deftest nsubstitute-if-list.14
-  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count -1 :from-end t))
+  (let ((x (copy-seq '(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count -1 :from-end t))
   (a b a c))
 
 (deftest nsubstitute-if-list.15
@@ -66,7 +66,7 @@
 	(loop for j from i to 10 always
 	      (let* ((orig '(a a a a a a a a a a))
 		     (x (copy-seq orig))
-		     (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j)))
+		     (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j)))
 		(equal y (nconc (make-list i :initial-element 'a)
 				(make-list (- j i) :initial-element 'x)
 				(make-list (- 10 j) :initial-element 'a))))))
@@ -77,7 +77,7 @@
 	(loop for j from i to 10 always
 	      (let* ((orig '(a a a a a a a a a a))
 		     (x (copy-seq orig))
-		     (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j :from-end t)))
+		     (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j :from-end t)))
 		(equal y (nconc (make-list i :initial-element 'a)
 				(make-list (- j i) :initial-element 'x)
 				(make-list (- 10 j) :initial-element 'a))))))
@@ -89,7 +89,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig '(a a a a a a a a a a))
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j :count c)))
+			   (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j :count c)))
 		      (equal y (nconc (make-list i :initial-element 'a)
 				      (make-list c :initial-element 'x)
 				      (make-list (- 10 (+ i c)) :initial-element 'a)))))))
@@ -101,7 +101,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig '(a a a a a a a a a a))
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j :count c :from-end t)))
+			   (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j :count c :from-end t)))
 		      (equal y (nconc (make-list (- j c) :initial-element 'a)
 				      (make-list c :initial-element 'x)
 				      (make-list (- 10 j) :initial-element 'a)))))))
@@ -110,59 +110,59 @@
 ;;; Tests on vectors
 
 (deftest nsubstitute-if-vector.1
-  (let ((x #())) (nsubstitute-if 'b (is-eq-p 'a) x))
+  (let ((x #())) (nsubstitute-if 'b (is-eql-p 'a) x))
   #())
 
 (deftest nsubstitute-if-vector.2
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x))
   #(b b b c))
 
 (deftest nsubstitute-if-vector.3
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count nil) x)
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count nil) x)
   #(b b b c))
 
 (deftest nsubstitute-if-vector.4
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 2))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 2))
   #(b b b c))
 
 (deftest nsubstitute-if-vector.5
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 1))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 1))
   #(b b a c))
 
 (deftest nsubstitute-if-vector.6
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 0))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 0))
   #(a b a c))
 
 (deftest nsubstitute-if-vector.7
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count -1))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count -1))
   #(a b a c))
 
 (deftest nsubstitute-if-vector.8
-  (let ((x #())) (nsubstitute-if 'b (is-eq-p 'a) x :from-end t))
+  (let ((x #())) (nsubstitute-if 'b (is-eql-p 'a) x :from-end t))
   #())
 
 (deftest nsubstitute-if-vector.9
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :from-end t))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :from-end t))
   #(b b b c))
 
 (deftest nsubstitute-if-vector.10
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :from-end t :count nil))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :from-end t :count nil))
   #(b b b c))
 
 (deftest nsubstitute-if-vector.11
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 2 :from-end t))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 2 :from-end t))
   #(b b b c))
 
 (deftest nsubstitute-if-vector.12
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 1 :from-end t))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 1 :from-end t))
   #(a b b c))
 
 (deftest nsubstitute-if-vector.13
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count 0 :from-end t))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count 0 :from-end t))
   #(a b a c))
 
 (deftest nsubstitute-if-vector.14
-  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eq-p 'a) x :count -1 :from-end t))
+  (let ((x (copy-seq #(a b a c)))) (nsubstitute-if 'b (is-eql-p 'a) x :count -1 :from-end t))
   #(a b a c))
 
 (deftest nsubstitute-if-vector.15
@@ -170,7 +170,7 @@
 	(loop for j from i to 10 always
 	      (let* ((orig #(a a a a a a a a a a))
 		     (x (copy-seq orig))
-		     (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j)))
+		     (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j)))
 		(equalp y (concatenate 'simple-vector
 				       (make-array i :initial-element 'a)
 				       (make-array (- j i) :initial-element 'x)
@@ -182,7 +182,7 @@
 	(loop for j from i to 10 always
 	      (let* ((orig #(a a a a a a a a a a))
 		     (x (copy-seq orig))
-		     (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j :from-end t)))
+		     (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j :from-end t)))
 		(equalp y (concatenate 'simple-vector
 				       (make-array i :initial-element 'a)
 				       (make-array (- j i) :initial-element 'x)
@@ -195,7 +195,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig #(a a a a a a a a a a))
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j :count c)))
+			   (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j :count c)))
 		      (equalp y (concatenate 'simple-vector
 					     (make-array i :initial-element 'a)
 					     (make-array c :initial-element 'x)
@@ -208,7 +208,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig #(a a a a a a a a a a))
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if 'x (is-eq-p 'a) x :start i :end j :count c :from-end t)))
+			   (y (nsubstitute-if 'x (is-eql-p 'a) x :start i :end j :count c :from-end t)))
 		      (equalp y (concatenate 'simple-vector
 					     (make-array (- j c) :initial-element 'a)
 					     (make-array c :initial-element 'x)
@@ -246,59 +246,59 @@
 ;;; Tests on strings
 
 (deftest nsubstitute-if-string.1
-  (let ((x "")) (nsubstitute-if #\b (is-eq-p #\a) x))
+  (let ((x "")) (nsubstitute-if #\b (is-eql-p #\a) x))
   "")
 
 (deftest nsubstitute-if-string.2
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x))
   "bbbc")
 
 (deftest nsubstitute-if-string.3
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count nil))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count nil))
   "bbbc")
 
 (deftest nsubstitute-if-string.4
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count 2))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count 2))
   "bbbc")
 
 (deftest nsubstitute-if-string.5
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count 1))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count 1))
   "bbac")
 
 (deftest nsubstitute-if-string.6
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count 0))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count 0))
   "abac")
 
 (deftest nsubstitute-if-string.7
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count -1))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count -1))
   "abac")
 
 (deftest nsubstitute-if-string.8
-  (let ((x "")) (nsubstitute-if #\b (is-eq-p #\a) x :from-end t))
+  (let ((x "")) (nsubstitute-if #\b (is-eql-p #\a) x :from-end t))
   "")
 
 (deftest nsubstitute-if-string.9
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :from-end t))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :from-end t))
   "bbbc")
 
 (deftest nsubstitute-if-string.10
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :from-end t :count nil))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :from-end t :count nil))
   "bbbc")
 
 (deftest nsubstitute-if-string.11
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count 2 :from-end t))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count 2 :from-end t))
   "bbbc")
 
 (deftest nsubstitute-if-string.12
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count 1 :from-end t))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count 1 :from-end t))
   "abbc")
 
 (deftest nsubstitute-if-string.13
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count 0 :from-end t))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count 0 :from-end t))
   "abac")
 
 (deftest nsubstitute-if-string.14
-  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eq-p #\a) x :count -1 :from-end t))
+  (let ((x (copy-seq "abac"))) (nsubstitute-if #\b (is-eql-p #\a) x :count -1 :from-end t))
   "abac")
 
 (deftest nsubstitute-if-string.15
@@ -306,7 +306,7 @@
 	(loop for j from i to 10 always
 	      (let* ((orig "aaaaaaaaaa")
 		     (x (copy-seq orig))
-		     (y (nsubstitute-if #\x (is-eq-p #\a) x :start i :end j)))
+		     (y (nsubstitute-if #\x (is-eql-p #\a) x :start i :end j)))
 		(equalp y (concatenate 'simple-string
 				       (make-array i :initial-element #\a)
 				       (make-array (- j i) :initial-element #\x)
@@ -318,7 +318,7 @@
 	(loop for j from i to 10 always
 	      (let* ((orig "aaaaaaaaaa")
 		     (x (copy-seq orig))
-		     (y (nsubstitute-if #\x (is-eq-p #\a) x :start i :end j :from-end t)))
+		     (y (nsubstitute-if #\x (is-eql-p #\a) x :start i :end j :from-end t)))
 		(equalp y (concatenate 'simple-string
 				       (make-array i :initial-element #\a)
 				       (make-array (- j i) :initial-element #\x)
@@ -331,7 +331,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig "aaaaaaaaaa")
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if #\x (is-eq-p #\a) x :start i :end j :count c)))
+			   (y (nsubstitute-if #\x (is-eql-p #\a) x :start i :end j :count c)))
 		      (equalp y (concatenate 'simple-string
 					     (make-array i :initial-element #\a)
 					     (make-array c :initial-element #\x)
@@ -344,7 +344,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig "aaaaaaaaaa")
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if #\x (is-eq-p #\a) x :start i :end j :count c :from-end t)))
+			   (y (nsubstitute-if #\x (is-eql-p #\a) x :start i :end j :count c :from-end t)))
 		      (equalp y (concatenate 'simple-string
 					     (make-array (- j c) :initial-element #\a)
 					     (make-array c :initial-element #\x)
@@ -385,133 +385,133 @@
 (deftest nsubstitute-if-bit-vector.1
   (let* ((orig #*)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 0 (is-eq-p 1) x)))
+	 (result (nsubstitute-if 0 (is-eql-p 1) x)))
     result)
   #*)
 
 (deftest nsubstitute-if-bit-vector.2
   (let* ((orig #*)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x)))
     result)
   #*)
 
 (deftest nsubstitute-if-bit-vector.3
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 0 (is-eq-p 1) x)))
+	 (result (nsubstitute-if 0 (is-eql-p 1) x)))
     result)
   #*000000)
 
 (deftest nsubstitute-if-bit-vector.4
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x)))
     result)
   #*111111)
 
 (deftest nsubstitute-if-bit-vector.5
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :start 1)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :start 1)))
     result)
   #*011111)
   
 (deftest nsubstitute-if-bit-vector.6
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 0 (is-eq-p 1) x :start 2 :end nil)))
+	 (result (nsubstitute-if 0 (is-eql-p 1) x :start 2 :end nil)))
     result)
   #*010000)
 
 (deftest nsubstitute-if-bit-vector.7
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :end 4)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :end 4)))
     result)
   #*111101)
   
 (deftest nsubstitute-if-bit-vector.8
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 0 (is-eq-p 1) x :end nil)))
+	 (result (nsubstitute-if 0 (is-eql-p 1) x :end nil)))
     result)
   #*000000)
 
 (deftest nsubstitute-if-bit-vector.9
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 0 (is-eq-p 1) x :end 3)))
+	 (result (nsubstitute-if 0 (is-eql-p 1) x :end 3)))
     result)
   #*000101)
 
 (deftest nsubstitute-if-bit-vector.10
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 0 (is-eq-p 1) x :start 2 :end 4)))
+	 (result (nsubstitute-if 0 (is-eql-p 1) x :start 2 :end 4)))
     result)
   #*010001)
 
 (deftest nsubstitute-if-bit-vector.11
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :start 2 :end 4)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :start 2 :end 4)))
     result)
   #*011101)
 
 (deftest nsubstitute-if-bit-vector.12
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count 1)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count 1)))
     result)
   #*110101)
 
 (deftest nsubstitute-if-bit-vector.13
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count 0)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count 0)))
     result)
   #*010101)
 
 (deftest nsubstitute-if-bit-vector.14
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count -1)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count -1)))
     result)
   #*010101)
 
 (deftest nsubstitute-if-bit-vector.15
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count 1 :from-end t)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count 1 :from-end t)))
     result)
   #*010111)
 
 (deftest nsubstitute-if-bit-vector.16
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count 0 :from-end t)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count 0 :from-end t)))
     result)
   #*010101)
 
 (deftest nsubstitute-if-bit-vector.17
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count -1 :from-end t)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count -1 :from-end t)))
     result)
   #*010101)
 
 (deftest nsubstitute-if-bit-vector.18
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count nil)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count nil)))
     result)
   #*111111)
 
 (deftest nsubstitute-if-bit-vector.19
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 0) x :count nil :from-end t)))
+	 (result (nsubstitute-if 1 (is-eql-p 0) x :count nil :from-end t)))
     result)
   #*111111)
 
@@ -521,7 +521,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig #*0000000000)
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if 1 (is-eq-p 0) x :start i :end j :count c)))
+			   (y (nsubstitute-if 1 (is-eql-p 0) x :start i :end j :count c)))
 		      (equalp y (concatenate
 				 'simple-bit-vector
 				 (make-list i :initial-element 0)
@@ -535,7 +535,7 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig #*1111111111)
 			   (x (copy-seq orig))
-			   (y (nsubstitute-if 0 (is-eq-p 1) x :start i :end j :count c :from-end t)))
+			   (y (nsubstitute-if 0 (is-eql-p 1) x :start i :end j :count c :from-end t)))
 		      (equalp y (concatenate
 				 'simple-bit-vector
 				 (make-list (- j c) :initial-element 1)
@@ -548,14 +548,14 @@
 (deftest nsubstitute-if-list.24
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if '(a 10) (is-eq-p 'a) x :key #'car)))
+	 (result (nsubstitute-if '(a 10) (is-eql-p 'a) x :key #'car)))
     result)
   ((a 10) (b 2) (a 10) (c 4) (d 5) (a 10) (e 7)))
 
 (deftest nsubstitute-if-list.25
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if '(a 10) (is-eq-p 'a) x
+	 (result (nsubstitute-if '(a 10) (is-eql-p 'a) x
 				:key #'car :start 1 :end 5)))
     result)
   ((a 1) (b 2) (a 10) (c 4) (d 5) (a 6) (e 7)))
@@ -563,42 +563,42 @@
 (deftest nsubstitute-if-vector.24
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if '(a 10) (is-eq-p 'a) x :key #'car)))
+	 (result (nsubstitute-if '(a 10) (is-eql-p 'a) x :key #'car)))
     result)
   #((a 10) (b 2) (a 10) (c 4) (d 5) (a 10) (e 7)))
     
 (deftest nsubstitute-if-vector.25
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if '(a 10) (is-eq-p 'a) x :key #'car :start 1 :end 5)))
+	 (result (nsubstitute-if '(a 10) (is-eql-p 'a) x :key #'car :start 1 :end 5)))
     result)
   #((a 1) (b 2) (a 10) (c 4) (d 5) (a 6) (e 7)))
 
 (deftest nsubstitute-if-string.24
   (let* ((orig "0102342015")
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if #\a (is-eq-p #\1) x :key #'nextdigit)))
+	 (result (nsubstitute-if #\a (is-eql-p #\1) x :key #'nextdigit)))
     result)
   "a1a2342a15")
     
 (deftest nsubstitute-if-string.25
   (let* ((orig "0102342015")
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if #\a (is-eq-p #\1) x :key #'nextdigit :start 1 :end 6)))
+	 (result (nsubstitute-if #\a (is-eql-p #\1) x :key #'nextdigit :start 1 :end 6)))
     result)
   "01a2342015")
 
 (deftest nsubstitute-if-bit-vector.26
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 1) x :key #'1+)))
+	 (result (nsubstitute-if 1 (is-eql-p 1) x :key #'1+)))
     result)
   #*11111111111111111)
     
 (deftest nsubstitute-if-bit-vector.27
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
-	 (result (nsubstitute-if 1 (is-eq-p 1) x :key #'1+ :start 1 :end 10)))
+	 (result (nsubstitute-if 1 (is-eql-p 1) x :key #'1+ :start 1 :end 10)))
     result)
   #*01111111111010110)
 
