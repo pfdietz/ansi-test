@@ -1927,6 +1927,12 @@
    0)
   0)
 
+(deftest misc.149a
+  (funcall
+   (compile nil '(lambda (a) (block b1 (- a (ignore-errors (return-from b1 1))))))
+   0)
+  1)
+
 ;;; cmucl (11 2003 image)  "NIL is not of type C::CONTINUATION"
 (deftest misc.150
   (funcall
@@ -2357,3 +2363,39 @@
   1)
 
   
+;;;   segmentation violation at #XA4A0B59
+
+(deftest misc.172
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline list apply))
+       (declare (optimize (safety 3)))
+       (declare (optimize (speed 0)))
+       (declare (optimize (debug 0)))
+       (labels ((%f12 (f12-1 f12-2)
+		      (labels ((%f2 (f2-1 f2-2)
+				    (flet ((%f6 ()
+						(flet ((%f18
+							(f18-1
+							 &optional (f18-2 a)
+							 (f18-3 -207465075)
+							 (f18-4 a))
+							(return-from %f12 b)))
+						  (%f18 -3489553
+							-7
+							(%f18 (%f18 150 -64 f12-1)
+							      (%f18 (%f18 -8531)
+								    11410)
+							      b)
+							56362666))))
+				      (labels ((%f7
+						(f7-1 f7-2
+						      &optional (f7-3 (%f6)))
+						7767415))
+					f12-1))))
+			(%f2 b -36582571))))
+	 (apply #'%f12 (list 774 -4413)))))
+   0 1 2)
+  774)
