@@ -323,7 +323,8 @@
 
 (def-pprint-test format.\:@t.4
   (format nil "XX~10,20:@tYY")
-  "XXYY")
+  "XXYY"
+  :pretty nil)
 
 (def-pprint-test format.\:@t.5
   (with-output-to-string
