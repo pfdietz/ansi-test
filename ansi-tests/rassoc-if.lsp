@@ -92,46 +92,46 @@
 ;;; Error tests
 
 (deftest rassoc-if.error.1
-  (classify-error (rassoc-if))
-  program-error)
+  (signals-error (rassoc-if) program-error)
+  t)
 
 (deftest rassoc-if.error.2
-  (classify-error (rassoc-if #'null))
-  program-error)
+  (signals-error (rassoc-if #'null) program-error)
+  t)
 
 (deftest rassoc-if.error.3
-  (classify-error (rassoc-if #'null nil :bad t))
-  program-error)
+  (signals-error (rassoc-if #'null nil :bad t) program-error)
+  t)
 
 (deftest rassoc-if.error.4
-  (classify-error (rassoc-if #'null nil :key))
-  program-error)
+  (signals-error (rassoc-if #'null nil :key) program-error)
+  t)
 
 (deftest rassoc-if.error.5
-  (classify-error (rassoc-if #'null nil 1 1))
-  program-error)
+  (signals-error (rassoc-if #'null nil 1 1) program-error)
+  t)
 
 (deftest rassoc-if.error.6
-  (classify-error (rassoc-if #'null nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (rassoc-if #'null nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest rassoc-if.error.7
-  (classify-error (rassoc-if #'cons '((a . b)(c . d))))
-  program-error)
+  (signals-error (rassoc-if #'cons '((a . b)(c . d))) program-error)
+  t)
 
 (deftest rassoc-if.error.8
-  (classify-error (rassoc-if #'car '((a . b)(c . d))))
-  type-error)
+  (signals-error (rassoc-if #'car '((a . b)(c . d))) type-error)
+  t)
 
 (deftest rassoc-if.error.9
-  (classify-error (rassoc-if #'identity '((a . b)(c . d)) :key #'cons))
-  program-error)
+  (signals-error (rassoc-if #'identity '((a . b)(c . d)) :key #'cons) program-error)
+  t)
 
 (deftest rassoc-if.error.10
-  (classify-error (rassoc-if #'identity '((a . b)(c . d)) :key #'car))
-  type-error)
+  (signals-error (rassoc-if #'identity '((a . b)(c . d)) :key #'car) type-error)
+  t)
 
 (deftest rassoc-if.error.11
-  (classify-error (rassoc-if #'not '((a . b) . c)))
-  type-error)
+  (signals-error (rassoc-if #'not '((a . b) . c)) type-error)
+  t)
 

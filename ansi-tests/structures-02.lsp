@@ -488,10 +488,10 @@
 ;;; Error tests
 
 (deftest copy-structure.error.1
-  (classify-error (copy-structure))
-  program-error)
+  (signals-error (copy-structure) program-error)
+  t)
 
 (deftest copy-structure.error.2
-  (classify-error (copy-structure (make-s-2) nil))
-  program-error)
+  (signals-error (copy-structure (make-s-2) nil) program-error)
+  t)
 

@@ -146,43 +146,47 @@
 ;; Argument error cases
 
 (deftest sublis.error.1
-  (classify-error (sublis))
-  program-error)
+  (signals-error (sublis) program-error)
+  t)
 
 (deftest sublis.error.2
-  (classify-error (sublis nil))
-  program-error)
+  (signals-error (sublis nil) program-error)
+  t)
 
 (deftest sublis.error.3
-  (classify-error (sublis nil 'a :test))
-  program-error)
+  (signals-error (sublis nil 'a :test) program-error)
+  t)
 
 (deftest sublis.error.4
-  (classify-error (sublis nil 'a :bad-keyword t))
-  program-error)
+  (signals-error (sublis nil 'a :bad-keyword t) program-error)
+  t)
 
 (deftest sublis.error.5
-  (classify-error (sublis '((a . 1) (b . 2))
+  (signals-error (sublis '((a . 1) (b . 2))
 			  (list 'a 'b 'c 'd)
-			  :test #'identity))
-  program-error)
+			  :test #'identity)
+		 program-error)
+  t)
 
 (deftest sublis.error.6
-  (classify-error (sublis '((a . 1) (b . 2))
+  (signals-error (sublis '((a . 1) (b . 2))
 			  (list 'a 'b 'c 'd)
-			  :key #'cons))
-  program-error)
+			  :key #'cons)
+		 program-error)
+  t)
 
 (deftest sublis.error.7
-  (classify-error (sublis '((a . 1) (b . 2))
+  (signals-error (sublis '((a . 1) (b . 2))
 			  (list 'a 'b 'c 'd)
-			  :test-not #'identity))
-  program-error)
+			  :test-not #'identity)
+		 program-error)
+  t)
 
 (deftest sublis.error.8
-  (classify-error (sublis '((a . 1) . bad)
-			  (list 'a 'b 'c 'd)))
-  type-error)
+  (signals-error (sublis '((a . 1) . bad)
+			  (list 'a 'b 'c 'd))
+		 type-error)
+  t)
 
 (deftest sublis.shared
   (let* ((shared-piece (list 'a 'b))

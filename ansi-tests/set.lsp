@@ -27,26 +27,29 @@
   b)
 
 (deftest set.error.1
-  (classify-error (set))
-  program-error)
+  (signals-error (set) program-error)
+  t)
 
 (deftest set.error.2
-  (classify-error
+  (signals-error
    (let ((*var-used-in-set-tests* 'a))
      (declare (special *var-used-in-set-tests*))
-     (set '*var-used-in-set-tests*)))
-  program-error)
+     (set '*var-used-in-set-tests*))
+   program-error)
+  t)
 
 (deftest set.error.3
-  (classify-error
+  (signals-error
    (let ((*var-used-in-set-tests* 'a))
      (declare (special *var-used-in-set-tests*))
-     (set '*var-used-in-set-tests* nil nil)))
-  program-error)
+     (set '*var-used-in-set-tests* nil nil))
+   program-error)
+  t)
 
 (deftest set.error.4
-  (classify-error
+  (signals-error
    (let ((*var-used-in-set-tests* 'a) (*y* 'b))
      (declare (special *var-used-in-set-tests*))
-     (set '*var-used-in-set-tests* nil '*y* nil)))
-  program-error)
+     (set '*var-used-in-set-tests* nil '*y* nil))
+   program-error)
+  t)

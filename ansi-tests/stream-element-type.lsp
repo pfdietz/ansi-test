@@ -73,17 +73,17 @@
   nil)
 
 (deftest stream-element-type.error.1
-  (classify-error (stream-element-type))
-  program-error)
+  (signals-error (stream-element-type) program-error)
+  t)
 
 (deftest stream-element-type.error.2
-  (classify-error (stream-element-type *standard-input* nil))
-  program-error)
+  (signals-error (stream-element-type *standard-input* nil) program-error)
+  t)
 
 (deftest stream-element-type.error.3
   (loop for x in *mini-universe*
 	unless (or (typep x 'stream)
-		   (eql (eval `(classify-error (stream-element-type ',x)))
-			'type-error))
+		   (eval `(signals-error (stream-element-type ',x)
+					 type-error)))
 	collect x)
   nil)

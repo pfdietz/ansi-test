@@ -677,23 +677,26 @@
 ;;; Error tests
 
 (deftest shared-initialize.error.1
-  (classify-error (shared-initialize))
-  program-error)
+  (signals-error (shared-initialize) program-error)
+  t)
 
 (deftest shared-initialize.error.2
-  (classify-error (let ((obj (allocate-instance
+  (signals-error (let ((obj (allocate-instance
 			      (find-class 'shared-init-class-01))))
-		    (shared-initialize obj)))
-  program-error)
+		    (shared-initialize obj))
+		 program-error)
+  t)
 
 (deftest shared-initialize.error.3
-  (classify-error (let ((obj (allocate-instance
+  (signals-error (let ((obj (allocate-instance
 			      (find-class 'shared-init-class-01))))
-		    (shared-initialize obj nil :a)))
-  program-error)
+		    (shared-initialize obj nil :a))
+		 program-error)
+  t)
 
 (deftest shared-initialize.error.4
-  (classify-error (let ((obj (allocate-instance
+  (signals-error (let ((obj (allocate-instance
 			      (find-class 'shared-init-class-01))))
-		    (shared-initialize obj nil '(a b c) nil)))
-  program-error)
+		    (shared-initialize obj nil '(a b c) nil))
+		 program-error)
+  t)

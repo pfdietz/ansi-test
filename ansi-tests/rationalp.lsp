@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest rationalp.error.1
-  (classify-error (rationalp))
-  program-error)
+  (signals-error (rationalp) program-error)
+  t)
 
 (deftest rationalp.error.2
-  (classify-error (rationalp 0 nil))
-  program-error)
+  (signals-error (rationalp 0 nil) program-error)
+  t)
 
 (deftest rationalp.error.3
-  (classify-error (rationalp 'a 0))
-  program-error)
+  (signals-error (rationalp 'a 0) program-error)
+  t)
 
 (deftest rationalp.1
   (loop for x in *rationals*

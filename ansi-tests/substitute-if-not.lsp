@@ -789,49 +789,51 @@
 ;;; Error cases
 
 (deftest substitute-if-not.error.1
-  (classify-error (substitute-if-not))
-  program-error)
+  (signals-error (substitute-if-not) program-error)
+  t)
 
 (deftest substitute-if-not.error.2
-  (classify-error (substitute-if-not 'a))
-  program-error)
+  (signals-error (substitute-if-not 'a) program-error)
+  t)
 
 (deftest substitute-if-not.error.3
-  (classify-error (substitute-if-not 'a #'null))
-  program-error)
+  (signals-error (substitute-if-not 'a #'null) program-error)
+  t)
 
 (deftest substitute-if-not.error.4
-  (classify-error (substitute-if-not 'a #'null nil 'bad t))
-  program-error)
+  (signals-error (substitute-if-not 'a #'null nil 'bad t) program-error)
+  t)
 
 (deftest substitute-if-not.error.5
-  (classify-error (substitute-if-not 'a #'null nil
-				      'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (substitute-if-not 'a #'null nil
+				      'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest substitute-if-not.error.6
-  (classify-error (substitute-if-not 'a #'null nil :key))
-  program-error)
+  (signals-error (substitute-if-not 'a #'null nil :key) program-error)
+  t)
 
 (deftest substitute-if-not.error.7
-  (classify-error (substitute-if-not 'a #'null nil 1 2))
-  program-error)
+  (signals-error (substitute-if-not 'a #'null nil 1 2) program-error)
+  t)
 
 (deftest substitute-if-not.error.8
-  (classify-error (substitute-if-not 'a #'cons (list 'a 'b 'c)))
-  program-error)
+  (signals-error (substitute-if-not 'a #'cons (list 'a 'b 'c)) program-error)
+  t)
 
 (deftest substitute-if-not.error.9
-  (classify-error (substitute-if-not 'a #'car (list 'a 'b 'c)))
-  type-error)
+  (signals-error (substitute-if-not 'a #'car (list 'a 'b 'c)) type-error)
+  t)
 
 (deftest substitute-if-not.error.10
-  (classify-error (substitute-if-not 'a #'identity (list 'a 'b 'c)
-				  :key #'car))
-  type-error)
+  (signals-error (substitute-if-not 'a #'identity (list 'a 'b 'c)
+				  :key #'car)
+		 type-error)
+  t)
 
 (deftest substitute-if-not.error.11
-  (classify-error (substitute-if-not 'a #'identity (list 'a 'b 'c)
-				  :key #'cons))
-  program-error)
+  (signals-error (substitute-if-not 'a #'identity (list 'a 'b 'c)
+				  :key #'cons)
+		 program-error)
+  t)
 

@@ -265,41 +265,41 @@
 ;;; Error tests
 
 (deftest rassoc.error.1
-  (classify-error (rassoc))
-  program-error)
+  (signals-error (rassoc) program-error)
+  t)
 
 (deftest rassoc.error.2
-  (classify-error (rassoc nil))
-  program-error)
+  (signals-error (rassoc nil) program-error)
+  t)
 
 (deftest rassoc.error.3
-  (classify-error (rassoc nil nil :bad t))
-  program-error)
+  (signals-error (rassoc nil nil :bad t) program-error)
+  t)
 
 (deftest rassoc.error.4
-  (classify-error (rassoc nil nil :key))
-  program-error)
+  (signals-error (rassoc nil nil :key) program-error)
+  t)
 
 (deftest rassoc.error.5
-  (classify-error (rassoc nil nil 1 1))
-  program-error)
+  (signals-error (rassoc nil nil 1 1) program-error)
+  t)
 
 (deftest rassoc.error.6
-  (classify-error (rassoc nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (rassoc nil nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest rassoc.error.7
-  (classify-error (rassoc 'a '((b . a)(c . d)) :test #'identity))
-  program-error)
+  (signals-error (rassoc 'a '((b . a)(c . d)) :test #'identity) program-error)
+  t)
 
 (deftest rassoc.error.8
-  (classify-error (rassoc 'a '((b . a)(c . d)) :test-not #'identity))
-  program-error)
+  (signals-error (rassoc 'a '((b . a)(c . d)) :test-not #'identity) program-error)
+  t)
 
 (deftest rassoc.error.9
-  (classify-error (rassoc 'a '((b . a)(c . d)) :key #'cons))
-  program-error)
+  (signals-error (rassoc 'a '((b . a)(c . d)) :key #'cons) program-error)
+  t)
 
 (deftest rassoc.error.10
-  (classify-error (rassoc 'z '((a . b) . c)))
-  type-error)
+  (signals-error (rassoc 'z '((a . b) . c)) type-error)
+  t)

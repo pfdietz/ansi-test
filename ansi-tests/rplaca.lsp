@@ -27,25 +27,25 @@
 (deftest rplaca.error.1
   (loop for x in *universe*
 	thereis (and (not (consp x))
-		     (not (eq (catch-type-error (rplaca x 1)) 'type-error))))
+		     (not (eval `(signals-error (rplaca ',x 1) type-error)))))
   nil)
 
 (deftest rplaca.error.2
-  (classify-error (rplaca))
-  program-error)
+  (signals-error (rplaca) program-error)
+  t)
 
 (deftest rplaca.error.3
-  (classify-error (rplaca (cons 'a 'b)))
-  program-error)
+  (signals-error (rplaca (cons 'a 'b)) program-error)
+  t)
 
 (deftest rplaca.error.4
-  (classify-error (rplaca (cons 'a 'b) (cons 'c 'd) 'garbage))
-  program-error)
+  (signals-error (rplaca (cons 'a 'b) (cons 'c 'd) 'garbage) program-error)
+  t)
 
 (deftest rplaca.error.5
-  (classify-error (rplaca 'a 1))
-  type-error)
+  (signals-error (rplaca 'a 1) type-error)
+  t)
 
 (deftest rplaca.error.6
-  (classify-error (locally (rplaca 'a 1) t))
-  type-error)
+  (signals-error (locally (rplaca 'a 1) t) type-error)
+  t)

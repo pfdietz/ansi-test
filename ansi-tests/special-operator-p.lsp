@@ -41,14 +41,14 @@
   t 1)
 
 (deftest special-operator-p.error.1
-  (classify-error (special-operator-p 1))
-  type-error)
+  (signals-error (special-operator-p 1) type-error)
+  t)
 
 (deftest special-operator-p.error.2
-  (classify-error (special-operator-p))
-  program-error)
+  (signals-error (special-operator-p) program-error)
+  t)
 
 (deftest special-operator-p.error.3
-  (classify-error (special-operator-p 'cons 'cons))
-  program-error)
+  (signals-error (special-operator-p 'cons 'cons) program-error)
+  t)
 

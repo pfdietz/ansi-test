@@ -169,44 +169,44 @@
 ;;;;;;;;
 
 (deftest reduce.error.1
-  (classify-error (reduce 'cons 'a))
-  type-error)
+  (signals-error (reduce 'cons 'a) type-error)
+  t)
 
 (deftest reduce.error.2
-  (classify-error (reduce))
-  program-error)
+  (signals-error (reduce) program-error)
+  t)
 
 (deftest reduce.error.3
-  (classify-error (reduce #'list nil :start))
-  program-error)
+  (signals-error (reduce #'list nil :start) program-error)
+  t)
 
 (deftest reduce.error.4
-  (classify-error (reduce #'list nil 'bad t))
-  program-error)
+  (signals-error (reduce #'list nil 'bad t) program-error)
+  t)
 
 (deftest reduce.error.5
-  (classify-error (reduce #'list nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (reduce #'list nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest reduce.error.6
-  (classify-error (reduce #'list nil 1 2))
-  program-error)
+  (signals-error (reduce #'list nil 1 2) program-error)
+  t)
 
 (deftest reduce.error.7
-  (classify-error (locally (reduce 'cons 'a) t))
-  type-error)
+  (signals-error (locally (reduce 'cons 'a) t) type-error)
+  t)
 
 (deftest reduce.error.8
-  (classify-error (reduce #'identity '(a b c)))
-  program-error)
+  (signals-error (reduce #'identity '(a b c)) program-error)
+  t)
 
 (deftest reduce.error.9
-  (classify-error (reduce #'cons '(a b c) :key #'cons))
-  program-error)
+  (signals-error (reduce #'cons '(a b c) :key #'cons) program-error)
+  t)
 
 (deftest reduce.error.10
-  (classify-error (reduce #'cons '(a b c) :key #'car))
-  type-error)
+  (signals-error (reduce #'cons '(a b c) :key #'car) type-error)
+  t)
 
 
 ;;;;;;;;

@@ -810,47 +810,50 @@
 ;;; Error cases
 
 (deftest substitute-if.error.1
-  (classify-error (substitute-if))
-  program-error)
+  (signals-error (substitute-if) program-error)
+  t)
 
 (deftest substitute-if.error.2
-  (classify-error (substitute-if 'a))
-  program-error)
+  (signals-error (substitute-if 'a) program-error)
+  t)
 
 (deftest substitute-if.error.3
-  (classify-error (substitute-if 'a #'null))
-  program-error)
+  (signals-error (substitute-if 'a #'null) program-error)
+  t)
 
 (deftest substitute-if.error.4
-  (classify-error (substitute-if 'a #'null nil 'bad t))
-  program-error)
+  (signals-error (substitute-if 'a #'null nil 'bad t) program-error)
+  t)
 
 (deftest substitute-if.error.5
-  (classify-error (substitute-if 'a #'null nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (substitute-if 'a #'null nil 'bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest substitute-if.error.6
-  (classify-error (substitute-if 'a #'null nil :key))
-  program-error)
+  (signals-error (substitute-if 'a #'null nil :key) program-error)
+  t)
 
 (deftest substitute-if.error.7
-  (classify-error (substitute-if 'a #'null nil 1 2))
-  program-error)
+  (signals-error (substitute-if 'a #'null nil 1 2) program-error)
+  t)
 
 (deftest substitute-if.error.8
-  (classify-error (substitute-if 'a #'cons (list 'a 'b 'c)))
-  program-error)
+  (signals-error (substitute-if 'a #'cons (list 'a 'b 'c)) program-error)
+  t)
 
 (deftest substitute-if.error.9
-  (classify-error (substitute-if 'a #'car (list 'a 'b 'c)))
-  type-error)
+  (signals-error (substitute-if 'a #'car (list 'a 'b 'c)) type-error)
+  t)
 
 (deftest substitute-if.error.10
-  (classify-error (substitute-if 'a #'identity (list 'a 'b 'c)
-				  :key #'car))
-  type-error)
+  (signals-error (substitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'car)
+		 type-error)
+  t)
 
 (deftest substitute-if.error.11
-  (classify-error (substitute-if 'a #'identity (list 'a 'b 'c)
-				  :key #'cons))
-  program-error)
+  (signals-error (substitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'cons)
+		 program-error)
+  t)

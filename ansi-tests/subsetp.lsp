@@ -211,49 +211,49 @@
 ;;; Error tests
 
 (deftest subsetp.error.1
-  (classify-error (subsetp))
-  program-error)
+  (signals-error (subsetp) program-error)
+  t)
 
 (deftest subsetp.error.2
-  (classify-error (subsetp nil))
-  program-error)
+  (signals-error (subsetp nil) program-error)
+  t)
 
 (deftest subsetp.error.3
-  (classify-error (subsetp nil nil :bad t))
-  program-error)
+  (signals-error (subsetp nil nil :bad t) program-error)
+  t)
 
 (deftest subsetp.error.4
-  (classify-error (subsetp nil nil :key))
-  program-error)
+  (signals-error (subsetp nil nil :key) program-error)
+  t)
 
 (deftest subsetp.error.5
-  (classify-error (subsetp nil nil 1 2))
-  program-error)
+  (signals-error (subsetp nil nil 1 2) program-error)
+  t)
 
 (deftest subsetp.error.6
-  (classify-error (subsetp nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (subsetp nil nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest subsetp.error.7
-  (classify-error (subsetp (list 1 2) (list 3 4) :test #'identity))
-  program-error)
+  (signals-error (subsetp (list 1 2) (list 3 4) :test #'identity) program-error)
+  t)
 
 (deftest subsetp.error.8
-  (classify-error (subsetp (list 1 2) (list 3 4) :test-not #'identity))
-  program-error)
+  (signals-error (subsetp (list 1 2) (list 3 4) :test-not #'identity) program-error)
+  t)
 
 (deftest subsetp.error.9
-  (classify-error (subsetp (list 1 2) (list 3 4) :key #'cons))
-  program-error)
+  (signals-error (subsetp (list 1 2) (list 3 4) :key #'cons) program-error)
+  t)
 
 (deftest subsetp.error.10
-  (classify-error (subsetp (list 1 2) (list 3 4) :key #'car))
-  type-error)
+  (signals-error (subsetp (list 1 2) (list 3 4) :key #'car) type-error)
+  t)
 
 (deftest subsetp.error.11
-  (classify-error (subsetp (list 1 2 3) (list* 4 5 6)))
-  type-error)
+  (signals-error (subsetp (list 1 2 3) (list* 4 5 6)) type-error)
+  t)
 
 (deftest subsetp.error.12
-  (classify-error (subsetp (list* 1 2 3) (list 1 2 3 4 5 6)))
-  type-error)
+  (signals-error (subsetp (list* 1 2 3) (list 1 2 3 4 5 6)) type-error)
+  t)

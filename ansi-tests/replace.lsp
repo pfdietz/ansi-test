@@ -660,26 +660,26 @@
 ;;; Error cases
 
 (deftest replace.error.1
-  (classify-error (replace))
-  program-error)
+  (signals-error (replace) program-error)
+  t)
 
 (deftest replace.error.2
-  (classify-error (replace nil))
-  program-error)
+  (signals-error (replace nil) program-error)
+  t)
 
 (deftest replace.error.3
-  (classify-error (replace nil nil :start))
-  program-error)
+  (signals-error (replace nil nil :start) program-error)
+  t)
 
 (deftest replace.error.4
-  (classify-error (replace nil nil 'bad t))
-  program-error)
+  (signals-error (replace nil nil 'bad t) program-error)
+  t)
 
 (deftest replace.error.5
-  (classify-error (replace nil nil :allow-other-keys nil 'bad t))
-  program-error)
+  (signals-error (replace nil nil :allow-other-keys nil 'bad t) program-error)
+  t)
 
 (deftest replace.error.6
-  (classify-error (replace nil nil 1 2))
-  program-error)
+  (signals-error (replace nil nil 1 2) program-error)
+  t)
 

@@ -216,44 +216,44 @@
 ;;; Error cases
 
 (deftest search.error.1
-  (classify-error (search))
-  program-error)
+  (signals-error (search) program-error)
+  t)
 
 (deftest search.error.2
-  (classify-error (search "a"))
-  program-error)
+  (signals-error (search "a") program-error)
+  t)
 
 (deftest search.error.3
-  (classify-error (search "a" "a" :key))
-  program-error)
+  (signals-error (search "a" "a" :key) program-error)
+  t)
 
 (deftest search.error.4
-  (classify-error (search "a" "a" 'bad t))
-  program-error)
+  (signals-error (search "a" "a" 'bad t) program-error)
+  t)
 
 (deftest search.error.5
-  (classify-error (search "a" "a" 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (search "a" "a" 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest search.error.6
-  (classify-error (search "a" "a" 1 2))
-  program-error)
+  (signals-error (search "a" "a" 1 2) program-error)
+  t)
 
 (deftest search.error.7
-  (classify-error (search "c" "abcde" :test #'identity))
-  program-error)
+  (signals-error (search "c" "abcde" :test #'identity) program-error)
+  t)
 
 (deftest search.error.8
-  (classify-error (search "c" "abcde" :test-not #'identity))
-  program-error)
+  (signals-error (search "c" "abcde" :test-not #'identity) program-error)
+  t)
 
 (deftest search.error.9
-  (classify-error (search "c" "abcde" :key #'cons))
-  program-error)
+  (signals-error (search "c" "abcde" :key #'cons) program-error)
+  t)
 
 (deftest search.error.10
-  (classify-error (search "c" "abcde" :key #'car))
-  type-error)
+  (signals-error (search "c" "abcde" :key #'car) type-error)
+  t)
 
 ;;; Order of evaluation
 

@@ -40,17 +40,17 @@
   (c b a d e f) 2 1 2)
 
 (deftest revappend.error.1
-  (classify-error (revappend))
-  program-error)
+  (signals-error (revappend) program-error)
+  t)
 
 (deftest revappend.error.2
-  (classify-error (revappend nil))
-  program-error)
+  (signals-error (revappend nil) program-error)
+  t)
 
 (deftest revappend.error.3
-  (classify-error (revappend nil nil nil))
-  program-error)
+  (signals-error (revappend nil nil nil) program-error)
+  t)
 
 (deftest revappend.error.4
-  (classify-error (revappend '(a . b) '(z)))
-  type-error)
+  (signals-error (revappend '(a . b) '(z)) type-error)
+  t)

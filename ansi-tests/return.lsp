@@ -5,18 +5,19 @@
 
 (in-package :cl-test)
 
+;;; RETURN is tested extensively in other files
+
 (deftest return.error.1
-  (classify-error (funcall (macro-function 'return)))
-  program-error)
+  (signals-error (funcall (macro-function 'return)) program-error)
+  t)
   
 (deftest return.error.2
-  (classify-error (funcall (macro-function 'return)
-			   '(return nil)))
-  program-error)
+  (signals-error (funcall (macro-function 'return) '(return nil))
+		 program-error)
+  t)
 
 (deftest return.error.3
-  (classify-error (funcall (macro-function 'return)
-			   '(return nil)
-			   nil nil))
-  program-error)
-  
+  (signals-error (funcall (macro-function 'return)
+			  '(return nil) nil nil)
+		 program-error)
+  t)

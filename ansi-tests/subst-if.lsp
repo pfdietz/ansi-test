@@ -83,33 +83,33 @@
 ;;; Error tests
 
 (deftest subst-if.error.1
-  (classify-error (subst-if))
-  program-error)
+  (signals-error (subst-if) program-error)
+  t)
 
 (deftest subst-if.error.2
-  (classify-error (subst-if 'a))
-  program-error)
+  (signals-error (subst-if 'a) program-error)
+  t)
 
 (deftest subst-if.error.3
-  (classify-error (subst-if 'a #'null))
-  program-error)
+  (signals-error (subst-if 'a #'null) program-error)
+  t)
 
 (deftest subst-if.error.4
-  (classify-error (subst-if 'a #'null nil :foo nil))
-  program-error)
+  (signals-error (subst-if 'a #'null nil :foo nil) program-error)
+  t)
 
 (deftest subst-if.error.5
-  (classify-error (subst-if 'a #'null nil :test))
-  program-error)
+  (signals-error (subst-if 'a #'null nil :test) program-error)
+  t)
 
 (deftest subst-if.error.6
-  (classify-error (subst-if 'a #'null nil 1))
-  program-error)
+  (signals-error (subst-if 'a #'null nil 1) program-error)
+  t)
 
 (deftest subst-if.error.7
-  (classify-error (subst-if 'a #'null nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (subst-if 'a #'null nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest subst-if.error.8
-  (classify-error (subst-if 'a #'null (list 'a nil 'c) :key #'cons))
-  program-error)
+  (signals-error (subst-if 'a #'null (list 'a nil 'c) :key #'cons) program-error)
+  t)

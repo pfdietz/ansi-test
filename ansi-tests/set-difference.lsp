@@ -272,49 +272,49 @@
 
 
 (deftest set-difference.error.1
-  (classify-error (set-difference))
-  program-error)
+  (signals-error (set-difference) program-error)
+  t)
 
 (deftest set-difference.error.2
-  (classify-error (set-difference nil))
-  program-error)
+  (signals-error (set-difference nil) program-error)
+  t)
 
 (deftest set-difference.error.3
-  (classify-error (set-difference nil nil :bad t))
-  program-error)
+  (signals-error (set-difference nil nil :bad t) program-error)
+  t)
 
 (deftest set-difference.error.4
-  (classify-error (set-difference nil nil :key))
-  program-error)
+  (signals-error (set-difference nil nil :key) program-error)
+  t)
 
 (deftest set-difference.error.5
-  (classify-error (set-difference nil nil 1 2))
-  program-error)
+  (signals-error (set-difference nil nil 1 2) program-error)
+  t)
 
 (deftest set-difference.error.6
-  (classify-error (set-difference nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (set-difference nil nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest set-difference.error.7
-  (classify-error (set-difference (list 1 2) (list 3 4) :test #'identity))
-  program-error)
+  (signals-error (set-difference (list 1 2) (list 3 4) :test #'identity) program-error)
+  t)
 
 (deftest set-difference.error.8
-  (classify-error (set-difference (list 1 2) (list 3 4) :test-not #'identity))
-  program-error)
+  (signals-error (set-difference (list 1 2) (list 3 4) :test-not #'identity) program-error)
+  t)
 
 (deftest set-difference.error.9
-  (classify-error (set-difference (list 1 2) (list 3 4) :key #'cons))
-  program-error)
+  (signals-error (set-difference (list 1 2) (list 3 4) :key #'cons) program-error)
+  t)
 
 (deftest set-difference.error.10
-  (classify-error (set-difference (list 1 2) (list 3 4) :key #'car))
-  type-error)
+  (signals-error (set-difference (list 1 2) (list 3 4) :key #'car) type-error)
+  t)
 
 (deftest set-difference.error.11
-  (classify-error (set-difference (list 1 2 3) (list* 4 5 6)))
-  type-error)
+  (signals-error (set-difference (list 1 2 3) (list* 4 5 6)) type-error)
+  t)
 
 (deftest set-difference.error.12
-  (classify-error (set-difference (list* 1 2 3) (list 4 5 6)))
-  type-error)
+  (signals-error (set-difference (list* 1 2 3) (list 4 5 6)) type-error)
+  t)

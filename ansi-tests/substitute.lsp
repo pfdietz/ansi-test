@@ -1066,46 +1066,46 @@
 ;;; Error cases
 
 (deftest substitute.error.1
-  (classify-error (substitute))
-  program-error)
+  (signals-error (substitute) program-error)
+  t)
 
 (deftest substitute.error.2
-  (classify-error (substitute 'a))
-  program-error)
+  (signals-error (substitute 'a) program-error)
+  t)
 
 (deftest substitute.error.3
-  (classify-error (substitute 'a 'b))
-  program-error)
+  (signals-error (substitute 'a 'b) program-error)
+  t)
 
 (deftest substitute.error.4
-  (classify-error (substitute 'a 'b nil 'bad t))
-  program-error)
+  (signals-error (substitute 'a 'b nil 'bad t) program-error)
+  t)
 
 (deftest substitute.error.5
-  (classify-error (substitute 'a 'b nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (substitute 'a 'b nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest substitute.error.6
-  (classify-error (substitute 'a 'b nil :key))
-  program-error)
+  (signals-error (substitute 'a 'b nil :key) program-error)
+  t)
 
 (deftest substitute.error.7
-  (classify-error (substitute 'a 'b nil 1 2))
-  program-error)
+  (signals-error (substitute 'a 'b nil 1 2) program-error)
+  t)
 
 (deftest substitute.error.8
-  (classify-error (substitute 'a 'b (list 'a 'b 'c) :test #'identity))
-  program-error)
+  (signals-error (substitute 'a 'b (list 'a 'b 'c) :test #'identity) program-error)
+  t)
 
 (deftest substitute.error.9
-  (classify-error (substitute 'a 'b (list 'a 'b 'c) :test-not #'identity))
-  program-error)
+  (signals-error (substitute 'a 'b (list 'a 'b 'c) :test-not #'identity) program-error)
+  t)
 
 (deftest substitute.error.10
-  (classify-error (substitute 'a 'b (list 'a 'b 'c) :key #'cons))
-  program-error)
+  (signals-error (substitute 'a 'b (list 'a 'b 'c) :key #'cons) program-error)
+  t)
 
 (deftest substitute.error.11
-  (classify-error (substitute 'a 'b (list 'a 'b 'c) :key #'car))
-  type-error)
+  (signals-error (substitute 'a 'b (list 'a 'b 'c) :key #'car) type-error)
+  t)
 

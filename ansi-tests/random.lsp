@@ -9,17 +9,17 @@
 (compile-and-load "random-aux.lsp")
 
 (deftest random.error.1
-  (classify-error (random))
-  program-error)
+  (signals-error (random) program-error)
+  t)
 
 (deftest random.error.2
-  (classify-error (random 10 *random-state* nil))
-  program-error)
+  (signals-error (random 10 *random-state* nil) program-error)
+  t)
 
 (deftest random.error.3
   (loop for x in *mini-universe*
 	unless (or (and (realp x) (> x 0))
-		   (eq (eval `(classify-error (random ',x))) 'type-error))
+		   (eval `(signals-error (random ',x) type-error)))
 	collect x)
   nil)
 

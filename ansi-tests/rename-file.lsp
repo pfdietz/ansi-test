@@ -144,6 +144,6 @@
 ;;;
 
 (deftest rename-file.error.1
-  (classify-error (rename-file))
-  program-error)
+  (signals-error (rename-file) program-error)
+  t)
 

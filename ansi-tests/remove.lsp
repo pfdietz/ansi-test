@@ -775,84 +775,84 @@
 ;;; Error cases
 
 (deftest remove.error.1
-  (classify-error (remove))
-  program-error)
+  (signals-error (remove) program-error)
+  t)
 
 (deftest remove.error.2
-  (classify-error (remove 'a))
-  program-error)
+  (signals-error (remove 'a) program-error)
+  t)
 
 (deftest remove.error.3
-  (classify-error (remove 'a nil :key))
-  program-error)
+  (signals-error (remove 'a nil :key) program-error)
+  t)
 
 (deftest remove.error.4
-  (classify-error (remove 'a nil 'bad t))
-  program-error)
+  (signals-error (remove 'a nil 'bad t) program-error)
+  t)
 
 (deftest remove.error.5
-  (classify-error (remove 'a nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (remove 'a nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest remove.error.6
-  (classify-error (remove 'a nil 1 2))
-  program-error)
+  (signals-error (remove 'a nil 1 2) program-error)
+  t)
 
 (deftest remove.error.7
-  (classify-error (remove 'a (list 'a 'b 'c) :test #'identity))
-  program-error)
+  (signals-error (remove 'a (list 'a 'b 'c) :test #'identity) program-error)
+  t)
 
 (deftest remove.error.8
-  (classify-error (remove 'a (list 'a 'b 'c) :test-not #'identity))
-  program-error)
+  (signals-error (remove 'a (list 'a 'b 'c) :test-not #'identity) program-error)
+  t)
 
 (deftest remove.error.9
-  (classify-error (remove 'a (list 'a 'b 'c) :key #'cons))
-  program-error)
+  (signals-error (remove 'a (list 'a 'b 'c) :key #'cons) program-error)
+  t)
 
 (deftest remove.error.10
-  (classify-error (remove 'a (list 'a 'b 'c) :key #'car))
-  type-error)
+  (signals-error (remove 'a (list 'a 'b 'c) :key #'car) type-error)
+  t)
 
 
 ;;;
 
 (deftest delete.error.1
-  (classify-error (delete))
-  program-error)
+  (signals-error (delete) program-error)
+  t)
 
 (deftest delete.error.2
-  (classify-error (delete 'a))
-  program-error)
+  (signals-error (delete 'a) program-error)
+  t)
 
 (deftest delete.error.3
-  (classify-error (delete 'a nil :key))
-  program-error)
+  (signals-error (delete 'a nil :key) program-error)
+  t)
 
 (deftest delete.error.4
-  (classify-error (delete 'a nil 'bad t))
-  program-error)
+  (signals-error (delete 'a nil 'bad t) program-error)
+  t)
 
 (deftest delete.error.5
-  (classify-error (delete 'a nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (delete 'a nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest delete.error.6
-  (classify-error (delete 'a nil 1 2))
-  program-error)
+  (signals-error (delete 'a nil 1 2) program-error)
+  t)
 
 (deftest delete.error.7
-  (classify-error (delete 'a (list 'a 'b 'c) :test #'identity))
-  program-error)
+  (signals-error (delete 'a (list 'a 'b 'c) :test #'identity) program-error)
+  t)
 
 (deftest delete.error.8
-  (classify-error (delete 'a (list 'a 'b 'c) :test-not #'identity))
-  program-error)
+  (signals-error (delete 'a (list 'a 'b 'c) :test-not #'identity) program-error)
+  t)
 
 (deftest delete.error.9
-  (classify-error (delete 'a (list 'a 'b 'c) :key #'cons))
-  program-error)
+  (signals-error (delete 'a (list 'a 'b 'c) :key #'cons) program-error)
+  t)
 
 (deftest delete.error.10
-  (classify-error (delete 'a (list 'a 'b 'c) :key #'car))
-  type-error)
+  (signals-error (delete 'a (list 'a 'b 'c) :key #'car) type-error)
+  t)

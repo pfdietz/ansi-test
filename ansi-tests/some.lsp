@@ -97,55 +97,55 @@
 
 
 (deftest some.error.1
-  (classify-error (some 1 '(a b c)))
-  type-error)
+  (signals-error (some 1 '(a b c)) type-error)
+  t)
 
 (deftest some.error.2
-  (classify-error (some #\a '(a b c)))
-  type-error)
+  (signals-error (some #\a '(a b c)) type-error)
+  t)
 
 (deftest some.error.3
-  (classify-error (some #() '(a b c)))
-  type-error)
+  (signals-error (some #() '(a b c)) type-error)
+  t)
 
 (deftest some.error.4
-  (classify-error (some #'null 'a))
-  type-error)
+  (signals-error (some #'null 'a) type-error)
+  t)
 
 (deftest some.error.5
-  (classify-error (some #'null 100))
-  type-error)
+  (signals-error (some #'null 100) type-error)
+  t)
 
 (deftest some.error.6
-  (classify-error (some #'null 'a))
-  type-error)
+  (signals-error (some #'null 'a) type-error)
+  t)
 
 (deftest some.error.7
-  (classify-error (some #'eq () 'a))
-  type-error)
+  (signals-error (some #'eq () 'a) type-error)
+  t)
 
 (deftest some.error.8
-  (classify-error (some))
-  program-error)
+  (signals-error (some) program-error)
+  t)
 
 (deftest some.error.9
-  (classify-error (some #'null))
-  program-error)
+  (signals-error (some #'null) program-error)
+  t)
 
 (deftest some.error.10
-  (classify-error (locally (some 1 '(a b c)) t))
-  type-error)
+  (signals-error (locally (some 1 '(a b c)) t) type-error)
+  t)
 
 (deftest some.error.11
-  (classify-error (some #'cons '(a b c)))
-  program-error)
+  (signals-error (some #'cons '(a b c)) program-error)
+  t)
 
 (deftest some.error.12
-  (classify-error (some #'car '(a b c)))
-  type-error)
+  (signals-error (some #'car '(a b c)) type-error)
+  t)
 
 (deftest some.error.13
-  (classify-error (some #'cons '(a b c) '(b c d) '(c d e)))
-  program-error)
+  (signals-error (some #'cons '(a b c) '(b c d) '(c d e)) program-error)
+  t)
 
 

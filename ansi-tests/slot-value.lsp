@@ -105,19 +105,21 @@
 ;;; Error tests
 
 (deftest slot-value.error.1
-  (classify-error (slot-value))
-  program-error)
+  (signals-error (slot-value) program-error)
+  t)
 
 (deftest slot-value.error.2
-  (classify-error (slot-value (make-instance 'slot-value-class-01)))
-  program-error)
+  (signals-error (slot-value (make-instance 'slot-value-class-01))
+		 program-error)
+  t)
 
 (deftest slot-value.error.3
-  (classify-error
+  (signals-error
    (let ((obj (make-instance 'slot-value-class-01)))
      (setf (slot-value obj 'a) t)
-     (slot-value obj 'a nil)))
-  program-error)
+     (slot-value obj 'a nil))
+   program-error)
+  t)
 
 (deftest slot-value.error.4
   (handler-case

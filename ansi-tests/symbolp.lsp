@@ -24,9 +24,9 @@
 ;;; Error cases
 
 (deftest symbolp.error.1
-  (classify-error (symbolp))
-  program-error)
+  (signals-error (symbolp) program-error)
+  t)
 
 (deftest symbolp.error.2
-  (classify-error (symbolp nil nil))
-  program-error)
+  (signals-error (symbolp nil nil) program-error)
+  t)

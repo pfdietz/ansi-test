@@ -6,22 +6,21 @@
 (in-package :cl-test)
 
 (deftest rational.error.1
-  (classify-error (rational))
-  program-error)
+  (signals-error (rational) program-error)
+  t)
 
 (deftest rational.error.2
-  (classify-error (rational 0 nil))
-  program-error)
+  (signals-error (rational 0 nil) program-error)
+  t)
 
 (deftest rational.error.3
-  (classify-error (rational 0 0))
-  program-error)
+  (signals-error (rational 0 0) program-error)
+  t)
 
 (deftest rational.error.4
   (loop for x in *mini-universe*
 	unless (or (realp x)
-		   (eq (eval `(classify-error (rational (quote ,x))))
-		       'type-error))
+		   (eval `(signals-error (rational ',x) type-error)))
 	collect x)
   nil)
 

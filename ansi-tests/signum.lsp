@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest signum.error.1
-  (classify-error (signum))
-  program-error)
+  (signals-error (signum) program-error)
+  t)
 
 (deftest signum.error.2
-  (classify-error (signum 1 1))
-  program-error)
+  (signals-error (signum 1 1) program-error)
+  t)
 
 (deftest signum.error.3
-  (classify-error (signum 1 nil))
-  program-error)
+  (signals-error (signum 1 nil) program-error)
+  t)
 
 (deftest signum.1
   (signum 0)

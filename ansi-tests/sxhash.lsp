@@ -120,9 +120,9 @@
 ;;; Error cases
 
 (deftest sxhash.error.1
-  (classify-error (sxhash))
-  program-error)
+  (signals-error (sxhash) program-error)
+  t)
 
 (deftest sxhash.error.2
-  (classify-error (sxhash nil nil))
-  program-error)
+  (signals-error (sxhash nil nil) program-error)
+  t)

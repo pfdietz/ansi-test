@@ -41,12 +41,12 @@
   nil)
 
 (deftest readtablep.error.1
-  (classify-error (readtablep))
-  program-error)
+  (signals-error (readtablep) program-error)
+  t)
 
 (deftest readtablep.error.2
-  (classify-error (readtablep nil nil))
-  program-error)
+  (signals-error (readtablep nil nil) program-error)
+  t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

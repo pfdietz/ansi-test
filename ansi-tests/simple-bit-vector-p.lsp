@@ -54,9 +54,9 @@
   t)
 
 (deftest simple-bit-vector-p.error.1
-  (classify-error (simple-bit-vector-p))
-  program-error)
+  (signals-error (simple-bit-vector-p) program-error)
+  t)
 
 (deftest simple-bit-vector-p.error.2
-  (classify-error (simple-bit-vector-p #* #*))
-  program-error)
+  (signals-error (simple-bit-vector-p #* #*) program-error)
+  t)

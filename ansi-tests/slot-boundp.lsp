@@ -51,24 +51,26 @@
 ;;; Error tests
 
 (deftest slot-boundp.error.1
-  (classify-error (slot-boundp))
-  program-error)
+  (signals-error (slot-boundp) program-error)
+  t)
 
 (deftest slot-boundp.error.2
-  (classify-error (let ((obj (make-instance 'slot-boundp-class-01)))
-		    (slot-boundp obj)))
-  program-error)
+  (signals-error (let ((obj (make-instance 'slot-boundp-class-01)))
+		    (slot-boundp obj))
+		 program-error)
+  t)
 
 (deftest slot-boundp.error.3
-  (classify-error (let ((obj (make-instance 'slot-boundp-class-01)))
-		    (slot-boundp obj 'a nil)))
-  program-error)
+  (signals-error (let ((obj (make-instance 'slot-boundp-class-01)))
+		    (slot-boundp obj 'a nil))
+		 program-error)
+  t)
 
 (deftest slot-boundp.error.4
-  (let ((err (classify-error
-	      (let ((obj (make-instance 'slot-boundp-class-01)))
-		(slot-boundp obj 'nonexistent-slot)))))
-    (and err (notnot (subtypep err 'error))))
+  (signals-error
+   (let ((obj (make-instance 'slot-boundp-class-01)))
+     (slot-boundp obj 'nonexistent-slot))
+   error)
   t)
 
 ;;; SLOT-BOUNDP should signal an error on elements of built-in-classes

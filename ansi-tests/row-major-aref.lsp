@@ -108,5 +108,5 @@
 ;;; Error tests
 
 (deftest row-major-aref.error.1
-  (classify-error (row-major-aref))
-  program-error)
+  (signals-error (row-major-aref) program-error)
+  t)

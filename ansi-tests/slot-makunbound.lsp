@@ -65,17 +65,19 @@
 ;;; Error cases
 
 (deftest slot-makunbound.error.1
-  (classify-error (slot-makunbound))
-  program-error)
+  (signals-error (slot-makunbound) program-error)
+  t)
 
 (deftest slot-makunbound.error.2
-  (classify-error (slot-makunbound (make-instance 'slot-makunbound-class-01)))
-  program-error)
+  (signals-error (slot-makunbound (make-instance 'slot-makunbound-class-01))
+		 program-error)
+  t)
 
 (deftest slot-makunbound.error.3
-  (classify-error (slot-makunbound (make-instance 'slot-makunbound-class-01)
-				   'a nil))
-  program-error)
+  (signals-error (slot-makunbound (make-instance 'slot-makunbound-class-01)
+				   'a nil)
+		 program-error)
+  t)
 
 (deftest slot-makunbound.error.4
   (let ((built-in-class (find-class 'built-in-class)))

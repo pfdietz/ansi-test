@@ -294,11 +294,11 @@ do the defstruct."
 		      ))
 	       t)
 	     (deftest ,(make-struct-test-name name "ERROR.1")
-	       (classify-error (,p-fn))
-	       program-error)
+	       (signals-error (,p-fn) program-error)
+	       t)
 	     (deftest ,(make-struct-test-name name "ERROR.2")
-	       (classify-error (,p-fn (,make-fn) nil))
-	       program-error)
+	       (signals-error (,p-fn (,make-fn) nil) program-error)
+	       t)
 	     ))
 
        ;; Test that the elements of *universe* are not
@@ -343,9 +343,11 @@ do the defstruct."
 		     for (slot-name . initval) in initial-value-alist
 		     for field-fn in field-fns
 		     collect
-		     `(let ((x (classify-error (,field-fn))))
-			(unless (eqt x 'program-error)
-			  (list ',slot-name ',field-fn x))))))
+		     `(multiple-value-bind
+			  (x val)
+			  (signals-error (,field-fn) program-error)
+			(unless x
+			  (list ',slot-name ',field-fn val))))))
 	 nil)
 
        (deftest ,(make-struct-test-name name "ERROR.4")
@@ -355,9 +357,12 @@ do the defstruct."
 		     for (slot-name . initval) in initial-value-alist
 		     for field-fn in field-fns
 		     collect
-		     `(let ((x (classify-error (,field-fn (,make-fn) nil))))
-			(unless (eqt x 'program-error)
-			  (list ',slot-name ',field-fn x))))))
+		     `(multiple-value-bind
+			  (x val)
+			  (signals-error (,field-fn (,make-fn) nil)
+					 program-error)
+			(unless x
+			  (list ',slot-name ',field-fn val))))))
 	 nil)
 
        ;; Check that two invocations return different structures
@@ -393,11 +398,11 @@ do the defstruct."
 		    t)
 	       t)
 	     (deftest ,(make-struct-test-name name "ERROR.5")
-	       (classify-error (,copy-fn))
-	       program-error)
+	       (signals-error (,copy-fn) program-error)
+	       t)
 	     (deftest ,(make-struct-test-name name "ERROR.6")
-	       (classify-error (,copy-fn (,make-fn) nil))
-	       program-error)
+	       (signals-error (,copy-fn (,make-fn) nil) program-error)
+	       t)
 	     ))	     
 
        ;; Check that the copy function properly copies fields

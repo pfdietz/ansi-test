@@ -62,16 +62,16 @@
   t)
 
 (deftest subtypep.error.1
-  (classify-error (subtypep))
-  program-error)
+  (signals-error (subtypep) program-error)
+  t)
 
 (deftest subtypep.error.2
-  (classify-error (subtypep t))
-  program-error)
+  (signals-error (subtypep t) program-error)
+  t)
 
 (deftest subtypep.error.3
-  (classify-error (subtypep t t nil nil))
-  program-error)
+  (signals-error (subtypep t t nil nil) program-error)
+  t)
 
 ;;; Special cases of types-6 that are/were causing problems in CMU CL
 

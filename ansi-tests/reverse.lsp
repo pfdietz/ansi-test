@@ -99,33 +99,33 @@
 ;;; Error cases
 
 (deftest reverse.error.1
-  (classify-error (reverse 'a))
-  type-error)
+  (signals-error (reverse 'a) type-error)
+  t)
 
 (deftest reverse.error.2
-  (classify-error (reverse #\a))
-  type-error)
+  (signals-error (reverse #\a) type-error)
+  t)
 
 (deftest reverse.error.3
-  (classify-error (reverse 10))
-  type-error)
+  (signals-error (reverse 10) type-error)
+  t)
 
 (deftest reverse.error.4
-  (classify-error (reverse 0.3))
-  type-error)
+  (signals-error (reverse 0.3) type-error)
+  t)
 
 (deftest reverse.error.5
-  (classify-error (reverse 10/3))
-  type-error)
+  (signals-error (reverse 10/3) type-error)
+  t)
 
 (deftest reverse.error.6
-  (classify-error (reverse))
-  program-error)
+  (signals-error (reverse) program-error)
+  t)
 
 (deftest reverse.error.7
-  (classify-error (reverse nil nil))
-  program-error)
+  (signals-error (reverse nil nil) program-error)
+  t)
 
 (deftest reverse.error.8
-  (classify-error (locally (reverse 'a) t))
-  type-error)
+  (signals-error (locally (reverse 'a) t) type-error)
+  t)

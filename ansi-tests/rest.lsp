@@ -15,11 +15,11 @@
   (b) 1)
 
 (deftest rest.error.1
-  (classify-error (rest))
-  program-error)
+  (signals-error (rest) program-error)
+  t)
 
 (deftest rest.error.2
-  (classify-error (rest nil nil))
-  program-error)
+  (signals-error (rest nil nil) program-error)
+  t)
 
 

@@ -130,5 +130,5 @@
   :good)
 
 (deftest reinitialize-instance.error.2
-  (classify-error (reinitialize-instance))
-  program-error)
+  (signals-error (reinitialize-instance) program-error)
+  t)

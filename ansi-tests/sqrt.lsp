@@ -8,17 +8,17 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest sqrt.error.1
-  (classify-error (sqrt))
-  program-error)
+  (signals-error (sqrt) program-error)
+  t)
 
 (deftest sqrt.error.2
-  (classify-error (sqrt 0 nil))
-  program-error)
+  (signals-error (sqrt 0 nil) program-error)
+  t)
 
 (deftest sqrt.error.3
   (loop for x in *mini-universe*
 	unless (or (numberp x)
-		   (eq (eval `(classify-error (sqrt ',x))) 'type-error))
+		   (eval `(signals-error (sqrt ',x) type-error)))
 	collect x)
   nil)
 

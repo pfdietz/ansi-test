@@ -9,12 +9,12 @@
 (compile-and-load "round-aux.lsp")
 
 (deftest round.error.1
-  (classify-error (round))
-  program-error)
+  (signals-error (round) program-error)
+  t)
 
 (deftest round.error.2
-  (classify-error (round 1.0 1 nil))
-  program-error)
+  (signals-error (round 1.0 1 nil) program-error)
+  t)
 
 ;;;
 

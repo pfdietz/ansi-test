@@ -14,30 +14,30 @@
   "1234abcdABCD")
 
 (deftest symbol-name.3
-  (classify-error (symbol-name 1))
-  type-error)
+  (signals-error (symbol-name 1) type-error)
+  t)
 
 (deftest symbol-name.4
-  (classify-error (symbol-name '(a)))
-  type-error)
+  (signals-error (symbol-name '(a)) type-error)
+  t)
 
 (deftest symbol-name.5
-  (classify-error (symbol-name "ABCDE"))
-  type-error)
+  (signals-error (symbol-name "ABCDE") type-error)
+  t)
 
 (deftest symbol-name.6
-  (classify-error (symbol-name 12913.0213))
-  type-error)
+  (signals-error (symbol-name 12913.0213) type-error)
+  t)
 
 (deftest symbol-name.7
   (symbol-name :|abcdefg|)
   "abcdefg")
 
 (deftest symbol-name.error.1
-  (classify-error (symbol-name))
-  program-error)
+  (signals-error (symbol-name) program-error)
+  t)
 
 (deftest symbol-name.error.2
-  (classify-error (symbol-name 'a 'b))
-  program-error)
+  (signals-error (symbol-name 'a 'b) program-error)
+  t)
 

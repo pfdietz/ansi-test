@@ -6,12 +6,12 @@
 (in-package :cl-test)
 
 (deftest random-state-p.error.1
-  (classify-error (random-state-p))
-  program-error)
+  (signals-error (random-state-p) program-error)
+  t)
 
 (deftest random-state-p.error.2
-  (classify-error (random-state-p nil nil))
-  program-error)
+  (signals-error (random-state-p nil nil) program-error)
+  t)
 
 (deftest random-state-p.1
   (loop for x in *universe*

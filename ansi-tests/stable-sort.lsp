@@ -114,41 +114,41 @@
 ;;; Error cases
 
 (deftest stable-sort.error.1
-  (classify-error (stable-sort))
-  program-error)
+  (signals-error (stable-sort) program-error)
+  t)
 
 (deftest stable-sort.error.2
-  (classify-error (stable-sort nil))
-  program-error)
+  (signals-error (stable-sort nil) program-error)
+  t)
 
 (deftest stable-sort.error.3
-  (classify-error (stable-sort nil #'< :key))
-  program-error)
+  (signals-error (stable-sort nil #'< :key) program-error)
+  t)
 
 (deftest stable-sort.error.4
-  (classify-error (stable-sort nil #'< 'bad t))
-  program-error)
+  (signals-error (stable-sort nil #'< 'bad t) program-error)
+  t)
 
 (deftest stable-sort.error.5
-  (classify-error (stable-sort nil #'< 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (stable-sort nil #'< 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest stable-sort.error.6
-  (classify-error (stable-sort nil #'< 1 2))
-  program-error)
+  (signals-error (stable-sort nil #'< 1 2) program-error)
+  t)
 
 (deftest stable-sort.error.7
-  (classify-error (stable-sort (list 1 2 3 4) #'identity))
-  program-error)
+  (signals-error (stable-sort (list 1 2 3 4) #'identity) program-error)
+  t)
 
 (deftest stable-sort.error.8
-  (classify-error (stable-sort (list 1 2 3 4) #'< :key #'cons))
-  program-error)
+  (signals-error (stable-sort (list 1 2 3 4) #'< :key #'cons) program-error)
+  t)
 
 (deftest stable-sort.error.9
-  (classify-error (stable-sort (list 1 2 3 4) #'< :key #'car))
-  type-error)
+  (signals-error (stable-sort (list 1 2 3 4) #'< :key #'car) type-error)
+  t)
 
 (deftest stable-sort.error.10
-  (classify-error (stable-sort (list 1 2 3 4) #'elt))
-  type-error)
+  (signals-error (stable-sort (list 1 2 3 4) #'elt) type-error)
+  t)

@@ -108,26 +108,26 @@
 ;;; Error cases
 
 (deftest string-downcase.error.1
-  (classify-error (string-downcase))
-  program-error)
+  (signals-error (string-downcase) program-error)
+  t)
 
 (deftest string-downcase.error.2
-  (classify-error (string-downcase (copy-seq "abc") :bad t))
-  program-error)
+  (signals-error (string-downcase (copy-seq "abc") :bad t) program-error)
+  t)
 
 (deftest string-downcase.error.3
-  (classify-error (string-downcase (copy-seq "abc") :start))
-  program-error)
+  (signals-error (string-downcase (copy-seq "abc") :start) program-error)
+  t)
 
 (deftest string-downcase.error.4
-  (classify-error (string-downcase (copy-seq "abc") :bad t
-				      :allow-other-keys nil))
-  program-error)
+  (signals-error (string-downcase (copy-seq "abc") :bad t
+				      :allow-other-keys nil) program-error)
+  t)
 
 (deftest string-downcase.error.5
-  (classify-error (string-downcase (copy-seq "abc") :end))
-  program-error)
+  (signals-error (string-downcase (copy-seq "abc") :end) program-error)
+  t)
 
 (deftest string-downcase.error.6
-  (classify-error (string-downcase (copy-seq "abc") 1 2))
-  program-error)
+  (signals-error (string-downcase (copy-seq "abc") 1 2) program-error)
+  t)

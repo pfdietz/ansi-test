@@ -163,13 +163,13 @@
 ;;; Error cases
 
 (deftest string-right-trim.error.1
-  (classify-error (string-right-trim))
-  program-error)
+  (signals-error (string-right-trim) program-error)
+  t)
 
 (deftest string-right-trim.error.2
-  (classify-error (string-right-trim "abc"))
-  program-error)
+  (signals-error (string-right-trim "abc") program-error)
+  t)
 
 (deftest string-right-trim.error.3
-  (classify-error (string-right-trim "abc" "abcdddabc" nil))
-  program-error)
+  (signals-error (string-right-trim "abc" "abcdddabc" nil) program-error)
+  t)

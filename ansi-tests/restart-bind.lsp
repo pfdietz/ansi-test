@@ -182,25 +182,28 @@
 ;;; Error tests
 
 (deftest restart-bind.error.1
-  (classify-error
+  (signals-error
    (restart-bind
     ((foo #'(lambda () t)))
-    (invoke-restart 'foo 'a)))
-  program-error)
+    (invoke-restart 'foo 'a))
+   program-error)
+  t)
 
 (deftest restart-bind.error.2
-  (classify-error
+  (signals-error
    (restart-bind
     ((foo #'(lambda (x) x)))
-    (invoke-restart 'foo)))
-  program-error)
+    (invoke-restart 'foo))
+   program-error)
+  t)
 
 (deftest restart-bind.error.3
-  (classify-error
+  (signals-error
    (restart-bind
     ((foo #'identity))
-    (invoke-restart 'foo)))
-  program-error)
+    (invoke-restart 'foo))
+   program-error)
+  t)
 
 (deftest restart-bind.23
   (restart-bind

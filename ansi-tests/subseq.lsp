@@ -221,15 +221,15 @@
 ;;; Error cases
 
 (deftest subseq.error.1
-  (classify-error (subseq))
-  program-error)
+  (signals-error (subseq) program-error)
+  t)
 
 (deftest subseq.error.2
-  (classify-error (subseq nil))
-  program-error)
+  (signals-error (subseq nil) program-error)
+  t)
 
 (deftest subseq.error.3
-  (classify-error (subseq nil 0 0 0))
-  program-error)
+  (signals-error (subseq nil 0 0 0) program-error)
+  t)
 
 

@@ -66,16 +66,16 @@
 ;;; Error tests
 
 (deftest remhash.error.1
-  (classify-error (remhash))
-  program-error)
+  (signals-error (remhash) program-error)
+  t)
 
 (deftest remhash.error.2
-  (classify-error (remhash 'a))
-  program-error)
+  (signals-error (remhash 'a) program-error)
+  t)
 
 (deftest remhash.error.3
-  (classify-error (remhash 'a (make-hash-table) nil))
-  program-error)
+  (signals-error (remhash 'a (make-hash-table) nil) program-error)
+  t)
 
 
 

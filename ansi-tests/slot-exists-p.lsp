@@ -163,20 +163,21 @@
 ;;; Errors tests
 
 (deftest slot-exists-p.error.1
-  (classify-error (slot-exists-p))
-  program-error)
+  (signals-error (slot-exists-p) program-error)
+  t)
 
 (deftest slot-exists-p.error.2
-  (classify-error (slot-exists-p 'a))
-  program-error)
+  (signals-error (slot-exists-p 'a) program-error)
+  t)
 
 (deftest slot-exists-p.error.3
-  (classify-error (slot-exists-p (make-instance 'slot-exists-p-class-01)))
-  program-error)
+  (signals-error (slot-exists-p (make-instance 'slot-exists-p-class-01))
+		 program-error)
+  t)
 
 (deftest slot-exists-p.error.4
-  (classify-error (slot-exists-p (make-instance 'slot-exists-p-class-01)
-				 'a nil))
-  program-error)
+  (signals-error (slot-exists-p (make-instance 'slot-exists-p-class-01) 'a nil)
+		 program-error)
+  t)
 
 

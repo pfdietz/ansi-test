@@ -195,75 +195,75 @@
 ;;; Error cases
 
 (deftest remove-duplicates.error.1
-  (classify-error (remove-duplicates))
-  program-error)
+  (signals-error (remove-duplicates) program-error)
+  t)
 
 (deftest remove-duplicates.error.2
-  (classify-error (remove-duplicates nil :start))
-  program-error)
+  (signals-error (remove-duplicates nil :start) program-error)
+  t)
 
 (deftest remove-duplicates.error.3
-  (classify-error (remove-duplicates nil 'bad t))
-  program-error)
+  (signals-error (remove-duplicates nil 'bad t) program-error)
+  t)
 
 (deftest remove-duplicates.error.4
-  (classify-error (remove-duplicates nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (remove-duplicates nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest remove-duplicates.error.5
-  (classify-error (remove-duplicates nil 1 2))
-  program-error)
+  (signals-error (remove-duplicates nil 1 2) program-error)
+  t)
 
 (deftest remove-duplicates.error.6
-  (classify-error (remove-duplicates (list 'a 'b 'c) :test #'identity))
-  program-error)
+  (signals-error (remove-duplicates (list 'a 'b 'c) :test #'identity) program-error)
+  t)
 
 (deftest remove-duplicates.error.7
-  (classify-error (remove-duplicates (list 'a 'b 'c) :test-not #'identity))
-  program-error)
+  (signals-error (remove-duplicates (list 'a 'b 'c) :test-not #'identity) program-error)
+  t)
 
 (deftest remove-duplicates.error.8
-  (classify-error (remove-duplicates (list 'a 'b 'c) :key #'cons))
-  program-error)
+  (signals-error (remove-duplicates (list 'a 'b 'c) :key #'cons) program-error)
+  t)
 
 (deftest remove-duplicates.error.9
-  (classify-error (remove-duplicates (list 'a 'b 'c) :key #'car))
-  type-error)
+  (signals-error (remove-duplicates (list 'a 'b 'c) :key #'car) type-error)
+  t)
 
 ;;;
 
 (deftest delete-duplicates.error.1
-  (classify-error (delete-duplicates))
-  program-error)
+  (signals-error (delete-duplicates) program-error)
+  t)
 
 (deftest delete-duplicates.error.2
-  (classify-error (delete-duplicates nil :start))
-  program-error)
+  (signals-error (delete-duplicates nil :start) program-error)
+  t)
 
 (deftest delete-duplicates.error.3
-  (classify-error (delete-duplicates nil 'bad t))
-  program-error)
+  (signals-error (delete-duplicates nil 'bad t) program-error)
+  t)
 
 (deftest delete-duplicates.error.4
-  (classify-error (delete-duplicates nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (delete-duplicates nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest delete-duplicates.error.5
-  (classify-error (delete-duplicates nil 1 2))
-  program-error)
+  (signals-error (delete-duplicates nil 1 2) program-error)
+  t)
 
 (deftest delete-duplicates.error.6
-  (classify-error (delete-duplicates (list 'a 'b 'c) :test #'identity))
-  program-error)
+  (signals-error (delete-duplicates (list 'a 'b 'c) :test #'identity) program-error)
+  t)
 
 (deftest delete-duplicates.error.7
-  (classify-error (delete-duplicates (list 'a 'b 'c) :test-not #'identity))
-  program-error)
+  (signals-error (delete-duplicates (list 'a 'b 'c) :test-not #'identity) program-error)
+  t)
 
 (deftest delete-duplicates.error.8
-  (classify-error (delete-duplicates (list 'a 'b 'c) :key #'cons))
-  program-error)
+  (signals-error (delete-duplicates (list 'a 'b 'c) :key #'cons) program-error)
+  t)
 
 (deftest delete-duplicates.error.9
-  (classify-error (delete-duplicates (list 'a 'b 'c) :key #'car))
-  type-error)
+  (signals-error (delete-duplicates (list 'a 'b 'c) :key #'car) type-error)
+  t)

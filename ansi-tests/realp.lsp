@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest realp.error.1
-  (classify-error (realp))
-  program-error)
+  (signals-error (realp) program-error)
+  t)
 
 (deftest realp.error.2
-  (classify-error (realp 0 nil))
-  program-error)
+  (signals-error (realp 0 nil) program-error)
+  t)
 
 (deftest realp.error.3
-  (classify-error (realp nil nil))
-  program-error)
+  (signals-error (realp nil nil) program-error)
+  t)
 
 (deftest realp.1
   (notnot-mv (realp 0))
