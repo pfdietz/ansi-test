@@ -3849,6 +3849,28 @@
    -3847091255 -13482 -7577750)
   0)
 
+(deftest misc.228a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -249606 2) a))
+       (declare (type (integer 125 511) b))
+       (declare (type (integer -2 1) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 2) (space 2) (safety 1) (debug 3)
+			  (compilation-speed 3)))
+       (catch 'ct4
+	 (rational (case b
+		     ((350 244 1059) (prog2 (numerator c) 0))
+		     ((1705 493)
+		      (unwind-protect
+			  (throw 'ct4 c)
+			(loop for lv2 below 2 count (logbitp 0 c))))
+		     (t a))))))
+   0 200 -1)
+  0)
+
 ;;; Error: `T' is not of the expected type `INTEGER'
 (deftest misc.229
   (funcall
@@ -4992,8 +5014,19 @@ Broken at C::WT-C-INLINE-LOC.
 	      (catch 'ct2
 		(complex (cl::handler-bind nil -254932942) 0))))))))
    1 2 3)
-  -254932942)   
+  -254932942)
 
+(deftest misc.293b
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (notinline complex))
+       (declare (optimize (speed 1) (space 0) (safety 1)
+			  (debug 3) (compilation-speed 3)))
+       (flet ((%f () (multiple-value-prog1 0 (return-from %f 0))))
+	 (complex (%f) 0)))))
+  0)
 
 ;;; failed AVER: "(SUBSETP START START-STACK)"
 
@@ -5794,3 +5827,107 @@ Broken at C::WT-C-INLINE-LOC.
    -90583503 -61289371485 -1 175888 -3 3257970 -3264725617  -6816839328)
   0)
 
+;;; (misc.315 deleted)
+
+;;; ACL 6.2 interpreter bugs
+;;; Error: `NIL' is not of the expected type `NUMBER'
+;;; (in COMP::IA-RESOLVE-REFS)
+
+(deftest misc.316
+  (funcall
+   (compile
+    nil
+    '(lambda (a c)
+       (declare (optimize (speed 2) (space 3) (safety 2) (debug 2)
+			  (compilation-speed 0)))
+       (unwind-protect
+	   0
+	 (progn (tagbody (bit #*000000111 (min 8 (max 0 a)))
+			 tag5    (flet ((%f17 (f17-1 f17-2 f17-3)
+					      (complex (numerator (go tag4)) 0)))
+				   c)
+			 tag4)
+		c))))
+   1 2)
+  0)
+
+;;; ecl failures (12 April 2004)
+
+;;; wrong value returned
+(deftest misc.317
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (space 1) (safety 3) (debug 0)
+			  (compilation-speed 3)))
+       (catch 'ct4
+	 (elt '(40760)
+	      (min 0 (max 0 (let* ((v3 (* (throw 'ct4 0) 0))) 0))))))))
+  0)
+
+;;; seg fault
+(deftest misc.318
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -2050548150 4917) a))
+       (declare (type (integer -4 1) b))
+       (declare (type (integer 99335934976 442465125376) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 1) (space 1) (safety 1) (debug 0)
+			  (compilation-speed 0)))
+       (if (rationalize
+	    (labels ((%f12 (f12-1)
+			   (if c 0
+			     (bit #*101010011000011
+				  (min 14 (max 0 0))))))
+	      (if (> 0 c) 0 (%f12 0))))
+	   (progn
+	     (expt (flet ((%f18 (f18-1 f18-2 &optional (f18-3 0)
+				       (f18-4 c) (f18-5 b))
+				0))
+		     (apply #'%f18 b b 0 0 nil))
+		   0)
+	     a)
+	 0)))
+   10 1 99335934976)
+  10)
+
+;;; seg fault
+(deftest misc.319
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -626615938 3649977016320) a))
+       (declare (type (integer -3615553 6013683) b))
+       (declare (type (integer -746719 1431737508) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 3) (space 1) (safety 2) (debug 3)
+			  (compilation-speed 3)))
+       (if (logbitp 0
+		    (flet ((%f10 (f10-1 f10-2 f10-3) b))
+		      (flet ((%f4 (f4-1 f4-2)
+				  (apply #'%f10 (%f10 0 a 0) 0 c nil)))
+			(complex (%f4 0 0) 0))))
+	   0 0)))
+   2378435476701 1646880 246794654)
+  0)
+
+;;; sbcl 0.8.9.35
+;;; failed AVER: "(EQL (LAMBDA-COMPONENT FUNCTIONAL) *CURRENT-COMPONENT*)"
+
+(deftest misc.320
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 0) (safety 2)
+			  (debug 2) (compilation-speed 0)))
+       (catch 'ct2
+	 (elt '(102)
+	      (flet ((%f12 () (rem 0 -43)))
+		(multiple-value-call #'%f12 (values))))))))
+  102)
