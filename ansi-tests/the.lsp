@@ -25,3 +25,29 @@
 	unless (and x (not (cdr x)) (eql (car x) e))
 	collect e)
   nil)
+
+(deftest the.5
+  (loop for e in *universe*
+	for x = (multiple-value-list (eval `(the (values ,(type-of e))
+					      (quote ,e))))
+	unless (and x (not (cdr x)) (eql (car x) e))
+	collect e)
+  nil)
+
+(deftest the.6
+  (loop for e in *universe*
+	for x = (multiple-value-list (eval `(the (values ,(type-of e) t)
+					      (quote ,e))))
+	unless (and x (not (cdr x)) (eql (car x) e))
+	collect e)
+  nil)
+
+(deftest the.7
+  (loop for e in *universe*
+	for x = (multiple-value-list (eval `(the (values ,(type-of e))
+					      (values (quote ,e) :ignored))))
+	unless (and (eql (length x) 2)
+		    (eql (car x) e)
+		    (eql (cadr x) :ignored))
+	collect e)
+  nil)
