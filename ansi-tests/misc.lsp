@@ -761,8 +761,9 @@
 			    (type (integer 266003133 2112105962) c)
 			    (optimize (speed 3) (safety 1) (debug 1)))
 		   (truncate (max (round a) c) (* (* a a) a))))
-   -10 1000)
-  -1 0)
+   -10 266003133)
+  -266003
+  133)
 
 (deftest misc.57
   (funcall
