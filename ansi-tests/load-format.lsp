@@ -9,6 +9,7 @@
 
 ;;; 22.3.1
 (load "format-c.lsp")
+(load "formatter-c.lsp")
 (load "format-percent.lsp")
 (load "format-ampersand.lsp")
 (load "format-page.lsp")

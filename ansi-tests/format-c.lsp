@@ -51,9 +51,8 @@
 	when (> count 100) collect "count limit exceeded" and do (loop-finish))
   nil)
 
-(deftest format.c.3
-  (format nil "~:C" #\Space)
-  #.(char-name #\Space))
+(def-format-test format.c.3
+  "~:C" (#\Space) #.(char-name #\Space))
 
 (deftest format.c.4
   (loop for c across +standard-chars+

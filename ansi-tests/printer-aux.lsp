@@ -440,3 +440,11 @@
 			    tail ,num-left)
 		  )))))
 	   ,expected-output)))))
+
+;;; Macro used for an idiom in testing FORMATTER calls
+
+(defmacro formatter-call-to-string (fn &body args)
+  (let ((stream (gensym "S")))
+    `(with-output-to-string
+       (,stream)
+       (assert (equal (funcall ,fn ,stream ,@args 'a) '(a))))))

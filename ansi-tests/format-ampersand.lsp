@@ -21,7 +21,18 @@
 (deftest format.&.5
   (loop for i from 1 to 100
 	for s1 = (make-string (1- i) :initial-element #\Newline)
-	for s2 = (format nil (format nil "~~~D&" i))
+	for format-string = (format nil "~~~D&" i)
+	for s2 = (format nil format-string)
+	unless (string= s1 s2)
+	collect i)
+  nil)
+
+(deftest formatter.&.5
+  (loop for i from 1 to 100
+	for s1 = (make-string (1- i) :initial-element #\Newline)
+	for format-string = (format nil "~~~D&" i)
+	for fn = (eval `(formatter ,format-string))
+	for s2 = (formatter-call-to-string fn)
 	unless (string= s1 s2)
 	collect i)
   nil)
@@ -31,7 +42,20 @@
 	for s1 = (concatenate 'string
 			      "X"
 			      (make-string i :initial-element #\Newline))
-	for s2 = (format nil (format nil "X~~~D&" i))
+	for format-string = (format nil "X~~~D&" i)
+	for s2 = (format nil format-string)
+	unless (string= s1 s2)
+	collect i)
+  nil)
+
+(deftest formatter.&.6
+  (loop for i from 1 to 100
+	for s1 = (concatenate 'string
+			      "X"
+			      (make-string i :initial-element #\Newline))
+	for format-string = (format nil "X~~~D&" i)
+	for fn = (eval `(formatter ,format-string))
+	for s2 = (formatter-call-to-string fn)
 	unless (string= s1 s2)
 	collect i)
   nil)
@@ -50,6 +74,15 @@
 	collect i)
   nil)
 
+(deftest formatter.&.9
+  (let ((fn (formatter "~V&")))
+    (loop for i from 1 to 100
+	  for s1 = (make-string (1- i) :initial-element #\Newline)
+	  for s2 = (formatter-call-to-string fn i)
+	  unless (string= s1 s2)
+	  collect i))
+  nil)
+
 (deftest format.&.10
   (loop for i from 1 to (min (- call-arguments-limit 3) 100)
 	for s1 = (make-string (1- i) :initial-element #\Newline)
@@ -57,6 +90,18 @@
 	for s2 = (apply #'format nil "~#&" args)
 	unless (string= s1 s2)
 	collect i)
+  nil)
+
+(deftest formatter.&.10
+  (let ((fn (formatter "~#&")))
+    (loop for i from 1 to (min (- call-arguments-limit 3) 100)
+	  for s1 = (make-string (1- i) :initial-element #\Newline)
+	  for args = (loop for j below i collect j)
+	  for s2 = (with-output-to-string
+		     (stream)
+		     (assert (equal (apply fn stream args) args)))
+	  unless (string= s1 s2)
+	  collect i))
   nil)
 
 (def-format-test format.&.11
@@ -69,16 +114,3 @@
   "X~#%" ('a 'b 'c) #.(let ((nl (string #\Newline)))
 			(concatenate 'string "X" nl nl nl))
   3)
-
-
-
-
-
-
-
-
-
-
-
-
-
