@@ -103,7 +103,25 @@
       (list str1 str2)))
   :good)
 
+;;; Free declaration scope
 
-    
-      
-				       
+(deftest with-output-to-string.15
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-output-to-string (s (return-from done x))
+			       (declare (special x))))))
+  :good)
+
+(deftest with-output-to-string.16
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good)
+	    (str (make-array '(10) :element-type 'character
+			     :fill-pointer 0)))
+	(with-output-to-string (s str :element-type (return-from done x))
+			       (declare (special x))))))
+  :good)
+
