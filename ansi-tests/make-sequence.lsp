@@ -172,6 +172,7 @@
   (make-sequence '(simple-vector 5) 5 :initial-element 'a)
   #(a a a a a))
 
+#+:ansi-tests-strict-initial-element
 (deftest make-sequence.26
   (equalp (make-sequence 'string 5) (make-string 5))
   t)
