@@ -9283,6 +9283,5 @@ Broken at C::WT-MAKE-CLOSURE.
    (compile nil '(lambda nil
 		   (declare (optimize (space 2) (debug 2) (compilation-speed 2)
 				      (speed 1) (safety 3)))
-		   (the integer
-		     (integer-length (dotimes (iv4 2 15790955) (progn -10)))))))
+		   (the integer (integer-length (dotimes (iv4 2 15790955)))))))
   24)
