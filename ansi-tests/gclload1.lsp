@@ -32,3 +32,5 @@
 
 #+ecl (setq c:*suppress-compiler-warnings* t
             c:*suppress-compiler-notes* t)
+
+#+clisp (setq custom::*warn-on-floating-point-contagion* nil)

@@ -417,14 +417,12 @@
 		 when (<= (rational bound)
 			  (rational x)
 			  (rational upper-bound))
-;;		 do (print x)
-;;		    (print epsilon) (print bound) (print upper-bound) (print one) (terpri)
-;;		    (finish-output)
 		 nconc
-		 (let* ((y (float x one))
-			(z (* y (- one (* 2 epsilon)))))
-		   (list (list y z t)
-			 (list z y nil)))))
+		 (let* ((y (float x one)))
+		   (let ((z (* y (- one (* 2 epsilon)))))
+		     (list (list y z t)
+			   (list z y nil))))))
+     
      (loop for x in *universe*
 	   when (and (realp x) (< -1 x 1))
 	   nconc
@@ -448,16 +446,16 @@
 			  (rational x)
 			  (rational upper-bound))
 		 nconc
-		 (let* ((y (float x one))
-			(z1 (+ y epsilon))
-			(z2 (- y epsilon)))
-		   (list (list y z1 t)
-			 (list z1 y nil)
-			 (list y z2 nil)
-			 (list z2 y t)))))
-     )))
-
-
+		 (handler-case
+		  (let* ((y (float x one))
+			 (z1 (+ y epsilon))
+			 (z2 (- y epsilon)))
+		    (list (list y z1 t)
+			  (list z1 y nil)
+			  (list y z2 nil)
+			  (list z2 y t)))
+		  (arithmetic-error () nil)))
+	   ))))
 
 (deftest <.4
   (loop for (x y result . rest) in *number-less-tests*
@@ -657,13 +655,15 @@
 			  (rational x)
 			  (rational upper-bound))
 		 nconc
-		 (let* ((y (float x one))
-			(z1 (+ y epsilon))
-			(z2 (- y epsilon)))
-		   (list (list y z1 t)
-			 (list z1 y nil)
-			 (list y z2 nil)
-			 (list z2 y t)))))
+		 (handler-case
+		  (let* ((y (float x one))
+			 (z1 (+ y epsilon))
+			 (z2 (- y epsilon)))
+		    (list (list y z1 t)
+			  (list z1 y nil)
+			  (list y z2 nil)
+			  (list z2 y t)))
+		  (floating-point-underflow () nil))))
      )))
 
 (deftest <=.4

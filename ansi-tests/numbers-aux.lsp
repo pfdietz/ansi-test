@@ -130,62 +130,83 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and ;; (numbers-are-compatible x y)
-			(and (< x y) (> x y)))
+	      when
+	      (handler-case
+	       (and ;; (numbers-are-compatible x y)
+		(and (< x y) (> x y)))
+	       (arithmetic-error () nil))
 	      collect (list x y))))
 
 (defun <.9-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and ;; (numbers-are-compatible x y)
-			(if (< x y) (not (> y x))
-			  (> y x)))
+	      when
+	      (handler-case
+	       (and ;; (numbers-are-compatible x y)
+		(if (< x y) (not (> y x))
+		  (> y x)))
+	       (arithmetic-error () nil))
 	      collect (list x y))))
 
 (defun <.10-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and ;; (numbers-are-compatible x y)
-			(if (< x y) (>= x y)
-			  (not (>= x y))))
+	      when
+	      (handler-case
+	       (and ;; (numbers-are-compatible x y)
+		(if (< x y) (>= x y)
+		  (not (>= x y))))
+	       (arithmetic-error () nil))
 	      collect (list x y))))
 
 (defun <=.8-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and ;; (numbers-are-compatible x y)
-			(if (<= x y) (not (>= y x))
-			  (>= y x)))
+	      when
+	      (handler-case
+	       (and ;; (numbers-are-compatible x y)
+		(if (<= x y) (not (>= y x))
+		  (>= y x)))
+	       (arithmetic-error () nil))
 	      collect (list x y))))
  
 (defun <=.9-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and ;; (numbers-are-compatible x y)
-			(if (<= x y) (not (or (= x y) (< x y)))
-			  (or (= x y) (< x y))))
+	      when
+	      (handler-case
+	       (and ;; (numbers-are-compatible x y)
+		(if (<= x y) (not (or (= x y) (< x y)))
+		  (or (= x y) (< x y))))
+	       (arithmetic-error () nil))
 	      collect (list x y))))
 
 (defun >.8-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and ;; (numbers-are-compatible x y)
-			(if (> x y) (<= x y)
-			  (not (<= x y))))
+	      when
+	      (handler-case
+	       (and ;; (numbers-are-compatible x y)
+		(if (> x y) (<= x y)
+		  (not (<= x y))))
+	       (arithmetic-error () nil))
 	      collect (list x y))))
 
 (defun >=.8-fn ()
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and ;; (numbers-are-compatible x y)
-			(if (>= x y) (not (or (= x y) (> x y)))
-			  (or (= x y) (> x y))))
+	      when
+	      (handler-case
+	       (and ;; (numbers-are-compatible x y)
+		(if (>= x y) (not (or (= x y) (> x y)))
+		  (or (= x y) (> x y))))
+	       (arithmetic-error () nil))
 	      collect (list x y))))
 
 ;;; Comparison of rationsls
