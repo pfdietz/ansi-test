@@ -20,6 +20,12 @@
   (default-initargs nil :type list)
   (metaclass 'standard-class :type symbol)
   (documentation nil :type (or null string))
+  ;; Internal fields
+  (preds nil :type list)
+  (succs nil :type list)
+  (count 0 :type integer)
+  (index nil)
+  (min-pred-index 1000000)
   )
 
 (defstruct my-slot
@@ -41,6 +47,10 @@
 
 (defun find-my-class (class-name)
   (gethash class-name *my-classes*))
+
+;;; This macro will assume that all the superclasses have already
+;;; been defined.  Tests will be written with defclass itself
+;;; to test forward referenced superclasses
 
 (defmacro defclass-with-tests
   (&whole args
@@ -224,14 +234,72 @@
 			'(,sym))))
 	 nil))))
 
-#|
-
 (defun compute-class-precedence-list (class-name)
   "Compute the class precdence list for classes defined using
    DEFCLASS-WITH-TESTS."
-  (let ((classes nil)
-	(classes-to-consider class-name))
+  (let ((class-names nil)
+	(class-names-to-consider (list class-name))
+	classes)
     ;; Find all classes
-
-|#
-    
+    (loop
+     while class-names-to-consider
+     do (let ((name (pop class-names-to-consider)))
+	  (unless (member name class-names)
+	    (push name class-names)
+	    (let ((my-class (find-my-class name)))
+	      (assert my-class)
+	      (setq class-names-to-consider
+		    (append (my-class-direct-superclass-names my-class)
+			    class-names-to-consider))))))
+    (setq class-names (reverse class-names))
+    (assert (eq class-name (first class-names)))
+    ;; class-names now contains class-name (which occurs first) and
+    ;; the names of all its superclasses except T
+    (setq classes (mapcar #'find-my-class class-names))
+    ;; Walk the classes and set the predecessor links in the
+    ;; class precedence DAG
+    (loop for c in classes
+	  for dsns = (my-class-direct-superclass-names c)
+	  do (let ((pred c))
+	       (loop for superclass-name in dsns
+		     for superclass = (find-my-class superclass-name)
+		     do (push pred (my-class-preds superclass))
+		     do (pushnew superclass (my-class-succs pred))
+		     do (incf (my-class-count superclass))
+		     do (setq pred superclass))))
+    ;; The list candidates will contain all the classes
+    ;; for which the count is zero.  These are the candidates
+    ;; for selection as the next class in the class precedence list
+    (let ((candidates (loop for c in classes
+			    when (zerop (my-class-count c))
+			    collect c))
+	  (n 0)
+	  (result nil))
+      (assert (equal candidates (list (first classes))))
+      (loop
+       while candidates
+       do (let* ((next (first candidates))
+		 (min-pred-index (my-class-min-pred-index next)))
+	    (loop
+	     for c in (rest candidates)
+	     for c-min-pred-index = (my-class-min-pred-index c)
+	     do
+	     (cond
+	      ((< c-min-pred-index min-pred-index)
+	       (setq next c
+		     min-pred-index c-min-pred-index))
+	      (t (assert (not (= c-min-pred-index min-pred-index))))))
+	    (setq candidates (remove next candidates))
+	    (setf (my-class-index next) (incf n))
+	    (push next result)
+	    (loop
+	     for succ in (my-class-succs next)
+	     do (decf (my-class-count succ))
+	     do (setf (my-class-min-pred-index succ)
+		      (min (my-class-min-pred-index succ)
+			   n))
+	     do (when (zerop (my-class-count succ))
+		  (push succ candidates)))))
+      (assert (eql (length result) (length classes)))
+      (setq result (reverse result))
+      (mapcar #'my-class-name result))))
