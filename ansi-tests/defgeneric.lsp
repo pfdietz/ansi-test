@@ -69,3 +69,61 @@
   (classify-error (defgeneric defgeneric-error-fn.8 (x y)
 		    (:argument-precedence-order x)))
   program-error)
+
+
+;;; Non error cases
+
+(deftest defgeneric.1
+  (let ((fn (eval '(defgeneric defgeneric.fun.1 (x y z)
+		     (:method ((x t) (y t) (z t)) (list x y z))))))
+    (values
+     (typep* fn 'generic-function)
+     (funcall fn 'a 'b 'c)
+     (defgeneric.fun.1 'd 'e 'f)))
+  t (a b c) (d e f))
+
+(deftest defgeneric.2
+  (let ((fn (eval '(defgeneric defgeneric.fun.2 (x y z)
+		     (:documentation "boo!")
+		     (:method ((x t) (y t) (z t)) (vector x y z))))))
+    (values
+     (typep* fn 'generic-function)
+     (funcall fn 'a 'b 'c)
+     (defgeneric.fun.2 'd 'e 'f)
+     (let ((doc (documentation fn t)))
+       (or (not doc)
+	   (and (stringp doc) (string=t doc "boo!"))))
+     (let ((doc (documentation fn 'function)))
+       (or (not doc)
+	   (and (stringp doc) (string=t doc "boo!"))))))
+     
+  t #(a b c) #(d e f) t t)
+
+(deftest defgeneric.3
+  (let ((fn (eval '(defgeneric defgeneric.fun.3 (x y)
+		     (:method ((x t) (y symbol)) (list x y))
+		     (:method ((x symbol) (y t)) (list y x))))))
+    (values
+     (typep* fn 'generic-function)
+     (funcall fn 1 'a)
+     (funcall fn 'b 2)
+     (funcall fn 'a 'b)))
+  t
+  (1 a)
+  (2 b)
+  (b a))
+
+(deftest defgeneric.4
+  (let ((fn (eval '(defgeneric defgeneric.fun.4 (x y)
+		     (:argument-precedence-order y x)
+		     (:method ((x t) (y symbol)) (list x y))
+		     (:method ((x symbol) (y t)) (list y x))))))
+    (values
+     (typep* fn 'generic-function)
+     (funcall fn 1 'a)
+     (funcall fn 'b 2)
+     (funcall fn 'a 'b)))
+  t
+  (1 a)
+  (2 b)
+  (a b))
