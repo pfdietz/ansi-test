@@ -54,6 +54,17 @@
 	  always (eql (floor (* i (expt 2 s))) ishifted)))
   t)
 
+(deftest ash.4
+  (loop for i from -1 to -1000
+	always (eql (ash i i) -1))
+  t)
+
+(deftest ash.5
+  (loop for i from 1 to 100
+	for j = (- (ash 1 i))
+	always (eql (ash j j) -1))
+  t)
+
 (deftest ash.order.1
   (let ((i 0) x y)
     (values (ash (progn (setf x (incf i)) 1)
