@@ -5974,3 +5974,19 @@ Broken at C::WT-C-INLINE-LOC.
 			   . ,tail)))))
     (funcall (compile nil form)))
   0)
+
+;;; Bad value
+
+(deftest misc.324
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 2) (space 2) (safety 3) (debug 2)
+			  (compilation-speed 3)))
+       (labels ((%f6 (f6-1) (multiple-value-setq (a) 0)))
+	 (reduce #'(lambda (lmv4 lmv3) a)
+		 (list (%f6 0) 2)))))
+   1)
+  0)
+
