@@ -10572,3 +10572,30 @@ Broken at C::WT-MAKE-CLOSURE.
     -3712.8447 -27)
    (scale-float -3712.8447 -27))
   t)
+
+;;; IR2 type checking of unused values in not implemented.
+;;; (note that this test has no THE form)
+
+(deftest misc.585
+  (funcall
+   (compile nil '(lambda (p1)
+		   (declare (optimize (speed 0) (safety 0) (debug 3) (space 3))
+			    (type symbol p1))
+		   (copy-list p1)))
+   nil)
+  nil)
+
+;;; The value 4 is not of type (UNSIGNED-BYTE 2).
+
+(deftest misc.586
+  (funcall
+   (compile
+    nil
+    '(lambda (p6)
+       (declare (optimize (speed 0) (safety 2) (debug 0) (space 0))
+		(type (integer -2 3009181) p6))
+       (string> (coerce "ababaaabb" 'base-string)
+		(coerce "ubbm" 'base-string)
+		:start1 2 :start2 p6 :end1 8)))
+   4)
+  2)
