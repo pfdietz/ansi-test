@@ -590,7 +590,7 @@
 		      (setf (,fn x) 'a)
 		      (eql (,fn x) 'a)
 		      (setf (,fn x) 'none)
-		      (equal x (create-c*r-test ,level))
+		      (equalt x (create-c*r-test ,level))
 		      ))
 		 t))))
 
