@@ -87,7 +87,7 @@
 (deftest print.array.0.12
   (loop for type0 in '(short-float single-float double-float long-float float)
 	for type = `(complex ,type0)
-	for zero = (complex (coerce 0 type0))
+	for zero = (complex (coerce 0.0s0 type0))
 	for a = (make-array nil :initial-element zero
 			    :element-type type)
 	nconc
@@ -133,7 +133,7 @@
 				   long-float float real)
 	for type = `(complex ,type0)
 	for a = (make-array nil :element-type type
-			    :initial-element (complex (coerce 3 type0)))
+			    :initial-element (complex 0 (coerce 3 type0)))
 	for result = (write-to-string a :readably nil :array nil)
 	unless (string= (subseq result 0 2) "#<")
 	collect (list type result))
@@ -391,7 +391,7 @@
 				   long-float float real)
 	for type = `(complex ,type0)
 	for a = (make-array '(13 5) :element-type type
-			    :initial-element (complex (coerce 3 type0)))
+			    :initial-element (complex 0 (coerce 3 type0)))
 	for result = (write-to-string a :readably nil :array nil)
 	unless (string= (subseq result 0 2) "#<")
 	collect (list type result))
