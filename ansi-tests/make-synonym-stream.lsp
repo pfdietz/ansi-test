@@ -13,6 +13,10 @@
      (assert (typep ss 'stream))
      (assert (typep ss 'synonym-stream))
      (assert (input-stream-p ss))
+     (assert (not (output-stream-p ss)))
+     (assert (open-stream-p ss))
+     (assert (streamp ss))
+     (assert (stream-element-type ss))
      (values
       (read-char *s*)
       (read-char ss)
@@ -30,6 +34,10 @@
       (assert (typep ss 'stream))
       (assert (typep ss 'synonym-stream))
       (assert (input-stream-p ss))
+      (assert (not (output-stream-p ss)))
+      (assert (open-stream-p ss))
+      (assert (streamp ss))
+      (assert (stream-element-type ss))
       (read-char ss)))
    #\z)
 
@@ -41,14 +49,31 @@
      (assert (typep ss 'stream))
      (assert (typep ss 'synonym-stream))
      (assert (output-stream-p ss))
+     (assert (not (input-stream-p ss)))
+     (assert (open-stream-p ss))
+     (assert (streamp ss))
+     (assert (stream-element-type ss))
      (write-char #\a *s*)
      (write-char #\b ss)
      (write-char #\x *s*)
      (write-char #\y ss)))
   "abxy")
 
+(deftest make-synonym-stream.4
+  (let ((ss (make-synonym-stream '*terminal-io*)))
+     (assert (typep ss 'stream))
+     (assert (typep ss 'synonym-stream))
+     (assert (output-stream-p ss))
+     (assert (input-stream-p ss))
+     (assert (open-stream-p ss))
+     (assert (streamp ss))
+     (assert (stream-element-type ss))
+     nil)
+  nil)
+
+
 ;;; FIXME
-;;; Add tests for: open-stream-p, close, stream-element-type, streamp,
+;;; Add tests for: close,
 ;;;  peek-char, read-char-no-hang, terpri, fresh-line, unread-char,
 ;;;  read-line, write-line, write-string, read-sequence, write-sequence,
 ;;;  read-byte, write-byte, listen, clear-input, finish-output, force-output,

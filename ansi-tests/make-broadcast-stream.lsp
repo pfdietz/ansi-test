@@ -55,7 +55,7 @@
   "This is a test")
 
 ;;; FIXME
-;;; Add tests for: close, stream-element-type,
+;;; Add tests for: close,
 ;;;  peek-char, read-char-no-hang, terpri, fresh-line, unread-char,
 ;;;  read-line, write-line, write-string, read-sequence, write-sequence,
 ;;;  read-byte, write-byte, listen, clear-input, finish-output, force-output,
