@@ -63,3 +63,42 @@
 	collect (list i j k))
   nil)
 
+(deftest gcd.7
+  (loop for i = (random-fixnum)
+	for j = (random-fixnum)
+	for k = (random-fixnum)
+	for n = (random-fixnum)
+	repeat 1000
+	unless (eql (my-gcd (my-gcd i j) (my-gcd k n)) (gcd i j k n))
+	collect (list i j k))
+  nil)
+
+(deftest gcd.8
+  (loop for i from 1 to (min 256 (1- call-arguments-limit))
+	always (eql (apply #'gcd (make-list i :initial-element 1)) 1))
+  t)
+
+(deftest gcd.order.1
+  (let ((i 0) x y)
+    (values
+     (gcd (progn (setf x (incf i)) 15)
+	  (progn (setf y (incf i)) 25))
+     i x y))
+  5 2 1 2)
+
+(deftest gcd.order.2
+  (let ((i 0) x y)
+    (values
+     (gcd (progn (setf x (incf i)) 0)
+	  (progn (setf y (incf i)) 10))
+     i x y))
+  10 2 1 2)
+
+(deftest gcd.order.3
+  (let ((i 0))
+    (values
+     (gcd (progn (incf i) 0))
+     i))
+  0 1)
+
+    
