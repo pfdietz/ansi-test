@@ -10,10 +10,10 @@
     (assert (typep s 'stream))
     (assert (typep s 'broadcast-stream))
     (assert (output-stream-p s))
-    (assert (not (input-stream-p s)))
+    ;; (assert (not (input-stream-p s)))
     (assert (open-stream-p s))
     (assert (streamp s))
-    (assert (stream-element-type s))
+    (assert (eq (stream-element-type s) t))
     (values
      (notnot (typep s 'stream))
      (notnot (typep s 'broadcast-stream))
@@ -29,10 +29,11 @@
       (assert (typep s 'stream))
       (assert (typep s 'broadcast-stream))
       (assert (output-stream-p s))
-      (assert (not (input-stream-p s)))
+      ;; (assert (not (input-stream-p s)))
       (assert (open-stream-p s))
       (assert (streamp s))
-      (assert (stream-element-type s))
+      (assert (eql (stream-element-type s)
+		   (stream-element-type s1)))
       (write-char #\x s)))
   "x")
 
@@ -43,16 +44,39 @@
       (assert (typep s 'stream))
       (assert (typep s 'broadcast-stream))
       (assert (output-stream-p s))
-      (assert (not (input-stream-p s)))
+      ;; (assert (not (input-stream-p s)))
       (assert (open-stream-p s))
       (assert (streamp s))
-      (assert (stream-element-type s))
+      (assert (eql (stream-element-type s)
+		   (stream-element-type s2)))
       (format s "This is a test"))
     (values
      (get-output-stream-string s1)
      (get-output-stream-string s2)))
   "This is a test"
   "This is a test")
+
+(deftest make-broadcast-stream.4
+  (fresh-line (make-broadcast-stream))
+  nil)
+
+(deftest make-broadcast-stream.5
+  (file-length (make-broadcast-stream))
+  0)
+
+(deftest make-broadcast-stream.6
+  (file-position (make-broadcast-stream))
+  0)
+
+(deftest make-broadcast-stream.7
+  (file-string-length (make-broadcast-stream) "antidisestablishmentarianism")
+  1)
+
+(deftest make-broadcast-stream.8
+  (stream-external-format (make-broadcast-stream))
+  :default)
+
+
 
 ;;; FIXME
 ;;; Add tests for: close,
