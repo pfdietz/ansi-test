@@ -124,3 +124,8 @@
 (load "string-trim.lsp")
 (load "string-left-trim.lsp")
 (load "string-right-trim.lsp")
+
+;;; Tests of string comparison functions
+(compile-and-load "string-aux.lsp")
+(load "string-comparisons.lsp")
+
