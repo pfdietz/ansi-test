@@ -71,6 +71,49 @@
   (nstring-upcase (make-array '(0) :element-type nil))
   "")
 
+(deftest nstring-upcase.12
+  (loop for type in '(standard-char base-char character)
+	for s = (make-array '(10) :element-type type
+			    :fill-pointer 5
+			    :initial-contents "aB0cDefGHi")
+	collect (list (copy-seq s)
+		      (copy-seq (nstring-upcase s))
+		      (copy-seq s)
+		      (progn (setf (fill-pointer s) 10) (copy-seq s))
+		      ))
+  (("aB0cD" "AB0CD" "AB0CD" "AB0CDefGHi")
+   ("aB0cD" "AB0CD" "AB0CD" "AB0CDefGHi")
+   ("aB0cD" "AB0CD" "AB0CD" "AB0CDefGHi")))
+
+(deftest nstring-upcase.13
+  (loop for type in '(standard-char base-char character)
+	for s0 = (make-array '(10) :element-type type
+			     :initial-contents "zZaB0cDefG")
+	for s = (make-array '(5) :element-type type
+			    :displaced-to s0
+			    :displaced-index-offset 2)
+	collect (list (copy-seq s)
+		      (nstring-upcase s)
+		      (copy-seq s)
+		      s0))
+  (("aB0cD" "AB0CD" "AB0CD" "zZAB0CDefG")
+   ("aB0cD" "AB0CD" "AB0CD" "zZAB0CDefG")
+   ("aB0cD" "AB0CD" "AB0CD" "zZAB0CDefG")))
+
+(deftest nstring-upcase.14
+  (loop for type in '(standard-char base-char character)
+	for s = (make-array '(5) :element-type type
+			    :adjustable t
+			    :initial-contents "aB0cD")
+	collect (list (copy-seq s)
+		      (nstring-upcase s)
+		      (copy-seq s)))
+  (("aB0cD" "AB0CD" "AB0CD")
+   ("aB0cD" "AB0CD" "AB0CD")
+   ("aB0cD" "AB0CD" "AB0CD")))
+
+;;; Order of evaluation tests
+
 (deftest nstring-upcase.order.1
   (let ((i 0) a b c (s (copy-seq "abcdef")))
     (values

@@ -69,6 +69,50 @@
   (nstring-capitalize (make-array '(0) :element-type nil))
   "")
 
+(deftest nstring-capitalize.13
+  (loop for type in '(standard-char base-char character)
+	for s = (make-array '(10) :element-type type
+			    :fill-pointer 5
+			    :initial-contents "aB0cDefGHi")
+	collect (list (copy-seq s)
+		      (copy-seq (nstring-capitalize s))
+		      (copy-seq s)
+		      (progn (setf (fill-pointer s) 10) (copy-seq s))
+		      ))
+  (("aB0cD" "Ab0cd" "Ab0cd" "Ab0cdefGHi")
+   ("aB0cD" "Ab0cd" "Ab0cd" "Ab0cdefGHi")
+   ("aB0cD" "Ab0cd" "Ab0cd" "Ab0cdefGHi")))
+
+(deftest nstring-capitalize.14
+  (loop for type in '(standard-char base-char character)
+	for s0 = (make-array '(10) :element-type type
+			     :initial-contents "zZaB0cDefG")
+	for s = (make-array '(5) :element-type type
+			    :displaced-to s0
+			    :displaced-index-offset 2)
+	collect (list (copy-seq s)
+		      (nstring-capitalize s)
+		      (copy-seq s)
+		      s0))
+  (("aB0cD" "Ab0cd" "Ab0cd" "zZAb0cdefG")
+   ("aB0cD" "Ab0cd" "Ab0cd" "zZAb0cdefG")
+   ("aB0cD" "Ab0cd" "Ab0cd" "zZAb0cdefG")))
+
+(deftest nstring-capitalize.15
+  (loop for type in '(standard-char base-char character)
+	for s = (make-array '(5) :element-type type
+			    :adjustable t
+			    :initial-contents "aB0cD")
+	collect (list (copy-seq s)
+		      (nstring-capitalize s)
+		      (copy-seq s)))
+  (("aB0cD" "Ab0cd" "Ab0cd")
+   ("aB0cD" "Ab0cd" "Ab0cd")
+   ("aB0cD" "Ab0cd" "Ab0cd")))
+
+;;; Order of evaluation tests
+
+
 (deftest nstring-capitalize.order.1
   (let ((i 0) a b c (s (copy-seq "abcdef")))
     (values
