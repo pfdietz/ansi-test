@@ -6891,3 +6891,34 @@ Broken at C::WT-C-INLINE-LOC.
    21956127 524275646496 101890987 8762 -88607922426 -55959 2177 147174
    38469170)
   11751)
+
+;;;  The value #<unknown pointer object, widetag=#x29 {A295F27}>
+;;;  is not of type RATIONAL.
+
+(deftest misc.367
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 11557968 115977463) a))
+       (declare (type (integer -89510 -20616) b))
+       (declare (optimize (speed 2) (space 3) (safety 1)
+			  (debug 0) (compilation-speed 1)))
+       (rational
+	(flet ((%f17 (f17-1 f17-2) 0))
+	  (%f17
+	   (numerator
+	    (%f17
+	     (denominator
+	      (catch 'ct5
+		(apply (constantly 0)
+		       0
+		       (unwind-protect
+			   (catch 'ct2 (throw 'ct5 (progn (%f17 a b) a))))
+		       nil)))
+	     0))
+	   (%f17 0 a))))))
+   112475717 -25829)
+  0)
+
+  
