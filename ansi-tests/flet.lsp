@@ -155,3 +155,119 @@
     (declare (ftype (fixnum) integer))
     (%f 10))
   11)
+
+(deftest flet.22
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p))
+	     (list x y (not (not y-p)) z (not (not z-p)))))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c)))
+  (10 1 nil 2 nil)
+  (20 40 t 2 nil)
+  (a b t c t))
+
+(deftest flet.23
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r)
+	     (list x y (not (not y-p)) z (not (not z-p)) r)))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c) (%f 'd 'e 'f 'g 'h)))
+  (10 1 nil 2 nil nil)
+  (20 40 t 2 nil nil)
+  (a b t c t nil)
+  (d e t f t (g h)))
+
+(deftest flet.24
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar)
+	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
+	    (%f 'd 'e 'f :foo 'h)
+	    (%f 'd 'e 'f :bar 'i) ))
+  (10 1 nil 2 nil nil nil nil)
+  (20 40 t 2 nil nil nil nil)
+  (a b t c t nil nil nil)
+  (d e t f t (:foo h) h nil)
+  (d e t f t (:bar i) nil i))
+
+(deftest flet.25
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar
+		&allow-other-keys)
+	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
+	    (%f 'd 'e 'f :foo 'h :whatever nil)
+	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z) ))
+  (10 1 nil 2 nil nil nil nil)
+  (20 40 t 2 nil nil nil nil)
+  (a b t c t nil nil nil)
+  (d e t f t (:foo h :whatever nil) h nil)
+  (d e t f t (:bar i :illegal t :foo z) z i))
+
+(deftest flet.26
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar)
+	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
+	    (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys t)
+	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z :allow-other-keys t) ))
+  (10 1 nil 2 nil nil nil nil)
+  (20 40 t 2 nil nil nil nil)
+  (a b t c t nil nil nil)
+  (d e t f t (:foo h :whatever nil :allow-other-keys t) h nil)
+  (d e t f t (:bar i :illegal t :foo z :allow-other-keys t) z i))
+
+;;; Section 3.4.1.4.1: "The :allow-other-keys argument is permissible
+;;; in all situations involving keyword[2] arguments, even when its
+;;; associated value is false."
+(deftest flet.27
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar)
+	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
+	    (%f 'd 'e 'f :foo 'h :allow-other-keys nil)
+	    (%f 'd 'e 'f :bar 'i :allow-other-keys nil) ))
+  (10 1 nil 2 nil nil nil nil)
+  (20 40 t 2 nil nil nil nil)
+  (a b t c t nil nil nil)
+  (d e t f t (:foo h :allow-other-keys nil) h nil)
+  (d e t f t (:bar i :allow-other-keys nil) nil i))
+
+(deftest flet.28
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r
+		&key foo bar allow-other-keys)
+	     (list x y (not (not y-p)) z (not (not z-p)) allow-other-keys
+		   r foo bar)))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
+	    (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys 100)
+	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z :allow-other-keys 200) ))
+  (10 1 nil 2 nil nil nil nil nil)
+  (20 40 t 2 nil nil nil nil nil)
+  (a b t c t nil nil nil nil)
+  (d e t f t 100 (:foo h :whatever nil :allow-other-keys 100) h nil)
+  (d e t f t 200 (:bar i :illegal t :foo z :allow-other-keys 200) z i))
+
+(deftest flet.29
+  (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r
+		&key foo bar allow-other-keys &allow-other-keys)
+	     (list x y (not (not y-p)) z (not (not z-p)) allow-other-keys
+		   r foo bar)))
+    (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
+	    (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys nil :blah t)
+	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z
+		:allow-other-keys nil :zzz 10) ))
+  (10 1 nil 2 nil nil nil nil nil)
+  (20 40 t 2 nil nil nil nil nil)
+  (a b t c t nil nil nil nil)
+  (d e t f t nil (:foo h :whatever nil :allow-other-keys nil :blah t) h nil)
+  (d e t f t nil (:bar i :illegal t :foo z :allow-other-keys nil :zzz 10) z i))
+
+;;; Tests of non-keyword keywords (see section 3.4.1.4, paragrph 2).
+(deftest flet.30
+  (flet ((%f (&key ((foo bar) nil)) bar))
+    (values (%f) (%f 'foo 10)))
+  nil 10)
+
+(deftest flet.31
+  (flet ((%f (&key ((:foo bar) nil)) bar))
+    (values (%f) (%f :foo 10)))
+  nil 10)
+
+;;; Multiple keyword actual parameters
+(deftest flet.32
+  (flet ((%f (&key a b c) (list a b c)))
+    (%f :a 10 :b 20 :c 30 :a 40 :b 50 :c 60))
+  (10 20 30))
+    
