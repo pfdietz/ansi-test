@@ -4,11 +4,6 @@
 ;;; with arbitrary legal garbage.
 ;; (pushnew :ansi-tests-strict-initial-element *features*)
 
-#+(and clisp (or win32 cygwin))       ; w2k exits on (disassemble 'car)
-(without-package-lock ("SYS")
- (defun sys::disassemble-machine-code (a b c)
-   (format t "~&<~S ~S ~S>~%" a b c)))
-
 #+allegro (run-shell-command "rm -f *.fasl")
 #+allegro (setq *enclose-printer-errors* nil)
 #+cmucl (run-program "rm -f *.x86f")
