@@ -287,6 +287,20 @@
 	  (list x w z y))))
   (b a d c))
 
+(deftest restart-case.35
+  (restart-case
+   (loop for i from 1 to 4
+	 for r in (compute-restarts)
+	 collect (restart-name r))
+   (foo () t)
+   (bar () t)
+   (foo () 'a)
+   (nil () :report (lambda (s) (format s "Anonymous restart"))  10))
+  (foo bar foo nil))
+
+
+
+
 
 
 

@@ -100,6 +100,27 @@
 	(foo () 'also-bad)))))
   nil nil)
 
+(deftest compute-restarts.10
+  (let ((c2 (make-condition 'error)))
+    (block done
+      (handler-bind
+       ((error #'(lambda (c)
+		   (declare (ignore c))
+		   (let* ((restarts (compute-restarts c2))
+			  (r (remove 'foo restarts
+				     :test-not #'eq
+				     :key #'restart-name)))
+		     ;; (write restarts)
+		     (return-from done
+		       (values r
+			       (mapcar #'restart-name r)))))))
+       (restart-case
+	(progn (error "an error"))
+	(foo () :test (lambda (c) (or (null c) (not (eq c c2))))
+	     'bad)
+	(foo () :test (lambda (c) (or (null c) (not (eq c c2))))
+	     'also-bad)))))
+  nil nil)
 
 
 
