@@ -1086,8 +1086,72 @@
 	 '(x y z))
   z)
 
+;;; cmucl bug (18e+ 10/15/03)
 (deftest misc.88
   (eval '(block b3
 	   (max (return-from b3 1)
 		(if (unwind-protect (unwind-protect 2)) 3 4))))
   1)
+
+;;; cmucl bug (18e+ 10/15/03)
+(deftest misc.89
+  (funcall
+   (compile nil
+	    '(lambda (c)
+	       (declare (type (integer 0 130304) c))
+	       (- (rem -26 (max 25 (load-time-value 505849129)))
+		  (* -15718867961526428520296254978781964 c))))
+   0)
+  26)
+
+;;; acl bug (version 6.2, linux x86 trial)
+(deftest misc.90
+  (let* ((form '(- 0 (ignore-errors 20763)
+		   (logxor b 1 c -7672794) b))
+	 (fn1 `(lambda (b c)
+		 (declare (type (integer -148895 -46982) b))
+		 (declare (type (integer 0 1) c))
+		 (declare (optimize (speed 3)))
+		 (declare (optimize (safety 1)))
+		 ,form))
+	 (fn2 `(lambda (b c) ,form)))
+    (let ((v1 (funcall (compile nil fn1) -76071 0))
+	  (v2 (funcall (compile nil fn2) -76071 0))
+	  (v3 (funcall (eval `(function ,fn2)) -76071 0)))
+      (if (= v1 v2 v3) :good
+	(list v1 v2 v3))))
+  :good)
+
+;;; acl bug (version 6.2, linux x86 trial)
+(deftest misc.91
+  (let ((fn1 '(lambda ()
+		(declare (optimize (speed 3) (safety 1)))
+		(ash -10 (min 8 -481))))
+	(fn2 '(lambda () (ash -10 (min 8 -481)))))
+    (let ((v1 (funcall (compile nil fn1)))
+	  (v2 (funcall (compile nil fn2)))
+	  (v3 (funcall (eval `(function ,fn2)))))
+      (if (= v1 v2 v3)
+	  :good
+	(list v1 v2 v3))))
+  :good)
+
+;;; acl bug (version 6.2, linux x86 trial)
+(deftest misc.92
+  (let* ((form '(- -16179207 b (lognor (let () 3) (logxor -17567197 c))))
+	 (fn1 `(lambda (b c)
+		 (declare (type (integer -621 30) c))
+		 (declare (optimize (speed 3)))
+		 (declare (optimize (safety 1)))
+		 ,form))
+	 (fn2 `(lambda (b c) ,form))
+	 (vals '(26291532469 -21)))
+    (let ((v1 (apply (compile nil fn1) vals))
+	  (v2 (apply (compile nil fn2) vals))
+	  (v3 (apply (eval `(function ,fn2)) vals)))
+      (if (= v1 v2 v3)
+	  :good
+	(list v1 v2 v3))))
+  :good)
+
+	 
