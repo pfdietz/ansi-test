@@ -159,12 +159,41 @@
     x)
   3)
 
+;;; Test that the subplaces of a VALUES place can be
+;;; complex, and that the various places' subforms are
+;;; evaluated in the correct (left-to-right) order.
+
+(deftest setf-values.4
+  (let ((x (list 'a 'b)))
+    (setf (values (car x) (cadr x)) (values 1 2))
+    x)
+  (1 2))
+
+(deftest setf-values.5
+  (let ((a (vector nil nil))
+	(i 0)
+	x y z)
+    (setf (values (aref a (progn (setf x (incf i)) 0))
+		  (aref a (progn (setf y (incf i)) 1)))
+	  (progn
+	    (setf z (incf i))
+	    (values 'foo 'bar)))
+    (values a i x y z))
+  #(foo bar) 3 1 2 3)
+
 ;;; Section 5.1.2.4
 (deftest setf-the.1
   (let ((x 1))
     (setf (the integer x) 2)
     x)
   2)
+
+(deftest setf-the.2
+  (let ((x (list 'a)))
+    (values
+     (setf (the symbol (car x)) 'b)
+     x))
+  b (b))
 
 ;;; Section 5.1.2.5
 (deftest setf-apply.1
