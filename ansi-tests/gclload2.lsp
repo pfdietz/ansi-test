@@ -43,9 +43,6 @@
 ;;; Tests of types and classes
 (load "load-types-and-class.lsp")
 
-;;; Tests of the reader
-(load "reader-test.lsp")
-
 ;;; Tests of strings
 (load "load-strings.lsp")
 
@@ -65,6 +62,9 @@
 
 ;;; Tests of the printer
 (load "load-printer.lsp")
+
+;;; Tests of the reader
+(load "load-reader.lsp")
 
 ;;; Tests of system construction
 (load "features.lsp")
