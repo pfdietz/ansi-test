@@ -9,3 +9,77 @@
   (do-all-symbols (x)))
 
 ;;; FIXME  Add tests for non-error cases
+
+(deftest do-all-symbols.1
+  (let ((symbols nil))
+    (do-all-symbols (sym) (push sym symbols))
+    (let ((hash (make-hash-table :test 'eq)))
+      (with-package-iterator
+       (f (list-all-packages) :internal :external :inherited)
+       (loop
+	(multiple-value-bind (found sym) (f)
+	  (unless found (return))
+	  (setf (gethash sym hash) t))))
+      ;; hash now contains all symbols accessible in any package
+      ;; Check that all symbols from DO-ALL-SYMBOLS are in this
+      ;; package
+      (loop for s in symbols unless (gethash s hash) collect s)))
+  nil)
+
+;; This is the converse of do-all-symbols.1
+(deftest do-all-symbols.2
+  (let ((symbols nil))
+    (with-package-iterator
+     (f (list-all-packages) :internal :external :inherited)
+     (loop
+      (multiple-value-bind (found sym) (f)
+	(unless found (return))`
+	(push sym symbols))))
+    (let ((hash (make-hash-table :test 'eq)))
+      (do-all-symbols (s) (setf (gethash s hash) t))
+      (loop for s in symbols unless (gethash s hash) collect s)))
+  nil)
+
+(deftest do-all-symbols.3
+  (let ((sym (gensym)))
+    (do-all-symbols (s t) (assert (not (eq s sym)))))
+  t)
+
+(deftest do-all-symbols.4
+  (let ((x :bad))
+    (do-all-symbols (x x)))
+  nil)
+
+(deftest do-all-symbols.5
+  (block nil
+    (do-all-symbols (x (return :bad)))
+    :good)
+  :good)
+
+(deftest do-all-symbols.6
+  (do-all-symbols (x :bad) (return :good))
+  :good)
+
+(deftest do-all-symbols.7
+  (block done
+    (tagbody
+     (do-all-symbols (x (return-from done :good))
+       (go 1)
+       (return-from done :bad1)
+       1)
+     1
+     (return-from done :bad2)))
+  :good)
+
+(deftest do-all-symbols.8
+  (block done
+    (tagbody
+     (do-all-symbols (x (return-from done :good))
+       (go tag)
+       (return-from done :bad1)
+       tag)
+     tag
+     (return-from done :bad2)))
+  :good)
+
+
