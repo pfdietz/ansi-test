@@ -241,6 +241,18 @@
      (s1 c)))
   t nil x)
 
+(deftest class-07.10
+  (let ((c (make-instance 'class-07 :s1a 'x :s2 'y :allow-other-keys nil)))
+    (values (s1 c) (s2 c)))
+  x y)
+
+(deftest class-07.11
+  (let ((c (make-instance 'class-07 :s1a 'a :s2 'b :garbage 'z
+			  :allow-other-keys t)))
+    (values (s1 c) (s2 c)))
+  a b)
+
+
 ;;;;
 
 (declaim (special *class-08-s2-initvar*))
@@ -345,6 +357,28 @@
   (slot-value (make-instance 'class-12 :s1 'y) 's1)
   y)
 
+;;;
+
+(defclass class-13 ()
+  ((s1 :allocation :class :initarg :s1)))
+
+(deftest class-13.1
+  (let ((c1 (make-instance 'class-13))
+	(c2 (make-instance 'class-13 :s1 'foo)))
+    (values
+     (slot-value c1 's1)
+     (slot-value c1 's1)))
+  foo foo)
+
+;;;
+
+(defclass class-14 ()
+  ((s1 :initarg nil :reader s1)))
+
+(deftest class-14.1
+  (let ((c (make-instance 'class-14 nil 'x)))
+    (s1 c))
+  x)
 
 
     
