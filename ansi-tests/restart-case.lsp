@@ -249,3 +249,21 @@
        (foo () 'good)))))
   good)
 
+(deftest restart-case.31
+  (macrolet ((%m2 (&rest args) (cons 'error args)))
+    (macrolet ((%m (&rest args &environment env)
+		   (macroexpand (cons '%m2 args) env)))
+      (handler-bind
+       ((error #'(lambda (c2) (invoke-restart (find-restart 'foo c2)))))
+       (handler-bind
+	((error #'(lambda (c) (declare (ignore c)) (error "Blah"))))
+	(restart-case
+	 (restart-case
+	  (%m "Boo!")
+	  (foo () 'bad))
+	 (foo () 'good))))))
+  good)
+
+
+
+
