@@ -122,7 +122,7 @@
 
 (deftest subtract.3
   (let ((args nil))
-    (loop for i from 1 to (min 256 (1- call-arguments-limit))
+    (loop for i from 1 below (min 256 (1- call-arguments-limit))
 	  do (push 1 args)
 	  always (eql (apply #'- 1000 args) (- 1000 i))))
   t)
