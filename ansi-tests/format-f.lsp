@@ -22,10 +22,12 @@
 (deftest format.f.2
   (let ((*print-readably* nil))
     (loop
-     for x = (expt (random-from-seq #(10.s0 10.f0 10.d0 10.0l0))
+     for i = (random 4)
+     for type = (elt #(short-float single-float double-float long-float) i)
+     for x = (expt (coerce 10 type)
 		   (- (random 10.0s0) 3))
      for s1 = (format nil "~f" x)
-     for s2 = (prin1-to-string x)
+     for s2 = (let ((*read-default-float-format* type)) (prin1-to-string x))
      repeat 1000
      when (and (<= 1/1000 x)
 	       (< x 10000000)
@@ -36,10 +38,12 @@
 (deftest format.f.3
   (let ((*print-readably* nil))
     (loop
-     for x = (- (expt (random-from-seq #(10.s0 10.f0 10.d0 10.0l0))
+     for i = (random 4)
+     for type = (elt #(short-float single-float double-float long-float) i)
+     for x = (- (expt (coerce 10 type)
 		      (- (random 10.0s0) 3)))
      for s1 = (format nil "~f" x)
-     for s2 = (prin1-to-string x)
+     for s2 = (let ((*read-default-float-format* type)) (prin1-to-string x))
      repeat 1000
      when (and (>= -1/1000 x)
 	       (> x -10000000)
