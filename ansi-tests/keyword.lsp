@@ -30,13 +30,13 @@
       (import s kwp)
       ;; Check that it's a keyword
       (values
-       (symbol-package s)
+       (eql (symbol-package s) kwp)
        (eqlt (find-symbol name kwp) s)
        (nth-value 1 (find-symbol name kwp))
        (notnot (typep s 'keyword))
        (if (boundp s) (eqlt s (symbol-value s)) :not-bound)
        (notnot (constantp s)))))
-  nil t :external t t t)
+  t t :external t t t)
 
 ;;; Note that the case of a symbol inherited into KEYWORD cannot arise
 ;;; standardly from user actions, since USE-PACKAGE disallows KEYWORD
