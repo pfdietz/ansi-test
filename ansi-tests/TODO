@@ -72,3 +72,7 @@ Got:      0
 
 20. Add destructuring-bind and destructuring macro lambda list tests
   for key and optional arguments, if they do not already exist
+
+21. The random tester showed (SETF AREF) wasn't being tested enough.  Add tests.
+22. Add more symbol printing tests.  In particular, there doesn't appear to
+ be a test that (princ :foo) >> :FOO  (noticed by PG in ABCL)
