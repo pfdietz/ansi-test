@@ -23,4 +23,5 @@
 (load "logical-pathname-translations.lsp")
 (load "translate-logical-pathname.lsp")
 
+(load "wild-pathname-p.lsp")
 (load "merge-pathnames.lsp")
