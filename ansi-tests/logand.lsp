@@ -73,7 +73,14 @@
 	for args = (nconc (make-list (1- i) :initial-element -1)
 			  (list 183))
 	always (eql (apply #'logand args) 183))
-  t)	
+  t)
+
+(deftest logand.9
+  (loop for i from -1 to 0 always
+	(loop for j from -1 to 0 always
+	      (locally (declare (type (integer -1 0) i j))
+		       (eql (logand i j) (if (or (zerop i) (zerop j)) 0 -1)))))
+  t)
 
 (deftest logand.order.1
   (let ((i 0) a b)
