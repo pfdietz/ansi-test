@@ -27,7 +27,7 @@
 	(eval `(deftest ,(intern
 			  (concatenate 'string
 			    (symbol-name fn)
-			    "-SET")
+			    "-SET-ALT")
 			  :cl-test)
 		   (let ((x (create-c*r-test ,level)))
 		     (and
@@ -47,7 +47,7 @@
        `(deftest ,(intern
 		   (concatenate 'string
 		     (symbol-name fn)
-		     "-SET")
+		     "-SET-ALT")
 		   :cl-test)
 	    (let ((x (make-list 20 :initial-element nil)))
 	      (and
