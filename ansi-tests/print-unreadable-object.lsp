@@ -93,6 +93,12 @@
    collect (list x return-vals s))
   nil)
 
+;;; TODO Tests that the :identity and :type arguments are evaluated
+;;; TODO Tests where :type, :identity are provided, but are nil
+;;; TODO Test that the type/identity parts of the output are the same
+;;;       for the both-printed case as they are in the only-one printed case,
+;;;       and that only a single space occurs between them if FORMS is omitted.
+
 ;;; Error cases
 
 (deftest print-unreadable-object.error.1
