@@ -9,6 +9,7 @@
 ;;; Tests of data and control flow
 
 (load "places.lsp")
+(load "block.lsp")
 (load "call-arguments-limit.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
