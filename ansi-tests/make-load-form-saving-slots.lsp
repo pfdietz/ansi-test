@@ -128,7 +128,7 @@
 	(map-slot-value newobj '(a b c)))))
   2 t (t t t) (7 100 64))
 
-(defpackage "CL-TEST-MLFSS-PACKAGE" (:use) (:export "A"))
+(defpackage "CL-TEST-MLFSS-PACKAGE" (:use) (:export #:a))
 (defstruct mlfss-03 cl-test-mlfss-package:a)
 
 (deftest make-load-form-savings-slots.10
