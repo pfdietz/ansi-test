@@ -139,3 +139,37 @@
      (multiple-value-list (funcall fn #c(9 8)))
      (multiple-value-list (funcall fn '(a b c)))))
   () (a b c) (1 2 3 4 5 6) (1))
+
+(deftest defgeneric-method-combination.min.9
+  (handler-case
+   (let ((fn (eval '(defgeneric dg-mc.min.9 (x)
+		      (:method-combination min)))))
+     (funcall fn (list 'a)))
+   (error () :error))
+  :error)
+
+(deftest defgeneric-method-combination.min.10
+  (handler-case
+   (eval '(defgeneric dg-mc.min.10 (x)
+	    (:method-combination min)
+	    (:method ((x t)) 0)))
+   (error () :error))
+  :error)
+
+(deftest defgeneric-method-combination.min.11
+  (handler-case
+   (eval '(defgeneric dg-mc.min.11 (x)
+	    (:method-combination min)
+	    (:method nonsense ((x t)) 0)))
+   (error () :error))
+  :error)
+
+(deftest defgeneric-method-combination.min.12
+  (let ((fn (eval '(defgeneric dg-mc.min.12 (x)
+		     (:method-combination min)
+		     (:method :around ((x t)) 1)
+		     (:method min ((x integer)) x)))))
+    (handler-case (funcall fn 'a)
+		  (error () :error)))
+  :error)
+

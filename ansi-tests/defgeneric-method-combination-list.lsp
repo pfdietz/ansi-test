@@ -151,3 +151,36 @@
      (multiple-value-list (funcall fn #c(9 8)))
      (multiple-value-list (funcall fn '(a b c)))))
   () (a b c) (1 2 3 4 5 6) ((b)))
+
+(deftest defgeneric-method-combination.list.9
+  (handler-case
+   (let ((fn (eval '(defgeneric dg-mc.list.9 (x)
+		      (:method-combination list)))))
+     (funcall fn (list 'a)))
+   (error () :error))
+  :error)
+
+(deftest defgeneric-method-combination.list.10
+  (handler-case
+   (eval '(defgeneric dg-mc.list.10 (x)
+	    (:method-combination list)
+	    (:method ((x t)) (list 'a))))
+   (error () :error))
+  :error)
+
+(deftest defgeneric-method-combination.list.11
+  (handler-case
+   (eval '(defgeneric dg-mc.list.11 (x)
+	    (:method-combination list)
+	    (:method nonsense ((x t)) (list 'a))))
+   (error () :error))
+  :error)
+
+(deftest defgeneric-method-combination.list.12
+  (let ((fn (eval '(defgeneric dg-mc.list.12 (x)
+		     (:method-combination list)
+		     (:method :around ((x t)) (list 'a))
+		     (:method list ((x integer)) x)))))
+    (handler-case (funcall fn (list 'b))
+		  (error () :error)))
+  :error)
