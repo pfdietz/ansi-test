@@ -13,6 +13,9 @@
   	#+CMU #.(C::BACKEND-FASL-FILE-TYPE C::*TARGET-BACKEND*)
 	#+ALLEGRO "fasl"
 	#+(OR AKCL GCL) "o"
+        #+CLISP "fas"
+        #-(OR CMU ALLEGRO AKCL GCL CLISP)
+        #.(pathname-type (compile-file-pathname "foo.lisp"))
   :components
   (
    "rt-package"

@@ -150,7 +150,7 @@ the condition to go uncaught if it cannot be classified."
   (classify-error* (eval form)))
 
 (defmacro classify-error (form)
-  `(classify-error** ',form)))
+  `(classify-error** ',form))
 
 ;;;
 ;;; A scaffold is a structure that is used to remember the object

@@ -3,6 +3,9 @@
 ;;;; Created:  Fri Mar 27 09:57:28 1998
 ;;;; Contains: MK portable system file for CL test suite
 
+;;; NOTE!! This file is not being maintained right now.
+;;; To run the test suite, load "gclload.lsp"
+
 (mk::defsystem "cltest"
   :source-pathname #.(directory-namestring *LOAD-TRUENAME*)
   :source-extension "lsp"
@@ -13,6 +16,9 @@
 	#+CMU  #.(C::BACKEND-FASL-FILE-TYPE C::*TARGET-BACKEND*)
 	#+ALLEGRO "fasl"
 	#+(OR AKCL GCL) "o"
+        #+CLISP "fas"
+        #-(OR CMU ALLEGRO AKCL GCL CLISP)
+        #.(pathname-type (compile-file-pathname "foo.lisp"))
   :initially-do (progn (load "rt/rt.system")
 		       (mk::compile-system "rt"))
   :components
@@ -23,7 +29,7 @@
     :depends-on ("cl-test-package")
     :components
     (
-     "aux"
+     "ansi-aux"
      "universe"
      "cons-test-01"
      "cons-test-02"

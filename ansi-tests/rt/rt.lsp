@@ -128,8 +128,7 @@
 	 (not (equal (array-dimensions x)
 		     (array-dimensions y))))
     nil)
-   ;; I should use ROW-MAJOR-AREF to do this, but that's broken
-   ;; in GCL right now.
+   #|
    ((and (typep x 'array)
 	 (= (array-rank x) 2))
     (let ((dim (array-dimensions x)))
@@ -137,6 +136,14 @@
 	    always (loop for j from 0 below (second dim)
 			 always (equalp-with-case (aref x i j)
 						  (aref y i j))))))
+   |#
+
+   ((typep x 'array)
+    (let ((size (array-total-size x)))
+      (loop for i from 0 below size
+	    always (equalp-with-case (row-major-aref x i)
+				     (row-major-aref y i)))))
+
    (t (eql x y))))
 
 (defun do-entry (entry &optional

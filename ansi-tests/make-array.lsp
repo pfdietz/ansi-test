@@ -276,6 +276,12 @@
 	      :allow-other-keys nil)
   #(x x x x))
 
+(deftest make-array.27
+  (make-array '(4) :initial-element 'x
+	      :allow-other-keys t
+	      :allow-other-keys nil
+	      :nonsense-argument t)
+  #(x x x x))
 
 
 ;;; Adjustable arrays
@@ -496,4 +502,123 @@
 			    :displaced-index-offset 4))
   #2a((5 6 7 8) (9 10 11 12)))
 
+(deftest make-array.displaced.20
+  (let ((a (make-array '(2 3 4)
+		       :initial-contents '(((a b c d) (e f g h) (i j k l))
+					   ((m n o p) (q r s t) (u v w x))))))
+    (make-array-with-checks '(24) :displaced-to a))
+  #(a b c d e f g h i j k l m n o p q r s t u v w x))
 
+(deftest make-array.displaced.21
+  (let ((a (make-array '(2 3 4)
+		       :initial-contents '(((a b c d) (e f g h) (i j k l))
+					   ((m n o p) (q r s t) (u v w x))))))
+    (make-array-with-checks '(3 8) :displaced-to a))
+  #2a((a b c d e f g h) (i j k l m n o p) (q r s t u v w x)))
+
+(deftest make-array.displaced.22
+  (let ((a (make-array '(2 3 4)
+		       :initial-contents '(((a b c d) (e f g h) (i j k l))
+					   ((m n o p) (q r s t) (u v w x))))))
+    (make-array-with-checks '(10) :displaced-to a
+			    :displaced-index-offset 5))
+  #(f g h i j k l m n o))
+
+(deftest make-array.displaced.23
+  (let ((a (make-array '(2 3 4)
+		       :initial-contents '(((a b c d) (e f g h) (i j k l))
+					   ((m n o p) (q r s t) (u v w x))))))
+    (make-array-with-checks '(10) :displaced-to a
+			    :displaced-index-offset 5
+			    :fill-pointer t))
+  #(f g h i j k l m n o))
+
+(deftest make-array.displaced.24
+  (let ((a (make-array '(2 3 4)
+		       :initial-contents '(((a b c d) (e f g h) (i j k l))
+					   ((m n o p) (q r s t) (u v w x))))))
+    (make-array-with-checks '(10) :displaced-to a
+			    :displaced-index-offset 5
+			    :fill-pointer 5))
+  #(f g h i j))
+
+(deftest make-array.displaced.25
+  (let ((a (make-array '(2 3 4)
+		       :initial-contents '(((a b c d) (e f g h) (i j k l))
+					   ((m n o p) (q r s t) (u v w x))))))
+    (make-array-with-checks '(10) :displaced-to a
+			    :displaced-index-offset 5
+			    :adjustable t))
+  #(f g h i j k l m n o))
+
+(deftest make-array.displaced.26
+  (let ((a (make-array '(2 3 4)
+		       :initial-contents '(((a b c d) (e f g h) (i j k l))
+					   ((m n o p) (q r s t) (u v w x))))))
+    (make-array-with-checks '(10) :displaced-to a
+			    :displaced-index-offset 5
+			    :fill-pointer 8
+			    :adjustable t))
+  #(f g h i j k l m))
+
+;;; Keywords tests
+
+(deftest make-array.allow-other-keys.1
+  (make-array '(5) :initial-element 'a :allow-other-keys t)
+  #(a a a a a))
+
+(deftest make-array.allow-other-keys.2
+  (make-array '(5) :initial-element 'a :allow-other-keys nil)
+  #(a a a a a))
+
+(deftest make-array.allow-other-keys.3
+  (make-array '(5) :initial-element 'a :allow-other-keys t '#:bad t)
+  #(a a a a a))
+
+(deftest make-array.allow-other-keys.4
+  (make-array '(5) :initial-element 'a :bad t :allow-other-keys t)
+  #(a a a a a))
+
+(deftest make-array.allow-other-keys.5
+  (make-array '(5) :bad t :initial-element 'a :allow-other-keys t)
+  #(a a a a a))
+
+(deftest make-array.allow-other-keys.6
+  (make-array '(5) :bad t :initial-element 'a :allow-other-keys t
+	      :allow-other-keys nil :also-bad nil)
+  #(a a a a a))
+
+(deftest make-array.allow-other-keys.7
+  (make-array '(5) :allow-other-keys t :initial-element 'a)
+  #(a a a a a))
+
+(deftest make-array.keywords.8.
+  (make-array '(5) :initial-element 'x :initial-element 'a)
+  #(x x x x x))
+
+;;; Error tests
+
+(deftest make-array.error.1
+  (classify-error (make-array))
+  program-error)
+
+(deftest make-array.error.2
+  (classify-error (make-array '(10) :bad t))
+  program-error)
+
+(deftest make-array.error.3
+  (classify-error (make-array '(10) :allow-other-keys nil :bad t))
+  program-error)
+
+(deftest make-array.error.4
+  (classify-error (make-array '(10) :allow-other-keys nil
+			      :allow-other-keys t :bad t))
+  program-error)
+
+(deftest make-array.error.5
+  (classify-error (make-array '(10) :bad))
+  program-error)
+
+(deftest make-array.error.6
+  (classify-error (make-array '(10) 1 2))
+  program-error)
