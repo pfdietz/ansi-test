@@ -50,6 +50,14 @@
     (%f 0 10))
   55)
 
+;;; Scope of defined function names includes &AUX parameters
+
+(deftest labels.7b
+  (labels ((%f (x &aux (b (%g x))) b)
+	   (%g (y) (+ y y)))
+    (%f 10))
+  20)
+
 ;;; Keyword arguments
 (deftest labels.8
   (labels ((%f (&key a (b 0 b-p)) (values a b (not (not b-p)))))
@@ -113,14 +121,6 @@
       (setf (%f z) 'a)
       z))
   (a 2))
-
-;;; Scope of defined function names includes &AUX parameters
-
-(deftest labels.7b
-  (labels ((%f (x &aux (b (%g x))) b)
-	   (%g (y) (+ y y)))
-    (%f 10))
-  20)
 
 ;;; Body is an implicit progn
 (deftest labels.18
