@@ -75,6 +75,8 @@
 (load "lognot.lsp")
 (load "logxor.lsp")
 (load "logbitp.lsp")
+(load "logcount.lsp")
+(load "logtest.lsp")
 
 (load "byte.lsp")
 (load "deposit-field.lsp")
