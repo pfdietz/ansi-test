@@ -190,6 +190,13 @@
   (if (coin) (random-nonnegative-real)
     (- (random-nonnegative-real))))
 
+(defun random-fixnum ()
+  (+ (random (1+ (- most-positive-fixnum most-negative-fixnum)))
+     most-negative-fixnum))
+
+(defun random-from-interval (upper &optional (lower (- upper)))
+  (+ (random (- upper lower)) lower))
+
 (defun epsilon (number)
   (etypecase number
     (short-float short-float-epsilon)

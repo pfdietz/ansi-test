@@ -37,7 +37,7 @@
   (let* ((upper-bound most-positive-fixnum)
 	 (lower-bound most-negative-fixnum)
 	 (spread (- upper-bound lower-bound)))
-    (flet ((%r () (- (random spread) lower-bound)))
+    (flet ((%r () (+ (random spread) lower-bound)))
       (loop for x = (%r)
 	    for y = (%r)
 	    for z = (%r)
@@ -57,7 +57,7 @@
   (let* ((upper-bound 1000000000000000)
 	 (lower-bound -1000000000000000)
 	 (spread (- upper-bound lower-bound)))
-    (flet ((%r () (- (random spread) lower-bound)))
+    (flet ((%r () (+ (random spread) lower-bound)))
       (loop for x = (%r)
 	    for y = (%r)
 	    for z = (%r)
@@ -77,7 +77,7 @@
   (let* ((upper-bound most-positive-fixnum)
 	 (lower-bound most-negative-fixnum)
 	 (spread (- upper-bound lower-bound)))
-    (flet ((%r () (- (random spread) lower-bound)))
+    (flet ((%r () (+ (random spread) lower-bound)))
       (loop for x = (/ (%r) (max 1 (%r)))
 	    for y = (/ (%r) (max 1 (%r)))
 	    for z = (/ (%r) (max 1 (%r)))
@@ -113,7 +113,7 @@
   (let* ((upper-bound most-positive-fixnum)
 	 (lower-bound most-negative-fixnum)
 	 (spread (- upper-bound lower-bound)))
-    (flet ((%r () (- (random spread) lower-bound)))
+    (flet ((%r () (+ (random spread) lower-bound)))
       (loop
        for xr = (%r)
        for xi = (%r)
@@ -389,5 +389,3 @@
 	   (list x x))
    collect (list x eps eps2))
   nil)
-
-

@@ -52,8 +52,8 @@
   (let* ((upper-bound (* 1000 1000 1000 1000))
 	 (lower-bound (- upper-bound))
 	 (spread (1+ (- upper-bound lower-bound))))
-    (loop for x = (+ (random spread) lower-bound)
-	  for y = (+ (random spread) lower-bound)
+    (loop for x = (random-from-interval upper-bound)
+	  for y = (random-from-interval upper-bound)
 	  for prod = (* x y)
 	  for prod2 = (integer-times x y)
 	  repeat 1000
@@ -93,10 +93,8 @@
   nil)
 
 (deftest *.9
-  (let* ((upper-bound (* 1000 1000 1000 1000))
-	 (lower-bound (- upper-bound))
-	 (spread (1+ (- upper-bound lower-bound))))
-    (flet ((%r () (+ (random spread) lower-bound)))
+  (let* ((upper-bound (* 1000 1000 1000 1000)))
+    (flet ((%r () (random-from-interval upper-bound)))
       (loop for xr = (%r)
 	    for xc = (%r)
 	    for x = (complex xr xc)
@@ -182,8 +180,8 @@
 
 (deftest *.14
   (let ((bound (- (sqrt most-positive-short-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound 2)) bound)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -193,8 +191,8 @@
 
 (deftest *.15
   (let ((bound (- (sqrt most-positive-single-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound 2)) bound)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -204,8 +202,8 @@
 
 (deftest *.16
   (let ((bound (- (sqrt most-positive-double-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound 2)) bound)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -215,8 +213,8 @@
 
 (deftest *.17
   (let ((bound (- (sqrt most-positive-long-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound 2)) bound)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -227,8 +225,8 @@
 (deftest *.18
   (let ((bound (- (sqrt most-positive-short-float) 1))
 	(bound2 (- (sqrt most-positive-single-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound2 2)) bound2)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound2)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -239,8 +237,8 @@
 (deftest *.19
   (let ((bound (- (sqrt most-positive-short-float) 1))
 	(bound2 (- (sqrt most-positive-double-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound2 2)) bound2)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound2)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -251,8 +249,8 @@
 (deftest *.20
   (let ((bound (- (sqrt most-positive-short-float) 1))
 	(bound2 (- (sqrt most-positive-long-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound2 2)) bound2)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound2)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -263,8 +261,8 @@
 (deftest *.21
   (let ((bound (- (sqrt most-positive-single-float) 1))
 	(bound2 (- (sqrt most-positive-double-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound2 2)) bound2)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound2)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -275,8 +273,8 @@
 (deftest *.22
   (let ((bound (- (sqrt most-positive-single-float) 1))
 	(bound2 (- (sqrt most-positive-long-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound2 2)) bound2)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound2)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))
@@ -287,8 +285,8 @@
 (deftest *.23
   (let ((bound (- (sqrt most-positive-double-float) 1))
 	(bound2 (- (sqrt most-positive-long-float) 1)))
-    (loop for x = (- (random (* bound 2)) bound)
-	  for y = (- (random (* bound2 2)) bound2)
+    (loop for x = (random-from-interval bound)
+	  for y = (random-from-interval bound2)
 	  for p = (* x y)
 	  repeat 10000
 	  unless (and (eql p (* y x))

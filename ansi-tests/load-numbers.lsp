@@ -25,6 +25,7 @@
 
 (load "times.lsp")
 (load "plus.lsp")
+(load "minus.lsp")
 
 (load "evenp.lsp")
 (load "oddp.lsp")
