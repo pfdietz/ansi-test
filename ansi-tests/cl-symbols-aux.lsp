@@ -17,24 +17,23 @@
   (multiple-value-bind (sym status)
       (find-symbol #+lower-case str #-lower-case (string-upcase str) 'common-lisp)
       (or
-       ;; Symbol not present in the common lisp package
-       (not status)
+       ;; Symbol not present in the common lisp package as an external symbol
+       (not (eqt status :external))
        ;; Check if it has any properties whose indicators are
        ;; external in any of the standard packages or are accessible
        ;; in CL-USER
-       (and (eqt status :external)
-	    (let ((plist (symbol-plist sym)))
-	      (loop for e = plist then (cddr e)
-		    while e
-		    for indicator = (car e)
-		    when (and (symbolp indicator)
-			      (or (is-external-symbol-of indicator
-							 "COMMON-LISP")
-				  (is-external-symbol-of indicator "KEYWORD")
-				  (eqt indicator (find-symbol
-						  (symbol-name indicator)
-						  "COMMON-LISP-USER"))))
-		    collect indicator))))))
+       (let ((plist (symbol-plist sym)))
+	 (loop for e = plist then (cddr e)
+	       while e
+	       for indicator = (car e)
+	       when (and (symbolp indicator)
+			 (or (is-external-symbol-of indicator
+						    "COMMON-LISP")
+			     (is-external-symbol-of indicator "KEYWORD")
+			     (eqt indicator (find-symbol
+					     (symbol-name indicator)
+					     "COMMON-LISP-USER"))))
+	       collect indicator)))))
 
 (defun safe-symbol-name (sym)
   (catch-type-error (symbol-name sym)))
