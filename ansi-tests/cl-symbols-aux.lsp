@@ -24,8 +24,8 @@
        ;; in CL-USER
        (let ((plist (symbol-plist sym)))
 	 (loop for e = plist then (cddr e)
-	       while e
 	       for indicator = (car e)
+	       while e
 	       when (and (symbolp indicator)
 			 (or (is-external-symbol-of indicator
 						    "COMMON-LISP")
