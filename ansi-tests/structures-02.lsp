@@ -478,6 +478,13 @@
 
 (defstruct-with-tests struct-test-66 nil)
 
+(defstruct-with-tests struct-test-67
+  (a 0 :type (integer 0 (#.(ash 1 32))))
+  (b nil))
+
+(defstruct-with-tests (struct-test-68 (:include struct-test-67))
+  c d)  
+
 ;;; Error tests
 
 (deftest copy-structure.error.1
