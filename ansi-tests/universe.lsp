@@ -40,18 +40,20 @@
       warning))
 
 (defparameter *condition-objects*
-  (loop for tp in *condition-types* append
-	(handler-case (list (make-condition tp))
-		      (error () nil))))
+  (locally (declare (optimize safety))
+	   (loop for tp in *condition-types* append
+		 (handler-case (list (make-condition tp))
+			       (error () nil)))))
 
 (defparameter *standard-package-names*
   '("COMMON-LISP" "COMMON-LISP-USER" "KEYWORD"))
 
 (defparameter *package-objects*
-  (loop for pname in *standard-package-names* append
-	(handler-case (let ((pkg (find-package pname)))
-			(and pkg (list pkg)))
-		      (error () nil))))
+  (locally (declare (optimize safety))
+	   (loop for pname in *standard-package-names* append
+		 (handler-case (let ((pkg (find-package pname)))
+				 (and pkg (list pkg)))
+			       (error () nil)))))
 
 (defparameter *integers*
     (remove-duplicates
@@ -155,6 +157,7 @@
 (defparameter *rationals* (append *integers* *ratios*))
 
 (defun try-to-read-chars (&rest namelist)
+  (declare (optimize safety))
   (loop
     for name in namelist append
 	(handler-case
@@ -353,78 +356,85 @@
       )
 
      ;; The ever-popular NIL array
-     (handler-case
-      (list (make-array '(0) :element-type nil))
-      (error () nil))
+     (locally (declare (optimize safety))
+	      (handler-case
+	       (list (make-array '(0) :element-type nil))
+	       (error () nil)))
 
      ;; more kinds of arrays here later?
      ))
 
 (defparameter *hash-tables*
-    (list
-     (make-hash-table)
-     (make-hash-table :test #'eq)
-     (make-hash-table :test #'eql)
-     (make-hash-table :test #'equal)
-     #-(or GCL CMU ECL) (make-hash-table :test #'equalp)
-     ))
-
-(defparameter *pathnames*
-    (append
-     (ignore-errors (list (make-pathname :name "foo")))
-     (ignore-errors (list (make-pathname :name "FOO" :case :common)))
-     (ignore-errors (list (make-pathname :name "bar")))
-     (ignore-errors (list (make-pathname :name "foo" :type "txt")))
-     (ignore-errors (list (make-pathname :name "bar" :type "txt")))
-     (ignore-errors (list (make-pathname :name "XYZ" :type "TXT" :case :common)))
-     (ignore-errors (list (make-pathname :name nil)))
-     (ignore-errors (list (make-pathname :name :wild)))
-     (ignore-errors (list (make-pathname :name nil :type "txt")))
-     (ignore-errors (list (make-pathname :name :wild :type "txt")))
-     (ignore-errors (list (make-pathname :name :wild :type "TXT" :case :common)))
-     (ignore-errors (list (make-pathname :name :wild :type "abc" :case :common)))
-     (ignore-errors (list (make-pathname :directory :wild)))
-     (ignore-errors (list (make-pathname :type :wild)))
-     (ignore-errors (list (make-pathname :version :wild)))
-     (ignore-errors (list (make-pathname :version :newest)))
-     ))
-
-(eval-when (load eval compile)
-  (ignore-errors
-    (setf (logical-pathname-translations "CLTESTROOT")
-	  `(("**;*.*.*" ,(make-pathname :directory '(:absolute :wild-inferiors)
-					:name :wild :type :wild)))))
-  (ignore-errors
-    (setf (logical-pathname-translations "CLTEST")
-	  `(("**;*.*.*" ,(make-pathname
-			  :directory (append
-				      (pathname-directory
-				       (truename (make-pathname)))
-				      '(:wild-inferiors))
-			  :name :wild :type :wild)))))
-  )
-
-(defparameter *logical-pathnames*
-  (append
-   (ignore-errors (list (logical-pathname "CLTESTROOT:")))
+  (list
+   (make-hash-table)
+   (make-hash-table :test #'eq)
+   (make-hash-table :test #'eql)
+   (make-hash-table :test #'equal)
+   #-(or GCL CMU ECL) (make-hash-table :test #'equalp)
    ))
 
+(defparameter *pathnames*
+  (locally
+   (declare (optimize safety))
+   (append
+    (ignore-errors (list (make-pathname :name "foo")))
+    (ignore-errors (list (make-pathname :name "FOO" :case :common)))
+    (ignore-errors (list (make-pathname :name "bar")))
+    (ignore-errors (list (make-pathname :name "foo" :type "txt")))
+    (ignore-errors (list (make-pathname :name "bar" :type "txt")))
+    (ignore-errors (list (make-pathname :name "XYZ" :type "TXT" :case :common)))
+    (ignore-errors (list (make-pathname :name nil)))
+    (ignore-errors (list (make-pathname :name :wild)))
+    (ignore-errors (list (make-pathname :name nil :type "txt")))
+    (ignore-errors (list (make-pathname :name :wild :type "txt")))
+    (ignore-errors (list (make-pathname :name :wild :type "TXT" :case :common)))
+    (ignore-errors (list (make-pathname :name :wild :type "abc" :case :common)))
+    (ignore-errors (list (make-pathname :directory :wild)))
+    (ignore-errors (list (make-pathname :type :wild)))
+    (ignore-errors (list (make-pathname :version :wild)))
+    (ignore-errors (list (make-pathname :version :newest)))
+    )))
+
+(eval-when (load eval compile)
+  (locally
+   (declare (optimize safety))
+   (ignore-errors
+     (setf (logical-pathname-translations "CLTESTROOT")
+	   `(("**;*.*.*" ,(make-pathname :directory '(:absolute :wild-inferiors)
+					 :name :wild :type :wild)))))
+   (ignore-errors
+     (setf (logical-pathname-translations "CLTEST")
+	   `(("**;*.*.*" ,(make-pathname
+			   :directory (append
+				       (pathname-directory
+					(truename (make-pathname)))
+				       '(:wild-inferiors))
+			   :name :wild :type :wild)))))
+   ))
+
+(defparameter *logical-pathnames*
+  (locally
+   (declare (optimize safety))
+   (append
+    (ignore-errors (list (logical-pathname "CLTESTROOT:")))
+    )))
+
 (defparameter *streams*
-    (remove-duplicates
-     (remove-if
-      #'null
-      (list
-       *debug-io*
-       *error-output*
-       *query-io*
-       *standard-input*
-       *standard-output*
-       *terminal-io*
-       *trace-output*))))
+  (remove-duplicates
+   (remove-if
+    #'null
+    (list
+     *debug-io*
+     *error-output*
+     *query-io*
+     *standard-input*
+     *standard-output*
+     *terminal-io*
+     *trace-output*))))
 
 (defparameter *readtables*
-    (list *readtable*
-	  (copy-readtable)))
+  (list *readtable*
+	(copy-readtable)))
 
 (defstruct foo-structure
   x y z)
@@ -433,11 +443,11 @@
   x y z)
 
 (defparameter *structures*
-    (list
-     (make-foo-structure :x 1 :y 'a :z nil)
-     (make-foo-structure :x 1 :y 'a :z nil)
-     (make-bar-structure :x 1 :y 'a :z nil)
-     ))
+  (list
+   (make-foo-structure :x 1 :y 'a :z nil)
+   (make-foo-structure :x 1 :y 'a :z nil)
+   (make-bar-structure :x 1 :y 'a :z nil)
+   ))
 
 (defun meaningless-user-function-for-universe (x y z)
   (list (+ x 1) (+ y 2) (+ z 3)))
@@ -468,26 +478,26 @@
   (list (make-random-state)))
 
 (defparameter *universe*
-    (remove-duplicates
-     (append
-      *symbols*
-      *numbers*
-      *characters*
-      (mapcar #'copy-seq *strings*)
-      *conses*
-      *condition-objects*
-      *package-objects*
-      *arrays*
-      *hash-tables*
-      *pathnames*
-      *logical-pathnames*
-      *streams*
-      *readtables*
-      *structures*
-      *functions*
-      *random-states*
-      *methods*
-      nil)))
+  (remove-duplicates
+   (append
+    *symbols*
+    *numbers*
+    *characters*
+    (mapcar #'copy-seq *strings*)
+    *conses*
+    *condition-objects*
+    *package-objects*
+    *arrays*
+    *hash-tables*
+    *pathnames*
+    *logical-pathnames*
+    *streams*
+    *readtables*
+    *structures*
+    *functions*
+    *random-states*
+    *methods*
+    nil)))
 
 (defparameter *mini-universe*
   (remove-duplicates
