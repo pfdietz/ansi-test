@@ -451,7 +451,9 @@
 						(*standard-output*)
 						(let ((*print-escape* t))
 						  (prin1 c)))))))))
-	     (compile nil lambda-form))))
+	     (prog1 (compile nil lambda-form)
+	       #+:ecl (si:gc t)
+	       ))))
       (let ((optimized-compiled-fn   (%compile optimized-fn-src))
 	    (unoptimized-compiled-fn (%compile unoptimized-fn-src)))
 	(declare (type function optimized-compiled-fn unoptimized-compiled-fn))
@@ -534,7 +536,7 @@
 ;;; The return value of PRUNE should be ignored.
 ;;;
 (defun prune (form try-fn)
-  (declare (function try-fn))
+  (declare (type function try-fn))
   (flet ((try (x) (funcall try-fn x)))
     (when (consp form)
       (let ((op (car form))
@@ -549,7 +551,7 @@
 	  (try -1)
 	  (prune-fn form try-fn))
 	 
-	 ((abs 1+ 1- identity values progn realpart imagpart)
+	 ((abs 1+ 1- identity values progn)
 	  (mapc #'try args)
 	  (prune-fn form try-fn))
 	 
@@ -750,7 +752,7 @@
       ;; Assume each case has a single form
       (prune-list cases
 		  #'(lambda (case try-fn)
-		      (declare (function try-fn))
+		      (declare (type function try-fn))
 		      (when (eql (length case) 2)
 			(prune (cadr case)
 			       #'(lambda (form)
@@ -762,7 +764,7 @@
 (defun prune-fn (form try-fn)
   "Attempt to simplify a function call form.  It is considered
    acceptable to replace the call by one of its argument forms."
-  (declare (function try-fn))
+  (declare (type function try-fn))
   (prune-list (cdr form)
 	      #'prune
 	      #'(lambda (args)
@@ -770,7 +772,7 @@
 
 (defun prune-let (form try-fn)
   "Attempt to simplify a LET form."
-  (declare (function try-fn))
+  (declare (type function try-fn))
   (let* ((op (car form))
 	 (binding-list (cadr form))
 	 (body (cddr form))
@@ -786,7 +788,7 @@
     ;; Try to simplify the forms in the RHS of the bindings
     (prune-list binding-list
 		#'(lambda (binding try-fn)
-		    (declare (function try-fn))
+		    (declare (type function try-fn))
 		    (prune (cadr binding)
 			   #'(lambda (form)
 			       (funcall try-fn
@@ -822,7 +824,7 @@
 
 (defun prune-flet (form try-fn)
   "Attempt to simplify a FLET form."
-  (declare (function try-fn))
+  (declare (type function try-fn))
 
   (let* ((op (car form))
 	 (binding-list (cadr form))
@@ -831,7 +833,7 @@
     ;; Try to simplify the forms in the RHS of the bindings
     (prune-list binding-list
 		#'(lambda (binding try-fn)
-		    (declare (function try-fn))
+		    (declare (type function try-fn))
 		    (prune (third binding)
 			   #'(lambda (form)
 			       (funcall try-fn
