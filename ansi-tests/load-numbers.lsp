@@ -33,7 +33,10 @@
 
 (load "sinh.lsp")
 (load "cosh.lsp")
-
+(load "tanh.lsp")
+(load "asinh.lsp")
+(load "acosh.lsp")
+(load "atanh.lsp")
 
 (load "times.lsp")
 (load "plus.lsp")

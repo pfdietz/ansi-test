@@ -265,6 +265,7 @@
 
 (defun epsilon (number)
   (etypecase number
+    (complex (* 2 (epsilon (realpart number)))) ;; crude
     (short-float short-float-epsilon)
     (single-float single-float-epsilon)
     (double-float double-float-epsilon)
@@ -273,6 +274,7 @@
 
 (defun negative-epsilon (number)
   (etypecase number
+    (complex (* 2 (negative-epsilon (realpart number)))) ;; crude
     (short-float short-float-negative-epsilon)
     (single-float single-float-negative-epsilon)
     (double-float double-float-negative-epsilon)

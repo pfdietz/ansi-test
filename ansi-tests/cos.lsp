@@ -153,6 +153,9 @@
 	always (numberp y))
   t)
 
+;;; FIXME
+;;; More accuracy tests here
+
 ;;; Error tests
 
 (deftest cos.error.1

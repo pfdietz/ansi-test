@@ -140,6 +140,9 @@
 	always (numberp y))
   t)
 
+;;; FIXME
+;;; More accuracy tests here
+
 ;;; Error tests
 
 (deftest tan.error.1
