@@ -1451,7 +1451,7 @@
 			(logbitp 6 c))
 		   c b)))
    0 100 600)
-  100)
+  600)
 
 (deftest misc.116
   (funcall
