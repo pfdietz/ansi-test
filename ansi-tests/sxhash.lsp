@@ -158,7 +158,9 @@
 	for c2 in '(-0.0s0 -0.0f0 -0.0d0 -0.0l0)
 	for sx1 = (sxhash c1)
 	for sx2 = (sxhash c2)
-	unless (eql sx1 sx2)
+	unless (or (not (typep c1 (type-of c2)))
+		   (not (typep c2 (type-of c1)))
+		   (eql sx1 sx2))
 	collect (list c1 c2 sx1 sx2))
   nil)
 
@@ -169,7 +171,9 @@
 	for c2 = (complex r2)
 	for sx1 = (sxhash c1)
 	for sx2 = (sxhash c2)
-	unless (eql sx1 sx2)
+	unless (or (not (typep c1 (type-of c2)))
+		   (not (typep c2 (type-of c1)))
+		   (eql sx1 sx2))
 	collect (list c1 c2 sx1 sx2))
   nil)
 
@@ -180,7 +184,9 @@
 	for c2 = (complex 0 r2)
 	for sx1 = (sxhash c1)
 	for sx2 = (sxhash c2)
-	unless (eql sx1 sx2)
+	unless (or (not (typep c1 (type-of c2)))
+		   (not (typep c2 (type-of c1)))
+		   (eql sx1 sx2))
 	collect (list c1 c2 sx1 sx2))
   nil)
 
