@@ -264,7 +264,7 @@ the condition to go uncaught if it cannot be classified."
 ;;; The above is badly designed, since it fails when some signals
 ;;; may be in more than one class/
 
-(defmacro signals-error (form error-name)
+(defmacro signals-error (form error-name &key (safety 3))
   `(handler-bind
     ((warning #'(lambda (c) (declare (ignore c))
 			      (muffle-warning))))
@@ -275,10 +275,15 @@ the condition to go uncaught if it cannot be classified."
 	    (multiple-value-list
 	     (if regression-test::*compile-tests*
 		 (funcall (compile nil '(lambda ()
-					  (declare (optimize safety))
+					  (declare (optimize (safety ,safety)))
 					  ,form)))
 	       (eval ',form))))
      (,error-name (c) (printable-p c)))))
+
+(defmacro signals-error-always (form error-name)
+  `(values
+    (signals-error ,form ,error-name)
+    (signals-error ,form ,error-name :safety 0)))
 
 (defun printable-p (obj)
   "Returns T iff obj can be printed to a string."

@@ -12,100 +12,100 @@
 ;;; Prefix and suffix cannot contain format directives
 
 (deftest format.logical-block.error.1
-  (signals-error (format nil "~<foo~A~;~A~;bar~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<foo~A~;~A~;bar~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.2
-  (signals-error (format nil "~<foo~A~@;~A~;bar~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<foo~A~@;~A~;bar~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.3
-  (signals-error (format nil "~<foo~;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<foo~;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.4
-  (signals-error (format nil "~<foo~@;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<foo~@;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.5
-  (signals-error (format nil "~<foo~A~;~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<foo~A~;~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.6
-  (signals-error (format nil "~<foo~A~@;~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<foo~A~@;~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.7
-  (signals-error (format nil "~<~;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<~;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.8
-  (signals-error (format nil "~<~@;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~<~@;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.9
-  (signals-error (format nil "~:<foo~A~;~A~;bar~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<foo~A~;~A~;bar~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.10
-  (signals-error (format nil "~:<foo~A~@;~A~;bar~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<foo~A~@;~A~;bar~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.11
-  (signals-error (format nil "~:<foo~;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<foo~;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.12
-  (signals-error (format nil "~:<foo~@;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<foo~@;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.13
-  (signals-error (format nil "~:<foo~A~;~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<foo~A~;~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.14
-  (signals-error (format nil "~:<foo~A~@;~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<foo~A~@;~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.15
-  (signals-error (format nil "~:<~;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<~;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.16
-  (signals-error (format nil "~:<~@;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~:<~@;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.17
-  (signals-error (format nil "~@<foo~A~;~A~;bar~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<foo~A~;~A~;bar~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.18
-  (signals-error (format nil "~@<foo~A~@;~A~;bar~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<foo~A~@;~A~;bar~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.19
-  (signals-error (format nil "~@<foo~;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<foo~;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.20
-  (signals-error (format nil "~@<foo~@;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<foo~@;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.21
-  (signals-error (format nil "~@<foo~A~;~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<foo~A~;~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.22
-  (signals-error (format nil "~@<foo~A~@;~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<foo~A~@;~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.23
-  (signals-error (format nil "~@<~;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<~;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 (deftest format.logical-block.error.24
-  (signals-error (format nil "~@<~@;~A~;bar~A~:>" '(X) '(Y)) error)
-  t)
+  (signals-error-always (format nil "~@<~@;~A~;bar~A~:>" '(X) '(Y)) error)
+  t t)
 
 ;;; Non-error tests
 
