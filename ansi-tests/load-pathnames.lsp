@@ -27,3 +27,4 @@
 (load "merge-pathnames.lsp")
 (load "pathname-match-p.lsp")
 
+(load "parse-nametring.lsp")
