@@ -1399,6 +1399,45 @@
    -500)
   -500)
 
+;;; In sbcl 0.8.10.14
+;;;  NIL fell through ETYPECASE expression.
+;;;  Wanted one of (SB-C:FIXUP SB-VM::EA SB-C:TN).
+
+(deftest misc.110a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d e f)
+       (declare (type (integer -1294746569 1640996137) a))
+       (declare (type (integer 33628514900 90005963619) b))
+       (declare (type (integer -807801310 3) c))
+       (declare (type (integer 36607 121946) d))
+       (declare (type (integer -6669690514043 -1776180885905) e))
+       (declare (type (integer -1472 1979) f))
+       (declare (ignorable a b c d e f))
+       (declare
+	(optimize (speed 3)
+		  (space 3)
+		  (safety 0)
+		  (debug 0)
+		  (compilation-speed 3)))
+       (catch 'ct7
+	 (if
+	     (logbitp 0
+		      (if (/= 0 a)
+			  c
+			(ignore-errors
+			  (progn
+			    (if
+				(ldb-test (byte 0 0) (rational (throw 'ct7 0)))
+				0
+                              0)
+			    0))))
+	     0
+	   0))))
+   391833530 36648101240 -32785211 91893 -4124561581760 1358)
+  0)
+
 ;;; CLISP (2.31+) compiler bug
 
 (deftest misc.111
