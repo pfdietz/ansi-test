@@ -30,6 +30,8 @@
 (load "oneplus.lsp")
 (load "oneminus.lsp")
 (load "abs.lsp")
+;;(load "exp.lsp")
+(load "expt.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
