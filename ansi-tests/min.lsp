@@ -14,7 +14,7 @@
 (deftest min.error.2
   (loop for x in *mini-universe*
 	unless (or (realp x)
-		   (eq (classify-error** `(classify-error (min ',x)))
+		   (eq (eval `(classify-error (min ',x)))
 		       'type-error))
 	collect x)
   nil)
