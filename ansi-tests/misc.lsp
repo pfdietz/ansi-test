@@ -1068,3 +1068,26 @@
 		     156)))
    0)
   156)
+
+;;; Two tests showing bug(s) in clisp (2.31)
+(deftest misc.86
+  (funcall (compile nil '(lambda (b)
+			   (flet ((%f10 nil :bad))
+			     (let ((v7 (let ((v2 (%f10))) b)))
+			       (unwind-protect b)))))
+	   :good)
+  :good)
+
+(deftest misc.87
+  (apply (compile nil '(lambda (a b c)
+			 (let ((v9 a))
+			   (let ((v2 (setq v9 c)))
+			     (unwind-protect c)))))
+	 '(x y z))
+  z)
+
+(deftest misc.88
+  (eval '(block b3
+	   (max (return-from b3 1)
+		(if (unwind-protect (unwind-protect 2)) 3 4))))
+  1)
