@@ -2466,3 +2466,182 @@
           c)))
    0 11000000000 0)
   0)
+
+;;; In sbcl 0.8.5.37
+;;; "Unreachable code is found or flow graph is not properly depth-first ordered."
+
+(deftest misc.175
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline list apply values signum funcall))
+       (declare (optimize (safety 3)))
+       (declare (optimize (speed 0)))
+       (declare (optimize (debug 0)))
+       (labels ((%f4 (f4-1 f4-2 f4-3)
+		     (labels ((%f1 (f1-1 f1-2 f1-3)
+				   2))
+		       (labels ((%f11
+				 (f11-1
+				  &optional
+				  (f11-2
+				   (return-from %f4
+				     (labels ((%f8
+					       (f8-1 f8-2 f8-3
+                                                     &optional (f8-4 -35)
+                                                     (f8-5 f4-2))
+					       f4-1))
+				       (funcall #'%f8 53 b f4-1)))))
+                                 (return-from %f4 a)))
+			 (signum
+			  (let ((v4
+				 (flet ((%f8
+					 (f8-1 f8-2 f8-3
+					       &optional (f8-4 b) (f8-5 -560367))
+                                         f8-4))
+				   (%f8 -27 35395 c -69))))
+			    (%f11
+			     (multiple-value-call #'%f11
+						  (values (%f1 (%f11 b (%f11 v4 f4-3)) f4-3 77936)
+							  1628490976))
+			     (return-from %f4 (%f1 -9432 f4-1 f4-1)))))))))
+	 (flet ((%f7 (f7-1 f7-2 f7-3)
+		     (%f4 b f7-3 f7-3)))
+	   (flet ((%f14 (f14-1)
+			(apply #'%f7 -252 -56169265 -7322946 (list))))
+	     (%f14 a))))))
+   -70313091 577425217 28052774417)
+  -70313091)
+
+;;; sbcl 0.8.5.37
+;;; failed AVER: "(FUNCTIONAL-LETLIKE-P CLAMBDA)"
+
+(deftest misc.176
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 162180298 184143783) a))
+       (declare (type (integer 702599480988 725878356286) b))
+       (declare (type (integer 168 80719238530) c))
+       (declare (optimize (speed 3)))
+       (declare (optimize (safety 1)))
+       (declare (optimize (debug 1)))
+       (block b6
+	 (flet ((%f10 (f10-1 f10-2)
+		      (labels ((%f6 (f6-1 f6-2)
+				    f6-1))
+			(let ((v2
+			       (flet ((%f1 (f1-1 f1-2 f1-3)
+					   f1-3))
+				 (let ((v8
+					(%f1 -11350578
+					     (%f6 10414199 13)
+					     -58931837)))
+				   -239755))))
+			  323))))
+	   (labels ((%f4
+		     (f4-1
+		      &optional (f4-2 204) (f4-3 -1)
+		      (f4-4
+		       (flet ((%f2 (f2-1)
+				   (if t (return-from b6 c) a)))
+			 (logorc2 (multiple-value-call #'%f2 (values 1))
+				  (let* ((v5 (floor (%f2 -1260))))
+				    (case (abs (logxor 185664 a))
+				      ((-2 5975)
+				       (if (or (< b v5) nil)
+					   (return-from b6
+					     (let ((v10 (%f2 c)))
+					       0))
+					 (multiple-value-call #'%f10
+							      (values -3 a))))
+				      (t b)))))))
+		     1503938))
+	     (multiple-value-call #'%f4 (values -1 a 1853966)))))))
+   173549795 725346738048 993243799)
+  993243799)
+
+;;; different results (sbcl 0.8.5.37)
+;;; May be that setq side effects bug again?
+
+(deftest misc.177
+  (let* ((form '(flet ((%f11
+			(f11-1 f11-2)
+			(labels ((%f4 () (round 200048 (max 99 c))))
+			  (logand
+			   f11-1
+			   (labels ((%f3 (f3-1) -162967612))
+			     (%f3 (let* ((v8 (%f4)))
+				    (setq f11-1 (%f4)))))))))
+		  (%f11 -120429363 (%f11 62362 b))))
+	 (vars '(a b c))
+	 (vals '(6714367 9645616 -637681868))
+	 (fn1 `(lambda ,vars
+		  (declare (type (integer 804561 7640697) a))
+		  (declare (type (integer -1 10441401) b))
+		  (declare (type (integer -864634669 55189745) c))
+		  (declare (ignorable a b c))
+		  (declare (optimize (speed 3)))
+		  (declare (optimize (safety 1)))
+		  (declare (optimize (debug 1)))
+		  ,form))
+	 (fn2 `(lambda ,vars
+		 (declare (notinline list apply logand max round))
+		 (declare (optimize (safety 3)))
+		 (declare (optimize (speed 0)))
+		 (declare (optimize (debug 0)))
+		 ,form))
+	 (compiled-fn1 (compile nil fn1))
+	 (compiled-fn2 (compile nil fn2))
+	 (results1 (multiple-value-list (apply compiled-fn1 vals)))
+	 (results2 (multiple-value-list (apply compiled-fn2 vals))))
+    (if (equal results1 results2)
+	:good
+      (values results1 results2)))
+  :good)
+
+;;; sbcl 0.8.5.37
+;;; The value NIL is not of type INTEGER.
+
+(deftest misc.178
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+         (declare (ignorable a b c))
+         (declare (optimize (speed 3)))
+         (declare (optimize (safety 1)))
+         (declare (optimize (debug 1)))
+         (let ((v9
+                (flet ((%f9
+                           (f9-1 f9-2 f9-3
+                            &optional (f9-4 -40538)
+                            (f9-5
+                             (flet ((%f10 (f10-1 f10-2)
+                                      (labels ((%f11 (f11-1 f11-2)
+                                                 (labels ((%f10 (f10-1 f10-2)
+                                                            -1422))
+                                                   (if
+                                                    (< b
+                                                       (%f10
+                                                        (%f10 28262437 95387)
+                                                        f10-2))
+                                                    -1562
+                                                    f10-2))))
+                                        (let* ((v6 (%f11 59 b)))
+                                          (return-from %f10
+                                            (apply #'%f11
+                                                   f10-1
+                                                   (list
+                                                    (return-from %f10
+                                                      2029647))))))))
+                               (apply #'%f10 -3067 3854883 (list)))))
+                         64066))
+                  (%f9 a 2774 0 c))))
+           (flet ((%f18 (f18-1 f18-2 &optional (f18-3 66) (f18-4 b))
+                    -6939342))
+             (%f18 1274880 (%f18 b a 46746370 -1))))))
+   0 0 0)
+  -6939342)
