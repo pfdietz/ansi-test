@@ -298,3 +298,13 @@
 (def-pprint-test format.logical-block.circle.5
   (format nil "~:<~@{~A~^ ~}~:>" (let ((x (list 0))) (cons x x)))
   "((0) 0)")
+
+;;; ~^ terminates a logical block
+
+(def-pprint-test format.logical-block.escape.1
+  (format nil "~<~A~^xxxx~:>" '(1))
+  "1")
+
+(def-pprint-test format.logical-block.escape.2
+  (format nil "~<~<~A~^xxx~:>yyy~:>" '((1)))
+  "1yyy")
