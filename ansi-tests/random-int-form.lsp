@@ -122,8 +122,8 @@
     (rcase
      ;; Unary ops
      (40
-      (let ((op (random-from-seq '(- abs abs signum signum 1+ 1- identity
-				     integer-length logcount))))
+      (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn
+				     integer-length logcount values))))
 	`(,op ,(make-random-integer-form (1- size) vars))))
      ;; Binary op
      (80
@@ -153,6 +153,7 @@
 	  ,(make-random-integer-form s1 vars)
 	  ,(make-random-byte-spec-form s2 vars)
 	  ,(make-random-integer-form s3 vars))))
+     #-:allegro
      (10
       (destructuring-bind (s1 s2) (random-partition (1- size) 2)
 	  `(,(random-from-seq '(ldb mask-field))
@@ -167,11 +168,13 @@
 	  (if (member var vars)
 	      (make-random-integer-form size vars)
 	    `(let ((,var ,e1)) ,e2)))))
+     (4 `(let () ,(make-random-integer-form (1- size) vars)))
      (10
       (let* ((name (random-from-seq #(b1 b2 b3 b4 b5 b6 b7 b8)))
 	     (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
 	`(block ,name ,(make-random-integer-form (1- size) vars))))
-     (1
+     (3 (make-random-integer-case-form size vars))
+     (3
       (if *random-int-form-blocks*
 	  (let ((name (random-from-seq *random-int-form-blocks*))
 		(form (make-random-integer-form (1- size) vars)))
@@ -193,6 +196,31 @@
      (5 (make-random-flet-form size vars))
 		
      )))
+
+(defun make-random-integer-case-form (size vars)
+  (let ((ncases (1+ (random 10))))
+    (if (< (+ size size) (+ ncases 2))
+	;; Too small, give up
+	(make-random-integer-form size vars)
+      (let* ((sizes (random-partition (1- size) (+ ncases 2)))
+	     (bound (ash 1 (+ 2 (random 16))))
+	     (lower-bound (if (coin 3) 0 (- bound)))
+	     (upper-bound (if (and (< lower-bound 0) (coin 3))
+			      1
+			    (1+ bound)))
+	     (cases
+	      (loop
+	       for case-size in (cddr sizes)
+	       for vals = (loop repeat (1+ (min (random 10) (random 10)))
+				collect (random-from-interval
+					 upper-bound lower-bound))
+	       for result = (make-random-integer-form case-size vars)
+	       repeat ncases
+	       collect `(,vals ,result)))
+	     (expr (make-random-integer-form (first sizes) vars)))
+	`(case ,expr
+	   ,@cases
+	   (t ,(make-random-integer-form (second sizes) vars)))))))
 
 (defun make-random-flet-form (size vars)
   "Generate random flet, labels forms, for now with no arguments
@@ -255,6 +283,62 @@
   (let* ((pform (random 33))
 	 (sform (1+ (random 33))))
     `(byte ,sform ,pform)))
+
+(defun make-random-element-of-type (type)
+  "Create a random element of a lisp type."
+  (cond
+   ((consp type)
+    (let ((type-op (first type)))
+      (ecase type-op
+	(integer
+	 (let ((lo (let ((lo (cadr type)))
+		     (cond
+		      ((consp lo) (1+ (car lo)))
+		      ((eq lo nil) '*)
+		      (t lo))))
+	       (hi (let ((hi (caddr type)))
+		     (cond
+		      ((consp hi) (1- (car hi)))
+		      ((eq hi nil) '*)
+		      (t hi)))))
+	 (if (eq lo '*)
+	     (if (eq hi '*)
+		 (let ((x (ash 1 (random 35))))
+		   (random-from-interval x (- x)))
+	       (random-from-interval (1+ hi)
+				     (- hi (random (ash 1 35)))))
+
+	   (if (eq hi '*)
+	       (random-from-interval (+ lo (random (ash 1 35)) 1)
+				     lo)
+	     ;; May generalize the next case to increase odds
+	     ;; of certain integers (near 0, near endpoints, near
+	     ;; powers of 2...)
+	     (random-from-interval (1+ hi) lo)))))
+	(mod
+	 (let ((modulus (second type)))
+	   (assert (and (integerp modulus)
+			(plusp modulus)))
+	   (make-random-element-of-type `(integer 0 (,modulus)))))
+	(unsigned-byte
+	 (if (null (cdr type))
+	   (make-random-element-of-type '(integer 0 *))
+	   (let ((bits (second type)))
+	     (if (eq bits'*)
+		 (make-random-element-of-type '(integer 0 *))
+	       (progn
+		 (assert (and (integerp bits) (>= bits 1)))
+		 (make-random-element-of-type `(integer 0 ,(1- (ash 1 bits)))))))))
+	)))
+   (t
+    (ecase type
+      (bit (random 2))
+      (boolean (random-from-seq #(nil t)))
+      (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| cl:car)))
+      (unsigned-byte (random-from-interval (1+ (ash 1 (random 35))) 0))
+      (integer (let ((x (ash 1 (random 35))))
+		 (random-from-interval (1+ x) (- x))))
+      ))))
 	
 (defun random-partition (n p)
   "Partition n into p numbers, each >= 1.  Return list of numbers."
@@ -313,33 +397,47 @@
 					      :compiler-condition
 					      (with-output-to-string
 						(*standard-output*)
-						(print c))))))))
+						(let ((*print-escape* t))
+						  (prin1 c)))))))))
 	     (compile nil lambda-form))))
       (let ((optimized-compiled-fn   (%compile optimized-fn-src))
 	    (unoptimized-compiled-fn (%compile unoptimized-fn-src)))
 	(declare (type function optimized-compiled-fn unoptimized-compiled-fn))
 	(dolist (vals vals-list)
 	  (setq *int-form-vals* vals)
-	  (let ((unopt-result (multiple-value-list
-			       (apply unoptimized-compiled-fn vals)))
-		(opt-result (multiple-value-list
-			     (apply optimized-compiled-fn vals))))
-	    (if (equal opt-result unopt-result)
-		nil
-	      (progn
-		(format t "Different results: ~A, ~A~%"
-			opt-result unopt-result)
-		(setq *opt-result* opt-result
-		      *unopt-result* unopt-result)
-		(return (list (list :vars vars
-				    :vals vals
-				    :form form
-				    :var-types var-types
-				    :optimized-lambda-form optimized-fn-src
-				    :unoptimized-lambda-form unoptimized-fn-src
-				    :optimized-values opt-result
-				    :unoptimized-values unopt-result
-				   )))))))))))
+	  (flet ((%eval-error
+		  (kind)
+		  (return
+		   (list (list :vars vars
+			       :vals vals
+			       :form form
+			       :var-types var-types
+			       :optimized-lambda-form optimized-fn-src
+			       :unoptimized-lambda-form unoptimized-fn-src
+			       :kind kind)))))
+	      
+	    (let ((unopt-result
+		   (handler-case
+		    (multiple-value-list
+		     (apply unoptimized-compiled-fn vals))
+		    (error (c) (declare (ignore c))
+			   (%eval-error :unoptimized-form-error))))
+		  (opt-result
+		   (handler-case
+		    (multiple-value-list
+		     (apply optimized-compiled-fn vals))
+		    (error (c) (declare (ignore c))
+			   (%eval-error :optimized-form-error)))))
+	      (if (equal opt-result unopt-result)
+		  nil
+		(progn
+		  (format t "Different results: ~A, ~A~%"
+			  opt-result unopt-result)
+		  (setq *opt-result* opt-result
+			*unopt-result* unopt-result)
+		  (%eval-error (list :different-results
+				     opt-result
+				     unopt-result)))))))))))
 
 (defun prune-int-form (form vars var-types vals-list)
   "Conduct tests on selected simplified versions of FORM.  Return the
@@ -397,7 +495,7 @@
 	  (try -1)
 	  (prune-fn form try-fn))
 	 
-	 ((abs 1+ 1- identity)
+	 ((abs 1+ 1- identity values)
 	  (mapc #'try args)
 	  (prune-fn form try-fn))
 	 
@@ -459,6 +557,9 @@
 
 	 ((flet labels)
 	  (prune-flet form try-fn))
+
+	 ((case)
+	  (prune-case form try-fn))
 	 
 	 (otherwise
 	  (prune-fn form try-fn))
@@ -471,25 +572,58 @@
 	   (or (find-in-tree value (car tree))
 	       (find-in-tree value (cdr tree))))))
 
+(defun prune-list (list element-prune-fn list-try-fn)
+  "Utility function for pruning in a list."
+    (loop for i from 0
+	  for e in list
+	  do (funcall element-prune-fn
+		      e
+		      #'(lambda (form)
+			  (funcall list-try-fn
+				   (append (subseq list 0 i)
+					   (list form)
+					   (subseq list (1+ i))))))))
+
+(defun prune-case (form try-fn)
+  (let* ((op (first form))
+	 (expr (second form))
+	 (cases (cddr form)))
+
+    ;; Try just the top expression
+    (funcall try-fn expr)
+
+    ;; Try simplifying the expr
+    (prune expr
+	   #'(lambda (form)
+	       (funcall try-fn `(,op ,form ,@cases))))
+
+    ;; Try deleting individual cases
+    (loop for i from 0 below (1- (length cases))
+	  do (funcall try-fn `(,op ,expr
+				  ,@(subseq cases 0 i)
+				  ,@(subseq cases (1+ i)))))
+
+    ;; Try simplifying the cases
+    ;; Assume each case has a single form
+    (prune-list cases
+		#'(lambda (case try-fn)
+		    (when (eql (length case) 2)
+		      (prune (cadr case)
+			     #'(lambda (form)
+				 (funcall try-fn
+					  (list (car case) form))))))
+		#'(lambda (cases)
+		    (funcall try-fn `(,op ,expr ,@cases))))))
+    
+
 (defun prune-fn (form try-fn)
   "Attempt to simplify a function call form.  It is considered
    acceptable to replace the call by one of its argument forms."
   (declare (function try-fn))
-  (let* ((i 0)
-	 (op (first form))
-	 (args (rest form))
-	 (len (length args)))
-    (flet ((try-arg (x)
-		    (funcall
-		     try-fn
-		     (cons op
-			   (append (subseq args 0 i)
-				   (list x)
-				   (subseq args (1+ i)))))))
-      (declare (dynamic-extent (function try-arg)))
-      (loop while (< i len)
-	    do (prune (elt args i) #'try-arg)
-	       (incf i)))))
+  (prune-list (cdr form)
+	      #'prune
+	      #'(lambda (args)
+		  (funcall try-fn (cons (car form) args)))))
 
 (defun prune-let (form try-fn)
   "Attempt to simplify a LET form."
@@ -507,22 +641,15 @@
       (funcall try-fn (cadar binding-list)))
 
     ;; Try to simplify the forms in the RHS of the bindings
-    (let ((i 0))
-      (flet ((try-binding (name form)
-			  (funcall
-			   try-fn
-			   `(,op
-			     (,@(subseq binding-list 0 i)
-				(,name ,form)
-				,@(subseq binding-list (1+ i)))
-			     ,@body))))
-	(declare (dynamic-extent (function try-binding)))
-	(loop for binding in binding-list
-	      while (< i len)
-	      do (prune (second binding)
-			#'(lambda (form)
-			    (try-binding (first binding) form))) 
-	      (incf i))))
+    (prune-list binding-list
+		#'(lambda (binding try-fn)
+		    (prune (cadr binding)
+			   #'(lambda (form)
+			       (funcall try-fn
+					(list (car binding)
+					      form)))))
+		#'(lambda (bindings)
+		    (funcall try-fn `(,op ,bindings ,@body))))
 
     ;; Try to simplify the body of the LET form
     (when body
@@ -547,54 +674,45 @@
 
   (let* ((op (car form))
 	 (binding-list (cadr form))
-;;	 (binding-names (mapcar #'car binding-list))
-	 (body (cddr form))
-	 (len (length binding-list)))
+	 (body (cddr form)))
     
     ;; Try to simplify the forms in the RHS of the bindings
-    (let ((i 0))
-      (flet ((try-binding (name args form)
-			  (funcall
-			   try-fn
-			   `(,op
-			     (,@(subseq binding-list 0 i)
-				(,name ,args ,form)
-				,@(subseq binding-list (1+ i)))
-			     ,@body))))
-	(declare (dynamic-extent (function try-binding)))
-	(loop for binding in binding-list
-	      while (< i len)
-	      do (print i)
-	      do #| (when (and (null (cdddr binding))
-			    (not (loop for n in binding-names
-				       thereis
-				       (find-in-tree n (cdr binding))))) |#
-		   (prune (third binding)
-			  #'(lambda (form)
-			      (try-binding (first binding)
-					   (second binding)
-					   form))) ;; )
-	      (incf i))))
+    (prune-list binding-list
+		#'(lambda (binding try-fn)
+		    (prune (third binding)
+			   #'(lambda (form)
+			       (funcall try-fn
+					(list (first binding)
+					      (second binding)
+					      form)))))
+		#'(lambda (bindings)
+		    (funcall try-fn `(,op ,bindings ,@body))))
 
     ;; ;; Try to simplify the body of the FLET form
     (when body
 
       ;; No bindings -- try to simplify to the last form in the body
       (unless binding-list
-	(funcall try-fn (car (last body))))
+	(funcall try-fn (first (last body))))
 
-      ;; One binding -- match on (flet ((<name> () <body>)) (<name>))
       (when (and (consp binding-list)
 		 (null (rest binding-list)))
 	(let ((binding (first binding-list)))
+	  ;; One binding -- match on (flet ((<name> () <body>)) (<name>))
 	  (when (and (symbolp (first binding))
 		     (not (find-in-tree (first binding) (rest binding)))
 		     (null (second binding))
 		     (equal body (list (list (first binding)))))
-	    (funcall try-fn `(,op () ,@(cddr binding))))))
+	    (funcall try-fn `(,op () ,@(cddr binding))))
+	  ;; One binding -- try to remove it if not used
+	  (when (and (symbolp (first binding))
+		     (not (find-in-tree (first binding) body)))
+	    (funcall try-fn (first (last body))))
+	))
+
 
       ;; Try to simplify (the last form in) the body.
-      (prune (car (last body))
+      (prune (first (last body))
 	     #'(lambda (form2)
 		 (funcall try-fn
 			  `(,@(butlast form) ,form2)))))))
