@@ -299,6 +299,88 @@
   (make-sequence '(simple-bit-vector 5) 5 :initial-element 0)
   #*00000)
 
+(deftest make-sequence.49
+  (if (subtypep (class-of nil) 'sequence)
+      (make-sequence (class-of nil) 0)
+    nil)
+  nil)
+
+(deftest make-sequence.50
+  (if (subtypep (class-of '(nil nil nil)) 'sequence)
+      (make-sequence (class-of '(nil nil nil)) 3 :initial-element nil)
+    '(nil nil nil))
+  (nil nil nil))
+
+(deftest make-sequence.51
+  (loop for i from 1 to 40
+	for vec = (make-array 1 :element-type `(unsigned-byte ,i)
+			      :initial-element 1)
+	for class = (class-of vec)
+	nconc
+	(if (subtypep class 'vector)
+	    (let ((vec2 (make-sequence class 1 :initial-element 1)))
+	      (unless (equalp vec vec)
+		(list (list i vec class vec2))))
+	  nil))
+  nil)
+
+(deftest make-sequence.52
+  (let ((class (class-of "aaaa")))
+    (if (subtypep class 'vector)
+	(make-sequence class 4 :initial-element #\a)
+      "aaaa"))
+  "aaaa")
+
+(deftest make-sequence.53
+  (let ((class (class-of (make-array 4 :element-type 'base-char
+				     :fill-pointer 4
+				     :adjustable t
+				     :initial-contents "aaaa"))))
+    (if (subtypep class 'vector)
+	(make-sequence class 4 :initial-element #\a)
+      "aaaa"))
+  "aaaa")
+
+(deftest make-sequence.54
+  (let ((class (class-of (make-array 4 :element-type 'character
+				     :fill-pointer 4
+				     :adjustable t
+				     :initial-contents "aaaa"))))
+    (if (subtypep class 'vector)
+	(make-sequence class 4 :initial-element #\a)
+      "aaaa"))
+  "aaaa")
+
+(deftest make-sequence.55
+  (let ((class (class-of (make-array 4 :element-type 'character
+				     :initial-contents "aaaa"))))
+    (if (subtypep class 'vector)
+	(make-sequence class 4 :initial-element #\a)
+      "aaaa"))
+  "aaaa")
+
+(deftest make-sequence.56
+  (loop for i from 1 to 40
+	for vec = (make-array 1 :element-type `(unsigned-byte ,i)
+			      :adjustable t :fill-pointer 1
+			      :initial-element 1)
+	for class = (class-of vec)
+	nconc
+	(if (subtypep class 'vector)
+	    (let ((vec2 (make-sequence class 1 :initial-element 1)))
+	      (unless (equalp vec vec)
+		(list (list i vec class vec2))))
+	  nil))
+  nil)
+
+(deftest make-sequence.57
+  (make-sequence (find-class 'list) 4 :initial-element 'x)
+  (x x x x))
+
+(deftest make-sequence.58
+  (make-sequence (find-class 'cons) 4 :initial-element 'x)
+  (x x x x))
+
 ;;; Keyword tests
 
 (deftest make-sequence.allow-other-keys.1
@@ -392,6 +474,10 @@
       (signals-error (make-sequence '(or (vector bit) (vector t)) 10 :initial-element 0) type-error)
     t)
   t)
+
+(deftest make-sequence.error.16
+  (signals-error-always (make-sequence (find-class 'integer) 0) type-error)
+  t t)  
 
 ;;; Order of execution tests
 
