@@ -726,6 +726,7 @@
        (funcall fn x :bar 'b :foo 'a))))
   nil a nil a a)
 
+;;; I'm not sure this one is proper
 (when (subtypep (class-of (find-class 'standard-generic-function))
 		'standard-class)
   (defclass substandard-generic-function (standard-generic-function) ())

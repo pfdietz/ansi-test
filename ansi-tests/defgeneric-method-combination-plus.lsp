@@ -1,24 +1,16 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat May 24 21:31:55 2003
-;;;; Contains: Tests of DEFGENERIC with :method-combination
+;;;; Contains: Tests of DEFGENERIC with :method-combination +
 
 (in-package :cl-test)
 
 (declaim (special *x*))
 
-(defclass dgmc-class-01 () ())
-(defclass dgmc-class-02 (dgmc-class-01) ())
-(defclass dgmc-class-03 (dgmc-class-01) ())
-(defclass dgmc-class-04 (dgmc-class-02 dgmc-class-03) ())
-(defclass dgmc-class-05 (dgmc-class-04) ())
-(defclass dgmc-class-06 (dgmc-class-04) ())
-(defclass dgmc-class-07 (dgmc-class-05 dgmc-class-06) ())
-
 (deftest defgeneric-method-combination.+.1
   (let ((*x* nil)
 	(fn
-	 (eval '(defgeneric dg-mc.fun.1 (x)
+	 (eval '(defgeneric dg-mc.fun.plus.1 (x)
 		  (:method-combination +)
 		  (:method + ((x integer)) (car (push 8 *x*)))
 		  (:method + ((x rational)) (car (push 4 *x*)))
@@ -33,7 +25,7 @@
 (deftest defgeneric-method-combination.+.2
   (let ((*x* nil)
 	(fn
-	 (eval '(defgeneric dg-mc.fun.2 (x)
+	 (eval '(defgeneric dg-mc.fun.plus.2 (x)
 		  (:method-combination + :most-specific-first)
 		  (:method + ((x integer)) (car (push 8 *x*)))
 		  (:method + ((x rational)) (car (push 4 *x*)))
@@ -48,7 +40,7 @@
 (deftest defgeneric-method-combination.+.3
   (let ((*x* nil)
 	(fn
-	 (eval '(defgeneric dg-mc.fun.3 (x)
+	 (eval '(defgeneric dg-mc.fun.plus.3 (x)
 		  (:method-combination + :most-specific-last)
 		  (:method + ((x integer)) (car (push 8 *x*)))
 		  (:method + ((x rational)) (car (push 4 *x*)))
@@ -62,7 +54,7 @@
 
 (deftest defgeneric-method-combination.+.4
   (let ((fn
-	 (eval '(defgeneric dg-mc.4 (x)
+	 (eval '(defgeneric dg-mc.plus.4 (x)
 		  (:method-combination +)
 		  (:method + ((x integer)) 1)
 		  (:method :around ((x rational)) 'foo)
@@ -79,7 +71,7 @@
 
 (deftest defgeneric-method-combination.+.5
   (let ((fn
-	 (eval '(defgeneric dg-mc.5 (x)
+	 (eval '(defgeneric dg-mc.plus.5 (x)
 		  (:method-combination +)
 		  (:method + ((x integer)) 1)
 		  (:method :around ((x rational))
@@ -97,7 +89,7 @@
 
 (deftest defgeneric-method-combination.+.6
   (let ((fn
-	 (eval '(defgeneric dg-mc.6 (x)
+	 (eval '(defgeneric dg-mc.plus.6 (x)
 		  (:method-combination +)
 		  (:method + ((x integer)) 1)
 		  (:method :around ((x rational))
@@ -118,7 +110,7 @@
 
 (deftest defgeneric-method-combination.+.7
   (let ((fn
-	 (eval '(defgeneric dg-mc.7 (x)
+	 (eval '(defgeneric dg-mc.plus.7 (x)
 		  (:method-combination +)
 		  (:method + ((x dgmc-class-04)) 1)
 		  (:method + ((x dgmc-class-03)) 2)
@@ -133,7 +125,7 @@
 
 (deftest defgeneric-method-combination.+.8
   (let ((fn
-	 (eval '(defgeneric dg-mc.8 (x)
+	 (eval '(defgeneric dg-mc.plus.8 (x)
 		  (:method-combination +)
 		  (:method + ((x (eql 1000))) 1)
 		  (:method :around ((x symbol)) (values))
