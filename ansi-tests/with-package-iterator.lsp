@@ -54,33 +54,10 @@
   (with-package-iterator-inherited (list (find-package "A")))
   t)
 
-;;; Check that if no access symbols are provided, a program error is
-;;; raised
-#|
 (deftest with-package-iterator.11
-    (handler-case
-	(progn
-	  (test-with-package-iterator (list (find-package "COMMON-LISP-USER")))
-	  nil)
-      (program-error () t)
-      (error (c) c))
-  t)
-|#
-
-;;; Paul Werkowski" <pw@snoopy.mv.com> pointed out that
-;;; that test is broken.  Here's a version of the replacement
-;;; he suggested.
-;;
-;;; I'm not sure if this is correct either; it depends on
-;;; whether with-package-iterator should signal the error
-;;; at macro expansion time or at run time.
-;;
-
-(deftest with-package-iterator.11
-  (handler-case (macroexpand-1
-		 '(with-package-iterator (x "COMMON-LISP-USER")))
-		(program-error () t)
-		(error (c) c))
+  (signals-error 
+   (with-package-iterator (x "COMMON-LISP-USER"))
+   program-error)
   t)
 
 ;;; Apply to all packages
@@ -122,3 +99,65 @@
 
 (def-macro-test with-package-iterator.error.1
   (with-package-iterator (x "CL" :external) nil))
+
+
+;;; Specialized sequence tests
+
+(defmacro def-with-package-iterator-test (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form))
+       (safely-delete-package name)
+       (let* ((p (make-package name :use nil))
+	      (result nil)
+	      (s (intern "X" p)))
+	 (with-package-iterator
+	  (x name :internal)
+	  (loop
+	   (multiple-value-bind
+	       (good? sym)
+	       (x)
+	       (unless good?
+		 (safely-delete-package name)
+		 (return (equalt (list s) result)))
+	     (push sym result))))))
+     t))
+
+(def-with-package-iterator-test with-package-iterator.15
+  (make-array 5 :initial-contents "TEST1"
+	      :element-type 'base-char))
+
+(def-with-package-iterator-test with-package-iterator.16
+  (make-array 8 :initial-contents "TEST1XXX"
+	      :fill-pointer 5
+	      :element-type 'base-char))
+
+(def-with-package-iterator-test with-package-iterator.17
+  (make-array 8 :initial-contents "TEST1XXX"
+	      :fill-pointer 5
+	      :element-type 'character))
+
+(def-with-package-iterator-test with-package-iterator.18
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'base-char))
+
+(def-with-package-iterator-test with-package-iterator.19
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'character))
+
+(def-with-package-iterator-test with-package-iterator.20
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :initial-contents "XTEST1YzYY"
+			    :element-type etype)))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 1)))
+
+(def-with-package-iterator-test with-package-iterator.21
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :initial-contents "XTEST1YzYY"
+			    :element-type etype)))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 1)))

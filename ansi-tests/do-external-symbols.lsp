@@ -73,5 +73,45 @@
    (error (c) c))
   (NIL (DS1:B T)))
 
+;;; Specialized sequence tests
+
+(defmacro def-do-external-symbols-test (test-name name-form)
+  `(deftest ,test-name
+     (collect-external-symbols ,name-form)
+     (DS1:A DS1:B)))
+
+(def-do-external-symbols-test do-external-symbols.9
+  (make-array 3 :element-type 'base-char :initial-contents "DS1"))
+
+(def-do-external-symbols-test do-external-symbols.10
+  (make-array 6 :element-type 'base-char :initial-contents "DS1XXX"
+	      :fill-pointer 3))
+
+(def-do-external-symbols-test do-external-symbols.11
+  (make-array 6 :element-type 'character :initial-contents "DS1XXX"
+	      :fill-pointer 3))
+
+(def-do-external-symbols-test do-external-symbols.12
+  (make-array 3 :element-type 'base-char :initial-contents "DS1"
+	      :adjustable t))
+
+(def-do-external-symbols-test do-external-symbols.13
+  (make-array 3 :element-type 'character :initial-contents "DS1"
+	      :adjustable t))
+
+(def-do-external-symbols-test do-external-symbols.14
+  (let* ((etype 'base-char)
+	 (name0 (make-array 6 :element-type etype :initial-contents "XDS1XX")))
+    (make-array 3 :element-type etype
+		:displaced-to name0 :displaced-index-offset 1)))
+
+(def-do-external-symbols-test do-external-symbols.15
+  (let* ((etype 'character)
+	 (name0 (make-array 6 :element-type etype :initial-contents "XDS1XX")))
+    (make-array 3 :element-type etype
+		:displaced-to name0 :displaced-index-offset 1)))
+
+;;; Error tests
+
 (def-macro-test do-external-symbols.error.1
   (do-external-symbols (x "CL")))

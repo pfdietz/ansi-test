@@ -189,6 +189,107 @@
 	    (safely-delete-package p))))))
   t)
 
+;;; Specialized sequences
+
+(defmacro def-unuse-package-test (test-name &key
+					    (user "H")
+					    (used "G"))
+  `(deftest ,test-name
+     (let ((user-name ,user)
+	   (used-name ,used))
+       (safely-delete-package user-name)
+       (safely-delete-package used-name)
+       (let* ((pused (make-package used-name :use nil))
+	      (puser (make-package user-name :use (list used-name))))
+	 (prog1
+	     (and
+	      (equal (package-use-list puser) (list pused))
+	      (equal (package-used-by-list pused) (list puser))
+	      (unuse-package (list used-name) user-name)
+	      (equal (package-use-list puser) nil)
+	      (null (package-used-by-list pused)))
+	   (safely-delete-package user-name)
+	   (safely-delete-package used-name))))
+     t))
+
+;;; Specialized user package designator
+
+(def-unuse-package-test unuse-package.10
+  :user (make-array 5 :initial-contents "TEST1" :element-type 'base-char))
+
+(def-unuse-package-test unuse-package.11
+  :user (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'base-char))
+
+(def-unuse-package-test unuse-package.12
+  :user (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'character))
+
+(def-unuse-package-test unuse-package.13
+  :user (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'base-char))
+
+(def-unuse-package-test unuse-package.14
+  :user (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'character))
+
+(def-unuse-package-test unuse-package.15
+  :user (let* ((etype 'base-char)
+	       (name0 (make-array 10 :element-type etype
+				  :initial-contents "xxxxxTEST1")))
+	  (make-array 5 :element-type etype
+		      :displaced-to name0
+		      :displaced-index-offset 5)))
+
+(def-unuse-package-test unuse-package.16
+  :user
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
+
+;;; Specialed used package designator
+
+(def-unuse-package-test unuse-package.17
+  :used (make-array 5 :initial-contents "TEST1" :element-type 'base-char))
+
+(def-unuse-package-test unuse-package.18
+  :used (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'base-char))
+
+(def-unuse-package-test unuse-package.19
+  :used (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'character))
+
+(def-unuse-package-test unuse-package.20
+  :used (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'base-char))
+
+(def-unuse-package-test unuse-package.21
+  :used (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'character))
+
+(def-unuse-package-test unuse-package.22
+  :used (let* ((etype 'base-char)
+	       (name0 (make-array 10 :element-type etype
+				  :initial-contents "xxxxxTEST1")))
+	  (make-array 5 :element-type etype
+		      :displaced-to name0
+		      :displaced-index-offset 5)))
+
+(def-unuse-package-test unuse-package.23
+  :used
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
+
+;;; Error tests
+
 (deftest unuse-package.error.1
   (signals-error (unuse-package) program-error)
   t)

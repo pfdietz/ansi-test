@@ -15,7 +15,7 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((p (make-package "H"))
+	(let ((p (make-package "H" :use nil))
 	      (i 0) x y)
 	  (intern "FOO" p)
 	  (multiple-value-bind*
@@ -37,7 +37,7 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((*PACKAGE* (make-package "H")))
+	(let ((*PACKAGE* (make-package "H" :use nil)))
 	  (intern "FOO")
 	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO")
@@ -54,7 +54,7 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((p (make-package "H")))
+	(let ((p (make-package "H" :use nil)))
 	  (intern "FOO" p)
 	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO" p)
@@ -71,7 +71,7 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((p (make-package "H")))
+	(let ((p (make-package "H" :use nil)))
 	  (intern "FOO" p)
 	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO" p)
@@ -89,7 +89,7 @@
    (progn
      (safely-delete-package "H")
      (prog1
-	 (let ((p (make-package "H")))
+	 (let ((p (make-package "H" :use nil)))
 	   (intern "FOO" p)
 	   (multiple-value-bind* (sym access)
 	       (find-symbol "FOO" p)
@@ -112,7 +112,7 @@
    (progn
      (safely-delete-package "H")
      (safely-delete-package "G")
-     (make-package "G")
+     (make-package "G" :use nil)
      (export (intern "FOO" "G") "G")
      (make-package "H" :use '("G"))
      (export (intern "FOO" "H") "H")
@@ -141,7 +141,7 @@
     (block failed
       (safely-delete-package "H")
       (safely-delete-package "G")
-      (let* ((pg (make-package "G"))
+      (let* ((pg (make-package "G" :use nil))
 	     (ph (make-package "H" :use (list pg))))
 	(handler-case
 	   (shadow "FOO" ph)
@@ -171,8 +171,8 @@
     (safely-delete-package "H")
     (safely-delete-package "G1")
     (safely-delete-package "G2")
-    (let* ((pg1 (make-package "G1"))
-	   (pg2 (make-package "G2"))
+    (let* ((pg1 (make-package "G1" :use nil))
+	   (pg2 (make-package "G2" :use nil))
 	   (ph (make-package "H" :use (list pg1 pg2))))
       (handler-case
        (shadow "FOO" ph)
@@ -208,7 +208,7 @@
     (safely-delete-package "G1")
     (safely-delete-package "G2")
     (safely-delete-package "G3")
-    (let* ((pg3 (make-package "G3"))
+    (let* ((pg3 (make-package "G3" :use nil))
 	   (pg1 (make-package "G1" :use (list pg3)))
 	   (pg2 (make-package "G2" :use (list pg3)))
 	   (ph  (make-package "H"  :use (list pg1 pg2))))
@@ -235,6 +235,62 @@
 			(eqt access2 :inherited))))
 	    (error (c) c)))))))
   t)
+
+;;; Specialized sequence tests
+
+(defmacro def-unintern-test (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form))
+       (safely-delete-package name)
+       (prog1
+	   (let ((p (make-package name :use nil)))
+	     (intern "FOO" p)
+	     (multiple-value-bind*
+	      (sym access)
+	      (find-symbol "FOO" p)
+	      (and
+	       (eqt access :internal)
+	       (unintern sym name)
+	       (null (symbol-package sym))
+	       (not (find-symbol "FOO" p)))))
+	 (safely-delete-package name)))
+     t))
+
+(def-unintern-test unintern.10
+  (make-array 5 :initial-contents "TEST1" :element-type 'base-char))
+
+(def-unintern-test unintern.11
+  (make-array 10 :initial-contents "TEST1ABCDE"
+	      :fill-pointer 5 :element-type 'base-char))
+
+(def-unintern-test unintern.12
+  (make-array 10 :initial-contents "TEST1ABCDE"
+	      :fill-pointer 5 :element-type 'character))
+
+(def-unintern-test unintern.13
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t :element-type 'base-char))
+
+(def-unintern-test unintern.14
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t :element-type 'character))
+
+(def-unintern-test unintern.15
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
+
+(def-unintern-test unintern.16
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
+
 
 (deftest unintern.error.1
   (signals-error (unintern) program-error)

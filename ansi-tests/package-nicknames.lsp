@@ -83,6 +83,53 @@
 	       (eqt p (find-package nk))))))
   0)
 
+;;; Specialized sequence names tests
+
+(defmacro def-package-nicknames-test (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form))
+       (safely-delete-package name)
+       (let ((p (make-package name :use nil)))
+	  (package-nicknames p)))
+     nil))
+
+(def-package-nicknames-test package-nicknames.16
+  (make-array 5 :element-type 'base-char :initial-contents "TEST1"))
+
+(def-package-nicknames-test package-nicknames.17
+  (make-array 10 :element-type 'base-char
+	      :fill-pointer 5
+	      :initial-contents "TEST1?????"))
+
+(def-package-nicknames-test package-nicknames.18
+  (make-array 10 :element-type 'character
+	      :fill-pointer 5
+	      :initial-contents "TEST1?????"))
+
+(def-package-nicknames-test package-nicknames.19
+  (make-array 5 :element-type 'base-char :adjustable t
+	      :initial-contents "TEST1"))
+
+(def-package-nicknames-test package-nicknames.20
+  (make-array 5 :element-type 'character :adjustable t
+	      :initial-contents "TEST1"))
+
+(def-package-nicknames-test package-nicknames.21
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "XXTEST1XXX")))
+    (make-array 5 :element-type etype :displaced-to name0
+		:displaced-index-offset 2)))
+
+(def-package-nicknames-test package-nicknames.22
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "XXTEST1XXX")))
+    (make-array 5 :element-type etype :displaced-to name0
+		:displaced-index-offset 2)))
+
+;;; Error tests
+
 (deftest package-nicknames.error.1
   (signals-error (package-nicknames) program-error)
   t)

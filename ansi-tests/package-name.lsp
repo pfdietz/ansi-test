@@ -104,6 +104,61 @@
 	       (ignore-errors (package-name (package-name p))))))
   0)
 
+;;; Specialized sequence tests
+
+(defmacro def-package-name-test (test-name name-form expected-name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form)
+	   (expected-name ,expected-name-form))
+       (assert (string= name expected-name))
+       (safely-delete-package name)
+       (let ((p (make-package name :use nil)))
+	 (equalt (package-name p) expected-name)))
+     t))
+
+(def-package-name-test package-name.16
+  (make-array 5 :element-type 'base-char :initial-contents "TEST1")
+  "TEST1")
+
+(def-package-name-test package-name.17
+  (make-array 10 :element-type 'base-char
+	      :fill-pointer 5
+	      :initial-contents "TEST1?????")
+  "TEST1")
+
+(def-package-name-test package-name.18
+  (make-array 10 :element-type 'character
+	      :fill-pointer 5
+	      :initial-contents "TEST1?????")
+  "TEST1")
+
+(def-package-name-test package-name.19
+  (make-array 5 :element-type 'base-char :adjustable t
+	      :initial-contents "TEST1")
+  "TEST1")
+
+(def-package-name-test package-name.20
+  (make-array 5 :element-type 'character :adjustable t
+	      :initial-contents "TEST1")
+  "TEST1")
+
+(def-package-name-test package-name.21
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "XXTEST1XXX")))
+    (make-array 5 :element-type etype :displaced-to name0
+		:displaced-index-offset 2))
+  "TEST1")
+
+(def-package-name-test package-name.22
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "XXTEST1XXX")))
+    (make-array 5 :element-type etype :displaced-to name0
+		:displaced-index-offset 2))
+  "TEST1")
+
+
 (deftest package-name.error.1
   (signals-error (package-name) program-error)
   t)

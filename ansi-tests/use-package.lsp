@@ -197,7 +197,142 @@
 	(safely-delete-package ph))))
   t)
 
-;; Also: need to check that *PACKAGE* is used as a default
+;; Check that *PACKAGE* is used as a default
+
+(deftest use-package.7
+  (let ((user-name "H")
+	(used-name "G"))
+    (safely-delete-package user-name)
+    (safely-delete-package used-name)
+    (let* ((pused (make-package used-name :use nil))
+	   (puser (make-package user-name :use nil))
+	   (sym1 (intern "FOO" pused)))
+      (and
+       (eqt (export sym1 pused) t)
+       (null (package-used-by-list pused))
+       (null (package-used-by-list puser))
+       (null (package-use-list pused))
+       (null (package-use-list puser))
+       (eqt (let ((*package* puser)) (use-package pused)) t)  ;; user will use used
+       (multiple-value-bind (sym2 access)
+	   (find-symbol "FOO" puser)
+	 (and
+	  (eqt access :inherited)
+	  (eqt sym1 sym2)))
+       (equal (package-use-list puser) (list pused))
+       (equal (package-used-by-list pused) (list puser))
+       (null (package-use-list pused))
+       (null (package-used-by-list puser))
+       (eqt (unuse-package pused puser) t)
+       (null (find-symbol "FOO" puser)))))
+  t)
+
+;;; Tests for specialized sequence arguments
+
+(defmacro def-use-package-test (test-name &key (user "H") (used "G"))
+  `(deftest ,test-name
+     (let ((user-name ,user)
+	   (used-name ,used))
+       (safely-delete-package user-name)
+       (safely-delete-package used-name)
+       (let* ((pused (make-package used-name :use nil))
+	      (puser (make-package user-name :use nil))
+	      (sym1 (intern "FOO" pused)))
+	 (and
+	  (eqt (export sym1 pused) t)
+	  (null (package-used-by-list pused))
+	  (null (package-used-by-list puser))
+	  (null (package-use-list pused))
+	  (null (package-use-list puser))
+	  (eqt (let ((*package* puser)) (use-package pused)) t)  ;; user will use used
+	  (multiple-value-bind (sym2 access)
+	      (find-symbol "FOO" puser)
+	    (and
+	     (eqt access :inherited)
+	     (eqt sym1 sym2)))
+	  (equal (package-use-list puser) (list pused))
+	  (equal (package-used-by-list pused) (list puser))
+	  (null (package-use-list pused))
+	  (null (package-used-by-list puser))
+	  (eqt (unuse-package pused puser) t)
+	  (null (find-symbol "FOO" puser)))))
+     t))
+
+;;; Specialized user package designator
+
+(def-use-package-test use-package.10
+  :user (make-array 5 :initial-contents "TEST1" :element-type 'base-char))
+
+(def-use-package-test use-package.11
+  :user (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'base-char))
+
+(def-use-package-test use-package.12
+  :user (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'character))
+
+(def-use-package-test use-package.13
+  :user (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'base-char))
+
+(def-use-package-test use-package.14
+  :user (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'character))
+
+(def-use-package-test use-package.15
+  :user (let* ((etype 'base-char)
+	       (name0 (make-array 10 :element-type etype
+				  :initial-contents "xxxxxTEST1")))
+	  (make-array 5 :element-type etype
+		      :displaced-to name0
+		      :displaced-index-offset 5)))
+
+(def-use-package-test use-package.16
+  :user
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
+
+;;; Specialed used package designator
+
+(def-use-package-test use-package.17
+  :used (make-array 5 :initial-contents "TEST1" :element-type 'base-char))
+
+(def-use-package-test use-package.18
+  :used (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'base-char))
+
+(def-use-package-test use-package.19
+  :used (make-array 10 :initial-contents "TEST1ABCDE"
+		    :fill-pointer 5 :element-type 'character))
+
+(def-use-package-test use-package.20
+  :used (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'base-char))
+
+(def-use-package-test use-package.21
+  :used (make-array 5 :initial-contents "TEST1"
+		    :adjustable t :element-type 'character))
+
+(def-use-package-test use-package.22
+  :used (let* ((etype 'base-char)
+	       (name0 (make-array 10 :element-type etype
+				  :initial-contents "xxxxxTEST1")))
+	  (make-array 5 :element-type etype
+		      :displaced-to name0
+		      :displaced-index-offset 5)))
+
+(def-use-package-test use-package.23
+  :used
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
 
 (deftest use-package.error.1
   (signals-error (use-package) program-error)

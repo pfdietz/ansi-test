@@ -48,3 +48,51 @@
 
 (def-macro-test in-package.error.1
   (in-package :cl-test))
+
+(defmacro def-in-package-test (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form))
+       (safely-delete-package name)
+       (prog1
+	   (let* ((p (make-package name :use nil))
+		  (*package* *package*)
+		  (p2 (eval `(in-package ,name))))
+	     (list (eqt p p2)
+		   (eqt p *package*)))
+	 (safely-delete-package name)))
+     (t t)))
+
+(def-in-package-test in-package.7
+  (make-array 5 :initial-contents "TEST1" :element-type 'base-char))
+
+(def-in-package-test in-package.8
+  (make-array 10 :initial-contents "TEST1ABCDE"
+	      :fill-pointer 5 :element-type 'base-char))
+
+(def-in-package-test in-package.9
+  (make-array 10 :initial-contents "TEST1ABCDE"
+	      :fill-pointer 5 :element-type 'character))
+
+(def-in-package-test in-package.10
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t :element-type 'base-char))
+
+(def-in-package-test in-package.11
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t :element-type 'character))
+
+(def-in-package-test in-package.12
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
+
+(def-in-package-test in-package.13
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :element-type etype
+			    :initial-contents "xxxxxTEST1")))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 5)))
