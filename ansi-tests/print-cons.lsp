@@ -57,5 +57,82 @@
    nconc (randomly-check-readability x))
   nil)
 
-   
-  
+
+;;; Printing with *print-length*
+
+(deftest print.cons.length.1
+  (with-standard-io-syntax
+   (write-to-string '(a) :length 0 :readably nil :pretty nil :escape nil))
+  "(...)")
+
+(deftest print.cons.length.2
+  (with-standard-io-syntax
+   (write-to-string '(81) :length 1 :readably nil :pretty nil :escape nil))
+  "(81)")
+
+(deftest print.cons.length.3
+  (with-standard-io-syntax
+   (write-to-string '(4 . 8) :length 1 :readably nil :pretty nil :escape nil))
+  "(4 . 8)")
+
+(deftest print.cons.length.4
+  (with-standard-io-syntax
+   (write-to-string '(4 8) :length 1 :readably nil :pretty nil :escape nil))
+  "(4 ...)")
+
+(deftest print.cons.length.5
+  (with-standard-io-syntax
+   (write-to-string '(a b c d e f g h i j k l m n o p)
+		    :case :downcase :length 10
+		    :readably nil :pretty nil :escape nil))
+  "(a b c d e f g h i j ...)")
+
+
+(deftest print.cons.length.6
+  (with-standard-io-syntax
+   (write-to-string '(((((((0)))))))
+		    :case :downcase :length 3
+		    :readably nil :pretty nil :escape nil))
+  "(((((((0)))))))")
+
+;;; Printing with *print-level*
+
+(deftest print.cons.level.1
+  (with-standard-io-syntax
+   (write-to-string '(a)
+		    :case :downcase :level 0
+		    :readably nil :escape nil
+		    :pretty nil))
+  "#")
+
+(deftest print.cons.level.2
+  (with-standard-io-syntax
+   (write-to-string '(a)
+		    :case :downcase :level 1
+		    :readably nil :escape nil
+		    :pretty nil))
+  "(a)")
+
+(deftest print.cons.level.3
+  (with-standard-io-syntax
+   (write-to-string '((a))
+		    :case :downcase :level 1
+		    :readably nil :escape nil
+		    :pretty nil))
+  "(#)")
+
+
+(deftest print.cons.level.4
+  (with-standard-io-syntax
+   (write-to-string '(a)
+		    :case :downcase :level 2
+		    :readably nil :escape nil
+		    :pretty nil))
+  "(a)")
+
+(deftest print.cons.level.5
+  (with-standard-io-syntax
+   (write-to-string '(#(a) #*1101 "abc")
+		    :case :downcase :level 1
+		    :readably nil :pretty nil))
+  "(# #*1101 \"abc\")")
