@@ -73,3 +73,56 @@
 		(list '*read-default-float-format* *read-default-float-format*)
 		(list 'readtable-case readcase)
 		)))))))
+
+(defun parse-escaped-string (string)
+  "Parse a string into a list of either characters (representing
+   themselves unescaped) or lists (<char> :escape) (representing
+   escaped characters.)"
+  (assert (stringp string) () "Not a string: ~A" string)
+  (let ((result nil)
+	(len (length string))
+	(index 0))
+    (prog
+     ()
+     normal ; parsing in normal mode
+     (when (= index len) (return))
+     (let ((c (elt string index)))
+       (cond ((eql c #\\)
+	      (assert (< (incf index) len)
+		      ()
+		      "End of string after \\")
+	      (push `(,(elt string index) :escaped) result)
+	      (incf index)
+	      (go normal))
+	     ((eql c #\|)
+	      (incf index)
+	      (go multiple-escaped))
+	     (t (push c result)
+		(incf index)
+		(go normal))))
+
+     multiple-escaped   ; parsing inside |s
+     (assert (< index len) () "End of string inside |")
+     (let ((c (elt string index)))
+       (cond ((eq c #\|)
+	      (incf index)
+	      (go normal))
+	     (t
+	      (push `(,c :escaped) result)
+	      (incf index)
+	      (go multiple-escaped)))))
+    (nreverse result)))
+
+(defun escaped-equal (list1 list2)
+  "Determine that everything escaped in list1 is also escaped
+   in list2, and that the characters are also the same."
+  (and (= (length list1) (length list2))
+       (loop for e1 in list1
+	     for e2 in list2
+	     for is-escaped1 = (and (consp e1) (eq (cadr e1) :escaped))
+	     for is-escaped2 = (and (consp e2) (eq (cadr e2) :escaped))
+	     for c1 = (if is-escaped1 (car e1) e1)
+	     for c2 = (if is-escaped2 (car e2) e2)
+	     always
+	     (and (if is-escaped1 is-escaped2 t)
+		  (char= c1 c2)))))

@@ -5,19 +5,27 @@
 
 (in-package :cl-test)
 
+(compile-and-load "printer-aux.lsp")
+
 ;;; Symbol printing when escaping is off
 
-(defun print.symbol.fn (sym case *print-case* expected)
+(defun princ.symbol.fn (sym case *print-case* expected)
   (setf (readtable-case *readtable*) case)
   (let ((str (with-output-to-string (s) (princ sym s))))
     (or (equalt str expected)
+	(list str expected))))
+
+(defun prin1.symbol.fn (sym case *print-case* expected)
+  (setf (readtable-case *readtable*) case)
+  (let ((str (with-output-to-string (s) (prin1 sym s))))
+    (or (and (member str expected :test #'string=) t)
 	(list str expected))))
 
 (deftest print.symbol.1
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|XYZ| :upcase :upcase "XYZ")
 	(%p '|XYZ| :upcase :downcase "xyz")
@@ -37,7 +45,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|xyz| :upcase :upcase "xyz")
 	(%p '|xyz| :upcase :downcase "xyz")
@@ -57,7 +65,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|Xyz| :upcase :upcase "Xyz")
 	(%p '|Xyz| :upcase :downcase "xyz")
@@ -77,7 +85,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|xYZ| :upcase :upcase "xYZ")
 	(%p '|xYZ| :upcase :downcase "xyz")
@@ -97,7 +105,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|X1Z| :upcase :upcase "X1Z")
 	(%p '|X1Z| :upcase :downcase "x1z")
@@ -117,7 +125,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|x1z| :upcase :upcase "x1z")
 	(%p '|x1z| :upcase :downcase "x1z")
@@ -137,7 +145,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|X1z| :upcase :upcase "X1z")
 	(%p '|X1z| :upcase :downcase "x1z")
@@ -157,7 +165,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|x1Z| :upcase :upcase "x1Z")
 	(%p '|x1Z| :upcase :downcase "x1z")
@@ -177,7 +185,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|X Z| :upcase :upcase "X Z")
 	(%p '|X Z| :upcase :downcase "x z")
@@ -197,7 +205,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|x z| :upcase :upcase "x z")
 	(%p '|x z| :upcase :downcase "x z")
@@ -217,7 +225,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|X z| :upcase :upcase "X z")
 	(%p '|X z| :upcase :downcase "x z")
@@ -237,7 +245,7 @@
   (with-standard-io-syntax
    (let ((*print-readably* nil)
 	 (*readtable* (copy-readtable nil)))
-     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+     (flet ((%p (&rest args) (apply #'princ.symbol.fn args)))
        (values
 	(%p '|x Z| :upcase :upcase "x Z")
 	(%p '|x Z| :upcase :downcase "x z")
@@ -335,3 +343,68 @@
 
 ;;;; Tests of printing with escaping enabled
 
+(deftest prin1.symbol.1
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*package* (find-package :cl-test))
+	 (*readtable* (copy-readtable nil)))
+     (flet ((%p (&rest args) (apply #'prin1.symbol.fn args)))
+       (values
+	(%p '|X| :upcase :upcase     '("x" "X" "\\X" "|X|"))
+	(%p '|X| :upcase :downcase   '("x" "X" "\\X" "|X|"))
+	(%p '|X| :upcase :capitalize '("x" "X" "\\X" "|X|"))
+	(%p '|X| :downcase :upcase     '("\\X" "|X|"))
+	(%p '|X| :downcase :downcase   '("\\X" "|X|"))
+	(%p '|X| :downcase :capitalize '("\\X" "|X|"))
+	(%p '|X| :preserve :upcase     '("X" "\\X" "|X|"))
+	(%p '|X| :preserve :downcase   '("X" "\\X" "|X|"))
+	(%p '|X| :preserve :capitalize '("X" "\\X" "|X|"))
+	(%p '|X| :invert :upcase       '("x" "\\X" "|X|"))
+	(%p '|X| :invert :downcase     '("x" "\\X" "|X|"))
+	(%p '|X| :invert :capitalize   '("x" "\\X" "|X|"))
+	))))
+  t t t t t t t t t t t t)
+
+(deftest prin1.symbol.2
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*package* (find-package :cl-test))
+	 (*readtable* (copy-readtable nil)))
+     (flet ((%p (&rest args) (apply #'prin1.symbol.fn args)))
+       (values
+	(%p '|x| :upcase :upcase     '("\\x" "|x|"))
+	(%p '|x| :upcase :downcase   '("\\x" "|x|"))
+	(%p '|x| :upcase :capitalize '("\\x" "|x|"))
+	(%p '|x| :downcase :upcase     '("x" "X" "\\x" "|x|"))
+	(%p '|x| :downcase :downcase   '("x" "X" "\\x" "|x|"))
+	(%p '|x| :downcase :capitalize '("x" "X" "\\x" "|x|"))
+	(%p '|x| :preserve :upcase     '("x" "\\x" "|x|"))
+	(%p '|x| :preserve :downcase   '("x" "\\x" "|x|"))
+	(%p '|x| :preserve :capitalize '("x" "\\x" "|x|"))
+	(%p '|x| :invert :upcase       '("X" "\\x" "|x|"))
+	(%p '|x| :invert :downcase     '("X" "\\x" "|x|"))
+	(%p '|x| :invert :capitalize   '("X" "\\x" "|x|"))
+	))))
+  t t t t t t t t t t t t)
+
+(deftest prin1.symbol.3
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*package* (find-package :cl-test))
+	 (*readtable* (copy-readtable nil)))
+     (flet ((%p (&rest args) (apply #'prin1.symbol.fn args)))
+       (values
+	(%p '|1| :upcase :upcase     '("\\1" "|1|"))
+	(%p '|1| :upcase :downcase   '("\\1" "|1|"))
+	(%p '|1| :upcase :capitalize '("\\1" "|1|"))
+	(%p '|1| :downcase :upcase     '("1" "\\1" "|1|"))
+	(%p '|1| :downcase :downcase   '("1" "\\1" "|1|"))
+	(%p '|1| :downcase :capitalize '("1" "\\1" "|1|"))
+	(%p '|1| :preserve :upcase     '("1" "\\1" "|1|"))
+	(%p '|1| :preserve :downcase   '("1" "\\1" "|1|"))
+	(%p '|1| :preserve :capitalize '("1" "\\1" "|1|"))
+	(%p '|1| :invert :upcase       '("1" "\\1" "|1|"))
+	(%p '|1| :invert :downcase     '("1" "\\1" "|1|"))
+	(%p '|1| :invert :capitalize   '("1" "\\1" "|1|"))
+	))))
+  t t t t t t t t t t t t)
