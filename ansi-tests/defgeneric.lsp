@@ -656,3 +656,37 @@
      (funcall fn 1 2)
      (funcall fn "1" "2")))
   3 "12")
+
+(deftest defgeneric.28
+  (let ((fn (eval '(defgeneric defgeneric.fun.28 (x &key)
+		     (:method ((x integer) &key foo) (list x foo))
+		     (:method ((x number) &key bar) (list x bar))
+		     (:method ((x t) &key baz) (list x baz))))))
+    (values
+      
+     (funcall fn 1)
+     (funcall fn 1 :foo 'a)
+     (funcall fn 1 :bar 'b)
+     (funcall fn 1 :baz 'c)
+     (funcall fn 1 :bar 'b :baz 'c)
+     (funcall fn 1 :foo 'a :bar 'b)
+     (funcall fn 1 :foo 'a :baz 'c)
+     (funcall fn 1 :foo 'a :bar 'b :baz 'c)
+     
+     (funcall fn 5/3)
+     (funcall fn 5/3 :bar 'b)
+     (funcall fn 5/3 :baz 'c)
+     (funcall fn 5/3 :bar 'b :baz 'c)
+     
+     (funcall fn 'x)
+     (funcall fn 'x :baz 'c)
+     
+     ))
+
+  (1 nil) (1 a) (1 nil) (1 nil)
+  (1 nil) (1 a) (1 a)   (1 a)
+
+  (5/3 nil) (5/3 b)   (5/3 nil) (5/3 b)
+
+  (x nil) (x c))
+
