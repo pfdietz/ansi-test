@@ -183,157 +183,170 @@
   (mismatch #(1 1 1 1 1 1 1) #(2 3 3) :from-end t :key 'evenp)
   5)
 
+(deftest mismatch-vector.23
+  (let ((a (make-array '(9) :initial-contents '(1 2 3 4 5 6 7 8 9)
+		       :fill-pointer 5)))
+    (values
+     (mismatch '(1 2 3 4 5) a)
+     (mismatch '(1 2 3 4 5) a :from-end t)
+     (mismatch '(1 2 3 4) a)
+     (mismatch '(1 2 3 4 5 6) a)
+     (mismatch '(6 7 8 9) a :from-end t)
+     (mismatch '(2 3 4 5) a :from-end t)))
+  nil nil 4 5 4 0)
+     
+
 ;;; tests on bit vectors
 
-(deftest mismatch-bitvector.1
+(deftest mismatch-bit-vector.1
   (mismatch "" #*111)
   0)
 
-(deftest mismatch-bitvector.1a
+(deftest mismatch-bit-vector.1a
   (mismatch '() #*111)
   0)
 
-(deftest mismatch-bitvector.1b
+(deftest mismatch-bit-vector.1b
   (mismatch "" '(1 1 1))
   0)
 
-(deftest mismatch-bitvector.2
+(deftest mismatch-bit-vector.2
   (mismatch #*1010 #*)
   0)
 
-(deftest mismatch-bitvector.2a
+(deftest mismatch-bit-vector.2a
   (mismatch #*1010 '())
   0)
 
-(deftest mismatch-bitvector.2b
+(deftest mismatch-bit-vector.2b
   (mismatch '(1 0 1 0) #*)
   0)
 
-(deftest mismatch-bitvector.3
+(deftest mismatch-bit-vector.3
   (mismatch #*101 #*101)
   nil)
 
-(deftest mismatch-bitvector.4
+(deftest mismatch-bit-vector.4
   (mismatch #*101 #*100)
   2)
 
-(deftest mismatch-bitvector.5
+(deftest mismatch-bit-vector.5
   (mismatch #*101  #*01 :start1 1)
   nil)
 
-(deftest mismatch-bitvector.6
+(deftest mismatch-bit-vector.6
   (mismatch #*0110 #*0111 :start1 1 :start2 1)
   3)
 
-(deftest mismatch-bitvector.7
+(deftest mismatch-bit-vector.7
   (mismatch #*0110 #*0111 :start1 1 :start2 1 :end1 3 :end2 3)
   nil)
 
-(deftest mismatch-bitvector.7a
+(deftest mismatch-bit-vector.7a
   (mismatch '(0 1 1 0) #*0111 :start1 1 :start2 1 :end1 3 :end2 3)
   nil)
 
-(deftest mismatch-bitvector.7b
+(deftest mismatch-bit-vector.7b
   (mismatch #*0110 '(0 1 1 1) :start1 1 :start2 1 :end1 3 :end2 3)
   nil)
 
-(deftest mismatch-bitvector.8
+(deftest mismatch-bit-vector.8
   (mismatch #*1001 #*0110 :test #'(lambda (x y) (= x (- 1 y))))
   nil)
 
-(deftest mismatch-bitvector.8a
+(deftest mismatch-bit-vector.8a
   (mismatch #*1001 '(5 4 4 5) :test #'(lambda (x y) (= x (- y 4))))
   nil)
 
-(deftest mismatch-bitvector.9
+(deftest mismatch-bit-vector.9
   (mismatch #*1001 '(5 4 17 5) :test #'(lambda (x y) (= x (- y 4))))
   2)
 
-(deftest mismatch-bitvector.9a
+(deftest mismatch-bit-vector.9a
   (mismatch '(5 4 17 5) #*1001 :test #'(lambda (x y) (= y (- x 4))))
   2)
 
-(deftest mismatch-bitvector.9b
+(deftest mismatch-bit-vector.9b
   (mismatch #*0100 #*1001 :test #'(lambda (x y) (= x (- 1 y))))
   2)
 
-(deftest mismatch-bitvector.10
+(deftest mismatch-bit-vector.10
   (mismatch #*1001 '(10 11 4 123) :test-not #'(lambda (x y) (= x (- y 4))))
   2)
 
-(deftest mismatch-bitvector.10a
+(deftest mismatch-bit-vector.10a
   (mismatch #*1001 '(10 11 100 123) :test-not #'(lambda (x y) (= x (- y 4))))
   nil)
 
-(deftest mismatch-bitvector.11
+(deftest mismatch-bit-vector.11
   (mismatch #*1010 '(5 6 17 8) :key #'evenp)
   nil)
 
-(deftest mismatch-bitvector.11a
+(deftest mismatch-bit-vector.11a
   (mismatch '(5 6 17 8) #*1010 :key #'evenp)
   nil)
 
-(deftest mismatch-bitvector.11b
+(deftest mismatch-bit-vector.11b
   (mismatch #*0101 #*1010 :key #'evenp :test-not 'eq)
   nil)
 
-(deftest mismatch-bitvector.11c
+(deftest mismatch-bit-vector.11c
   (mismatch '(5 6 17 8) #*10101 :key #'evenp)
   4)
 
-(deftest mismatch-bitvector.11d
+(deftest mismatch-bit-vector.11d
   (mismatch '(5 6 17 8 100) #*1010 :key #'evenp)
   4)
 
-(deftest mismatch-bitvector.12
+(deftest mismatch-bit-vector.12
   (mismatch #*1010 #*1000 :key 'oddp)
   2)
 
-(deftest mismatch-bitvector.12a
+(deftest mismatch-bit-vector.12a
   (mismatch #*1010 '(5 6 8 8) :key 'oddp)
   2)
 
-(deftest mismatch-bitvector.12b
+(deftest mismatch-bit-vector.12b
   (mismatch '(5 6 8 8) #*1010 :key 'oddp)
   2)
 
-(deftest mismatch-bitvector.13
+(deftest mismatch-bit-vector.13
   (mismatch #*0001 #*0001 :test 'eq)
   nil)
 
-(deftest mismatch-bitvector.14
+(deftest mismatch-bit-vector.14
   (mismatch '#*10001 #*01110 :test-not 'eq)
   nil)
 
-(deftest mismatch-bitvector.15
+(deftest mismatch-bit-vector.15
   (mismatch #*00100010100 #*00110010000)
   3)
 
-(deftest mismatch-bitvector.16
+(deftest mismatch-bit-vector.16
   (mismatch #*00100010100 #*00110010000 :from-end t)
   9)
 
-(deftest mismatch-bitvector.17
+(deftest mismatch-bit-vector.17
   (mismatch #*001 #*0010010 :from-end t)
   3)
 
-(deftest mismatch-bitvector.18
+(deftest mismatch-bit-vector.18
   (mismatch #*0010010 #*001 :from-end t)
   7)
 
-(deftest mismatch-bitvector.19
+(deftest mismatch-bit-vector.19
   (mismatch #*000 #*11111011 :from-end t :test-not 'eq)
   1)
 
-(deftest mismatch-bitvector.20
+(deftest mismatch-bit-vector.20
   (mismatch #*1111111 '(2 3 3) :from-end t :key #'evenp)
   5)
 
-(deftest mismatch-bitvector.21
+(deftest mismatch-bit-vector.21
   (mismatch #*111 #*00000100 :from-end t :test-not #'equal)
   1)
 
-(deftest mismatch-bitvector.22
+(deftest mismatch-bit-vector.22
   (mismatch #*1111111 '(2 3 3) :from-end t :key 'evenp)
   5)
 

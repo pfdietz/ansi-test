@@ -207,6 +207,16 @@
    (7 7)
    (nil)))
 
+(deftest position-if-not-vector.13
+  (let ((a (make-array '(10) :initial-contents '(1 2 3 4 5 a b c d e)
+		       :fill-pointer 5)))
+    (values
+     (position-if-not #'numberp a)
+     (position-if-not #'symbolp a)
+     (position-if-not #'numberp a :from-end t)
+     (position-if-not #'symbolp a :from-end t)))
+  nil 0 nil 4)
+
 ;;; Bit vector tests
 
 (deftest position-if-not-bit-vector.1
@@ -309,6 +319,17 @@
    (7 7)
    (nil)))
 
+(deftest position-if-not-bit-vector.13
+  (let ((a (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
+		       :fill-pointer 5
+		       :element-type 'bit)))
+    (values
+     (position-if-not #'zerop a)
+     (position-if-not (complement #'zerop) a)
+     (position-if-not #'zerop a :from-end t)
+     (position-if-not (complement #'zerop) a :from-end t)))
+  0 nil 4 nil)  
+
 ;;; string tests
 
 (deftest position-if-not-string.1
@@ -410,6 +431,18 @@
    (nil 7 7)
    (7 7)
    (nil)))
+
+(deftest position-if-not-string.13
+  (let ((a (make-array '(10) :initial-contents (coerce "55555aaaaa" 'list)
+		       :fill-pointer 5
+		       :element-type 'character)))
+    (and (stringp a)
+	 (values
+	  (position-if-not #'digit-char-p a)
+	  (position-if-not (complement #'digit-char-p) a)
+	  (position-if-not #'digit-char-p a :from-end t)
+	  (position-if-not (complement #'digit-char-p) a :from-end t))))
+  nil 0 nil 4)
 
 ;;; Error tests
 

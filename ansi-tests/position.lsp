@@ -297,6 +297,22 @@
 	    :start 2 :from-end t)
   4)
 
+(deftest position-vector.29
+  (position 'a (make-array '(10) :initial-contents '(b b b b b a a a a a)
+			   :fill-pointer 5))
+  nil)
+
+(deftest position-vector.30
+  (position 'a (make-array '(10) :initial-contents '(b b b b a a a a a a)
+			   :fill-pointer 5))
+  4)
+
+(deftest position-vector.31
+  (position 'a (make-array '(10) :initial-contents '(b a b b a a a a a a)
+			   :fill-pointer 5)
+	    :from-end t)
+  4)
+
 ;;; tests on bit vectors
 
 (deftest position-bit-vector.1
@@ -436,6 +452,38 @@
 	    :start 2 :from-end t)
   8)
 
+(deftest position-bit-vector.28
+  (position 0 (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
+			  :element-type 'bit
+			  :fill-pointer 5))
+  nil)
+
+(deftest position-bit-vector.29
+  (position 0 (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
+			  :element-type 'bit
+			  :fill-pointer 5)
+	    :from-end t)
+  nil)
+
+(deftest position-bit-vector.30
+  (position 0 (make-array '(10) :initial-contents '(1 1 1 1 0 0 0 0 0 0)
+			  :element-type 'bit
+			  :fill-pointer 5))
+  4)
+
+(deftest position-bit-vector.31
+  (position 0 (make-array '(10) :initial-contents '(0 1 0 1 0 0 0 0 0 0)
+			  :element-type 'bit
+			  :fill-pointer 5)
+	    :from-end t)
+  4)
+
+(deftest position-bit-vector.32
+  (position 0 (make-array '(10) :initial-contents '(1 0 1 1 0 0 0 0 0 0)
+			  :element-type 'bit
+			  :fill-pointer 5))
+  1)
+
 ;;; strings
 
 (deftest position-string.1
@@ -562,6 +610,32 @@
 (deftest position-string.24
   (position #\a "aabacedafa" :test-not #'eq
 	    :start 0 :end 5 :from-end t)
+  4)
+
+(deftest position-string.25
+  (position #\a (make-array '(10) :initial-contents (coerce "bbbbbaaaaa" 'list)
+			    :element-type 'character
+			    :fill-pointer 5))
+  nil)
+
+(deftest position-string.26
+  (position #\a (make-array '(10) :initial-contents (coerce "bbbbbaaaaa" 'list)
+			    :element-type 'character
+			    :fill-pointer 5)
+	    :from-end t)
+  nil)
+
+(deftest position-string.27
+  (position #\a (make-array '(10) :initial-contents (coerce "bbbbaaaaaa" 'list)
+			    :element-type 'character
+			    :fill-pointer 5))
+  4)
+
+(deftest position-string.28
+  (position #\a (make-array '(10) :initial-contents (coerce "babbaaaaaa" 'list)
+			    :element-type 'character
+			    :fill-pointer 5)
+	    :from-end t)
   4)
 
 ;;; Error tests

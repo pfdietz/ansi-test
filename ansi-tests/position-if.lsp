@@ -207,6 +207,14 @@
    (7 7)
    (nil)))
 
+(deftest position-if-vector.11
+  (let ((a (make-array '(10) :initial-contents '(1 3 1 4 3 1 2 1 8 9)
+		       :fill-pointer 5)))
+    (flet ((%f (x) (eql x 1)))
+      (values (position-if #'%f a)
+	      (position-if #'%f a :from-end t))))
+  0 2)	      
+
 ;;; Bit vector tests
 
 (deftest position-if-bit-vector.1
@@ -309,6 +317,16 @@
    (7 7)
    (nil)))
 
+(deftest position-if-bit-vector.13
+  (let ((a (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
+		       :fill-pointer 5
+		       :element-type 'bit)))
+    (values (position-if #'evenp a)
+	    (position-if #'evenp a :from-end 'foo)
+	    (position-if #'oddp a)
+	    (position-if #'oddp a :from-end 'foo)))
+  nil nil 0 4)
+
 ;;; string tests
 
 (deftest position-if-string.1
@@ -410,6 +428,19 @@
    (nil 7 7)
    (7 7)
    (nil)))
+
+(deftest position-if-string.13
+  (flet ((%f (c) (eql c #\0))
+	 (%g (c) (eql c #\1)))
+    (let ((a (make-array '(10) :initial-contents
+			 (coerce "1111100000" 'list())
+		       :fill-pointer 5
+		       :element-type 'character)))
+    (values (position-if #'%f a)
+	    (position-if #'%f a :from-end 'foo)
+	    (position-if #'%g a)
+	    (position-if #'%g a :from-end 'foo))))
+  nil nil 0 4)
 
 ;;; Error tests
 

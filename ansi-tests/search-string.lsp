@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sun Aug 25 13:06:54 2002
-;;;; Contains: Tests for SEARCH on vectors
+;;;; Contains: Tests for SEARCH on strings
 
 (in-package :cl-test)
 
@@ -130,3 +130,34 @@
 					 :test (complement #'eq))))))
 	  collect pat))
   nil)
+
+(deftest search-string.15
+  (let ((a (make-array '(10) :initial-contents (coerce "abbaaababb" 'list)
+		       :fill-pointer 5
+		       :element-type 'character)))
+    (values
+     (search "a" a)
+     (search "a" a :from-end t)
+     (search "ab" a)
+     (search "ab" a :from-end t)
+     (search "aba" a)
+     (search "aba" a :from-end t)))
+  0 4 0 0 nil nil)
+
+(deftest search-string.16
+  (let ((pat (make-array '(3) :initial-contents '(#\a #\b #\a)
+			 :fill-pointer 1))
+	(a "abbaa"))
+    (values
+     (search pat a)
+     (search pat a :from-end t)
+     (progn
+       (setf (fill-pointer pat) 2)
+       (search pat a))
+     (search pat a :from-end t)
+     (progn
+       (setf (fill-pointer pat) 3)
+       (search pat a))
+     (search pat a :from-end t)))
+  0 4 0 0 nil nil)
+

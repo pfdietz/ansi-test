@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sun Aug 25 13:06:54 2002
-;;;; Contains: Tests for SEARCH on vectors
+;;;; Contains: Tests for SEARCH on bit vectors
 
 (in-package :cl-test)
 
@@ -143,3 +143,34 @@
 					 :test (complement #'eq))))))
 	  collect pat))
   nil)
+
+(deftest search-bitvector.15
+  (let ((a (make-array '(10) :initial-contents '(0 1 1 0 0 0 1 0 1 1)
+		       :fill-pointer 5
+		       :element-type 'bit)))
+    (values
+     (search #*0 a)
+     (search #*0 a :from-end t)
+     (search #*01 a)
+     (search #*01 a :from-end t)
+     (search #*010 a)
+     (search #*010 a :from-end t)))
+  0 4 0 0 nil nil)
+
+(deftest search-bitvector.16
+  (let ((pat (make-array '(3) :initial-contents '(0 1 0)
+			 :fill-pointer 1))
+	(a #*01100))
+    (values
+     (search pat a)
+     (search pat a :from-end t)
+     (progn
+       (setf (fill-pointer pat) 2)
+       (search pat a))
+     (search pat a :from-end t)
+     (progn
+       (setf (fill-pointer pat) 3)
+       (search pat a))
+     (search pat a :from-end t)))
+  0 4 0 0 nil nil)
+

@@ -145,3 +145,32 @@
 					 :test (complement #'eq))))))
 	  collect pat))
   nil)
+
+(deftest search-vector.15
+  (let ((a (make-array '(10) :initial-contents '(a b b a a a b a b b)
+		       :fill-pointer 5)))
+    (values
+     (search '(a) a)
+     (search '(a) a :from-end t)
+     (search '(a b) a)
+     (search '(a b) a :from-end t)
+     (search '(a b a) a)
+     (search '(a b a) a :from-end t)))
+  0 4 0 0 nil nil)
+
+(deftest search-vector.16
+  (let ((pat (make-array '(3) :initial-contents '(a b a)
+			 :fill-pointer 1))
+	(a #(a b b a a)))
+    (values
+     (search pat a)
+     (search pat a :from-end t)
+     (progn
+       (setf (fill-pointer pat) 2)
+       (search pat a))
+     (search pat a :from-end t)
+     (progn
+       (setf (fill-pointer pat) 3)
+       (search pat a))
+     (search pat a :from-end t)))
+  0 4 0 0 nil nil)
