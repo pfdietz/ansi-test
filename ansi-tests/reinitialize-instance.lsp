@@ -50,6 +50,27 @@
      (map-slot-value obj '(s1 s2))))
   t (a b))
 
+(deftest reinitialize-instance.6
+  (let* ((obj (make-instance 'class-07 :s1a 'a))
+	 (obj2 (reinitialize-instance obj :s1b 'b)))
+    (values
+     (eqt obj obj2)
+     (slot-value obj 's1)
+     (slot-boundp* obj 's2)))
+  t b nil)
+
+(deftest reinitialize-instance.7
+  (let* ((obj (make-instance 'class-07 :s1a 'a))
+	 (obj2 (reinitialize-instance obj :s2 'b)))
+    (values
+     (eqt obj obj2)
+     (slot-value obj 's1)
+     (slot-value obj 's2)))
+  t a b)
+
+
+
+
 
 
 
