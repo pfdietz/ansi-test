@@ -12,3 +12,4 @@
 (load "defclass-forward-reference.lsp")
 (load "ensure-generic-function.lsp")
 (load "allocate-instance.lsp")
+(load "reinitialize-instance.lsp")
