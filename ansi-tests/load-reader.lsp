@@ -15,3 +15,4 @@
 (load "readtable-case.lsp")
 (load "readtablep.lsp")
 
+(load "syntax.lsp")
