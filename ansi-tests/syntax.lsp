@@ -791,7 +791,7 @@
 
 ;;; Tests of #S
 
-(unless (find-class 'syntax-test-struct-1)
+(unless (find-class 'syntax-test-struct-1 nil)
   (defstruct syntax-test-struct-1
     a b c))
 
