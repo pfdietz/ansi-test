@@ -1314,3 +1314,18 @@
 			 b)))))
    2950453607 -4)
   -815145134)
+
+;;; Gives the error The value NIL is not of type INTEGER.  (in sbcl 0.8.4.40)
+
+(deftest misc.106
+  (progn
+    (eval '(defun misc.106-fn (a b c)
+	     (declare (optimize speed))
+	     (block b6
+	       (flet ((%f8 (f8-1 f8-2) b))
+		 (%f8 (%f8 c 338) (if t (return-from b6 a) c))))))
+    (misc.106-fn -30271 -1 -3043))
+  -30271)
+
+    
+
