@@ -80,25 +80,21 @@
   t)
 
 (deftest truename.error.3
-  (signals-error (truename "nonexistent") file-error)
-  t)
+  (signals-error-always (truename "nonexistent") file-error)
+  t t)
 
 (deftest truename.error.4
-  (signals-error (truename #p"nonexistent") file-error)
-  t)
+  (signals-error-always (truename #p"nonexistent") file-error)
+  t t)
 
 (deftest truename.error.5
-  (signals-error (truename (logical-pathname "CLTESTROOT:nonexistent")) file-error)
-  t)
+  (signals-error-always (truename (logical-pathname "CLTESTROOT:nonexistent")) file-error)
+  t t)
 
 (deftest truename.error.6
-  (signals-error
+  (signals-error-always
    (let ((pn (make-pathname :name :wild
 			    :defaults *default-pathname-defaults*)))
-     (truename pn)) file-error)
-  t)
-
-
-
-
-
+     (truename pn))
+   file-error)
+  t t)

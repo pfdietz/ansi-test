@@ -143,12 +143,12 @@
 ;; Need to add a LPN test
 
 (deftest ensure-directories-exist.error.1
-  (signals-error
+  (signals-error-always
    (ensure-directories-exist
     (make-pathname :directory '(:relative :wild)
 		   :defaults *default-pathname-defaults*))
    file-error)
-  t)
+  t t)
 
 (deftest ensure-directories-exist.error.2
   (signals-error (ensure-directories-exist) program-error)

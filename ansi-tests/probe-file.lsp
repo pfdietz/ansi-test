@@ -38,9 +38,9 @@
   t)
 
 (deftest probe-file.error.3
-  (signals-error (probe-file (make-pathname :name :wild)) file-error)
-  t)
+  (signals-error-always (probe-file (make-pathname :name :wild)) file-error)
+  t t)
 
 (deftest probe-file.error.4
-  (signals-error (probe-file "CLTEST:*.FOO") file-error)
-  t)
+  (signals-error-always (probe-file "CLTEST:*.FOO") file-error)
+  t t)

@@ -65,15 +65,15 @@
   t)
 
 (deftest file-write-date.error.3
-  (signals-error
+  (signals-error-always
    (file-write-date (make-pathname :name :wild :type "lsp"
 				   :defaults *default-pathname-defaults*))
    file-error)
-  t)
+  t t)
 
 (deftest file-write-date.error.4
-  (signals-error
+  (signals-error-always
    (file-write-date (make-pathname :name "file-write-date" :type :wild
 				   :defaults *default-pathname-defaults*))
    file-error)
-  t)
+  t t)

@@ -79,26 +79,26 @@
   t)
 
 (deftest read-line.error.2
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-line s))
    end-of-file)
-  t)
+  t t)
 
 (deftest read-line.error.3
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (*standard-input* "")
     (read-line))
    end-of-file)
-  t)
+  t t)
 
 (deftest read-line.error.4
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-line s t))
    end-of-file)
-  t)
+  t t)
 

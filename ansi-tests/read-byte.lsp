@@ -115,21 +115,21 @@
   t)
 
 (deftest read-byte.error.4
-  (progn
-    (let ((s (open "foo.txt"
-		   :direction :output
-		   :if-exists :supersede
-		  :element-type '(unsigned-byte 8))))
-      (close s))
-    (signals-error
+  (signals-error-always
+   (progn
      (let ((s (open "foo.txt"
-		   :direction :input
-		   :element-type '(unsigned-byte 8))))
+		    :direction :output
+		    :if-exists :supersede
+		    :element-type '(unsigned-byte 8))))
+       (close s))
+     (let ((s (open "foo.txt"
+		    :direction :input
+		    :element-type '(unsigned-byte 8))))
        (unwind-protect
 	   (read-byte s t)
-	 (close s)))
-     end-of-file))
-  t)
+	 (close s))))
+   end-of-file)
+  t t)
 
 (deftest read-byte.error.5
   (loop for x in *mini-universe*

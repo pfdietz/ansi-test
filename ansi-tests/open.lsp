@@ -1102,135 +1102,135 @@
   t)
 
 (deftest open.error.2
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (close (open pn :direction :output :if-does-not-exist :create))
      (open pn :if-exists :error :direction :output))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.3
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (close (open pn :direction :output :if-does-not-exist :create))
      (open pn :if-exists :error :direction :io))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.4
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.5
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :if-does-not-exist :error))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.6
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :input))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.7
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :if-does-not-exist :error :direction :input))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.8
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :output :if-does-not-exist :error))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.9
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :io :if-does-not-exist :error))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.10
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :probe :if-does-not-exist :error))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.11
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :output :if-exists :overwrite))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.12
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :output :if-exists :append))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.13
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :io :if-exists :overwrite))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.14
-  (signals-error
+  (signals-error-always
    (let ((pn #p"tmp.dat"))
      (delete-all-versions pn)
      (open pn :direction :io :if-exists :append))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.15
-  (signals-error
+  (signals-error-always
    (open (make-pathname :name :wild :type "lsp"))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.16
-  (signals-error
+  (signals-error-always
    (open (make-pathname :name "open" :type :wild))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.17
-  (signals-error
+  (signals-error-always
    (let ((pn (make-pathname :name "open" :type "lsp" :version :wild)))
      (if (wild-pathname-p pn) (open pn)
        (error 'file-error)))
    file-error)
-  t)
+  t t)
 
 (deftest open.error.18
-  (signals-error
+  (signals-error-always
    (open #p"tmp.dat" :direction :output :if-exists :supersede
 	 :external-form (gensym))
    error)
-  t)
+  t t)
 
 
 ;;; FIXME -- add tests for :element-type :default

@@ -97,25 +97,25 @@
   t)
 
 (deftest read-char.error.2
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-char s))
    end-of-file)
-  t)
+  t t)
 
 (deftest read-char.error.3
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-char s t))
    end-of-file)
-  t)
+  t t)
 
 (deftest read-char.error.4
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-char s t t))
    end-of-file)
-  t)
+  t t)

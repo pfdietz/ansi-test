@@ -99,25 +99,25 @@
   t)
 
 (deftest read-char-no-hang.error.2
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-char-no-hang s))
    end-of-file)
-  t)
+  t t)
 
 (deftest read-char-no-hang.error.3
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-char-no-hang s t))
    end-of-file)
-  t)
+  t t)
 
 (deftest read-char-no-hang.error.4
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (read-char-no-hang s t t))
    end-of-file)
-  t)
+  t t)

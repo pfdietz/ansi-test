@@ -284,36 +284,36 @@
 
 
 (deftest peek-char.error.2
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (*standard-input* "")
     (peek-char))
    end-of-file)
-  t)
+  t t)
 
 (deftest peek-char.error.3
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "")
     (peek-char nil s))
    end-of-file)
-  t)
+  t t)
 
 (deftest peek-char.error.4
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s " ")
     (peek-char t s))
    end-of-file)
-  t)
+  t t)
 
 (deftest peek-char.error.5
-  (signals-error
+  (signals-error-always
    (with-input-from-string
     (s "abcd")
     (peek-char #\z s))
    end-of-file)
-  t)
+  t t)
 
 ;;; There was a consensus on comp.lang.lisp that the requirement
 ;;; that an end-of-file error be thrown in the following case

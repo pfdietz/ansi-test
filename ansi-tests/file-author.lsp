@@ -66,28 +66,15 @@
   t)
 
 (deftest file-author.error.3
-  (signals-error
+  (signals-error-always
    (file-author (make-pathname :name :wild :type "lsp"
 			       :defaults *default-pathname-defaults*))
    file-error)
-  t)
+  t t)
 
 (deftest file-author.error.4
-  (signals-error
+  (signals-error-always
    (file-author (make-pathname :name "file-author" :type :wild
 			       :defaults *default-pathname-defaults*))
    file-error)
-  t)
-
-
-
-
-
-
-
-
-
-
-
-
-
+  t t)
