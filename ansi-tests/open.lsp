@@ -69,7 +69,9 @@
 			`(:element-type ',element-type))
 		  :if-exists :supersede)
 	      (assert (open-stream-p os))
-	      (dotimes (i 10) ,write-element-form)))))
+	      (dotimes (i 10) ,write-element-form)
+	      (finish-output os)
+	    ))))
 			      
   `(deftest ,name
      (let ((pn ,pathname))
@@ -80,14 +82,18 @@
 	     (progn
 	       (assert (open-stream-p s))
 	       (assert (typep s 'file-stream))
-	       ,@(unless (member element-type '(signed-byte unsigned-byte))
-		   `((assert (subtypep ',element-type
-				       (stream-element-type s)))))
+	       ,@
+	       (unless (member element-type '(signed-byte unsigned-byte))
+		 #-allegro
+		 `((assert (subtypep ',element-type
+				     (stream-element-type s))))
+		 #+allegro nil
+		 )
 	       ,form)
 	   (close s))))
      ,@expected))
 
-(compile 'def-open-test)
+;; (compile 'def-open-test)
 
 (def-open-test open.1 () (values (read-line s nil)) ("abcdefghij"))
 (def-open-test open.2 (:direction :input)
@@ -329,7 +335,7 @@
      :build-form nil
      ,@keyargs))
 
-(compile 'def-open-output-test)
+;; (compile 'def-open-output-test)
 
 (def-open-output-test open.output.1 ()
   (progn (close s)
@@ -677,7 +683,7 @@
      :build-form nil
      ,@keyargs))
 
-(compile 'def-open-io-test)
+;; (compile 'def-open-io-test)
 
 (def-open-io-test open.io.1 ()
   (progn (file-position s :start)
@@ -949,3 +955,231 @@
   (progn (file-position s :start)
 	 (values (read-line s nil)))
   ("abcdefghij"))
+
+;;;; :PROBE tests
+
+(defmacro def-open-probe-test
+  (name args form
+	&key (build-form nil build-form-p)
+	(pathname #p"tmp.dat"))
+  (unless build-form-p
+    (setf build-form
+	  `(with-open-file (s pn :direction :output
+			      :if-exists :supersede))))
+  `(deftest ,name
+     (let ((pn ,pathname))
+       (delete-all-versions pn)
+       ,build-form
+       (let ((s (open pn :direction :probe ,@args)))
+	 (values
+	  ,(if build-form
+	       `(and
+		 (typep s 'file-stream)
+		 (not (open-stream-p s))
+		 )
+	     `(not s))
+	  ,form)))
+     t t))
+
+(def-open-probe-test open.probe.1 () t)
+(def-open-probe-test open.probe.2 (:if-exists :error) t)
+(def-open-probe-test open.probe.3 (:if-exists :new-version) t)
+(def-open-probe-test open.probe.4 (:if-exists :rename) t)
+(def-open-probe-test open.probe.5 (:if-exists :rename-and-delete) t)
+(def-open-probe-test open.probe.6 (:if-exists :overwrite) t)
+(def-open-probe-test open.probe.7 (:if-exists :append) t)
+(def-open-probe-test open.probe.8 (:if-exists :supersede) t)
+
+(def-open-probe-test open.probe.9 (:if-does-not-exist :error) t)
+(def-open-probe-test open.probe.10 (:if-does-not-exist nil) t)
+(def-open-probe-test open.probe.11 (:if-does-not-exist :create) t)
+
+(def-open-probe-test open.probe.12 () t :build-form nil)
+(def-open-probe-test open.probe.13 (:if-exists :error) t :build-form nil)
+(def-open-probe-test open.probe.14 (:if-exists :new-version) t :build-form nil)
+(def-open-probe-test open.probe.15 (:if-exists :rename) t :build-form nil)
+(def-open-probe-test open.probe.16 (:if-exists :rename-and-delete) t
+  :build-form nil)
+(def-open-probe-test open.probe.17 (:if-exists :overwrite) t
+  :build-form nil)
+(def-open-probe-test open.probe.18 (:if-exists :append) t
+  :build-form nil)
+(def-open-probe-test open.probe.19 (:if-exists :supersede) t
+  :build-form nil)
+
+(def-open-probe-test open.probe.20 (:if-does-not-exist nil) t
+  :build-form nil)
+
+(deftest open.probe.21
+  (let ((pn #p"tmp.dat"))
+    (delete-all-versions pn)
+    (let ((s (open pn :direction :probe :if-does-not-exist :create)))
+      (values
+       (notnot s)
+       (notnot (probe-file pn)))))
+  t t)
+
+(deftest open.probe.22
+  (let ((pn #p"tmp.dat"))
+    (delete-all-versions pn)
+    (let ((s (open pn :direction :probe :if-does-not-exist :create
+		   :if-exists :error)))
+      (values
+       (notnot s)
+       (notnot (probe-file pn)))))
+  t t)
+
+(def-open-probe-test open.probe.23 (:external-format :default) t)
+(def-open-probe-test open.probe.24 (:element-type 'character) t)
+(def-open-probe-test open.probe.25 (:element-type 'bit) t)
+(def-open-probe-test open.probe.26 (:element-type '(unsigned-byte 2)) t)
+(def-open-probe-test open.probe.27 (:element-type '(unsigned-byte 4)) t)
+(def-open-probe-test open.probe.28 (:element-type '(unsigned-byte 8)) t)
+(def-open-probe-test open.probe.29 (:element-type '(unsigned-byte 9)) t)
+(def-open-probe-test open.probe.30 (:element-type '(unsigned-byte 15)) t)
+(def-open-probe-test open.probe.31 (:element-type '(unsigned-byte 16)) t)
+(def-open-probe-test open.probe.32 (:element-type '(unsigned-byte 17)) t)
+(def-open-probe-test open.probe.33 (:element-type '(unsigned-byte 31)) t)
+(def-open-probe-test open.probe.34 (:element-type '(unsigned-byte 32)) t)
+(def-open-probe-test open.probe.35 (:element-type '(unsigned-byte 33)) t)
+(def-open-probe-test open.probe.36 (:element-type '(integer -1002 13112)) t)
+
+;;;; Error tests
+
+(deftest open.error.1
+  (signals-error (open) program-error)
+  t)
+
+(deftest open.error.2
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (close (open pn :direction :output :if-does-not-exist :create))
+     (open pn :if-exists :error :direction :output))
+   file-error)
+  t)
+
+(deftest open.error.3
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (close (open pn :direction :output :if-does-not-exist :create))
+     (open pn :if-exists :error :direction :io))
+   file-error)
+  t)
+
+(deftest open.error.4
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn))
+   file-error)
+  t)
+
+(deftest open.error.5
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :if-does-not-exist :error))
+   file-error)
+  t)
+
+(deftest open.error.6
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :input))
+   file-error)
+  t)
+
+(deftest open.error.7
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :if-does-not-exist :error :direction :input))
+   file-error)
+  t)
+
+(deftest open.error.8
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :output :if-does-not-exist :error))
+   file-error)
+  t)
+
+(deftest open.error.9
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :io :if-does-not-exist :error))
+   file-error)
+  t)
+
+(deftest open.error.10
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :probe :if-does-not-exist :error))
+   file-error)
+  t)
+
+(deftest open.error.11
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :output :if-exists :overwrite))
+   file-error)
+  t)
+
+(deftest open.error.12
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :output :if-exists :append))
+   file-error)
+  t)
+
+(deftest open.error.13
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :io :if-exists :overwrite))
+   file-error)
+  t)
+
+(deftest open.error.14
+  (signals-error
+   (let ((pn #p"tmp.dat"))
+     (delete-all-versions pn)
+     (open pn :direction :io :if-exists :append))
+   file-error)
+  t)
+
+(deftest open.error.15
+  (signals-error
+   (open (make-pathname :name :wild :type "lsp"))
+   file-error)
+  t)
+
+(deftest open.error.16
+  (signals-error
+   (open (make-pathname :name "open" :type :wild))
+   file-error)
+  t)
+
+(deftest open.error.17
+  (signals-error
+   (let ((pn (make-pathname :name "open" :type "lsp" :version :wild)))
+     (if (wild-pathname-p pn) (open pn)
+       (error 'file-error)))
+   file-error)
+  t)
+
+(deftest open.error.18
+  (signals-error
+   (open #p"tmp.dat" :direction :output :if-exists :supersede
+	 :external-form (gensym))
+   error)
+  t)
+
+
+;;; FIXME -- add tests for :element-type :default
