@@ -98,7 +98,7 @@
 	#'string<)
   ("X" "Y" "Z"))
 
-;;; According to the ANSI CL spec, " If the package for the iteration is not supplied,
+;;; According to the ANSI CL spec, "If the package for the iteration is not supplied,
 ;;; the current package is used."  Thse next tests are of the cases that the package
 ;;; is not supplied in the loop form.
 
@@ -125,21 +125,21 @@
 
 (deftest loop.7.18
   (progn
-    (ignore-errors (delete-package "LOOP.MISSING,PACKAGE"))
+    (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
     (classify-error
      (loop for x being each symbol of "LOOP.MISSING.PACKAGE" collect x)))
   package-error)
 
 (deftest loop.7.19
   (progn
-    (ignore-errors (delete-package "LOOP.MISSING,PACKAGE"))
+    (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
     (classify-error
      (loop for x being each present-symbol of "LOOP.MISSING.PACKAGE" collect x)))
   package-error)
 
 (deftest loop.7.20
   (progn
-    (ignore-errors (delete-package "LOOP.MISSING,PACKAGE"))
+    (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
     (classify-error
      (loop for x being each external-symbol of "LOOP.MISSING.PACKAGE" collect x)))
   package-error)
