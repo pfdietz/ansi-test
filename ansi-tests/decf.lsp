@@ -141,7 +141,7 @@
     (values (decf x #c(0.0d0 -2.0l0)) x))
   #c(1.0l0 2.0l0) #c(1.0l0 2.0l0))
 
-(deftest decf.order.1
+(deftest decf.order.2
   (let ((a (vector 1 2 3 4))
 	(i 0) x y z)
     (values
@@ -151,7 +151,7 @@
      i x y z a))
   -16 3 1 2 3 #(-16 2 3 4))
 
-(deftest decf.order.2
+(deftest decf.order.3
   (let ((a (vector 10 2 3 4))
 	(i 0) x y)
     (values
