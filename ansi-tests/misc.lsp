@@ -9510,11 +9510,18 @@ Broken at C::WT-MAKE-CLOSURE.
 	-3792864899))
   -96073358)
 
+;;; gcl 27 Dec 2004
+;;; Issue with dynamic extent
 
-
-
-
-
-
-	
-		 
+(deftest misc.515
+  (funcall
+   (compile nil '(lambda (a)
+                   (declare (type (integer -1337016312 832159784) a))
+                   (declare (optimize speed (safety 1)))
+                   (let* ((y 0)
+                          (v9 0))
+                     (declare (dynamic-extent v9))
+                     (setq v9 (+ a a))
+                     (setq y (1+ v9)))))
+   -1209913207)
+  -2419826413)
