@@ -31,6 +31,75 @@
 		 type-error)
   t)
 
+(deftest file-length.error.5
+  (signals-error
+   (with-open-file
+    (is "file-length.lsp" :direction :input)
+    (with-open-file
+     (os "tmp.txt" :direction :output :if-exists :supersede)
+     (let ((s (make-two-way-stream is os)))
+       (unwind-protect (file-length s) (close s)))))
+   type-error)
+  t)
+
+(deftest file-length.error.6
+  (signals-error
+   (with-open-file
+    (is "file-length.lsp" :direction :input)
+    (with-open-file
+     (os "tmp.txt" :direction :output :if-exists :supersede)
+     (let ((s (make-echo-stream is os)))
+       (unwind-protect (file-length s) (close s)))))
+   type-error)
+  t)
+
+(deftest file-length.error.7
+  (signals-error
+   (let ((s (make-broadcast-stream)))
+     (unwind-protect (file-length s) (close s)))
+   type-error)
+  t)
+
+(deftest file-length.error.8
+  (signals-error
+   (with-open-file
+     (os "tmp.txt" :direction :output :if-exists :supersede)
+     (let ((s (make-broadcast-stream os)))
+       (unwind-protect (file-length s) (close s))))
+   type-error)
+  t)
+
+(deftest file-length.error.9
+  (signals-error
+   (let ((s (make-concatenated-stream)))
+     (unwind-protect (file-length s) (close s)))
+   type-error)
+  t)
+
+(deftest file-length.error.10
+  (signals-error
+   (with-open-file
+    (is "file-length.lsp" :direction :input)
+    (let ((s (make-concatenated-stream is)))
+      (unwind-protect (file-length s) (close s))))
+   type-error)
+  t)
+
+(deftest file-length.error.11
+  (signals-error
+   (let ((s (make-string-input-stream "abcde")))
+     (unwind-protect (file-length s) (close s)))
+   type-error)
+  t)
+
+(deftest file-length.error.12
+  (signals-error
+   (let ((s (make-string-output-stream)))
+     (unwind-protect (file-length s) (close s)))
+   type-error)
+  t)
+
+
 ; more stream error tests here
 
 ;;; Non-error tests
@@ -108,4 +177,13 @@
 		   (close is)))
 	collect i)
   nil)		 
-	
+
+(deftest file-length.6
+  (with-open-file
+   (*foo* "file-length.lsp" :direction :input)
+   (declare (special *foo*))
+   (let ((s (make-synonym-stream '*foo*)))
+     (unwind-protect
+	 (typep* (file-length s) '(integer (0)))
+	(close s))))
+  t)
