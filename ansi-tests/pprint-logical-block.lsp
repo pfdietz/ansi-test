@@ -8,6 +8,7 @@
 (deftest pprint-logical-block.1
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil))
      (with-open-stream
       (os (make-string-output-stream))
@@ -19,6 +20,7 @@
 (deftest pprint-logical-block.2
   (with-standard-io-syntax
    (let ((*print-pretty* nil)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (val '(1 a (b) (c . d) 1.0s0 2.0f0 -3.0d0 4.0l0 1/2 #(x y z))))
      (string=t (with-output-to-string (s) (write val :stream s))
@@ -28,6 +30,7 @@
 (deftest pprint-logical-block.3
   (with-standard-io-syntax
    (let ((*print-pretty* nil)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil))
      (with-output-to-string
        (*standard-output*)
@@ -37,6 +40,7 @@
 (deftest pprint-logical-block.4
   (with-standard-io-syntax
    (let ((*print-pretty* nil)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil))
      (with-output-to-string
        (os)
@@ -49,6 +53,7 @@
 (deftest pprint-logical-block.5
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (val '(1)))
      (with-output-to-string
@@ -61,6 +66,7 @@
 (deftest pprint-logical-block.6
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (val '(2)))
      (with-output-to-string
@@ -74,6 +80,7 @@
   :notes (:nil-vectors-are-strings)
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (val '(3)))
      (with-output-to-string
@@ -88,6 +95,7 @@
 (deftest pprint-logical-block.8
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (val '(4)))
      (with-output-to-string
@@ -106,6 +114,7 @@
 (deftest pprint-logical-block.9
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (*print-level* 1)
 	 (val '((4))))
@@ -121,6 +130,7 @@
 (deftest pprint-logical-block.10
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (*print-level* 0)
 	 (val '(5)))
@@ -134,6 +144,7 @@
 (deftest pprint-logical-block.11
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (val '(6)))
      (with-output-to-string
@@ -146,6 +157,7 @@
 (deftest pprint-logical-block.12
   (with-standard-io-syntax
    (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (val '(a b c)))
      (with-output-to-string
@@ -168,6 +180,7 @@ abcd3")
 (deftest pprint-logical-block.13
   (with-standard-io-syntax
    (let ((*print-pretty* nil)
+	 (*print-right-margin* 100)
 	 (*print-readably* nil)
 	 (*print-level* 0)
 	 (val '(5)))
@@ -178,6 +191,63 @@ abcd3")
 	(write (car val) :stream os)))))
   "#")
 
+;;; Both :suffix and :per-line-prefix may be supplied
+(deftest pprint-logical-block.14
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
+	 (*print-readably* nil)
+	 (val '(6)))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block (os val :per-line-prefix "[" :suffix "]")
+			     (write (car val) :stream os)))))
+  "[6]")
+
+;;; Declarations are allowed
+
+(deftest pprint-logical-block.15
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (x 0))
+     (with-output-to-string
+       (os)
+       (declare (integer x))
+       (declare (optimize (safety 3))))))
+  "")
+
+;;; Two conditions that cause :prefix, :suffix to be omitted
+
+(deftest pprint-logical-block.16
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-right-margin* 100)
+	 (*print-readably* nil)
+	 (val 9))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block (os val :prefix "[" :suffix "]")
+			     (write val :stream os)))))
+  "9")
+
+(deftest pprint-logical-block.17
+  (with-standard-io-syntax
+   (let* ((*print-pretty* t)
+	  (*print-right-margin* 100)
+	  (*print-readably* nil)
+	  (*print-circle* t)
+	  (v1 '(8))
+	  (val (list v1 v1)))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os val :prefix "(" :suffix ")")
+	(pprint-logical-block (os (car val) :prefix "(" :suffix ")")
+			      (write (caar val) :stream os))
+	(write-char #\Space os)
+	(pprint-logical-block (os (cadr val) :prefix "(" :suffix ")")
+			      (write (caadr val) :stream os))))))
+  "(#1=(8) #1#)")
 
 ;;; Error cases
 
@@ -205,3 +275,13 @@ abcd3")
 	collect x)
   nil)
 
+(deftest pprint-logical-block.error.4
+  (signals-error (with-standard-io-syntax
+		  (let ((*print-pretty* t)
+			(*print-right-margin* 100)
+			(*print-readably* nil)
+			(val '(7)))
+		    (pprint-logical-block (os val :prefix "" :per-line-prefix "")
+					  (write (car val) :stream os))))
+		 error)
+  t)
