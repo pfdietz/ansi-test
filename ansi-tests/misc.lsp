@@ -4312,3 +4312,19 @@
 		  (%f1 0))
 		tag2))))
   nil)
+
+;;; clisp (26 Dec 2003)
+;;; PROGV binding is not having the correct effect in compiled code
+
+(deftest misc.258
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (space 2) (safety 1) (debug 1)
+			  (compilation-speed 0)))
+       (let ((*s4* :right))
+	 (declare (special *s4*))
+	 (progv '(*s4*) (list :wrong1) (setq *s4* :wrong2))
+	 *s4*))))
+  :right)
