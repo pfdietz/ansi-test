@@ -345,9 +345,26 @@
 
 ;;; Note handling functions and macros
 
-(defmacro defnote (name contents)
+(defmacro defnote (name contents &optional disabled)
   `(eval-when #+gcl (load eval) #-gcl (:load-toplevel :execute)
-     (let ((note (make-note :name ,name :contents ,contents)))
+     (let ((note (make-note :name ',name
+			    :contents ',contents
+			    :disabled ',disabled)))
        (setf (gethash *notes* (note-name note)) note)
        note)))
+
+(defun disable-note (n)
+  (let ((note (if (note-p n) n
+		(setf n (gethash n *notes*)))))
+    (unless note (error "~A is not a note or note name." n))
+    (setf (note-disabled note) t)
+    note))
+
+(defun enable-note (n)
+  (let ((note (if (note-p n) n
+		(setf n (gethash n *notes*)))))
+    (unless note (error "~A is not a note or note name." n))
+    (setf (note-disabled note) nil)
+    note))
+
 

@@ -16,6 +16,7 @@
 		  (:method or ((x rational)) (push 3 *x*) nil)
 		  (:method or ((x number)) (push 2 *x*) nil)
 		  (:method or ((x t)) (push 1 *x*) 'a)))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -34,6 +35,7 @@
 		  (:method or ((x rational)) (push 3 *x*) 'a)
 		  (:method or ((x number)) (push 2 *x*) nil)
 		  (:method or ((x t)) (push 1 *x*) 'b)))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -49,6 +51,7 @@
 		  (:method or ((x rational)) (push 3 *x*) nil)
 		  (:method or ((x number)) (push 2 *x*) nil)
 		  (:method or ((x t)) (push 1 *x*) nil)))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -64,6 +67,7 @@
 		  (:method or ((x number)) 'b)
 		  (:method or ((x symbol)) nil)
 		  (:method or ((x t)) 'a)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -82,6 +86,7 @@
 		  (:method or ((x number)) nil)
 		  (:method or ((x symbol)) 'b)
 		  (:method or ((x t)) 'c)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -102,6 +107,7 @@
 		  (:method or ((x number)) 'b)
 		  (:method or ((x symbol)) 'c)
 		  (:method or ((x t)) 'd)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -119,6 +125,7 @@
 		  (:method or ((x dgmc-class-03)) nil)
 		  (:method or ((x dgmc-class-02)) 'b)
 		  (:method or ((x dgmc-class-01)) 'c)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn (make-instance 'dgmc-class-01))
      (funcall fn (make-instance 'dgmc-class-02))
@@ -136,6 +143,7 @@
 		  (:method :around ((x complex)) (call-next-method))
 		  (:method :around ((x number)) (values 1 2 3 4 5 6))
 		  (:method or ((x t)) 'b)))))
+    (declare (type generic-function fn))
     (values
      (multiple-value-list (funcall fn 'a))
      (multiple-value-list (funcall fn 10))
@@ -147,6 +155,7 @@
   (handler-case
    (let ((fn (eval '(defgeneric dg-mc.or.9 (x)
 		      (:method-combination or)))))
+     (declare (type generic-function fn))
      (funcall fn (list 'a)))
    (error () :error))
   :error)
@@ -172,6 +181,7 @@
 		     (:method-combination or)
 		     (:method :around ((x t)) t)
 		     (:method or ((x integer)) x)))))
+    (declare (type generic-function fn))
     (handler-case (funcall fn 'a)
 		  (error () :error)))
   :error)

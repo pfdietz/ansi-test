@@ -47,6 +47,14 @@
   (nbutlast (list 'a 'b 'c 'd) (1+ most-positive-fixnum))
   nil)
 
+(deftest nbutlast.8
+  (nbutlast (list 'a 'b 'c 'd) most-positive-fixnum)
+  nil)
+
+(deftest nbutlast.9
+  (nbutlast (list 'a 'b 'c 'd) (1- most-positive-fixnum))
+  nil)
+
 (deftest nbutlast.order.1
   (let ((i 0) x y)
     (values

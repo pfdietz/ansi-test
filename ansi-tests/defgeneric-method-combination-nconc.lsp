@@ -20,6 +20,7 @@
 			   (copy-list (car (push '(b) *x*))))
 		  (:method nconc ((x t))
 			   (copy-list (car (push '(a) *x*))))))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -42,6 +43,7 @@
 			   (copy-list (car (push '(b) *x*))))
 		  (:method nconc ((x t))
 			   (copy-list (car (push '(a) *x*))))))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -64,6 +66,7 @@
 			   (copy-list (car (push '(b) *x*))))
 		  (:method nconc ((x t))
 			   (copy-list (car (push '(a) *x*))))))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -82,6 +85,7 @@
 		  (:method nconc ((x number)) (list 'c 'd))
 		  (:method nconc ((x symbol)) (list 'e 'f))
 		  (:method nconc ((x t)) (list 'g 'h))))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -100,6 +104,7 @@
 		  (:method nconc ((x number)) (list 'b))
 		  (:method nconc ((x symbol)) (list 'c))
 		  (:method nconc ((x t)) (cons 'd 'e))))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -120,6 +125,7 @@
 		  (:method nconc ((x number)) (list 'b))
 		  (:method nconc ((x symbol)) (list 'c))
 		  (:method nconc ((x t)) (list 'd))))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -137,6 +143,7 @@
 		  (:method nconc ((x dgmc-class-03)) (list 'b))
 		  (:method nconc ((x dgmc-class-02)) (list 'c))
 		  (:method nconc ((x dgmc-class-01)) (list 'd))))))
+    (declare (type generic-function fn))
     (values
      (funcall fn (make-instance 'dgmc-class-01))
      (funcall fn (make-instance 'dgmc-class-02))
@@ -157,6 +164,7 @@
 		  (:method :around ((x complex)) (call-next-method))
 		  (:method :around ((x number)) (values 1 2 3 4 5 6))
 		  (:method nconc ((x t)) (list 'b))))))
+    (declare (type generic-function fn))
     (values
      (multiple-value-list (funcall fn 'a))
      (multiple-value-list (funcall fn 10))
@@ -168,6 +176,7 @@
   (handler-case
    (let ((fn (eval '(defgeneric dg-mc.nconc.9 (x)
 		      (:method-combination nconc)))))
+     (declare (type generic-function fn))
      (funcall fn (list 'a)))
    (error () :error))
   :error)
@@ -193,6 +202,7 @@
 		     (:method-combination nconc)
 		     (:method :around ((x t)) (list 'a))
 		     (:method nconc ((x integer)) x)))))
+    (declare (type generic-function fn))
     (handler-case (funcall fn (list 'b))
 		  (error () :error)))
   :error)

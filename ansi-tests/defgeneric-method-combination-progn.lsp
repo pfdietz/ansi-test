@@ -16,6 +16,7 @@
 		  (:method progn ((x rational)) (push 3 *x*) nil)
 		  (:method progn ((x number)) (push 2 *x*) nil)
 		  (:method progn ((x t)) (push 1 *x*) 'a)))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -34,6 +35,7 @@
 		  (:method progn ((x rational)) (push 3 *x*) 'b)
 		  (:method progn ((x number)) (push 2 *x*) 'c)
 		  (:method progn ((x t)) (push 1 *x*) 'd)))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -52,6 +54,7 @@
 		  (:method progn ((x rational)) (push 3 *x*) 'b)
 		  (:method progn ((x number)) (push 2 *x*) 'c)
 		  (:method progn ((x t)) (push 1 *x*) 'd)))))
+    (declare (type generic-function fn))
     (flet ((%f (y)
 	       (let ((*x* nil))
 		 (list (funcall fn y) *x*))))
@@ -70,6 +73,7 @@
 		  (:method progn ((x number)) 'b)
 		  (:method progn ((x symbol)) 'c)
 		  (:method progn ((x t)) 'a)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -87,6 +91,7 @@
 		  (:method progn ((x number)) 'b)
 		  (:method progn ((x symbol)) 'c)
 		  (:method progn ((x t)) 'a)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -105,6 +110,7 @@
 		  (:method progn ((x number)) nil)
 		  (:method progn ((x symbol)) 'b)
 		  (:method progn ((x t)) 'c)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -123,6 +129,7 @@
 		  (:method progn ((x number)) 'e)
 		  (:method progn ((x symbol)) 'b)
 		  (:method progn ((x t)) 'c)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -144,6 +151,7 @@
 		  (:method progn ((x number)) 'b)
 		  (:method progn ((x symbol)) 'c)
 		  (:method progn ((x t)) 'd)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -165,6 +173,7 @@
 		  (:method progn ((x number)) 'b)
 		  (:method progn ((x symbol)) 'c)
 		  (:method progn ((x t)) 'd)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn 0)
      (funcall fn 4/3)
@@ -183,6 +192,7 @@
 		  (:method progn ((x dgmc-class-03)) 'b)
 		  (:method progn ((x dgmc-class-02)) 'c)
 		  (:method progn ((x dgmc-class-01)) 'd)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn (make-instance 'dgmc-class-01))
      (funcall fn (make-instance 'dgmc-class-02))
@@ -198,6 +208,7 @@
 		  (:method progn ((x dgmc-class-03)) 'b)
 		  (:method progn ((x dgmc-class-02)) 'c)
 		  (:method progn ((x dgmc-class-01)) 'd)))))
+    (declare (type generic-function fn))
     (values
      (funcall fn (make-instance 'dgmc-class-01))
      (funcall fn (make-instance 'dgmc-class-02))
@@ -215,6 +226,7 @@
 		  (:method :around ((x complex)) (call-next-method))
 		  (:method :around ((x number)) (values 1 2 3 4 5 6))
 		  (:method progn ((x t)) 'b)))))
+    (declare (type generic-function fn))
     (values
      (multiple-value-list (funcall fn 'a))
      (multiple-value-list (funcall fn 10))
@@ -226,6 +238,7 @@
   (handler-case
    (let ((fn (eval '(defgeneric dg-mc.progn.9 (x)
 		      (:method-combination progn)))))
+     (declare (type generic-function fn))
      (funcall fn (list 'a)))
    (error () :error))
   :error)
@@ -251,6 +264,7 @@
 		     (:method-combination progn)
 		     (:method :around ((x t)) 'a)
 		     (:method progn ((x integer)) x)))))
+    (declare (type generic-function fn))
     (handler-case (funcall fn 'b)
 		  (error () :error)))
   :error)

@@ -55,6 +55,16 @@
     (eqt (last x (1+ most-positive-fixnum)) x))
   t)
 
+(deftest last.13
+  (let ((x '(a b c . d)))
+    (eqt (last x  most-positive-fixnum) x))
+  t)
+
+(deftest last.14
+  (let ((x '(a b c . d)))
+    (eqt (last x (1- most-positive-fixnum)) x))
+  t)
+
 (deftest last.order.1
   (let ((i 0) x y)
     (values
