@@ -71,6 +71,22 @@
 ;;; lisp objects used when stimulating things in various tests.
 (declaim (special *universe*))
 
+;;; The function EMPIRICAL-SUBTYPEP checks two types
+;;; for subtypeness, first using SUBTYPEP*, then (if that
+;;; fails) empirically against all the elements of *universe*,
+;;; checking if all that are in the first are also in the second.
+;;; Return T if this is the case, NIL otherwise.  This will
+;;; always return T if type1 is truly a subtype of type2,
+;;; but may return T even if this is not the case.
+
+(defun empirical-subtypep (type1 type2)
+  (multiple-value-bind (sub good)
+      (subtypep* type1 type2)
+    (if good
+	sub
+      (loop for e in *universe*
+	    always (or (not (typep e type1)) (typep e type2))))))
+
 (defun check-type-predicate (P TYPE)
   "Check that a predicate P is the same as #'(lambda (x) (typep x TYPE))
    by applying both to all elements of *UNIVERSE*.  Print message
@@ -973,14 +989,14 @@ the condition to go uncaught if it cannot be classified."
   (let ((num 0))
     (declare (fixnum num))
     (do-symbols (s p num)
-      (declare (ignore s))
+      s
       (incf num))))
 
 (defun num-external-symbols-in-package (p)
   (let ((num 0))
     (declare (fixnum num))
     (do-external-symbols (s p num)
-      (declare (ignore s))
+      s
       (incf num))))
 
 (defun safely-delete-package (package-designator)

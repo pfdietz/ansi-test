@@ -140,11 +140,16 @@
 (load "array-dimension.lsp")
 (load "array-dimensions.lsp")
 (load "array-in-bounds-p.lsp")
+(load "array-misc.lsp")
 (load "array-rank.lsp")
 (load "array-row-major-index.lsp")
 (load "array-total-size.lsp")
 (load "arrayp.lsp")
 (load "fill-pointer.lsp")
+(load "row-major-aref.lsp")
+(load "simple-vector-p.lsp")
+(load "svref.lsp")
+(load "upgraded-array-element-type.lsp")
 
 ;;; Tests of packages
 
