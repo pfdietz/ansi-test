@@ -3722,6 +3722,14 @@
        (ldb (byte 26 6) -1252))))
   67108844)
 
+(deftest misc.215a
+  (funcall
+   (compile nil '(lambda ()
+		   (declare (optimize (speed 3) (space 2) (safety 2) (debug 1)
+				      (compilation-speed 2)))
+		   (ldb (byte 30 0) -407020740))))
+  666721084)
+
 ;;; Floating point exception
 (deftest misc.216
   (truncate 0 -2549795210)
@@ -5990,3 +5998,34 @@ Broken at C::WT-C-INLINE-LOC.
    1)
   0)
 
+;;; "A bug was found in the compiler.  Contact worm@arrakis.es."
+;;; Broken at C::C2MULTIPLE-VALUE-SETQ.
+
+(deftest misc.325
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -1659358 3099614928896) a))
+       (declare (type (integer -492625 197903) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 3) (space 1) (safety 3) (debug 0)
+			  (compilation-speed 1)))
+       (reduce #'(lambda (lmv5 lmv6)
+		   (multiple-value-setq (a) 2443855591508))
+	       (vector b a 0 0) :from-end t)))
+   1 2)
+  2443855591508)
+
+;;; wrong value
+(deftest misc.326
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer 155 7955) b))
+       (declare (optimize (speed 3) (space 3) (safety 3) (debug 1)
+			  (compilation-speed 0)))
+       (flet ((%f13 (f13-1) (shiftf b 3019))) (+ b (%f13 0)))))
+   200)
+  400)
