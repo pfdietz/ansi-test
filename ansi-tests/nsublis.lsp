@@ -67,6 +67,19 @@
    :key nil)
   (2 2 b b))
 
+(deftest nsublis.10
+  (check-nsublis  (list 0 3 8 20)
+		  '((1 . x) (5 . y) (10 . z))
+		  :test #'(lambda (x y) (and (realp x) (realp y) (< x y))))
+  (x y z 20))
+
+(deftest nsublis.11
+  (check-nsublis  (list 0 3 8 20)
+		  '((1 . x) (5 . y) (10 . z))
+		  :test-not
+		  #'(lambda (x y) (not (and (realp x) (realp y) (< x y)))))
+  (x y z 20))
+
 ;;; Order of argument evaluation
 (deftest nsublis.order.1
   (let ((i 0) w x y z)

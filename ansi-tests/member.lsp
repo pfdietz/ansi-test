@@ -138,6 +138,14 @@
   (member 'z '(a b c d) :key nil)
   nil)
 
+(deftest member.20
+  (member 10 '(1 2 3 4 10 11 14 18) :test #'<)
+  (11 14 18))
+
+(deftest member.21
+  (member 10 '(1 2 3 4 10 11 14 18) :test-not #'>=)
+  (11 14 18))
+
 ;;; Order of evaluation
 
 (deftest member.order.1

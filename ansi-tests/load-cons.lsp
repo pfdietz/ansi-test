@@ -9,6 +9,7 @@
 (load "rplaca.lsp")
 (load "rplacd.lsp")
 (load "copy-tree.lsp")
+(load "tree-equal.lsp")
 (load "sublis.lsp")
 (load "nsublis.lsp")
 (load "subst.lsp")

@@ -140,6 +140,16 @@
 		       (eqt x y))))
   (a . 3))
 
+;;; Order of test arguments
+
+(deftest assoc.26
+  (assoc 10 '((1 a) (5 b) (8 c) (11 d) (12 e)) :test #'<)
+  (11 d))
+
+(deftest assoc.27
+  (assoc 10 '((1 a) (5 b) (8 c) (11 d) (12 e)) :test-not #'>=)
+  (11 d))
+
 ;;; Order of argument evaluation
 
 (deftest assoc.order.1

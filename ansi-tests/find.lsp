@@ -150,6 +150,14 @@
 	    :start 2 :from-end t)
   (a b))
 
+(deftest find-list.29
+  (find 10 '(1 2 3 8 20 3 1 21 3) :test #'<)
+  20)
+
+(deftest find-list.30
+  (find 10 '(1 2 3 8 20 3 1 21 3) :test-not #'>=)
+  20)
+
 ;;; Tests on vectors
 
 (deftest find-vector.1
@@ -319,6 +327,14 @@
 		       :fill-pointer 5)))
     (loop for i from 1 to 5 collect (find i a :from-end t :key #'car)))
   ((1 1) (2 2) (3 3) (4 4) (5 5)))
+
+(deftest find-vector.31
+  (find 10 #(1 2 3 8 20 3 1 21 3) :test #'<)
+  20)
+
+(deftest find-vector.32
+  (find 10 #(1 2 3 8 20 3 1 21 3) :test-not #'>=)
+  20)
 
 ;;; tests on bit vectors
 
@@ -593,6 +609,22 @@
     (values (find 0 a) (find 0 a :from-end t)))
   0 0)
 
+(deftest find-bit-vector.31
+  (find 2 #*00011010010 :test #'<)
+  nil)
+
+(deftest find-bit-vector.32
+  (find 2 #*0010101101 :test-not #'>=)
+  nil)
+
+(deftest find-bit-vector.33
+  (find 0 #*00011010010 :test #'<)
+  1)
+
+(deftest find-bit-vector.34
+  (find 0 #*0010101101 :test-not #'>=)
+  1)
+
 ;;; strings
 
 (deftest find-string.1
@@ -740,6 +772,14 @@
 	   collect (find e s :from-end t))))
   (#\a #\b #\c #\d #\e nil nil nil nil nil)
   (#\a #\b #\c #\d #\e nil nil nil nil nil))
+
+(deftest find-string.26
+  (find #\k "abcdmnop" :test #'char<)
+  #\m)
+
+(deftest find-string.27
+  (find #\k "abcdmnop" :test-not #'char>=)
+  #\m)
 
 ;;; Keyword tests
 

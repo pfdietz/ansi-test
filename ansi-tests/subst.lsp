@@ -61,6 +61,17 @@
 	       :key nil)
   (a a c d a a))
 
+(deftest subst.10
+  (check-subst 'x 10 (copy-tree '(1 2 10 20 30 4))
+	       :test #'(lambda (x y) (and (realp x) (realp y) (< x y))))
+  (1 2 10 x x 4))
+
+(deftest subst.11
+  (check-subst 'x 10 (copy-tree '(1 2 10 20 30 4))
+	       :test-not #'(lambda (x y)
+			     (not (and (realp x) (realp y) (< x y)))))
+  (1 2 10 x x 4))
+
 ;;; Order of argument evaluation
 (deftest subst.order.1
   (let ((i 0) v w x y z)

@@ -84,6 +84,25 @@
 	  :test-not (complement #'equal) :key nil)
   (aaa "AAA" "aaa" #\a))
 
+;;; Ordering in comparison function
+
+(deftest adjoin.19
+  (adjoin 10 '(1 2 3) :test #'<)
+  (10 1 2 3))
+
+(deftest adjoin.20
+  (adjoin 10 '(1 2 3) :test #'>)
+  (1 2 3))
+
+(deftest adjoin.21
+  (adjoin 10 '(1 2 3) :test-not #'>)
+  (10 1 2 3))
+
+(deftest adjoin.22
+  (adjoin 10 '(1 2 3) :test-not #'<)
+  (1 2 3))
+
+
 (deftest adjoin.order.1
   (let ((i 0) w x y z)
     (values

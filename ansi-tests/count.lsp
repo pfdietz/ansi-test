@@ -79,6 +79,14 @@
 	 :test #'(lambda (x y) (declare (ignore x y))  t))
   5)
 
+(deftest count-list.17
+  (count 10 '(1 11 2 4 14 5 18 6 7) :test #'<)
+  3)
+
+(deftest count-list.18
+  (count 10 '(1 11 2 4 14 5 18 6 7) :test-not #'>=)
+  3)
+
 ;;; On vectors
 
 (deftest count-vector.1
@@ -150,10 +158,18 @@
   (count 1 #(1 1 1 1 1 2 1 1)  :test-not #'eql)
   1)
 
-(deftest count-vector16
+(deftest count-vector.16
   (count 1 #(1 1 1 3 1 2 1 1) :start 2 :end 7
 	 :test #'(lambda (x y) (declare (ignore x y)) t))
   5)
+
+(deftest count-vector.17
+  (count 10 #(1 11 2 4 14 5 18 6 7) :test #'<)
+  3)
+
+(deftest count-vector.18
+  (count 10 #(1 11 2 4 14 5 18 6 7) :test-not #'>=)
+  3)
 
 ;;; Non-simple vectors
 
@@ -384,6 +400,13 @@
 	 :end 4)
   3)
 
+(deftest count-bit-vector.21
+  (count 1 #*00001100100 :test #'<=)
+  3)
+
+(deftest count-bit-vector.22
+  (count 1 #*00001100100 :test-not #'>)
+  3)
 
 ;;; Tests on strings
 
@@ -484,6 +507,14 @@
 			 :fill-pointer 7
 			 :element-type 'character)
 	 :start 2 :end 5)
+  3)
+
+(deftest count-string.21
+  (count #\1 "00001100100" :test #'char<=)
+  3)
+
+(deftest count-string.22
+  (count #\1 "00001100100" :test-not #'char>)
   3)
 
 ;;; Argument order tests

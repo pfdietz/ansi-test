@@ -178,6 +178,16 @@
 		      (eqt x y))))
   (3 . a))
 
+(deftest rassoc.26
+  (rassoc 10 '((a . 1) (b . 5) (c . 10) (d . 15) (e . 40))
+	  :test #'<)
+  (d . 15))
+
+(deftest rassoc.27
+  (rassoc 10 '((a . 1) (b . 5) (c . 10) (d . 15) (e . 40))
+	  :test-not #'>=)
+  (d . 15))
+
 ;;; Order of argument evaluation
 
 (deftest rassoc.order.1

@@ -154,6 +154,37 @@
   (a b c) (a b c)
   3 1 3 2)
 
+(deftest pushnew.16
+  (let ((x '(1 2 3)))
+    (values
+     (pushnew 10 x :test #'<=)
+     x))
+  (10 1 2 3)
+  (10 1 2 3))
+
+(deftest pushnew.17
+  (let ((x '(1 2 3)))
+    (values
+     (pushnew 10 x :test #'>)
+     x))
+  (1 2 3)
+  (1 2 3))
+(deftest pushnew.18
+  (let ((x '(1 2 3)))
+    (values
+     (pushnew 10 x :test-not #'>)
+     x))
+  (10 1 2 3)
+  (10 1 2 3))
+
+(deftest pushnew.19
+  (let ((x '(1 2 3)))
+    (values
+     (pushnew 10 x :test-not #'<=)
+     x))
+  (1 2 3)
+  (1 2 3))
+
 (deftest pushnew.order.1
   (let ((x (vector nil nil nil nil))
 	(y (vector 'a 'b 'c 'd))
