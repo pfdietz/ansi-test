@@ -5,28 +5,47 @@
 
 (in-package :cl-test)
 
+(defun listify-form (form)
+  (cond
+   ((integerp form) `'(,form))
+   ((null form) nil)
+   ((and (consp form)
+	 (eq (car form) 'quote)
+	 (consp (cadr form)))
+    form)
+   (t `(let ((x ,form)) (if (listp x) x (list x))))))
+		     
+
 (defmacro def-adjust-array-test (name args1 args2 expected-result)
-  (flet ((%listify (form)
-		   (cond
-		    ((integerp form) `'(,form))
-		    ((null form) nil)
-		    ((and (consp form)
-			  (eq (car form) 'quote)
-			  (consp (cadr form)))
-		     form)
-		    (t `(let ((x ,form)) (if (listp x) x (list x)))))))
-    `(deftest ,name
-       (let* ((a1 (make-array ,@args1))
-	      (a2 (adjust-array a1 ,@args2)))
-	 (assert (or (not (adjustable-array-p a1)) (eq a1 a2)))
-	 (assert (or (adjustable-array-p a1)
-		     (equal (array-dimensions a1) ,(%listify (first args1)))))
-	 (assert (equal (array-dimensions a2) ,(%listify (first args2))))
-	 ,@(unless (or (member :displaced-to args1)
-		       (member :displaced-to args2))
-	     (list '(assert (not (array-displacement a2)))))
-	 a2)
-       ,expected-result)))
+  `(deftest ,name
+     (let* ((a1 (make-array ,@args1))
+	    (a2 (adjust-array a1 ,@args2)))
+       (assert (or (not (adjustable-array-p a1)) (eq a1 a2)))
+       (assert (or (adjustable-array-p a1)
+		   (equal (array-dimensions a1) ,(listify-form (first args1)))))
+       (assert (equal (array-dimensions a2) ,(listify-form (first args2))))
+       ,@(unless (or (member :displaced-to args1)
+		     (member :displaced-to args2))
+	   (list '(assert (not (array-displacement a2)))))
+       a2)
+     ,expected-result))
+
+(defmacro def-adjust-array-fp-test (name args1 args2 misc &rest expected-results)
+   `(deftest ,name
+     (let* ((a1 (make-array ,@args1))
+	    (a2 (adjust-array a1 ,@args2)))
+       (assert (or (not (adjustable-array-p a1)) (eq a1 a2)))
+       (assert (or (adjustable-array-p a1)
+		   (equal (array-dimensions a1) ,(listify-form (first args1)))))
+       (assert (equal (array-dimensions a2) ,(listify-form (first args2))))
+       ,@(unless (or (member :displaced-to args1)
+		     (member :displaced-to args2))
+	   (list '(assert (not (array-displacement a2)))))
+       ,@(when misc (list misc))
+       (values
+	(fill-pointer a2)
+	a2))
+     ,@expected-results))
 
 (def-adjust-array-test adjust-array.1
   (5 :initial-contents '(a b c d e))
@@ -49,82 +68,36 @@
   (8 :initial-contents '(8 7 6 5 4 3 2 1))
   #(8 7 6 5 4 3 2 1))
 
-(deftest adjust-array.5
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e) :fill-pointer 3))
-	 (a2 (adjust-array a1 4)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 3)))
-  (4) 3 #(a b c) d)
+(def-adjust-array-fp-test adjust-array.5
+  (5 :initial-contents '(a b c d e) :fill-pointer 3)
+  (4)
+  (assert (eq (aref a2 3) 'd))
+  3 #(a b c))
 
-(deftest adjust-array.6
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3))
-	 (a2 (adjust-array a1 4 :fill-pointer nil)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 3)))
-  (4) 3 #(a b c) d)
+(def-adjust-array-fp-test adjust-array.6
+  (5 :initial-contents '(a b c d e) :fill-pointer 3)
+  (4 :fill-pointer nil)
+  (assert (eq (aref a2 3) 'd))
+  3 #(a b c))
 
-(deftest adjust-array.7
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3))
-	 (a2 (adjust-array a1 4 :fill-pointer t)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2))
-  (4) 4 #(a b c d))
+(def-adjust-array-fp-test adjust-array.7
+  (5 :initial-contents '(a b c d e) :fill-pointer 3)
+  (4 :fill-pointer t)
+  nil
+  4 #(a b c d))
 
-(deftest adjust-array.8
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3))
-	 (a2 (adjust-array a1 4 :fill-pointer 2)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 2)
-     (aref a2 3)))
-  (4) 2 #(a b) c d)
+(def-adjust-array-fp-test adjust-array.8
+  (5 :initial-contents '(a b c d e) :fill-pointer 3)
+  (4 :fill-pointer 2)
+  (progn (assert (eq (aref a2 2) 'c))
+	 (assert (eq (aref a2 3) 'd)))
+  2 #(a b))
 
-(deftest adjust-array.9
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3))
-	 (a2 (adjust-array a1 8 :fill-pointer 5
-			   :initial-element 'x)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 5)
-     (aref a2 6)
-     (aref a2 7)))
-  (8) 5 #(a b c d e) x x x)
+(def-adjust-array-fp-test adjust-array.9
+  (5 :initial-contents '(a b c d e) :fill-pointer 3)
+  (8 :fill-pointer 5 :initial-element 'x)
+  (assert (equal (list (aref a2 5) (aref a2 6) (aref a2 7)) '(x x x)))
+  5 #(a b c d e))
 
 (deftest adjust-array.10
   (let* ((a1 (make-array 5 :initial-contents '(a b c d e)))
@@ -280,73 +253,35 @@
   (8 :initial-contents '(8 7 6 5 4 3 2 1))
   #(8 7 6 5 4 3 2 1))
 
-(deftest adjust-array.adjustable.5
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3 :adjustable t))
-	 (a2 (adjust-array a1 4)))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 3)))
-  (4) 3 #(a b c) d)
+(def-adjust-array-fp-test adjust-array.adjustable.5
+  (5 :initial-contents '(a b c d e) :fill-pointer 3 :adjustable t)
+  (4)
+  (assert (eq (aref a2 3) 'd))
+  3 #(a b c))
 
-(deftest adjust-array.adjustable.6
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3 :adjustable t))
-	 (a2 (adjust-array a1 4 :fill-pointer nil)))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 3)))
-  (4) 3 #(a b c) d)
+(def-adjust-array-fp-test adjust-array.adjustable.6
+  (5 :initial-contents '(a b c d e) :fill-pointer 3 :adjustable t)
+  (4 :fill-pointer nil)
+  (assert (eq (aref a2 3) 'd))
+  3 #(a b c))
 
-(deftest adjust-array.adjustable.7
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3 :adjustable t))
-	 (a2 (adjust-array a1 4 :fill-pointer t)))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2))
-  (4) 4 #(a b c d))
+(def-adjust-array-fp-test adjust-array.adjustable.7
+  (5 :initial-contents '(a b c d e) :fill-pointer 3 :adjustable t)
+  (4 :fill-pointer t)
+  nil
+  4 #(a b c d))
 
-(deftest adjust-array.adjustable.8
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3 :adjustable t))
-	 (a2 (adjust-array a1 4 :fill-pointer 2)))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 2)
-     (aref a2 3)))
-  (4) 2 #(a b) c d)
+(def-adjust-array-fp-test adjust-array.adjustable.8
+  (5 :initial-contents '(a b c d e) :fill-pointer 3 :adjustable t)
+  (4 :fill-pointer 2)
+  (assert (equal (list (aref a2 2) (aref a2 3)) '(c d)))
+  2 #(a b))
 
-(deftest adjust-array.adjustable.9
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3 :adjustable t))
-	 (a2 (adjust-array a1 8 :fill-pointer 5
-			   :initial-element 'x)))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    (values
-     (array-dimensions a2)
-     (fill-pointer a2)
-     a2
-     (aref a2 5)
-     (aref a2 6)
-     (aref a2 7)))
-  (8) 5 #(a b c d e) x x x)
+(def-adjust-array-fp-test adjust-array.adjustable.9
+  (5 :initial-contents '(a b c d e) :fill-pointer 3 :adjustable t)
+  (8 :fill-pointer 5 :initial-element 'x)
+  (assert (equal (list (aref a2 5) (aref a2 6) (aref a2 7)) '(x x x)))
+  5 #(a b c d e))
 
 (deftest adjust-array.adjustable.10
   (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
@@ -386,6 +321,62 @@
     a2)
   #(c d e y))
 
+
+;;;; Strings
+
+(def-adjust-array-test adjust-array.string.1
+  (5 :element-type 'character :initial-contents "abcde")
+  (4 :element-type 'character)
+  "abcd")
+
+(def-adjust-array-test adjust-array.string.2
+  (5 :element-type 'character :initial-contents "abcde")
+  (8 :element-type 'character :initial-element #\x)
+  "abcdexxx")
+
+(def-adjust-array-test adjust-array.string.3
+  (5 :element-type 'character :initial-contents "abcde")
+  (4 :element-type 'character :initial-contents "wxyz")
+  "wxyz")
+
+(def-adjust-array-test adjust-array..string.4
+  (5 :element-type 'character :initial-contents "abcde")
+  (8 :element-type 'character :initial-contents "87654321")
+  "87654321")
+
+(def-adjust-array-fp-test adjust-array.string.5
+  (5 :element-type 'character :initial-contents "abcde" :fill-pointer 3)
+  (4 :element-type 'character)
+  (assert (eql (aref a2 3) #\d))
+  3 "abc")
+
+(def-adjust-array-fp-test adjust-array.string.6
+  (5 :element-type 'character :initial-contents "abcde" :fill-pointer 3)
+  (4 :element-type 'character :fill-pointer nil)
+  (assert (eql (aref a2 3) #\d))
+  3 "abc")
+
+(def-adjust-array-fp-test adjust-array.string.7
+  (5 :element-type 'character :initial-contents "abcde" :fill-pointer 3)
+  (4 :element-type 'character :fill-pointer t)
+  nil
+  4 "abcd")
+
+(def-adjust-array-fp-test adjust-array.string.8
+  (5 :element-type 'character :initial-contents "abcde" :fill-pointer 3)
+  (4 :element-type 'character :fill-pointer 2)
+  (progn (assert (eql (aref a2 2) #\c))
+	 (assert (eql (aref a2 3) #\d)))
+  2 "ab")
+
+(def-adjust-array-fp-test adjust-array.string.9
+  (5 :element-type 'character :initial-contents "abcde" :fill-pointer 3)
+  (8 :element-type 'character :fill-pointer 5 :initial-element #\x)
+  (assert (equal (list (aref a2 5) (aref a2 6) (aref a2 7))
+		 '(#\x #\x #\x)))
+  5 "abcde")
+
+;;; Add displaced string tests, adjustable string tests
 
 ;;; FIXME.  Tests for:
 ;;;  strings/character arrays
