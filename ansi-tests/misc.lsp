@@ -10056,3 +10056,12 @@ Broken at C::WT-MAKE-CLOSURE.
 	   (sqrt p1)))
 	 n))))
   t)
+
+;;; OpenMCL
+;;; 1/2 is not of type integer
+
+(deftest misc.545
+  (let ((x #c(-1 1/2)))
+    (declare (type (eql #c(-1 1/2)) x))
+    x)
+  #c(-1 1/2))
