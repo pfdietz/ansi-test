@@ -1104,7 +1104,7 @@
    0)
   26)
 
-;;; acl bug (version 6.2, linux x86 trial)
+;;; acl bugs (version 6.2, linux x86 trial)
 (deftest misc.90
   (let* ((form '(- 0 (ignore-errors 20763)
 		   (logxor b 1 c -7672794) b))
@@ -1122,7 +1122,6 @@
 	(list v1 v2 v3))))
   :good)
 
-;;; acl bug (version 6.2, linux x86 trial)
 (deftest misc.91
   (let ((fn1 '(lambda ()
 		(declare (optimize (speed 3) (safety 1)))
@@ -1136,7 +1135,6 @@
 	(list v1 v2 v3))))
   :good)
 
-;;; acl bug (version 6.2, linux x86 trial)
 (deftest misc.92
   (let* ((form '(- -16179207 b (lognor (let () 3) (logxor -17567197 c))))
 	 (fn1 `(lambda (b c)
@@ -1154,4 +1152,80 @@
 	(list v1 v2 v3))))
   :good)
 
-	 
+(deftest misc.93
+  (let* ((form '(ash (1+ (flet ((%f5 (f5-1) c)) c))
+		     (min 69 (logxor a b))))
+	 (fn1 `(lambda (a b c)
+		 (declare (type (integer -128 -109) a)
+			  (type (integer -2 -1) b)
+			  (optimize (speed 3) (safety 1)))
+		 ,form))
+	 (fn2 `(lambda (a b c) ,form))
+	 (vals '(-123 -1 2590941967601)))
+    (eqlt (apply (compile nil fn1) vals)
+	  (apply (compile nil fn2) vals)))
+  t)
+
+(deftest misc.94
+  (not (funcall
+	(compile nil '(lambda ()
+			(declare (optimize (speed 3) (safety 1) (debug 1)))
+			(<= 268435280
+			    (load-time-value
+			     39763134374436777607194165739302560271120000))))))
+  nil)
+
+(deftest misc.95
+  (let* ((form '(+ 272 c (if (< b a) -49618 -29042) b))
+	 (fn1 `(lambda (a b c)
+		 (declare (type (integer -1585918 601848636) a))
+		 (declare (type (integer -4 16544323) b))
+		 (declare (optimize (speed 3)))
+		 (declare (optimize (safety 1)))
+		 ,form))
+	 (fn2 `(lambda (a b c) ,form))
+	 (vals '(601739317 10891850 17452477960)))
+    (let ((v1 (apply (compile nil fn1) vals))
+	  (v2 (apply (compile nil fn2) vals)))
+      (if (eql v1 v2)
+	  :good
+	(list v1 v2))))
+  :good)
+
+(deftest misc.96
+  (let* ((form '(max 26 (ceiling b (min -8 (max -1 c)))))
+	 (fn1 `(lambda (b c)
+		 (declare (type (integer 482134 96074347505) b))
+		 (declare (type (integer -4036 -50) c))
+		 (declare (optimize (speed 3)))
+		 (declare (optimize (safety 1)))
+		 ,form))
+	 (fn2 `(lambda (b c) ,form))
+	 (vals '(90244278480 -338)))
+    (let ((v1 (apply (compile nil fn1) vals))
+	  (v2 (apply (compile nil fn2) vals)))
+      (if (eql v1 v2)
+	  :good
+	(list v1 v2))))
+  :good)
+
+(deftest misc.97
+  (let* ((form '(- 349708 (gcd c 0) (logand b b (if (> -8543459 c) 83328 1073))))
+	 (fn1 `(lambda (b c)
+		 (declare (type (integer 301653 329907) b))
+		 (declare (type (integer 171971491 1073721279) c))
+		 (declare (optimize (speed 3)))
+		 (declare (optimize (safety 1)))
+		 ,form))
+	 (fn2 `(lambda (b c) ,form))
+	 (vals '(321769 1073671227)))
+    (let ((v1 (apply (compile nil fn1) vals))
+	  (v2 (apply (compile nil fn2) vals)))
+      (if (eql v1 v2)
+	  :good
+	(list v1 v2))))
+  :good)
+
+
+
+
