@@ -177,6 +177,7 @@
 (load "structure-00.lsp")
 (load "structures-01.lsp")
 (load "structures-02.lsp")
+(load "structures-03.lsp")
 
 ;;; Tests of types and classes
 
