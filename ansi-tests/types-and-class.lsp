@@ -350,6 +350,30 @@
   (subtypep* 'extended-char 'atom)
   t t)
 
+(deftest string-is-not-simple-vector
+  (subtypep* 'string 'simple-vector)
+  nil t)
+
+(deftest base-string-is-not-simple-vector
+  (subtypep* 'base-string 'simple-vector)
+  nil t)
+
+(deftest simple-string-is-not-simple-vector
+  (subtypep* 'simple-string 'simple-vector)
+  nil t)
+
+(deftest simple-base-string-is-not-simple-vector
+  (subtypep* 'simple-base-string 'simple-vector)
+  nil t)
+
+(deftest bit-vector-is-not-simple-vector
+  (subtypep* 'bit-vector 'simple-vector)
+  nil t)
+
+(deftest simple-bit-vector-is-not-simple-vector
+  (subtypep* 'simple-bit-vector 'simple-vector)
+  nil t)
+
 ;;; Error checking of type-related functions
 
 (deftest subtypep.error.1
