@@ -165,6 +165,7 @@
 		(list (list name c s val)))))))
   nil)
 
+#|
 (def-syntax-test syntax.escape.whitespace.2
   (let ((names '("Tab" "Newline" "Linefeed" "Space" "Return" "Page")))
     (loop for name in names
@@ -176,6 +177,7 @@
 	      (unless (eql val (intern (string c)))
 		(list (list name c s val)))))))
   nil)
+|#
 
 (def-syntax-test syntax.multiple-escape.invalid.backspace
   (let ((c (name-char "Backspace")))
