@@ -5,15 +5,23 @@
 
 (in-package :cl-test)
 
+(defvar *null-pathname*
+    (make-pathname))
+
 (defun make-pathname-test
   (&rest args &key (defaults nil)
 	 (host (if defaults (pathname-host defaults)
 		 (pathname-host *default-pathname-defaults*)))
-	 (device (if defaults (pathname-device defaults) nil))
-	 (directory (if defaults (pathname-directory defaults) nil))
-	 (name (if defaults (pathname-name defaults) nil))
-	 (type (if defaults (pathname-type defaults) nil))
-	 (version (if defaults (pathname-version defaults) nil))
+	 (device (if defaults (pathname-device defaults)
+		   (pathname-device *null-pathname*)))
+	 (directory (if defaults (pathname-directory defaults)
+		      (pathname-directory *null-pathname*)))
+	 (name (if defaults (pathname-name defaults)
+		 (pathname-name  *null-pathname*)))
+	 (type (if defaults (pathname-type defaults)
+		 (pathname-type *null-pathname*)))
+	 (version (if defaults (pathname-version defaults)
+		    (pathname-version *null-pathname*)))
 	 case)
   (declare (ignorable case))
   (let* ((vals (multiple-value-list (apply #'make-pathname args)))
