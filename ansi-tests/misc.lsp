@@ -6347,6 +6347,75 @@ Broken at C::WT-C-INLINE-LOC.
 			      :from-end t)))))))
   0)
 
-    
+;;; Wrong value
+(deftest misc.344
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -3464434 12316202) a))
+       (declare (optimize (speed 1) (space 0) (safety 0) (debug 0)
+			  (compilation-speed 2)))
+       (progn (tagbody (gcd (expt (setf a -2612809) 0) (go 5))
+		       5)
+	      a)))
+   1891348)
+  -2612809)
 
+;;; Stack size too large
+(deftest misc.345
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (a b c)
+	(declare (type (integer -1968 -1759) a))
+	(declare (type (integer 91 2293818743282) b))
+	(declare (type (integer -843793650839 -2) c))
+	(declare (ignorable a b c))
+	(declare (optimize (speed 3) (space 2) (safety 3) (debug 0)
+			   (compilation-speed 3)))
+	(max (block b1
+	       (conjugate (dotimes (iv3 0
+					(bit #*010
+					     (min 2
+						  (max 0
+						       (return-from b1 0)))))
+			    (progn 0))))
+	     (sbit #*0001011010010 (min 12 (max 0 0))))))
+    -1957 523078358699 -634832888815))
+  0)
 
+;;; wrong return value
+(deftest misc.346
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 2) (safety 2) (debug 2)
+			  (compilation-speed 2)))
+       (bit #*011100
+	    (min 5
+		 (max 0
+		      (block b8
+			(aref #(122010971004 126555236004)
+			      (min 1
+				   (max 0
+					(progn (return-from b8 191438621)
+					       0)))))))))))
+  0)
+
+;;; The value 8 is not of type FUNCTION.
+(deftest misc.347
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 2) (safety 3) (debug 2)
+			  (compilation-speed 1)))
+       (complex (* (block b2
+		     (boole boole-xor (logxor (return-from b2 0)) 0)))
+		0))))
+  0)
