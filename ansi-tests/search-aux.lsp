@@ -6,9 +6,9 @@
 (in-package :cl-test)
 
 (defparameter *searched-list*
-  '(B B A B B B B B B B A B A B B B A B A B B B A A A A B A A B A A A A A
-      A B A B B A B A A B A A A B B A A B A A A A B B A B A B A A A B A B
-      B A B A A B B B B B A A A A A B A B B B B B A B A B B A B A B))
+  '(b b a b b b b b b b a b a b b b a b a b b b a a a a b a a b a a a a a
+      a b a b b a b a a b a a a b b a a b a a a a b b a b a b a a a b a b
+      b a b a a b b b b b a a a a a b a b b b b b a b a b b a b a b))
 
 (defparameter *pattern-sublists*
   (remove-duplicates

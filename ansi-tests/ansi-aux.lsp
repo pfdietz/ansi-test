@@ -1349,7 +1349,7 @@ the condition to go uncaught if it cannot be classified."
 		 (multiple-value-bind (sym2 access2)
 		     (find-symbol (symbol-name sym) pkg)
 		   (unless (or (eqt sym sym2)
-			       (member sym2 (PACKAGE-SHADOWING-SYMBOLS pkg)))
+			       (member sym2 (package-shadowing-symbols pkg)))
 		     (unless (> fail-count +fail-count-limit+)
 		       (format t "Not same symbol: ~S ~S~%" sym sym2))
 		     (when (= fail-count +fail-count-limit+)

@@ -1343,7 +1343,7 @@
   (let ((*gensym-counter* 1))
     (declare (special *gensym-counter*))
      (symbol-name (gensym)))
-  "G1")
+  #.(string '#:g1))
 
 ;;; Gensym uses the string argument instead of the default
 (deftest gensym.4
@@ -1387,7 +1387,7 @@
   (let ((*gensym-counter* 1234567890123456789012345678901234567890))
     (declare (special *gensym-counter*))
     (symbol-name (gensym)))
-  "G1234567890123456789012345678901234567890")
+  #.(string '#:g1234567890123456789012345678901234567890))
 
 ;;; gensym increments Really Big values of *gensym-counter*
 (deftest gensym.11
@@ -1402,7 +1402,7 @@
   (let ((*gensym-counter* 10))
     (declare (special *gensym-counter*))
     (symbol-name (gensym 123)))
-  "G123")
+  #.(string '#:g123))
 
 ;;; When given an integer argument, gensym does not increment the
 ;;; *gensym-counter*

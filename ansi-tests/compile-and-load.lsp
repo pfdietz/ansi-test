@@ -1,5 +1,10 @@
-(in-package "COMMON-LISP-USER")
+(in-package :common-lisp-user)
 
+#+allegro
+(progn
+  (setq *ignore-package-name-case* t)
+  (when (eq excl:*current-case-mode* :case-sensitive-lower)
+    (push :lower-case *features*)))
 
 (eval-when (load eval compile)
   (intern "==>" "CL-USER")

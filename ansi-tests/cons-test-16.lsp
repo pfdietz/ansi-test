@@ -202,7 +202,7 @@
 	     :test #'(lambda (x y)
 		       (unless (eqt x 'a) (return-from fail 'fail))
 		       (eqt x y))))
-  (A . 3))
+  (a . 3))
 
 ;;; Order of argument evaluation
 

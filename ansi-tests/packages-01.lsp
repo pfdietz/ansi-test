@@ -30,27 +30,27 @@
   nil nil)
 
 (deftest find-symbol.6
-  (find-symbol "CAR" "CL")
+  (find-symbol (string '#:car) "CL")
   car :external)
 
 (deftest find-symbol.7
-  (find-symbol "CAR" "COMMON-LISP")
+  (find-symbol (string '#:car) "COMMON-LISP")
   car :external)
 
 (deftest find-symbol.8
-  (values (find-symbol "CAR" "COMMON-LISP-USER"))
+  (values (find-symbol (string '#:car) "COMMON-LISP-USER"))
   car #| :inherited |# )
 
 (deftest find-symbol.9
-  (find-symbol "CAR" "CL-TEST")
+  (find-symbol (string '#:car) "CL-TEST")
   car :inherited)
 
 (deftest find-symbol.10
-  (find-symbol "TEST" "KEYWORD")
+  (find-symbol (string '#:test) "KEYWORD")
   :test :external)
 
 (deftest find-symbol.11
-  (find-symbol "FIND-SYMBOL.11" "CL-TEST")
+  (find-symbol (string '#:find-symbol.11) "CL-TEST")
   find-symbol.11 :internal)
 
 (deftest find-symbol.12
@@ -78,7 +78,7 @@
 (deftest find-symbol.order.1
   (let ((i 0) x y)
     (values
-     (find-symbol (progn (setf x (incf i)) "CAR")
+     (find-symbol (progn (setf x (incf i)) (string '#:car))
 		  (progn (setf y (incf i)) "COMMON-LISP"))
      i x y))
   car 2 1 2)

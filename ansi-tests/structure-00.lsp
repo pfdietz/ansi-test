@@ -22,13 +22,13 @@
   (setf structure-name (string structure-name))
   (intern (concatenate 'string
 	    structure-name
-	    "-P")))
+	    (string '#:-p))))
 
 (defun make-struct-copy-fn (structure-name)
   (assert (typep structure-name '(or string symbol character)))
   (setf structure-name (string structure-name))
   (intern (concatenate 'string
-		       "COPY-"
+		       (string '#:copy-)
 		       structure-name)))
 
 (defun make-struct-field-fn (conc-name field-name)
@@ -47,7 +47,7 @@
   (assert (typep structure-name '(or string symbol character)))
   (setf structure-name (string structure-name))
   (intern (concatenate 'string
-	    "MAKE-" structure-name)))
+	    (string '#:make-) structure-name)))
 
 (defun create-instance-of-type (type)
   "Return an instance of a type.  Signal an error if
@@ -72,7 +72,7 @@
    ((and (symbolp type)
 	 (typep type 'structure-class))
     (let ((make-fn
-	   (intern (concatenate 'string "MAKE-" (symbol-name type))
+	   (intern (concatenate 'string (string '#:make-) (symbol-name type))
 		   (symbol-package type))))
       (eval (list make-fn))))
    ((eqt type 'character) #\w)

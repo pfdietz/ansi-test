@@ -58,8 +58,8 @@
      `(
        0
        ;; Integers near the fixnum/bignum boundaries
-       ,@(loop for i from -5 to 5 collect (+ i MOST-POSITIVE-FIXNUM))
-       ,@(loop for i from -5 to 5 collect (+ i MOST-NEGATIVE-FIXNUM))
+       ,@(loop for i from -5 to 5 collect (+ i most-positive-fixnum))
+       ,@(loop for i from -5 to 5 collect (+ i most-negative-fixnum))
        ;; Powers of two, negatives, and off by one.
        ,@(loop for i from 1 to 64 collect (ash 1 i))
        ,@(loop for i from 1 to 64 collect (1- (ash 1 i)))
@@ -72,39 +72,39 @@
 
 (defvar *floats*
     (append
-     (loop for sym in '(PI
-			MOST-POSITIVE-SHORT-FLOAT
-			LEAST-POSITIVE-SHORT-FLOAT
-			LEAST-POSITIVE-NORMALIZED-SHORT-FLOAT
-			MOST-POSITIVE-DOUBLE-FLOAT
-			LEAST-POSITIVE-DOUBLE-FLOAT
-			LEAST-POSITIVE-NORMALIZED-DOUBLE-FLOAT
-			MOST-POSITIVE-LONG-FLOAT
-			LEAST-POSITIVE-LONG-FLOAT
-			LEAST-POSITIVE-NORMALIZED-LONG-FLOAT
-			MOST-POSITIVE-SINGLE-FLOAT
-			LEAST-POSITIVE-SINGLE-FLOAT
-			LEAST-POSITIVE-NORMALIZED-SINGLE-FLOAT
-			MOST-NEGATIVE-SHORT-FLOAT
-			LEAST-NEGATIVE-SHORT-FLOAT
-			LEAST-NEGATIVE-NORMALIZED-SHORT-FLOAT
-			MOST-NEGATIVE-SINGLE-FLOAT
-			LEAST-NEGATIVE-SINGLE-FLOAT
-			LEAST-NEGATIVE-NORMALIZED-SINGLE-FLOAT
-			MOST-NEGATIVE-DOUBLE-FLOAT
-			LEAST-NEGATIVE-DOUBLE-FLOAT
-			LEAST-NEGATIVE-NORMALIZED-DOUBLE-FLOAT
-			MOST-NEGATIVE-LONG-FLOAT
-			LEAST-NEGATIVE-LONG-FLOAT
-			LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT
-			SHORT-FLOAT-EPSILON
-			SHORT-FLOAT-NEGATIVE-EPSILON
-			SINGLE-FLOAT-EPSILON
-			SINGLE-FLOAT-NEGATIVE-EPSILON
-			DOUBLE-FLOAT-EPSILON
-			DOUBLE-FLOAT-NEGATIVE-EPSILON
-			LONG-FLOAT-EPSILON
-			LONG-FLOAT-NEGATIVE-EPSILON)
+     (loop for sym in '(pi
+			most-positive-short-float
+			least-positive-short-float
+			least-positive-normalized-short-float
+			most-positive-double-float
+			least-positive-double-float
+			least-positive-normalized-double-float
+			most-positive-long-float
+			least-positive-long-float
+			least-positive-normalized-long-float
+			most-positive-single-float
+			least-positive-single-float
+			least-positive-normalized-single-float
+			most-negative-short-float
+			least-negative-short-float
+			least-negative-normalized-short-float
+			most-negative-single-float
+			least-negative-single-float
+			least-negative-normalized-single-float
+			most-negative-double-float
+			least-negative-double-float
+			least-negative-normalized-double-float
+			most-negative-long-float
+			least-negative-long-float
+			least-negative-normalized-long-float
+			short-float-epsilon
+			short-float-negative-epsilon
+			single-float-epsilon
+			single-float-negative-epsilon
+			double-float-epsilon
+			double-float-negative-epsilon
+			long-float-epsilon
+			long-float-negative-epsilon)
 	   when (boundp sym) collect (symbol-value sym))
      (list
       0.0 1.0 -1.0 313123.13 283143.231 -314781.9

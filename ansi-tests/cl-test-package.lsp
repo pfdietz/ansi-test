@@ -7,7 +7,7 @@
   (:use :cl :regression-test)
   ;; #+gcl (:use defpackage)
   (:nicknames)
-  (:import-from "COMMON-LISP-USER" "COMPILE-AND-LOAD" "==>")
+  (:import-from "COMMON-LISP-USER" #:compile-and-load "==>")
   (:export))
 
 #+cmu (import 'cl::quit :cl-test)

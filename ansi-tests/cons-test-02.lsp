@@ -54,7 +54,7 @@
   (check-sublis '(f6 10 (f4 (f3 (f1 a b) (f1 a p)) (f2 a b)))
 		'(((f1 a b) . (f2 a b)) ((f2 a b) . (f1 a b)))
 		:test #'equal)
-  (F6 10 (F4 (F3 (F2 A B) (F1 A P)) (F1 A B))))
+  (f6 10 (f4 (f3 (f2 a b) (f1 a p)) (f1 a b))))
 
 (deftest sublis.3
   (check-sublis '(10 ((10 20 (a b c) 30)) (((10 20 30 40))))
@@ -209,7 +209,7 @@
   (check-nsublis '(f6 10 (f4 (f3 (f1 a b) (f1 a p)) (f2 a b)))
 		 '(((f1 a b) . (f2 a b)) ((f2 a b) . (f1 a b)))
 		 :test #'equal)
-  (F6 10 (F4 (F3 (F2 A B) (F1 A P)) (F1 A B))))
+  (f6 10 (f4 (f3 (f2 a b) (f1 a p)) (f1 a b))))
 
 (deftest nsublis.3
   (check-nsublis '(10 ((10 20 (a b c) 30)) (((10 20 30 40))))
@@ -381,11 +381,11 @@
 (deftest subst.4
   (check-subst 'grape 'dick
 	       '(melville wrote (moby dick)))
-  (MELVILLE WROTE (MOBY GRAPE)))
+  (melville wrote (moby grape)))
 
 (deftest subst.5
   (check-subst 'cha-cha-cha 'nil '(melville wrote (moby dick)))
-  (MELVILLE WROTE (MOBY DICK . CHA-CHA-CHA) . CHA-CHA-CHA))
+  (melville wrote (moby dick . cha-cha-cha) . cha-cha-cha))
 
 (deftest subst.6
   (check-subst
@@ -480,15 +480,15 @@
   
 (deftest subst-if.1
   (check-subst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
-  A)
+  a)
 
 (deftest subst-if-not.1
   (check-subst-if-not '(x) 'consp '(1 (1 2) (1 2 3) (1 2 3 4)))
-  ((X)
-   ((X) (X) X)
-   ((X) (X) (X) X)
-   ((X) (X) (X) (X) X)
-   X))
+  ((x)
+   ((x) (x) x)
+   ((x) (x) (x) x)
+   ((x) (x) (x) (x) x)
+   x))
 
 (deftest subst-if.2
   (check-subst-if 17 (complement #'listp) '(a (a b) (a c d) (a nil e f g)))
@@ -498,27 +498,27 @@
   (check-subst-if '(z)
 		  (complement #'consp)
 		  '(a (a b) (c d e) (f g h i)))
-  ((Z)
-   ((Z) (Z) Z)
-   ((Z) (Z) (Z) Z)
-   ((Z) (Z) (Z) (Z) Z)
-   Z))
+  ((z)
+   ((z) (z) z)
+   ((z) (z) (z) z)
+   ((z) (z) (z) (z) z)
+   z))
 
 (deftest subst-if-not.2
   (check-subst-if-not 'a (complement #'listp)
 		      '((100 1) (2 3) (4 3 2 1) (a b c)))
-  A)
+  a)
 
 (deftest subst-if.4
   (check-subst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
 		  :key #'listp)
-  B)
+  b)
 
 (deftest subst-if-not.3
   (check-subst-if-not 'c #'identity
 		      '((100 1) (2 3) (4 3 2 1) (a b c))
 		      :key (complement #'listp))
-  C)
+  c)
 
 (deftest subst-if.5
   (check-subst-if 4 #'(lambda (x) (eql x 1))
@@ -646,11 +646,11 @@
 (deftest nsubst.4
   (check-nsubst 'grape 'dick
 		'(melville wrote (moby dick)))
-  (MELVILLE WROTE (MOBY GRAPE)))
+  (melville wrote (moby grape)))
 
 (deftest nsubst.5
   (check-nsubst 'cha-cha-cha 'nil '(melville wrote (moby dick)))
-  (MELVILLE WROTE (MOBY DICK . CHA-CHA-CHA) . CHA-CHA-CHA))
+  (melville wrote (moby dick . cha-cha-cha) . cha-cha-cha))
 
 (deftest nsubst.6
   (check-nsubst
@@ -742,15 +742,15 @@
 
 (deftest nsubst-if.1
     (check-nsubst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
-  A)
+  a)
 
 (deftest nsubst-if-not.1
   (check-nsubst-if-not '(x) 'consp '(1 (1 2) (1 2 3) (1 2 3 4)))
-  ((X)
-   ((X) (X) X)
-   ((X) (X) (X) X)
-   ((X) (X) (X) (X) X)
-   X))
+  ((x)
+   ((x) (x) x)
+   ((x) (x) (x) x)
+   ((x) (x) (x) (x) x)
+   x))
 
 (deftest nsubst-if.2
   (check-nsubst-if 17 (complement #'listp) '(a (a b) (a c d) (a nil e f g)))
@@ -760,27 +760,27 @@
   (check-nsubst-if '(z)
 		   (complement #'consp)
 		   '(a (a b) (c d e) (f g h i)))
-  ((Z)
-   ((Z) (Z) Z)
-   ((Z) (Z) (Z) Z)
-   ((Z) (Z) (Z) (Z) Z)
-   Z))
+  ((z)
+   ((z) (z) z)
+   ((z) (z) (z) z)
+   ((z) (z) (z) (z) z)
+   z))
 
 (deftest nsubst-if-not.2
   (check-nsubst-if-not 'a (complement #'listp)
 		       '((100 1) (2 3) (4 3 2 1) (a b c)))
-  A)
+  a)
 
 (deftest nsubst-if.4
   (check-nsubst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
 		   :key #'listp)
-  B)
+  b)
 
 (deftest nsubst-if-not.3
   (check-nsubst-if-not 'c #'identity
 		       '((100 1) (2 3) (4 3 2 1) (a b c))
 		       :key (complement #'listp))
-  C)
+  c)
 
 (deftest nsubst-if.5
   (check-nsubst-if 4 #'(lambda (x) (eql x 1))

@@ -118,7 +118,7 @@
        (push s x)
        (go foo)
        bar
-       (push T x)
+       (push t x)
        foo)
       (sort-symbols x)))
    (error (c) c))
@@ -134,7 +134,7 @@
        (push s x)
        (go foo)
        bar
-       (push T x)
+       (push t x)
        foo)
       (sort-symbols x)))
    (error (c) c))

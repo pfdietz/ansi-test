@@ -81,27 +81,27 @@
 
 (deftest package-name.7
   (package-name "CL")
-  "COMMON-LISP")
+  #.(string '#:common-lisp))
 
 (deftest package-name.8
   (package-name "COMMON-LISP")
-  "COMMON-LISP")
+  #.(string '#:common-lisp))
 
 (deftest package-name.9
   (package-name "COMMON-LISP-USER")
-  "COMMON-LISP-USER")
+  #.(string '#:common-lisp-user))
 
 (deftest package-name.10
   (package-name "CL-USER")
-  "COMMON-LISP-USER")
+  #.(string '#:common-lisp-user))
 
 (deftest package-name.11
   (package-name "KEYWORD")
-  "KEYWORD")
+  #.(string '#:keyword))
 
 (deftest package-name.12
   (package-name (find-package "CL"))
-  "COMMON-LISP")
+  #.(string '#:common-lisp))
 
 (deftest package-name.13
   (let* ((p (make-package "TEMP1"))
@@ -168,7 +168,7 @@
 
 (deftest package-nicknames.7
   (ignore-errors
-    (subsetp '("CL")
+    (subsetp '(#.(string '#:cl))
 	     (package-nicknames "COMMON-LISP")
 	     :test #'string=))
   t)
@@ -176,7 +176,7 @@
 (deftest package-nicknames.8
   (ignore-errors
     (notnot
-     (subsetp '("CL-USER")
+     (subsetp '(#.(string '#:cl-user))
 	      (package-nicknames "COMMON-LISP-USER")
 	      :test #'string=)))
   t)

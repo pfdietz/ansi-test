@@ -10,16 +10,16 @@
     (:use :cl)
     (:nicknames :rtest #-lispworks :rt)
     (:export
-     "*DO-TESTS-WHEN-DEFINED*"
-     "*TEST*"
-     "CONTINUE-TESTING"
-     "DEFTEST"
-     "DO-TEST"
-     "DO-TESTS"
-     "GET-TEST"
-     "PENDING-TESTS"
-     "REM-ALL-TESTS"
-     "REM-TEST"
+     #:*do-tests-when-defined*
+     #:*test*
+     #:continue-testing
+     #:deftest
+     #:do-test
+     #:do-tests
+     #:get-test
+     #:pending-tests
+     #:rem-all-tests
+     #:rem-test
      )))
 
 (in-package :regression-test)

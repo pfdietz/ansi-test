@@ -15,7 +15,7 @@
 
 (defun test-if-not-in-cl-package (str)
   (multiple-value-bind (sym status)
-      (find-symbol (string-upcase str) 'common-lisp)
+      (find-symbol #+lower-case str #-lower-case (string-upcase str) 'common-lisp)
       (or
        ;; Symbol not present in the common lisp package
        (not status)
