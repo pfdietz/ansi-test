@@ -79,7 +79,7 @@
 
 (defstruct (struct-include-03b (:include struct-include-03a (a))))
 
-(deftest struct-include.5
+(deftest struct-include.5a
   (let ((obj (make-struct-include-03b :a 100)))
     (values
      (typep obj 'struct-include-03a)
