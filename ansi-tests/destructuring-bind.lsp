@@ -89,6 +89,17 @@
      (return 'good)))
   good)
 
+(deftest destructuring-bind.20
+  (destructuring-bind (&whole (a . b) c . d) '(1 . 2) (list a b c d))
+  (1 2 1 2))
+
+(deftest destructuring-bind.21
+  (destructuring-bind
+      (x &rest (y z))
+      '(1 2 3)
+    (values x y z))
+  1 2 3)
+
 
 ;;; Error cases
 
