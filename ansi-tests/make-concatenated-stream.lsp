@@ -295,6 +295,16 @@
       (listen s))))
   nil)
 
+(deftest make-concatenated-stream.32
+  (clear-input (make-concatenated-stream))
+  nil)
+
+(deftest make-concatenated-stream.33
+  (with-input-from-string
+   (s1 "abc")
+   (clear-input (make-concatenated-stream s1)))
+  nil)
+
 ;;; Error cases
 
 (deftest make-concatenated-stream.error.1

@@ -47,3 +47,4 @@
 (load "make-echo-stream.lsp")
 (load "concatenated-stream-streams.lsp")
 (load "make-concatenated-stream.lsp")
+(load "get-output-stream-string.lsp")

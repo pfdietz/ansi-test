@@ -23,3 +23,5 @@ Things to do to the test suite (not a complete list)
 
 11. Address issues with broadcast streams (C. Rhodes) -- apparent
    contradictions in the spec.
+
+12. Make sure all string operators work on displaced character vectors.
