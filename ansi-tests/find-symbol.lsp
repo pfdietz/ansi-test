@@ -78,27 +78,27 @@
   (find-symbol "FOO" (find-package "B"))
   A::FOO :inherited)
 
-(deftest find-package.17
+(deftest find-symbol.17
   (let ((name (make-array '(3) :initial-contents "FOO"
 			  :element-type 'base-char)))
     (find-symbol name "B"))
   A::FOO :inherited)
 
-(deftest find-package.18
+(deftest find-symbol.18
   (let ((name (make-array '(4) :initial-contents "FOOD"
 			  :element-type 'character
 			  :fill-pointer 3)))
     (find-symbol name "B"))
   A::FOO :inherited)
 
-(deftest find-package.19
+(deftest find-symbol.19
   (let ((name (make-array '(4) :initial-contents "FOOD"
 			  :element-type 'base-char
 			  :fill-pointer 3)))
     (find-symbol name "B"))
   A::FOO :inherited)
 
-(deftest find-package.20
+(deftest find-symbol.20
   (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
 			    :element-type 'character))
 	 (name (make-array '(3) :element-type 'character
@@ -107,7 +107,7 @@
     (find-symbol name "B"))
   A::FOO :inherited)
 
-(deftest find-package.21
+(deftest find-symbol.21
   (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
 			    :element-type 'base-char))
 	 (name (make-array '(3) :element-type 'base-char
