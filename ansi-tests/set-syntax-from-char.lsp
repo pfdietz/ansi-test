@@ -24,7 +24,7 @@
 	    ((or string symbol) (name-char (string c)))
 	    (t nil)))
   (when c
-    (format t "~A ~A~%" c (char-name c))
+    ;; (format t "~A ~A~%" c (char-name c))
     `(def-set-syntax-from-char-test
        ,(intern (concatenate 'string "SET-SYNTAX-FROM-CHAR-TRAIT-X-" (or (char-name c)
 									 (string c)))
@@ -66,7 +66,7 @@
 
 ;;; Turning characters into single escape characters
 
-(deftest set-syntax-from-char.single-escape
+(deftest set-syntax-from-char.single-escape.1
   (loop for c across +standard-chars+
 	nconc
 	(with-standard-io-syntax
@@ -79,6 +79,23 @@
 	     (unless (equal results '(t |Z|))
 	       (list (list c results)))))))
   nil)
+
+(deftest set-syntax-from-char.single-escape.2
+  (loop for c across +standard-chars+
+	unless (eql c #\")
+	nconc
+	(with-standard-io-syntax
+	 (let ((*readtable* (copy-readtable nil))
+	       (*package* (find-package "CL-TEST")))
+	   (let ((results
+		  (list
+		   (set-syntax-from-char c #\\)
+		   (read-from-string (concatenate 'string
+						  (list #\" c #\" #\"))))))
+	     (unless (equal results '(t "\""))
+	       (list (list c results)))))))
+  nil)
+
 
 (deftest set-syntax-from-char.multiple-escape
   (loop for c across +standard-chars+
@@ -454,5 +471,3 @@
 	     (list (list c results)))
 	   )))
   nil)
-
-
