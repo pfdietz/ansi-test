@@ -1063,12 +1063,16 @@
   nil)
 
 ;;; None of the standard symbols except those in +special-operators+
-;;; are special operators
+;;; are special operators, unless they have a macro function
+;;; (See the page for MACRO-FUNCTION)
+
 (deftest special-operator-p.2
   (let ((p (find-package "CL")))
     (loop for name in *cl-symbol-names*
 	  unless (or (member name +special-operators+ :test #'string=)
-		     (not (special-operator-p (find-symbol name p))))
+		     (let ((sym (find-symbol name p)))
+		       (or (not (special-operator-p sym))
+			   (macro-function sym))))
 	  collect name))
   nil)
 
