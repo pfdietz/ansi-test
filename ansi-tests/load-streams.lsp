@@ -40,5 +40,5 @@
 (load "make-broadcast-stream.lsp")
 (load "broadcast-stream-streams.lsp")
 (load "make-two-way-stream.lsp")
-
-
+(load "two-way-stream-input-stream.lsp")
+(load "two-way-stream-output-stream.lsp")
