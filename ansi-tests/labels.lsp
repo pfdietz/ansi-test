@@ -272,3 +272,30 @@
    (labels ((%f (&key) :bad)) (%f nil nil))
    program-error)
   t)
+
+;;; Identity of function objects
+;;; Since (FUNCTION <name>) returns *the* functional value, it
+;;; should be the case that different invocations of this form
+;;; in the same lexical environment return the same value.
+
+(deftest labels.37
+  (labels ((f () 'foo))
+    (eqt #'f #'f))
+  t)
+
+(deftest labels.38
+  (labels ((f () 'foo))
+    (destructuring-bind (x y) (loop repeat 2 collect #'f) (eqlt x y)))
+  t)
+
+(deftest labels.39
+  (labels ((f () #'f))
+    (eqlt (f) #'f))
+  t)
+
+(deftest labels.40
+  (let ((x (labels ((f () #'f)) #'f)))
+    (eqlt x (funcall x)))
+  t)
+
+
