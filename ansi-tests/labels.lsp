@@ -265,3 +265,10 @@
   (labels ((%f (&key &allow-other-keys) 'good))
     (%f :a 1 :b 2))
   good)
+
+;;; NIL as a disallowed keyword argument
+(deftest labels.36
+  (signals-error
+   (labels ((%f (&key) :bad)) (%f nil nil))
+   program-error)
+  t)
