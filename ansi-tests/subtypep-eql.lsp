@@ -36,3 +36,19 @@
 (deftest subtypep.eql.4
   (check-equivalence '(and (eql a) (eql b)) nil)
   nil)
+
+(deftest subtypep.eql.5
+  (check-all-subtypep '(eql a) '(satisfies symbolp))
+  nil)
+
+(deftest subtypep.eql.6
+  (check-disjointness '(eql 17) '(satisfies symbolp))
+  nil)
+
+(deftest subtypep.eql.7
+  (check-all-subtypep '(eql nil) '(satisfies symbolp))
+  nil)
+
+(deftest subtypep.eql.8
+  (check-all-not-subtypep '(satisfies symbolp) '(eql a))
+  nil)
