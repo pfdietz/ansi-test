@@ -307,8 +307,8 @@
 			    (handler-case
 				(and (not (typep x tp2))
 				     (progn
-				       (format t "Found element of ~S not in ~S~%"
-					       tp tp2)
+				       (format t "Found element of ~S not in ~S ~S~%"
+					       tp tp2 x)
 				       t))
 			      (condition (c) (format t "Error ~S occured: ~S~%"
 						c tp2)
