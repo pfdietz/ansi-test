@@ -58,6 +58,28 @@
   #(0 2 2 4 4 5 6 7 8 9)
   4)
 
+(deftest psetq.8
+  (let ((*x* 0) (*y* 10))
+    (declare (special *x* *y*))
+    (values
+     *x* *y*
+     (psetq *x* 6
+	    *y* 15)
+     *x* *y*))
+  0 10 nil 6 15)
+
+(deftest psetq.9
+  (let ((*x* 0) (*y* 10))
+    (declare (special *x* *y*))
+    (values
+     *x* *y*
+     (psetq *x* *y*
+	    *y* *x*)
+     *x* *y*))
+  0 10 nil 10 0)
+
+
+
 (deftest psetq.error.1
   (classify-error (funcall (macro-function 'psetq)))
   program-error)

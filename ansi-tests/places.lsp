@@ -227,6 +227,19 @@
   (let (x) (setq x (values 1 2)))
   1)
 
+(deftest setq.5
+  (let ((*x* 0))
+    (declare (special *x*))
+    (values *x* (setq *x* 1) *x*))
+  0 1 1)
+
+(deftest setq.6
+  (let ((*x* 0))
+    (declare (special *x*))
+    (setq *x* 1))
+  1)
+    
+
 (deftest setf.1
   (setf)
   nil)
@@ -243,4 +256,16 @@
 
 (deftest setf.4
   (let (x) (setf x (values 1 2)))
+  1)
+
+(deftest setf.5
+  (let ((*x* 0))
+    (declare (special *x*))
+    (values *x* (setf *x* 1) *x*))
+  0 1 1)
+
+(deftest setf.6
+  (let ((*x* 0))
+    (declare (special *x*))
+    (setf *x* 1))
   1)

@@ -420,3 +420,10 @@
 	(c2 (find-class 'symbol)))
     (notnot-mv (typep 'a `(or ,c2 ,c1))))
   t)
+
+(deftest typep.18
+  (let ((i 0))
+    (values
+     (notnot (typep (incf i) '(and (integer 0 10) (integer -5 6))))
+     i))
+  t 1)

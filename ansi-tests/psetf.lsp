@@ -92,4 +92,24 @@
     a)
   #(0 2 2 4 4 5 6 7 8 9))
 
+(deftest psetf.10
+  (let ((*x* 0) (*y* 10))
+    (declare (special *x* *y*))
+    (values
+     *x* *y*
+     (psetf *x* 6
+	    *y* 15)
+     *x* *y*))
+  0 10 nil 6 15)
+
+(deftest psetf.11
+  (let ((*x* 0) (*y* 10))
+    (declare (special *x* *y*))
+    (values
+     *x* *y*
+     (psetf *x* *y*
+	    *y* *x*)
+     *x* *y*))
+  0 10 nil 10 0)
+
 (def-macro-test psetf.error.1 (psetf))
