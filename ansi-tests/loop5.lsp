@@ -32,7 +32,7 @@
   (#\a #\b #\c))
 
 (deftest loop.5.7
-  (let ((x (make-array '(4) :initial-elements "abcd" :element-type 'base-char)))
+  (let ((x (make-array '(4) :initial-contents "abcd" :element-type 'base-char)))
     (loop for e across (the base-string x) collect e))
   (#\a #\b #\c #\d))
 
