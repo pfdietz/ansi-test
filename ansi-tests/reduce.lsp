@@ -1,0 +1,248 @@
+;-*- Mode:     Lisp -*-
+;;;; Author:   Paul Dietz
+;;;; Created:  Sun Aug 18 14:08:57 2002
+;;;; Contains: Tests for function REDUCE
+
+(in-package :cl-test)
+
+(deftest reduce-list.1
+  (reduce #'cons '(a b c d e f))
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-list.2
+  (reduce #'cons '(a b c d e f) :from-end t)
+  (a b c d e . f))
+
+(deftest reduce-list.3
+  (reduce #'cons '(a b c d e f) :initial-value 'z)
+  ((((((z . a) . b) . c) . d) . e) . f))
+  
+(deftest reduce-list.4
+  (reduce #'cons '(a b c d e f) :from-end t :initial-value 'g)
+  (a b c d e f . g))
+
+(deftest reduce-list.5
+  (reduce #'cons '(a b c d e f) :from-end nil)
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-list.6
+  (reduce #'cons '(a b c d e f) :from-end 17)
+  (a b c d e . f))
+
+(deftest reduce-list.7
+  (reduce #'cons '(a b c d e f) :end nil)
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-list.8
+  (reduce #'cons '(a b c d e f) :end 3)
+  ((a . b) . c))
+
+(deftest reduce-list.9
+  (reduce #'cons '(a b c d e f) :start 1 :end 4)
+  ((b . c) . d))
+
+(deftest reduce-list.10
+  (reduce #'cons '(a b c d e f) :start 1 :end 4 :from-end t)
+  (b c . d))
+
+(deftest reduce-list.11
+  (reduce #'cons '(a b c d e f) :start 1 :end 4 :from-end t
+	  :initial-value nil)
+  (b c d))
+
+(deftest reduce-list.12
+  (reduce 'cons '(a b c d e f))
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-list.13
+  (reduce #'+ nil)
+  0)
+
+(deftest reduce-list.14
+  (reduce #'+ '(1 2 3) :start 0 :end 0)
+  0)
+
+(deftest reduce-list.15
+  (reduce #'+ '(1 2 3) :key '1+)
+  9)
+
+(deftest reduce-list.16
+  (reduce #'cons '(1 2 3) :key '1+ :from-end t :initial-value nil)
+  (2 3 4))
+
+(deftest reduce-list.17
+  (reduce #'+ '(1 2 3 4 5 6 7) :key '1+ :start 2 :end 6)
+  22)
+
+;;;;;;;
+
+(deftest reduce-array.1
+  (reduce #'cons #(a b c d e f))
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-array.2
+  (reduce #'cons #(a b c d e f) :from-end t)
+  (a b c d e . f))
+
+(deftest reduce-array.3
+  (reduce #'cons #(a b c d e f) :initial-value 'z)
+  ((((((z . a) . b) . c) . d) . e) . f))
+  
+(deftest reduce-array.4
+  (reduce #'cons #(a b c d e f) :from-end t :initial-value 'g)
+  (a b c d e f . g))
+
+(deftest reduce-array.5
+  (reduce #'cons #(a b c d e f) :from-end nil)
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-array.6
+  (reduce #'cons #(a b c d e f) :from-end 17)
+  (a b c d e . f))
+
+(deftest reduce-array.7
+  (reduce #'cons #(a b c d e f) :end nil)
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-array.8
+  (reduce #'cons #(a b c d e f) :end 3)
+  ((a . b) . c))
+
+(deftest reduce-array.9
+  (reduce #'cons #(a b c d e f) :start 1 :end 4)
+  ((b . c) . d))
+
+(deftest reduce-array.10
+  (reduce #'cons #(a b c d e f) :start 1 :end 4 :from-end t)
+  (b c . d))
+
+(deftest reduce-array.11
+  (reduce #'cons #(a b c d e f) :start 1 :end 4 :from-end t
+	  :initial-value nil)
+  (b c d))
+
+(deftest reduce-array.12
+  (reduce 'cons #(a b c d e f))
+  (((((a . b) . c) . d) . e) . f))
+
+(deftest reduce-array.13
+  (reduce #'+ #(1 2 3) :start 0 :end 0)
+  0)
+
+;;;;;;;;
+
+(deftest reduce-error.1
+  (handler-case (reduce 'cons 'a)
+		(type-error (c) 'type-error)
+		(error (c) c))
+  type-error)
+
+;;;;;;;;
+
+(deftest reduce-string.1
+  (reduce #'cons "abcdef")
+  (((((#\a . #\b) . #\c) . #\d) . #\e) . #\f))
+
+(deftest reduce-string.2
+  (reduce #'cons "abcdef" :from-end t)
+  (#\a #\b #\c #\d #\e . #\f))
+
+(deftest reduce-string.3
+  (reduce #'cons "abcdef" :initial-value 'z)
+  ((((((z . #\a) . #\b) . #\c) . #\d) . #\e) . #\f))
+  
+(deftest reduce-string.4
+  (reduce #'cons "abcdef" :from-end t :initial-value 'g)
+  (#\a #\b #\c #\d #\e #\f . g))
+
+(deftest reduce-string.5
+  (reduce #'cons "abcdef" :from-end nil)
+   (((((#\a . #\b) . #\c) . #\d) . #\e) . #\f))
+
+(deftest reduce-string.6
+  (reduce #'cons "abcdef" :from-end 17)
+   (#\a #\b #\c #\d #\e . #\f))
+
+(deftest reduce-string.7
+  (reduce #'cons "abcdef" :end nil)
+  (((((#\a . #\b) . #\c) . #\d) . #\e) . #\f))
+
+(deftest reduce-string.8
+  (reduce #'cons "abcdef" :end 3)
+  ((#\a . #\b) . #\c))
+
+(deftest reduce-string.9
+  (reduce #'cons "abcdef" :start 1 :end 4)
+  ((#\b . #\c) . #\d))
+
+(deftest reduce-string.10
+  (reduce #'cons "abcdef" :start 1 :end 4 :from-end t)
+  (#\b #\c . #\d))
+
+(deftest reduce-string.11
+  (reduce #'cons "abcdef" :start 1 :end 4 :from-end t
+	  :initial-value nil)
+  (#\b #\c #\d))
+
+(deftest reduce-string.12
+  (reduce 'cons "abcdef")
+  (((((#\a . #\b) . #\c) . #\d) . #\e) . #\f))
+
+(deftest reduce-string.13
+  (reduce #'+ "abc" :start 0 :end 0)
+  0)
+
+;;;;;;;;
+
+(deftest reduce-bitstring.1
+  (reduce #'cons #*001101)
+  (((((0 . 0) . 1) . 1) . 0) . 1))
+
+(deftest reduce-bitstring.2
+  (reduce #'cons #*001101 :from-end t)
+  (0 0 1 1 0 . 1))
+
+(deftest reduce-bitstring.3
+  (reduce #'cons #*001101 :initial-value 'z)
+  ((((((z . 0) . 0) . 1) . 1) . 0) . 1))
+  
+(deftest reduce-bitstring.4
+  (reduce #'cons #*001101 :from-end t :initial-value 'g)
+  (0 0 1 1 0 1 . g))
+
+(deftest reduce-bitstring.5
+  (reduce #'cons #*001101 :from-end nil)
+  (((((0 . 0) . 1) . 1) . 0) . 1))
+
+(deftest reduce-bitstring.6
+  (reduce #'cons #*001101 :from-end 17)
+  (0 0 1 1 0 . 1))
+
+(deftest reduce-bitstring.7
+  (reduce #'cons #*001101 :end nil)
+  (((((0 . 0) . 1) . 1) . 0) . 1))
+
+(deftest reduce-bitstring.8
+  (reduce #'cons #*001101 :end 3)
+  ((0 . 0) . 1))
+
+(deftest reduce-bitstring.9
+  (reduce #'cons #*001101 :start 1 :end 4)
+  ((0 . 1) . 1))
+
+(deftest reduce-bitstring.10
+  (reduce #'cons #*001101 :start 1 :end 4 :from-end t)
+  (0 1 . 1))
+
+(deftest reduce-bitstring.11
+  (reduce #'cons #*001101 :start 1 :end 4 :from-end t
+	  :initial-value nil)
+  (0 1 1))
+
+(deftest reduce-bitstring.12
+  (reduce 'cons #*001101)
+  (((((0 . 0) . 1) . 1) . 0) . 1))
+
+(deftest reduce-bitstring.13
+  (reduce #'+ #(1 1 1) :start 0 :end 0)
+  0)
