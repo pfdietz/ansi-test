@@ -5,6 +5,17 @@
 
 (in-package :cl-test)
 
+(defun eqlzt (x y)
+  "Return T if (eql x y) or if both are zero of the same type."
+  (cond
+   ((complexp x)
+    (and (complexp y)
+	 (eqlzt (realpart x) (realpart y))
+	 (eqlzt (imagpart x) (imagpart y))))
+   ((zerop x)
+    (eqlt (abs x) (abs y)))
+   (t (eqlt x y))))
+
 (defun numbers-are-compatible (x y)
   (cond
    ((complexp x)

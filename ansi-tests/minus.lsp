@@ -61,7 +61,7 @@
 		       (float 1.0s0 (realpart neg)))
 		  (or (/= neg (- 0 x))
 		      (and (not (zerop (realpart x)))
-			   (not (eql neg (- 0 x))))))
+			   (not (eqlzt neg (- 0 x))))))
 	collect x)
   nil)
 
