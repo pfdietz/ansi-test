@@ -161,3 +161,16 @@
      (search pat a :from-end t)))
   0 4 0 0 nil nil)
 
+;; Order of test, test-not
+
+(deftest search-string.17
+  (let ((pat "m")
+	(target '"adgmnpq"))
+    (search pat target :test #'char<))
+  4)
+
+(deftest search-string.18
+  (let ((pat "m")
+	(target '"adgmnpq"))
+    (search pat target :test-not #'char>=))
+  4)

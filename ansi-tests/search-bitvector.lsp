@@ -174,3 +174,17 @@
      (search pat a :from-end t)))
   0 4 0 0 nil nil)
 
+;; Order of test, test-not
+
+(deftest search-bitvector.17
+  (let ((pat #*10)
+	(target #*000011))
+    (search pat target :test #'<=))
+  4)
+
+(deftest search-bitvector.18
+  (let ((pat #*10)
+	(target #*000011))
+    (search pat target :test-not #'>))
+  4)
+

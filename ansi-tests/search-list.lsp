@@ -134,6 +134,21 @@
 	  collect pat))
   nil)
 
+;; Order of test, test-not
+
+(deftest search-list.15
+  (let ((pat '(10))
+	(target '(1 4 6 10 15 20)))
+    (search pat target :test #'<))
+  4)
+
+(deftest search-list.16
+  (let ((pat '(10))
+	(target '(1 4 6 10 15 20)))
+    (search pat target :test-not #'>=))
+  4)
+
+
 ;;; Keyword tests
 
 (deftest search.allow-other-keys.1
