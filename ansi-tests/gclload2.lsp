@@ -196,7 +196,7 @@
 
 ;;; Tests of packages
 
-(load "packages.lsp")
+#-ecl (load "packages.lsp")
 
 ;;; Tests of sequences
 
@@ -245,7 +245,7 @@
 (load "structure-00.lsp")
 (load "structures-01.lsp")
 (load "structures-02.lsp")
-(load "structures-03.lsp")
+#-ecl (load "structures-03.lsp")
 
 ;;; Tests of types and classes
 

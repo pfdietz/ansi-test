@@ -36,4 +36,4 @@
   (:shadowing-import-from "DS1" "B")
   (:use "DS1" "DS3")
   (:intern "X" "Y" "Z")
-  (:import-from "DS2" "F"))9
+  (:import-from "DS2" "F"))

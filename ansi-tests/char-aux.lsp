@@ -272,6 +272,7 @@
      t)))
 
 (defun name-char.1.body ()
+  (declare (optimize (safety 3)))
   (loop for x in *universe*
 	for s = (catch-type-error (string x))
 	always
@@ -279,4 +280,7 @@
 	    (let ((c (name-char x)))
 	      (or (not c)
 		  (characterp c)
-		  (string-equal (char-name c) s))))))
+		  (let ((name (char-name c)))
+		    (declare (type (or null string) name))
+		    (and name
+			 (string-equal name s))))))))

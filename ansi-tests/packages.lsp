@@ -4,7 +4,7 @@
 ;;;; Contains: Loader for files containing package tests
 
 
-(compile-and-load "packages-00.lsp")
+(load "packages-00.lsp")
 (load "packages-01.lsp")
 (load "packages-02.lsp")
 (load "packages-03.lsp")
