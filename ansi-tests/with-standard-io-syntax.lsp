@@ -95,6 +95,28 @@
   (with-standard-io-syntax (notnot-mv (readtablep *readtable*)))
   t)
 
+(deftest with-standard-io-syntax.19
+  (with-standard-io-syntax)
+  nil)
+
+(deftest with-standard-io-syntax.20
+  (with-standard-io-syntax (values 'a 'b 'c))
+  a b c)
+
+(deftest with-standard-io-syntax.21
+  (block done
+    (tagbody
+     (with-standard-io-syntax (go 10) 10 (return-from done :bad))
+     10
+     (return-from done :good)))
+  :good)
+
+(deftest with-standard-io-syntax.22
+  (let ((i 3))
+    (with-standard-io-syntax
+     (incf i 10)
+     (+ i 2)))
+  15)
 
 
 

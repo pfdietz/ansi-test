@@ -5,5 +5,7 @@
 
 (in-package :cl-test)
 
+(compile-and-load "printer-aux.lsp")
+
 (load "copy-pprint-dispatch.lsp")
 

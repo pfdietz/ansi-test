@@ -24,6 +24,8 @@
 	       (push sym failures))))))))
   nil)
 
+;;; FIXME -- test that each symbol found is accessible in some package
+
 (deftest find-all-symbols.2
   (loop for i from 0 to 255
 	for c = (code-char i)
