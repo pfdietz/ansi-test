@@ -105,7 +105,7 @@
        (loop for name in names
 	     for c = (name-char name)
 	     for str = (with-output-to-string (s) (prin1 c s))
-	     unless (or (null str)
+	     unless (or (null c)
 			(and (>= (length str) 3)
 			     (equal (subseq str 0 2) "#\\")
 			     (member (subseq str 2) names
