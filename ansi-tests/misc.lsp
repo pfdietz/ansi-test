@@ -660,13 +660,56 @@
   (funcall
    (compile
     nil
-    '(LAMBDA (B C)
-	     (DECLARE (TYPE (INTEGER 0 1) B) (OPTIMIZE (SPEED 3)))
-	     (FLET ((%F2 () (LOGNOR (BLOCK B5 138) C)))
-		   (IF (NOT (OR (= -67399 B) B))
-		       (DEPOSIT-FIELD (%F2) (BYTE 11 8) -3)
-		       C))))
+    '(lambda (b c)
+	     (declare (type (integer 0 1) b) (optimize (speed 3)))
+	     (flet ((%f2 () (lognor (block b5 138) c)))
+		   (if (not (or (= -67399 b) b))
+		       (deposit-field (%f2) (byte 11 8) -3)
+		       c))))
    0 0)
   0)
 
-    
+(deftest misc.47
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+	     (declare (type (integer -4005718822 -50081775) a)
+		      (optimize (speed 3) (safety 1) (debug 1)))
+	     (lognor (ash a (min 0 a)) a)))
+   -2878148992)
+  0)
+
+(deftest misc.48
+  (funcall
+   (compile
+    nil
+    '(lambda (a) (declare (notinline ash min)) (lognor (ash a (min 0 a)) a)))
+   -2878148992)
+  0)
+
+(deftest misc.49
+  (let ((body '(truncate (logorc1 -996082 C) -2))
+	(arg 25337234))
+    (values
+     (funcall (compile nil `(lambda (c) ,body)) arg)
+     (funcall (compile nil `(lambda (c) (declare (notinline truncate))
+			      ,body)) arg)))
+  -13099001
+  -13099001)
+
+(deftest misc.50
+  (funcall (compile nil `(lambda (c)
+			   (declare (optimize (speed 3))
+				    (type (integer 23062188 149459656) c))
+			   (mod c (min -2 0))))
+	   95019853)
+  -1)
+
+(deftest misc.51
+  (funcall (compile nil `(lambda (b)
+			   (declare (optimize (speed 3))
+				    (type (integer 2 152044363) b))
+			    (rem b (min -16 0))))
+	   108251912)
+  8)
