@@ -62,6 +62,16 @@
 	for upgraded-type = (upgraded-array-element-type type nil)
 	always (empirical-subtypep type upgraded-type))
   t)
+
+(deftest upgraded-array-element-type.6
+  (macrolet
+      ((%foo (&environment env)
+	     (empirical-subtypep
+	      'bit
+	      (upgraded-array-element-type 'bit env))))
+    (%foo))
+  t)
+		   
     
 ;;; Error tests
 

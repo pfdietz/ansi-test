@@ -430,3 +430,63 @@
      (type-error-expected-type c nil)))
   program-error)
 
+;;; Tests of env arguments to typep, subtypep
+
+(deftest typep.env.1
+  (notnot-mv (typep 0 'bit nil))
+  t)
+
+(deftest typep.env.2
+  (macrolet ((%foo (&environment env)
+		   (notnot (typep 0 'bit env))))
+    (%foo))
+  t)
+
+(deftest typep.env.3
+  (macrolet ((%foo (&environment env)
+		   (notnot (typep env (type-of env)))))
+    (%foo))
+  t)
+
+(deftest subtype.env.1
+  (mapcar #'notnot
+	  (multiple-value-list (subtypep 'bit 'integer nil)))
+  (t t))
+
+(deftest subtype.env.2
+  (macrolet
+      ((%foo (&environment env)
+	     (list 'quote
+		   (mapcar #'notnot
+			   (multiple-value-list
+			    (subtypep 'bit 'integer env))))))
+    (%foo))
+  (t t))
+
+(deftest subtype.env.3
+  (macrolet
+      ((%foo (&environment env)
+	     (multiple-value-bind (sub good)
+		 (subtypep nil (type-of env))
+	       (or (not good) (notnot sub)))))
+    (%foo))
+  t)
+
+(deftest subtype.env.4
+  (macrolet
+      ((%foo (&environment env)
+	     (multiple-value-bind (sub good)
+		 (subtypep (type-of env) (type-of env))
+	       (or (not good) (notnot sub)))))
+    (%foo))
+  t)
+
+(deftest subtype.env.5
+  (macrolet
+      ((%foo (&environment env)
+	     (multiple-value-bind (sub good)
+		 (subtypep (type-of env) t)
+	       (or (not good) (notnot sub)))))
+    (%foo))
+  t)
+
