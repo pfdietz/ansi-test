@@ -115,11 +115,17 @@
   "Generate a list (LO HI) of integers, LO <= HI.  This is used
    for generating integer types."
   (declare (ignore var))
-  (flet ((%r () (let ((r (ash 1 (1+ (random *maximum-random-int-bits*)))))
-		  (- (random r) (floor (/ r 2))))))
-    (let ((x (%r))
-	  (y (%r)))
-      (list (min x y) (max x y)))))
+  (rcase
+   (1 (flet ((%r () (let ((r (ash 1 (1+ (random *maximum-random-int-bits*)))))
+		      (- (random r) (floor (/ r 2))))))
+	(let ((x (%r))
+	      (y (%r)))
+	  (list (min x y) (max x y)))))
+   (1 (let* ((b (ash 1 (1+ (random *maximum-random-int-bits*))))
+	     (b2 (floor (/ b 2))))
+	(let ((x (- (random b) b2))
+	      (y (- (random b) b2)))
+	  (list (min x y) (max x y)))))))
 
 (defparameter *flet-names* nil)
 
