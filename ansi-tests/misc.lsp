@@ -7362,3 +7362,41 @@ Broken at C::WT-C-INLINE-LOC.
       (funcall
        (compile nil '(lambda () (block b1 (catch 'ct1 (throw 'ct1 (return-from b1 0))))))))
   0)
+
+;;; ecl (cvs head, 13 June 2004)
+;;; Problems with multiple-value-setq
+
+; NIL cannot be coerced to a C int.
+
+(deftest misc.388
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 200077 60836768) a))
+       (declare (type (integer 339831915 371006999) b))
+       (declare (type (integer -13 5553) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 2) (space 1) (safety 0) (debug 0)
+			  (compilation-speed 0)))
+       (dotimes (iv4 2 0) (multiple-value-setq (c) 4212))))
+   8959928 366395687 5048)
+  0)
+
+;;; wrong return value
+
+(deftest misc.389
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -49972981888 -48068810368) a))
+       (declare (type (integer -452283089 -27620701) b))
+       (declare (type (integer -24815 15089) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 2) (space 1) (safety 2) (debug 1)
+			  (compilation-speed 0)))
+       (multiple-value-setq (c) 8015)))
+   -49966124671 -68547159 12944)
+  8015)
+
