@@ -4420,6 +4420,16 @@
    1)
   0)
 
+;;; ecl (10 jan 2004)
+;;; A bug was found in the compiler.  Contact worm@arrakis.es.
 
-
+(deftest misc.266
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (tagbody
+	(flet ((%f (x) :bad)) (multiple-value-call #'%f (go done)))
+	done))))
+  nil)
 
