@@ -271,11 +271,139 @@
   (format nil "~1@{FOO~}")
   "")
 
+(deftest format.@{.8
+  (format nil "~v@{~A~}" nil 1 4 7)
+  "147")
+
+(deftest format.@{.9
+  (format nil "~#@{~A~}" 1 2 3)
+  "123")
+
+(deftest format.@{.10
+  (loop for i from 0 to 10
+	for x = nil then (cons i x)
+	collect (apply #'format nil "~v@{~A~}" i (reverse x)))
+  ("" "1" "12" "123" "1234" "12345"
+   "123456" "1234567" "12345678" "123456789" "12345678910"))
+
+(deftest format.@{.11
+  (format nil "~@{X~:}")
+  "X")
+
+(deftest format.@{.12
+  (format nil "~@{~}" (formatter "X~AY") 1)
+  "X1Y")
+
+(deftest format.@{.13
+  (format nil "~v@{~}" 1 (formatter "X") 'foo)
+  "X")
+
+;;; ~:@{
+
+(deftest format.\:@{.1
+  (format nil "~:@{~
+~}")
+  "")
+
+(deftest format.\:@{.2
+  (format nil "~:@{~A~}" '(1 2) '(3) '(4 5 6))
+  "134")
+
+(deftest format.\:@{.3
+  (format nil "~:@{(~A ~A)~}" '(1 2 4) '(3 7) '(4 5 6))
+  "(1 2)(3 7)(4 5)")
+
+(deftest format.\:@{.4
+  (format nil "~:@{~}" "(~A ~A)" '(1 2 4) '(3 7) '(4 5 6))
+  "(1 2)(3 7)(4 5)")
+
+(deftest format.\:@{.5
+  (format nil "~:@{~}" (formatter "(~A ~A)") '(1 2 4) '(3 7) '(4 5 6))
+  "(1 2)(3 7)(4 5)")
+
+(deftest format.\:@.6
+  (format nil "~:@{~A~:}" '(1 A) '(2 B) '(3) '(4 C D))
+  "1234")
+
+(deftest format.\:@.7
+  (format nil "~0:@{~A~:}" '(1 A) '(2 B) '(3) '(4 C D))
+  "")
+
+(deftest format.\:@.8
+  (format nil "~#:@{A~:}" nil nil nil)
+  "AAA")
+
+(deftest format.\:@.9
+  (format nil "~v:@{~A~}" nil '(1) '(2) '(3))
+  "123")
+
+(deftest format.\:@.10
+  (loop for i from 0 to 10
+	for x = nil then (cons (list i) x)
+	collect
+	(apply #'format nil "~V:@{~A~}" i (reverse x)))
+  ("" "1" "12" "123" "1234" "12345" "123456" "1234567" "12345678"
+   "123456789" "12345678910"))
 
 
+;;; Error tests
 
+(deftest format.{.error.1
+  (signals-error (format nil "~{~A~}" 'A) type-error)
+  t)
 
+(deftest format.{.error.2
+  (signals-error (format nil "~{~A~}" 1) type-error)
+  t)
 
+(deftest format.{.error.3
+  (signals-error (format nil "~{~A~}" "foo") type-error)
+  t)
 
+(deftest format.{.error.4
+  (signals-error (format nil "~{~A~}" #*01101) type-error)
+  t)
+
+(deftest format.{.error.5
+  (signals-error (format nil "~{~A~}" '(x y . z)) type-error)
+  t)
+
+(deftest format.\:{.error.1
+  (signals-error (format nil "~:{~A~}" '(x)) type-error)
+  t)
+
+(deftest format.\:{.error.2
+  (signals-error (format nil "~:{~A~}" 'x) type-error)
+  t)
   
+(deftest format.\:{.error.3
+  (signals-error (format nil "~:{~A~}" '((x) . y)) type-error)
+  t)
 
+(deftest format.\:{.error.4
+  (signals-error (format nil "~:{~A~}" '("X")) type-error)
+  t)
+
+(deftest format.\:{.error.5
+  (signals-error (format nil "~:{~A~}" '(#(X Y Z))) type-error)
+  t)
+
+(deftest format.\:@.error.1
+  (signals-error (format nil "~:@{~A~}" 'x) type-error)
+  t)
+
+(deftest format.\:@.error.2
+  (signals-error (format nil "~:@{~A~}" 0) type-error)
+  t)
+
+(deftest format.\:@.error.3
+  (signals-error (format nil "~:@{~A~}" #*01101) type-error)
+  t)
+
+(deftest format.\:@.error.4
+  (signals-error (format nil "~:@{~A~}" "abc") type-error)
+  t)
+
+(deftest format.\:@.error.5
+  (signals-error (format nil "~:@{~A ~A~}" '(x . y)) type-error)
+  t)
