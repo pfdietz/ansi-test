@@ -3879,6 +3879,25 @@
    0 200 -1)
   0)
 
+(deftest misc.228b
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 2198744686266 4396067580775) a))
+       (declare (type (integer 1709 2198581933954) b))
+       (declare (type (integer -1 412413109) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 1) (space 2) (safety 2) (debug 1)
+			  (compilation-speed 3)))
+       (catch 'ct2
+	 (logior (* (progn (if c 0 (throw 'ct2 0)) 0)
+		    (catch 'ct2 (throw 'ct2 0)))
+		 (complex c 0)
+		 ))))
+   216169575299 1618390099 62151)
+  62151)
+
 ;;; Error: `T' is not of the expected type `INTEGER'
 (deftest misc.229
   (funcall
@@ -5940,6 +5959,23 @@ Broken at C::WT-C-INLINE-LOC.
 		(multiple-value-call #'%f12 (values))))))))
   102)
 
+(deftest misc.320a
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (speed 3) (space 0) (safety 2)
+			    (debug 2) (compilation-speed 0)))
+         (reduce '*
+                 (list (elt '(10 20 30 40 50) b)
+                       (expt (reduce #'(lambda (lmv1 lmv3) (mod lmv3 15))
+				     (vector 0 0))
+			     0)
+                       (rem 0 -71))
+		 )))
+   2)
+  0)
+
 ;;; ecl
 ;;; Wrong value
 
@@ -6029,3 +6065,33 @@ Broken at C::WT-C-INLINE-LOC.
        (flet ((%f13 (f13-1) (shiftf b 3019))) (+ b (%f13 0)))))
    200)
   400)
+
+;;; acl 6.2 (x86 linux trial edition, patched, 4/15/04)
+;;; Error: `NIL' is not of the expected type `REAL'
+
+(deftest misc.327
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -67668056 -55) a))
+       (declare (type (integer -586950907 -10945000) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 2) (space 0) (safety 2) (debug 2)
+			  (compilation-speed 1)))
+       (labels ((%f15 (f15-1)
+		      (elt #(1073730663 1073689230 596123606 1073713997
+					311527378 186184643 1073713230 1316881)
+			   (min 7
+				(max 0
+				     (catch 'ct7
+				       (reduce
+					#'min
+					(list 0 b (catch 'ct7
+						    (throw 'ct7 f15-1))
+					      0)
+					:start 1
+					:from-end t)))))))
+     (%f15 0))))
+   -38276611 -11001852)
+  1073730663)
