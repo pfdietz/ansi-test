@@ -9552,3 +9552,24 @@ Broken at C::WT-MAKE-CLOSURE.
 		     (declare (special *s8*))
 		     0))))
   0)
+
+;;; Incorrect return value
+;;; (This also causes an error in CLISP)
+
+(deftest misc.518
+  (funcall
+   (compile nil '(lambda ()
+		   (declare (optimize (compilation-speed 0) (safety 1)
+				      (debug 1) (space 0) (speed 3)))
+		   (flet ((%f10 (&optional (f10-1 0) (f10-2 0) &key)
+				(progn
+				  (tagbody
+				   (decf f10-2)
+				   (return-from %f10
+				     (complex (unwind-protect (go tag7))
+					      0))
+				   tag7)
+				  f10-2)))
+		     (if (evenp (%f10 0 0)) 0 2140390)))))
+  2140390)
+
