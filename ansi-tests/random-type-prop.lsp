@@ -28,10 +28,15 @@
 	    (reps *default-reps*)
 	    (enclosing-the nil)
 	    (cell *default-cell*)
+	    (ignore nil)
 	    (test #'regression-test::equalp-with-case))
   (assert (<= 1 minargs maxargs 20))
+(prog1
   (dotimes (i reps)
     again
+    (handler-bind
+     #-lispworks ((error #'(lambda (c) (when (typep c ignore) (go again)))))
+     #+lispworks ()
     (let* ((param-names
 	   '(p1 p2 p3 p4 p5 p6 p7 p8 p9 p10
 	     p11 p12 p13 p14 p15 p16 p17 p18 p19 p20))
@@ -110,11 +115,12 @@
 		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			 (warning #'muffle-warning))
 		 (compile nil form)))
-	    (result (if store-into-cell?
-			(let ((r (make-array nil :element-type upgraded-result-type)))
-			  (apply fn r param-vals)
-			  (aref r))
-		      (apply fn param-vals))))
+	    (result
+	     (if store-into-cell?
+		 (let ((r (make-array nil :element-type upgraded-result-type)))
+		   (apply fn r param-vals)
+		   (aref r))
+	       (apply fn param-vals))))
        (setq *random-type-prop-result*
 	     (list :upgraded-result-type upgraded-result-type
 		   :form form
@@ -122,7 +128,9 @@
 		   :result result
 		   :rval rval))
        (unless (funcall test result rval)
-	 (return *random-type-prop-result*))))))
+	 (return *random-type-prop-result*))))
+  #+allegro (excl::gc t)
+  ))))
 
 (defun make-random-arguments (types-or-funs)
   (let ((vals nil))
@@ -316,3 +324,12 @@
 	  'compiled-function
 	'function))
    (1 t)))
+
+;;; Macro for defining random type prop tests
+
+(defmacro def-type-prop-test (name &body args)
+  `(deftest ,(intern (concatenate 'string "RANDOM-TYPE-PROP."
+				  (string name))
+		     (find-package :cl-test))
+     (do-random-type-prop-tests ,@args)
+     nil))
