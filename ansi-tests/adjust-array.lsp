@@ -376,7 +376,131 @@
 		 '(#\x #\x #\x)))
   5 "abcde")
 
+(deftest adjust-array.string.10
+  (let* ((a1 (make-array 5 :element-type 'character :initial-contents "abcde"))
+	 (a2 (adjust-array a1 4 :displaced-to nil :element-type 'character)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (not (array-displacement a2)))
+    a2)
+  "abcd")
+
+(deftest adjust-array.string.11
+  (let* ((a0 (make-array 7 :initial-contents "xabcdey" :element-type 'character))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'character))
+	 (a2 (adjust-array a1 4 :element-type 'character)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (not (array-displacement a2)))
+    a2)
+  "abcd")
+
+(deftest adjust-array.string.12
+  (let* ((a0 (make-array 7 :initial-contents "1234567" :element-type 'character))
+	 (a1 (make-array 5 :initial-contents "abcde" :element-type 'character))
+	 (a2 (adjust-array a1 4 :displaced-to a0 :element-type 'character)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (equal (multiple-value-list (array-displacement a2))
+		   (list a0 0)))
+    a2)
+  "1234")
+
+(deftest adjust-array.string.13
+  (let* ((a0 (make-array 7 :initial-contents "1234567" :element-type 'character))
+	 (a1 (make-array 5 :initial-contents "abcde" :element-type 'character))
+	 (a2 (adjust-array a1 4 :displaced-to a0
+			   :displaced-index-offset 2
+			   :element-type 'character)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (equal (multiple-value-list (array-displacement a2))
+		   (list a0 2)))
+    a2)
+  "3456")
+
+(deftest adjust-array.string.14
+  (let* ((a0 (make-array 7 :initial-contents "1234567" :element-type 'character))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'character))
+	 (a2 (adjust-array a1 4 :displaced-to a0 :element-type 'character)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (equal (multiple-value-list (array-displacement a2))
+		   (list a0 0)))
+    a2)
+  "1234")
+
+(deftest adjust-array.string.15
+  (let* ((a0 (make-array 7 :initial-contents "1234567" :element-type 'character))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'character))
+	 (a2 (make-array 4 :displaced-to a1 :displaced-index-offset 1
+			 :element-type 'character))
+	 (a3 (adjust-array a2 4 :displaced-to a1 :element-type 'character)))
+    a3)
+  "2345")
+
+(deftest adjust-array.string.16
+  (let* ((a0 (make-array 7 :initial-contents "1234567" :element-type 'character))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :element-type 'character))
+	 (a2 (adjust-array a1 5 :displaced-to a0 :element-type 'character)))
+    a2)
+  "12345")
+
+(def-adjust-array-test adjust-array.string.17
+  (nil :initial-element #\x :element-type 'character)
+  (nil)
+  #.(make-array nil :initial-element #\x :element-type 'character))
+
+(def-adjust-array-test adjust-array.string.18
+  (nil :initial-element #\x :element-type 'character)
+  (nil :initial-contents #\y :element-type 'character)
+  #.(make-array nil :initial-element #\y :element-type 'character))
+
+(def-adjust-array-test adjust-array.string.19
+  (nil :initial-element #\x :element-type 'character)
+  (nil :initial-element #\y :element-type 'character)
+  #.(make-array nil :initial-element #\x :element-type 'character))
+
+
+(deftest adjust-array.string.20
+  (let* ((a0 (make-array nil :initial-element #\x :element-type 'character))
+	 (a1 (make-array nil :displaced-to a0 :element-type 'character))
+	 (a2 (adjust-array a1 nil :element-type 'character)))
+    a2)
+   #.(make-array nil :initial-element #\x :element-type 'character))
+
+;; 2-d arrays
+
+(def-adjust-array-test adjust-array.string.21
+  ('(4 5) :initial-contents '("12345" "34567" "56789" "78912")
+   :element-type 'character)
+  ('(2 3))
+  #.(make-array '(2 3) :initial-contents '("123" "345")
+		:element-type 'character))
+
+(def-adjust-array-test adjust-array.string.22
+  ('(4 5) :initial-contents  '("12345" "34567" "56789" "78912")
+   :element-type 'character)
+  ('(6 8) :initial-element #\0 :element-type 'character)
+  #.(make-array '(6 8)
+		:initial-contents '("12345000" "34567000" "56789000"
+                                    "78912000" "00000000" "00000000")
+		:element-type 'character))
+
 ;;; Add displaced string tests, adjustable string tests
+
+;;; Bit vector tests
+
+
 
 ;;; FIXME.  Tests for:
 ;;;  strings/character arrays
