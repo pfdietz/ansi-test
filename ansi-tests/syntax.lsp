@@ -674,3 +674,33 @@
 (def-syntax-test syntax.sharp-c.5
   (read-from-string "#c (1 1)")
   #.(complex 1 1) 8)
+
+
+;;;; Various error cases
+
+(def-syntax-test syntax.sharp-whitespace.1
+  (let ((names '("Tab" "Newline" "Linefeed" "Space" "Return" "Page")))
+    (loop for name in names
+	  for c = (name-char name)
+	  when c
+	  nconc
+	  (let* ((form `(signals-error
+			 (read-from-string ,(concatenate 'string "#" (string c)))
+			 reader-error))
+		 (vals (multiple-value-list (eval form))))
+	    (unless (equal vals '(t))
+	      (list (list name c form vals))))))
+  nil)
+
+(def-syntax-test syntax.sharp-greater-than.1
+  (signals-error (read-from-string "#<" nil nil) reader-error)
+  t)
+
+
+(def-syntax-test syntax.sharp-close-paren.1
+  (signals-error (read-from-string "#)" nil nil) reader-error)
+  t)
+
+
+
+	  
