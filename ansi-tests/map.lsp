@@ -254,6 +254,7 @@
   t)
 
 (deftest map.error.10
+  :notes (:result-type-element-type-by-subtype)
   (let ((type '(or (vector bit) (vector t))))
     (if (subtypep type 'vector)
 	(eval `(signals-error-always (map ',type #'identity '(1 0 1)) error))
@@ -384,7 +385,7 @@
 	for result = (map `(vector ,type) #'identity vals)
 	unless (and (= (length result) len)
 		    (every #'eql vals result))
-	collect (list i vals result))
+	collect (list type vals result))
   nil)
 
 (deftest map.specialized-vector.7
@@ -397,7 +398,7 @@
 	for result = (map `(vector ,type) #'identity vals)
 	unless (and (= (length result) len)
 		    (every #'eql vals result))
-	collect (list i vals result))
+	collect (list type vals result))
   nil)
 
 ;;; Order of evaluation tests

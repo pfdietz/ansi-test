@@ -312,6 +312,7 @@
   t)
 
 (deftest concatenate.error.6
+  :notes (:result-type-element-type-by-subtype)
   (let ((type '(or (vector bit) (vector t))))
     (if (subtypep type 'vector)
 	(eval `(signals-error-always (concatenate ',type '(0 1 0) '(1 1 0)) error))

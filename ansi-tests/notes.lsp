@@ -18,7 +18,8 @@
   "The standardized package nicknames specified in section 11 of ANSI CL are exclusive (disputed).")
 
 (defnote :type-of/strict-builtins
-  "Interpret requirement 1.a on the TYPE-OF page to apply to all built-in types that contain the object, not just to some builtin type that contains the object.")
+  "Interpret requirement 1.a on the TYPE-OF page to apply to all built-in types that
+contain the object, not just to some builtin type that contains the object.")
 
 (defnote :assume-no-gray-streams
   "Disable the test if gray streams are present.")
@@ -32,4 +33,12 @@
 #+sbcl (rt::disable-note :open-if-exists-new-version-no-error)
 
 (defnote :negative-zero-is-similar-to-positive-zero
-  "The definition of similarity implies that -0.0 and 0.0 are similar (for each float type.)  If negative zeros are distinct this is probably not good, since it makes (defconstant x 0.0) be nonportable.")
+  "The definition of similarity implies that -0.0 and 0.0 are similar (for each float type.)
+If negative zeros are distinct this is probably not good, since it makes (defconstant x 0.0) be nonportable.")
+
+(defnote :result-type-element-type-by-subtype
+  "Assume that (for sequence functions MAP, etc.) the element type of a vector result type
+   is defined to be the type X such that result-type is a subtype of (vector X).")
+
+;;; Haible disagrees with :result-type-element-type-by-subtype
+#+clisp (rt::disable-note :result-type-element-type-by-subtype)
