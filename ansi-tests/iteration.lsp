@@ -376,7 +376,7 @@
 (deftest dotimes.3
   (dotimes (i 10 (values))))
 
-(deftest dotimes.3
+(deftest dotimes.3a
   (dotimes (i 10 (values 'a 'b 'c)))
   a b c)
 

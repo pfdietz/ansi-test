@@ -56,34 +56,34 @@
 	collect (+ x y))
   (3 7 11))
 
-(deftest loop.2.10
+(deftest loop.2.11
   (loop for (x y) of-type fixnum in '((1 2) (3 4) (5 6))
 	collect (+ x y))
   (3 7 11))
 
-(deftest loop.2.11
+(deftest loop.2.12
   (loop for (x y) of-type (fixnum fixnum) in '((1 2) (3 4) (5 6))
 	collect (+ x y))
   (3 7 11))
 
 
-(deftest loop.2.11
+(deftest loop.2.13
   (loop for (x . y) of-type (fixnum . fixnum) in '((1 . 2) (3 . 4) (5 . 6))
 	collect (+ x y))
   (3 7 11))
 
-(deftest loop.2.12
+(deftest loop.2.14
   (classify-error
    (loop for x in '(a b c)
 	 for x in '(d e f) collect x))
   programm-error)
 
-(deftest loop.2.13
+(deftest loop.2.15
   (classify-error
    (loop for (x . x) in '((a b) (c d)) collect x))
   programm-error)
 
-(deftest loop.2.14
+(deftest loop.2.16
   (loop for nil in nil do (return t))
   nil)
 

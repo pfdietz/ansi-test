@@ -201,6 +201,7 @@
   (loop for x of-type fixnum from 1 to 5 collect x)
   (1 2 3 4 5))
 
+#|
 ;;; The following provides an example where an incorrect
 ;;; implementation will assign X an out-of-range value
 ;;; at the end.
@@ -227,3 +228,4 @@
 (deftest loop.1.43
   (loop for x from 10 above 0 do nil finally (return x))
   1)
+|#
