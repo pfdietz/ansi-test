@@ -31,6 +31,35 @@
 		   (return hi)
 		 (setq lo mid))))))
 
+(defun integer-binary-search (fn lo hi)
+
+  "FN is a function that, if true for X, is true for all Y < X.
+   Find the largest integer in [lo,hi) for which the function
+   return true."
+  
+  (assert (functionp fn))
+  (assert (integerp lo))
+  (assert (integerp hi))
+  (assert (<= lo hi))
+  (assert (funcall fn lo))
+
+  (loop while (< lo hi)
+	do (let ((mid (ceiling (+ lo hi) 2)))
+	     (if (funcall fn mid)
+		 (setq lo mid)
+	       (if (= mid hi)
+		   (return lo)
+		 (setq hi mid))))))
+
+(defun find-largest-exactly-floatable-integer (upper-bound)
+  (integer-binary-search
+   #'(lambda (i)
+       (let* ((f  (float i))
+	      (i- (1- i))
+	      (f- (float i-)))
+	 (and (= f i) (= f- i-))))
+   0 upper-bound))
+
 (defun eqlzt (x y)
   "Return T if (eql x y) or if both are zero of the same type."
   (cond

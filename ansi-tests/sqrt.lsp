@@ -184,10 +184,11 @@
   nil)
 
 (deftest sqrt.17
-  (loop for i = (random-from-interval most-positive-fixnum 0)
-	repeat 1000
-	unless (>= (sqrt i) (isqrt i))
-	collect i)
+  (let ((b1 (find-largest-exactly-floatable-integer (* most-positive-fixnum most-positive-fixnum))))
+    (loop for i = (random-from-interval (* b1 b1) 0)
+	  repeat 1000
+	  unless (>= (sqrt i) (isqrt i))
+	  collect i))
   nil)
 
 (deftest sqrt.18
