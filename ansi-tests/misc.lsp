@@ -2291,4 +2291,69 @@
    1 2 3)
   3)
 
+(deftest misc.169
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (if t -21705
+	 (flet ((%f15 (f15-1 f15-2)
+                      b))
+	   (block b4
+	     (%f15 -11112264
+		   (labels ((%f2
+			     (f2-1
+			      &optional (f2-2 (if b -5485340 -1534))
+			      (f2-3 -6))
+			     (return-from b4 f2-1)))
+		     (return-from b4
+		       (if b (%f2 c -320813) (%f2 b a a))))))))))
+   1 2 3)
+  -21705)
 
+;;; sbcl (0.8.5.26)
+;;; failed AVER: "(FUNCTIONAL-LETLIKE-P CLAMBDA)"
+
+(deftest misc.170
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (flet ((%f14 (f14-1 f14-2)
+                    (if (if (eql b -7) nil nil)
+                        (labels ((%f10 (f10-1 f10-2 f10-3)
+                                       7466))
+                          (return-from %f14
+                            (min
+                             (multiple-value-call #'%f10 (values 0 492 f14-1))
+                             (max 11 f14-1)
+                             (multiple-value-call #'%f10
+                                                  (values 439171 f14-2 0)))))
+                      1)))
+         (let ((v6 (%f14 (logcount b) -386283)))
+           56211))))
+   17)
+  56211)
+
+;;; The value NIL is not of type SB-C::NODE.
+
+(deftest misc.171
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (block b6
+	 (flet ((%f11 (f11-1 f11-2 &optional (f11-3 -2369157) (f11-4 409468))
+		      (return-from b6 1)))
+	   (block b2
+	     (flet ((%f10 (f10-1 f10-2
+                            &optional (f10-3 (return-from b6 (return-from b6 -3))))
+		     -8))
+	       (%f10
+		(multiple-value-call #'%f11 (values -5945959 1654846427 -22))
+		(return-from b2 b)
+		(return-from b2 31258361))))))))
+   10)
+  1)
+
+  
