@@ -105,9 +105,35 @@
     (get-output-stream-string s))
   "")
 
-(deftest make0string-output-stream.12
+(deftest make-string-output-stream.12
+  :notes (:nil-vectors-are-strings)
+  (let ((s (make-string-output-stream :element-type nil)))
+    (typep #\a (array-element-type (get-output-stream-string s))))
+  nil)
+
+(deftest make-string-output-stream.13
   (let ((s (make-string-output-stream)))
     (values
      (close s)
      (open-stream-p s)))
   t nil)
+
+;;; Error tests
+
+(deftest make-string-output-stream.error.1
+  (signals-error (make-string-output-stream nil) program-error)
+  t)
+
+(deftest make-string-output-stream.error.2
+  (signals-error (make-string-output-stream :foo nil) program-error)
+  t)
+
+(deftest make-string-output-stream.error.3
+  (signals-error (make-string-output-stream :allow-other-keys nil
+					    :foo 'bar)
+		 program-error)
+  t)
+
+
+
+
