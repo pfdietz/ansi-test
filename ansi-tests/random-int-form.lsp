@@ -2151,7 +2151,7 @@
    #'(lambda (form)
        (and (consp form)
 	    (or
-	     (and (member (car form) '(setq setf shiftf) :test #'eq)
+	     (and (member (car form) '(setq setf shiftf incf decf) :test #'eq)
 		  (eq (cadr form) var))
 	     (and (eql (car form) 'multiple-value-setq)
 		  (member var (cadr form))))))
