@@ -416,7 +416,9 @@
 
 (deftest print.array.multi-dim.1
   (with-standard-io-syntax
-   (loop for d in '(4 5 6 7 8 9 10 12 16 20 30 40 100 200 400 600 800 1023)
+   (loop for d in (remove array-rank-limit
+			  '(4 5 6 7 8 9 10 12 16 20 30 40 100 200 400 600 800 1023)
+			  :test #'<=)
 	 for dims = (make-list d :initial-element 1)
 	 for a = (make-array dims :initial-element 0)
 	 for result = (with-standard-io-syntax
@@ -433,7 +435,7 @@
 
 (deftest print.array.multi-dim.2
   (with-standard-io-syntax
-   (loop for d = (+ 4 (random 1020))
+   (loop for d = (+ 4 (random (min (- array-rank-limit 4) 1000)))
 	 for p = (random d)
 	 for dims = (let ((list (make-list d :initial-element 1)))
 		      (setf (elt list p) 0)
