@@ -122,3 +122,114 @@
   nil
   :margin 1000)
 
+(def-pprint-test pprint-tab.section.1
+  (loop
+   for prefix-length = (random 50)
+   for offset = (random 50)
+   for colnum = (random 50)
+   for colinc = (min (random 50) (random 50))
+   for s = (with-output-to-string
+	     (*standard-output*)
+	     (pprint-logical-block
+	      (*standard-output* nil :prefix (make-string prefix-length
+							  :initial-element #\Space))
+	      (dotimes (i offset) (write #\Space))
+	      (pprint-tab :section colnum colinc)
+	      (write #\A)))
+   for expected-col = (+ prefix-length
+			 (cond ((< offset colnum) colnum)
+			       ((= colinc 0) offset)
+			       ((= offset colnum) (+ offset colinc))
+			       (t (let ((k (mod (- colnum offset) colinc)))
+				    (if (= k 0)
+					(+ offset colinc)
+				      (+ offset k))))))
+   repeat 200
+   nconc
+   (unless (string= s (concatenate
+			 'string
+			 (make-string expected-col :initial-element #\Space)
+			 "A"))
+       (list (list offset colnum colinc expected-col (count #\Space s) s))))
+  nil
+  :margin 1000)
+
+(def-pprint-test pprint-tab.line-relative.1
+  (loop
+   for offset = (random 100)
+   for colrel = (random 100)
+   for colinc = (1+ (min (random 50) (random 50)))
+   for extra = (mod (- (+ offset colrel)) colinc)
+   for s = (with-output-to-string
+	     (*standard-output*)
+	     (pprint-logical-block
+	      (*standard-output* nil)
+	      (dotimes (i offset) (write #\Space))
+	      (pprint-tab :line-relative colrel colinc)
+	      (write #\A)))
+   for expected-col = (+ offset colrel extra)
+   repeat 200
+   nconc
+   (unless (string= s (concatenate
+			 'string
+			 (make-string expected-col :initial-element #\Space)
+			 "A"))
+       (list (list offset colrel colinc expected-col (count #\Space s) s))))
+  nil
+  :margin 1000)
+
+(def-pprint-test pprint-tab.section-relative.1
+  (loop
+   for prefix-length = (random 50)
+   for offset = (random 50)
+   for colrel = (random 50)
+   for colinc = (1+ (min (random 50) (random 50)))
+   for extra = (mod (- (+ offset colrel)) colinc)
+   for s = (with-output-to-string
+	     (*standard-output*)
+	     (pprint-logical-block
+	      (*standard-output* nil :prefix (make-string prefix-length
+							  :initial-element #\Space))
+	      (dotimes (i offset) (write #\Space))
+	      (pprint-tab :section-relative colrel colinc)
+	      (write #\A)))
+   for expected-col = (+ prefix-length offset colrel extra)
+
+   repeat 200
+   nconc
+   (unless (string= s (concatenate
+			 'string
+			 (make-string expected-col :initial-element #\Space)
+			 "A"))
+       (list (list prefix-length offset colrel colinc extra expected-col (count #\Space s) s))))
+  nil
+  :margin 1000)
+
+;;; Error cases
+
+(deftest pprint-tab.error.1
+  (signals-error (pprint-tab) program-error)
+  t)
+
+(deftest pprint-tab.error.2
+  (signals-error (pprint-tab :line) program-error)
+  t)
+
+(deftest pprint-tab.error.3
+  (signals-error (pprint-tab :line 1) program-error)
+  t)
+
+(deftest pprint-tab.error.4
+  (signals-error (pprint-tab :line 1 1 nil nil) program-error)
+  t)
+
+(deftest pprint-tab.error.5
+  (loop for x in *mini-universe*
+	unless (or (member x '(:line :section :line-relative :section-relative))
+		   (eval `(signals-error (pprint-tab ',x 1 1) error)))
+	collect x)
+  nil)
+
+
+
+
