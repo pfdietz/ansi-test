@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "printer-aux.lsp")
+
 ;;; See CLtS section 22.1.3.2, "Printing Characters"
 
 (deftest print.char.1
