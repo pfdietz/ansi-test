@@ -8191,3 +8191,29 @@ Broken at C::WT-MAKE-CLOSURE.
 	  v5))))
    17)
   17)
+
+(deftest misc.428
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (notinline -))
+       (declare	(optimize (compilation-speed 0) (safety 1) (speed 0)
+			  (debug 2) (space 3)))
+       (let ((v10 (catch 'ct2 1)))
+	 (declare (dynamic-extent v10))
+	 (- v10)))))
+  -1)
+
+(deftest misc.429
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (safety 1) (debug 1) (space 2)
+			  (speed 2) (compilation-speed 1)))
+       (let ((v8 (let ((*s3* 0)) *s3*)))
+	 (declare (dynamic-extent v8))
+	 (logandc1 v8 28)))))
+  28)
+
