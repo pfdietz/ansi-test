@@ -206,3 +206,6 @@
 (compile-and-load "char-aux.lsp")
 (load "character.lsp")
 (load "char-compare.lsp")
+
+;;; Tests of system construction
+(load "features.lsp")
