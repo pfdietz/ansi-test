@@ -22,7 +22,11 @@
 ;;; the object and the printer variable bindings otherwise.  They key
 ;;; argument TEST is used to compared the reread object and obj.
 
-(defun randomly-check-readability (obj &key (test #'equal))
+(defun randomly-check-readability (obj &key
+				       (test #'equal)
+				       (readable t)
+				       (escape nil escape-p)
+				       (gensym nil gensym-p))
   (declare (type function test))
   ;; Generate random printer-control values
   (with-standard-io-syntax
@@ -31,15 +35,15 @@
 	 (*print-radix* (coin))
 	 (*print-case* (random-from-seq #(:upcase :downcase :capitalize)))
 	 (*print-circle* (coin))
-	 (*print-escape* (coin))
-	 (*print-gensym* (coin))
+	 (*print-escape* (if escape-p escape (coin)))
+	 (*print-gensym* (if gensym-p gensym (coin)))
 	 (*print-level* (random 50))
-	 (*print-length* (random 50))
-	 (*print-lines* (random 50))
+	 (*print-length* (if readable (random 50) nil))
+	 (*print-lines* (if readable (random 50) nil))
 	 (*print-miser-width* (and (coin) (random 100)))
 	 (*print-pretty* (coin))
 	 (*print-right-margin* (and (coin) (random 100)))
-	 (*print-readably* t)
+	 (*print-readably* readable)
 	 (*read-default-float-format* (rcase (1 'short-float) (1 'single-float)
 					     (1 'double-float) (1 'long-float)
 					     (1 *read-default-float-format*)))
@@ -50,13 +54,14 @@
      (let* ((str (with-output-to-string (s) (write obj :stream s)))
 	    (obj2 (let ((*read-base* *print-base*))
 		    (handler-case
-		     (let ((*readtable* (copy-readtable nil)))
+		     (let ((*readtable* (if *print-readably* (copy-readtable nil)
+					  *readtable*)))
 		       (read-from-string str))
 		     (reader-error () :error)))))
        (unless (funcall test obj obj2)
 	 (list
 	  (list obj str obj2
-		;; Note: (*print-readably* t) always holds
+		(list '*print-readably* *print-readably*)
 		(list '*print-array* *print-array*)
 		(list '*print-base* *print-base*)
 		(list '*print-radix* *print-radix*)
@@ -126,3 +131,11 @@
 	     always
 	     (and (if is-escaped1 is-escaped2 t)
 		  (char= c1 c2)))))
+
+(defun similar-uninterned-symbols (s1 s2)
+  (and (symbolp s1)
+       (symbolp s2)
+       (null (symbol-package s1))
+       (null (symbol-package s2))
+       (string= (symbol-name s1)
+		(symbol-name s2))))

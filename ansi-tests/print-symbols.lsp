@@ -408,3 +408,163 @@
 	(%p '|1| :invert :capitalize   '("1" "\\1" "|1|"))
 	))))
   t t t t t t t t t t t t)
+
+;;; Random symbol printing tests when *print-escape* is true
+;;; and *print-readably* is false.
+
+;;; I AM NOT SURE THESE ARE CORRECT, SO THEY ARE COMMENTED OUT FOR NOW -- PFD
+
+#|
+(deftest print.symbol.escaped-random.1
+  (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
+    (when (find-package pkg-name)
+      (delete-package pkg-name))
+    (prog1
+	(let ((*package* (make-package pkg-name))
+	      (result
+	       (loop for c across +standard-chars+
+		     for s = (intern (string c))
+		     append
+		     (loop repeat 50
+			   nconc (randomly-check-readability
+				  s
+				  :readable nil
+				  :escape t)))))
+	  (subseq result 0 (min (length result) 10)))
+      ;; (delete-package pkg-name)
+      ))
+  nil)
+
+(deftest print.symbol.escaped-random.2
+  (let ((result
+	 (loop for c across +standard-chars+
+	       for s = (make-symbol (string c))
+	       nconc
+	       (loop repeat 50
+		     nconc (randomly-check-readability
+			    s
+			    :readable nil
+			    :escape t
+			    :gensym t
+			    :test #'similar-uninterned-symbols)))))
+    (subseq result 0 (min (length result) 10)))
+  nil)
+
+(deftest print.symbol.escaped-random.3
+  (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
+    (when (find-package pkg-name)
+      (delete-package pkg-name))
+    (prog1
+	(let ((*package* (make-package pkg-name))
+	      (result
+	       (loop for i below 256
+		     for c = (code-char i)
+		     when c
+		     nconc
+		     (let ((s (intern (string c))))
+		       (loop repeat 50
+			     nconc (randomly-check-readability
+				    s
+				    :readable nil
+				    :escape t))))))
+	  (subseq result 0 (min (length result) 10)))
+      ;; (delete-package pkg-name)
+      ))
+  nil)
+	
+(deftest print.symbol.escaped-random.4
+  (let ((result
+	 (loop for i below 256
+	       for c = (code-char i)
+	       when c
+	       nconc
+	       (let ((s (make-symbol (string c))))
+		 (loop repeat 50
+		       nconc (randomly-check-readability
+			      s
+			      :readable nil
+			      :escape t
+			      :gensym t
+			      :test #'similar-uninterned-symbols))))))
+    (subseq result 0 (min (length result) 10)))
+  nil)
+
+(deftest print.symbol.escaped-random.5
+  (loop for s in *universe*
+	when (and (symbolp s) (symbol-package s) )
+	nconc
+	(loop repeat 50
+	      nconc (randomly-check-readability
+		     s
+		     :readable nil
+		     :escape t)))
+  nil)
+
+(deftest print.symbol.escaped-random.6
+  (let ((*package* (find-package "KEYWORD")))
+    (loop for s in *universe*
+	  when (and (symbolp s) (symbol-package s))
+	  nconc
+	  (loop repeat 50
+		nconc (randomly-check-readability
+		       s
+		       :readable nil
+		       :escape t))))
+  nil)
+
+(deftest print.symbol.escaped-random.7
+  (loop for s in *universe*
+	when (and (symbolp s) (not (symbol-package s)))
+	nconc
+	(loop repeat 50
+	      nconc (randomly-check-readability
+		     s
+		     :readable nil
+		     :escape t
+		     :gensym t
+		     :test #'similar-uninterned-symbols)))
+  nil)								    
+			  
+(deftest print.symbol.escaped-random.8
+  (let ((*package* (find-package "KEYWORD")))
+    (loop for s in *universe*
+	  when (and (symbolp s) (not (symbol-package s)))
+	  nconc
+	  (loop repeat 50
+		nconc (randomly-check-readability
+		       s
+		       :readable nil
+		       :escape t
+		       :gensym t
+		       :test #'similar-uninterned-symbols))))
+  nil)
+
+(deftest print.symbol.escaped.9
+  (let* ((*package* (find-package "CL-TEST"))
+	 (s (intern "()")))
+    (randomly-check-readability s :readable nil :escape t))
+  nil)
+
+(deftest print.symbol.escaped.10
+  (let* ((*package* (find-package "KEYWORD"))
+	 (s (intern "()")))
+    (randomly-check-readability s :readable nil :escape t))
+  nil)
+
+|#
+
+;;; Tests of printing package prefixes
+
+(deftest print.symbol.prefix.1
+  (with-standard-io-syntax
+   (let ((s (write-to-string (make-symbol "ABC") :gensym t :case :upcase)))
+     (if (string= s "#:ABC") t s)))
+  t)
+
+(deftest print.symbol.prefix.2
+  (with-standard-io-syntax
+   (let ((s (write-to-string (make-symbol "ABC") :gensym nil :case :upcase)))
+     (if (string= s "ABC") t s)))
+  t)
+
+			    
