@@ -18,6 +18,7 @@
 (load "set-macro-character.lsp")
 (load "read-suppress.lsp")
 (load "set-syntax-from-char.lsp")
+(load "dispatch-macro-characters.lsp")
 
 (load "syntax.lsp")
 (load "syntax-tokens.lsp")
