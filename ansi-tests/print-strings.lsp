@@ -75,18 +75,39 @@
 ;;; Only active elements of the string are printed
 
 (deftest print.string.9
-  (let ((s (make-array '(10) :fill-pointer 5 :element-type 'character
-		       :initial-contents "abcdefghij")))
-    (with-standard-io-syntax
-     (write-to-string s :escape nil :readably nil)))
-  "abcde")
+  (let* ((s (make-array '(10) :fill-pointer 5 :element-type 'character
+		       :initial-contents "abcdefghij"))
+	 (result
+	  (with-standard-io-syntax
+	   (write-to-string s :escape nil :readably nil))))
+    (or (and (string= result "abcde") t)
+	result))
+  t)
 
 (deftest print.string.10
-  (let ((s (make-array '(10) :fill-pointer 5 :element-type 'character
-		       :initial-contents "aBcDefGHij")))
-    (with-standard-io-syntax
-     (write-to-string s :escape t :readably nil)))
-  "\"aBcDe\"")
+  (let* ((s (make-array '(10) :fill-pointer 5 :element-type 'character
+		       :initial-contents "aBcDefGHij"))
+	 (result
+	  (with-standard-io-syntax
+	   (write-to-string s :escape t :readably nil))))
+    (or (and (string= result "\"aBcDe\"") t)
+	result))
+  t)
+
+;;; The ever-popular nil string
+
+(deftest print.string.nil.1
+  :notes (:nil-vectors-are-strings)
+  (let ((s (make-array '(0) :element-type nil)))
+    (write-to-string s :escape nil :readably nil))
+  "")
+
+(deftest print.string.nil.2
+  :notes (:nil-vectors-are-strings)
+  (let ((s (make-array '(0) :element-type nil)))
+    (write-to-string s :escape t :readably nil))
+  "\"\"")
+
 
 ;;; Random tests
 
