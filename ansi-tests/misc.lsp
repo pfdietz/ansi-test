@@ -2399,3 +2399,70 @@
 	 (apply #'%f12 (list 774 -4413)))))
    0 1 2)
   774)
+
+;;; In sbcl 0.8.5.37
+;;; "Unreachable code is found or flow graph is not properly depth-first ordered."
+
+(deftest misc.173
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline values))
+       (declare (optimize (safety 3)))
+       (declare (optimize (speed 0)))
+       (declare (optimize (debug 0)))
+       (flet ((%f11
+	       (f11-1 f11-2
+		      &optional (f11-3 c) (f11-4 7947114)
+		      (f11-5
+		       (flet ((%f3 (f3-1 &optional (f3-2 b) (f3-3 5529))
+				   8134))
+			 (multiple-value-call #'%f3
+					      (values (%f3 -30637724 b) c)))))
+	       (setq c 555910)))
+	 (if (and nil (%f11 a a))
+	     (if (%f11 a 421778 4030 1)
+		 (labels ((%f7
+			   (f7-1 f7-2
+                                 &optional
+                                 (f7-3
+                                  (%f11 -79192293
+                                        (%f11 c a c -4 214720)
+                                        b
+                                        b
+                                        (%f11 b 985)))
+                                 (f7-4 a))
+			   b))
+		   (%f11 c b -25644))
+	       54)
+	   -32326608))))
+   1 2 3)
+  -32326608)
+
+;;; In sbcl 0.8.5.37
+;;; The value NIL is not of type SB-C:COMPONENT.
+
+(deftest misc.174
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+         (declare (type (integer 10292971433 14459537906) b))
+         (declare (optimize (speed 3)))
+         (declare (optimize (safety 1)))
+         (declare (optimize (debug 1)))
+         (if
+          (and (and (/= -51885 b) nil)
+               (case (1+ b)
+                 ((4 4 3 -4)
+                  (let* ((v1
+                          (flet ((%f16 (f16-1)
+                                   -1858366))
+                            (apply #'%f16 b (list)))))
+                    -1602321))
+                 (t 3)))
+          19
+          c)))
+   0 11000000000 0)
+  0)
