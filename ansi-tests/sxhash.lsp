@@ -66,6 +66,7 @@
   t)
 
 (deftest sxhash.8
+  :notes (:nil-vectors-are-strings)
   (eqlt (sxhash (make-array 0 :element-type nil))
 	(sxhash ""))
   t)
