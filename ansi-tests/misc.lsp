@@ -6589,3 +6589,66 @@ Broken at C::WT-C-INLINE-LOC.
 	      (block b3 (block b3 (setq *s7* (return-from b3 0)))))))))))
   0)
 
+(deftest misc.357
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (b)
+	(declare (type (integer -1750881587721 -327383867) b))
+	(declare (optimize (speed 1) (space 0) (safety 2) (debug 3)
+			   (compilation-speed 3)))
+	(denominator (block b2
+		       (let* ((*s8* 0))
+			 (setq *s8*
+			       (case 0
+				 ((-26733 -244 -26253 -50028) 0)
+				 (t (return-from b2 b)))))))))
+    -1153135130306))
+  1)
+
+(deftest misc.358
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda ()
+	(declare (optimize (speed 2) (space 0) (safety 0) (debug 3)
+			   (compilation-speed 1)))
+	(rationalize (let* ((*s1* 0))
+		       (block b3
+			 (conjugate (let* ((v10
+					    (if (ldb-test (byte 0 0) 0)
+						(return-from b3 *s1*)
+					      0)))
+				      (setq *s1* (return-from b3 0)))))))))))
+  0)
+
+(deftest misc.359
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (a b)
+	(declare (type (integer -477801566869 432060432661) a))
+	(declare (type (integer 366578392 525704751) b))
+	(declare (optimize (speed 3) (space 3) (safety 1) (debug 1)
+			   (compilation-speed 1)))
+	(max (case b
+	       ((0 -3 -2 -2 -3)
+		(progn (tagbody (loop for lv1 below 2
+				      count (let* ((*s1* a))
+					      (setq *s1* (go 4))))
+				4)
+		       0))
+	       (t 0)))))
+    287358622300 400248608))
+  0)
+
+    
