@@ -230,3 +230,31 @@
    (slot-value (make-instance 'class-0208a) 'a)
    (slot-value (make-instance 'class-0208b) 'a))
   x x)
+
+;;;
+
+;;; That was failing when things were reloaded.
+;;; Try a test that redefines it
+
+(deftest class-redefinition.1
+  (let*
+    ((cobj1 (eval '(defclass class-0209a ()
+		     ((a :allocation :class :initform 'x)))))
+     (cobj2 (eval '(defclass class-0209b (class-0209a)
+		     ((a :allocation :instance)))))
+     (cobj3 (eval '(defclass class-0209a ()
+		     ((a :allocation :class :initform 'x)))))
+     (cobj4 (eval '(defclass class-0209b (class-0209a)
+		     ((a :allocation :instance))))))
+    (values
+     (eq cobj1 cobj3)
+     (eq cobj2 cobj4)
+     (class-name cobj1)
+     (class-name cobj3)
+     (slot-value (make-instance 'class-0209a) 'a)
+     (slot-value (make-instance 'class-0209b) 'a)))
+  t t
+  class-0209a
+  class-0209b
+  x x)
+
