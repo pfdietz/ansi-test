@@ -32,6 +32,7 @@
 (load "abs.lsp")
 ;;(load "exp.lsp")
 (load "expt.lsp")
+(load "gcd.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
