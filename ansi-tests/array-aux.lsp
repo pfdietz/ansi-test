@@ -32,15 +32,61 @@
 		   initial-element initial-element-p dio-p))
   (let ((a (check-values (apply #'make-array dimensions options))))
     (cond
-     ((not (typep a 'array)) :fail-not-array)
+
+     ((not (typep a 'array))
+      :fail-not-array)
+     ((not (typep a '(array *)))
+      :fail-not-array2)
+     ((not (typep a `(array * ,dimensions-list)))
+      :fail-not-array3)
+     ((not (typep a `(array * *)))
+      :fail-not-array4)
+     ((not (typep a `(array ,element-type)))
+      :fail-not-array5)
+     ((not (typep a `(array ,element-type *)))
+      :fail-not-array6)
+     
+     #-gcl
+     ((not (typep a `(array ,element-type ,(length dimensions-list))))
+      :fail-not-array7)
+
+     ((not (typep a `(array ,element-type ,dimensions-list)))
+      :fail-not-array8)
+
+     ((not (typep a `(array ,element-type ,(mapcar (constantly '*)
+						   dimensions-list))))
+      :fail-not-array9)
+
      ((not (check-values (arrayp a))) :fail-not-arrayp)
 
-     ((and (eq t element-type)
+     ((and ;; (eq t element-type)
 	   (not adjustable)
 	   (not fill-pointer)
 	   (not displaced-to)
-	   (not (typep a 'simple-array)))
-      :fail-not-simple-array)
+	   (cond
+	    ((not (typep a 'simple-array))
+	     :fail-not-simple-array)
+	    ((not (typep a '(simple-array *)))
+	     :fail-not-simple-array2)
+	    ((not (typep a `(simple-array * ,dimensions-list)))
+	     :fail-not-simple-array3)
+	    ((not (typep a `(simple-array * *)))
+	     :fail-not-simple-array4)
+	    ((not (typep a `(simple-array ,element-type)))
+	     :fail-not-simple-array5)
+	    ((not (typep a `(simple-array ,element-type *)))
+	     :fail-not-simple-array6)
+	    #-gcl
+	    ((not (typep a `(simple-array ,element-type
+					  ,(length dimensions-list))))
+	     :fail-not-array7)
+	    ((not (typep a `(simple-array ,element-type ,dimensions-list)))
+	     :fail-not-simple-array8)
+	    ((not (typep a `(simple-array ,element-type
+					  ,(mapcar (constantly '*)
+						   dimensions-list))))
+	     :fail-not-simple-array9)
+	    )))
 
      ;; If the array is a vector, check that...
      ((and (eq (length dimensions-list) 1) 
