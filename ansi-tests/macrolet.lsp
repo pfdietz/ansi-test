@@ -333,6 +333,12 @@
   (nil 2)
   (1 2))
 
+;;; &whole is followed by a destructuring pattern (see 3.4.4.1.2)
+(deftest macrolet.36
+  (macrolet ((%m (&whole (m a b) c d) `(quote (,m ,a ,b ,c ,d))))
+    (%m 1 2))
+  (%m 1 2 1 2))
+
 ;;; Symbol-macrolet tests
 
 (deftest symbol-macrolet.1
