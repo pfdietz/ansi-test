@@ -50,9 +50,6 @@
     (disassemble-it name))
   t nil)
 
-(defun (setf disassemble-example-fn) (val arg)
-  (setf (car arg) val))
-
 (deftest disassemble.8
   (progn
     (eval '(defun (setf disassemble-example-fn) (val arg)
@@ -72,10 +69,3 @@
     (eval '(defmethod disassemble-example-fn3 ((x t)(y t)(z t)) (list x y z)))
     (disassemble-it 'disassemble-example-fn3))
   t nil)
-
-
-
-
-
-
-
