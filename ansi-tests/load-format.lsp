@@ -42,3 +42,8 @@
 (load "format-goto.lsp")
 (load "format-conditional.lsp")
 (load "format-brace.lsp")
+(load "format-question.lsp")
+
+;;; 22.3.8
+(load "format-paren.lsp")
+(load "format-p.lsp")
