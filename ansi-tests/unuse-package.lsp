@@ -4,6 +4,9 @@
 ;;;; Contains: Tests of UNUSE-PACKAGE
 
 (in-package :cl-test)
+
+(compile-and-load "package-aux.lsp")
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

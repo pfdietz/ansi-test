@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 ;;; More subtypep tests are in types-and-class.lsp
 
 (deftest subtypep.order.1

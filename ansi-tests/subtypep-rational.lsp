@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 ;;; SUBTYPEP on rational types
 
 (deftest subtypep.rational.1

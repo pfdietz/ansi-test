@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 ;;;;;;;
 
 (deftest subtypep.float.1

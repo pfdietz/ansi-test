@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 (deftest subtypep.eql.1
   (let ((s1 (copy-seq "abc"))
 	(s2 (copy-seq "abc")))

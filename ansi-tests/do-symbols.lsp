@@ -4,6 +4,9 @@
 ;;;; Contains: Tests of DO-SYMBOLS
 
 (in-package :cl-test)
+
+(compile-and-load "package-aux.lsp")
+
 (declaim (optimize (safety 3)))
 
 (deftest do-symbols.1

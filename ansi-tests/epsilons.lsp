@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "numbers-aux.lsp")
+
 (deftest epsilons.1
   (loop for e in (list short-float-epsilon single-float-epsilon
 		       double-float-epsilon long-float-epsilon)

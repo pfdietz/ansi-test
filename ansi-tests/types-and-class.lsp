@@ -7,6 +7,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 (declaim (optimize (safety 3)))
 
 (deftest boolean-type.1

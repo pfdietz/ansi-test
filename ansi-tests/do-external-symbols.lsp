@@ -4,6 +4,9 @@
 ;;;; Contains: Tests of DO-EXTERNAL-SYMBOLS
 
 (in-package :cl-test)
+
+(compile-and-load "package-aux.lsp")
+
 (declaim (optimize (safety 3)))
 
 (defun collect-external-symbols (pkg)

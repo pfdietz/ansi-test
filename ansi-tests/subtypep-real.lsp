@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 ;;; SUBTYPEP on real types
 
 (deftest subtypep.real.1

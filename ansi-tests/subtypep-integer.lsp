@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 (deftest subtypep.fixnum-or-bignum
   (check-equivalence '(or fixnum bignum) 'integer)
   nil)

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "package-aux.lsp")
+
 ;;; Create a package name that does not collide with an existing package
 ;;; name or nickname
 (defvar *import-package-test-name*

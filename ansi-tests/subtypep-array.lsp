@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "types-aux.lsp")
+
 ;;; *array-element-types* is defined in ansi-aux.lsp
 
 (deftest subtypep.array.1
