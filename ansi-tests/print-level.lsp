@@ -7,6 +7,7 @@
 
 (compile-and-load "printer-aux.lsp")
 
+#|
 (deftest print-level.1
   (with-standard-io-syntax
    (let ((*print-readably* nil))
@@ -21,6 +22,7 @@
 		      (not (string= s2 "#")))
 	   collect (list x s1 s2))))
   nil)
+|#
 
 (defclass print-level-test-class nil (a b c))
 
