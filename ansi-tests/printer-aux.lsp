@@ -22,7 +22,7 @@
 ;;; the object and the printer variable bindings otherwise.  They key
 ;;; argument TEST is used to compared the reread object and obj.
 
-(defparameter *random-read-check-debug* nil
+(defvar *random-read-check-debug* nil
   "When set to true, RANDOMLY-CHECK-READABILITY will dump out parameter
    settings before trying a test.  This is intended for cases where the
    error that occurs is fatal.")
