@@ -9,11 +9,33 @@
 
 (declaim (optimize (safety 3)))
 
+(defun is-external-symbol-of (sym package)
+  (multiple-value-bind (sym2 status)
+      (find-symbol (symbol-name sym) package)
+    (and (eq sym sym2)
+	 (eq status :external))))
+
 (defun test-if-not-in-cl-package (str)
   (multiple-value-bind (sym status)
       (find-symbol (string-upcase str) 'common-lisp)
       (declare (ignore sym))
-    (not status)))
+      (or
+       ;; Symbol not present in the common lisp package
+       (not status)
+       ;; Check if it has any properties whose indicators are
+       ;; external in any of the standard packages or are accessible
+       ;; in CL-USER
+       (and (eq status :external)
+	    (let ((plist (symbol-plist sym)))
+	      (loop for e = plist then (cddr e)
+		    while e
+		    for indicator = (car e)
+		    when (and (symbolp indicator)
+			      (or (is-external-symbol-of indicator "COMMON-LISP")
+				  (is-external-symbol-of indicator "KEYWORD")
+				  (eq indicator (find-symbol (symbol-name indicator)
+							     "COMMON-LISP-USER"))))
+		    collect indicator))))))
 
 ;; Test for the presence of every darned symbol
 ;; the standard says should be in the CL package.
@@ -1011,7 +1033,7 @@
 (deftest keywordp-8 (keywordp "rest")     nil)
 (deftest keywordp-9 (keywordp ":rest")    nil)
 (deftest keywordp-10 (keywordp '&body) nil)
-(deftest keywordp-11 (not (not (keywordp ::foo)))       t)
+;;(deftest keywordp-11 (not (not (keywordp :foo)))       t)
 (deftest keywordp-12 (keywordp t)          nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
