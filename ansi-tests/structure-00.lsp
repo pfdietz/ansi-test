@@ -243,8 +243,8 @@ do the defstruct."
 	 (and (fboundp (quote ,make-fn))
 	      (functionp (function ,make-fn))
 	      (symbol-function (quote ,make-fn))
-	      ,@(unless type-option
-		  `((typep (,make-fn) (quote ,name))))
+	      (typep (,make-fn) (quote ,(if type-option struct-type
+					  name)))
 	      t)
 	 t)
 
@@ -263,7 +263,6 @@ do the defstruct."
 	   `((deftest ,(make-struct-test-name name 3)
 	       (count-if (function ,p-fn) *universe*)
 	       0)))
-
        ,@(unless type-option
 	   `((deftest ,(make-struct-test-name name 4)
 	       (count-if (function (lambda (x) (typep x (quote ,name))))
@@ -375,6 +374,22 @@ do the defstruct."
 			when read-only
 			collect `(not (fboundp '(setf ,field-fn))))
 		t)
-	       t)))		  
+	       t)))
+
+       ;; When the structure is a true structure type, check that
+       ;; the various class relationships hold
+       ,@(unless type-option
+	   `(
+	     (deftest ,(make-struct-test-name name 13)
+	       (notnot (typep (,make-fn) (find-class (quote ,name))))
+	       t)
+	     (deftest ,(make-struct-test-name name 14)
+	       (let ((class (find-class (quote ,name))))
+		 (notnot (typep class 'structure-class)))
+	       t)
+	     (deftest ,(make-struct-test-name name 15)
+	       (notnot (typep (,make-fn) 'structure-object))
+	       t)
+	     ))
        nil
        )))
