@@ -263,6 +263,7 @@ do the defstruct."
 	       (and (fboundp (quote ,p-fn))
 		    (functionp (function ,p-fn))
 		    (symbol-function (quote ,p-fn))
+		    (notnot (funcall #',p-fn (,make-fn)))
 		    (notnot (,p-fn (,make-fn))))
 	       t)))
 
@@ -291,8 +292,10 @@ do the defstruct."
 		   (list* (intern (string slot-name) "KEYWORD")
 			  (list 'quote initval)
 			  inits))
-	     (push `(eqlt (quote ,initval)
-			  (,field-fn ,var))
+	     (push `(and (eqlt (quote ,initval)
+			       (,field-fn ,var))
+			 (eqlt (quote ,initval)
+			       (funcall #',field-fn ,var)))
 		   tests))
 	    `(let ((,var (,make-fn . ,inits)))
 	       (and ,@tests t)))
@@ -335,7 +338,8 @@ do the defstruct."
        ,@(when copy-fn
 	   `((deftest ,(make-struct-test-name name 9)
 	       ,(let* ((var 'XTEMP-9)
-		       (var2 'YTEMP-9))
+		       (var2 'YTEMP-9)
+		       (var3 'ZTEMP-9))		       
 		  `(let ((,var (,make-fn
 				,@(loop
 				   for (slot-name . initval)
@@ -343,14 +347,18 @@ do the defstruct."
 				   nconc (list (intern (string slot-name)
 						       "KEYWORD")
 					       `(quote ,initval))))))
-		     (let ((,var2 (,copy-fn ,var)))
+		     (let ((,var2 (,copy-fn ,var))
+			   (,var3 (funcall #',copy-fn ,var)))
 		       (and
 			(not (eqlt ,var ,var2))
+			(not (eqlt ,var ,var3))
+			(not (eqlt ,var2 ,var3))
 			,@(loop
 			   for (slot-name . nil) in initial-value-alist
 			   for fn in field-fns
 			   collect
-			   `(eqlt (,fn ,var) (,fn ,var2)))
+			   `(and (eqlt (,fn ,var) (,fn ,var2))
+				 (eqlt (,fn ,var) (,fn ,var3))))
 			t))))
 	       t)))
 
