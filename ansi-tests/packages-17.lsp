@@ -146,7 +146,7 @@
 (def-macro-test do-external-symbols.error.1
   (do-external-symbols (x "CL")))
 
-(def-macro-est do-all-symbols.error.1
+(def-macro-test do-all-symbols.error.1
   (do-all-symbols (x)))
 
 ;;; Need to add DO-ALL-SYMBOLS tests

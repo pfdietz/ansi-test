@@ -25,7 +25,7 @@
 (load "defconstant.lsp")
 (load "define-modify-macro.lsp")
 (load "defparameter.lsp")
-(ignore-errors (load "defun.lsp"))
+(load "defun.lsp")
 (load "defvar.lsp")
 (load "destructuring-bind.lsp")
 (load "ecase.lsp")

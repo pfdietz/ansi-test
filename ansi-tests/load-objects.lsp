@@ -13,3 +13,4 @@
 (load "ensure-generic-function.lsp")
 (load "allocate-instance.lsp")
 (load "reinitialize-instance.lsp")
+(load "shared-initialize.lsp")
