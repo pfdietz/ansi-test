@@ -11,4 +11,5 @@
 (load "truename.lsp")
 (load "file-author.lsp")
 (load "file-write-date.lsp")
+(load "rename-file.lsp")
 
