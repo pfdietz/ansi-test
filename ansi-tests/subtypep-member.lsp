@@ -139,7 +139,7 @@
   nil)
 
 (deftest subtypep.member.27
-  (check-all-subtypep '(member a b c d) '(satisfies #'symbolp))
+  (check-all-subtypep '(member a b c d) '(satisfies symbolp))
   nil)
 
 (deftest subtypep.member.28
@@ -147,11 +147,11 @@
   nil)
 
 (deftest subtypep.member.29
-  (check-all-not-subtypep '(member a b 10 z) '(satisfies #'symbolp))
+  (check-all-not-subtypep '(member a b 10 z) '(satisfies symbolp))
   nil)
 
 (deftest subtypep.member.30
-  (check-disjointness '(member 1 6 10) '(satisfies #'symbolp))
+  (check-disjointness '(member 1 6 10) '(satisfies symbolp))
   nil)
 
 (deftest subtypep.member.31
