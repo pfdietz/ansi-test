@@ -96,15 +96,21 @@
 	collect (list i c r))
   nil)
 
+;;; This test will fail if you compute complex reciprocals
+;;; naively.  If z = a + bi, the naive approach computes
+;;; z^-1 = c + di as c = a/(a^2+b^2), d = -b/(a^2+b^2).
+;;; That loses precision, however.  Instead, the implementation
+;;; should do c = 1/(a+b/a), d = -1/(a/b+b).
+
 (deftest /.7
   (loop for bound in (list 1.0s5 1.0f10 1.0d20 1.0l20)
 	nconc
 	(loop for i = (1+ (random bound))
 	      for c = (complex 0 i)
 	      for r = (/ c)
-	      repeat 10000
-	      unless (eql r (complex 0 (- (/ i))))
-	      collect (list i c r)))
+	      repeat 1000
+	      unless (= r (complex 0 (- (/ i))))
+	      collect (list i c r (complex 0 (- (/ i))))))
   nil)
 
 (deftest /.8

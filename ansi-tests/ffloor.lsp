@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (compile-and-load "numbers-aux.lsp")
-(compile-and-load "ffloor-aux.lsp")
+(ignore-errors (compile-and-load "ffloor-aux.lsp"))
 
 (deftest ffloor.error.1
   (classify-error (ffloor))

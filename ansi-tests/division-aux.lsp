@@ -10,7 +10,3 @@
    (progn (apply #'/ args) (values))
    (division-by-zero () (values))
    (condition (c) c)))
-
-
-
-		

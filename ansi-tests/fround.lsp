@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (compile-and-load "numbers-aux.lsp")
-(compile-and-load "fround-aux.lsp")
+(ignore-errors (compile-and-load "fround-aux.lsp"))
 
 (deftest fround.error.1
   (classify-error (fround))

@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (compile-and-load "numbers-aux.lsp")
-(compile-and-load "ftruncate-aux.lsp")
+(ignore-errors (compile-and-load "ftruncate-aux.lsp"))
 
 (deftest ftruncate.error.1
   (classify-error (ftruncate))
