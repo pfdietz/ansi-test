@@ -20,9 +20,7 @@
 			  (subsetp similar similar2)
 			  (subsetp similar2 similar)
 			  (loop for sym2 in similar
-				always (and (string= name (symbol-name sym2))
-					    (member (symbol-package sym2)
-						    all-packages))))
+				always (string= name (symbol-name sym2))))
 	       (push sym failures))))))))
   nil)
 
