@@ -135,6 +135,7 @@
 ;;; Tests on arrays
 (compile-and-load "array-aux.lsp")
 (load "array.lsp")
+(load "array-t.lsp")
 (load "make-array.lsp")
 (load "adjustable-array-p.lsp")
 (load "array-displacement.lsp")
