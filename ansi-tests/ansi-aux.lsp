@@ -1211,6 +1211,7 @@ the condition to go uncaught if it cannot be classified."
 			     (member e z :key key :test test)))
    t))
 
+#|
 (defun do-random-set-exclusive-ors (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
     (loop
@@ -1223,6 +1224,7 @@ the condition to go uncaught if it cannot be classified."
 	 (let ((is-good (check-set-exclusive-or x y z)))
 	   (unless is-good (return (values x y z)))))))
     nil))
+|#
 
 (defun nset-exclusive-or-with-check (x y &key (key 'no-key)
 				       test test-not)
@@ -1234,6 +1236,7 @@ the condition to go uncaught if it cannot be classified."
 	     ,@(when test `(:test ,test))
 	     ,@(when test-not `(:test-not ,test-not)))))
 
+#|
 (defun do-random-nset-exclusive-ors (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
     (loop
@@ -1246,6 +1249,7 @@ the condition to go uncaught if it cannot be classified."
 	 (let ((is-good (check-set-exclusive-or x y z)))
 	   (unless is-good (return (values x y z)))))))
     nil))
+|#
 
 (defun subsetp-with-check (x y &key (key 'no-key) test test-not)
   (let ((xcopy (make-scaffold-copy x))

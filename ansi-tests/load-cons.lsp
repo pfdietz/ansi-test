@@ -1,5 +1,7 @@
 ;;; Tests of conses
 
+(compile-and-load "cons-aux.lsp")
+
 (load "cons-test-01.lsp")
 (load "cons-test-02.lsp")
 (load "cons-test-03.lsp")

@@ -86,9 +86,9 @@
 			       :test 'equal)
   (c))
 
-(deftest set-exclusive-or.13
-    (do-random-set-exclusive-ors 100 100)
-  nil)
+;;; (deftest set-exclusive-or.13
+;;;    (do-random-set-exclusive-ors 100 100)
+;;;  nil)
 
 (deftest set-exclusive-or.14
     (set-exclusive-or-with-check '((a . 1) (b . 2) (c . 3012))
@@ -348,6 +348,11 @@
   type-error)
 
 
+;;; Randomized test
+
+(deftest random-set-exclusive-or
+  (random-set-exclusive-or-test 10 100)
+  nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-exclusive-or
@@ -428,9 +433,9 @@
 			       :test 'equal)
   (c))
 
-(deftest nset-exclusive-or.13
-    (do-random-nset-exclusive-ors 100 100)
-  nil)
+;;; (deftest nset-exclusive-or.13
+;;;    (do-random-nset-exclusive-ors 100 100)
+;;;  nil)
 
 (deftest nset-exclusive-or.14
     (nset-exclusive-or-with-check '((a . 1) (b . 2) (c . 3012))
@@ -647,6 +652,12 @@
 			  :test #'/=
 			  :test #'eql)
 	#'<)
+  nil)
+
+;;; Randomized test
+
+(deftest random-nset-exclusive-or
+  (random-set-exclusive-or-test 10 1000 'nset-exclusive-or)
   nil)
 
 ;;; Error tests
