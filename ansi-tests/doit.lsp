@@ -10,6 +10,7 @@
    (format t "~&<~S ~S ~S>~%" a b c)))
 
 #+allegro (run-shell-command "rm -f *.fasl")
+#+allegro (setq *enclose-printer-errors* nil)
 #+cmucl (run-program "rm -f *.x86f")
 
 (load "gclload1.lsp")

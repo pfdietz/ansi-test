@@ -129,7 +129,7 @@
 	count
 	(multiple-value-bind (s1 s2 args)
 	    (make-random-string-compare-test n)
-	  ;; (format t "Args = ~S~%" args)
+	  ;; (format t "Strings: ~s ~s - Args = ~S~%" s1 s2 args)
 	  (let ((x (apply (case comparison
 			    (< (if case #'string-lessp #'string<))
 			    (<= (if case #'string-not-greaterp
