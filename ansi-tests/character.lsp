@@ -246,7 +246,7 @@
 		   (not (standard-char-p x))))
   t)
 
-(deftest standard-char-p.2
+(deftest standard-char-p.2a
   (loop for i from 0 below (min 65536 char-code-limit)
 	for x = (code-char i)
 	always (or (not (characterp x))
@@ -438,10 +438,21 @@
   (string= (char-name #\Newline) "Newline")
   t)
 
+;;; Check that the names of various semi-standard characters are
+;;; appropriate.  This is complicated by the possibility that two different
+;;; names may refer to the same character (as is allowed by the standard,
+;;; for example in the case of Newline and Linefeed).
+ 
 (deftest char-name.4
   (loop for s in '("Rubout" "Page" "Backspace" "Return" "Tab" "Linefeed")
 	for c = (name-char s)
-	unless (or (not c) (string= (char-name c) s))
+	unless (or (not c)
+		   ;; If the char-name is not even string-equal,
+		   ;; assume we're sharing the character with some other
+		   ;; name, and assume it's ok
+		   (not (string-equal (char-name c) s))
+		   (string= (char-name c) s))
+	;; Collect list of cases that failed
 	collect (list s c (char-name c)))
   nil)
 
