@@ -440,7 +440,8 @@
   (list (+ x 1) (+ y 2) (+ z 3)))
 
 (defgeneric meaningless-user-generic-function-for-universe (x y z)
-  (:method ((x integer) (y integer) (z integer)) (+ x y z)))
+  #+(or (not :gcl) :setf) (:method ((x integer) (y integer) (z integer)) (+ x y z))
+  )
 
 (eval-when (:load-toplevel)
   (compile 'meaningless-user-function-for-universe)
