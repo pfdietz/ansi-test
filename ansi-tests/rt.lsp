@@ -22,7 +22,7 @@
  |----------------------------------------------------------------------------|#
 
 ;This is the December 19, 1990 version of the regression tester.
-
+
 (in-package :rt)
 
 (defvar *test* nil "Current test name")
@@ -33,6 +33,10 @@
 (defvar *catch-errors* t "When true, causes errors in a test to be caught.")
 (defvar *print-circle-on-failure* nil
   "Failure reports are printed with *PRINT-CIRCLE* bound to this value.")
+
+(defvar *compile-tests* nil "When true, compile the tests before running
+them.")
+(defvar *optimization-settings* '((safety 3)))
 
 (defstruct (entry (:conc-name nil)
 		  (:type list))
@@ -59,7 +63,7 @@
     (when (equal (name (cadr l)) name)
       (setf (cdr l) (cddr l))
       (return name))))
-
+
 (defun get-test (&optional (name *test*))
   (defn (get-entry name)))
 
@@ -99,7 +103,7 @@
 	 (if error? (throw '*debug* nil)))
 	(error? (apply #'error args))
 	(t (apply #'warn args))))
-
+
 (defun do-test (&optional (name *test*))
   (do-entry (get-entry name)))
 
@@ -157,16 +161,27 @@
 	   r)
       ;; (declare (special *break-on-warnings*))
 
-      (block aborted
-	(if *catch-errors*
-	    (handler-bind ((style-warning #'muffle-warning)
-			   (error #'(lambda (c)
-				      (setf aborted t)
-				      (setf r (list c))
-				      (return-from aborted nil))))
-			  (setf r (multiple-value-list
-				   (eval (form entry)))))
-	  (setf r (eval (form entry)))))
+      (flet ((%do
+	      ()
+	      (setf r
+		    (multiple-value-list
+		     (if *compile-tests*
+			 (funcall (compile
+				   nil
+				   `(lambda ()
+				      (declare
+				       (optimize ,@*optimization-settings*))
+				      ,(form entry))))
+		       (eval (form entry)))))))
+	(block aborted
+	  (if *catch-errors*
+	      (handler-bind (#-ecl (style-warning #'muffle-warning)
+				   (error #'(lambda (c)
+					      (setf aborted t)
+					      (setf r (list c))
+					      (return-from aborted nil))))
+			    (%do))
+	    (%do))))
       
       (setf (pend entry)
 	    (or aborted
@@ -189,7 +204,7 @@
   (if *in-test*
       (throw '*in-test* nil)
       (do-entries *standard-output*)))
-
+
 (defun do-tests (&optional
 		 (out *standard-output*))
   (dolist (entry (cdr *entries*))
