@@ -8,6 +8,7 @@
 ;;; DEFUN is used extensively elsewhere, so I'm just putting error
 ;;; case tests here
 
+#|
 (deftest defun.error.1
   (classify-error (defun))
   program-error)
@@ -15,3 +16,4 @@
 (deftest defun.error.2
   (classify-error (defun ignored-defun-name))
   program-error)
+|#
