@@ -72,49 +72,40 @@
 
 (declaim (special +standard-chars+ *cl-symbols-vector*))
 
-#|
-(defun make-random-string (n)
-  (make-array n
-	      :initial-contents
-	      (loop repeat n collect
-		    (random-from-seq +standard-chars+))
-	      :element-type (random-from-seq
-			     #(character standard-char base-char))))
-|#
-
 (defparameter *use-random-byte* t)
 (defparameter *random-readable* nil)
 
-(defun make-random-string (n)
+(defun make-random-string (size-spec &key simple)
   (let*
-      ((use-random-byte nil)
+      ((size (if (eql size-spec '*) (random 30) size-spec))
+       (use-random-byte nil)
        (etype 'character)
        (s (random-case
 	   (progn
 	     (setf use-random-byte *use-random-byte*)
-	     (make-string n))
+	     (make-string size :element-type 'character))
 	   (progn
 	     (setf use-random-byte *use-random-byte*)
-	     (make-array n :element-type 'character
+	     (make-array size :element-type 'character
 			 :initial-element #\a))
-	   (make-array n :element-type (setf etype (if *random-readable* 'character 'standard-char))
-		       :adjustable (and (not *random-readable*) (rcase (3 nil) (1 t)))
-		       :fill-pointer (and (not *random-readable*) (rcase (3 nil) (1 (random (1+ n)))))
+	   (make-array size :element-type (setf etype (if *random-readable* 'character 'standard-char))
+		       :adjustable (and (not simple) (not *random-readable*) (rcase (3 nil) (1 t)))
+		       :fill-pointer (and (not simple) (not *random-readable*) (rcase (3 nil) (1 (random (1+ size)))))
 		       :initial-element #\a)
-	   (make-array n :element-type (setf etype (if *random-readable* 'character 'base-char))
-		       :adjustable (and (not *random-readable*) (rcase (3 nil) (1 t)))
-		       :fill-pointer (and (not *random-readable*) (rcase (3 nil) (1 (random (1+ n)))))
+	   (make-array size :element-type (setf etype (if *random-readable* 'character 'base-char))
+		       :adjustable (and (not simple) (not *random-readable*) (rcase (3 nil) (1 t)))
+		       :fill-pointer (and (not simple) (not *random-readable*) (rcase (3 nil) (1 (random (1+ size)))))
 		       :initial-element #\a))))
     (if (coin)
-	(dotimes (i n)
+	(dotimes (i size)
 	  (setf (char s i) (elt #(#\a #\b #\A #\B) (random 4))))
-      (dotimes (i n)
+      (dotimes (i size)
 	(setf (char s i)
 	      (or (and use-random-byte (or (code-char (random (min char-code-limit (ash 1 16))))
 					   (code-char (random 256))))
 		  (elt "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 		       (random 62))))))
-    (when (and (not *random-readable*) (coin 5))
+    (when (and (not simple) (not *random-readable*) (coin 5))
       (let* ((len (length s))
 	     (len2 (random (1+ len))))
 	(setf s (make-array len2
