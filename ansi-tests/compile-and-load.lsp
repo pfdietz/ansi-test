@@ -24,3 +24,12 @@
 	      (<= target-write-time source-write-time))
       (compile-file pathname))
     (load compile-pathname)))
+
+;;; On-demand compile and load
+
+(defvar *compiled-and-loaded-files* nil
+  "List containing pathname, creation times for files that have already
+   been loaded.")
+
+
+
