@@ -17,3 +17,4 @@
 (load "print-symbols.lsp")
 (load "print-strings.lsp")
 (load "print-cons.lsp")
+(load "print-bit-vector.lsp")
