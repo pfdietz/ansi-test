@@ -250,6 +250,28 @@
   ((lambda (&key &allow-other-keys)) :a 1 :b 2 :c 3)
   nil)
 
+;;; Free declaration scope
+
+(deftest lambda.52
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      ((lambda (&optional (y x)) (declare (special x)) y))))
+  :good)
+
+(deftest lambda.53
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      ((lambda (&key (y x)) (declare (special x)) y))))
+  :good)
+
+(deftest lambda.54
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      ((lambda (&aux (y x)) (declare (special x)) y))))
+  :good)
 
 ;;; Tests of lambda as a macro
 
