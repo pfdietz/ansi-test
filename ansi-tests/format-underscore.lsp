@@ -93,6 +93,17 @@ A A A A "
        (format s "A ~_A ~_A ~_A ~_A ~_"))))
   "A A A A A ")
 
+(deftest formatter._.9
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t)
+	 (*print-right-margin* 4)
+	 (*print-miser-width* nil))
+     (formatter-call-to-string
+      (formatter "A ~_A ~_A ~_A ~_A ~_"))))
+  "A A A A A ")
+
 ;;; miser
 
 (def-ppblock-test format.@_.1
@@ -185,6 +196,17 @@ A A A A "
        (format s "A ~@_A ~@_A ~@_A ~@_A ~@_"))))
   "A A A A A ")
 
+(deftest formatter.@_.10
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t)
+	 (*print-right-margin* 4)
+	 (*print-miser-width* 4))
+     (formatter-call-to-string
+      (formatter "A ~@_A ~@_A ~@_A ~@_A ~@_"))))
+  "A A A A A ")
+
 ;;; fill
 
 (def-ppblock-test format.\:_.1
@@ -256,6 +278,17 @@ A
        (format s "A ~:_A ~:_A ~:_A ~:_A ~:_"))))
   "A A A A A ")
 
+(deftest formatter.\:_.7
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-right-margin* 4)
+	 (*print-pretty* t)
+	 (*print-miser-width* nil))
+     (formatter-call-to-string
+      (formatter "A ~:_A ~:_A ~:_A ~:_A ~:_"))))
+  "A A A A A ")
+
 ;;; mandatory
 
 (def-ppblock-test format.\:@_.1
@@ -296,4 +329,14 @@ A "
 	   (*print-right-margin* 4)
 	   (*print-miser-width* nil))
        (format s "A ~:@_A ~:@_A ~:@_A ~:@_A ~:@_"))))
+  "A A A A A ")
+
+(deftest formatter.\:@_.5
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t)
+	 (*print-right-margin* 4)
+	 (*print-miser-width* nil))
+     (formatter-call-to-string (formatter "A ~:@_A ~:@_A ~:@_A ~:@_A ~:@_"))))
   "A A A A A ")
