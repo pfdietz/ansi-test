@@ -373,7 +373,7 @@
      (30
       (let* ((op (random-from-seq
 		  '(+ - *  logand min max gcd
-		      #-gcl lcm
+		      lcm
 		      #-:allegro
 		      logandc1
 		      logandc2 logeqv logior lognand lognor
@@ -403,8 +403,7 @@
      ;; n-ary ops
      (30
       (let* ((op (random-from-seq #(+ - * logand min max logior
-				      #-gcl lcm
-				      gcd logxor)))
+				      lcm gcd logxor)))
 	     (nargs (1+ (min (random 10) (random 10) (random 10))))
 	     (sizes (random-partition (1- size) nargs))
 	     (args (mapcar #'make-random-integer-form sizes)))
@@ -624,7 +623,7 @@
 	 (tags nil))
     (loop for i below num-forms
 	  do (loop for tag = (rcase
-			      #-acl (1 (random 8))
+			      #-allegro (1 (random 8))
 			      (1 (random-from-seq #(tag1 tag2 tag3 tag4
 							 tag5 tag6 tag7 tag8))))
 		   while (member tag tags)
