@@ -348,10 +348,10 @@ the condition to go uncaught if it cannot be classified."
 	    nil
 	    (multiple-value-list
 	     (if regression-test::*compile-tests*
-		 (funcall (compile nil `(lambda ()
+		 (funcall (compile nil '(lambda ()
 					  (declare (optimize safety))
 					  ,form)))
-	       (eval ',form))))
+	       (eval '(locally (declare (optimize safety)) ,form)))))
      (,error-name (c) t))))
 
 ;;;
