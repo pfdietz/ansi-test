@@ -51,3 +51,24 @@
 		    (eql (cadr x) :ignored))
 	collect e)
   nil)
+
+(deftest the.8
+  (loop for e in *universe*
+	when (and (constantp e)
+		  (not (eql (eval `(the ,(type-of e) ,e)) e)))
+	collect e)
+  nil)
+
+(deftest the.9
+  (loop for e in *universe*
+	when (and (constantp e)
+		  (not (eql (eval `(the ,(class-of e) ,e)) e)))
+	collect e)
+  nil)
+
+(deftest the.10
+  (loop for e in *universe*
+	unless (eql (eval `(the ,(class-of e) ',e)) e)
+	collect e)
+  nil)
+
