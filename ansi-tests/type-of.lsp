@@ -105,6 +105,12 @@
     (notnot-mv (typep obj class)))
   t)
 
+(deftest type-of.11
+  (let* ((c #c(-1 1/2))
+	 (type (type-of c)))
+    (notnot (typep c type)))
+  t)
+
 ;;; Error tests
 
 (deftest type-of.error.1
