@@ -11,13 +11,15 @@
     (values
      (defun compile.1-fn (x) x)
      (compiled-function-p 'compile.1-fn)
-     (compile 'compile.1-fn)
+     (let ((x (compile 'compile.1-fn)))
+       (or (eqt x 'compile.1-fn)
+	   (notnot (compiled-function-p x))))
      (compiled-function-p 'compile.1-fn)
      (not (compiled-function-p #'compile.1-fn))
      (fmakunbound 'compile.1-fn)))
   compile.1-fn
   nil
-  compile.1-fn
+  t
   nil
   nil
   compile.1-fn)
