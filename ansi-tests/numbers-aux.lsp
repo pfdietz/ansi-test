@@ -276,8 +276,22 @@
 	     (,op x y)))
 	 (fn (compile nil source)))
     (loop for i below niters
-	  for x = (random-from-interval xhi xlo)
-	  for y = (random-from-interval yhi ylo)
+	  for x = (random-from-interval (1+ xhi) xlo)
+	  for y = (random-from-interval (1+ yhi) ylo)
 	  unless (eql (funcall (the symbol op) x y)
 		      (funcall fn x y))
 	  collect (list x y))))
+
+(defun test-log-op (op n1 n2)
+  (flet ((%r () (let ((r (random 33)))
+		  (- (random (ash 1 (1+ r))) (ash 1 r)))))
+    (loop for x1 = (%r)
+	  for x2 = (%r)
+	  for y1 = (%r)
+	  for y2 = (%r)
+	  repeat n1
+	  nconc
+	  (test-log-op-with-decls op
+				  (min x1 x2) (max x1 x2)
+				  (min y1 y2) (max y1 y2)
+				  n2))))
