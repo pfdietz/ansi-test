@@ -10477,8 +10477,8 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;; The value #C(435422075/240892576 373) is not of type NUMBER.
 
 (deftest misc.576
-  (notnot (complexp (* -7023900320 #C(435422075/240892576 373))))
-  t)
+  (* -7023900320 #C(435422075/240892576 373))
+  #C(-95573789122736375/7527893 -2619914819360))
 
 ;;; The value #C(-555014/122849 -6641556271) is not of type NUMBER.
 
@@ -10487,5 +10487,10 @@ Broken at C::WT-MAKE-CLOSURE.
   #C(217230410502882805764/665706755984253572883257634437
      -319343563321640207257301634954/665706755984253572883257634437))
 
+;;; The value "" is not of type (STRING 1).
 
-
+(deftest misc.578
+  (funcall (compile nil '(lambda (p1) (declare (optimize safety)) (the (string 1) p1)))
+	   (make-array '(1) :element-type 'base-char :initial-element #\x
+		       :fill-pointer 0))
+  "")
