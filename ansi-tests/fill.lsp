@@ -298,7 +298,7 @@
 
 (deftest fill.string.9
   (let* ((s1 (make-array '(8) :element-type 'character
-			 :initial-element #\a
+			 :initial-element #\z
 			 :fill-pointer 4))
 	 (s2 (fill s1 #\a)))
     (and (eqt s1 s2)
@@ -308,7 +308,7 @@
 
 (deftest fill.string.10
   (let* ((s1 (make-array '(8) :element-type 'base-char
-			 :initial-element #\a
+			 :initial-element #\z
 			 :fill-pointer 4))
 	 (s2 (fill s1 #\a)))
     (and (eqt s1 s2)
