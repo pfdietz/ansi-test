@@ -29,7 +29,7 @@
 (deftest clear-input.5
   (with-input-from-string
    (is "!?*")
-   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+   (let ((*terminal-io* (make-two-way-stream is (make-broadcast-stream))))
      (clear-input t)))
   nil)
 

@@ -75,7 +75,7 @@
 (deftest read-char.9
   (with-input-from-string
    (is "!?*")
-   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+   (let ((*terminal-io* (make-two-way-stream is (make-string-output-stream))))
      (read-char t)))
   #\!)
 

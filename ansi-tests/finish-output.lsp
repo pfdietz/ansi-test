@@ -27,7 +27,8 @@
 
 (deftest finish-output.5
   (let ((os (make-string-output-stream)))
-    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+    (let ((*terminal-io* (make-two-way-stream (make-string-input-stream "")
+					      os)))
       (finish-output t)))
   nil)
 

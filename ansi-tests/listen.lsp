@@ -50,7 +50,7 @@
 (deftest listen.8
   (with-input-from-string
    (is "abc")
-   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+   (let ((*terminal-io* (make-two-way-stream is (make-broadcast-stream))))
      (notnot-mv (listen t))))
   t)
 

@@ -262,7 +262,7 @@
 (deftest peek-char.22
   (with-input-from-string
    (is "!?*")
-   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+   (let ((*terminal-io* (make-two-way-stream is (make-string-output-stream))))
      (peek-char nil t)))
   #\!)
 
