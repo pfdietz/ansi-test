@@ -117,3 +117,4 @@
 (load "string.lsp")
 (load "string-upcase.lsp")
 (load "string-downcase.lsp")
+(load "string-capitalize.lsp")
