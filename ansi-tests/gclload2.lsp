@@ -140,6 +140,7 @@
 
 ;;; Tests on arrays
 (compile-and-load "array-aux.lsp")
+(load "aref.lsp")
 (load "array.lsp")
 (load "array-t.lsp")
 (load "array-as-class.lsp")

@@ -1374,3 +1374,5 @@ the condition to go uncaught if it cannot be classified."
 
 (defun with-package-iterator-all (packages)
   (test-with-package-iterator packages :internal :external :inherited))
+
+(deftype otherwise () nil) ;; used in testing TYPECASE
