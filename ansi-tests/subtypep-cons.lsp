@@ -299,3 +299,16 @@
 		 (not (cons integer cons)))))
     (subtypep-and-contrapositive-are-consistent 'cons t2))
   t)
+
+(deftest subtypep.cons.35
+  (notnot-mv (subtypep '(cons nil t) 'float))
+  t t)
+
+(deftest subtypep.cons.36
+  (notnot-mv (subtypep '(cons t nil) 'symbol))
+  t t)
+
+(deftest subtypep.cons.37
+  (notnot-mv (subtypep '(cons nil nil) 'real))
+  t t)
+
