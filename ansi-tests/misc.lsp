@@ -787,14 +787,93 @@
 
 (deftest misc.59
   (funcall
-   (compile  nil '(lambda (a b c)
-			  (declare (type (integer -3966039360 -879349) a)
-				   (type (integer -62642199164 -8993827395) b)
-				   (type (integer -8065934654337 223) c)
-				   (ignorable a b c)
-				   (optimize (speed 3) (safety 1) (debug 1)))
-			  (floor (* (ceiling c) c)
-				 (max 78 (* b (* a (* a b)))))))
+   (compile nil '(lambda (a b c)
+		   (declare (type (integer -3966039360 -879349) a)
+			    (type (integer -62642199164 -8993827395) b)
+			    (type (integer -8065934654337 223) c)
+			    (optimize (speed 3) (safety 1) (debug 1)))
+		   (floor (* (ceiling c) c)
+			  (max 78 (* b (* a (* a b)))))))
    -1000000 -10000000000 0)
   0 0)
+
+(deftest misc.60
+  (funcall
+    (compile nil
+	     '(lambda ()
+		(let ((v5 46660))
+		  (setq v5 (signum (rem v5 (max 53 v5))))))))
+  0)
+
+(deftest misc.61
+  (progn
+    (compile nil
+	     '(lambda (a b)
+		(declare (type (integer -1785799651 -2) a)
+			 (type (integer -27 614132331) b)
+			 (optimize (speed 3) (safety 1) (debug 1)))
+		(ceiling (max (floor -733432 (max 84 -20)) 346)
+			 (min -10 (* 17592186028032 (* (* a b) a))))))
+    :good)
+  :good)
+
+(deftest misc.62
+  (funcall (compile nil '(lambda (a)
+		(if (and (if a t nil) nil)
+		    a
+		  (min (block b5 -1) a))))
+	   100)
+  -1)
+
+(deftest misc.63
+  (let* ((form '(flet ((%f12 () (setq c -9868204937)))
+		  (if (<= c (%f12)) -2 (if (= c c) b c))))
+	 (form1 `(lambda (b c)
+		   (declare (type (integer -80421740610 1395590616) c))
+		   ,form))
+	 (form2 `(lambda (b c) ,form))
+	 (vals '(-696742851945 686256271)))
+    (eqlt (apply (compile nil form1) vals)
+	  (apply (compile nil form2) vals)))
+  t)
+
+(deftest misc.64
+  (let* ((form '(logcount
+		 (if (not (> c (let ((v7 (setq c -246180))) -1)))
+		     (ldb (byte 24 11) c)
+		   c)))
+	 (form1 `(lambda (c)
+		   (declare (type (integer -256128 207636) c))
+		   ,form))
+	 (form2 `(lambda (c) ,form))
+	 (vals '(11292))
+	 )
+    (eqlt (apply (compile nil form1) vals)
+	  (apply (compile nil form2) vals)))
+  t)
+
+(deftest misc.65
+  (let ((form1 '(lambda (b c)
+		  (declare (type (integer -350684427436 -255912007) b))
+		  (logandc2 c (if (< b (setq b -25647585550)) b 0))))
+	(form2 '(lambda (b c)
+		  (logandc2 c (if (< b (setq b -25647585550)) b 0))))
+	(vals '(-297090677547 -20121092)))
+    (eqlt (apply (compile nil form1) vals)
+	  (apply (compile nil form2) vals)))
+  t)
+
+(deftest misc.66
+  (let* ((form '(if (> a (setq a -2198578292))
+		    (min b (if (<= a -14866) a -128363))
+		  a))
+	 (form1 `(lambda (a b)
+		   (declare (type (integer -3709231882 0) a))
+		   (declare (type (integer -562051054 -1) b))
+		   ,form))
+	 (form2 `(lambda (a b) ,form))
+	 (vals '(-2095414787 -256985442)))
+    (eqlt (apply (compile nil form1) vals)
+	  (apply (compile nil form2) vals)))
+  t)
 
