@@ -63,7 +63,7 @@
      (map-slot-boundp* c2 '(a b c d))
      (slot-value c1 'a)
      (slot-value c2 'a)
-     (eq (slot-makunbound c1 'a) c1)
+     (eqt (slot-makunbound c1 'a) c1)
      (map-slot-boundp* c1 '(a b))
      (map-slot-boundp* c2 '(a b c d))))
   (nil nil)
@@ -88,7 +88,7 @@
      (map-slot-boundp* c2 '(a b c d))
      (slot-value c1 'a)
      (slot-value c2 'a)
-     (eq (slot-makunbound c2 'a) c2)
+     (eqt (slot-makunbound c2 'a) c2)
      (map-slot-boundp* c1 '(a b))
      (map-slot-boundp* c2 '(a b c d))))
   (nil nil)
@@ -247,8 +247,8 @@
      (cobj4 (eval '(defclass class-0209b (class-0209a)
 		     ((a :allocation :instance))))))
     (values
-     (eq cobj1 cobj3)
-     (eq cobj2 cobj4)
+     (eqt cobj1 cobj3)
+     (eqt cobj2 cobj4)
      (class-name cobj1)
      (class-name cobj2)
      (slot-value (make-instance 'class-0209a) 'a)
@@ -257,4 +257,61 @@
   class-0209a
   class-0209b
   x x)
+
+(deftest class-redefinition.2
+  (let*
+      (
+       (cobj1 (eval '(defclass class-0210a ()
+		       ((a :allocation :class)))))
+       (cobj2 (eval '(defclass class-0210b (class-0210a)
+		       ((a :allocation :instance)))))
+       (cobj3 (eval '(defclass class-0210c (class-0210b)
+		       ((a :allocation :class)))))
+       (dummy (progn
+		(setf (slot-value (make-instance 'class-0210a) 'a) :bad1)
+		(make-instance 'class-0210b)
+		(make-instance 'class-0210c)
+		nil))
+       (cobj4 (eval '(defclass class-0210a ()
+		       ((a :allocation :class)))))
+       (cobj5 (eval '(defclass class-0210b (class-0210a)
+		       ((a :allocation :instance)))))
+       (cobj6 (eval '(defclass class-0210c (class-0210b)
+		       ((a :allocation :class))))))
+    (list
+     (eqt cobj1 cobj4)
+     (eqt cobj2 cobj5)
+     (eqt cobj3 cobj6)
+     (class-name cobj1)
+     (class-name cobj2)
+     (class-name cobj3)
+     (let ((c1 (make-instance 'class-0210a))
+	   (c2 (make-instance 'class-0210b))
+	   (c3 (make-instance 'class-0210c)))
+       (slot-makunbound c1 'a)
+       (slot-makunbound c2 'a)
+       (slot-makunbound c3 'a)
+       (list
+	(setf (slot-value c1 'a) 'x)
+	(and (slot-boundp* c1 'a) (slot-value c1 'a))
+	(slot-boundp* c2 'a)
+	(slot-boundp* c3 'a)
+	(setf (slot-value c2 'a) 'y)
+	(and (slot-boundp* c1 'a) (slot-value c1 'a))
+	(and (slot-boundp* c2 'a) (slot-value c2 'a))
+	(slot-boundp* c3 'a)
+	(setf (slot-value c3 'a) 'z)
+	(and (slot-boundp* c1 'a) (slot-value c1 'a))
+	(and (slot-boundp* c2 'a) (slot-value c2 'a))
+	(and (slot-boundp* c3 'a) (slot-value c3 'a))))))
+  (t t t 
+     class-0210a
+     class-0210b
+     class-0210c
+     (x
+      x nil nil
+      y
+      x y nil
+      z
+      x y z)))
 
