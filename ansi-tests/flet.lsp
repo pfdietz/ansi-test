@@ -293,3 +293,64 @@
   (1 2 (:foo a :bar b) a b)
   (1 2 (:bar b :foo a) a b))
 
+;;; Binding of formal parameters that are also special variables
+(deftest flet.35
+  (let ((x 'bad))
+    (declare (special x))
+    (flet ((%f () x))
+      (flet ((%g (x)
+		 (declare (special x))
+		 (%f)))
+	(%g 'good))))
+  good)
+
+(deftest flet.36
+  (let ((x 'bad))
+    (declare (special x))
+    (flet ((%f () x))
+      (flet ((%g (&aux (x 'good))
+		 (declare (special x))
+		 (%f)))
+	 (%g))))
+  good)
+
+(deftest flet.37
+  (let ((x 'bad))
+    (declare (special x))
+    (flet ((%f () x))
+      (flet ((%g (&rest x)
+		 (declare (special x))
+		 (%f)))
+	 (%g 'good))))
+  (good))
+
+(deftest flet.38
+  (let ((x 'bad))
+    (declare (special x))
+    (flet ((%f () x))
+      (flet ((%g (&key (x 'good))
+		 (declare (special x))
+		 (%f)))
+	 (%g))))
+  good)
+
+(deftest flet.39
+  (let ((x 'bad))
+    (declare (special x))
+    (flet ((%f () x))
+      (flet ((%g (&key (x 'bad))
+		 (declare (special x))
+		 (%f)))
+	 (%g :x 'good))))
+  good)
+
+(deftest flet.40
+  (let ((x 'good))
+    (declare (special x))
+    (flet ((%f () x))
+      (flet ((%g (&key (x 'bad))
+		 (%f)))
+	 (%g :x 'worse))))
+  good)
+
+
