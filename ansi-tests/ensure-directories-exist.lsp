@@ -125,6 +125,11 @@
 	      (setq results (multiple-value-list (ensure-directories-exist pn)))))
 	   (result-pn (first results))
 	   (created (second results)))
+      ;; Create the file and write to it
+      (with-open-file (*standard-output*
+		       pn :direction :output :if-exists :error
+		       :if-does-not-exist :create)
+		      (print nil))		      
       (values
        (length results)
        (notnot created)
