@@ -34,9 +34,10 @@
      (loop for pn in pathnames
 	   unless (equal pn (truename pn))
 	   collect pn)
-     (loop for pn in pathnames
-	   unless (pathname-match-p pn pattern-pathname)
-	   collect pn)))
+;;     (loop for pn in pathnames
+;;	   unless (pathname-match-p pn pattern-pathname)
+;;	   collect pn))
+     )
   nil nil nil)
 
 (deftest directory.error.1
