@@ -23,14 +23,14 @@
   "Xbcd" "aXcd" "abXd" "abcX")
 
 (deftest char.3
-  (let ((s (make-array 6 :element-type 'chararacter
+  (let ((s (make-array 6 :element-type 'character
 		       :initial-contents '(#\a #\b #\c #\d #\e #\f))))
     (setf (char s 3) #\X)
     s)
   "abcXef")
 
 (deftest char.4
-  (let ((s (make-array 6 :element-type 'chararacter
+  (let ((s (make-array 6 :element-type 'character
 		       :initial-contents '(#\a #\b #\c #\d #\e #\f)
 		       :fill-pointer 4)))
     (setf (char s 3) #\X)
@@ -56,7 +56,7 @@
   "aaaXa")
 
 (deftest char.8
-  (let ((s (make-array 6 :element-type 'chararacter
+  (let ((s (make-array 6 :element-type 'character
 		       :initial-contents '(#\a #\b #\c #\d #\e #\f)
 		       :fill-pointer 4)))
     (setf (char s 5) #\X)

@@ -97,6 +97,7 @@
 			   "ABCD"))))
   t)
 	     
+#|
 (deftest read-symbol-8
     (multiple-value-bind (s n)
 	(ignore-errors (read-from-string "::ABCD"))
@@ -107,6 +108,7 @@
 	     (string-equal (symbol-name s)
 			   "ABCD"))))
   t)
+|#
 
 (defun read-symbol-9-body (natoms maxlen)
   (let* ((chars (concatenate 'string

@@ -108,6 +108,10 @@
   (subtypep 'simple-base-string 'simple-string)
   t t)
 
+(deftest simple-base-string.8
+  (subtypep 'simple-base-string 'simple-vector)
+  t t)
+
 ;;; Tests for simple-string-p
 
 (deftest simple-string-p.1
