@@ -122,16 +122,39 @@
     (rcase
      ;; Unary ops
      (40
-      (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn
+      (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn floor
+				     ceiling truncate round
 				     integer-length logcount values))))
 	`(,op ,(make-random-integer-form (1- size) vars))))
+     (2 `(isqrt (abs ,(make-random-integer-form (- size 2) vars))))
+     (3
+      (destructuring-bind (s1 s2)
+	  (random-partition (- size 2) 2)
+	`(ash ,(make-random-integer-form s1 vars)
+	      (min ,(random 100)
+		   ,(make-random-integer-form s2 vars)))))
+     
+     ;; binary floor, ceiling, truncate, round
+     (4
+      (let ((op (random-from-seq #(floor ceiling truncate round)))
+	    (op2 (random-from-seq #(max min))))
+	(destructuring-bind (s1 s2)
+	  (random-partition (- size 2) 2)
+	  `(,op  ,(make-random-integer-form s1 vars)
+		 (,op2  ,(if (eq op2 'max)
+			     (1+ (random 100))
+			   (- (1+ (random 100))))
+			,(make-random-integer-form s2 vars))))))
+	    
      ;; Binary op
      (80
       (let* ((op (random-from-seq
 		  '(+ - * * logand min max min max ;; gcd lcm
-		      #-:allegro logandc1  ;; bug in ACL 6.2 makes this cause crashes
+		      ;; #-:allegro
+		      logandc1
 		      logandc2 logeqv logior lognand lognor
-		      #-:allegro logorc1 ;; another bug in ACL 6.2
+		      ;; #-:allegro
+		      logorc1
 		      logorc2 logxor))))
 	(destructuring-bind (leftsize rightsize)
 	    (random-partition (1- size) 2)
@@ -153,7 +176,7 @@
 	  ,(make-random-integer-form s1 vars)
 	  ,(make-random-byte-spec-form s2 vars)
 	  ,(make-random-integer-form s3 vars))))
-     #-:allegro
+     ;; #-:allegro
      (10
       (destructuring-bind (s1 s2) (random-partition (1- size) 2)
 	  `(,(random-from-seq '(ldb mask-field))
@@ -350,8 +373,6 @@
     (let ((n1 (1+ (random (floor n p)))))
       (cons n1 (random-partition (- n n1) (1- p)))))))
 
-;;; Interface to the form pruner
-
 (defun make-optimized-lambda-form (form vars var-types)
   `(lambda ,vars
      (declare ,@(mapcar #'(lambda (tp var)
@@ -418,13 +439,13 @@
 	      
 	    (let ((unopt-result
 		   (handler-case
-		    (multiple-value-list
+		    (identity ;; multiple-value-list
 		     (apply unoptimized-compiled-fn vals))
 		    (error (c) (declare (ignore c))
 			   (%eval-error :unoptimized-form-error))))
 		  (opt-result
 		   (handler-case
-		    (multiple-value-list
+		    (identity ;; multiple-value-list
 		     (apply optimized-compiled-fn vals))
 		    (error (c) (declare (ignore c))
 			   (%eval-error :optimized-form-error)))))
@@ -438,6 +459,8 @@
 		  (%eval-error (list :different-results
 				     opt-result
 				     unopt-result)))))))))))
+
+;;; Interface to the form pruner
 
 (defun prune-int-form (form vars var-types vals-list)
   "Conduct tests on selected simplified versions of FORM.  Return the
@@ -524,6 +547,11 @@
 
 	 ((ldb mask-field)
 	  (try (second args))
+	  (when (and (consp (first args))
+		     (eq 'byte (first (first args)))
+		     (every #'numberp (cdr (first args)))
+		     (numberp (second args)))
+	    (try (eval form)))
 	  (prune-fn form try-fn))
 
 	 ((ldb-test)
@@ -560,6 +588,63 @@
 
 	 ((case)
 	  (prune-case form try-fn))
+
+	 ((isqrt)
+	  (let ((arg (second form)))
+	    (assert (null (cddr form)))
+	    (assert (consp arg))
+	    (assert (eq (first arg) 'abs))
+	    (let ((arg2 (second arg)))
+	      ;; Try to fold
+	      (when (integerp arg2)
+		(try (isqrt (abs arg2))))
+	      ;; Otherwise, simplify arg2
+	      (prune arg2 #'(lambda (form)
+			      (try `(isqrt (abs ,form))))))))
+
+	 ((ash)
+	  (let ((form1 (second form))
+		(form2 (third form)))
+	    (try form1)
+	    (try form2)
+	    (prune form1
+		   #'(lambda (form)
+		       (try `(ash ,form ,form2))))
+	    (when (and (consp form2)
+		       (= (length form2) 3))
+	      (when (and (integerp form1)
+			 (eq (first form2) 'min)
+			 (every #'integerp (cdr form2)))
+		(try (eval form)))
+	      (let ((form3 (third form2)))
+		(prune form3
+		       #'(lambda (form)
+			   (try
+			    `(ash ,form1 (,(first form2) ,(second form2)
+					  ,form)))))))))
+
+	 ((floor ceiling truncate round)
+	  (let ((form1 (second form))
+		(form2 (third form)))
+	    (try form1)
+	    (when (cddr form) (try form2))
+	    (prune form1
+		   (if (cddr form)
+		       #'(lambda (form)
+			   (try `(,op ,form ,form2)))
+		     #'(lambda (form) (try `(,op ,form)))))
+	    (when (and (consp form2)
+		       (= (length form2) 3))
+	      (when (and (integerp form1)
+			 (member (first form2) '(max min))
+			 (every #'integerp (cdr form2)))
+		(try (eval form)))
+	      (let ((form3 (third form2)))
+		(prune form3
+		       #'(lambda (form)
+			   (try
+			    `(,op ,form1 (,(first form2) ,(second form2)
+					  ,form)))))))))
 	 
 	 (otherwise
 	  (prune-fn form try-fn))
@@ -573,6 +658,7 @@
 	       (find-in-tree value (cdr tree))))))
 
 (defun prune-list (list element-prune-fn list-try-fn)
+  (declare (type function element-prune-fn list-try-fn))
   "Utility function for pruning in a list."
     (loop for i from 0
 	  for e in list
@@ -585,6 +671,7 @@
 					   (subseq list (1+ i))))))))
 
 (defun prune-case (form try-fn)
+  (declare (type function try-fn))
   (let* ((op (first form))
 	 (expr (second form))
 	 (cases (cddr form)))
@@ -607,6 +694,7 @@
     ;; Assume each case has a single form
     (prune-list cases
 		#'(lambda (case try-fn)
+		    (declare (function try-fn))
 		    (when (eql (length case) 2)
 		      (prune (cadr case)
 			     #'(lambda (form)
@@ -643,6 +731,7 @@
     ;; Try to simplify the forms in the RHS of the bindings
     (prune-list binding-list
 		#'(lambda (binding try-fn)
+		    (declare (function try-fn))
 		    (prune (cadr binding)
 			   #'(lambda (form)
 			       (funcall try-fn
@@ -679,6 +768,7 @@
     ;; Try to simplify the forms in the RHS of the bindings
     (prune-list binding-list
 		#'(lambda (binding try-fn)
+		    (declare (function try-fn))
 		    (prune (third binding)
 			   #'(lambda (form)
 			       (funcall try-fn
