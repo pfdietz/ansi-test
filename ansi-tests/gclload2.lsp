@@ -67,15 +67,11 @@
 ;;; Tests of the reader
 (load "load-reader.lsp")
 
-;;; Tests of system construction, environment
-(load "apropos.lsp")
-(load "describe.lsp")
-(load "disassemble.lsp")
-(load "environment-functions.lsp")
-(load "features.lsp")
-(load "room.lsp")
-(load "time.lsp")
-(load "user-homedir-pathname.lsp")
+;;; Tests of system construction
+(load "load-system-construction.lsp")
+
+;;; Tests of environment
+(load "load-environment.lsp")
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
