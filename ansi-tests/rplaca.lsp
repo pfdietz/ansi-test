@@ -23,7 +23,7 @@
      i a b))
   (c . b) 2 1 2)
 
-;; rplaca on a fixnum is a type error
+;; rplaca on a non-cons is a type error
 (deftest rplaca.error.1
   (loop for x in *universe*
 	thereis (and (not (consp x))
