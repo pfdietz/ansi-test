@@ -13,3 +13,4 @@
 (load "streamp.lsp")
 (load "read-byte.lsp")
 (load "peek-char.lsp")
+(load "read-char.lsp")
