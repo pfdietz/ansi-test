@@ -328,7 +328,7 @@
 				       :pretty nil
 				       :length 0)
 	 unless (string= result "#()")
-	 collect (i type v result)))
+	 collect (list i type v result)))
   nil)
 
 (deftest print.vector.length.6
@@ -342,7 +342,7 @@
 				       :readably nil
 				       :length 0)
 	 unless (string= result "#(...)")
-	 collect (i type v result)))
+	 collect (list i type v result)))
   nil)
 
 (deftest print.vector.length.7
@@ -356,7 +356,7 @@
 				       :readably nil
 				       :length 0)
 	 unless (string= result "#(...)")
-	 collect (i type v result)))
+	 collect (list i type v result)))
   nil)
 
 (deftest print.vector.length.8
@@ -371,7 +371,7 @@
 				       :readably nil
 				       :length 2)
 	 unless (string= result "#(1 3 ...)")
-	 collect (i type v result)))
+	 collect (list i type v result)))
   nil)
 
 (deftest print.vector.length.9
@@ -386,7 +386,7 @@
 				       :readably nil
 				       :length 2)
 	 unless (string= result "#(1 -2 ...)")
-	 collect (i type v result)))
+	 collect (list i type v result)))
   nil)
 
 ;;; Printing with *print-level* bound
