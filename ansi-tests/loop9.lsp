@@ -151,11 +151,11 @@
   (a b c d e f g i))
 
 (deftest loop.9.32
-  (loop for x in '((a) (b) (c . whatever)) nconc (copy-seq x))
+  (loop for x in '((a) (b) (c . whatever)) nconc (cons (car x) (cdr x)))
   (a b c . whatever))
 
 (deftest loop.9.33
-  (loop for x in '((a) (b) (c . whatever)) nconcing (copy-seq x))
+  (loop for x in '((a) (b) (c . whatever)) nconcing (cons (car x) (cdr x)))
   (a b c . whatever))
 
 (deftest loop.9.34
@@ -214,3 +214,9 @@
 	else collect (+ x 2) into foo
 	finally (return foo))
   (1 3 4 5 7 8 9))
+
+;;; More nconc tests
+
+(deftest loop.9.42
+  (loop for x in '(a b c d e) nconc (cons x 'foo))
+  (a b c d e . foo))
