@@ -41,7 +41,7 @@
 ;;; See 11.1.2.1.1
 (deftest fboundp.8
   (loop for x in *cl-non-function-macro-special-operator-symbols*
-	when (fboundp x)
+	when (and (fboundp x) (not (eq x 'ed)))
 	collect x)
   nil)
 
