@@ -23,6 +23,15 @@
 ;;(deftest keywordp.11 (notnot-mv (keywordp ::foo))       t)
 (deftest keywordp.12 (keywordp t)          nil)
 
+(deftest keywordp.13
+  (let ((kwp (find-package "KEYWORD"))
+	(bad nil))
+    (do-symbols (s "KEYWORD" bad)
+      (when (and (not (eq (symbol-package s) kwp))
+		 (keywordp s))
+	(push s bad))))
+  nil)
+
 (deftest keywordp.order.1
   (let ((i 0))
     (values (keywordp (progn (incf i) nil)) i))
