@@ -9825,5 +9825,3 @@ Broken at C::WT-MAKE-CLOSURE.
       (unless (eql expected actual)
 	(list expected actual))))
   nil)
-
-    
