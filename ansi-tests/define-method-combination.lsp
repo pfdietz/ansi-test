@@ -66,36 +66,39 @@
 (defgeneric dmc-gf-03 (x) (:method-combination times))
 
 (deftest define-method-combination-03.1
-  (handler-case
-   (progn
-     (eval '(defmethod dmc-gf-03 ((x integer)) t))
-     :bad)
-   (error ()
-	  (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list 1)))
-	    (remove-method #'dmc-gf-03 meth))
-	  :good))
+  (prog1
+      (handler-case
+       (progn
+	 (eval '(defmethod dmc-gf-03 ((x integer)) t))
+	 (eval '(dmc-gf-03 1))
+	 :bad)
+       (error () :good))
+    (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list 1)))
+      (remove-method #'dmc-gf-03 meth)))
   :good)
 
 (deftest define-method-combination-03.2
-  (handler-case
-   (progn
-     (eval '(defmethod dmc-gf-03 :before ((x cons)) t))
-     :bad)
-   (error ()
-     (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list '(a))))
-       (remove-method #'dmc-gf-03 meth))
-     :good))
+  (prog1
+      (handler-case
+       (progn
+	 (eval '(defmethod dmc-gf-03 :before ((x cons)) t))
+	 (eval '(dmc-gf-03 (cons 'a 'b)))
+	 :bad)
+       (error () :good))
+    (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list '(a))))
+      (remove-method #'dmc-gf-03 meth)))
   :good)
 
 (deftest define-method-combination-03.3
-  (handler-case
-   (progn
-     (eval '(defmethod dmc-gf-03 :after ((x symbol)) t))
-     :bad)
-   (error ()
-     (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list 'a)))
-       (remove-method #'dmc-gf-03 meth))
-     :good))
+  (prog1
+      (handler-case
+       (progn
+	 (eval '(defmethod dmc-gf-03 :after ((x symbol)) t))
+	 (eval '(dmc-gf-03 'a))
+	 :bad)
+       (error () :good))
+    (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list 'a)))
+      (remove-method #'dmc-gf-03 meth)))
   :good)
 
 (define-method-combination times2
