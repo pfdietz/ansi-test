@@ -6095,3 +6095,56 @@ Broken at C::WT-C-INLINE-LOC.
      (%f15 0))))
    -38276611 -11001852)
   1073730663)
+
+;;; Bugs from abcl
+;;; Debugger invoked on condition of type TYPE-ERROR:
+;;;   The value org.armedbear.lisp.Symbol@54 is not of type integer.
+
+(deftest misc.328
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -11368047588 14412128900) a))
+       (declare (type (integer -10 0) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 3) (space 1) (safety 3) (debug 0)
+			  (compilation-speed 0)))
+       (if (logbitp 0 (if (or t nil) (setf a -2616861879) 0)) 0 0)))
+   -4836700955 -1)
+  0)
+
+;;; Incorrect value
+(deftest misc.329
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -725661427 405092) a))
+       (declare (type (integer 84176291516 98216856233) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 3) (space 3) (safety 0) (debug 0)
+			  (compilation-speed 0)))
+       (let ((*s2* (case b ((53651 62711 29537 25305 62250) 0) (t 0))))
+	 (declare (special *s2*))
+	 (setq a -688292831))))
+   -406606203 84436335326)
+  -688292831)
+
+(deftest misc.330
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -12816761394938 -8706928710678) a))
+       (declare (type (integer -3683497948554 427) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 3) (space 0) (safety 0) (debug 3)
+			  (compilation-speed 2)))
+       (lcm (block b8 (signum (return-from b8 a))))))
+   -12715609319989 -582329850697)
+  12715609319989)
+
+
+
+    
