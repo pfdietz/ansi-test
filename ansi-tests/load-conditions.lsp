@@ -8,3 +8,6 @@
 (load "warn.lsp")
 (load "invoke-debugger.lsp")
 (load "handler-bind.lsp")
+(load "handler-case.lsp")
+(load "ignore-errors.lsp")
+

@@ -181,11 +181,19 @@
    (error () 'good))
   good)
 
+(deftest handler-case.26
+  (handler-case
+   (values 1 'a 1.0)
+   (error () 'bad)
+   (:no-error (a b c)
+	      ;; Test that declarations can go here
+	      (declare (type integer a))
+	      (declare (type symbol b))
+	      (declare (type number c))
+	      (declare (ignore a c))
+	      b))
+  a)
 
-
-
-
-
-
-
-
+(deftest handler-case.27
+  (handler-case (error "foo") (error ()))
+  nil)
