@@ -512,63 +512,61 @@
 ;;; Error tests
 
 (deftest position-if.error.1
-  (classify-error (position-if #'identity 'b))
-  type-error)
+  (signals-error (position-if #'identity 'b) type-error)
+  t)
 
 (deftest position-if.error.2
-  (classify-error (position-if #'identity 10))
-  type-error)
+  (signals-error (position-if #'identity 10) type-error)
+  t)
 
 (deftest position-if.error.3
-  (classify-error (position-if 'null 1.4))
-  type-error)
+  (signals-error (position-if 'null 1.4) type-error)
+  t)
 
 (deftest position-if.error.4
-  (classify-error (position-if 'null '(a b c . d)))
-  type-error)
+  (signals-error (position-if 'null '(a b c . d)) type-error)
+  t)
 
 (deftest position-if.error.5
-  (classify-error (position-if))
-  program-error)
+  (signals-error (position-if) program-error)
+  t)
 
 (deftest position-if.error.6
-  (classify-error (position-if #'null))
-  program-error)
+  (signals-error (position-if #'null) program-error)
+  t)
 
 (deftest position-if.error.7
-  (classify-error (position-if #'null nil :key))
-  program-error)
+  (signals-error (position-if #'null nil :key) program-error)
+  t)
 
 (deftest position-if.error.8
-  (classify-error (position-if #'null nil 'bad t))
-  program-error)
+  (signals-error (position-if #'null nil 'bad t) program-error)
+  t)
 
 (deftest position-if.error.9
-  (classify-error (position-if #'null nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (position-if #'null nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest position-if.error.10
-  (classify-error (position-if #'null nil 1 2))
-  program-error)
+  (signals-error (position-if #'null nil 1 2) program-error)
+  t)
 
 (deftest position-if.error.11
-  (classify-error (locally (position-if #'identity 'b) t))
-  type-error)
+  (signals-error (locally (position-if #'identity 'b) t) type-error)
+  t)
 
 (deftest position-if.error.12
-  (classify-error (position-if #'cons '(a b c d)))
-  program-error)
+  (signals-error (position-if #'cons '(a b c d)) program-error)
+  t)
 
 (deftest position-if.error.13
-  (classify-error (position-if #'car '(a b c d)))
-  type-error)
+  (signals-error (position-if #'car '(a b c d)) type-error)
+  t)
 
 (deftest position-if.error.14
-  (classify-error (position-if #'identity '(a b c d) :key #'cdr))
-  type-error)
+  (signals-error (position-if #'identity '(a b c d) :key #'cdr) type-error)
+  t)
 
 (deftest position-if.error.15
-  (classify-error (position-if #'identity '(a b c d) :key #'cons))
-  program-error)
-
-
+  (signals-error (position-if #'identity '(a b c d) :key #'cons) program-error)
+  t)

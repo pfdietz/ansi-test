@@ -60,8 +60,8 @@
   t)
 
 (deftest pathname-device.error.1
-  (classify-error (pathname-device))
-  program-error)
+  (signals-error (pathname-device) program-error)
+  t)
 
 (deftest pathname-device.error.2
   (loop for x in *mini-universe*

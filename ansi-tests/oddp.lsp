@@ -7,25 +7,29 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest oddp.error.1
-  (classify-error (oddp))
-  program-error)
+  (signals-error (oddp) program-error)
+  t)
 
 (deftest oddp.error.2
-  (classify-error (oddp 0 nil))
-  program-error)
+  (signals-error (oddp 0 nil) program-error)
+  t)
+
+(deftest oddp.error.3
+  (loop for x in *mini-universe*
+	unless (or (integerp x)
+		   (eval `(signals-error (oddp ',x) type-error)))
+	collect x)
+  nil)
+
+;;; Non-error tests
 
 (deftest oddp.1
   (loop for x in *numbers*
 	when (integerp x)
 	do (oddp x))
-  nil)
-
-(deftest oddp.2
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eq (classify-error** `(oddp (quote ,x))) 'type-error))
-	collect x)
   nil)
 
 (deftest oddp.3

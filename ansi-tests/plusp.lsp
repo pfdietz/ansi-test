@@ -5,24 +5,28 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest plusp.error.1
-  (classify-error (plusp))
-  program-error)
+  (signals-error (plusp) program-error)
+  t)
 
 (deftest plusp.error.2
-  (classify-error (plusp 0 0))
-  program-error)
+  (signals-error (plusp 0 0) program-error)
+  t)
 
 (deftest plusp.error.3
-  (classify-error (plusp 0 nil))
-  program-error)
+  (signals-error (plusp 0 nil) program-error)
+  t)
 
 (deftest plusp.error.4
   (loop for x in *mini-universe*
 	unless (realp x)
-	unless (eql (classify-error** `(plusp ',x)) 'type-error)
+	unless (eval `(signals-error (plusp ',x) type-error))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest plusp.1
   (plusp 0)

@@ -73,8 +73,6 @@
 ;;; whether with-package-iterator should signal the error
 ;;; at macro expansion time or at run time.
 ;;
-;;; PFD 01-18-03:  I should rewrite this to use CLASSIFY-ERROR, which
-;;;  uses EVAL to avoid that problem.
 
 (deftest with-package-iterator.11
   (handler-case (macroexpand-1

@@ -30,17 +30,17 @@
   t)
 
 (deftest probe-file.error.1
-  (classify-error (probe-file))
-  program-error)
+  (signals-error (probe-file) program-error)
+  t)
 
 (deftest probe-file.error.2
-  (classify-error (probe-file #p"probe-file.lsp" nil))
-  program-error)
+  (signals-error (probe-file #p"probe-file.lsp" nil) program-error)
+  t)
 
 (deftest probe-file.error.3
-  (classify-error (probe-file (make-pathname :name :wild)))
-  file-error)
+  (signals-error (probe-file (make-pathname :name :wild)) file-error)
+  t)
 
 (deftest probe-file.error.4
-  (classify-error (probe-file "CLTEST:*.FOO"))
-  file-error)
+  (signals-error (probe-file "CLTEST:*.FOO") file-error)
+  t)

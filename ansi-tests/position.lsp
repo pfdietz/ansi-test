@@ -768,62 +768,61 @@
 ;;; Error tests
 
 (deftest position.error.1
-  (classify-error (position 'a 'b))
-  type-error)
+  (signals-error (position 'a 'b) type-error)
+  t)
 
 (deftest position.error.2
-  (classify-error (position 'a 10))
-  type-error)
+  (signals-error (position 'a 10) type-error)
+  t)
 
 (deftest position.error.3
-  (classify-error (position 'a 1.4))
-  type-error)
+  (signals-error (position 'a 1.4) type-error)
+  t)
 
 (deftest position.error.4
-  (classify-error (position 'e '(a b c . d)))
-  type-error)
+  (signals-error (position 'e '(a b c . d)) type-error)
+  t)
 
 (deftest position.error.5
-  (classify-error (position))
-  program-error)
+  (signals-error (position) program-error)
+  t)
 
 (deftest position.error.6
-  (classify-error (position 'a))
-  program-error)
+  (signals-error (position 'a) program-error)
+  t)
 
 (deftest position.error.7
-  (classify-error (position 'a nil :key))
-  program-error)
+  (signals-error (position 'a nil :key) program-error)
+  t)
 
 (deftest position.error.8
-  (classify-error (position 'a nil 'bad t))
-  program-error)
+  (signals-error (position 'a nil 'bad t) program-error)
+  t)
 
 (deftest position.error.9
-  (classify-error (position 'a nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (position 'a nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest position.error.10
-  (classify-error (position 'a nil 1 2))
-  program-error)
+  (signals-error (position 'a nil 1 2) program-error)
+  t)
 
 (deftest position.error.11
-  (classify-error (locally (position 'a 'b) t))
-  type-error)
+  (signals-error (locally (position 'a 'b) t) type-error)
+  t)
 
 (deftest position.error.12
-  (classify-error (position 'b '(a b c d) :test #'identity))
-  program-error)
+  (signals-error (position 'b '(a b c d) :test #'identity) program-error)
+  t)
 
 (deftest position.error.13
-  (classify-error (position 'b '(a b c d) :test-not #'not))
-  program-error)
+  (signals-error (position 'b '(a b c d) :test-not #'not) program-error)
+  t)
 
 (deftest position.error.14
-  (classify-error (position 'b '(a b c d) :key #'cdr))
-  type-error)
+  (signals-error (position 'b '(a b c d) :key #'cdr) type-error)
+  t)
 
 (deftest position.error.15
-  (classify-error (position 'b '(a b c d) :key #'cons))
-  program-error)
-
+  (signals-error (position 'b '(a b c d) :key #'cons) program-error)
+  t)

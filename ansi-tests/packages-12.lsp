@@ -239,9 +239,9 @@
   t)
 
 (deftest unintern.error.1
-  (classify-error (unintern))
-  program-error)
+  (signals-error (unintern) program-error)
+  t)
 
 (deftest unintern.error.2
-  (classify-error (unintern '#:x "CL-TEST" nil))
-  program-error)
+  (signals-error (unintern '#:x "CL-TEST" nil) program-error)
+  t)

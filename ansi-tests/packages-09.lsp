@@ -265,7 +265,7 @@
 
 (deftest make-package.error.1
   (handle-non-abort-restart (make-package "A"))
-  success)
+  success)  
 
 (deftest make-package.error.2
   (handle-non-abort-restart (make-package "Q"))
@@ -284,41 +284,42 @@
   success)
 
 (deftest make-package.error.5
-  (classify-error (make-package))
-  program-error)
+  (signals-error (make-package) program-error)
+  t)
 
 (deftest make-package.error.6
   (progn
     (safely-delete-package "MPE6")
-    (classify-error (make-package "MPE6" :bad t)))
-  program-error)
+    (signals-error (make-package "MPE6" :bad t) program-error))
+  t)
 
 (deftest make-package.error.7
   (progn
     (safely-delete-package "MPE7")
-    (classify-error (make-package "MPE7" :nicknames)))
-  program-error)
+    (signals-error (make-package "MPE7" :nicknames) program-error))
+  t)
 
 (deftest make-package.error.8
   (progn
     (safely-delete-package "MPE8")
-    (classify-error (make-package "MPE8" :use)))
-  program-error)
+    (signals-error (make-package "MPE8" :use) program-error))
+  t)
 
 (deftest make-package.error.9
   (progn
     (safely-delete-package "MPE9")
-    (classify-error (make-package "MPE9" 'bad t)))
-  program-error)
+    (signals-error (make-package "MPE9" 'bad t) program-error))
+  t)
 
 (deftest make-package.error.10
   (progn
     (safely-delete-package "MPE10")
-    (classify-error (make-package "MPE10" 1 2)))
-  program-error)
+    (signals-error (make-package "MPE10" 1 2) program-error))
+  t)
 
 (deftest make-package.error.11
   (progn
     (safely-delete-package "MPE11")
-    (classify-error (make-package "MPE11" 'bad t :allow-other-keys nil)))
-  program-error)
+    (signals-error (make-package "MPE11" 'bad t :allow-other-keys nil)
+		   program-error))
+  t)

@@ -6,17 +6,17 @@
 (in-package :cl-test)
 
 (deftest phase.error.1
-  (classify-error (phase))
-  program-error)
+  (signals-error (phase) program-error)
+  t)
 
 (deftest phase.error.2
-  (classify-error (phase 0 0))
-  program-error)
+  (signals-error (phase 0 0) program-error)
+  t)
 
 (deftest phase.error.3
   (loop for x in *mini-universe*
 	unless (or (numberp x)
-		   (eq (eval `(classify-error (phase ',x))) 'type-error))
+		   (eval `(signals-error (phase ',x) type-error)))
 	collect x)
   nil)
 

@@ -99,12 +99,9 @@
   caught)
 
 (deftest export.error.1
-  (classify-error (export))
-  program-error)
+  (signals-error (export) program-error)
+  t)
 
 (deftest export.error.2
-  (classify-error (export 'X "CL-TEST" NIL))
-  program-error)
-
-
-
+  (signals-error (export 'X "CL-TEST" NIL) program-error)
+  t)

@@ -84,9 +84,9 @@
   car 2 1 2)
 
 (deftest find-symbol.error.1
-  (classify-error (find-symbol))
-  program-error)
+  (signals-error (find-symbol) program-error)
+  t)
 
 (deftest find-symbol.error.2
-  (classify-error (find-symbol "CAR" "CL" nil))
-  program-error)
+  (signals-error (find-symbol "CAR" "CL" nil) program-error)
+  t)

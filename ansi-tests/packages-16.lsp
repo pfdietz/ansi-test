@@ -370,19 +370,21 @@
 (deftest defpackage.13
   (progn
     (safely-delete-package "H")
-    (classify-error
-     (eval '(defpackage "H" (:use) (:size 10) (:size 20)))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use) (:size 10) (:size 20))
+     program-error))
+  t)
 
 ;; Repeated documentation field should cause a program-error
 (deftest defpackage.14
   (progn
     (safely-delete-package "H")
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:documentation "foo")
-	      (:documentation "bar")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:documentation "foo")
+       (:documentation "bar"))
+     program-error))
+  t)
 
 ;; When a nickname refers to an existing package or nickname,
 ;; signal a package-error
@@ -390,18 +392,18 @@
 (deftest defpackage.15
   (progn
     (safely-delete-package "H")
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:nicknames "A")))))
-  package-error)
+    (signals-error
+     (defpackage "H" (:use) (:nicknames "A"))
+     package-error))
+  t)
 
 (deftest defpackage.16
   (progn
     (safely-delete-package "H")
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:nicknames "Q")))))
-  package-error)
+    (signals-error
+     (defpackage "H" (:use) (:nicknames "Q"))
+     package-error))
+  t)
 
 ;; Names in :shadow, :shadowing-import-from, :import-from, and :intern
 ;; must be disjoint, or a package-error is signalled.
@@ -412,11 +414,12 @@
     (safely-delete-package "H")
     (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:shadow "A")
-	      (:shadowing-import-from "G" "A")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:shadow "A")
+       (:shadowing-import-from "G" "A"))
+     program-error))
+  t)
 
 ;; :shadow and :import-from
 (deftest defpackage.18
@@ -424,21 +427,23 @@
     (safely-delete-package "H")
     (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:shadow "A")
-	      (:import-from "G" "A")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:shadow "A")
+       (:import-from "G" "A"))
+     program-error))
+  t)
 
 ;; :shadow and :intern
 (deftest defpackage.19
   (progn
     (safely-delete-package "H")
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:shadow "A")
-	      (:intern "A")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:shadow "A")
+       (:intern "A"))
+     program-error))
+  t)
 
 ;; :shadowing-import-from and :import-from
 (deftest defpackage.20
@@ -446,11 +451,12 @@
     (safely-delete-package "H")
     (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:shadowing-import-from "G" "A")
-	      (:import-from "G" "A")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:shadowing-import-from "G" "A")
+       (:import-from "G" "A"))
+     program-error))
+  t)
 
 ;; :shadowing-import-from and :intern
 (deftest defpackage.21
@@ -458,11 +464,12 @@
     (safely-delete-package "H")
     (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:shadowing-import-from "G" "A")
-	      (:intern "A")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:shadowing-import-from "G" "A")
+       (:intern "A"))
+     program-error))
+  t)
 
 ;; :import-from and :intern
 (deftest defpackage.22
@@ -470,22 +477,24 @@
     (safely-delete-package "H")
     (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:import-from "G" "A")
-	      (:intern "A")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:import-from "G" "A")
+       (:intern "A"))
+     program-error))
+  t)
 
 ;; Names given to :export and :intern must be disjoint,
 ;;  otherwise signal a program-error
 (deftest defpackage.23
   (progn
     (safely-delete-package "H")
-    (classify-error
-     (eval '(defpackage "H" (:use)
-	      (:export "A")
-	      (:intern "A")))))
-  program-error)
+    (signals-error
+     (defpackage "H" (:use)
+       (:export "A")
+       (:intern "A"))
+     program-error))
+  t)
 
 ;; :shadowing-import-from signals a correctable package-error
 ;;  if the symbol is not accessible in the named package

@@ -24,13 +24,14 @@
   t)
 
 (deftest pathnamep.error.1
-  (classify-error (pathnamep))
-  program-error)
+  (signals-error (pathnamep) program-error)
+  t)
 
 (deftest pathnamep.error.2
-  (classify-error (pathnamep nil nil))
-  program-error)
+  (signals-error (pathnamep nil nil) program-error)
+  t)
 
 (deftest pathnamep.error.3
-  (classify-error (pathnamep *default-pathname-defaults* nil))
-  program-error)
+  (signals-error (pathnamep *default-pathname-defaults* nil)
+		 program-error)
+  t)

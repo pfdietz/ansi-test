@@ -161,16 +161,13 @@
   t)
 
 (deftest rename-package.error.1
-  (classify-error (rename-package))
-  program-error)
+  (signals-error (rename-package) program-error)
+  t)
 
 (deftest rename-package.error.2
-  (classify-error (rename-package "CL"))
-  program-error)
+  (signals-error (rename-package "CL") program-error)
+  t)
 
 (deftest rename-package.error.3
-  (classify-error (rename-package "A" "XXXXX" NIL NIL))
-  program-error)
-
-
-
+  (signals-error (rename-package "A" "XXXXX" NIL NIL) program-error)
+  t)

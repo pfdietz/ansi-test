@@ -34,9 +34,9 @@
 ;;; Error tests
 
 (deftest pathname.error.1
-  (classify-error (pathname))
-  program-error)
+  (signals-error (pathname) program-error)
+  t)
 
 (deftest pathname.error.2
-  (classify-error (pathname (first *pathnames*) nil))
-  program-error)
+  (signals-error (pathname (first *pathnames*) nil) program-error)
+  t)

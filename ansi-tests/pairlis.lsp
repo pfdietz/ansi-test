@@ -62,25 +62,26 @@
   t)
 
 (deftest pairlis.error.1
-  (classify-error (pairlis))
-  program-error)
+  (signals-error (pairlis) program-error)
+  t)
 
 (deftest pairlis.error.2
-  (classify-error (pairlis nil))
-  program-error)
+  (signals-error (pairlis nil) program-error)
+  t)
 
 (deftest pairlis.error.3
-  (classify-error (pairlis nil nil nil nil))
-  program-error)
+  (signals-error (pairlis nil nil nil nil) program-error)
+  t)
 
 (deftest pairlis.error.4
-  (classify-error (pairlis 'a '(1)))
-  type-error)
+  (signals-error (pairlis 'a '(1)) type-error)
+  t)
 
 (deftest pairlis.error.5
-  (classify-error (pairlis '(a) 'b))
-  type-error)
+  (signals-error (pairlis '(a) 'b) type-error)
+  t)
 
 (deftest pairlis.error.6
-  (classify-error (pairlis '(a . b) '(c . d)))
-  type-error)
+  (signals-error (pairlis '(a . b) '(c . d)) type-error)
+  t)
+

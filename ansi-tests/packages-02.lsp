@@ -83,9 +83,9 @@
   t)
 
 (deftest find-package.error.1
-  (classify-error (find-package))
-  program-error)
+  (signals-error (find-package) program-error)
+  t)
 
 (deftest find-package.error.2
-  (classify-error (find-package "CL" nil))
-  program-error)
+  (signals-error (find-package "CL" nil) program-error)
+  t)

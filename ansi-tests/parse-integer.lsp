@@ -6,72 +6,72 @@
 (in-package :cl-test)
 
 (deftest parse-integer.error.1
-  (classify-error (parse-integer))
-  program-error)
+  (signals-error (parse-integer) program-error)
+  t)
 
 (deftest parse-integer.error.2
-  (classify-error (parse-integer "123" :bogus))
-  program-error)
+  (signals-error (parse-integer "123" :bogus) program-error)
+  t)
 
 (deftest parse-integer.error.3
-  (classify-error (parse-integer "123" :bogus 'foo))
-  program-error)
+  (signals-error (parse-integer "123" :bogus 'foo) program-error)
+  t)
 
 (deftest parse-integer.error.4
-  (classify-error (parse-integer ""))
-  parse-error)
+  (signals-error (parse-integer "") parse-error)
+  t)
 
 (deftest parse-integer.error.5
   (loop for x across +standard-chars+
 	unless (or (digit-char-p x)
-		   (eq (eval `(classify-error (parse-integer ,(string x))))
-		       'parse-error))
+		   (eval `(signals-error (parse-integer ,(string x))
+					 parse-error)))
 	collect x)
   nil)
 
 (deftest parse-integer.error.5a
-  (classify-error (parse-integer ""))
-  parse-error)
+  (signals-error (parse-integer "") parse-error)
+  t)
 
 (deftest parse-integer.error.6
-  (classify-error (parse-integer "1234a"))
-  parse-error)
+  (signals-error (parse-integer "1234a") parse-error)
+  t)
 
 (deftest parse-integer.error.7
-  (classify-error (parse-integer "-"))
-  parse-error)
+  (signals-error (parse-integer "-") parse-error)
+  t)
 
 (deftest parse-integer.error.8
-  (classify-error (parse-integer "+"))
-  parse-error)
+  (signals-error (parse-integer "+") parse-error)
+  t)
 
 (deftest parse-integer.error.9
-  (classify-error (parse-integer "--10"))
-  parse-error)
+  (signals-error (parse-integer "--10") parse-error)
+  t)
 
 (deftest parse-integer.error.10
-  (classify-error (parse-integer "++10"))
-  parse-error)
+  (signals-error (parse-integer "++10") parse-error)
+  t)
 
 (deftest parse-integer.error.11
-  (classify-error (parse-integer "10."))
-  parse-error)
+  (signals-error (parse-integer "10.") parse-error)
+  t)
 
 (deftest parse-integer.error.12
-  (classify-error (parse-integer "#O123"))
-  parse-error)
+  (signals-error (parse-integer "#O123") parse-error)
+  t)
 
 (deftest parse-integer.error.13
-  (classify-error (parse-integer "#B0100"))
-  parse-error)
+  (signals-error (parse-integer "#B0100") parse-error)
+  t)
 
 (deftest parse-integer.error.14
-  (classify-error (parse-integer "#X0100"))
-  parse-error)
+  (signals-error (parse-integer "#X0100") parse-error)
+  t)
 
 (deftest parse-integer.error.15
-  (classify-error (parse-integer "#3R0100"))
-  parse-error)
+  (signals-error (parse-integer "#3R0100") parse-error)
+  t)
 
 ;;;
 

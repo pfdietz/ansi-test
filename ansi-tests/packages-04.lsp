@@ -64,9 +64,9 @@
   t)
 
 (deftest intern.error.1
-  (classify-error (intern))
-  program-error)
+  (signals-error (intern) program-error)
+  t)
 
 (deftest intern.error.2
-  (classify-error (intern "X" "CL" nil))
-  program-error)
+  (signals-error (intern "X" "CL" nil) program-error)
+  t)

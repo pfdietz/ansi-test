@@ -188,8 +188,8 @@
   t)
 
 (deftest unuse-package.error.1
-  (classify-error (unuse-package))
-  program-error)
+  (signals-error (unuse-package) program-error)
+  t)
 
 (deftest unuse-package.error.2
   (progn
@@ -197,5 +197,5 @@
     (safely-delete-package "UPE2")
     (make-package "UPE2" :use ())
     (make-package "UPE2A" :use '("UPE2"))
-    (classify-error (unuse-package "UPE2" "UPE2A" nil)))
-  program-error)
+    (signals-error (unuse-package "UPE2" "UPE2A" nil) program-error))
+  t)

@@ -61,8 +61,8 @@
   nil)
 
 (deftest pathname-type.error.1
-  (classify-error (pathname-type))
-  program-error)
+  (signals-error (pathname-type) program-error)
+  t)
 
 (deftest pathname-type.error.2
   (loop for x in *mini-universe*

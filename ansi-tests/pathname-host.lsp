@@ -47,8 +47,8 @@
   nil)
 
 (deftest pathname-host.error.1
-  (classify-error (pathname-host))
-  program-error)
+  (signals-error (pathname-host) program-error)
+  t)
 
 (deftest pathname-host.error.2
   (loop for x in *mini-universe*
@@ -60,5 +60,7 @@
   nil)
 
 (deftest pathname-host.error.3
-  (classify-error (pathname-host *default-pathname-defaults* '#:bogus t))
-  program-error)
+  (signals-error (pathname-host *default-pathname-defaults* '#:bogus t)
+		 program-error)
+  t)
+

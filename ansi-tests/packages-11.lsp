@@ -108,12 +108,13 @@
 ;;  an inaccessible symbol
 
 (deftest unexport.5
-  (classify-error
+  (signals-error
    (progn
      (when (find-package "X") (delete-package "X"))
      (unexport 'a (make-package "X" :use nil))
-     nil))
-  package-error)
+     nil)
+   package-error)
+  t)
 
 ;; Check that internal symbols are left alone
 
@@ -134,10 +135,9 @@
   t)
 
 (deftest unexport.error.1
-  (classify-error (unexport))
-  program-error)
+  (signals-error (unexport) program-error)
+  t)
 
 (deftest unexport.error.2
-  (classify-error (unexport 'xyz "CL-TEST" nil))
-  program-error)
-
+  (signals-error (unexport 'xyz "CL-TEST" nil) program-error)
+  t)

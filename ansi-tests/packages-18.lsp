@@ -29,12 +29,12 @@
   nil)
 
 (deftest packagep.error.1
-  (classify-error (packagep))
-  program-error)
+  (signals-error (packagep) program-error)
+  t)
 
 (deftest packagep.error.2
-  (classify-error (packagep nil nil))
-  program-error)
+  (signals-error (packagep nil nil) program-error)
+  t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-error
@@ -95,12 +95,14 @@
   t)
 
 (deftest package-error-package.error.1
-  (classify-error (package-error-package))
-  program-error)
+  (signals-error (package-error-package) program-error)
+  t)
 
 (deftest package-error-package.error.2
-  (classify-error
+  (signals-error
    (package-error-package
     (make-condition 'package-error :package #\A)
-    nil))
-  program-error)
+    nil)
+   program-error)
+  t)
+

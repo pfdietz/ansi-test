@@ -1490,14 +1490,14 @@ the condition to go uncaught if it cannot be classified."
     (assert (symbolp macro-name))
     `(deftest ,test-name
        (values
-	(eqlt (classify-error (funcall (macro-function ',macro-name)))
-	      'program-error)
-	(eqlt (classify-error (funcall (macro-function ',macro-name)
-				       ',macro-form))
-	      'program-error)
-	(eqlt (classify-error (funcall (macro-function ',macro-name)
-				       ',macro-form nil nil))
-	      'program-error))
+	(signals-error (funcall (macro-function ',macro-name))
+		       program-error)
+	(signals-error (funcall (macro-function ',macro-name)
+				',macro-form)
+		       program-error)
+	(signals-error (funcall (macro-function ',macro-name)
+				',macro-form nil nil)
+		       program-error))
        t t t)))
 
 (defun typep* (element type)

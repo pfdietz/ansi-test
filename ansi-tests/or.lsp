@@ -42,18 +42,13 @@
   1 nil 2)
 
 (deftest or.error.1
-  (classify-error (funcall (macro-function 'or)))
-  program-error)
+  (signals-error (funcall (macro-function 'or)) program-error)
+  t)
 
 (deftest or.error.2
-  (classify-error (funcall (macro-function 'or)
-			   '(or)))
-  program-error)
+  (signals-error (funcall (macro-function 'or) '(or)) program-error)
+  t)
 
 (deftest or.error.3
-  (classify-error (funcall (macro-function 'or)
-			   '(or) nil nil))
-  program-error)
-
-  
-
+  (signals-error (funcall (macro-function 'or) '(or) nil nil) program-error)
+  t)

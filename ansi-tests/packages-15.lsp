@@ -197,8 +197,8 @@
 ;; Also: need to check that *PACKAGE* is used as a default
 
 (deftest use-package.error.1
-  (classify-error (use-package))
-  program-error)
+  (signals-error (use-package) program-error)
+  t)
 
 (deftest use-package.error.2
   (progn
@@ -206,5 +206,6 @@
     (safely-delete-package "UPE2")
     (make-package "UPE2" :use ())
     (make-package "UPE2A" :use ())
-    (classify-error (use-package "UPE2" "UPE2A" nil)))
-  program-error)
+    (signals-error (use-package "UPE2" "UPE2A" nil) program-error))
+  t)
+

@@ -41,8 +41,8 @@
   t)
 
 (deftest list-all-packages.error.1
-  (classify-error (list-all-packages nil))
-  program-error)
+  (signals-error (list-all-packages nil) program-error)
+  t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -65,18 +65,30 @@
   "A")
 
 (deftest package-name.5
-  (notnot-mv (member (classify-error (package-name "NOT-THERE"))
-		     '(type-error package-error)))
+  (handler-case
+   (locally (declare (optimize safety))
+	    (eval '(package-name "NOT-THERE"))
+	    nil)
+   (type-error () t)
+   (package-error () t))
   t)
 
 (deftest package-name.6
-  (notnot-mv (member (classify-error (package-name #\*))
-		     '(type-error package-error)))
+  (handler-case
+   (locally (declare (optimize safety))
+	    (eval '(package-name #\*))
+	    nil)
+   (type-error () t)
+   (package-error () t))
   t)
 
 (deftest package-name.6a
-  (notnot-mv (member (classify-error (locally (package-name #\*) t))
-		     '(type-error package-error)))
+  (handler-case
+   (locally (declare (optimize safety))
+	    (eval '(locally (package-name #\*) t))
+	    nil)
+   (type-error () t)
+   (package-error () t))
   t)
 
 (deftest package-name.7
@@ -132,12 +144,12 @@
   0)
 
 (deftest package-name.error.1
-  (classify-error (package-name))
-  program-error)
+  (signals-error (package-name) program-error)
+  t)
 
 (deftest package-name.error.2
-  (classify-error (package-name "CL" nil))
-  program-error)
+  (signals-error (package-name "CL" nil) program-error)
+  t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; package-nicknames
@@ -184,20 +196,24 @@
   t)
 
 (deftest package-nicknames.9
-  (classify-error (package-nicknames 10))
-  type-error)
+  (signals-error (package-nicknames 10) type-error)
+  t)
 
 (deftest package-nicknames.9a
-  (classify-error (locally (package-nicknames 10) t))
-  type-error)
+  (signals-error (locally (package-nicknames 10) t) type-error)
+  t)
 
 (deftest package-nicknames.10
   (let () (ignore-errors (package-nicknames (find-package "A"))))
   ("Q"))
 
 (deftest package-nicknames.11
-  (notnot-mv (member (classify-error (package-nicknames "NOT-A-PACKAGE-NAME"))
-		     '(type-error package-error)))
+  (handler-case
+   (locally (declare (optimize safety))
+	    (eval '(package-nicknames "NOT-A-PACKAGE-NAME"))
+	    nil)
+   (type-error () t)
+   (package-error () t))
   t)
 
 
@@ -214,9 +230,9 @@
   0)
 
 (deftest package-nicknames.error.1
-  (classify-error (package-nicknames))
-  program-error)
+  (signals-error (package-nicknames) program-error)
+  t)
 
 (deftest package-nicknames.error.2
-  (classify-error (package-nicknames "CL" nil))
-  program-error)
+  (signals-error (package-nicknames "CL" nil) program-error)
+  t)

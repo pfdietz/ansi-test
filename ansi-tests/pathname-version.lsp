@@ -20,12 +20,13 @@
   nil)
 
 (deftest pathname-version.error.1
-  (classify-error (pathname-version))
-  program-error)
+  (signals-error (pathname-version) program-error)
+  t)
 
 (deftest pathname-version.error.2
-  (classify-error (pathname-version *default-pathname-defaults* nil))
-  program-error)
+  (signals-error (pathname-version *default-pathname-defaults* nil)
+		 program-error)
+  t)
 
 (deftest pathname-version.error.3
   (loop for x in *mini-universe*

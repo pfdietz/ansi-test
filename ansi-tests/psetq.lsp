@@ -81,16 +81,15 @@
 
 
 (deftest psetq.error.1
-  (classify-error (funcall (macro-function 'psetq)))
-  program-error)
+  (signals-error (funcall (macro-function 'psetq)) program-error)
+  t)
 
 (deftest psetq.error.2
-  (classify-error (funcall (macro-function 'psetq)
-			   '(psetq)))
-  program-error)
+  (signals-error (funcall (macro-function 'psetq) '(psetq))
+		 program-error)
+  t)
 
 (deftest psetq.error.3
-  (classify-error (funcall (macro-function 'psetq)
-			   '(psetq)
-			   nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'psetq) '(psetq) nil nil)
+		 program-error)
+  t)

@@ -75,8 +75,8 @@
   nil)
 
 (deftest pathname-directory.error.1
-  (classify-error (pathname-directory))
-  program-error)
+  (signals-error (pathname-directory) program-error)
+  t)
 
 (deftest pathname-directory.error.2
   (loop for x in *mini-universe*

@@ -214,21 +214,24 @@
   4)
 
 (deftest pushnew.error.1
-  (classify-error
+  (signals-error
    (let ((x '(a b)))
-     (pushnew 'c x :test #'identity)))
-  program-error)
+     (pushnew 'c x :test #'identity))
+   program-error)
+  t)
 
 (deftest pushnew.error.2
-  (classify-error
+  (signals-error
    (let ((x '(a b)))
-     (pushnew 'c x :test-not #'identity)))
-  program-error)
+     (pushnew 'c x :test-not #'identity))
+   program-error)
+  t)
 
 (deftest pushnew.error.3
-  (classify-error
+  (signals-error
    (let ((x '(a b)))
-     (pushnew 'c x :key #'cons)))
-  program-error)
+     (pushnew 'c x :key #'cons))
+   program-error)
+  t)
 
 (def-macro-test pushnew.error.4 (pushnew x y))
