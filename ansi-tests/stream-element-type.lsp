@@ -19,7 +19,7 @@
   (let ((pn "foo.txt"))
     (loop for i from 1 to 100
 	  for etype = `(unsigned-byte ,i)
-	  for s = (progn (when (probe-file pn) (delete-file pn))
+	  for s = (progn (delete-all-versions pn)
 			 (open pn :direction :output
 			       :element-type etype))
 	  unless
@@ -34,7 +34,7 @@
   (let ((pn "foo.txt"))
     (loop for i from 1 to 100
 	  for etype = `(signed-byte ,i)
-	  for s = (progn (when (probe-file pn) (delete-file pn))
+	  for s = (progn (delete-all-versions pn)
 			 (open pn :direction :output
 			       :element-type etype))
 	  unless
@@ -49,7 +49,7 @@
   (let ((pn "foo.txt"))
     (loop for i from 1 to 100
 	  for etype = `(integer 0 ,i)
-	  for s = (progn (when (probe-file pn) (delete-file pn))
+	  for s = (progn (delete-all-versions pn)
 			 (open pn :direction :output
 			       :element-type etype))
 	  unless
@@ -63,7 +63,7 @@
 
 (deftest stream-element-type.5
   (let ((pn "foo.txt"))
-    (when (probe-file pn) (delete-file pn))
+    (delete-all-versions pn)
     (let ((s (open pn :direction :output)))
       (let ((etype (stream-element-type s)))
 	(unwind-protect
