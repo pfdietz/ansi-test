@@ -1468,3 +1468,11 @@ the condition to go uncaught if it cannot be classified."
        when (null list2) do (return-from is-noncontiguous-sublist-of nil)
        when (eql x (pop list2)) do (return))
    finally (return t)))
+
+;;; This defines a new metaclass to allow us to get around
+;;; the restriction in section 11.1.2.1.2, bullet 19 in some
+;;; object system tests
+
+;;; (when (typep (find-class 'standard-class) 'standard-class)
+;;;  (defclass substandard-class (standard-class) ())
+;;;  (defparameter *can-define-metaclasses* t))

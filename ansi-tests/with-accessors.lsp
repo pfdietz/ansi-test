@@ -112,9 +112,3 @@
      (values (setf a 'x) (setf b 'y) (setf c 'z)
 	     (wa-2-a obj) (wa-2-b obj) (wa-2-c obj))))
   x y z x y z)
-
-
-
-
-
-

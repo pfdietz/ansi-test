@@ -143,8 +143,9 @@
 
 ;;; If slot is unbound, act as if slot-value had been called
 
-(defmethod slot-unbound ((class (eql (find-class 'with-slots-class-01)))
-			 instance slot-name)
+(defmethod slot-unbound ((class t)
+			 (instance with-slots-class-01)
+			 slot-name)
   'missing)
 
 (deftest with-slots.18

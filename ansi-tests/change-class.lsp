@@ -536,7 +536,7 @@
 
 (ignore-errors
   (defmethod change-class :after
-    ((obj standard-object)
+    ((obj change-class-class-08)
      (class (eql (find-class 'change-class-class-08)))
      &rest initargs &key &allow-other-keys)
     (declare (ignore initargs))
