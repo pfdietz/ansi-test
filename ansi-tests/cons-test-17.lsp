@@ -191,6 +191,19 @@
 		       (eqt x y))))
   (3 . A))
 
+(deftest rassoc-26
+  (rassoc 'b '((1 . a) (2 . b) (3 . c)) :bad t :allow-other-keys t)
+  (2 . b))
+
+(deftest rassoc-27
+  (rassoc 'b '((1 . a) (2 . b) (3 . c)) :allow-other-keys t :bad t)
+  (2 . b))
+
+(deftest rassoc-28
+  (rassoc 'a '((1 . a) (2 . b) (3 . c)) :allow-other-keys t :bad t
+	  :test-not #'eql)
+  (2 . b))
+
 (deftest rassoc.error.1
   (classify-error (rassoc))
   program-error)
@@ -254,6 +267,19 @@
 	       (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
 
+(deftest rassoc-if-26
+  (rassoc-if #'null '((1 . a) (2) (3 . c)) :bad t :allow-other-keys t)
+  (2))
+
+(deftest rassoc-if-27
+  (rassoc-if #'null '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t)
+  (2))
+
+(deftest rassoc-if-28
+  (rassoc-if #'identity '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t
+	  :key 'not)
+  (2))
+
 (deftest rassoc-if.error.1
   (classify-error (rassoc-if))
   program-error)
@@ -315,6 +341,19 @@
     (rassoc-if-not #'identity 
 		   (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
+
+(deftest rassoc-if-not-26
+  (rassoc-if-not #'identity '((1 . a) (2) (3 . c)) :bad t :allow-other-keys t)
+  (2))
+
+(deftest rassoc-if-not-27
+  (rassoc-if-not #'values '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t)
+  (2))
+
+(deftest rassoc-if-not-28
+  (rassoc-if-not #'not '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t
+	  :key 'not)
+  (2))
 
 (deftest rassoc-if-not.error.1
   (classify-error (rassoc-if-not))

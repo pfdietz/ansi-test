@@ -194,6 +194,19 @@
 		       (eqt x y))))
   (A . 3))
 
+(deftest assoc-26
+  (assoc 'b '((a . 1) (b . 2) (c . 3)) :bad t :allow-other-keys t)
+  (b . 2))
+
+(deftest assoc-27
+  (assoc 'b '((a . 1) (b . 2) (c . 3)) :allow-other-keys t :also-bad t)
+  (b . 2))
+
+(deftest assoc-28
+  (assoc 'b '((a . 1) (b . 2) (c . 3)) :allow-other-keys t :also-bad t
+	 :test-not #'eql)
+  (a . 1))
+
 (deftest assoc.error.1
   (classify-error (assoc))
   program-error)
@@ -255,6 +268,22 @@
     (assoc-if #'null '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
 
+(deftest assoc-if-5
+  (assoc-if #'null '((a . 1) (nil . 2) (c . 3)) :bad t :allow-other-keys t)
+  (nil . 2))
+
+(deftest assoc-if-6
+  (assoc-if #'null '((a . 1) (nil . 2) (c . 3))
+	    :allow-other-keys t :also-bad t)
+  (nil . 2))
+
+(deftest assoc-if-7
+  (assoc-if #'null '((a . 1) (nil . 2) (c . 3))
+	    :allow-other-keys t :also-bad t :key #'not)
+  (a . 1))
+
+;;; Error cases
+
 (deftest assoc-if.error.1
   (classify-error (assoc-if))
   program-error)
@@ -315,6 +344,21 @@
 (deftest assoc-if-not-4
     (assoc-if-not #'identity '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
+
+(deftest assoc-if-not-5
+  (assoc-if-not #'identity
+		'((a . 1) (nil . 2) (c . 3)) :bad t :allow-other-keys t)
+  (nil . 2))
+
+(deftest assoc-if-not-6
+  (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3))
+	    :allow-other-keys t :also-bad t)
+  (nil . 2))
+
+(deftest assoc-if-not-7
+  (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3))
+	    :allow-other-keys t :also-bad t :key #'not)
+  (a . 1))
 
 (deftest assoc-if-not.error.1
   (classify-error (assoc-if-not))
@@ -439,6 +483,3 @@
 (deftest pairlis.error.3
   (classify-error (pairlis nil nil nil nil))
   program-error)
-
-
-

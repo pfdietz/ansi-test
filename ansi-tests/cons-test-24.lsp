@@ -126,6 +126,22 @@
 		 nil)))
   t)
 
+(deftest subsetp-16
+  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4 5) :bad t :allow-other-keys 67))
+  t)
+
+(deftest subsetp-17
+  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4 5)
+		   :allow-other-keys #'cons :bad t))
+  t)
+
+(deftest subsetp-18
+  (notnot (subsetp '(1 2 3 4) '(0 1 2 3 4)
+		   :allow-other-keys (make-hash-table)
+		   :bad t
+		   :test #'(lambda (x y) (= (1+ x) y))))
+  nil)
+
 (deftest subsetp.error.1
   (classify-error (subsetp))
   program-error)

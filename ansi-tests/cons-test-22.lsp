@@ -149,6 +149,34 @@
 	    #'<))
   (1 2 3 4))
 
+(deftest set-difference-20
+  (sort
+   (copy-list
+    (set-difference
+     '(1 2 3 4 5) '(2 3 4)
+     :bad t :allow-other-keys t))
+   #'<)
+  (1 5))
+
+(deftest set-difference-21
+  (sort
+   (copy-list
+    (set-difference
+     '(1 2 3 4 5) '(2 3 4)
+     :allow-other-keys t :bad t))
+   #'<)
+  (1 5))
+
+(deftest set-difference-22
+  (sort
+   (copy-list
+    (set-difference
+     '(1 2 3 4 5) '(2 3 4)
+     :allow-other-keys t :bad t :test #'(lambda (x y) (= x (1- y)))))
+   #'<)
+  (4 5))
+
+
 (deftest set-difference.error.1
   (classify-error (set-difference))
   program-error)
@@ -313,6 +341,33 @@
 		(not (eqt x y)))))
 	  #'<))
   (1 2 3 4))
+
+(deftest nset-difference-20
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :bad t :allow-other-keys t))
+   #'<)
+  (1 5))
+
+(deftest nset-difference-21
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t :bad t))
+   #'<)
+  (1 5))
+
+(deftest nset-difference-22
+  (sort
+   (copy-list
+    (nset-difference
+     (list 1 2 3 4 5) (list 2 3 4)
+     :allow-other-keys t :bad t :test #'(lambda (x y) (= x (1- y)))))
+   #'<)
+  (4 5))
 
 (deftest nset-difference.error.1
   (classify-error (nset-difference))

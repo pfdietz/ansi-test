@@ -485,7 +485,7 @@
   a)
 
 (deftest nsubst-if-not-6
-  (nsubst-if 'a #'identity nil :bad t :allow-other-keys t)
+  (nsubst-if-not 'a #'null nil :bad t :allow-other-keys t)
   nil)
 
 ;;; Error cases

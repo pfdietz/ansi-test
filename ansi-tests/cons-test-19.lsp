@@ -235,6 +235,25 @@
 	   (not (eql x y))))))
   (4))
 
+(deftest intersection-19
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (intersection list1 list2 :bad t :allow-other-keys 1))
+  (4))
+
+(deftest intersection-20
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (intersection list1 list2 :allow-other-keys :foo :also-bad t))
+  (4))
+
+(deftest intersection-21
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (intersection list1 list2 :allow-other-keys :foo :also-bad t
+		  :test #'(lambda (x y) (= x (1+ y)))))
+  nil)
+
 (deftest intersection.error.1
   (classify-error (intersection))
   program-error)
@@ -450,6 +469,25 @@
 	   (when (< y x) (return-from fail 'fail))
 	   (not (eql x y))))))
   (4))
+
+(deftest nintersection-19
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (nintersection list1 list2 :bad t :allow-other-keys 1))
+  (4))
+
+(deftest nintersection-20
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (nintersection list1 list2 :allow-other-keys :foo :also-bad t))
+  (4))
+
+(deftest nintersection-21
+  (let ((list1 (list 1 2 3 4))
+	(list2 (list 4 5 6 7)))
+    (nintersection list1 list2 :allow-other-keys :foo :also-bad t
+		  :test #'(lambda (x y) (= x (1+ y)))))
+  nil)
 
 (deftest nintersection.error.1
   (classify-error (nintersection))

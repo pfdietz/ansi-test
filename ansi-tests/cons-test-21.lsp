@@ -263,6 +263,25 @@
        #'<))
   (1 2 3 4 5 6))
 
+(deftest nunion-32
+  (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2) :bad t
+	       :allow-other-keys "yes")
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest nunion-33
+  (sort (nunion (list 7 9 1 5) (list 10 11 9 20 1 2)
+	       :allow-other-keys t :also-bad t)
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest nunion-34
+  (sort (nunion (list 1 2 3) (list 1 2 3)
+	       :allow-other-keys t :also-bad t
+	       :test #'(lambda (x y) (= x (+ y 100))))
+	#'<)
+  (1 1 2 2 3 3))
+
 (deftest nunion.error.1
   (classify-error (nunion))
   program-error)

@@ -187,7 +187,7 @@
 	#'<))))
   (1 4 6 10 44 101))
 
-;; Check that union uses eql, not equal or eq
+;;; Check that union uses eql, not equal or eq
 
 (deftest union-26
   (let ((x 1000)
@@ -263,6 +263,26 @@
 		      (not (eql x y))))
        #'<))
   (1 2 3 4 5 6))
+
+(deftest union-32
+  (sort (union (list 7 9 1 5) (list 10 11 9 20 1 2) :bad t
+	       :allow-other-keys "yes")
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest union-33
+  (sort (union (list 7 9 1 5) (list 10 11 9 20 1 2)
+	       :allow-other-keys t :also-bad t)
+	#'<)
+  (1 2 5 7 9 10 11 20))
+
+(deftest union-34
+  (sort (union (list 1 2 3) (list 1 2 3)
+	       :allow-other-keys t :also-bad t
+	       :test #'(lambda (x y) (= x (+ y 100))))
+	#'<)
+  (1 1 2 2 3 3))
+
 
 (deftest union.error.1
   (classify-error (union))

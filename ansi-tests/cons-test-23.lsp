@@ -171,6 +171,25 @@
 			 t))))))
   t)
 
+(deftest set-exclusive-or-19
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :bad t :allow-other-keys t)
+	#'<)
+  (1 2 5 6))
+
+(deftest set-exclusive-or-20
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t :bad t)
+	#'<)
+  (1 2 5 6))
+
+(deftest set-exclusive-or-21
+  (sort (set-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t :bad t
+			  :test #'(lambda (x y) (= x (1- y))))
+	#'<)
+  (1 6))
+
 (deftest set-exclusive-or.error.1
   (classify-error (set-exclusive-or))
   program-error)
@@ -359,6 +378,25 @@
 			   (return-from fail 'failed))
 			 t))))))
   t)
+
+(deftest nset-exclusive-or-19
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :bad t :allow-other-keys t)
+	#'<)
+  (1 2 5 6))
+
+(deftest nset-exclusive-or-20
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t :bad t)
+	#'<)
+  (1 2 5 6))
+
+(deftest nset-exclusive-or-21
+  (sort (nset-exclusive-or (list 1 2 3 4) (list 3 4 5 6)
+			  :allow-other-keys t :bad t
+			  :test #'(lambda (x y) (= x (1- y))))
+	#'<)
+  (1 6))
 
 (deftest nset-exclusive-or.error.1
   (classify-error (nset-exclusive-or))

@@ -4,6 +4,7 @@
 (compile-and-load "cl-symbols-aux.lsp")
 (load "cl-symbol-names.lsp")
 (load "cl-symbols.lsp")
+(load "boundp.lsp")
 
 ;;; Tests of evaluation and compilation
 (load "eval.lsp")
