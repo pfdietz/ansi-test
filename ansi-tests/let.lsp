@@ -7,6 +7,10 @@
 
 ;;; LET and LET* are also heavily exercised in the many other tests.
 
+;;; NOTE!  Some of these tests bind a variable with the same name
+;;; more than once.  This apparently has underdetermined semantics that
+;;; varies in different Lisps.
+
 (deftest let.1
   (let ((x 0)) x)
   0)
