@@ -33,7 +33,10 @@
 
 (defvar *test* nil "Current test name")
 (defvar *do-tests-when-defined* nil)
-(defvar *entries* '(nil) "Test database")
+(defvar *entries* '(nil) "Test database.  Has a leading dummy cell that does not contain an entry.")
+(defvar *entries-tail* *entries* "Tail of the *entries* list")
+(defvar *entries-table* (make-hash-table :test #'equal)
+    "Map the names of entries to the cons cell in *entries* that precedes the one whose car is the entry.")
 (defvar *in-test* nil "Used by TEST")
 (defvar *debug* nil "For debugging")
 (defvar *catch-errors* t "When true, causes errors in a test to be caught.")
@@ -71,35 +74,6 @@
     `(let ((,var ,entry))
        (list* (name ,var) (form ,var) (vals ,var)))))
 
-(defun pending-tests ()
-  (loop for entry in (cdr *entries*)
-	when (and (pend entry) (not (has-disabled-note entry)))
-	collect (name entry)))
-
-(defun rem-all-tests ()
-  (setq *entries* (list nil))
-  nil)
-
-(defun rem-test (&optional (name *test*))
-  (do ((l *entries* (cdr l)))
-      ((null (cdr l)) nil)
-    (when (equal (name (cadr l)) name)
-      (setf (cdr l) (cddr l))
-      (return name))))
-
-(defun get-test (&optional (name *test*))
-  (defn (get-entry name)))
-
-(defun get-entry (name)
-  (let ((entry (find name (the list (cdr *entries*))
-		     :key #'name
-		     :test #'equal)))
-    (when (null entry)
-      (report-error t
-        "~%No test with name ~:@(~S~)."
-	name))
-    entry))
-
 (defun entry-notes (entry)
   (let* ((props (props entry))
 	 (notes (getf props :notes)))
@@ -113,6 +87,40 @@
 	  for note = (if (note-p n) n
 		       (gethash n *notes*))
 	  thereis (and note (note-disabled note)))))
+
+(defun pending-tests ()
+  (loop for entry in (cdr *entries*)
+	when (and (pend entry) (not (has-disabled-note entry)))
+	collect (name entry)))
+
+(defun rem-all-tests ()
+  (setq *entries* (list nil))
+  (setq *entries-tail* *entries*)
+  (clrhash *entries-table*)
+  nil)
+
+(defun rem-test (&optional (name *test*))
+  (let ((pred (gethash name *entries-table*)))
+    (when pred
+      (when (eq (cdr pred) *entries-tail*)
+	(setq *entries-tail* pred))
+      (setf (cdr pred) (cddr pred))
+      (remhash name *entries-table*)
+      name)))
+
+(defun get-test (&optional (name *test*))
+  (defn (get-entry name)))
+
+(defun get-entry (name)
+  (let ((entry ;; (find name (the list (cdr *entries*))
+	       ;;     :key #'name :test #'equal)
+	 (cadr (gethash name *entries-table*))
+	 ))
+    (when (null entry)
+      (report-error t
+        "~%No test with name ~:@(~S~)."
+	name))
+    entry))
 
 (defmacro deftest (name &rest body)
   (let* ((p body)
@@ -132,17 +140,18 @@
 
 (defun add-entry (entry)
   (setq entry (copy-entry entry))
-  (do ((l *entries* (cdr l))) (nil)
-    (when (null (cdr l))
-      (setf (cdr l) (list entry))
-      (return nil))
-    (when (equal (name (cadr l)) 
-		 (name entry))
-      (setf (cadr l) entry)
+  (let* ((pred (gethash (name entry) *entries-table*)))
+    (cond
+     (pred
+      (setf (cadr pred) entry)
       (report-error nil
         "Redefining test ~:@(~S~)"
-        (name entry))
-      (return nil)))
+        (name entry)))
+     (t
+      (setf (gethash (name entry) *entries-table*) *entries-tail*)
+      (setf (cdr *entries-tail*) (cons entry nil))
+      (setf *entries-tail* (cdr *entries-tail*))
+      )))
   (when *do-tests-when-defined*
     (do-entry entry))
   (setq *test* (name entry)))
@@ -318,11 +327,6 @@
 	  (stream out :direction :output)
 	(do-entries stream))))
 
-(defun do-entries (s)
-  #-sbcl (do-entries* s)
-  #+sbcl (handler-bind ((sb-ext:code-deletion-note #'muffle-warning))
-		       (do-entries* s)))
-
 (defun do-entries* (s)
   (format s "~&Doing ~A pending test~:P ~
              of ~A tests total.~%"
@@ -366,6 +370,11 @@
       (finish-output s)
       (null pending))))
 
+(defun do-entries (s)
+  #-sbcl (do-entries* s)
+  #+sbcl (handler-bind ((sb-ext:code-deletion-note #'muffle-warning))
+		       (do-entries* s)))
+
 ;;; Note handling functions and macros
 
 (defmacro defnote (name contents &optional disabled)
@@ -389,5 +398,3 @@
     (unless note (error "~A is not a note or note name." n))
     (setf (note-disabled note) nil)
     note))
-
-
