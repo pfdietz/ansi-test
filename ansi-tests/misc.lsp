@@ -4703,16 +4703,34 @@
   (funcall
    (compile
     nil
-    '(lambda (a b c d)
-       (declare (optimize (speed 2) (space 2) (safety 1) (debug 1)
-                          (compilation-speed 3)))
+    '(lambda (b d)
+       (declare (optimize (speed 2) (space 2) (safety 1) (compilation-speed 3)))
        (expt (logxor (progn
                        (tagbody
-                        (multiple-value-prog1 0 a c (go 7))
+                        (multiple-value-prog1 0 (go 7))
                         7)
                        0)
-                     0 b (rational d))
+                     0 b
+                     (rational d))
              0)))
-   1 2 3 4)
+   2 4)
   1)
 
+;;; Error in COMPILER::CMP-ANON [or a callee]: 3 is not of type FUNCTION.
+;;; (possibly the same bug as misc.283)
+(deftest misc.284
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (optimize (speed 1) (space 1) (safety 2) (debug 3)
+                          (compilation-speed 2)))
+       (progn
+         (tagbody
+	  (multiple-value-prog1 0 (go tag2))
+          0
+          tag2)
+         (funcall (constantly 0)
+                  (apply (constantly 0) (signum c) nil)))))
+   3)
+  0)
