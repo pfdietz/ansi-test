@@ -41,3 +41,5 @@
 (load "defgeneric-method-combination-and.lsp")
 (load "defgeneric-method-combination-or.lsp")
 (load "defgeneric-method-combination-progn.lsp")
+;; (load "defgeneric-method-combination-standard.lsp")
+(load "find-class.lsp")

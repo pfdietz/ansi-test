@@ -236,9 +236,17 @@
 	   (and (stringp doc) (string=t doc "boo!"))))
      (let ((doc (documentation fn 'function)))
        (or (not doc)
-	   (and (stringp doc) (string=t doc "boo!"))))))
+	   (and (stringp doc) (string=t doc "boo!"))))
+     (setf (documentation fn t) "foo")
+     (let ((doc (documentation fn t)))
+       (or (not doc)
+	   (and (stringp doc) (string=t doc "foo"))))
+     (setf (documentation fn 'function) "bar")
+     (let ((doc (documentation fn t)))
+       (or (not doc)
+	   (and (stringp doc) (string=t doc "bar"))))))
      
-  t t #(a b c) #(d e f) t t)
+  t t #(a b c) #(d e f) t t "foo" t "bar" t)
 
 (deftest defgeneric.3
   (let ((fn (eval '(defgeneric defgeneric.fun.3 (x y)
@@ -787,3 +795,22 @@
     (funcall fn 10))
   (10 :good))
 
+(deftest defgeneric.35
+  (let ((fn (eval '(defgeneric defgeneric.fun.35 (x)
+		     (:method ((x (eql 'a)))
+			      (declare (optimize (speed 0)))
+			      "FOO"
+			      (declare (optimize (safety 3)))
+			      x)))))
+    (values
+     (funcall fn 'a)
+     (let ((method (first (compute-applicable-methods fn '(a)))))
+       (and method
+	    (let ((doc (documentation method t)))
+	      (list
+	       (or (null doc) (equalt doc "FOO"))
+	       (setf (documentation method t) "BAR")
+	       (let ((doc (documentation method t)))
+		 (or (null doc) (equalt doc "BAR")))
+	       ))))))
+  a (t "BAR" t))
