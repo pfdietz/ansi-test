@@ -1633,3 +1633,108 @@
    0 0)
   2)
 
+;;; cmucl (22 Oct 2003 build) bug
+;;; The assertion (EQ (C::COMPONENT-KIND C:COMPONENT) :INITIAL) failed.
+
+(deftest misc.128
+  (flet ((%f14
+	  (f14-1 f14-2
+		 &optional
+		 (f14-3 (unwind-protect 13059412))
+		 (f14-4 452384)
+		 (f14-5 -6714))
+	  -1))
+    (%f14 -2 1 1279896 589726354 -11))
+  -1)
+
+(deftest misc.129
+  (labels ((%f17 (f17-1 f17-2 &optional (f17-3 (unwind-protect 178)))
+		 483633925))
+    -661328075)
+  -661328075)
+
+(deftest misc.130
+  (let* ((fn1
+	  '(lambda (a c)
+	     (flet ((%f10 (&optional (f10-1 -6489) (f10-2 (+ c)))
+			  a))
+	       (multiple-value-call #'%f10 (values -178858 a)))))
+	 (fn2
+	  '(lambda (a c)
+	     (declare (notinline values +) (optimize (speed 0) (debug 0)))
+	     (flet ((%f10 (&optional (f10-1 -6489) (f10-2 (+ c)))
+			  a))
+	       (multiple-value-call #'%f10 (values -178858 a)))))
+	 (vals '(-13649921 -1813684177409))
+	 (v1 (apply (compile nil fn1) vals))
+	 (v2 (apply (compile nil fn2) vals)))
+    (if (eql v1 v2) :good (list v1 v2)))
+  :good)
+
+(deftest misc.131
+  (let* ((fn1
+	  '(lambda (a b)
+	     (max
+	      (block b7
+		(abs
+		 (ignore-errors
+		   (if (ldb-test (byte 33 15) (return-from b7 a))
+		       b b)))))))
+	 (fn2
+	  '(lambda (a b)
+	     (declare (notinline abs max))
+	     (declare (optimize (speed 0)))
+	     (declare (optimize (debug 0)))
+	     (max
+	      (block b7
+		(abs
+		 (ignore-errors
+		   (if (ldb-test (byte 33 15) (return-from b7 a))
+		       b b)))))))
+	 (vals '(-823894140303 -3))
+	 (v1 (apply (compile nil fn1) vals))
+	 (v2 (apply (compile nil fn2) vals)))
+    (if (eql v1 v2) :good (list v1 v2)))
+  :good) 
+
+;;; cmucl (22 Oct 2003)
+;;; The assertion (EQ C::ENV
+;;;                   (C::LAMBDA-ENVIRONMENT
+;;;                      (C::LAMBDA-VAR-HOME C::THING))) failed.
+
+(deftest misc.132
+  (funcall
+   (compile nil
+	    '(lambda (b c)
+	       (declare (type (integer -3358662 7782429) b))
+	       (declare (type (integer -513018 12740) c))
+	       (declare (optimize (speed 3)))
+	       (declare (optimize (safety 1)))
+	       (declare (optimize (debug 1)))
+	       (labels ((%f9
+			 (&optional
+			  (f9-1
+			   (labels
+			       ((%f5 (f5-1 f5-2)
+				     (floor (ignore-errors f5-1)
+					    (min -67 (if (equal -56 c)
+							 -11197265 f5-2)))))
+			     c))
+			  (f9-2 -439518)
+			  (f9-3 -2840573))
+			 f9-1))
+		 (%f9 -193644 b 1368))))
+   10 20)
+  -193644)
+
+;;; cmucl (22 Oct 2003)  Default for optional parameter is improperly chosen
+(deftest misc.133
+  (funcall
+   (compile nil
+	    '(lambda (a b c)
+	       (declare (notinline values))
+	       (declare (optimize (speed 0) (debug 0)))
+	       (flet ((%f15 (&optional (f15-5 c)) f15-5))
+		 (multiple-value-call #'%f15 (values -2688612)))))
+   1 2 3)
+  -2688612)
