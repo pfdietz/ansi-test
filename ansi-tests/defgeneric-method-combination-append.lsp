@@ -7,6 +7,8 @@
 
 (declaim (special *x*))
 
+(compile-and-load "defgeneric-method-combination-aux.lsp")
+
 (deftest defgeneric-method-combination.append.1
   (let ((*x* nil)
 	(fn
@@ -170,19 +172,23 @@
   :error)
 
 (deftest defgeneric-method-combination.append.10
-  (handler-case
-   (eval '(defgeneric dg-mc.append.10 (x)
-	    (:method-combination append)
-	    (:method ((x t)) '(a))))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.append.10 (x)
+	      (:method-combination append)
+	      (:method ((x t)) '(a))))
+    (handler-case
+     (dg-mc.append.10 'x)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.append.11
-  (handler-case
-   (eval '(defgeneric dg-mc.append.11 (x)
-	    (:method-combination append)
-	    (:method nonsense ((x t)) '(a))))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.append.11 (x)
+	     (:method-combination append)
+	     (:method nonsense ((x t)) '(a))))
+    (handler-case
+     (dg-mc.append.11 0)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.append.12

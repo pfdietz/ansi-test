@@ -182,19 +182,23 @@
   :error)
 
 (deftest defgeneric-method-combination.nconc.10
-  (handler-case
-   (eval '(defgeneric dg-mc.nconc.10 (x)
-	    (:method-combination nconc)
-	    (:method ((x t)) (list 'a))))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.nconc.10 (x)
+	     (:method-combination nconc)
+	     (:method ((x t)) (list 'a))))
+    (handler-case
+     (dg-mc.nconc.10 'a)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.nconc.11
-  (handler-case
-   (eval '(defgeneric dg-mc.nconc.11 (x)
+  (progn
+    (eval '(defgeneric dg-mc.nconc.11 (x)
 	    (:method-combination nconc)
 	    (:method nonsense ((x t)) (list 'a))))
-   (error () :error))
+    (handler-case
+     (dg-mc.nconc.11 0)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.nconc.12

@@ -114,7 +114,7 @@ Results: ~A~%" expected-number form n results))))
        (typep a2 'array)
        (= (array-rank a1) (array-rank a2))
        (if (= (array-rank a1) 0)
-	   (equal (rt::my-aref a1) (rt::my-aref a2))
+	   (equal (regression-test::my-aref a1) (regression-test::my-aref a2))
 	 (let ((ad (array-dimensions a1)))
 	   (and (equal ad (array-dimensions a2))
 		(locally
@@ -123,13 +123,17 @@ Results: ~A~%" expected-number form n results))))
 		     (let ((as (first ad)))
 		       (loop
 			for i from 0 below as
-			always (equal (rt::my-aref a1 i) (rt::my-aref a2 i))))
+			always (equal (regression-test::my-aref a1 i)
+				      (regression-test::my-aref a2 i))))
 		   (let ((as (array-total-size a1)))
 		     (and (= as (array-total-size a2))
 			  (loop
 			   for i from 0 below as
-			   always (equal (rt::my-row-major-aref a1 i)
-					 (rt::my-row-major-aref a2 i))))))))))))
+			   always
+			   (equal
+			    (regression-test::my-row-major-aref a1 i)
+			    (regression-test::my-row-major-aref a2 i))
+			   ))))))))))
 
 ;;; *universe* is defined elsewhere -- it is a list of various
 ;;; lisp objects used when stimulating things in various tests.

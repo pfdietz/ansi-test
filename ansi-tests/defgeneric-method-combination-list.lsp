@@ -170,19 +170,23 @@
   :error)
 
 (deftest defgeneric-method-combination.list.10
-  (handler-case
-   (eval '(defgeneric dg-mc.list.10 (x)
-	    (:method-combination list)
-	    (:method ((x t)) (list 'a))))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.list.10 (x)
+	     (:method-combination list)
+	     (:method ((x t)) (list 'a))))
+    (handler-case
+     (dg-mc.list.10 'a)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.list.11
-  (handler-case
-   (eval '(defgeneric dg-mc.list.11 (x)
-	    (:method-combination list)
-	    (:method nonsense ((x t)) (list 'a))))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.list.11 (x)
+	     (:method-combination list)
+	     (:method nonsense ((x t)) (list 'a))))
+    (handler-case
+     (dg-mc.list.11 0)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.list.12

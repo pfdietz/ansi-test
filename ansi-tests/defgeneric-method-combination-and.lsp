@@ -167,19 +167,23 @@
   :error)
 
 (deftest defgeneric-method-combination.and.10
-  (handler-case
-   (eval '(defgeneric dg-mc.and.10 (x)
-	    (:method-combination and)
-	    (:method ((x t)) t)))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.and.10 (x)
+	     (:method-combination and)
+	     (:method ((x t)) t)))    
+    (handler-case
+     (dg-mc.and.10 'a)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.and.11
-  (handler-case
-   (eval '(defgeneric dg-mc.and.11 (x)
-	    (:method-combination and)
-	    (:method nonsense ((x t)) t)))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.and.11 (x)
+	     (:method-combination and)
+	     (:method nonsense ((x t)) t)))
+    (handler-case
+     (dg-mc.and.11 0)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.and.12
@@ -191,7 +195,3 @@
     (handler-case (funcall fn 'x)
 		  (error () :error)))
   :error)
-
-
-
-

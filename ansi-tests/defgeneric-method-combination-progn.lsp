@@ -244,19 +244,23 @@
   :error)
 
 (deftest defgeneric-method-combination.progn.10
-  (handler-case
-   (eval '(defgeneric dg-mc.progn.10 (x)
-	    (:method-combination progn)
-	    (:method ((x t)) 0)))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.progn.10 (x)
+	     (:method-combination progn)
+	     (:method ((x t)) 0)))
+    (handler-case
+     (dg-mc.progn.10 'a)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.progn.11
-  (handler-case
-   (eval '(defgeneric dg-mc.progn.11 (x)
-	    (:method-combination progn)
-	    (:method nonsense ((x t)) 0)))
-   (error () :error))
+  (progn
+    (eval '(defgeneric dg-mc.progn.11 (x)
+	     (:method-combination progn)
+	     (:method nonsense ((x t)) 0)))
+    (handler-case
+     (dg-mc.progn.11 0)
+     (error () :error)))
   :error)
 
 (deftest defgeneric-method-combination.progn.12
