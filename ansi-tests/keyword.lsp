@@ -31,12 +31,12 @@
       ;; Check that it's a keyword
       (values
        (symbol-package s)
-       (equalt (multiple-value-list (find-symbol name kwp))
-	       (list s :external))
+       (eqlt (find-symbol name kwp) s)
+       (nth-value 1 (find-symbol name kwp))
        (notnot (typep s 'keyword))
        (if (boundp s) (eqlt s (symbol-value s)) :not-bound)
        (notnot (constantp s)))))
-  nil t t t t)
+  nil t :external t t t)
 
 ;; Every keyword is external
 (deftest keyword.2
