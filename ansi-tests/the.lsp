@@ -72,3 +72,39 @@
 	collect e)
   nil)
 
+(deftest the.11
+  (loop for e in *universe*
+	for type = (type-of e)
+	for x = (multiple-value-list (eval `(the ,type (the ,type
+							 (quote ,e)))))
+	unless (and x (not (cdr x)) (eql (car x) e))
+	collect e)
+  nil)
+
+(deftest the.12
+  (let ((lexpr
+	 `(lambda ()
+	    (and
+	     ,@(loop for e in *mini-universe*
+		     for type = (type-of e)
+		     collect `(eqlt (quote ,e) (the ,type (quote ,e))))))))
+    (funcall (compile nil lexpr)))
+  t)
+
+(deftest the.13
+  (let ((x 0))
+    (values
+     (the (or symbol integer) (incf x))
+     x))
+  1 1)
+
+(deftest the.14
+  (the (values &rest (cons t (cons t null))) (values 'a 'b))
+  a b)
+
+(deftest the.15
+  (the (values &rest (cons symbol (cons symbol null))) (values 'a 'b))
+  a b)
+
+(deftest the.16
+  (the (values &rest null) (values)))
