@@ -192,5 +192,9 @@
 	append (check-all-not-subtypep type nil))
   nil)
 
-	
-  
+(deftest subtypep.nil.2
+  (loop for (type) in *subtype-table*
+	for class = (find-class type nil)
+	unless (or (not class) (member type '(nil extended-char)))
+	append (check-all-not-subtypep class nil))
+  nil)

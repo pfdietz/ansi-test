@@ -161,7 +161,14 @@
   0)
 
 
-
+;;; All class names in CL denote classes that are subtypep
+;;; equivalent to themselves
+(deftest all-classes-are-type-equivalent-to-their-names
+  (loop for sym being  the external-symbols of "COMMON-LISP"
+       for class = (find-class sym nil)
+       when class
+       append (check-equivalence sym class))
+  nil)
 
 ;;; Check that all class names in CL that name standard-classes or
 ;;; structure-classes are subtypes of standard-object and structure-object,
