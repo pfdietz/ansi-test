@@ -9959,3 +9959,35 @@ Broken at C::WT-MAKE-CLOSURE.
 	  (equal ,p1 (the (bit-vector 0) p2))))
       #*)))
   t)
+
+;;; abcl (23 Feb 2005)
+;;;  The value #C(3 4) is not of type number.
+
+(deftest misc.538
+  (notnot (typep (* 2/5 #c(3 4)) 'number))
+  t)
+
+;;; Allegro CL (6.2 trial edition, x86)
+;;; Error: `#c(0 -8)' is not of the expected type `REAL'
+
+(deftest misc.539
+  (=t
+   (funcall
+    (compile nil '(lambda (x)
+		    (declare (OPTIMIZE SPEED (SAFETY 1))
+			     (type (eql #c(0 -8)) x))
+		    (sqrt x)))
+    #c(0 -8))
+   #c(2 -2))
+  t)
+
+;;; Illegal instruction
+
+(deftest misc.540
+  (let* ((d0 #(a b c d e f g h))
+	 (d1 (make-array 5
+			 :fill-pointer 1
+			 :displaced-to d0
+			 :displaced-index-offset 2)))
+    (find #c(1.0 2.0) d1))
+  nil)
