@@ -109,6 +109,6 @@
   t)
 
 (deftest signum.11
-  (let ((i 0)) (values (signum (incf i)) i))
+  (let ((i 0)) (values (signum (the (integer 1 1) (incf i))) i))
   1 1)
 

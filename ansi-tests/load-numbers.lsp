@@ -37,6 +37,12 @@
 (load "decf.lsp")
 (load "lcm.lsp")
 (load "signum.lsp")
+(load "sqrt.lsp")
+(load "isqrt.lsp")
+(load "random.lsp")
+(load "random-state-p.lsp")
+(load "make-random-state.lsp")
+(load "numberp.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")

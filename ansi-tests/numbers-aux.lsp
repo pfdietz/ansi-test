@@ -44,13 +44,18 @@
 	  (long-float
 	   (<= #.(rational most-negative-long-float)
 	       x
-	       #.(rational most-positive-long-float))))))))    
+	       #.(rational most-positive-long-float))))))))
+
+;;; NOTE!  According to section 12.1.4.1, when a rational is compared
+;;; to a float, the effect is as if the float is convert to a rational
+;;; (by RATIONAL), not as if the rational is converted to a float.
+;;; This means the calls to numbers-are-compatible are not necessary.
 
 (defun =.4-fn ()
   (loop for x in *numbers*
 	append
 	(loop for y in *numbers*
-	      unless (or (not (numbers-are-compatible x y))
+	      unless (or ;; (not (numbers-are-compatible x y))
 			 (if (= x y) (= y x) (not (= y x))))
 	      collect (list x y))))
 
@@ -58,7 +63,7 @@
   (loop for x in *numbers*
 	append
 	(loop for y in *numbers*
-	      unless (or (not (numbers-are-compatible x y))
+	      unless (or ;; (not (numbers-are-compatible x y))
 			 (if (/= x y) (/= y x) (not (/= y x))))
 	      collect (list x y))))
 
@@ -66,7 +71,7 @@
   (loop for x in *numbers*
 	append
 	(loop for y in *numbers*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(if (= x y)
 			    (/= x y)
 			  (not (/= x y))))
@@ -76,7 +81,7 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(and (< x y) (> x y)))
 	      collect (list x y))))
 
@@ -84,7 +89,7 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(if (< x y) (not (> y x))
 			  (> y x)))
 	      collect (list x y))))
@@ -93,7 +98,7 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(if (< x y) (>= x y)
 			  (not (>= x y))))
 	      collect (list x y))))
@@ -102,7 +107,7 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(if (<= x y) (not (>= y x))
 			  (>= y x)))
 	      collect (list x y))))
@@ -111,7 +116,7 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(if (<= x y) (not (or (= x y) (< x y)))
 			  (or (= x y) (< x y))))
 	      collect (list x y))))
@@ -120,7 +125,7 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(if (> x y) (<= x y)
 			  (not (<= x y))))
 	      collect (list x y))))
@@ -129,7 +134,7 @@
   (loop for x in *reals*
 	nconc
 	(loop for y in *reals*
-	      when (and (numbers-are-compatible x y)
+	      when (and ;; (numbers-are-compatible x y)
 			(if (>= x y) (not (or (= x y) (> x y)))
 			  (or (= x y) (> x y))))
 	      collect (list x y))))

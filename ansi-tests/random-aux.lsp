@@ -31,3 +31,14 @@
 	       (rotatef (elt seq r) (elt seq (1- i))))))
   seq)
 
+(defun binomial-distribution-test (n fn)
+  (let* ((count (loop repeat n count (funcall fn)))
+	 (sigma (/ (sqrt n) 2.0))
+	 (bound (* sigma 6))
+	 (expected (/ n 2.0)))
+    (<= (- expected bound)
+	count
+	(+ expected bound))))
+
+
+
