@@ -115,11 +115,13 @@
   ("abcde"))
 
 (deftest write-line.11
-  (with-output-to-string
-    (os)
-    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
-      (write-line "951" t)
-      (close *terminal-io*)))
+  (with-input-from-string
+   (is "abcd")
+   (with-output-to-string
+     (os)
+     (let ((*terminal-io* (make-two-way-stream is os)))
+       (write-line "951" t)
+       (close *terminal-io*))))
   #.(concatenate 'string "951" (string #\Newline)))
 
 (deftest write-line.12

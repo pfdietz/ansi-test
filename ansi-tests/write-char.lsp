@@ -17,11 +17,13 @@
   nil)
 
 (deftest write-char.2
-  (with-output-to-string
-    (os)
-    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
-      (write-char #\$ t)
-      (close *terminal-io*)))
+  (with-input-from-string
+   (is "abcd")
+   (with-output-to-string
+     (os)
+     (let ((*terminal-io* (make-two-way-stream is os)))
+       (write-char #\$ t)
+       (close *terminal-io*))))
   "$")
 
 (deftest write-char.3
