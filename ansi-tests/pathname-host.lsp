@@ -39,6 +39,13 @@
 					    'foo t))) 1))
   t)
 
+;;; section 19.3.2.1
+(deftest pathname-host.7
+  (loop for p in *logical-pathnames*
+	when (eq (pathname-host p) :unspecific)
+	collect p)
+  nil)
+
 (deftest pathname-host.error.1
   (classify-error (pathname-host))
   program-error)

@@ -10,7 +10,26 @@
 	always (eq x (pathname x)))
   t)
 
-;;; More here
+(deftest pathname.2
+  (equalt #p"ansi-aux.lsp" (pathname "ansi-aux.lsp"))
+  t)
+
+(deftest pathname.3
+  (let ((s (open "ansi-aux.lsp" :direction :input)))
+    (prog1 (equalt (truename (pathname s)) (truename #p"ansi-aux.lsp"))
+      (close s)))
+  t)
+
+(deftest pathname.4
+  (let ((s (open "ansi-aux.lsp" :direction :input)))
+    (close s)
+    (equalt (truename (pathname s)) (truename #p"ansi-aux.lsp")))
+  t)
+
+(deftest pathname.5
+  (loop for x in *logical-pathnames*
+	always (eq x (pathname x)))
+  t)
 
 ;;; Error tests
 

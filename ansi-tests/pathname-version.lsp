@@ -12,6 +12,13 @@
 	collect (list p version))
   nil)
 
+;;; section 19.3.2.1
+(deftest pathname-version.2
+  (loop for p in *logical-pathnames*
+	when (eq (pathname-version p) :unspecific)
+	collect p)
+  nil)
+
 (deftest pathname-version.error.1
   (classify-error (pathname-version))
   program-error)

@@ -67,6 +67,13 @@
 	collect (list p directory))
   nil)
 
+;;; section 19.3.2.1
+(deftest pathname-directory.7
+  (loop for p in *logical-pathnames*
+	when (eq (pathname-directory p) :unspecific)
+	collect p)
+  nil)
+
 (deftest pathname-directory.error.1
   (classify-error (pathname-directory))
   program-error)

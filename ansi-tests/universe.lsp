@@ -338,7 +338,10 @@
 
 (eval-when (load eval compile)
   (setf (logical-pathname-translations "CLTESTROOT")
-	`(("**;*.*.*" ,(make-pathname :directory '(:absolute))))))
+	`(("**;*.*.*" ,(make-pathname :directory '(:absolute)))))
+  (setf (logical-pathname-translations "CLTEST")
+	`(("**;*.*.*" ,(make-pathname))))
+  )
 
 (defparameter *logical-pathnames*
   (append

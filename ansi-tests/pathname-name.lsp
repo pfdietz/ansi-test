@@ -53,6 +53,13 @@
 	collect (list p name))
   nil)
 
+;;; section 19.3.2.1
+(deftest pathname-name.7
+  (loop for p in *logical-pathnames*
+	when (eq (pathname-name p) :unspecific)
+	collect p)
+  nil)
+
 (deftest pathname-name.error.1
   (classify-error (pathname-name))
   program-error)

@@ -53,6 +53,12 @@
 	collect (list p device))
   nil)
 
+;;; section 19.3.2.1
+(deftest pathname-device.7
+  (loop for p in *logical-pathnames*
+	always (eq (pathname-device p) :unspecific))
+  t)
+
 (deftest pathname-device.error.1
   (classify-error (pathname-device))
   program-error)

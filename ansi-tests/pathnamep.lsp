@@ -17,6 +17,12 @@
 	always (eql (length (multiple-value-list (pathnamep x))) 1))
   t)
 
+(deftest pathnamep.3
+  (loop for x in *universe*
+	always (or (not (typep x 'logical-pathname))
+		   (pathnamep x)))
+  t)
+
 (deftest pathnamep.error.1
   (classify-error (pathnamep))
   program-error)

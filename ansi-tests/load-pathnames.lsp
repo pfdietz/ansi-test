@@ -9,6 +9,7 @@
 
 (load "pathnames.lsp")
 (load "pathname.lsp")
+(load "pathnamep.lsp")
 (load "make-pathname.lsp")
 (load "pathname-host.lsp")
 (load "pathname-device.lsp")
@@ -17,4 +18,5 @@
 (load "pathname-type.lsp")
 (load "pathname-version.lsp")
 
+(load "logical-pathname.lsp")
 (load "translate-logical-pathname.lsp")
