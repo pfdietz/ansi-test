@@ -612,3 +612,6 @@
 	(list (%do-it% args)
 	      (%do-it% (reverse args))))))
   (success success))
+
+(def-macro-test defpackage.error.1
+  (defpackage :nonexistent-package (:use)))

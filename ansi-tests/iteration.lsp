@@ -131,6 +131,9 @@
 	      (push #'(lambda () i) x))))
   (5 5 5 5 5))
 
+(def-macro-test do.error.1
+  (do ((i 0 (1+ i))) ((= i 5) 'a)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Tests of DO*
@@ -250,6 +253,9 @@
 	      (push #'(lambda () i) x))))
   (5 5 5 5 5))
 
+(def-macro-test do*.error.1
+  (do* ((i 0 (1+ i))) ((= i 5) 'a)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Tests for DOLIST
@@ -360,6 +366,9 @@
       (push e x)
       (when (eq e 'c) (return x))))
   (c b a))
+
+(def-macro-test dolist.error.1
+  (dolist (x nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -491,6 +500,8 @@
     y)
   (3 2 1 0))
 
+(def-macro-test dotimes.error.1
+  (dotimes (i 10)))
 
 
 

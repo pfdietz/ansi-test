@@ -70,4 +70,17 @@
      (return 'good)))
   good)
 
+(deftest etypecase.error.1
+  (classify-error (funcall (macro-function 'etypecase)))
+  program-error)
 
+(deftest etypecase.error.2
+  (classify-error (funcall (macro-function 'etypecase)
+			   '(etypecase t)))
+  program-error)
+
+(deftest etypecase.error.3
+  (classify-error (funcall (macro-function 'etypecase)
+			   '(etypecase t)
+			   nil nil))
+  program-error)

@@ -81,9 +81,10 @@
 
 
 (deftest ctypecase.13
-  (ctypecase 'a
-	     (number 'bad)
-	     (#.(find-class 'symbol nil) 'good))
+  (let ((x 'a))
+    (ctypecase x
+	       (number 'bad)
+	       (#.(find-class 'symbol nil) 'good)))
   good)
 
 (deftest ctypecase.14
@@ -97,3 +98,17 @@
      (return-from done 'good)))
   good)
 
+(deftest ctypecase.error.1
+  (classify-error (funcall (macro-function 'ctypecase)))
+  program-error)
+
+(deftest ctypecase.error.2
+  (classify-error (funcall (macro-function 'ctypecase)
+			   '(ctypecase t)))
+  program-error)
+
+(deftest ctypecase.error.3
+  (classify-error (funcall (macro-function 'ctypecase)
+			   '(ctypecase t)
+			   nil nil))
+  program-error)

@@ -35,4 +35,16 @@
      i a b))
   (z) ((z)) 2 1 2)
 
+(deftest push.order.2
+  (let ((x (vector nil nil nil nil))
+	(y (vector 'a 'b 'c 'd))
+	(i 1))
+    (push (aref y (incf i)) (aref x (incf i)))
+    (values x y i))
+  #(nil nil nil (c))
+  #(a b c d)
+  3)
+
+(def-macro-test push.error.1 (push x y))
+
 ;;; Need to add push vs. various accessors

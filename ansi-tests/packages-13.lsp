@@ -50,3 +50,6 @@
      (package-error () 'package-error)
      (error (c) c)))
   package-error)
+
+(def-macro-test in-package.error.1
+  (in-package :cl-test))

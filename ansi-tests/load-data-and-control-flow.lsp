@@ -2,6 +2,13 @@
 
 (load "data-and-control-flow.lsp")
 (load "places.lsp")
+(load "psetq.lsp")
+(load "psetf.lsp")
+(load "shiftf.lsp")
+(load "rotatef.lsp")
+(load "return.lsp")
+(load "defsetf.lsp")
+(load "define-setf-expander.lsp")
 
 (load "and.lsp")
 (load "apply.lsp")

@@ -35,3 +35,18 @@
   (classify-error (multiple-value-list 'a 'b))
   program-error)
 |#
+
+(deftest multiple-value-list.error.1
+  (classify-error (funcall (macro-function 'multiple-value-list)))
+  program-error)
+  
+(deftest multiple-value-list.error.2
+  (classify-error (funcall (macro-function 'multiple-value-list)
+			   '(multiple-value-list nil)))
+  program-error)
+
+(deftest multiple-value-list.error.3
+  (classify-error (funcall (macro-function 'multiple-value-list)
+			   '(multiple-value-list nil)
+			   nil nil))
+  program-error)

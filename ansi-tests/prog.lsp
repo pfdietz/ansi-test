@@ -71,6 +71,7 @@
 	(return 'bad))
   2)
 
+(def-macro-test prog.error.1 (prog nil))
 
 ;;; Tests of PROG*
 
@@ -140,8 +141,4 @@
 	(return 'bad))
   2)
 
-    
-
-
-
-
+(def-macro-test prog*.error.1 (prog* nil))

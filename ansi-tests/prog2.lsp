@@ -45,4 +45,4 @@
      (return 'good)))
   good)
 
-
+(def-macro-test prog2.error.1 (prog2 nil nil))

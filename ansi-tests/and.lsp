@@ -55,3 +55,16 @@
      i a b c d))
   4 4 1 2 3 4)
 
+(deftest and.error.1
+  (classify-error (funcall (macro-function 'and)))
+  program-error)
+
+(deftest and.error.2
+  (classify-error (funcall (macro-function 'and)
+			   '(and)))
+  program-error)
+
+(deftest and.error.3
+  (classify-error (funcall (macro-function 'and)
+			   '(and) nil nil))
+  program-error)

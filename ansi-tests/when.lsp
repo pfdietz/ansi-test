@@ -50,3 +50,17 @@
 ;;; (deftest when.error.1
 ;;;  (classify-error (when))
 ;;;  program-error)
+
+(deftest when.error.1
+  (classify-error (funcall (macro-function 'when)))
+  program-error)
+
+(deftest when.error.2
+  (classify-error (funcall (macro-function 'when)
+			   '(when t)))
+  program-error)
+
+(deftest when.error.3
+  (classify-error (funcall (macro-function 'when)
+			   '(when t) nil nil))
+  program-error)

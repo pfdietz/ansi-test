@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-;;; See also places.lsp
-
 (deftest pushnew.1
   (let ((x nil))
     (let ((y (pushnew 'a x)))
@@ -156,6 +154,27 @@
   (a b c) (a b c)
   3 1 3 2)
 
+(deftest pushnew.order.1
+  (let ((x (vector nil nil nil nil))
+	(y (vector 'a 'b 'c 'd))
+	(i 1))
+    (pushnew (aref y (incf i)) (aref x (incf i)))
+    (values x y i))
+  #(nil nil nil (c))
+  #(a b c d)
+  3)
+
+(deftest pushnew.order.2
+  (let ((x (vector nil nil nil nil nil))
+	(y (vector 'a 'b 'c 'd 'e))
+	(i 1))
+    (pushnew (aref y (incf i)) (aref x (incf i))
+	     :test (progn (incf i) #'eql))
+    (values x y i))
+  #(nil nil nil (c) nil)
+  #(a b c d e)
+  4)
+
 (deftest pushnew.error.1
   (classify-error
    (let ((x '(a b)))
@@ -173,3 +192,5 @@
    (let ((x '(a b)))
      (pushnew 'c x :key #'cons)))
   program-error)
+
+(def-macro-test pushnew.error.4 (pushnew x y))

@@ -5,15 +5,20 @@
 
 (in-package :cl-test)
 
-#|
 (deftest defun.error.1
-  (classify-error (defun))
+  (classify-error (funcall (macro-function 'defun)))
   program-error)
 
 (deftest defun.error.2
-  (classify-error (defun ignored-defun-name))
+  (classify-error (funcall (macro-function 'defun)
+			   '(defun nonexistent-function ())))
   program-error)
-|#
+
+(deftest defun.error.3
+  (classify-error (funcall (macro-function 'defun)
+			   '(defun nonexistent-function ())
+			   nil nil))
+  program-error)
 
 ;;; Tests for implicit blocks
 

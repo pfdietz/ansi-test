@@ -13,3 +13,5 @@
 (load "subtypep-eql.lsp")
 (load "subtypep-array.lsp")
 
+(load "deftype.lsp")
+

@@ -35,4 +35,6 @@
      (pop x)))
   c)
 
+(def-macro-test pop.error.1 (pop x))
+
 ;;; Need to add tests of POP vs. various accessors

@@ -415,3 +415,7 @@
 ;;;	     :a :b :c)
 ;;;  (3 6 9))
 
+
+;;; Error test
+
+(def-macro-test struct.error.1 (defstruct nonexistent-structure-type a b c))

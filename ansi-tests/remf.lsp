@@ -41,3 +41,13 @@
      i x y))
   t (a b e f) 2 1 2)
 
+(deftest remf.order.2
+  (let ((x  (copy-seq #(nil :a :b)))
+	(pa (vector (list :a 1) (list :b 2) (list :c 3) (list :d 4)))
+	(i 0))
+    (values
+     (not (remf (aref pa (incf i)) (aref x (incf i))))
+     pa))
+  nil #((:a 1) nil (:c 3) (:d 4)))
+
+(def-macro-test remf.error.1 (remf x 'a))

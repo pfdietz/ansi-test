@@ -1438,3 +1438,18 @@ the condition to go uncaught if it cannot be classified."
   (loop for e on plist by #'cddr
 	when (eql (car e) prop)
 	collect (cadr e)))
+
+(defmacro def-macro-test (test-name macro-form)
+  (let ((macro-name (car macro-form)))
+    (assert (symbolp macro-name))
+    `(deftest ,test-name
+       (values
+	(eqlt (classify-error (funcall (macro-function ',macro-name)))
+	      'program-error)
+	(eqlt (classify-error (funcall (macro-function ',macro-name)
+				       ',macro-form))
+	      'program-error)
+	(eqlt (classify-error (funcall (macro-function ',macro-name)
+				       ',macro-form nil nil))
+	      'program-error))
+       t t t)))

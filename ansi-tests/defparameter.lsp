@@ -64,3 +64,19 @@
 ;;; 		    "documentation"
 ;;; 		    "illegal extra argument"))
 ;;;   program-error)
+
+(deftest defparameter.error.1
+  (classify-error (funcall (macro-function 'defparameter)))
+  program-error)
+
+(deftest defparameter.error.2
+  (classify-error (funcall (macro-function 'defparameter)
+			   '(defparameter *nonexistent-variable* nil)))
+  program-error)
+
+(deftest defparameter.error.3
+  (classify-error (funcall (macro-function 'defparameter)
+			   '(defparameter *nonexistent-variable* nil)
+			   nil nil))
+  program-error)
+

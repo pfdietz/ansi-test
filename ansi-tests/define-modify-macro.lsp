@@ -81,3 +81,5 @@
 ;;; 		    "extra illegal argument"))
 ;;;   program-error)
 
+(def-macro-test define-modify-macro.error.1
+  (define-modify-macro nonexistent-modify-macro () foo))

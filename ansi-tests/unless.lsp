@@ -59,3 +59,17 @@
 ;;; (deftest unless.error.1
 ;;;  (classify-error (unless))
 ;;;  program-error)
+
+(deftest unless.error.1
+  (classify-error (funcall (macro-function 'unless)))
+  program-error)
+
+(deftest unless.error.2
+  (classify-error (funcall (macro-function 'unless)
+			   '(unless t)))
+  program-error)
+
+(deftest unless.error.3
+  (classify-error (funcall (macro-function 'unless)
+			   '(unless t) nil nil))
+  program-error)

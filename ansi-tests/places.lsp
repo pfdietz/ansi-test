@@ -6,14 +6,15 @@
 (in-package :cl-test)
 
 ;;; Section 5.1.1.1
-(deftest setf-order
+
+(deftest setf.order.1
   (let ((x (vector nil nil nil nil))
 	(i 0))
     (setf (aref x (incf i)) (incf i))
     (values x i))
   #(nil 2 nil nil) 2)
 
-(deftest setf-order.2
+(deftest setf.order.2
   (let ((x (vector nil nil nil nil))
 	(i 0))
     (setf (aref x (incf i)) (incf i)
@@ -21,47 +22,7 @@
     (values x i))
   #(nil 2 nil 13) 13)
 
-(deftest push-order
-  (let ((x (vector nil nil nil nil))
-	(y (vector 'a 'b 'c 'd))
-	(i 1))
-    (push (aref y (incf i)) (aref x (incf i)))
-    (values x y i))
-  #(nil nil nil (c))
-  #(a b c d)
-  3)
-
-(deftest pushnew-order
-  (let ((x (vector nil nil nil nil))
-	(y (vector 'a 'b 'c 'd))
-	(i 1))
-    (pushnew (aref y (incf i)) (aref x (incf i)))
-    (values x y i))
-  #(nil nil nil (c))
-  #(a b c d)
-  3)
-
-(deftest pushnew-order.2
-  (let ((x (vector nil nil nil nil nil))
-	(y (vector 'a 'b 'c 'd 'e))
-	(i 1))
-    (pushnew (aref y (incf i)) (aref x (incf i))
-	     :test (progn (incf i) #'eql))
-    (values x y i))
-  #(nil nil nil (c) nil)
-  #(a b c d e)
-  4)
-
-(deftest remf-order
-  (let ((x  (copy-seq #(nil :a :b)))
-	(pa (vector (list :a 1) (list :b 2) (list :c 3) (list :d 4)))
-	(i 0))
-    (values
-     (not (remf (aref pa (incf i)) (aref x (incf i))))
-     pa))
-  nil #((:a 1) nil (:c 3) (:d 4)))
-
-(deftest incf-order
+(deftest incf.order.1
   (let ((x (copy-seq #(0 0 0 0 0)))
 	(i 1))
     (values
@@ -69,7 +30,7 @@
      x i))
   3 #(0 0 3 0 0) 3)
 
-(deftest decf-order
+(deftest decf.order.1
   (let ((x (copy-seq #(0 0 0 0 0)))
 	(i 1))
     (values
@@ -77,60 +38,7 @@
      x i))
   -3 #(0 0 -3 0 0) 3)
 
-(deftest shiftf-order.1
-  (let ((x (vector 'a 'b 'c 'd 'e))
-	(i 2))
-    (values (shiftf (aref x (incf i)) (incf i)) x i))
-  d #(a b c 4 e) 4)
-    
-(deftest shiftf-order.2
-  (let ((x (vector 'a 'b 'c 'd 'e 'f 'g 'h))
-	(i 2))
-    (values (shiftf (aref x (incf i)) (aref x (incf i)) (incf i)) x i))
-  d #(a b c e 5 f g h) 5)
-
-(deftest rotatef-order.1
-  (let ((x (vector 'a 'b 'c 'd 'e 'f))
-	(i 2))
-    (values
-     (rotatef (aref x (incf i)) (aref x (incf i)))
-     x i))
-  nil
-  #(a b c e d f)
-  4)
-
-(deftest rotatef-order.2
-  (let ((x (vector 'a 'b 'c 'd 'e 'f))
-	(i 2))
-    (values
-     (rotatef (aref x (incf i)) (aref x (incf i)) (aref x (incf i)))
-     x i))
-  nil
-  #(a b c e f d)
-  5)
-    
-(deftest psetf-order
-  (let ((x (vector nil nil nil nil))
-	(i 0))
-    (psetf (aref x (incf i)) (incf i))
-    (values x i))
-  #(nil 2 nil nil) 2)
-
-(deftest psetf-order.2
-  (let ((x (vector nil nil nil nil))
-	(i 0))
-    (psetf (aref x (incf i)) (incf i)
-	   (aref x (incf i)) (incf i 10))
-    (values x i))
-  #(nil 2 nil 13) 13)
-
-(deftest pop-order
-  (let ((x (vector '(a b) '(c d) '(e f)))
-	(i 0))
-    (values (pop (aref x (incf i))) x i))
-  c #((a b) (d) (e f)) 1)
-
-
+   
 ;;; Section 5.1.2.1
 (deftest setf-var
   (let ((x nil))
@@ -336,132 +244,3 @@
 (deftest setf.4
   (let (x) (setf x (values 1 2)))
   1)
-
-;;; Tests of PSETQ
-
-(deftest psetq.1
-  (psetq)
-  nil)
-
-(deftest psetq.2
-  (let ((x 0))
-    (values (psetq x 1) x))
-  nil 1)
-
-(deftest psetq.3
-  (let ((x 0) (y 1))
-    (values (psetq x y y x) x y))
-  nil 1 0)
-
-(deftest psetq.4
-  (let ((x 0))
-    (values
-     (symbol-macrolet ((x y))
-       (let ((y 1))
-	 (psetq x 2)
-	 y))
-     x))
-  2 0)
-
-(deftest psetq.5
-  (let ((w (list nil)))
-    (values
-     (symbol-macrolet ((x (car w)))
-       (psetq x 2))
-     w))
-  nil (2))
-
-(deftest psetq.6
-  (let ((c 0) x y)
-    (psetq x (incf c)
-	   y (incf c))
-    (values c x y))
-  2 1 2)
-
-;;; The next test is a PSETQ that is equivalent to a PSETF
-;;; See PSETF.7 for comments related to this test.
-
-(deftest psetq.7
-  (symbol-macrolet ((x (aref a (incf i)))
-		    (y (aref a (incf i))))
-    (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9)))
-	  (i 0))
-      (psetq x (aref a (incf i))
-	     y (aref a (incf i)))
-      (values a i)))
-  #(0 2 2 4 4 5 6 7 8 9)
-  4)
-
-;;; Tests of PSETF
-
-(deftest psetf.1
-  (psetf)
-  nil)
-
-(deftest psetf.2
-  (let ((x 0))
-    (values (psetf x 1) x))
-  nil 1)
-
-(deftest psetf.3
-  (let ((x 0) (y 1))
-    (values (psetf x y y x) x y))
-  nil 1 0)
-
-(deftest psetf.4
-  (let ((x 0))
-    (values
-     (symbol-macrolet ((x y))
-       (let ((y 1))
-	 (psetf x 2)
-	 y))
-     x))
-  2 0)
-
-(deftest psetf.5
-  (let ((w (list nil)))
-    (values
-     (symbol-macrolet ((x (car w)))
-       (psetf x 2))
-     w))
-  nil (2))
-
-(deftest psetf.6
-  (let ((c 0) x y)
-    (psetf x (incf c)
-	   y (incf c))
-    (values c x y))
-  2 1 2)
-
-;;; According to the standard, the forms to be assigned and
-;;; the subforms in the places to be assigned to are evaluated
-;;; from left to right.  Therefore, PSETF.7 and PSETF.8 should
-;;; do the same thing to A as PSETF.9 does.
-;;; (See the page for PSETF)
-
-(deftest psetf.7
-  (symbol-macrolet ((x (aref a (incf i)))
-		    (y (aref a (incf i))))
-    (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9)))
-	  (i 0))
-      (psetf x (aref a (incf i))
-	     y (aref a (incf i)))
-      (values a i)))
-  #(0 2 2 4 4 5 6 7 8 9)
-  4)
-
-(deftest psetf.8
-  (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9)))
-	(i 0))
-    (psetf (aref a (incf i)) (aref a (incf i))
-	   (aref a (incf i)) (aref a (incf i)))
-    (values a i))
-  #(0 2 2 4 4 5 6 7 8 9)
-  4)
-
-(deftest psetf.9
-  (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9))))
-    (psetf (aref a 1) (aref a 2)
-	   (aref a 3) (aref a 4))
-    a)
-  #(0 2 2 4 4 5 6 7 8 9))

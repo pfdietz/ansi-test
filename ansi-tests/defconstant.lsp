@@ -43,3 +43,19 @@
 ;;; 		    "This is a docstring"
 ;;; 		    "This is an unnecessary extra argument."))
 ;;;   program-error)
+
+(deftest defconstant.error.1
+  (classify-error (funcall (macro-function 'defconstant)))
+  program-error)
+
+(deftest defconstant.error.2
+  (classify-error (funcall (macro-function 'defconstant)
+			   '(defconstant +nonexistent-constant+ 0)))
+  program-error)
+
+(deftest defconstant.error.3
+  (classify-error (funcall (macro-function 'defconstant)
+			   '(defconstant +nonexistent-constant+ 0)
+			   nil nil))
+  program-error)
+			   

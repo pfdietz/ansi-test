@@ -189,7 +189,7 @@
   (a 2 3)
   (a b c))
 
-(deftest macrolet.22
+(deftest macrolet.22a
   (macrolet ((%m (x &optional ((y z) '(2 3) y-z-p))
 		 `(quote (,x ,y ,z ,y-z-p))))
     (values
@@ -338,6 +338,14 @@
   (macrolet ((%m (&whole (m a b) c d) `(quote (,m ,a ,b ,c ,d))))
     (%m 1 2))
   (%m 1 2 1 2))
+
+;;; Macro names are shadowed by local functions
+
+(deftest macrolet.37
+  (macrolet ((%f () :bad))
+    (flet ((%f () :good))
+      (%f)))
+  :good)
 
 ;;; Symbol-macrolet tests
 

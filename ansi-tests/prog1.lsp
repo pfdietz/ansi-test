@@ -35,3 +35,5 @@
      10
      (return 'good)))
   good)
+
+(def-macro-test prog1.error.1 (prog1 nil))

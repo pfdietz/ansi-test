@@ -41,8 +41,19 @@
   (or (values nil 1 2) (values 1 nil 2))
   1 nil 2)
 
+(deftest or.error.1
+  (classify-error (funcall (macro-function 'or)))
+  program-error)
 
+(deftest or.error.2
+  (classify-error (funcall (macro-function 'or)
+			   '(or)))
+  program-error)
 
+(deftest or.error.3
+  (classify-error (funcall (macro-function 'or)
+			   '(or) nil nil))
+  program-error)
 
   
 

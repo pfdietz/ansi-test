@@ -129,3 +129,18 @@
 ;;;  (classify-error (destructuring-bind x))
 ;;;  program-error)
 
+(deftest destructuring-bind.error.7
+  (classify-error (funcall (macro-function 'destructuring-bind)))
+  program-error)
+
+(deftest destructuring-bind.error.8
+  (classify-error (funcall (macro-function 'destructuring-bind)
+			   '(destructuring-bind (a . b) '(1 2) nil)))
+  program-error)
+
+(deftest destructuring-bind.error.9
+  (classify-error (funcall (macro-function 'destructuring-bind)
+			   '(destructuring-bind (a . b) '(1 2) nil)
+			   nil nil))
+  program-error)
+

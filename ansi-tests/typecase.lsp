@@ -93,6 +93,20 @@
      (return-from done 'good)))
   good)
 
+(deftest typecase.error.1
+  (classify-error (funcall (macro-function 'typecase)))
+  program-error)
+
+(deftest typecase.error.2
+  (classify-error (funcall (macro-function 'typecase)
+			   '(typecase t)))
+  program-error)
+
+(deftest typecase.error.3
+  (classify-error (funcall (macro-function 'typecase)
+			   '(typecase t)
+			   nil nil))
+  program-error)
 
 
 

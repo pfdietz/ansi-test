@@ -62,3 +62,19 @@
 ;;;   (classify-error (defvar *ignored-defvar-name* nil "documentation"
 ;;; 		    "illegal extra argument"))
 ;;;   program-error)
+
+(deftest defvar.error.1
+  (classify-error (funcall (macro-function 'defvar)))
+  program-error)
+
+(deftest defvar.error.2
+  (classify-error (funcall (macro-function 'defvar)
+			   '(defvar *nonexistent-variable* nil)))
+  program-error)
+
+(deftest defvar.error.3
+  (classify-error (funcall (macro-function 'defvar)
+			   '(defvar *nonexistent-variable* nil)
+			   nil nil))
+  program-error)
+

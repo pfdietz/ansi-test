@@ -197,3 +197,17 @@
 ;;; (deftest ccase.error.1
 ;;;  (classify-error (ccase))
 ;;;  program-error)
+
+(deftest ccase.error.1
+  (classify-error (funcall (macro-function 'ccase)))
+  program-error)
+
+(deftest ccase.error.2
+  (classify-error (funcall (macro-function 'ccase)
+			   '(ccase t)))
+  program-error)
+
+(deftest ccase.error.3
+  (classify-error (funcall (macro-function 'ccase)
+			   '(ccase t) nil nil))
+  program-error)

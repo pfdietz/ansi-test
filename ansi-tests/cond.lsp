@@ -80,3 +80,17 @@
      10
      (return-from done 'good)))
   good)
+
+(deftest cond.error.1
+  (classify-error (funcall (macro-function 'cond)))
+  program-error)
+
+(deftest cond.error.2
+  (classify-error (funcall (macro-function 'cond)
+			   '(cond)))
+  program-error)
+
+(deftest cond.error.3
+  (classify-error (funcall (macro-function 'cond)
+			   '(cond) nil nil))
+  program-error)

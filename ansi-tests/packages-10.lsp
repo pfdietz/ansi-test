@@ -119,3 +119,6 @@
 	   (format t "Error ~S on package ~S~%" c p)
 	   t)))
   0)
+
+(def-macro-test with-package-iterator.error.1
+  (with-package-iterator (x "CL" :external) nil))

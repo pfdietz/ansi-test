@@ -71,4 +71,18 @@
 ;;;  (classify-error (multiple-value-bind (a b c)))
 ;;;  program-error)
 
+(deftest multiple-value-bind.error.1
+  (classify-error (funcall (macro-function 'multiple-value-bind)))
+  program-error)
+  
+(deftest multiple-value-bind.error.2
+  (classify-error (funcall (macro-function 'multiple-value-bind)
+			   '(multiple-value-bind nil nil)))
+  program-error)
+
+(deftest multiple-value-bind.error.3
+  (classify-error (funcall (macro-function 'multiple-value-bind)
+			   '(multiple-value-bind nil nil)
+			   nil nil))
+  program-error)
   

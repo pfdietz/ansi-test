@@ -234,19 +234,19 @@
    :d 40 :allow-other-keys nil :a 1 :b 2 :c 20)
   (nil 1 2))
 
-(deftest lambda.48
+(deftest lambda.49
   ((lambda (&key a b allow-other-keys &allow-other-keys)
      (list allow-other-keys a b))
    :d 40 :a 1 :b 2 :c 20)
   (nil 1 2))
 
-(deftest lambda.49
+(deftest lambda.50
   ((lambda (&key a b ((:allow-other-keys aok)))
      (list aok a b))
    :d 40 :a 1 :allow-other-keys t :b 2 :c 20)
   (t 1 2))
 
-(deftest lambda.50
+(deftest lambda.51
   ((lambda (&key &allow-other-keys)) :a 1 :b 2 :c 3)
   nil)
 
@@ -261,4 +261,14 @@
   (funcall (eval (macroexpand '(lambda () 10))))
   10)
 
-  
+(deftest lambda.error.1
+  (classify-error (funcall (macro-function 'lambda)))
+  program-error)
+
+(deftest lambda.error.2
+  (classify-error (funcall (macro-function 'lambda) '(lambda ())))
+  program-error)
+
+(deftest lambda.error.3
+  (classify-error (funcall (macro-function 'lambda) '(lambda ()) nil nil))
+  program-error)

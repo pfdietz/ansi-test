@@ -158,3 +158,18 @@
      10
      (return-from done 'good)))
   good)
+
+(deftest ecase.error.1
+  (classify-error (funcall (macro-function 'ecase)))
+  program-error)
+
+(deftest ecase.error.2
+  (classify-error (funcall (macro-function 'ecase)
+			   '(ecase t)))
+  program-error)
+
+(deftest ecase.error.3
+  (classify-error (funcall (macro-function 'ecase)
+			   '(ecase t)
+			   nil nil))
+  program-error)
