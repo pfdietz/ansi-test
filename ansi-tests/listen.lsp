@@ -47,6 +47,19 @@
      (end-of-file () (listen s)))))
   t nil)
 
+(deftest listen.8
+  (with-input-from-string
+   (is "abc")
+   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+     (notnot-mv (listen t))))
+  t)
+
+(deftest listen.9
+  (with-input-from-string
+   (*standard-input* "345")
+   (notnot-mv (listen nil)))
+  t)
+
 ;;; Error tests
 
 (deftest listen.error.1

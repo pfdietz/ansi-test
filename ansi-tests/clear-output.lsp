@@ -26,6 +26,17 @@
 	collect s)
   nil)
 
+(deftest clear-output.5
+  (let ((os (make-string-output-stream)))
+    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+      (clear-output t)))
+  nil)
+
+(deftest clear-output.6
+  (let ((*standard-output* (make-string-output-stream)))
+    (clear-output nil))
+  nil)
+
 ;;; Error tests
 
 (deftest clear-output.error.1

@@ -72,6 +72,20 @@
     (read-char s nil t)))
   #\a #\b #\c)
 
+(deftest read-char.9
+  (with-input-from-string
+   (is "!?*")
+   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+     (read-char t)))
+  #\!)
+
+(deftest read-char.10
+  (with-input-from-string
+   (*standard-input* "345")
+   (read-char nil))
+  #\3)
+
+
 ;;; Error tests
 
 (deftest read-char.error.1

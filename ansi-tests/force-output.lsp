@@ -25,6 +25,18 @@
 	collect s)
   nil)
 
+(deftest force-output.5
+  (let ((os (make-string-output-stream)))
+    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+      (force-output t)))
+  nil)
+
+(deftest force-output.6
+  (let ((*standard-output* (make-string-output-stream)))
+    (force-output nil))
+  nil)
+
+
 ;;; Error tests
 
 (deftest force-output.error.1

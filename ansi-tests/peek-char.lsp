@@ -257,6 +257,20 @@
   #\a #\a  ; *not* #\x #\x
   )
 
+;;; Stream designators are accepted for the stream argument
+
+(deftest peek-char.22
+  (with-input-from-string
+   (is "!?*")
+   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+     (peek-char nil t)))
+  #\!)
+
+(deftest peek-char.23
+  (with-input-from-string
+   (*standard-input* "345")
+   (peek-char nil nil))
+  #\3)
 
 ;;; Error tests
 

@@ -114,6 +114,20 @@
   #.(concatenate 'string "abc" (string #\Newline))
   ("abcde"))
 
+(deftest write-line.11
+  (with-output-to-string
+    (os)
+    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+      (write-line "951" t)
+      (close *terminal-io*)))
+  #.(concatenate 'string "951" (string #\Newline)))
+
+(deftest write-line.12
+  (with-output-to-string
+    (*standard-output*)
+    (write-line "-=|!" nil))
+  #.(concatenate 'string "-=|!" (string #\Newline)))
+
 ;;; Error tests
 
 (deftest write-line.error.1

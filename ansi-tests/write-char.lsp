@@ -16,6 +16,20 @@
 	collect c)
   nil)
 
+(deftest write-char.2
+  (with-output-to-string
+    (os)
+    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+      (write-char #\$ t)
+      (close *terminal-io*)))
+  "$")
+
+(deftest write-char.3
+  (with-output-to-string
+    (*standard-output*)
+    (write-char #\: nil))
+  ":")
+
 ;;; Error tests
 
 (deftest write-char.error.1

@@ -36,6 +36,20 @@
     (write-char #\y s))
   #.(concatenate 'string "x" (string #\Newline) (string #\Newline) "y"))
 
+(deftest terpri.4
+  (with-output-to-string
+    (os)
+    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+      (terpri t)
+      (finish-output t)))
+  #.(string #\Newline))
+
+(deftest terpri.5
+  (with-output-to-string
+    (*standard-output*)
+    (terpri nil))
+  #.(string #\Newline))
+
 ;;; Error tests
 
 (deftest terpri.error.1

@@ -60,7 +60,21 @@
   " 
 " ((t) (nil) (nil)))
 
+(deftest fresh-line.6
+  (with-output-to-string
+    (os)
+    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+      (write-char #\a t)
+      (fresh-line t)
+      (finish-output t)))
+  #.(concatenate 'string (string #\a) (string #\Newline)))
 
+(deftest fresh-line.7
+  (with-output-to-string
+    (*standard-output*)
+    (write-char #\a nil)
+    (terpri nil))
+  #.(concatenate 'string (string #\a) (string #\Newline)))
 
 ;;; Error tests
 

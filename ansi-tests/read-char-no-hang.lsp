@@ -72,6 +72,19 @@
     (read-char-no-hang s nil t)))
   #\a #\b #\c)
 
+(deftest read-char-no-hang.9
+  (with-input-from-string
+   (is "!?*")
+   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+     (read-char-no-hang t)))
+  #\!)
+
+(deftest read-char-no-hang.10
+  (with-input-from-string
+   (*standard-input* "345")
+   (read-char-no-hang nil))
+  #\3)
+
 ;;; Need a test of the non-hanging.
 ;;; This is hard to do portably.
 

@@ -104,6 +104,20 @@
      result))
   "abc" ("abcde"))
 
+(deftest write-string.11
+  (with-output-to-string
+    (os)
+    (let ((*terminal-io* (make-two-way-stream *standard-input* os)))
+      (write-string "951" t)
+      (close *terminal-io*)))
+  "951")
+
+(deftest write-string.12
+  (with-output-to-string
+    (*standard-output*)
+    (write-string "-=|!" nil))
+  "-=|!")
+
 ;;; Error tests
 
 (deftest write-string.error.1

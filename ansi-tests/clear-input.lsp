@@ -26,6 +26,19 @@
   (clear-input t)
   nil)
 
+(deftest clear-input.5
+  (with-input-from-string
+   (is "!?*")
+   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+     (clear-input t)))
+  nil)
+
+(deftest clear-input.6
+  (with-input-from-string
+   (*standard-input* "345")
+   (clear-input nil))
+  nil)
+
 ;;; Error cases
 
 (deftest clear-input.error.1

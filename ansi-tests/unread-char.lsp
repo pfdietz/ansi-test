@@ -46,6 +46,33 @@
        (read-char s))))
   "abc")
 
+(deftest unread-char.4
+  (with-input-from-string
+   (*standard-input* "abc")
+   (values
+    (read-char)
+    (unread-char #\a nil)
+    (read-char)
+    (read-char)
+    (unread-char #\b nil)
+    (read-char)
+    (read-char)))
+  #\a nil #\a #\b nil #\b #\c)
+
+(deftest unread-char.5
+  (with-input-from-string
+   (is "abc")
+   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+     (values
+      (read-char t)
+      (unread-char #\a t)
+      (read-char t)
+      (read-char t)
+      (unread-char #\b t)
+      (read-char t)
+      (read-char t))))
+  #\a nil #\a #\b nil #\b #\c)
+
 ;;; Error tests
 
 (deftest unread-char.error.1

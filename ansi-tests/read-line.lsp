@@ -49,6 +49,24 @@
      (values (first vals) (notnot (second vals)))))
   " abcd " t)
 
+(deftest read-line.7
+  (with-input-from-string
+   (is "abc")
+   (let ((*terminal-io* (make-two-way-stream is *standard-output*)))
+     (let ((vals (multiple-value-list (read-line t))))
+       (assert (= (length vals) 2))
+       (assert (second vals))
+       (first vals))))
+  "abc")
+
+(deftest read-line.8
+  (with-input-from-string
+   (*standard-input* "abc")
+   (let ((vals (multiple-value-list (read-line nil))))
+     (assert (= (length vals) 2))
+     (assert (second vals))
+     (first vals)))
+  "abc")
 
 ;;; Error tests
 
