@@ -210,7 +210,8 @@
 	   (loop for i from 0 below size
 		 always (equalp-with-case (my-row-major-aref x i)
 					  (my-row-major-aref y i))))))
-
+   ((typep x 'pathname)
+    (equal x y))
    (t (eql x y))))
 
 (defun do-entry (entry &optional
