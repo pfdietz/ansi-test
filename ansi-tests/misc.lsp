@@ -7392,7 +7392,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer -429173946 -3892) b))
        (declare (type (integer -229669685 -50537386) c))
        (declare (ignorable a b c))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (speed 3) (space 1) (safety 0) (debug 3) (compilation-speed 2)))
        (logorc2
@@ -7543,7 +7543,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer -995205 1035654) a))
        (declare (type (integer 473 114804994247) b))
        (declare (ignorable a b))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (debug 3) (speed 2) (compilation-speed 0) (space 3)
 		  (safety 3)))
@@ -7564,7 +7564,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer -76 86) a))
        (declare (type (integer -13771285280 109) b))
        (declare (ignorable a b))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (safety 3) (space 1) (debug 2) (compilation-speed 3)
 		  (speed 3)))
@@ -7584,7 +7584,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer -76645001 98715919) a))
        (declare (type (integer 0 856472753903) b))
        (declare (ignorable a b))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (speed 2) (space 0) (debug 3) (compilation-speed 0)
 		  (safety 3)))
@@ -7600,7 +7600,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer 6429252570156 8761983588786) a))
        (declare (type (integer -400378288 4971722) b))
        (declare (ignorable a b))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (debug 3) (speed 3) (space 2) (safety 0)
 		  (compilation-speed 3)))
@@ -7617,7 +7617,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer -1601 485) a))
        (declare (type (integer -190428560464 -1444494) b))
        (declare (ignorable a b))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (debug 0) (space 2) (speed 0) (safety 3)
 		  (compilation-speed 2)))
@@ -7635,7 +7635,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer -168258525920 -2044) a))
        (declare (type (integer -522 54) b))
        (declare (ignorable a b))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (speed 0) (safety 3) (compilation-speed 1) (space 0)
 		  (debug 2)))
@@ -7659,7 +7659,7 @@ Broken at C::WT-C-INLINE-LOC.
        (declare (type (integer -319 7353) a))
        (declare (type (integer 31751 4233916489) b))
        (declare (ignorable a b))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (safety 3) (compilation-speed 1) (debug 1) (speed 0)
 		  (space 0)))
@@ -7681,7 +7681,7 @@ Broken at C::WT-C-INLINE-LOC.
     '(lambda (a)
        (declare (type (integer -3 1) a))
        (declare (ignorable a))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (space 0) (debug 0) (speed 3) (compilation-speed 2)
 		  (safety 3)))
@@ -7697,7 +7697,7 @@ Broken at C::WT-C-INLINE-LOC.
     '(lambda (a)
        (declare (type (integer 3376 4762) a))
        (declare (ignorable a))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (debug 0) (safety 0) (space 0) (compilation-speed 3)
 		  (speed 3)))
@@ -7713,7 +7713,7 @@ Broken at C::WT-C-INLINE-LOC.
     '(lambda (a)
        (declare (type (integer 7299 257071514003) a))
        (declare (ignorable a))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (compilation-speed 2) (space 1) (safety 2) (speed 1)
 		  (debug 2)))
@@ -7729,7 +7729,7 @@ Broken at C::WT-C-INLINE-LOC.
     '(lambda (a)
        (declare (type (integer -19116544 21344004) a))
        (declare (ignorable a))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (space 1) (safety 3) (debug 1) (compilation-speed 0)
 		  (speed 0)))
@@ -7751,7 +7751,7 @@ Broken at C::WT-C-INLINE-LOC.
     '(lambda (a)
        (declare (type (integer -6456 -32) a))
        (declare (ignorable a))
-       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
        (declare
 	(optimize (space 3) (safety 1) (compilation-speed 1) (speed 0)
 		  (debug 0)))
@@ -7970,5 +7970,205 @@ Broken at C::WT-MAKE-CLOSURE.
    -4794909 4095236669)
   0)
 
+;;; sbcl 0.8.14.28
+;;; Wrong value computed
 
+(deftest misc.414
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (optimize (speed 1) (space 3) (compilation-speed 3)
+			  (debug 3) (safety 1)))
+       (if (setq c 2)
+           (case (shiftf c 1) ((2) c) (t 0))
+	 0)))
+   0)
+  1)
+
+;;; cmucl
+;;; Sept. 2004 snapshot
+;;; Wrong return value
+
+(deftest misc.415
+  (funcall
+   #'(lambda (a c)
+       (catch 'ct2
+	 (flet ((%f17 (&optional x &key)
+			(let* ((y (cons (dotimes (iv3 0)) 0)))
+			  a)))
+	   c)))
+   :bad :good)
+  :good)
+
+;;; Wrong value
+(deftest misc.416
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer 12052668 22838464) b))
+       (declare (ignorable a b c))
+       (declare	(optimize (compilation-speed 3) (debug 2) (speed 1) (space 0)
+			  (safety 3)))
+       (min (mask-field (byte 2 18) b) 89582)))
+   13891743)
+  0)
+
+;;; Invalid number of arguments: 3
+(deftest misc.417
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+     (declare (type (integer 995 22565094) c))
+     (declare (optimize (safety 2) (debug 1) (space 0) (compilation-speed 2)
+			(speed 1)))
+     (numerator (floor (numerator (deposit-field 0 (byte 0 0) c))))))
+   17190042)
+  17190042)
+
+;;; Invalid number of arguments: #<Unknown Immediate Object, lowtag=#b110, type=#x66
+;;;                               {598FCC66}>
+(deftest misc.418
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 1670923021 2536883848) a))
+       (declare (ignorable a b c))
+       (declare (optimize (safety 3) (compilation-speed 3) (speed 1) (debug 1)
+			  (space 2)))
+       (if (logior (setf c 67) 0 a) a 0)))
+   2161404325 -1968715305 83)
+  2161404325)
+
+;;;   nil is not of type c::continuation
+;;; (c::convert-type-check #<Continuation c1>
+;;;                       ((nil #<numeric-type integer> #<numeric-type integer>)))
+
+(deftest misc.419
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (safety 3) (speed 3) (compilation-speed 1) (space 1)
+			  (debug 2)))
+       (boole boole-set 0 (case 2 ((0) 0) (t (numerator (catch 'ct2 0))))))))
+  -1)
+
+;;;  nil is not of type c::continuation
+;;; (c::convert-type-check #<Continuation c1>
+;;;                       ((nil #<union-type real> #<union-type real>)))
+
+(deftest misc.420
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -65954801 6519292634236) a))
+       (declare (type (integer 5721249203 36508717226) b))
+       (declare (ignorable a b))
+       (declare
+	(optimize (space 3) (compilation-speed 2) (safety 3) (speed 0)
+		  (debug 2)))
+       (flet ((%f14 (f14-1 f14-2 &key)
+		    (prog2 0 f14-2 (min (catch 'ct4 (floor 120378948 (max 22 a)))))))
+	 (reduce #'(lambda (lmv6 lmv5) (%f14 0 0))
+		 (vector 0 0 0)
+		 :start
+		 0
+		 :from-end
+		 t))))
+   6313133774518 10840050742)
+  0)
+
+;;; Invalid number of arguments: 1
+(deftest misc.421
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (debug 0) (space 2) (compilation-speed 1) (safety 0)
+			  (speed 0)))
+       (imagpart (block b8 (logior (catch 'ct7 (return-from b8 a)) -1123785)))))
+   -1021899)
+  0)
+
+;;; Invalid number of arguments: 2
+(deftest misc.422
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -13 -3) a))
+       (declare (optimize (space 2) (debug 1) (safety 1) (speed 2)
+			  (compilation-speed 1)))
+       (logorc2 (sbit #*0010000011101010 (min 15 (max 0 0))) a)))
+   -7)
+  6)
+
+;;;   nil is not of type c::continuation
+;;; (c::convert-type-check #<Continuation c1>
+;;;                        ((t #<member-type null> #<union-type real>)))
+(deftest misc.423
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 0 1) a))
+       (declare (type (integer -8031148528 5509023941) b))
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare (optimize (space 2) (safety 3) (debug 1) (compilation-speed 3) (speed 2)))
+       (min 0 (ignore-errors (logand 0 b 388)))))
+   0 4604112015)
+  0)
+
+;;; Argument x is not a real: nil.
+;;; (kernel:two-arg-> nil 0)
+
+(deftest misc.424
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+     (declare (type (integer -24 15) a))
+     (declare (type (integer -99661829155 16) b))
+     (declare (ignorable a b))
+     #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+     (declare (optimize (safety 3) (debug 1) (compilation-speed 1) (space 3)
+			(speed 3)))
+     (catch 'ct4
+       (logandc1 a
+                 (ignore-errors
+                  (let* ((v8 (complex (throw 'ct4 0) 0)))
+                    0))))))
+   -18 -47519360453)
+  0)
+
+;;; Different results
+(deftest misc.425
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+     (declare (type (integer -394128 80657) a))
+     (declare (type (integer 13729431 14852298) b))
+     (declare (optimize (space 2) (compilation-speed 1) (safety 0) (debug 0)
+			(speed 2)))
+     (logorc1 (* a (logior b 0)) 0)))
+   -80334 14527920)
+  1167085925279)
+
+;;; Unable to display error condition
+(deftest misc.426
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare (optimize (safety 3) (space 3) (speed 3) (debug 1)
+			  (compilation-speed 3)))
+       (dotimes (iv3 1 0) (logxor iv3 1285775)))))
+  0)
 
