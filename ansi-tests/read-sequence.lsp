@@ -7,256 +7,169 @@
 
 ;;; Read into a string
 
-(deftest read-sequence.string.1
-  (let ((s (make-string 5)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is)
-      s)))
-  5
-  "abcde")
+(defmacro def-read-sequence-test (name init args input &rest expected)
+  `(deftest ,name
+     (let ((s ,init))
+       (with-input-from-string
+	(is ,input)
+	(values
+	 (read-sequence s is ,@args)
+	 s)))
+     ,@expected))
 
-(deftest read-sequence.string.2
-  (let ((s (make-string 5 :initial-element #\Space)))
-    (with-input-from-string
-     (is "abc")
-     (values
-      (read-sequence s is)
-      s)))
-  3
-  "abc  ")
+(def-read-sequence-test read-sequence.string.1 (copy-seq "     ")
+  () "abcdefghijk" 5 "abcde")
 
-(deftest read-sequence.string.3
-  (let ((s (make-string 5 :initial-element #\Space)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1)
-      s)))
-  5
-  " abcd")
+(def-read-sequence-test read-sequence.string.2 (copy-seq "     ")
+  () "abc" 3 "abc  ")
 
-(deftest read-sequence.string.4
-  (let ((s (make-string 5 :initial-element #\Space)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :end 3)
-      s)))
-  3
-  "abc  ")
+(def-read-sequence-test read-sequence.string.3 (copy-seq "     ")
+  (:start 1) "abcdefghijk" 5 " abcd")
 
-(deftest read-sequence.string.5
-  (let ((s (make-string 5 :initial-element #\Space)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1 :end 4)
-      s)))
-  4
-  " abc ")
+(def-read-sequence-test read-sequence.string.4 (copy-seq "     ")
+  (:end 3) "abcdefghijk" 3 "abc  ")
 
-(deftest read-sequence.string.6
-  (let ((s (make-string 5 :initial-element #\Space)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 0 :end 0)
-      s)))
-  0
-  "     ")
+(def-read-sequence-test read-sequence.string.5 (copy-seq "     ")
+  (:start 1 :end 4) "abcdefghijk" 4 " abc ")
+
+(def-read-sequence-test read-sequence.string.6 (copy-seq "     ")
+  (:start 0 :end 0) "abcdefghijk" 0 "     ")
+
+(def-read-sequence-test read-sequence.string.7 (copy-seq "     ")
+  (:end nil) "abcdefghijk" 5 "abcde")
+
+(def-read-sequence-test read-sequence.string.8 (copy-seq "     ")
+  (:allow-other-keys nil) "abcdefghijk" 5 "abcde")
+
+(def-read-sequence-test read-sequence.string.9 (copy-seq "     ")
+  (:allow-other-keys t :foo 'bar) "abcdefghijk" 5 "abcde")
+
+(def-read-sequence-test read-sequence.string.10 (copy-seq "     ")
+  (:foo 'bar :allow-other-keys 'x) "abcdefghijk" 5 "abcde")
+
+(def-read-sequence-test read-sequence.string.11 (copy-seq "     ")
+  (:foo 'bar :allow-other-keys 'x :allow-other-keys nil)
+  "abcdefghijk" 5 "abcde")
+
+(def-read-sequence-test read-sequence.string.12 (copy-seq "     ")
+  (:end 5 :end 3 :start 0 :start 1) "abcdefghijk" 5 "abcde")
 
 ;;; Read into a base string
 
-(deftest read-sequence.base-string.1
-  (let ((s (make-array 5 :element-type 'base-char)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is)
-      s)))
-  5
-  "abcde")
+(def-read-sequence-test read-sequence.base-string.1
+  (make-array 5 :element-type 'base-char)
+  () "abcdefghijk" 5 "abcde")
 
-(deftest read-sequence.base-string.2
-  (let ((s (make-array 5 :initial-element #\Space
-		       :element-type 'base-char)))
-    (with-input-from-string
-     (is "abc")
-     (values
-      (read-sequence s is)
-      s)))
-  3
-  "abc  ")
+(def-read-sequence-test read-sequence.base-string.2
+  (make-array 5 :element-type 'base-char :initial-element #\Space)
+  () "abc" 3 "abc  ")
 
-(deftest read-sequence.base-string.3
-  (let ((s (make-array 5 :initial-element #\Space
-		       :element-type 'base-char)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1)
-      s)))
-  5
-  " abcd")
+(def-read-sequence-test read-sequence.base-string.3
+  (make-array 5 :element-type 'base-char :initial-element #\Space)
+  (:start 1) "abcdefghijk" 5 " abcd")
 
-(deftest read-sequence.base-string.4
-  (let ((s (make-array 5 :initial-element #\Space
-		       :element-type 'base-char)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :end 3)
-      s)))
-  3
-  "abc  ")
+(def-read-sequence-test read-sequence.base-string.4
+  (make-array 5 :element-type 'base-char :initial-element #\Space)
+  (:end 3) "abcdefghijk" 3 "abc  ")
 
-(deftest read-sequence.base-string.5
-  (let ((s (make-array 5 :initial-element #\Space
-		       :element-type 'base-char)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1 :end 4)
-      s)))
-  4
-  " abc ")
+(def-read-sequence-test read-sequence.base-string.5
+  (make-array 5 :element-type 'base-char :initial-element #\Space)
+  (:start 1 :end 4) "abcdefghijk" 4 " abc ")
 
-(deftest read-sequence.base-string.6
-  (let ((s (make-array 5 :initial-element #\Space
-		       :element-type 'base-char)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 0 :end 0)
-      s)))
-  0
-  "     ")
+(def-read-sequence-test read-sequence.base-string.6
+  (make-array 5 :element-type 'base-char :initial-element #\Space)
+  (:start 0 :end 0) "abcdefghijk" 0 "     ")
+
+(def-read-sequence-test read-sequence.base-string.7
+  (make-array 5 :element-type 'base-char :initial-element #\Space)
+  (:end nil) "abcdefghijk" 5 "abcde")
 
 ;;; Read into a list
 
-(deftest read-sequence.list.1
-  (let ((s (make-list 5)))
-    (with-input-from-string
-     (is "abcde")
-     (values
-      (read-sequence s is)
-      s)))
-  5
-  (#\a #\b #\c #\d #\e))
+(def-read-sequence-test read-sequence.list.1 (make-list 5)
+  () "abcdefghijk" 5 (#\a #\b #\c #\d #\e))
 
-(deftest read-sequence.list.2
-  (let ((s (make-list 5)))
-    (with-input-from-string
-     (is "abc")
-     (values
-      (read-sequence s is)
-      s)))
-  3
-  (#\a #\b #\c nil nil))
+(def-read-sequence-test read-sequence.list.2 (make-list 5)
+  () "abc" 3 (#\a #\b #\c nil nil))
 
-(deftest read-sequence.list.3
-  (let ((s (make-list 5)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1)
-      s)))
-  5
-  (nil #\a #\b #\c #\d))
+(def-read-sequence-test read-sequence.list.3 (make-list 5)
+  (:start 1) "abcdefghijk" 5 (nil #\a #\b #\c #\d))
 
-(deftest read-sequence.list.4
-  (let ((s (make-list 5)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :end 3)
-      s)))
-  3
-  (#\a #\b #\c nil nil))
+(def-read-sequence-test read-sequence.list.4 (make-list 5)
+  (:end 3) "abcdefghijk" 3 (#\a #\b #\c nil nil))
 
-(deftest read-sequence.list.5
-  (let ((s (make-list 5)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1 :end 4)
-      s)))
-  4
-  (nil #\a #\b #\c nil))
+(def-read-sequence-test read-sequence.list.5 (make-list 5)
+  (:end 4 :start 1) "abcdefghijk" 4 (nil #\a #\b #\c nil))
 
-(deftest read-sequence.list.6
-  (let ((s (make-list 5)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 0 :end 0)
-      s)))
-  0
-  (nil nil nil nil nil))
+(def-read-sequence-test read-sequence.list.6 (make-list 5)
+  (:start 0 :end 0) "abcdefghijk" 0 (nil nil nil nil nil))
+
+(def-read-sequence-test read-sequence.list.7 (make-list 5)
+  (:end nil) "abcdefghijk" 5 (#\a #\b #\c #\d #\e))
 
 ;;; Read into a vector
 
-(deftest read-sequence.vector.1
-  (let ((s (vector nil nil nil nil nil)))
-    (with-input-from-string
-     (is "abcde")
-     (values
-      (read-sequence s is)
-      s)))
-  5
-  #(#\a #\b #\c #\d #\e))
+(def-read-sequence-test read-sequence.vector.1
+  (vector nil nil nil nil nil)
+  () "abcdefghijk" 5 #(#\a #\b #\c #\d #\e))
 
-(deftest read-sequence.vector.2
-  (let ((s (vector nil nil nil nil nil)))
-    (with-input-from-string
-     (is "abc")
-     (values
-      (read-sequence s is)
-      s)))
-  3
-  #(#\a #\b #\c nil nil))
+(def-read-sequence-test read-sequence.vector.2
+  (vector nil nil nil nil nil)
+  () "abc" 3 #(#\a #\b #\c nil nil))
 
-(deftest read-sequence.vector.3
-  (let ((s (vector nil nil nil nil nil)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1)
-      s)))
-  5
-  #(nil #\a #\b #\c #\d))
+(def-read-sequence-test read-sequence.vector.3
+  (vector nil nil nil nil nil)
+  (:start 2) "abcdefghijk" 5 #(nil nil #\a #\b #\c))
 
-(deftest read-sequence.vector.4
-  (let ((s (vector nil nil nil nil nil)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :end 3)
-      s)))
-  3
-  #(#\a #\b #\c nil nil))
+(def-read-sequence-test read-sequence.vector.4
+  (vector nil nil nil nil nil)
+  (:start 1 :end 4) "abcdefghijk" 4 #(nil #\a #\b #\c nil))
 
-(deftest read-sequence.vector.5
-  (let ((s (vector nil nil nil nil nil)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 1 :end 4)
-      s)))
-  4
-  #(nil #\a #\b #\c nil))
+(def-read-sequence-test read-sequence.vector.5
+  (vector nil nil nil nil nil)
+  (:end 2) "abcdefghijk" 2 #(#\a #\b nil nil nil))
 
-(deftest read-sequence.vector.6
-  (let ((s (vector nil nil nil nil nil)))
-    (with-input-from-string
-     (is "abcdefghijk")
-     (values
-      (read-sequence s is :start 0 :end 0)
-      s)))
-  0
-  #(nil nil nil nil nil))
+(def-read-sequence-test read-sequence.vector.6
+  (vector nil nil nil nil nil)
+  (:end 0 :start 0) "abcdefghijk" 0 #(nil nil nil nil nil))
+
+(def-read-sequence-test read-sequence.vector.7
+  (vector nil nil nil nil nil)
+  (:end nil) "abcdefghijk" 5 #(#\a #\b #\c #\d #\e))
+
+;;; Read into a vector with a fill pointer
+
+(def-read-sequence-test read-sequence.fill-vector.1
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  () "abcdefghijk" 5 #(#\a #\b #\c #\d #\e))
+
+(def-read-sequence-test read-sequence.fill-vector.2
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  () "ab" 2 #(#\a #\b nil nil nil))
+
+(def-read-sequence-test read-sequence.fill-vector.3
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  () "" 0 #(nil nil nil nil nil))
+
+(def-read-sequence-test read-sequence.fill-vector.4
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  (:start 2) "abcdefghijk" 5 #(nil nil #\a #\b #\c))
+
+(def-read-sequence-test read-sequence.fill-vector.5
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  (:start 1 :end 4) "abcdefghijk" 4 #(nil #\a #\b #\c nil))
+
+(def-read-sequence-test read-sequence.fill-vector.6
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  (:end 2) "abcdefghijk" 2 #(#\a #\b nil nil nil))
+
+(def-read-sequence-test read-sequence.fill-vector.7
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  (:end 0 :start 0) "abcdefghijk" 0 #(nil nil nil nil nil))
+
+(def-read-sequence-test read-sequence.fill-vector.8
+  (make-array 10 :initial-element nil :fill-pointer 5)
+  (:end nil) "abcdefghijk" 5 #(#\a #\b #\c #\d #\e))
 
 ;;; Read into a bit vector
 
