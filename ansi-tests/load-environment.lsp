@@ -4,6 +4,7 @@
 ;;;; Contains: Load environment tests (section 25)
 
 (load "apropos.lsp")
+(load "apropos-list.lsp")
 (load "describe.lsp")
 (load "disassemble.lsp")
 (load "environment-functions.lsp")
