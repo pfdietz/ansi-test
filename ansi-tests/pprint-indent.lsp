@@ -73,15 +73,14 @@
 
 ;;; Now test with pprint-logical-block
 
+;;; :current
+
 (deftest pprint-indent.9
   (with-standard-io-syntax
    (let ((*print-pretty* t)
 	 (*print-readably* nil)
 	 (*print-right-margin* 100)
-	 (*print-escape* nil)
-	 (*print-case* :upcase)
-	 (*print-miser-width* nil)
-	 (*print-circle* nil))
+	 (*print-escape* nil))
      (with-output-to-string
        (os)
        (pprint-logical-block
@@ -98,10 +97,7 @@
    (let ((*print-pretty* t)
 	 (*print-readably* nil)
 	 (*print-right-margin* 100)
-	 (*print-escape* nil)
-	 (*print-case* :upcase)
-	 (*print-miser-width* nil)
-	 (*print-circle* nil))
+	 (*print-escape* nil))
      (with-output-to-string
        (os)
        (pprint-logical-block
@@ -113,5 +109,298 @@
   "(M
    M)")
 
+(deftest pprint-indent.11
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|) :prefix "(" :suffix ")")
+	(write '|M| :stream os)
+	(pprint-indent :current -1 os)
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)))))
+  "(M
+ M)")
 
-			     
+(deftest pprint-indent.12
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|) :prefix "(" :suffix ")")
+	(write '|M| :stream os)
+	(pprint-indent :current -2.0 os)
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)))))
+  "(M
+M)")
+
+;;; :block
+
+(deftest pprint-indent.13
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|))
+	(write '|MMM| :stream os)
+	(pprint-indent :block 0 os)
+	(pprint-newline :mandatory os)
+	(write '|MMMMM| :stream os)))))
+  "MMM
+MMMMM")
+
+(deftest pprint-indent.13a
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|) :prefix "(" :suffix ")")
+	(write '|MMM| :stream os)
+	(pprint-indent :block 0 os)
+	(pprint-newline :mandatory os)
+	(write '|MMMMM| :stream os)))))
+  "(MMM
+ MMMMM)")
+
+(deftest pprint-indent.14
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|))
+	(write '|MMM| :stream os)
+	(pprint-indent :block 1 os)
+	(pprint-newline :mandatory os)
+	(write '|MMMMM| :stream os)))))
+  "MMM
+ MMMMM")
+
+(deftest pprint-indent.15
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|))
+	(write '|MMM| :stream os)
+	(pprint-indent :block -1 os)
+	(pprint-newline :mandatory os)
+	(write '|MMMMM| :stream os)))))
+  "MMM
+MMMMM")
+
+(deftest pprint-indent.16
+  (loop for n in '(3.0s0 3.0f0 3.0d0 3.0l0)
+	unless (string=
+		(with-standard-io-syntax
+		 (let ((*print-pretty* t)
+		       (*print-readably* nil)
+		       (*print-right-margin* 100)
+		       (*print-escape* nil))
+		   (with-output-to-string
+		     (os)
+		     (pprint-logical-block
+		      (os '(|M| |M|))
+		      (write '|MMM| :stream os)
+		      (pprint-indent :block n os)
+		      (pprint-newline :mandatory os)
+		      (write '|MMMMM| :stream os)))))
+		"MMM
+   MMMMM")
+	collect n)
+  nil)
+
+;;; *print-pretty* must be true for pprint-indent to have an effect
+
+(deftest pprint-indent.17
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|))
+	(write '|M| :stream os)
+	(let ((*print-pretty* nil)) (pprint-indent :current 3 os))
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)))))
+  "M
+M")
+
+(deftest pprint-indent.18
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|))
+	(write '|M| :stream os)
+	(let ((*print-pretty* nil)) (pprint-indent :block 3 os))
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)))))
+  "M
+M")
+
+;;; indentation interaction with :per-line-prefix
+
+(deftest pprint-indent.19
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M| |M|) :per-line-prefix ">>>>")
+	(write '|M| :stream os)
+	(pprint-indent :block 2 os)
+	(write #\Space :stream os)
+	(write '|M| :stream os)
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)))))
+  ">>>>M M
+>>>>  M")
+
+(deftest pprint-indent.20
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M|) :per-line-prefix ">>>>")
+	(write '|M| :stream os)
+	(pprint-indent :block -1 os)
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)))))
+  ">>>>M
+>>>>M")
+
+(deftest pprint-indent.21
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(|M| |M| |M| |M|) :per-line-prefix ">>>>")
+	(write '|M| :stream os)
+	(pprint-indent :block 3 os)
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)
+	(pprint-indent :current -2 os)
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)
+	(pprint-indent :current -5 os)
+	(pprint-newline :mandatory os)
+	(write '|M| :stream os)
+	))))
+	
+  ">>>>M
+>>>>   M
+>>>>  M
+>>>>M")
+
+;;; In miser mode, indentation is ignored
+
+(deftest pprint-indent.22
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-miser-width* 200)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(1 2 3) :prefix "(" :suffix ")")
+	(write 1 :stream os)
+	(pprint-indent :current 1 os)
+	(pprint-newline :mandatory os)
+	(write 2 :stream os)
+	(pprint-indent :block 3 os)
+	(pprint-newline :mandatory os)
+	(write 3 :stream os)))))
+  "(1
+ 2
+ 3)")
+
+;;; TERPRI or printing newline characters does not invoke indentation
+
+(deftest pprint-indent.23
+  (with-standard-io-syntax
+   (let ((*print-pretty* t)
+	 (*print-readably* nil)
+	 (*print-right-margin* 100)
+	 (*print-escape* nil))
+     (with-output-to-string
+       (os)
+       (pprint-logical-block
+	(os '(1 2 3 4))
+	(pprint-indent :block 2 os)
+	(write 1 :stream os)
+	(terpri os)
+	(write 2 :stream os)
+	(write #\Newline :stream os)
+	(write 3 :stream os)
+	(pprint-newline :mandatory os)
+	(write 4 :stream os)))))
+  "1
+2
+3
+  4")
+
+;;; Error cases
+
+(deftest pprint-indent.error.1
+  (signals-error (pprint-indent) program-error)
+  t)
+
+(deftest pprint-indent.error.2
+  (signals-error (pprint-indent :current) program-error)
+  t)
+
+(deftest pprint-indent.error.3
+  (signals-error (pprint-indent :block 0 *standard-output* nil) program-error)
+  t)
+
+(deftest pprint-indent.error.4
+  (loop for x in *mini-universe*
+	when (and (not (member x '(:block :current)))
+		  (not (eval `(signals-error (pprint-indent ',x 0) error))))
+	collect x)
+  nil)
