@@ -4544,3 +4544,28 @@
 	  (catch 'ct4
 	    (complex (throw 'ct4 (dotimes (iv4 0 0) (throw 'ct1 0))) 0)))))))
   0)
+
+;;;  failed AVER: "SUCC"
+
+(deftest misc.275
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d)
+       (declare (notinline funcall min coerce))
+       (declare
+	(optimize (speed 1)
+		  (space 2)
+		  (safety 2)
+		  (debug 1)
+		  (compilation-speed 1)))
+       (flet ((%f12 (f12-1)
+		    (coerce
+		     (min
+		      (if f12-1 (multiple-value-prog1
+				 b (return-from %f12 0))
+			0))
+		     'integer)))
+	 (funcall #'%f12 0))))
+   1611561761 -33 -62834 -1127955)
+  0)
