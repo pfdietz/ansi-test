@@ -99,9 +99,6 @@
    type-error)
   t)
 
-
-; more stream error tests here
-
 ;;; Non-error tests
 
 (deftest file-length.1
