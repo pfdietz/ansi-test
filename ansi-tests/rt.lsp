@@ -38,6 +38,9 @@
 them.")
 (defvar *optimization-settings* '((safety 3)))
 
+(defvar *expected-failures* nil
+  "A list of test names that are expected to fail.")
+
 (defstruct (entry (:conc-name nil)
 		  (:type list))
   pend name form)
@@ -225,14 +228,31 @@ them.")
     (when (pend entry)
       (format s "~@[~<~%~:; ~:@(~S~)~>~]"
 	      (do-entry entry s))))
-  (let ((pending (pending-tests)))
-    (if (null pending)
-	(format s "~&No tests failed.")
-	(format s "~&~A out of ~A ~
+  (let ((pending (pending-tests))
+	(expected-table (make-hash-table :test #'equal)))
+    (dolist (ex *expected-failures*)
+      (setf (gethash ex expected-table) t))
+    (let ((new-failures
+	   (loop for pend in pending
+		 unless (gethash pend expected-table)
+		 collect pend)))
+      (if (null pending)
+	  (format s "~&No tests failed.")
+	(progn
+	  (format s "~&~A out of ~A ~
                    total tests failed: ~
                    ~:@(~{~<~%   ~1:;~S~>~
                          ~^, ~}~)."
-		(length pending)
-		(length (cdr *entries*))
-		pending))
-    (null pending)))
+		  (length pending)
+		  (length (cdr *entries*))
+		  pending)
+	  (if (null new-failures)
+	      (format s "~&No unexpected failures.")
+	    (when *expected-failures*
+	      (format s "~&~A unexpected failures: ~
+                   ~:@(~{~<~%   ~1:;~S~>~
+                         ~^, ~}~)."
+		    (length new-failures)
+		    new-failures)))
+	  ))
+      (null pending))))
