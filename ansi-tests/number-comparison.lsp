@@ -1342,4 +1342,250 @@
 		  (list (list x i))))))
   nil)
 
-;;; To add ... comparisons of large rationals with floats
+(deftest bignum.float.compare.7
+  (let ((toobig (loop for x in *reals*
+		      collect (and (> (abs x) 1.0)
+				   (> (abs (log (abs x))) 10000)))))
+    (loop for x in *reals*
+	  for xtoobig in toobig
+	  nconc
+	  (unless xtoobig
+	    (let ((fx (floor x)))
+	      (loop for y in *reals*
+		    for ytoobig in toobig
+		    when (and (not ytoobig)
+			      (< x y)
+			      (or (not (< fx y))
+				  (<= y fx)
+				  (not (> y fx))
+				  (>= fx y)))
+		    collect (list x y))))))
+  nil)
+
+(deftest bignum.float.compare.8
+  (let ((toobig (loop for x in *reals*
+		      collect (and (> (abs x) 1.0)
+				   (> (abs (log (abs x))) 10000)))))
+    (loop for x in *reals*
+	  for xtoobig in toobig
+	  nconc
+	  (unless xtoobig
+	    (let ((fx (floor x)))
+	      (loop for y in *reals*
+		    for ytoobig in toobig
+		    when (and (not ytoobig)
+			      (<= x y)
+			      (or (not (<= fx y))
+				  (> fx y)
+				  (not (>= y fx))
+				  (< y fx)))
+		    collect (list x y))))))
+  nil)
+
+;;; More randomized comparisons
+
+(deftest bignum.short-float.random.compare.1
+  (let* ((integer-bound (ash 1 1000))
+	 (upper-bound (if (< (/ most-positive-short-float 2) integer-bound)
+			  (/ most-positive-short-float 2)
+			(coerce integer-bound 'short-float))))
+    (loop for bound = 1.0s0 then (* bound 2)
+	  while (<= bound upper-bound)
+	  nconc
+	  (loop for r = (random bound)
+		for fr = (floor r)
+		for cr = (ceiling r)
+		repeat 20
+		unless (and (<= fr r cr)
+			    (if (= r fr)
+				(= r cr)
+			      (/= r cr))
+			    (>= cr r fr))
+		collect (list r fr cr))))
+  nil)
+
+(deftest bignum.single-float.random.compare.1
+  (let* ((integer-bound (ash 1 100))
+	 (upper-bound (if (< (/ most-positive-single-float 2) integer-bound)
+			  (/ most-positive-single-float 2)
+			(coerce integer-bound 'single-float))))
+    (loop for bound = 1.0f0 then (* bound 2)
+	  while (<= bound upper-bound)
+	  nconc
+	  (loop for r = (random bound)
+		for fr = (floor r)
+		for cr = (ceiling r)
+		repeat 20
+		unless (and (<= fr r cr)
+			    (if (= r fr)
+				(= r cr)
+			      (/= r cr))
+			    (>= cr r fr))
+		collect (list r fr cr))))
+  nil)
+
+(deftest bignum.double-float.random.compare.1
+  (let* ((integer-bound (ash 1 100))
+	 (upper-bound (if (< (/ most-positive-double-float 2) integer-bound)
+			  (/ most-positive-double-float 2)
+			(coerce integer-bound 'double-float))))
+    (loop for bound = 1.0d0 then (* bound 2)
+	  while (<= bound upper-bound)
+	  nconc
+	  (loop for r = (random bound)
+		for fr = (floor r)
+		for cr = (ceiling r)
+		repeat 20
+		unless (and (<= fr r cr)
+			    (if (= r fr)
+				(= r cr)
+			      (/= r cr))
+			    (>= cr r fr))
+		collect (list r fr cr))))
+  nil)
+
+(deftest bignum.long-float.random.compare.1
+  (let* ((integer-bound (ash 1 100))
+	 (upper-bound (if (< (/ most-positive-long-float 2) integer-bound)
+			  (/ most-positive-long-float 2)
+			(coerce integer-bound 'long-float))))
+    (loop for bound = 1.0l0 then (* bound 2)
+	  while (< bound upper-bound)
+	  nconc
+	  (loop for r = (random bound)
+		for fr = (floor r)
+		for cr = (ceiling r)
+		repeat 20
+		unless (and (<= fr r cr)
+			    (if (= r fr)
+				(= r cr)
+			      (/= r cr))
+			    (>= cr r fr))
+		collect
+		(list r fr cr))))
+  nil)
+
+;;; Rational/float comparisons
+
+(deftest rational.short-float.random.compare.1
+  (let* ((integer-bound (ash 1 1000))
+	 (upper-bound (if (< (/ most-positive-short-float 2) integer-bound)
+			  (/ most-positive-short-float 2)
+			(coerce integer-bound 'short-float))))
+    (loop for bound = 1.0s0 then (* bound 2)
+	  while (<= bound upper-bound)
+	  nconc
+	  (loop for r = (+ 1.s0 (random bound))
+		for fr = (floor r)
+		for cr = (ceiling r)
+		for m = (ash 1 (1+ (random 30)))
+		for p = (1+ (random m))
+		for q = (1+ (random m))
+		for x = 0
+		repeat 50
+		when (<= p q) do (psetf p (1+ q) q p)
+		do (setf x (/ p q))
+		unless (let ((fr/x (/ fr x))
+			     (cr*x (* cr x)))
+			 (and (<= fr/x r cr*x)
+			      (< fr/x r cr*x)
+			      (> cr*x r fr/x)
+			      (>= cr*x r fr/x)))
+		collect (list r p q x fr cr))))
+  nil)
+
+(deftest rational.single-float.random.compare.1
+  (let* ((integer-bound (ash 1 1000))
+	 (upper-bound (if (< (/ most-positive-single-float 2) integer-bound)
+			  (/ most-positive-single-float 2)
+			(coerce integer-bound 'single-float))))
+    (loop for bound = 1.0f0 then (* bound 2)
+	  while (<= bound upper-bound)
+	  nconc
+	  (loop for r = (+ 1.s0 (random bound))
+		for fr = (floor r)
+		for cr = (ceiling r)
+		for m = (ash 1 (1+ (random 30)))
+		for p = (1+ (random m))
+		for q = (1+ (random m))
+		for x = 0
+		repeat 50
+		when (<= p q) do (psetf p (1+ q) q p)
+		do (setf x (/ p q))
+		unless (let ((fr/x (/ fr x))
+			     (cr*x (* cr x)))
+			 (and (<= fr/x r cr*x)
+			      (< fr/x r cr*x)
+			      (> cr*x r fr/x)
+			      (>= cr*x r fr/x)))
+		collect (list r p q x fr cr))))
+  nil)
+
+(deftest rational.double-float.random.compare.1
+  (let* ((integer-bound (ash 1 1000))
+	 (upper-bound (if (< (/ most-positive-double-float 4) integer-bound)
+			  (/ most-positive-double-float 4)
+			(coerce integer-bound 'double-float))))
+    (loop for bound = 1.0d0 then (* bound 4)
+	  while (<= bound upper-bound)
+	  nconc
+	  (loop for r = (+ 1.s0 (random bound))
+		for fr = (floor r)
+		for cr = (ceiling r)
+		for m = (ash 1 (1+ (random 30)))
+		for p = (1+ (random m))
+		for q = (1+ (random m))
+		for x = 0
+		repeat 50
+		when (<= p q) do (psetf p (1+ q) q p)
+		do (setf x (/ p q))
+		unless (let ((fr/x (/ fr x))
+			     (cr*x (* cr x)))
+			 (and (<= fr/x r cr*x)
+			      (< fr/x r cr*x)
+			      (> cr*x r fr/x)
+			      (>= cr*x r fr/x)))
+		collect (list r p q x fr cr))))
+  nil)
+
+(deftest rational.long-float.random.compare.1
+  (let* ((integer-bound (ash 1 1000))
+	 (upper-bound (if (< (/ most-positive-long-float 4) integer-bound)
+			  (/ most-positive-long-float 4)
+			(coerce integer-bound 'long-float))))
+    (loop for bound = 1.0d0 then (* bound 4)
+	  while (<= bound upper-bound)
+	  nconc
+	  (loop for r = (+ 1.s0 (random bound))
+		for fr = (floor r)
+		for cr = (ceiling r)
+		for m = (ash 1 (1+ (random 30)))
+		for p = (1+ (random m))
+		for q = (1+ (random m))
+		for x = 0
+		repeat 50
+		when (<= p q) do (psetf p (1+ q) q p)
+		do (setf x (/ p q))
+		unless (let ((fr/x (/ fr x))
+			     (cr*x (* cr x)))
+			 (and (<= fr/x r cr*x)
+			      (< fr/x r cr*x)
+			      (> cr*x r fr/x)
+			      (>= cr*x r fr/x)))
+		collect (list r p q x fr cr))))
+  nil)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			    
