@@ -7,6 +7,7 @@
 
 (load "constantly.lsp")
 (load "complement.lsp")
+(load "setf-apply.lsp")
 
 ;;; Tests of conses
 
