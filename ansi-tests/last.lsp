@@ -45,6 +45,16 @@
   (last (cons 'a 'b) 2)
   (a . b))
 
+(deftest last.11
+  (let ((x '(a b c)))
+    (eqt (last x (1+ most-positive-fixnum)) x))
+  t)
+
+(deftest last.12
+  (let ((x '(a b c . d)))
+    (eqt (last x (1+ most-positive-fixnum)) x))
+  t)
+
 (deftest last.order.1
   (let ((i 0) x y)
     (values
