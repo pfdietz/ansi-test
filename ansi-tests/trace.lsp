@@ -137,7 +137,7 @@
 (deftest trace.12
   (progn
     (untrace)
-    (defgeneric generic-function-to-trace (x y))
+    (eval '(defgeneric generic-function-to-trace (x y)))
     (trace generic-function-to-trace)
     (prog1 (trace) (untrace)))
   (generic-function-to-trace))
@@ -145,18 +145,18 @@
 (deftest trace.13
   (progn
     (untrace)
-    (defgeneric generic-function-to-trace (x y))
+    (eval '(defgeneric generic-function-to-trace (x y)))
     (trace generic-function-to-trace)
-    (defmethod generic-function-to-trace ((x t)(y t)) nil)
+    (eval '(defmethod generic-function-to-trace ((x t)(y t)) nil))
     (prog1 (trace) (untrace)))
   (generic-function-to-trace))
 
 (deftest trace.14
   (progn
     (untrace)
-    (defgeneric generic-function-to-trace (x y))
+    (eval '(defgeneric generic-function-to-trace (x y)))
     (trace generic-function-to-trace)
-    (defmethod generic-function-to-trace ((x t)(y t)) nil)
+    (eval '(defmethod generic-function-to-trace ((x t)(y t)) nil))
     (assert (not (equal (with-output-to-string
 			  (*trace-output*)
 			  (assert (null (generic-function-to-trace 'a 'b))))
@@ -172,10 +172,12 @@
 (deftest trace.15
   (progn
     (untrace)
-    (let* ((gf (defgeneric generic-function-to-trace2 (x y)))
-	   (m (defmethod generic-function-to-trace2 ((x integer)(y integer))
-		:foo)))
-      (defmethod generic-function-to-trace2 ((x symbol)(y symbol)) :bar)
+    (let* ((gf (eval '(defgeneric generic-function-to-trace2 (x y))))
+	   (m (eval '(defmethod generic-function-to-trace2
+		       ((x integer)(y integer))
+		       :foo))))
+      (eval '(defmethod generic-function-to-trace2
+	       ((x symbol)(y symbol)) :bar))
       (assert (eql (generic-function-to-trace2 1 2) :foo))
       (assert (eql (generic-function-to-trace2 'a 'b) :bar))
       (trace generic-function-to-trace2)
