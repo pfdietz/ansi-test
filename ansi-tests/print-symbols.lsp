@@ -173,7 +173,85 @@
 	(%p '|x1Z| :invert :capitalize "x1Z")))))
   t t t t t t t t t t t t)
 
-;;; To add -- symbol printing when escaping is enabled
+(deftest print.symbol.9
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*readtable* (copy-readtable nil)))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+       (values
+	(%p '|X Z| :upcase :upcase "X Z")
+	(%p '|X Z| :upcase :downcase "x z")
+	(%p '|X Z| :upcase :capitalize "X Z")
+	(%p '|X Z| :downcase :upcase "X Z")
+	(%p '|X Z| :downcase :downcase "X Z")
+	(%p '|X Z| :downcase :capitalize "X Z")
+	(%p '|X Z| :preserve :upcase "X Z")
+	(%p '|X Z| :preserve :downcase "X Z")
+	(%p '|X Z| :preserve :capitalize "X Z")
+	(%p '|X Z| :invert :upcase "x z")
+	(%p '|X Z| :invert :downcase "x z")
+	(%p '|X Z| :invert :capitalize "x z")))))
+  t t t t t t t t t t t t)
+
+(deftest print.symbol.10
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*readtable* (copy-readtable nil)))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+       (values
+	(%p '|x z| :upcase :upcase "x z")
+	(%p '|x z| :upcase :downcase "x z")
+	(%p '|x z| :upcase :capitalize "x z")
+	(%p '|x z| :downcase :upcase "X Z")
+	(%p '|x z| :downcase :downcase "x z")
+	(%p '|x z| :downcase :capitalize "X Z")
+	(%p '|x z| :preserve :upcase "x z")
+	(%p '|x z| :preserve :downcase "x z")
+	(%p '|x z| :preserve :capitalize "x z")
+	(%p '|x z| :invert :upcase "X Z")
+	(%p '|x z| :invert :downcase "X Z")
+	(%p '|x z| :invert :capitalize "X Z")))))
+  t t t t t t t t t t t t)
+
+(deftest print.symbol.11
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*readtable* (copy-readtable nil)))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+       (values
+	(%p '|X z| :upcase :upcase "X z")
+	(%p '|X z| :upcase :downcase "x z")
+	(%p '|X z| :upcase :capitalize "X z")
+	(%p '|X z| :downcase :upcase "X Z")
+	(%p '|X z| :downcase :downcase "X z")
+	(%p '|X z| :downcase :capitalize "X Z")
+	(%p '|X z| :preserve :upcase "X z")
+	(%p '|X z| :preserve :downcase "X z")
+	(%p '|X z| :preserve :capitalize "X z")
+	(%p '|X z| :invert :upcase "X z")
+	(%p '|X z| :invert :downcase "X z")
+	(%p '|X z| :invert :capitalize "X z")))))
+  t t t t t t t t t t t t)
+
+(deftest print.symbol.12
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*readtable* (copy-readtable nil)))
+     (flet ((%p (&rest args) (apply #'print.symbol.fn args)))
+       (values
+	(%p '|x Z| :upcase :upcase "x Z")
+	(%p '|x Z| :upcase :downcase "x z")
+	(%p '|x Z| :upcase :capitalize "x Z")
+	(%p '|x Z| :downcase :upcase "X Z")
+	(%p '|x Z| :downcase :downcase "x Z")
+	(%p '|x Z| :downcase :capitalize "X Z")
+	(%p '|x Z| :preserve :upcase "x Z")
+	(%p '|x Z| :preserve :downcase "x Z")
+	(%p '|x Z| :preserve :capitalize "x Z")
+	(%p '|x Z| :invert :upcase "x Z")
+	(%p '|x Z| :invert :downcase "x Z")
+	(%p '|x Z| :invert :capitalize "x Z")))))
+  t t t t t t t t t t t t)
 
 ;;; Randomized printing tests
 
@@ -254,4 +332,6 @@
 		(return-from done)))))))
     (reverse result))
   nil)
+
+;;;; Tests of printing with escaping enabled
 
