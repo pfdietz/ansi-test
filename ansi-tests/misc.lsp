@@ -9319,7 +9319,6 @@ Broken at C::WT-MAKE-CLOSURE.
 (deftest misc.503
   (funcall
    (compile nil '(lambda (a)
-		   ; (declare (type (integer -3392166213 2904445263) a))
 		   (declare (optimize (space 3) (debug 1) (speed 2) (safety 0)
 				      (compilation-speed 1)))
 		   (catch 'ct1
@@ -9330,3 +9329,18 @@ Broken at C::WT-MAKE-CLOSURE.
 				      :end 8 :start 6 :from-end t))))))
    17)
   -6)
+
+;;; Inconsistent stack height
+
+(deftest misc.504
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer 196060 241373941) a))
+			(declare (ignorable a))
+			(declare (optimize (speed 3) (debug 0) (safety 2)
+					   (compilation-speed 3) (space 2)))
+			(prog2 (if 0 (+ a a) 0) 0)))
+	200000))
+  0)
