@@ -344,7 +344,7 @@
    for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
    for eps in (list short-float-epsilon single-float-epsilon
 		    double-float-epsilon long-float-epsilon)
-   for eps2 = (* eps 0.9)
+   for eps2 = (* eps 9/10)
    when (eql
 	 (funcall (compile nil `(lambda () (+ ,x (+ ,eps2 ,eps2)))))
 	 x)
@@ -356,7 +356,7 @@
    for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
    for eps in (list short-float-epsilon single-float-epsilon
 		    double-float-epsilon long-float-epsilon)
-   for eps2 = (* eps 0.9)
+   for eps2 = (* eps 9/10)
    unless (equal
 	   (funcall (compile nil `(lambda () (list (+ (+ ,x ,eps2) ,eps2)
 						   (+ ,eps2 (+ ,eps2 ,x))))))
@@ -369,7 +369,7 @@
    for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
    for eps in (list short-float-epsilon single-float-epsilon
 		    double-float-epsilon long-float-epsilon)
-   for eps2 = (* eps 0.9)
+   for eps2 = (* eps 9/10)
    when (eql
 	 (funcall (compile nil `(lambda (y e) (+ y (+ e e)))) x eps2)
 	 x)
@@ -381,7 +381,7 @@
    for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
    for eps in (list short-float-epsilon single-float-epsilon
 		    double-float-epsilon long-float-epsilon)
-   for eps2 = (* eps 0.9)
+   for eps2 = (* eps 9/10)
    unless (equal
 	   (funcall (compile nil `(lambda (y e) (list (+ (+ y e) e)
 						      (+ e (+ e y)))))
