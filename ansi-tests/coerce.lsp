@@ -9,18 +9,18 @@
   (loop for x in *universe*
 	for type = (type-of x)
 	unless (and (consp type) (eqt (car type) 'function))
-	count (not (eq (coerce x type) x)))
+	count (not (eql (coerce x type) x)))
   0)
 
 (deftest coerce.2
   (loop for x in *universe*
-	count (not (eq (coerce x t) x)))
+	count (not (eql (coerce x t) x)))
   0)
 
 (deftest coerce.3
   (loop for x in *universe*
 	for class = (class-of x)
-	count (and class (not (eq (coerce x class) x))))
+	count (and class (not (eql (coerce x class) x))))
   0)
 
 (deftest coerce.4
