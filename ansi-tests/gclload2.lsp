@@ -108,6 +108,7 @@
 (load "condition.lsp")
 (load "cell-error-name.lsp")
 (load "assert.lsp")
+(load "error.lsp")
 
 ;;; Tests of conses
 
@@ -246,6 +247,7 @@
 
 (load "types-and-class.lsp")
 (load "coerce.lsp")
+(load "subtypep.lsp")
 
 ;;; Tests of the reader
 

@@ -11,15 +11,15 @@
 (declaim (optimize (safety 3)))
 
 (deftest boolean-type-1
-  (notnot (typep nil 'boolean))
+  (notnot-mv (typep nil 'boolean))
   t)
 
 (deftest boolean-type-2
-  (notnot (typep t 'boolean))
+  (notnot-mv (typep t 'boolean))
   t)
 
 (deftest boolean-type-3
-    (check-type-predicate 'is-t-or-nil 'boolean)
+  (check-type-predicate 'is-t-or-nil 'boolean)
   0)
 
 ;; Two type inclusions on booleans
@@ -212,10 +212,6 @@
   0)
 |#
 
-(deftest simple-base-string-is-sequence
-    (subtypep* 'simple-base-string 'sequence)
-  t t)
-
 (deftest types-6
     (types-6-body)
   0)
@@ -298,7 +294,7 @@
   nil)
 
 (deftest deftype-3
-  (notnot (typep (make-array '(10)) '(even-array t (*))))
+  (notnot-mv (typep (make-array '(10)) '(even-array t (*))))
   t)
 
 (deftest deftype-4
@@ -306,11 +302,11 @@
   nil)
 
 (deftest deftype-5
-  (notnot (typep (make-string 10) '(even-array character (*))))
+  (notnot-mv (typep (make-string 10) '(even-array character (*))))
   t)
 
 (deftest deftype-6
-  (notnot
+  (notnot-mv
    (typep (make-array '(3 5 6) :element-type '(unsigned-byte 8))
 	  '(even-array (unsigned-byte 8))))
   t)
@@ -324,69 +320,20 @@
   (remove-if #'fboundp *type-and-class-fns*)
   nil)
 
-(defparameter type-and-class-macros
-  (not (macro-function 'deftype))
-  nil)
+(deftest type-and-class-macros
+  (notnot-mv (macro-function 'deftype))
+  t)
 
 (deftest typep-nil-null
-    (not (not (typep nil 'null)))
+  (notnot-mv (typep nil 'null))
   t)
 
 (deftest typep-t-null
-    (typep t 'null)
+  (typep t 'null)
   nil)
 
-;;; Special cases of types-6 that are/were causing problems in CMU CL
-
-(deftest keyword-is-subtype-of-atom
-  (subtypep* 'keyword 'atom)
-  t t)
-
-(deftest ratio-is-subtype-of-atom
-  (subtypep* 'ratio 'atom)
-  t t)
-
-(deftest extended-char-is-subtype-of-atom
-  (subtypep* 'extended-char 'atom)
-  t t)
-
-(deftest string-is-not-simple-vector
-  (subtypep* 'string 'simple-vector)
-  nil t)
-
-(deftest base-string-is-not-simple-vector
-  (subtypep* 'base-string 'simple-vector)
-  nil t)
-
-(deftest simple-string-is-not-simple-vector
-  (subtypep* 'simple-string 'simple-vector)
-  nil t)
-
-(deftest simple-base-string-is-not-simple-vector
-  (subtypep* 'simple-base-string 'simple-vector)
-  nil t)
-
-(deftest bit-vector-is-not-simple-vector
-  (subtypep* 'bit-vector 'simple-vector)
-  nil t)
-
-(deftest simple-bit-vector-is-not-simple-vector
-  (subtypep* 'simple-bit-vector 'simple-vector)
-  nil t)
 
 ;;; Error checking of type-related functions
-
-(deftest subtypep.error.1
-  (classify-error (subtypep))
-  program-error)
-
-(deftest subtypep.error.2
-  (classify-error (subtypep t))
-  program-error)
-
-(deftest subtypep.error.3
-  (classify-error (subtypep t t nil nil))
-  program-error)
 
 (deftest type-of.error.1
   (classify-error (type-of))
@@ -438,55 +385,13 @@
 
 (deftest typep.env.2
   (macrolet ((%foo (&environment env)
-		   (notnot (typep 0 'bit env))))
+		   (notnot-mv (typep 0 'bit env))))
     (%foo))
   t)
 
 (deftest typep.env.3
   (macrolet ((%foo (&environment env)
-		   (notnot (typep env (type-of env)))))
-    (%foo))
-  t)
-
-(deftest subtype.env.1
-  (mapcar #'notnot
-	  (multiple-value-list (subtypep 'bit 'integer nil)))
-  (t t))
-
-(deftest subtype.env.2
-  (macrolet
-      ((%foo (&environment env)
-	     (list 'quote
-		   (mapcar #'notnot
-			   (multiple-value-list
-			    (subtypep 'bit 'integer env))))))
-    (%foo))
-  (t t))
-
-(deftest subtype.env.3
-  (macrolet
-      ((%foo (&environment env)
-	     (multiple-value-bind (sub good)
-		 (subtypep nil (type-of env))
-	       (or (not good) (notnot sub)))))
-    (%foo))
-  t)
-
-(deftest subtype.env.4
-  (macrolet
-      ((%foo (&environment env)
-	     (multiple-value-bind (sub good)
-		 (subtypep (type-of env) (type-of env))
-	       (or (not good) (notnot sub)))))
-    (%foo))
-  t)
-
-(deftest subtype.env.5
-  (macrolet
-      ((%foo (&environment env)
-	     (multiple-value-bind (sub good)
-		 (subtypep (type-of env) t)
-	       (or (not good) (notnot sub)))))
+		   (notnot-mv (typep env (type-of env)))))
     (%foo))
   t)
 
