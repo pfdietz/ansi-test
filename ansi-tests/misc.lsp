@@ -9759,3 +9759,34 @@ Broken at C::WT-MAKE-CLOSURE.
 	 (%f14 0 a a))))
    857304)
   0)
+
+;;; sbcl 0.8.19.32
+;;; Type propagation problem with BIT-AND
+
+(deftest misc.527
+  (let ((v1 (make-array 1 :element-type 'bit
+			:initial-contents '(1)
+			:fill-pointer 0))
+	(v2 (make-array 1 :element-type 'bit
+			:initial-contents '(1)
+			:fill-pointer 1))
+	(r (make-array nil)))
+    (funcall
+     (compile
+      nil
+      `(lambda  (r p2)
+	 (declare (optimize speed (safety 1))
+		  (type (simple-array t nil) r)
+		  (type (array *) p2))
+	 (setf (aref r) (bit-and ,v1 (the (bit-vector *) p2)))
+	 (values)))
+     r v2)
+    (let ((result (aref r)))
+      (values
+       (notnot (simple-bit-vector-p result))
+       (=t (array-dimension result 0) 1)
+       (=t (aref result 0) 1))))
+  t t t)
+
+
+    
