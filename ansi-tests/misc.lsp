@@ -7866,4 +7866,109 @@ Broken at C::WT-C-INLINE-LOC.
 	0))
   0)
 
+;;; ecl (07 Oct 2004)
+;;; (0 . 0) is not of type REAL
+
+(deftest misc.409
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -40524 53538) a))
+       (declare (type (integer -5967075 -235) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 2) (safety 1) (space 2)
+			  (compilation-speed 3) (debug 0)))
+       (labels ((%f2 (f2-1 f2-2 &optional (f2-3 0) (f2-4 a)) 0))
+	 (apply #'%f2 a
+		(%f2 b
+		     (flet ((%f12 (f12-1 f12-2 f12-3 &optional &key
+					 (key1 0) (key2 0))
+				  (%f2 0 0)))
+		       (reduce #'(lambda (lmv2 lmv1) (%f2 0 0 a))
+			       (list 0 0 a 0 0 0 a) :end 7))
+		     0)
+		nil))))
+   -7465 -3590953)
+  0)
+
+#|
+;;; A bug was found in the compiler.  Contact worm@arrakis.es.
+
+Broken at C::WT-MAKE-CLOSURE.
+|#
+(deftest misc.410
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (safety 0) (space 1) (compilation-speed 0)
+			  (speed 2) (debug 0)))
+       (let ((*s2* 0))
+	 (declare (special *s2*))
+	 (reduce #'(lambda (lmv1 lmv2) *s2*) (vector 0) :end 1
+		 :start 0)))))
+  0)
+
+;;; THROW: The catch CT2 is undefined.
+(deftest misc.411
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (safety 2) (debug 0) (space 0)
+			  (compilation-speed 2) (speed 0)))
+       (catch 'ct2 (values 0 (throw 'ct2 0)))
+       0)))
+  0)
+
+;;; /tmp/eclDD7aumXi8.c: In function `LC3':
+;;; /tmp/eclDD7aumXi8.c:9: `env0' undeclared (first use in this function)
+(deftest misc.412
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -25409 1946) a))
+       (declare (type (integer -215956065 223815244) b))
+       (declare (ignorable a b))
+       (declare (optimize (compilation-speed 2) (space 3) (debug 2)
+			  (safety 1) (speed 3)))
+       (complex (flet ((%f15 (f15-1 &optional &key (key1 0)) 0))
+		  (reduce #'(lambda (lmv6 lmv1) (%f15 lmv1))
+			  (list b 0)))
+		0)))
+   -21802 -105983932)
+  0)
+
+;;; Different resutls: #<a type-error>, 0
+(deftest misc.413
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -120206733 37762378) a))
+       (declare (type (integer 2777758072 5675328792) b))
+       (declare (ignorable a b))
+       (declare (optimize (compilation-speed 3) (space 3) (debug 3)
+			  (safety 0) (speed 1)))
+       (labels ((%f8 (f8-1 f8-2 &optional &key (key1 0))
+		     (let* ((v2 (ash f8-1 (min 63 a)))) 0)))
+	 (ignore-errors
+	   (logand (apply #'%f8 0 b nil)
+		   (unwind-protect
+		       0
+		     (ash (%f8 0 0)
+			  (min 48
+			       (flet
+				   ((%f12
+				     (f12-1 f12-2 &optional &key
+					    (key1 a) (key2 b)
+					    &allow-other-keys)
+				     0))
+				 b)))))))))
+   -4794909 4095236669)
+  0)
+
+
 
