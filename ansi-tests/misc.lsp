@@ -6461,3 +6461,80 @@ Broken at C::WT-C-INLINE-LOC.
 	      -10)
 	    (max 26 0)))))
   16)
+
+;;; Inconsistent stack height 0 != 1
+
+(deftest misc.350
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda ()
+	(declare (optimize (speed 2) (space 3) (safety 1) (debug 2)
+			   (compilation-speed 3)))
+	(progn (tagbody (complex (- 0 (if (and t) 0 (go tag1))) 0)
+			tag1)
+	       0)))))
+  0)
+
+(deftest misc.351
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (c)
+	(declare (type (integer -598962457711 -2902) c))
+	(declare (optimize (speed 1) (space 0) (safety 1) (debug 0)
+			   (compilation-speed 3)))
+	(lognor c
+		(block b1
+		  (loop for lv3 below 1
+			sum (if (/= 0) (return-from b1 0) c))))))
+    -392248104420))
+  392248104419)
+
+(deftest misc.352
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda ()
+	(declare (optimize (speed 1) (space 3) (safety 3) (debug 3)
+			   (compilation-speed 1)))
+	(progn (tagbody (+ 0 (if (< 0) (go 5) 0))
+			5)
+	       0)))))
+  0)
+
+(deftest misc.353
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (a b)
+	(declare (type (integer -8 -2) a))
+	(declare (type (integer -67321 14697029362) b))
+	(declare (optimize (speed 3) (space 1) (safety 3) (debug 1)
+			   (compilation-speed 2)))
+	(expt (block b2
+		(loop for lv1 below 3
+		      sum (prog2 b
+			      0
+                            (expt (case 0
+                                    ((-13960 -57685 -37843 -34222
+					     -14273 -40931 -2688)
+                                     (return-from b2 0))
+                                    (t a))
+                                  0))))
+	      0)))
+    -7 772373806))
+  1)
+
