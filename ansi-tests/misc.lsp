@@ -2147,3 +2147,22 @@
    -6)
   :good)
 
+;;; gcl (13 Nov 2003)
+;;; Error in FUNCALL [or a callee]: Caught fatal error [memory may be damaged]
+
+(deftest misc.164
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+     (labels ((%f6 (f6-1 f6-2)
+		   (handler-case
+		    (labels ((%f2 nil (logior a)))
+		      (if (eql (%f2) (%f2))
+			  2829254 -10723))
+		    (error (c) (error c))
+		    )))
+       (funcall #'%f6 10 20)
+       )))
+   0)
+  2829254)
