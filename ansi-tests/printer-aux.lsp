@@ -291,6 +291,24 @@
 					      '(100 20 50 200 200)))))
 		(reduce #'append (random-permute arg-lists) :from-end t)))
 
+(defun filter-unreadable-forms (string)
+  "Find #<...> strings and replace with #<>."
+  (let ((len (length string))
+	(pos 0))
+    (loop while (< pos len)
+	  do (let ((next (search "#<" string :start2 pos)))
+	       (unless next (return string))
+	       (let ((end (position #\> string :start next)))
+		 (unless end (return string))
+		 (setq string
+		       (concatenate 'string
+				    (subseq string 0 next)
+				    "#<>"
+				    (subseq string (1+ end)))
+		       pos (+ next 3)
+		       len (+ len (- next end) 3)))))))
+		       
+
 (defmacro def-random-write-test-fun (name write-args test-fn
 					  &key
 					  (prefix "")
@@ -309,7 +327,10 @@
 		   (*standard-output*)
 		   (apply #'output-test obj :fun ,test-fn args)))
       repeat n
-      unless (string= (concatenate 'string ,prefix s1 ,suffix) s2)
+      ;; We filter the contents of #<...> forms since they may change with time
+      ;; if they contain object addresses.
+      unless (string= (filter-unreadable-forms (concatenate 'string ,prefix s1 ,suffix))
+		      (filter-unreadable-forms s2))
       collect (list obj s1 s2))))
 
 (def-random-write-test-fun random-write-test nil #'write)
@@ -336,7 +357,8 @@
       for s2 = (let ((*package* package))
 		 (apply ,test-fn obj args))
       repeat n
-      unless (string= (concatenate 'string ,prefix s1 ,suffix) s2)
+      unless (string= (filter-unreadable-forms (concatenate 'string ,prefix s1 ,suffix))
+		      (filter-unreadable-forms s2))
       collect (list obj s1 s2))))
 
 (def-random-write-to-string-test-fun random-write-to-string-test nil #'write-to-string)
