@@ -102,8 +102,9 @@
 (defun rem-test (&optional (name *test*))
   (let ((pred (gethash name *entries-table*)))
     (when pred
-      (when (eq (cdr pred) *entries-tail*)
-	(setq *entries-tail* pred))
+      (if (null (cddr pred))
+	  (setq *entries-tail* pred)
+	(setf (gethash (name (caddr pred)) *entries-table*) pred))
       (setf (cdr pred) (cddr pred))
       (remhash name *entries-table*)
       name)))
