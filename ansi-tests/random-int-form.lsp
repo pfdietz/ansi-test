@@ -151,7 +151,6 @@
 	`(,op ,(make-random-integer-form (1- size)))))
      (2 `(isqrt (abs ,(make-random-integer-form (- size 2)))))
 
-     #-cmu
      (2
       (destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)

@@ -943,3 +943,9 @@
 		   (rem c (min -1 0))))
    87723029763)
   0)
+
+(deftest misc.74
+  (funcall (compile nil '(lambda ()
+			   (declare (optimize (safety 3) (speed 0) (debug 0)))
+			   (ash 6916244 (min 42 -185236061640)))))
+  0)
