@@ -38,13 +38,14 @@
       (let ((*print-pretty* t)
 	    (*print-readably* nil)
 	    (*print-right-margin* ,margin)
+	    (*package* (find-package "CL-TEST"))
 	    (*print-circle* ,circle))
 	(with-output-to-string (s) (pprint-fill s ,@args))))
      ,expected-value))
 
-(def-pprint-fill-test pprint-fill.3 ('(cl-user::|A|)) "(A)")
-(def-pprint-fill-test pprint-fill.4 ('(cl-user::|A|) t) "(A)")
-(def-pprint-fill-test pprint-fill.5 ('(cl-user::|A|) nil) "A")
+(def-pprint-fill-test pprint-fill.3 ('(|A|)) "(A)")
+(def-pprint-fill-test pprint-fill.4 ('(|A|) t) "(A)")
+(def-pprint-fill-test pprint-fill.5 ('(|A|) nil) "A")
 (def-pprint-fill-test pprint-fill.6 ('(1 2 3 4 5)) "(1 2 3 4 5)")
 (def-pprint-fill-test pprint-fill.7 ('((1) (2) #(3) "abc" 5) nil) "(1) (2) #(3) \"abc\" 5")
 
@@ -126,8 +127,12 @@
   nil)
 
 ;;; 
-(def-pprint-fill-test pprint-fill.14 ((let ((x (list 'CL-USER::|A|))) (list x x)))
+(def-pprint-fill-test pprint-fill.14 ((let ((x (list '|A|))) (list x x)))
   "(#1=(A) #1#)" :circle t)
+
+(def-pprint-fill-test pprint-fill.15 ((let ((x (list '|A|))) (setf (cdr x) x) x))
+  "#1=(A . #1#)" :circle t)
+
 
 ;;; Test that pprint-fill returns NIL
 
