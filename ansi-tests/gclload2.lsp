@@ -63,6 +63,9 @@
 ;;; Tests of streams
 (load "load-streams.lsp")
 
+;;; Tests of the printer
+(load "load-printer.lsp")
+
 ;;; Tests of system construction
 (load "features.lsp")
 (load "disassemble.lsp")
