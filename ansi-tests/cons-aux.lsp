@@ -82,3 +82,11 @@
 	unless (equal result1 result2)
 	return (list (list 'remove-duplicates (list 'sort (cons fn args) '<) "...")
 		     "actual: " result2 "should be: " result1)))
+
+(defun rev-assoc-list (x)
+  (cond
+   ((null x) nil)
+   ((null (car x))
+    (cons nil (rev-assoc-list (cdr x))))
+   (t
+    (acons (cdar x) (caar x) (rev-assoc-list (cdr x))))))

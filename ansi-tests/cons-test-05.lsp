@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-(declaim (optimize (safety 3)))
-
 (defparameter *cons-accessors*
   '(first second third fourth fifth sixth seventh eighth ninth tenth
     car cdr caar cadr cdar cddr
@@ -138,55 +136,3 @@
 			     :cl-test)
 	     (classify-error (,name nil nil))
 	     program-error)))	  
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; nth
-
-(deftest nth.1
-  (nth-1-body (loop for i from 1 to 2000 collect (* 4 i)))
-  0)
-
-(deftest nth.2
-  (let ((x (loop for i from 1 to 2000 collect i)))
-    (loop
-     for i from 0 to 1999 do
-     (setf (nth i x) (- 1999 i)))
-    (equalt x (loop for i from 1999 downto 0 collect i)))
-  t)
-
-;;; Test side effects, evaluation order in assignment to NTH
-(deftest nth.order.1
-  (let ((i 0)
-	(x (list 'a 'b 'c 'd))
-	y z)
-    (and
-     (eqlt (setf (nth (setf y (incf i)) x) (progn (setf z (incf i)) 'z))
-	   'z)
-     (eqlt y 1)
-     (eqlt z 2)
-     x))
-  (a z c d))
-
-(deftest nth.order.2
-  (let ((i 0) x y (z '(a b c d e)))
-    (values
-     (nth (progn (setf x (incf i)) 1)
-	  (progn (setf y (incf i)) z))
-     i x y))
-  b 2 1 2)
-
-(deftest nth.error.1
-  (classify-error (nth))
-  program-error)
-
-(deftest nth.error.2
-  (classify-error (nth 0))
-  program-error)
-
-(deftest nth.error.3
-  (classify-error (nth 1 '(a b c) nil))
-  program-error)
-
-(deftest nth.error.4
-  (classify-error (nth 0 '(a b c) nil))
-  program-error)
