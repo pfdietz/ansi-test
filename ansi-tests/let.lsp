@@ -119,6 +119,16 @@
      (return-from done 'good)))
   good)
 
+;;; Check that free declarations do not apply to the init forms
+
+(deftest let.17
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good)) ;; lexical binding
+      (let ((y x))
+	(declare (special x)) ;; free declaration
+	y)))
+  :good)
 
 ;;; Tests for LET*
 
@@ -227,3 +237,15 @@
      10
      (return-from done 'good)))
   good)
+
+;;; Check that free declarations do not apply to the init forms
+
+(deftest let*.17
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good)) ;; lexical binding
+      (let* ((y x))
+	(declare (special x)) ;; free declaration
+	y)))
+  :good)
+
