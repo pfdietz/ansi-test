@@ -255,9 +255,13 @@
 		  *test* (form entry)
 		  (length (vals entry))
 		  (vals entry))
-	  (format s "Actual value~P: ~
+	  (handler-case
+	   (let ((s (format nil "Actual value~P: ~
                       ~{~S~^~%~15t~}.~%"
-		  (length r) r)))))
+			    (length r) r)))
+	     (format t "~A" s))
+	   (error () (format t "Actual value~P: #<error during printing>~%"))
+	   )))))
   (when (not (pend entry)) *test*))
 
 (defun expanded-eval (form)

@@ -319,13 +319,17 @@
 (defparameter *pathnames*
     (append
      (ignore-errors (list (make-pathname :name "foo")))
+     (ignore-errors (list (make-pathname :name "FOO" :case :common)))
      (ignore-errors (list (make-pathname :name "bar")))
      (ignore-errors (list (make-pathname :name "foo" :type "txt")))
      (ignore-errors (list (make-pathname :name "bar" :type "txt")))
+     (ignore-errors (list (make-pathname :name "XYZ" :type "TXT" :case :common)))
      (ignore-errors (list (make-pathname :name nil)))
      (ignore-errors (list (make-pathname :name :wild)))
      (ignore-errors (list (make-pathname :name nil :type "txt")))
      (ignore-errors (list (make-pathname :name :wild :type "txt")))
+     (ignore-errors (list (make-pathname :name :wild :type "TXT" :case :common)))
+     (ignore-errors (list (make-pathname :name :wild :type "abc" :case :common)))
      (ignore-errors (list (make-pathname :directory :wild)))
      (ignore-errors (list (make-pathname :type :wild)))
      (ignore-errors (list (make-pathname :version :wild)))

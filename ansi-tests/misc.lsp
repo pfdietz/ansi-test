@@ -998,6 +998,22 @@
 		     -12))))
   -12)
 
+(deftest misc.79a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 72504 351460) a))
+       (declare (type (integer 2383 108330) b))
+       (declare	(optimize (speed 2) (space 0) (safety 0)
+			  (debug 2) (compilation-speed 1)))
+       (if (or (or (/= b 0) (logbitp 0 0)) (logbitp 0 a))
+	   0
+	 (funcall (constantly 0) b 0 (catch 'ct4 b)))))
+   132318 12238)
+  0)
+
+
 ;;; cmucl (2003-10-12) "Invalid number of arguments: 2"
 (deftest misc.80
   (funcall
@@ -1728,6 +1744,16 @@
    10 20)
   -193644)
 
+(deftest misc.132a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 0) (safety 0) (debug 2) (compilation-speed 0)))
+       (labels ((%f1 () 0))
+	 (if t 0 (dotimes (iv1 5 (if (%f1) 0 0)) (catch 'ct1 0)))))))
+  0)
+
 ;;; cmucl (22 Oct 2003)  Default for optional parameter is improperly chosen
 (deftest misc.133
   (funcall
@@ -1950,6 +1976,59 @@
    10 20 30000)
   30000)
 
+(deftest misc.150a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 2) (safety 3)
+			  (debug 3) (compilation-speed 2)))
+       (catch 'ct6 (apply (constantly 0) (list))))))
+  0)
+
+(deftest misc.150b
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type integer a))
+       (declare (optimize (speed 3) (space 0) (safety 3) (debug 2)
+			  (compilation-speed 3)))
+       (if (= a 0) 0 (truncate a))))
+   0)
+  0)
+
+(deftest misc.150c
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (optimize (speed 1) (space 3) (safety 2) (debug 3) (compilation-speed 3)))
+       (labels ((%f4 (f4-1)
+		     0))
+	 (labels ((%f15
+		   (f15-1 f15-2
+			  &optional (f15-3 (apply #'%f4 0 nil)) (f15-4 0)
+			  (f15-5 (%f4 (%f4 (if (/= 0 0) a 0)))))
+		   0))
+	   (labels ((%f13 (f13-1)
+			  (%f15 b 0 0 0)))
+	     0)))))
+   1 2)
+  0)
+
+(deftest misc.150d
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 4146834609223 16403344221223) a))
+       (declare (type (integer -35470308180 3523580009) b))
+       (declare (optimize (speed 1) (space 3) (safety 3) (debug 0) (compilation-speed 0)))
+       (catch 'ct1 (logand b a 0))))
+   4146834609223 10)
+  0)
+
 ;;; cmucl (11 2003 x86 linux)  "NIL is not of type C::ENVIRONMENT"
 (deftest misc.151
   (funcall
@@ -1965,6 +2044,16 @@
 	 5520737)))
    -24 5657943)
   5520737)
+
+(deftest misc.151a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare
+	(optimize (speed 3) (space 3) (safety 1) (debug 1) (compilation-speed 0)))
+       (case 0 ((-12 -9 -12 -2 -5 -2 15) (catch 'ct7 (throw 'ct7 0))) (t 0)))))
+  0)  
 
 ;;; sbcl bug (0.8.5.19)
 ;;; "The value NIL is not of type SB-C::REF."
@@ -2154,6 +2243,15 @@
 		   c))))
    -511 -2269809964 250738)
   250738)
+
+(deftest misc.161a
+  (funcall
+   (compile nil
+	    '(lambda (a)
+	       (declare (optimize (speed 3) (space 2) (safety 3) (debug 0) (compilation-speed 0)))
+	       (progn (abs 0) (- a) 0)))
+   1)
+  0)
 
 ;;; cmucl (9 Nov 2003) Incorrect result at SPEED 0.
 
@@ -2370,6 +2468,42 @@
            56211))))
    17)
   56211)
+
+(deftest misc.170a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -281 30570) a))
+       (declare (type (integer -4247786 -199821) b))
+       (declare
+	(optimize (speed 3)
+		  (space 0)
+		  (safety 0)
+		  (debug 2)
+		  (compilation-speed 1)))
+       (flet ((%f14 (f14-1 f14-2)
+		    (coerce 0 'integer)))
+	 (labels ((%f3 (f3-1 f3-2 f3-3)
+		       (if
+			   (if
+			       (typep (%f14 -864 -10620) '(integer -11672107617 -2))
+			       t
+			     (typep
+			      (imagpart
+			       (lcm 2120258 0 (logandc2 -6222 -1057382553)))
+			      '(integer * -113)))
+			   (dotimes
+			       (iv3 5
+				    (flet ((%f11 (f11-1 f11-2 f11-3)
+						 b))
+				      (multiple-value-call #'%f11
+							   (values a a f3-3))))
+			     0)
+			 0)))
+	   (case (%f3 a a 0) (t 0))))))
+   22087 -1787181)
+  0)
 
 ;;; The value NIL is not of type SB-C::NODE.
 
@@ -2985,6 +3119,10 @@
    0 6000 -9000000)
   0)
 
+(deftest misc.183a
+  (let () (apply #'list 1 (list (catch 'a (throw 'a (block b 2))))))
+  (1 2))
+
 ;;; sbcl 0.8.5.42
 ;;; failed AVER: "(FUNCTIONAL-LETLIKE-P CLAMBDA)"
 
@@ -3318,3 +3456,859 @@
 		       b))))
     (funcall (compile nil fn) 4108962100))
   11159349376)
+
+;;; sbcl
+;;; "The value 0 is not of type REAL."  (???)
+
+(deftest misc.200
+  (funcall
+   (compile nil '(lambda ()
+		   (declare (optimize (speed 1) (space 0) (safety 3) (debug 3) (compilation-speed 1)))
+		   (ceiling
+		    (ceiling
+		     (flet ((%f16 () 0)) (%f16)))))))
+  0 0)
+
+;;; ecl 5 Dec 2003
+;;; Wrong number of arguments passed to an anonymous function
+
+(deftest misc.201
+  ;; form to be evaluated
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (optimize (speed 1) (space 0) (safety 0) (debug 2)
+			  (compilation-speed 1)))
+       (flet ((%f10 (f10-1) (return-from %f10 a)))
+	 (multiple-value-call #'%f10 (values b)))))
+   10 -100)
+  ;; expected return value
+  10)
+
+;;; Does not terminate?
+(deftest misc.202
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+	     (declare (type (integer -363953100 5324773015552) a))
+	     (declare (type (integer -5744998440960 59520311) b))
+	     (declare (type (integer -1864645998 -14608) c))
+	     (declare (ignorable a b c))
+	     (declare (optimize (speed 3) (space 0) (safety 2) (debug 0)
+				(compilation-speed 2)))
+	     (flet ((%f1 (f1-1 f1-2)
+			 (labels ((%f1 (f1-1 f1-2) 0)) (%f1 a f1-2))))
+		   (%f1 0 c))))
+   10 20 -20000)
+  0)
+
+;;; #<illegal pointer bfffe90c>
+(deftest misc.203
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 3) (space 1) (safety 2) (debug 0)
+			  (compilation-speed 0)))
+       (labels ((%f18 (f18-1 f18-2 &optional (f18-3 a) (f18-4 a))
+		      f18-2))
+	 (multiple-value-call #'%f18 (values a 0)))))
+   100)
+  0)
+
+;;; `env0' undeclared (first use in this function)
+(deftest misc.204
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+          (declare (type (integer -4801373 -50300) a))
+          (declare (type (integer -62 -28) b))
+          (declare (ignorable a b))
+          (declare (optimize (speed 1) (space 3) (safety 3) (debug 2)
+                       (compilation-speed 2)))
+          (flet ((%f12 (f12-1) 0))
+            (labels ((%f3 (f3-1 f3-2 f3-3 &optional (f3-4 b) (f3-5 b)
+                                (f3-6 (labels ((%f9 nil b))
+                                        (apply #'%f12 (%f9) nil))))
+                          (%f12 0)))
+              (%f3 b 0 a)))))
+   -2224841 -54)
+  0)
+
+;;; #<compiled-function 08405fd8> is not of type INTEGER.
+(deftest misc.205
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (optimize (speed 3) (space 1) (safety 1) (debug 0)
+			  (compilation-speed 3)))
+       (labels ((%f1 nil b))
+	 (flet ((%f11 (f11-1 f11-2 f11-3) 0))
+	   (apply #'%f11 a (logand (%f1))
+		  (flet ((%f13 (f13-1 f13-2) b))
+		    (apply #'%f13 0 0 nil))
+		  nil)))))
+   100 200)
+  0)
+
+;;; #<bytecompiled-function %F14> is not of type INTEGER.
+(deftest misc.206
+  (funcall
+   #'(lambda (a b)
+       (declare (notinline mask-field byte))
+       (declare (optimize (speed 1) (space 1) (safety 2) (debug 1)
+			  (compilation-speed 2)))
+       (mask-field (byte 0 0)
+		   (block b3
+		     (labels ((%f14 nil (return-from b3 a))) (%f14)))))
+   1 2)
+  0)
+
+;;; #<compiled-closure 08405fd8> is not of type INTEGER
+(deftest misc.207
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 3) (space 2) (safety 0) (debug 1)
+			  (compilation-speed 0)))
+       (labels ((%f3 (f3-1) a))
+	 (labels ((%f10 (f10-1 f10-2) a))
+	   (apply #'%f10 0 (logior (%f3 0)) nil)))))
+   -10000)
+  -10000)
+
+;;; `env0' undeclared (first use in this function)
+(deftest misc.208
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (speed 3) (space 2) (safety 3) (debug 3)
+			  (compilation-speed 0)))
+       (flet ((%f6 (f6-1 f6-2 f6-3) f6-3))
+	 (labels ((%f8 (f8-1) (let* ((v1 (%f6 0 0 0))) 0)))
+	   (apply #'%f6 b b (%f8 b) nil)))))
+   10)
+  0)
+
+;;; Wrong value computed
+(deftest misc.209
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (speed 3) (space 2) (safety 3) (debug 3)
+			  (compilation-speed 3)))
+       (max (catch 'ct4 (throw 'ct4 (setq b 0))) b)))
+   6353)
+  0)
+
+;;; Wrong value computed
+(deftest misc.210
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (type (integer 3 65500689) c))
+       (declare (optimize (speed 2) (space 1) (safety 3) (debug 3)
+			  (compilation-speed 2)))
+       (catch 'ct6
+	 (let ((v10 (truncate (integer-length (throw 'ct6 0))))) c))))
+   100)
+  0)
+
+(deftest misc.210a
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -55982525 -1) a))
+       (declare (optimize (speed 1) (space 2) (safety 1) (debug 2)
+			  (compilation-speed 1)))
+       (flet ((%f11 (f11-1 f11-2 f11-3) a))
+	 (let ((v6 0))
+	   (flet ((%f12 (f12-1) v6))
+	     (if (<= 0) (%f11 v6 0 0)
+	       (multiple-value-call #'%f11
+				    (values 0 0 (%f11 0 0 (apply #'%f12 0 nil))))))))))
+   -100)
+  -100)
+
+;;; Segmentation violation
+(deftest misc.211
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -1439706333184 1191686946816) a))
+       (declare (type (integer -28 282229324) b))
+       (declare (type (integer -108149896 38889958912) c))
+       (declare (optimize (speed 3) (space 1) (safety 2) (debug 1)
+			  (compilation-speed 3)))
+       (let ((v4 (labels ((%f8 (f8-1 &optional (f8-2 0) (f8-3 b)) 0))
+		   (logior (%f8 0) (%f8 0 0)))))
+	 (truncate
+	  (labels ((%f4 (&optional (f4-1 (ceiling c))) a))
+	    (%f4 v4))
+	  (max 38
+	       (labels ((%f8 (f8-1 &optional (f8-2 (+ c a))) 0))
+		 (apply #'%f8 a nil)))))))
+   -979021452526 138874383 21099308459)
+  -25763722434
+  -34)
+
+;;; Wrong value returned
+(deftest misc.212
+  (funcall #'(lambda ()
+	       (declare (optimize (speed 2) (space 0) (safety 3) (debug 2)
+				  (compilation-speed 0)))
+	       (let* ((v9 (unwind-protect 0))) v9)))
+  0)
+
+;;; segmentation violation
+(deftest misc.213
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -2 -1) b))
+       (declare (optimize (speed 1) (space 0) (safety 1) (debug 1)
+			  (compilation-speed 3)))
+       (max (labels ((%f15 (f15-1) b)) (if (< 0 (%f15 a)) 0 0))
+	    (labels ((%f11 (f11-1 f11-2 f11-3) b))
+	      (apply #'%f11 0 0 0 nil)))))
+   0 -2)
+  0)
+
+(deftest misc.213a
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 3) (space 3) (safety 0) (debug 1)
+			  (compilation-speed 3)))
+       (max (labels ((%f7 (f7-1) a)) (%f7 0))
+	    (flet ((%f12 (f12-1 f12-2) (if a f12-2 0)))
+	      (apply #'%f12 0 a nil)))))
+   123)
+  123)
+
+;;; Wrong value
+(deftest misc.214
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 3) (space 1) (safety 2) (debug 0)
+			  (compilation-speed 2)))
+       (flet ((%f8 nil (setq a 0))) (max a (%f8)))))
+   100)
+  100)
+
+;;; Wrong value
+(deftest misc.215
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 3) (safety 3) (debug 0)
+			  (compilation-speed 2)))
+       (ldb (byte 26 6) -1252))))
+  67108844)
+
+;;; Floating point exception
+(deftest misc.216
+  (truncate 0 -2549795210)
+  0 0)
+
+(deftest misc.217
+  (ceiling 0 -2549795210)
+  0 0)
+    
+(deftest misc.218
+  (floor 0 -2549795210)
+  0 0)
+
+;;; Infinite loop
+(deftest misc.219
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (labels ((%f (a b)
+		    (labels ((%f (c d) 0))
+		      (%f 1 2))))
+	 (%f 3 4)))))
+  0)
+
+;;; #\^E is not of type NUMBER.
+(deftest misc.220
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -3218770816 9386121) a))
+       (declare (type (integer -1 13) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 2) (space 1) (safety 1) (debug 0)
+			  (compilation-speed 1)))
+       (labels ((%f18 (f18-1 f18-2 f18-3) a))
+	 (apply #'%f18 0 a
+		(%f18 b
+		      (- (labels ((%f11 (f11-1 f11-2 f11-3) a))
+			   (%f11 0 0 0)))
+		      a)
+		nil))))
+   -468614602 3)
+  -468614602)
+
+;;; Floating point exception
+(deftest misc.221
+  (truncate 0 3006819284014656913408)
+  0 0)
+
+(deftest misc.222
+  (ceiling 0 3006819284014656913408)
+  0 0)
+
+(deftest misc.223
+  (floor 0 3006819284014656913408)
+  0 0)
+
+;;; clisp (10 Dec 2003 cvs head)
+;;; *** - SYMBOL-VALUE: 2 is not a SYMBOL
+
+(deftest misc.224
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (optimize (speed 2) (space 3) (safety 0)
+			  (debug 1) (compilation-speed 0)))
+       (flet ((%f14 (f14-1 f14-2
+			   &optional (f14-3 c)
+			   (f14-4 (if (not nil)
+				      (labels ((%f9 nil 0)) (%f9))
+				    a)))
+		    (flet ((%f17 (f17-1 f17-2) f14-1)) (%f17 0 f14-3))))
+	 (%f14 (%f14 0 a) 0 b a))))
+   248000 5409415 227923)
+  0)
+
+;;; Wrong values
+(deftest misc.225
+  (funcall (compile nil '(lambda () (values (values 'a 'b)))))
+  a)
+
+;;; clisp (12 Dec 2003, 2:30AM CST cvs head)
+;;; SYMBOL-VALUE: 1 is not a SYMBOL
+(deftest misc.226
+  (funcall
+   (compile nil
+	    '(lambda (a)
+	       (flet ((%f (&optional (x (setq a 1))
+				     (y (setq a 2)))
+			   0))
+		 (%f 0 0))))
+   0)
+  0)
+
+(deftest misc.227
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (flet ((%f (&optional x (y (setq b 1))) x))
+	 (%f 0))))
+   0)
+  0)
+
+;;; acl (x86 linux 6.2, patched 12 Dec 2003)
+;;; No from-creg to move to...
+(deftest misc.228
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (optimize (speed 1) (space 2) (safety 0) (debug 2)
+			  (compilation-speed 2)))
+       (catch 'ct2
+	 (case 0
+	   ((-56087 86404 -94716)
+	    (signum (labels ((%f7 (f7-1 f7-2 f7-3) f7-2)) 0)))
+	   ((12986)
+	    (let ((v3 (catch 'ct2 (throw 'ct2 0))))
+	      (labels ((%f14 (f14-1 f14-2) 0)) (%f14 b c))))
+	   (t 0)))))
+   -3847091255 -13482 -7577750)
+  0)
+
+;;; Error: `T' is not of the expected type `INTEGER'
+(deftest misc.229
+  (funcall
+   (compile
+    nil
+    '(lambda nil
+       (declare (optimize (speed 2) (space 1) (safety 1) (debug 2)
+			  (compilation-speed 3)))
+       (labels ((%f15 (f15-1) 0))
+	 (let ((v4 0))
+	   (catch 'ct5
+	     (%f15
+	      (gcd (catch 'ct5 (let* ((v5 (throw 'ct5 0))) 0)) v4))))))))
+  0)
+
+;;; ecl
+;;; Wrong result (order of evaluation problem)
+
+(deftest misc.230
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -6527559920 -247050) a))
+       (declare (optimize (speed 1) (space 3) (safety 0) (debug 0)
+			  (compilation-speed 3)))
+       (labels ((%f10 (&optional (f10-1 0)
+				 (f10-2 (setq a -4456327156)))
+		      0))
+	 (logxor a (%f10 a)))))
+   -3444248334)
+  -3444248334)
+
+;;; cmucl
+;;; Wrong value
+
+(deftest misc.231
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer -5209401 3339878) b))
+       (declare (optimize (speed 1) (space 2) (safety 0) (debug 2)
+			  (compilation-speed 3)))
+       (flet ((%f3 (f3-1 f3-2)
+		   f3-1))
+	 (apply #'%f3 0 (logxor (catch 'ct2 b)
+				(catch 'ct5 (throw 'ct5 0))) nil))))
+   -2179757)
+  0)
+
+;;; Invalid number of arguments: 1
+(deftest misc.232
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 197447754 495807327) a))
+       (declare (type (integer -125379462 1863191461) b))
+       (declare
+	(optimize (speed 2) (space 2) (safety 2) (debug 1) (compilation-speed 2)))
+       (flet ((%f8
+	       (&optional
+		(f8-1
+		 (max (catch (quote ct4) 0)
+		      (catch (quote ct6) (throw (quote ct6) 0)))))
+	       b))
+	 (flet ((%f16 (f16-1 f16-2 f16-3)
+		      0))
+	   (apply #'%f16 a 0 (%f8) nil)))))
+   348270365 28780966)
+  0)
+
+;;;  The assertion (EQ C::CHECK :SIMPLE) failed.
+(deftest misc.233
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -2333758327203 -321096206070) a))
+       (declare (type (integer -2842843403569 258395684270) b))
+       (declare (optimize (speed 2) (space 0) (safety 1) (debug 2)
+			  (compilation-speed 2)))
+       (flet ((%f18 (f18-1)
+		    (the integer
+		      (labels ((%f9 (f9-1 f9-2)
+				    (* (- -1 -210032251)
+				       (1+
+					(floor
+					 (labels ((%f11 (f11-1 f11-2)
+							-96773966))
+					   (%f11 b -3440758)))))))
+			(flet ((%f2
+				(f2-1 f2-2 f2-3
+				      &optional (f2-4 (%f9 -429204 -63))
+				      (f2-5 (- (%f9 b 17) a))
+				      (f2-6
+				       (multiple-value-call #'%f9
+							    (values
+							     (let () 7127585)
+							     (flet ((%f1 (f1-1 f1-2 f1-3)
+									 (catch 'ct6 -569234)))
+							       (macrolet () 13))))))
+				1027))
+			  (if nil
+			      (%f2 b a f18-1 69968 4 -217193265)
+			    (catch 'ct1 129548688)))))))
+	 (max (apply #'%f18 (list 0))))))
+   -2067244683733 143879071206)
+  129548688)
+
+;;;  NIL is not of type C::TAIL-SET
+(deftest misc.234
+  (funcall
+   (compile
+    nil
+    '(lambda (b) ;; (a b)
+       (declare (type (integer -13583709 -3876310) b))
+       (declare (optimize (speed 1) (space 2) (safety 3) (debug 3)
+			  (compilation-speed 1)))
+       (flet ((%f14 (f14-1 f14-2 f14-3)
+		    (flet ((%f2
+			    (f2-1
+			     &optional (f2-2 0) (f2-3 0)
+			     (f2-4
+			      (block b8 (if (ldb-test (byte 0 0) 0) (* 0 f14-2) 0))))
+			    0))
+		      (%f2 b f14-2))))
+	 (%f14 0 0 (%f14 0 0 0)))))
+   ;; -155589
+   -5694124)
+  0)
+
+;;; sbcl 0.8.6.34
+;;; Wrong value
+(deftest misc.235
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+         (declare (notinline not))
+         (declare (optimize (speed 1) (space 0) (safety 0)
+			    (debug 2) (compilation-speed 3)))
+         (multiple-value-prog1 0 (catch 'ct2 (if (not nil) (throw 'ct2 b) 0)))))
+   :wrong)
+  0)
+
+(deftest misc.236
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (optimize (speed 1) (space 0) (safety 3)
+			  (debug 0) (compilation-speed 1)))
+       (flet ((%f8 (f8-1) 0))
+	 (labels ((%f18 (f18-1 f18-2 &optional (f18-3 0))
+			(%f8 (catch 'ct7 (throw 'ct7 f18-1)))))
+	   (multiple-value-prog1 (catch 'ct7 a)
+				 0
+				 (multiple-value-call #'%f18 (values 0 (%f8 b))))))))
+   :good :bad)
+  :good)
+
+(deftest misc.237
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 2) (safety 3)
+			  (debug 3) (compilation-speed 1)))
+       (multiple-value-prog1 0
+			     (catch 'ct7 (logandc1 (block b7 0)
+						   (throw 'ct7 -908543)))))))
+  0)
+
+;;; cmucl (11 2003 snapshot)
+
+;;;  NIL is not of type C::CONTINUATION
+(deftest misc.238
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -77145797 -1) a))
+       (declare (optimize (speed 1) (space 1) (safety 3) (debug 3) (compilation-speed 1)))
+       (flet ((%f5 (f5-1) a))
+	 (%f5 (unwind-protect 0 (logand (- (catch 'ct5 0))))))))
+   -100)
+  -100)
+
+;;; (in C::MAYBE-LET-CONVERT)
+(deftest misc.239
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -2315418108387 111852261677) a))
+       (declare (optimize (speed 2) (space 0) (safety 2) (debug 2) (compilation-speed 1)))
+       (labels ((%f4 ()
+		     (labels ((%f16 (f16-1 f16-2) 0))
+		       (flet ((%f9 () 0))
+			 (%f16 0 (%f16 (%f9) a))))))
+	 (flet ((%f10 (f10-1 f10-2 f10-3)
+		      (flet ((%f15 (f15-1 &optional (f15-2 (%f4)) (f15-3 0)) f15-3))
+			0)))
+	   0))))
+   100)
+  0)
+
+(deftest misc.239a
+  (funcall
+   (compile nil '(lambda () (declare (optimize speed safety))
+		   (LET ((x (PROG1 0 (ROUND 18916)))) (catch 'ct4 0)))))
+  0)
+
+(deftest misc.240
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer 4 7) b))
+       (declare (optimize (speed 2) (space 3) (safety 3) (debug 1) (compilation-speed 3)))
+       (unwind-protect 0
+	 (common-lisp:handler-case
+	  (max
+	   (let ((*s1* b))
+	     (declare (special *s1*))
+	     (+ 0 *s1*)))))))
+   5)
+  0)
+
+;;; clisp (12 Dec 2003 cvs head)
+;;; *** - Compiler bug!! Occurred in ASSEMBLE-LAP at ILLEGAL INSTRUCTION.
+(deftest misc.241
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 3) (safety 0) (debug 0) (compilation-speed 2)))
+       (labels ((%f17 (f17-1 f17-2) (multiple-value-prog1 0 0 0 (return-from %f17 0)))) (%f17 0 0)))))
+  0)
+
+(deftest misc.242
+  (funcall (compile nil '(lambda (a) (block b6 (multiple-value-prog1 a (return-from b6 0))))) :wrong)
+  0)
+
+(deftest misc.243
+  (funcall (compile nil '(lambda () (block b3 (return-from b3 (multiple-value-prog1 0 (return-from b3 0)))))))
+  0)
+
+;;; lispworks 4.3 (personal edition)
+(deftest misc.244
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (speed 3) (space 1) (safety 2) (debug 3) (compilation-speed 2)))
+       (catch 'ct8 (labels ((%f4 (&optional (f4-1 0) (f4-2 (throw 'ct8 0))) f4-1)) (%f4 b)))))
+   :wrong)
+  0)
+
+(deftest misc.245
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 2) (space 0) (safety 0) (debug 2) (compilation-speed 1)))
+       (catch 'ct2 (labels ((%f11 (&optional (f11-1 (throw 'ct2 0))) a)) (apply #'%f11 0 nil)))))
+   20)
+  20)
+
+;;; ecl (cvs head, 18 Dec 2003)
+(deftest misc.246
+  (let ((x (unwind-protect 0))) x)
+  0)
+
+(deftest misc.247
+  (let ((x (dotimes (i 0 10)))) x)
+  10)
+
+;;; acl 6.2 trial
+;;; "Error: Attempt to access the plist field of 0 which is not a symbol."
+
+(deftest misc.248
+  (funcall (compile nil '(lambda () (dotimes (i 0 0) 0))))
+  0)
+
+;;; sbcl
+;;;  #<SB-C::LAMBDA-VAR :%SOURCE-NAME IV4 :TYPE # {A67BE29}>
+;;;  not found in
+;;;  #<SB-C::PHYSENV :LAMBDA # :NLX-INFO # {A680EF1}>
+
+(deftest misc.249
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+         (declare (notinline <=))
+         (declare (optimize (speed 2) (space 3) (safety 0)
+			    (debug 1) (compilation-speed 3)))
+         (if (if (<= 0) nil nil)
+             (labels ((%f9 (f9-1 f9-2 f9-3)
+			   (ignore-errors 0)))
+               (dotimes (iv4 5 a) (%f9 0 0 b)))
+	   0)))
+   1 2)
+  0)
+
+;;; cmucl 11/2003
+(deftest misc.250
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -12 14) a))
+       (declare	(optimize (speed 1) (space 2) (safety 1) (debug 1) (compilation-speed 3)))
+       (let ((v6 0))
+	 (flet ((%f11
+		 (f11-1
+		  &optional
+		  (f11-2
+		   (case (catch 'ct7 0)
+		     (t
+		      (let* ((v2 (ignore-errors a)))
+			v6)))))
+		 0))
+	   (%f11 0 0)))))
+   5)
+  0)
+
+;;; NIL is not of type C::CONTINUATION
+;;; (C::MAYBE-CONVERT-TO-ASSIGNMENT
+;;;  #<LAMBDA #x48A3031D
+;;;     NAME= (FLET %F3
+;;;             NIL)
+;;;     TYPE= #<KERNEL::BUILT-IN-CLASS FUNCTION (read-only) {2803AE6D}>
+;;;     WHERE-FROM= :DEFINED
+;;;     VARS= (F3-1 F3-2 F3-3)>)
+
+(deftest misc.251
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -186585769 -7483) a))
+       (declare (type (integer -550 524) b))
+       (declare
+	(optimize (speed 2) (space 1) (safety 1) (debug 2) (compilation-speed 3)))
+       (flet ((%f3 (f3-1 f3-2 f3-3)
+		   0))
+	 (%f3 0 0
+	      (flet ((%f13 (f13-1 f13-2)
+			   0))
+		(if (/= b a)
+		    b
+		  (deposit-field (%f3 0 b 0) (byte 0 0) (%f3 0 0 (%f13 0 0)))))))))
+   -10000 0)
+  0)
+
+;;; 8061593093 is not of type (INTEGER -2147483648 4294967295)
+(deftest misc.252
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer -43443 9126488423) b))
+       (declare (optimize (speed 3) (space 1) (safety 1) (debug 3) (compilation-speed 0)))
+       (logand (setq b 8061593093) (min b 0))))
+   0)
+  0)
+
+(deftest misc.252a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -30189 -6047) a))
+       (declare (type (integer -10 16391481067) b))
+       (declare (optimize (speed 3) (space 1) (safety 2) (debug 3)
+			  (compilation-speed 0)))
+       (if
+	   (<= 0
+	       (let ((*s1* (setq b 12204309028)))
+		 (declare (special *s1*))
+		 (truncate b)))
+	   a
+	 0)))
+   -12618 16130777867)
+  -12618)
+
+;;; #<C::ENTRY #x48DCC585> fell through ETYPECASE expression.
+;;; Wanted one of (C::BASIC-COMBINATION C::EXIT C::CRETURN C::CSET C::CIF
+;;;                (OR C::REF C:BIND)).
+;;;    [Condition of type CONDITIONS::CASE-FAILURE]
+;;;[...]
+;;; (C::SUBSTITUTE-CONTINUATION #<Continuation c1> #<Continuation c2>)
+
+(deftest misc.253
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 2) (safety 3) (debug 3) (compilation-speed 2)))
+       (flet ((%f17 (f17-1) 0))
+	 (%f17 (logandc1 0 (catch 'ct2 0)))))))
+  0)
+
+;;; Wrong return value
+(deftest misc.254
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -5241 -1159) a))
+       (declare (optimize (speed 3) (space 2) (safety 0) (debug 3) (compilation-speed 1)))
+       (gcd a
+	    (let ((*misc.254* (setq a -4929)))  ;; special variable
+	      (declare (special *misc.254*))
+	      0))))
+   -3000)
+  3000)
+
+(deftest misc.255
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer -3474321 15089206) b))
+       (declare (optimize (speed 3) (space 3) (safety 3) (debug 3) (compilation-speed 0)))
+       (- b
+	  (block b3
+	    (setq b 9367613)
+	    0))))
+   10)
+  10)
+
+;;; clisp (20 Dec 2003)
+;;; Bug involving tagbody and go in lexical function
+
+(deftest misc.256
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 0) (safety 3) (debug 0) (compilation-speed 0)))
+       (tagbody (flet ((%f6 () (go 18))) (%f6))
+                18))))
+  nil)
+
+;;; clisp (22 Dec 2003)
+;;; *** - Compiler bug!! Occurred in ACCESS-IN-STACK at STACKZ-END.
+
+(deftest misc.257
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (space 2) (safety 3) (debug 3) (compilation-speed 1)))
+       (tagbody (flet ((%f1 (f1-1)
+			    (flet ((%f9 (&optional (f9-1 b) (f9-2 (go tag2)) (f9-3 0)) 0))
+			      (%f9 0 0 0))))
+		  (%f1 0))
+		tag2))))
+  nil)

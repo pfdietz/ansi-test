@@ -88,6 +88,26 @@
   (make-pathname-test :case :common)
   t)
 
+;;; Works on the components of actual pathnames
+(deftest make-pathname.rebuild
+  (loop for p in *pathnames*
+	for host = (pathname-host p)
+	for device = (pathname-device p)
+	for directory = (pathname-directory p)
+	for name = (pathname-name p)
+	for type = (pathname-type p)
+	for version = (pathname-version p)
+	for p2 = (make-pathname
+		  :host host
+		  :device device
+		  :directory directory
+		  :name name
+		  :type type
+		  :version version)
+	unless (equal p p2)
+	collect (list p p2))
+  nil)
+
 ;;; Various constraints on :directory
 
 (deftest make-pathname-error-absolute-up
