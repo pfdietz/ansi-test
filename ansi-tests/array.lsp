@@ -31,6 +31,35 @@
   (notnot-mv (typep #*010101 'array))
   t)
 
+(deftest array.1.7
+  (typep nil 'array)
+  nil)
+
+(deftest array.1.8
+  (typep 'x 'array)
+  nil)
+
+(deftest array.1.9
+  (typep '(a b c) 'array)
+  nil)
+
+(deftest array.1.10
+  (typep 10.0 'array)
+  nil)
+
+(deftest array.1.11
+  (typep #'(lambda (x) (cons x nil)) 'array)
+  nil)
+
+(deftest array.1.12
+  (typep 1 'array)
+  nil)
+
+(deftest array.1.13
+  (typep (1+ most-positive-fixnum) 'array)
+  nil)
+
+
 ;;; Tests of (array *)
 
 (deftest array.2.1

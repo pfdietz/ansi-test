@@ -36,6 +36,8 @@
 
      ((not (typep a 'array))
       :fail-not-array)
+     ((not (typep a (find-class 'array)))
+      :fail-not-array-class)
      ((not (typep a '(array *)))
       :fail-not-array2)
      ((not (typep a `(array * ,dimensions-list)))

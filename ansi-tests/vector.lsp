@@ -192,7 +192,81 @@
 (deftest vector.type.44
   (notnot-mv (typep (make-array '10 :element-type 'long-float) 'vector))
   t)
+
+
+;;; Tests of vector as class
+
+(deftest vector-as-class.1
+  (notnot-mv (find-class 'vector))
+  t)
+
+(deftest vector-as-class.2
+  (notnot-mv (typep #() (find-class 'vector)))
+  t)
   
+(deftest vector-as-class.3
+  (notnot-mv (typep #(a b c) (find-class 'vector)))
+  t)
+  
+(deftest vector-as-class.4
+  (notnot-mv (typep "" (find-class 'vector)))
+  t)
+  
+(deftest vector-as-class.5
+  (notnot-mv (typep "abcd" (find-class 'vector)))
+  t)
+  
+(deftest vector-as-class.6
+  (notnot-mv (typep #* (find-class 'vector)))
+  t)
+  
+(deftest vector-as-class.7
+  (notnot-mv (typep #*01101010100 (find-class 'vector)))
+  t)
+
+(deftest vector-as-class.8
+  (typep #0aNIL (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.9
+  (typep #2a((a b)(c d)) (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.10
+  (typep (make-array '(1 0)) (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.11
+  (typep (make-array '(0 1)) (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.12
+  (typep 1 (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.13
+  (typep nil (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.14
+  (typep 'x (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.15
+  (typep '(a b c) (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.16
+  (typep 10.0 (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.17
+  (typep 3/5 (find-class 'vector))
+  nil)
+
+(deftest vector-as-class.18
+  (typep (1+ most-positive-fixnum) (find-class 'vector))
+  nil)
 
 ;;;; Tests of the function VECTOR
 
