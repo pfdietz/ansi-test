@@ -19,7 +19,7 @@
 (deftest array-displacement.7
   (let* ((a (make-array '(10)))
 	 (b (make-array '(10) :displaced-to a)))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 0))))
@@ -28,7 +28,7 @@
 (deftest array-displacement.8
   (let* ((a (make-array '(10)))
 	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2)))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 2))))
@@ -38,7 +38,7 @@
   (let* ((a (make-array '(10) :element-type 'base-char))
 	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2
 			:element-type 'base-char)))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 2))))
@@ -48,7 +48,7 @@
   (let* ((a (make-array '(10) :element-type 'base-char))
 	 (b (make-array '(5) :displaced-to a
 			:element-type 'base-char)))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 0))))
@@ -58,7 +58,7 @@
   (let* ((a (make-array '(10) :element-type 'bit))
 	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2
 			:element-type 'bit)))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 2))))
@@ -68,7 +68,7 @@
   (let* ((a (make-array '(10) :element-type 'bit))
 	 (b (make-array '(5) :displaced-to a
 			:element-type 'bit)))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 0))))
@@ -78,7 +78,7 @@
   (let* ((a (make-array '(10) :element-type '(integer 0 255)))
 	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2
 			:element-type '(integer 0 255))))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 2))))
@@ -88,7 +88,7 @@
   (let* ((a (make-array '(10) :element-type '(integer 0 255)))
 	 (b (make-array '(5) :displaced-to a
 			:element-type '(integer 0 255))))
-    (multiple-value-bind (dt disp)
+    (multiple-value-bind* (dt disp)
 	(array-displacement b)
       (and (eqt a dt)
 	   (eqlt disp 0))))

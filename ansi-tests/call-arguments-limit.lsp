@@ -6,12 +6,12 @@
 (in-package :cl-test)
 
 (deftest call-arguments-limit.1
-  (not (constantp 'call-arguments-limit))
-  nil)
+  (notnot-mv (constantp 'call-arguments-limit))
+  t)
 
 (deftest call-arguments-limit.2
-  (not (typep call-arguments-limit 'integer))
-  nil)
+  (notnot-mv (typep call-arguments-limit 'integer))
+  t)
 
 (deftest call-arguments-limit.3
   (< call-arguments-limit 50)

@@ -8,23 +8,23 @@
 ;;; Also tested by make-array.lsp
 
 (deftest arrayp.1
-  (notnot (arrayp #(a b c)))
+  (notnot-mv (arrayp #(a b c)))
   t)
 
 (deftest arrayp.2
-  (notnot (arrayp "abcd"))
+  (notnot-mv (arrayp "abcd"))
   t)
 
 (deftest arrayp.3
-  (notnot (arrayp #*001110101))
+  (notnot-mv (arrayp #*001110101))
   t)
 
 (deftest arrayp.4
-  (notnot (arrayp #0aNIL))
+  (notnot-mv (arrayp #0aNIL))
   t)
 
 (deftest arrayp.5
-  (notnot (arrayp #2a((1 2 3)(4 5 6))))
+  (notnot-mv (arrayp #2a((1 2 3)(4 5 6))))
   t)
 
 (deftest arrayp.6

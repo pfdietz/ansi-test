@@ -28,15 +28,15 @@
 ;;; See other tests in cl-symbols.lsp
 
 (deftest boundp.1
-  (notnot (boundp 't))
+  (notnot-mv (boundp 't))
   t)
 
 (deftest boundp.2
-  (notnot (boundp nil))
+  (notnot-mv (boundp nil))
   t)
 
 (deftest boundp.3
-  (notnot (boundp :foo))
+  (notnot-mv (boundp :foo))
   t)
 
 (deftest boundp.4

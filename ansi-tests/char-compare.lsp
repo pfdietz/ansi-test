@@ -78,11 +78,11 @@
   t)
 
 (deftest char<=.7
-  (or (char<= #\9 #\A) (char<= #\Z #\0) t)
+  (notnot-mv (or (char<= #\9 #\A) (char<= #\Z #\0)))
   t)
   
 (deftest char<=.8
-  (or (char<= #\9 #\a) (char<= #\z #\0) t)
+  (notnot-mv (or (char<= #\9 #\a) (char<= #\z #\0)))
   t)
 
 (deftest char<.1
@@ -111,11 +111,11 @@
   t)
 
 (deftest char<.7
-  (or (char< #\9 #\A) (char< #\Z #\0) t)
+  (notnot-mv (or (char< #\9 #\A) (char< #\Z #\0)))
   t)
   
 (deftest char<.8
-  (or (char< #\9 #\a) (char< #\z #\0) t)
+  (notnot-mv (or (char< #\9 #\a) (char< #\z #\0)))
   t)
   
 
@@ -145,11 +145,11 @@
   t)
 
 (deftest char>=.7
-  (or (char>= #\A #\9) (char>= #\0 #\Z) t)
+  (notnot-mv (or (char>= #\A #\9) (char>= #\0 #\Z)))
   t)
   
 (deftest char>=.8
-  (or (char>= #\a #\9) (char>= #\0 #\z) t)
+  (notnot-mv (or (char>= #\a #\9) (char>= #\0 #\z)))
   t)
 
 (deftest char>.1
@@ -178,11 +178,11 @@
   t)
 
 (deftest char>.7
-  (or (char> #\A #\9) (char> #\0 #\Z) t)
+  (notnot-mv (or (char> #\A #\9) (char> #\0 #\Z)))
   t)
   
 (deftest char>.8
-  (or (char> #\a #\9) (char> #\0 #\z) t)
+  (notnot-mv (or (char> #\a #\9) (char> #\0 #\z)))
   t)
 
 ;;; Case-insensitive comparisons
@@ -262,11 +262,11 @@
   t)
 
 (deftest char-not-greaterp.7
-  (or (char-not-greaterp #\9 #\A) (char-not-greaterp #\Z #\0) t)
+  (notnot-mv (or (char-not-greaterp #\9 #\A) (char-not-greaterp #\Z #\0)))
   t)
   
 (deftest char-not-greaterp.8
-  (or (char-not-greaterp #\9 #\a) (char-not-greaterp #\z #\0) t)
+  (notnot-mv (or (char-not-greaterp #\9 #\a) (char-not-greaterp #\z #\0)))
   t)
 
 (deftest char-lessp.1
@@ -295,11 +295,11 @@
   t)
 
 (deftest char-lessp.7
-  (or (char-lessp #\9 #\A) (char-lessp #\Z #\0) t)
+  (notnot-mv (or (char-lessp #\9 #\A) (char-lessp #\Z #\0)))
   t)
   
 (deftest char-lessp.8
-  (or (char-lessp #\9 #\a) (char-lessp #\z #\0) t)
+  (notnot-mv (or (char-lessp #\9 #\a) (char-lessp #\z #\0)))
   t)
 
 (deftest char-not-lessp.1
@@ -329,11 +329,11 @@
   t)
 
 (deftest char-not-lessp.7
-  (or (char-not-lessp #\A #\9) (char-not-lessp #\0 #\Z) t)
+  (notnot-mv (or (char-not-lessp #\A #\9) (char-not-lessp #\0 #\Z)))
   t)
   
 (deftest char-not-lessp.8
-  (or (char-not-lessp #\a #\9) (char-not-lessp #\0 #\z) t)
+  (notnot-mv (or (char-not-lessp #\a #\9) (char-not-lessp #\0 #\z)))
   t)
 
 (deftest char-greaterp.1
@@ -363,9 +363,9 @@
   t)
 
 (deftest char-greaterp.7
-  (or (char-greaterp #\A #\9) (char-greaterp #\0 #\Z) t)
+  (notnot-mv (or (char-greaterp #\A #\9) (char-greaterp #\0 #\Z)))
   t)
   
 (deftest char-greaterp.8
-  (or (char-greaterp #\a #\9) (char-greaterp #\0 #\z) t)
+  (notnot-mv (or (char-greaterp #\a #\9) (char-greaterp #\0 #\z)))
   t)

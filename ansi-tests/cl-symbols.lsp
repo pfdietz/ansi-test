@@ -1065,16 +1065,16 @@
 
 (deftest keywordp-1 (keywordp 'hefalump)   nil)
 (deftest keywordp-2 (keywordp 17)          nil)
-(deftest keywordp-3 (not (not (keywordp :stream)))         t)
-(deftest keywordp-4 (not (not (keywordp ':stream)))        t)
+(deftest keywordp-3 (notnot-mv (keywordp :stream))         t)
+(deftest keywordp-4 (notnot-mv (keywordp ':stream))        t)
 (deftest keywordp-5 (keywordp nil)         nil)
-(deftest keywordp-6 (not (not (keywordp :nil)))          t)
+(deftest keywordp-6 (notnot-mv (keywordp :nil))          t)
 (deftest keywordp-7 (keywordp '(:stream))    nil)
 (deftest keywordp-8 (keywordp "rest")     nil)
 (deftest keywordp-9 (keywordp ":rest")    nil)
 (deftest keywordp-10 (keywordp '&body) nil)
 ;;; This next test was busted.  ::foo is not portable syntax
-;;(deftest keywordp-11 (not (not (keywordp ::foo)))       t)
+;;(deftest keywordp-11 (notnot-mv (keywordp ::foo))       t)
 (deftest keywordp-12 (keywordp t)          nil)
 (deftest keywordp-13 (classify-error (keywordp)) program-error)
 (deftest keywordp-14 (classify-error (keywordp :x :x)) program-error)
@@ -1122,7 +1122,7 @@
 ;;; make-symbol
 
 (deftest make-symbol-1
-  (not (not (symbolp (make-symbol "FOO"))))
+  (notnot-mv (symbolp (make-symbol "FOO")))
   t)
 
 (deftest make-symbol-2
@@ -1206,71 +1206,67 @@
 ;;; copy-symbol
 
 (deftest copy-symbol-1
-  (not (not
-	(every
-	 #'(lambda (x)
-	     (let ((y (copy-symbol x)))
-	       (and (null (symbol-plist y))
-		    (symbolp y)
-		    (not (boundp y))
-		    (not (fboundp y))
-		    (null (symbol-package y))
-		    (string= (symbol-name x) (symbol-name y))
-		    (symbolp (copy-symbol y))
-			)))
-	 '(nil t a b |a| |123|))))
+  (notnot-mv
+   (every
+    #'(lambda (x)
+	(let ((y (copy-symbol x)))
+	  (and (null (symbol-plist y))
+	       (symbolp y)
+	       (not (boundp y))
+	       (not (fboundp y))
+	       (null (symbol-package y))
+	       (string= (symbol-name x) (symbol-name y))
+	       (symbolp (copy-symbol y))
+	       )))
+    '(nil t a b |a| |123|)))
   t)
 
 (deftest copy-symbol-2
-  (handler-case
-   (progn
-     (setf (symbol-plist '|foo|) '(a b c d))
-     (makunbound '|foo|)
-     (not (not
-	   (every
-	    #'(lambda (x)
-		(let ((y (copy-symbol x t)))
-		  (and
-		   (equal (symbol-plist y) (symbol-plist x))
-		   (symbolp y)
-		   (if (boundp x)
-		       (boundp y)
-		     (not (boundp y)))
-		   (not (fboundp y))
-		   (null (symbol-package y))
-		   (string= (symbol-name x) (symbol-name y))
-		   )))
-	    '(nil t a b |foo| |a| |123|)))))
-   (error (c) c))
+  (progn
+    (setf (symbol-plist '|foo|) '(a b c d))
+    (makunbound '|foo|)
+    (notnot-mv
+     (every
+      #'(lambda (x)
+	  (let ((y (copy-symbol x t)))
+	    (and
+	     (equal (symbol-plist y) (symbol-plist x))
+	     (symbolp y)
+	     (if (boundp x)
+		 (boundp y)
+	       (not (boundp y)))
+	     (not (fboundp y))
+	     (null (symbol-package y))
+	     (string= (symbol-name x) (symbol-name y))
+	     )))
+      '(nil t a b |foo| |a| |123|))))
   t)
 
 (deftest copy-symbol-3
-  (handler-case
-   (progn
-     (setf (symbol-plist '|foo|) '(a b c d))
-     (setf (symbol-value '|a|) 12345)
-     (not (not
-	   (every
-	    #'(lambda (x)
-		(let ((y (copy-symbol x t)))
-		  (and
-		   (eql (length (symbol-plist y))
-			(length (symbol-plist x)))
-		   ;; Is a list copy
-		   (every #'eq (symbol-plist y) (symbol-plist x))
-		   (symbolp y)
-		   (if (boundp x)
-		       (eqt (symbol-value x)
-			    (symbol-value y))
-		     (not (boundp y)))
-		   (not (fboundp y))
-		   (null (symbol-package y))
-		   (string= (symbol-name x) (symbol-name y))
-		   (eql (length (symbol-plist x))
-			(length (symbol-plist y)))
-		   )))
-	    '(nil t a b |foo| |a| |123|)))))
-   (error (c) c))
+  (progn
+    (setf (symbol-plist '|foo|) '(a b c d))
+    (setf (symbol-value '|a|) 12345)
+    (notnot-mv
+     (every
+      #'(lambda (x)
+	  (let ((y (copy-symbol x t)))
+	    (and
+	     (eql (length (symbol-plist y))
+		  (length (symbol-plist x)))
+	     ;; Is a list copy
+	     (every #'eq (symbol-plist y) (symbol-plist x))
+	     (symbolp y)
+	     (if (boundp x)
+		 (eqt (symbol-value x)
+		      (symbol-value y))
+	       (not (boundp y)))
+	     (not (fboundp y))
+	     (null (symbol-package y))
+	     (string= (symbol-name x) (symbol-name y))
+	     (eql (length (symbol-plist x))
+		  (length (symbol-plist y)))
+	     )))
+      '(nil t a b |foo| |a| |123|))))
   t)
 
 (deftest copy-symbol-4

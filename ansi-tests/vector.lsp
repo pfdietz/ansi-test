@@ -8,27 +8,27 @@
 ;;; More tests of type vector in make-array.lsp
 
 (deftest vector.type.1
-  (notnot (typep #(a b c) 'vector))
+  (notnot-mv (typep #(a b c) 'vector))
   t)
 
 (deftest vector.type.2
-  (notnot (typep #() 'vector))
+  (notnot-mv (typep #() 'vector))
   t)
 
 (deftest vector.type.3
-  (notnot (typep "" 'vector))
+  (notnot-mv (typep "" 'vector))
   t)
 
 (deftest vector.type.4
-  (notnot (typep "abcdef" 'vector))
+  (notnot-mv (typep "abcdef" 'vector))
   t)
 
 (deftest vector.type.5
-  (notnot (typep #* 'vector))
+  (notnot-mv (typep #* 'vector))
   t)
 
 (deftest vector.type.6
-  (notnot (typep #*011011101011 'vector))
+  (notnot-mv (typep #*011011101011 'vector))
   t)
 
 (deftest vector.type.7
@@ -44,15 +44,15 @@
   t t)
 
 (deftest vector.type.10
-  (notnot (typep #(a b c) '(vector *)))
+  (notnot-mv (typep #(a b c) '(vector *)))
   t)
 
 (deftest vector.type.11
-  (notnot (typep #(a b c) '(vector t)))
+  (notnot-mv (typep #(a b c) '(vector t)))
   t)
 
 (deftest vector.type.12
-  (notnot (typep "abcde" '(vector *)))
+  (notnot-mv (typep "abcde" '(vector *)))
   t)
 
 (deftest vector.type.13
@@ -60,12 +60,69 @@
   nil)
 
 (deftest vector.type.14
-  (notnot (typep #*00110 '(vector *)))
+  (notnot-mv (typep #*00110 '(vector *)))
   t)
 
 (deftest vector.type.15
   (typep #*00110 '(vector t))
   nil)
 
+(deftest vector.type.16
+  (notnot-mv (typep #(a b c) '(vector * 3)))
+  t)
 
+(deftest vector.type.17
+  (typep #(a b c) '(vector * 2))
+  nil)
 
+(deftest vector.type.18
+  (typep #(a b c) '(vector * 4))
+  nil)
+
+(deftest vector.type.19
+  (notnot-mv (typep #(a b c) '(vector t 3)))
+  t)
+
+(deftest vector.type.20
+  (typep #(a b c) '(vector t 2))
+  nil)
+
+(deftest vector.type.21
+  (typep #(a b c) '(vector t 4))
+  nil)
+
+(deftest vector.type.23
+  (notnot-mv (typep #(a b c) '(vector t *)))
+  nil)
+
+(deftest vector.type.23a
+  (notnot-mv (typep "abcde" '(vector * 5)))
+  t)
+
+(deftest vector.type.24
+  (typep "abcde" '(vector * 4))
+  nil)
+
+(deftest vector.type.25
+  (typep "abcde" '(vector * 6))
+  nil)
+
+(deftest vector.type.26
+  (notnot-mv (typep "abcde" '(vector * *)))
+  t)
+
+(deftest vector.type.27
+  (typep "abcde" '(vector t 5))
+  nil)
+
+(deftest vector.type.28
+  (typep "abcde" '(vector t 4))
+  nil)
+
+(deftest vector.type.29
+  (typep "abcde" '(vector t 6))
+  nil)
+
+(deftest vector.type.30
+  (typep "abcde" '(vector t *))
+  nil)
