@@ -9905,3 +9905,41 @@ Broken at C::WT-MAKE-CLOSURE.
     (aref r0))
   4134713351/6105637898)
 
+#|
+  The value
+    #<SB-ALIEN:CAST
+      :%TYPE-CHECK NIL
+      :VALUE #<SB-C::LVAR 1 {DEDE809}>
+      :ASSERTED-TYPE #<SB-KERNEL:MEMBER-TYPE (MEMBER
+                                              #C(4196.088977268509d0 -15943.3603515625d0))>
+      :TYPE-TO-CHECK #<SB-KERNEL:NAMED-TYPE *> {DECFF19}>
+  is not of type
+    SB-C::REF.
+|#
+
+(deftest misc.535
+  (let ((c0 #c(4196.088977268509d0 -15943.3603515625d0)))
+    (funcall
+     (compile
+      nil
+      `(lambda (p1 p2)
+	 (declare (optimize speed (safety 1))
+		  (type (simple-array t nil) r)
+		  (type (eql ,c0) p1)
+		  (type number p2))
+	 (eql (the (complex double-float) p1) p2)))
+     c0 #c(12 612/979)))
+  nil)
+
+;;; Similar to misc.535
+(deftest misc.536
+  (funcall
+   (compile
+    nil
+    '(lambda (p1 p2)
+       (declare (optimize speed (safety 1))
+		(type (eql #c(11963908204 1/6)) p1)
+		(type (complex rational) p2))
+       (eql p1 (the complex p2))))
+   #c(11963908204 1/6) #c(2343315619 5252231066))
+  nil)
