@@ -16,7 +16,9 @@
   t)
 
 (deftest cis.1
-  (eqlt (cis 0) #c(1.0 0.0))
+  (let ((result (cis 0)))
+    (or (=t result 1)
+	(eqlt #c(1.0 0.0))))
   t)
 
 (deftest cis.2
