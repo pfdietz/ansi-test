@@ -48,6 +48,8 @@
 (load "complexp.lsp")
 (load "conjugate.lsp")
 (load "phase.lsp")
+(load "realpart.lsp")
+(load "imagpart.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")

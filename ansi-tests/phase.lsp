@@ -99,3 +99,24 @@
   (let ((p (phase #c(1.0l0 1.0l0))))
     (approx= p (/ pi 4)))
   t)
+
+;;; Negative zeros
+(deftest phase.18
+  (or (eqlt -0.0s0 0.0s0)
+      (approx= (phase #c(-1.0 -0.0)) (coerce (- pi) 'short-float)))
+  t)
+
+(deftest phase.19
+  (or (eqlt -0.0f0 0.0f0)
+      (approx= (phase #c(-1.0 -0.0)) (coerce (- pi) 'single-float)))
+  t)
+
+(deftest phase.20
+  (or (eqlt -0.0d0 0.0d0)
+      (approx= (phase #c(-1.0 -0.0)) (coerce (- pi) 'double-float)))
+  t)
+
+(deftest phase.21
+  (or (eqlt -0.0l0 0.0l0)
+      (approx= (phase #c(-1.0 -0.0)) (coerce (- pi) 'long-float)))
+  t)
