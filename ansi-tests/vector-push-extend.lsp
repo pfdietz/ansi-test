@@ -400,6 +400,111 @@
 	collect (list etype result))
   nil)
 
+;;; strings
+
+(deftest vector-push-extend.27
+  (loop for adj in '(nil t)
+	nconc
+	(loop for etype in '(character base-char standard-char)
+	      for a1 = (make-array 10 :initial-element #\a
+				   :element-type etype)
+	      for a2 =(make-array 6
+				  :element-type etype
+				  :displaced-to a1
+				  :displaced-index-offset 2
+				  :adjustable adj
+				  :fill-pointer 0)
+	      for result = (list (fill-pointer a2)
+				 (map 'list #'identity a2)
+				 (vector-push-extend #\b a2)
+				 (fill-pointer a2)
+				 (map 'list #'identity a2)
+				 (map 'list #'identity a1))
+	      unless (equal result '(0 () 0 1 (#\b) (#\a #\a #\b #\a #\a #\a #\a #\a #\a #\a)))
+	      collect (list etype adj result)))
+  nil)
+
+(deftest vector-push-extend.28
+  (loop for etype in '(character base-char standard-char)
+	for a1 = (make-array 8 :initial-element #\a
+			     :element-type etype)
+	for a2 = (make-array 6
+			     :element-type etype
+			     :displaced-to a1
+			     :displaced-index-offset 2
+			     :adjustable t
+			     :fill-pointer 6)
+	for result = (list (fill-pointer a2)
+			   (map 'list #'identity a2)
+			   (vector-push-extend #\b a2)
+			   (fill-pointer a2)
+			   (map 'list #'identity a2)
+			   (map 'list #'identity a1)
+			   (notnot (adjustable-array-p a2))
+			   (multiple-value-list (array-displacement a1)))
+	unless (equal result '(6 #.(coerce "aaaaaa" 'list)
+				 6 7
+				 #.(coerce "aaaaaab" 'list)
+				 #.(coerce "aaaaaaaa" 'list)
+				 t (nil 0)))
+	collect (list etype result))
+  nil)
+
+;;; float tests
+
+(deftest vector-push-extend.29
+  (loop for adj in '(nil t)
+	nconc
+	(loop for etype in '(short-float single-float double-float long-float)
+	      for zero in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	      for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	      for a1 = (make-array 10 :initial-element zero
+				   :element-type etype)
+	      for a2 =(make-array 6
+				  :element-type etype
+				  :displaced-to a1
+				  :displaced-index-offset 2
+				  :adjustable adj
+				  :fill-pointer 0)
+	      for result = (list (fill-pointer a2)
+				 (map 'list #'identity a2)
+				 (vector-push-extend one a2)
+				 (fill-pointer a2)
+				 (map 'list #'identity a2)
+				 (map 'list #'identity a1))
+	      unless (equal result `(0 () 0 1 (,one) (,zero ,zero ,one ,zero ,zero ,zero ,zero ,zero ,zero ,zero)))
+	      collect (list etype adj result)))
+  nil)
+
+(deftest vector-push-extend.30
+  (loop for etype in '(short-float single-float double-float long-float)
+	for zero in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for a1 = (make-array 8 :initial-element zero
+			     :element-type etype)
+	for a2 = (make-array 6
+			     :element-type etype
+			     :displaced-to a1
+			     :displaced-index-offset 2
+			     :adjustable t
+			     :fill-pointer 6)
+	for result = (list (fill-pointer a2)
+			   (map 'list #'identity a2)
+			   (vector-push-extend one a2)
+			   (fill-pointer a2)
+			   (map 'list #'identity a2)
+			   (map 'list #'identity a1)
+			   (notnot (adjustable-array-p a2))
+			   (multiple-value-list (array-displacement a1)))
+	unless (equal result `(6 (,zero ,zero ,zero ,zero ,zero ,zero)
+				 6 7
+				 (,zero ,zero ,zero ,zero ,zero ,zero ,one)
+				 (,zero ,zero ,zero ,zero ,zero ,zero ,zero ,zero)
+				 t (nil 0)))
+	collect (list etype result))
+  nil)
+
+
 ;;; Error tests
 
 (defun vector-push-extend-error-test (seq val)
@@ -501,9 +606,3 @@
 	    ))))
    (error () t))
   t)
-
-
-
-
-
-
