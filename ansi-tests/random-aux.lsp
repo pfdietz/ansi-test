@@ -61,6 +61,36 @@
   (+ (random (1+ (- most-positive-fixnum most-negative-fixnum)))
      most-negative-fixnum))
 
+(defun random-thing (n)
+  (if (<= n 1)
+      (random-leaf)
+    (rcase
+     (1 (apply #'cons (mapcar #'random-thing (random-partition (1- n) 2))))
+     (1 (apply #'vector (mapcar #'random-thing
+				(random-partition (1- n) (max 10 (1- n))))))
+     )))
+
+(declaim (special +standard-chars+ *cl-symbols-vector*))
+
+(defun make-random-string (n)
+  (make-array n
+	      :initial-contents
+	      (loop repeat n collect
+		    (random-from-seq +standard-chars+))
+	      :element-type (random-from-seq
+			     #(character standard-char base-char))))
+
+(defun random-leaf ()
+  (rcase
+   (1 (let ((k (ash 1 (1+ (random 40)))))
+	(random-from-interval k (- k))))
+   (1 (random-from-seq +standard-chars+))
+   (1 (random-real))
+   (1 (make-random-string (random 20)))
+   (1 (gensym))
+   (1 (make-symbol (make-random-string (random 20))))
+   (1 (random-from-seq *cl-symbols-vector*))))
+
 (defun random-from-interval (upper &optional (lower (- upper)))
   (+ (random (- upper lower)) lower))
 

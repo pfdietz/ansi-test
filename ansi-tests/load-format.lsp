@@ -1,0 +1,34 @@
+;-*- Mode:     Lisp -*-
+;;;; Author:   Paul Dietz
+;;;; Created:  Mon Aug  2 21:47:02 2004
+;;;; Contains: Load format-related tests
+
+(in-package :cl-test)
+
+;;; Format tests
+
+;;; 22.3.1
+(load "format-c.lsp")
+(load "format-percent.lsp")
+(load "format-ampersand.lsp")
+(load "format-page.lsp")
+(load "format-tilde.lsp")
+
+;;; 22.3.2
+(load "format-r.lsp")
+(load "format-d.lsp")
+(load "format-b.lsp")
+(load "format-o.lsp")
+(load "format-x.lsp")
+
+;;; 22.3.3
+(load "format-f.lsp")
+
+;;; 22.3.4
+(load "format-a.lsp")
+(load "format-s.lsp")
+
+;;; 22.3.5
+(load "format-underscore.lsp")
+
+

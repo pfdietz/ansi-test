@@ -944,6 +944,3 @@ the condition to go uncaught if it cannot be classified."
 	 (*read-suppress* nil)
 	 (*readtable* (copy-readtable nil)))
      ,@body))
-
-	 
-	 

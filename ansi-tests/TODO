@@ -90,3 +90,6 @@ Got:      0
   a collection of random test harnesses.
 
 27. Be sure the various string operations work on non-simple strings.
+
+28. Add tests for reading/printing with packages with weird names (lower case letters,
+  digits, etc.)

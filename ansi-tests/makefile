@@ -18,7 +18,7 @@ random-test:
 		(load \"gclload1.lsp\") \
 		(funcall (symbol-function 'compile-and-load) \"random-int-form.lsp\")))  \
 	      (in-package :cl-test) \
-	      (let ((x (cl-test::test-random-integer-forms 1000 10 100 :random-size t :random-nvars t))) \
+	      (let ((x (cl-test::test-random-integer-forms 100 10 1000 :random-size t :random-nvars t))) \
 		(setq x (cl-test::prune-results x)) \
 		(with-open-file (*standard-output* \"failures.lsp\" \
 		   :direction :output \

@@ -317,7 +317,7 @@
     (rcase
 
      ;; flet call
-     #-(or armedbear)
+     ;; #-(or armedbear)
      (30 ;; 5
       (make-random-integer-flet-call-form size))
 
@@ -549,7 +549,7 @@
 	;; No blocks -- try again
 	(make-random-integer-form size)))
 
-     #-(or armedbear)
+     ; #-(or armedbear)
      (20
       (make-random-flet-form size))
 

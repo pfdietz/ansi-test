@@ -24,9 +24,12 @@
   "#0AA")
 
 (deftest print.array.0.3
-  (let ((a (make-array nil :initial-element 0)))
-    (subseq (write-to-string a :readably nil :array nil) 0 2))
-  "#<")
+  (let* ((a (make-array nil :initial-element 0))
+	 (result (write-to-string a :readably nil :array nil)))
+    (values
+     (subseq result 0 2)
+     (subseq result (1- (length result)))))
+  "#<" ">")
 
 (deftest print.array.0.4
    (let ((a (make-array nil :initial-element 0 :adjustable t)))
@@ -96,17 +99,20 @@
   nil)
 
 (deftest print.array.0.13
-  (subseq (write-to-string (make-array nil :initial-element 0)
-			   :readably nil :array nil)
-	  0 2)
-  "#<")
+  (let ((result (write-to-string (make-array nil :initial-element 0)
+				 :readably nil :array nil)))
+    (values
+     (subseq result 0 2)
+     (subseq result (1- (length result)))))
+  "#<" ">")
 
 (deftest print.array.0.14
   (loop for i from 1 to 64
 	for type = `(unsigned-byte ,i)
 	for a = (make-array nil :element-type type :initial-element 1)
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list i result))
   nil)
 
@@ -115,7 +121,8 @@
 	for type = `(signed-byte ,i)
 	for a = (make-array nil :element-type type :initial-element -1)
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list i result))
   nil)
 
@@ -124,7 +131,8 @@
 	for a = (make-array nil :element-type type
 			    :initial-element (coerce 17 type))
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list type result))
   nil)
 
@@ -135,7 +143,8 @@
 	for a = (make-array nil :element-type type
 			    :initial-element (complex 0 (coerce 3 type0)))
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list type result))
   nil)
 
@@ -354,17 +363,18 @@
 
 
 (deftest print.array.2.27
-  (subseq (write-to-string (make-array '(2 3) :initial-element 0)
-			   :readably nil :array nil)
-	  0 2)
-  "#<")
+  (let ((str (write-to-string (make-array '(2 3) :initial-element 0)
+			      :readably nil :array nil)))
+    (values (subseq str 0 2) (subseq str (1- (length str)))))
+  "#<" ">")
 
 (deftest print.array.2.28
   (loop for i from 1 to 64
 	for type = `(unsigned-byte ,i)
 	for a = (make-array '(4 3) :element-type type :initial-element 1)
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list i result))
   nil)
 
@@ -373,7 +383,8 @@
 	for type = `(signed-byte ,i)
 	for a = (make-array '(4 8) :element-type type :initial-element -1)
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list i result))
   nil)
 
@@ -382,7 +393,8 @@
 	for a = (make-array '(5 7) :element-type type
 			    :initial-element (coerce 17 type))
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list type result))
   nil)
 
@@ -393,7 +405,8 @@
 	for a = (make-array '(13 5) :element-type type
 			    :initial-element (complex 0 (coerce 3 type0)))
 	for result = (write-to-string a :readably nil :array nil)
-	unless (string= (subseq result 0 2) "#<")
+	unless (and (string= (subseq result 0 2) "#<")
+		    (string= (subseq result (1- (length result))) ">"))
 	collect (list type result))
   nil)
 

@@ -5,14 +5,18 @@
 
 (in-package :cl-test)
 
+(eval-when (load eval compile) (compile-and-load "random-aux.lsp"))
+
 (defmacro def-print-test (name form result &rest bindings)
   `(deftest ,name
-     (equalpt
-      (my-with-standard-io-syntax
-	(let ((*print-readably* nil))
-	  (let ,bindings
-	    (with-output-to-string (*standard-output*) (prin1 ,form)))))
-      ,result)
+     (if (equalpt
+	  (my-with-standard-io-syntax
+	   (let ((*print-readably* nil))
+	     (let ,bindings
+	       (with-output-to-string (*standard-output*) (prin1 ,form)))))
+	  ,result)
+	 t
+       ,result)
      t))
 
 (defmacro def-pprint-test
@@ -112,7 +116,7 @@
 	   (with-standard-io-syntax (format *debug-io* "~%~A~%" params)))
 	 (finish-output *debug-io*))
        
-       (setf (readtable-case *readtable*) readcase)
+       #-gcl (setf (readtable-case *readtable*) readcase)
        (let* ((str (handler-case
 		    (with-output-to-string (s) (write obj :stream s))
 		    (print-not-readable
@@ -218,3 +222,155 @@
      (1 (- (random 2001) 1000))
      (1 (random 1000.0))
      )))
+
+;;; Random printing test for WRITE and related functions
+
+(defun funcall-with-print-bindings
+  (fun &key
+       ((:array *print-array*)                     *print-array*)
+       ((:base *print-base*)                       *print-base*)
+       ((:case *print-case*)                       *print-case*)
+       ((:circle *print-circle*)                   *print-circle*)
+       ((:escape *print-escape*)                   *print-escape*)
+       ((:gensym *print-gensym*)                   *print-gensym*)
+       ((:length *print-length*)                   *print-length*)
+       ((:level *print-level*)                     *print-level*)
+       ((:lines *print-lines*)                     *print-lines*)
+       ((:miser-width *print-miser-width*)         *print-miser-width*)
+       ((:pprint-dispatch *print-pprint-dispatch*) *print-pprint-dispatch*)
+       ((:pretty *print-pretty*)                   *print-pretty*)
+       ((:radix *print-radix*)                     *print-radix*)
+       ((:readably *print-readably*)               *print-readably*)
+       ((:right-margin *print-right-margin*)       *print-right-margin*)
+       ((:stream *standard-output*)                *standard-output*))
+  (funcall fun))
+  
+(defun output-test
+  (obj &key
+       (fun #'write)
+       ((:array *print-array*)                     *print-array*)
+       ((:base *print-base*)                       *print-base*)
+       ((:case *print-case*)                       *print-case*)
+       ((:circle *print-circle*)                   *print-circle*)
+       ((:escape *print-escape*)                   *print-escape*)
+       ((:gensym *print-gensym*)                   *print-gensym*)
+       ((:length *print-length*)                   *print-length*)
+       ((:level *print-level*)                     *print-level*)
+       ((:lines *print-lines*)                     *print-lines*)
+       ((:miser-width *print-miser-width*)         *print-miser-width*)
+       ((:pprint-dispatch *print-pprint-dispatch*) *print-pprint-dispatch*)
+       ((:pretty *print-pretty*)                   *print-pretty*)
+       ((:radix *print-radix*)                     *print-radix*)
+       ((:readably *print-readably*)               *print-readably*)
+       ((:right-margin *print-right-margin*)       *print-right-margin*)
+       ((:stream *standard-output*)                *standard-output*))
+  (let ((results (multiple-value-list (apply fun obj))))
+    (assert (= (length results) 1))
+    (assert (eql (car results) obj))
+    obj))
+
+(defun make-random-key-param (name)
+  (rcase (1 nil)
+	 (1 `(,name nil))
+	 (1 `(,name t))))
+
+(defun make-random-key-integer-or-nil-param (name bound)
+  (rcase (1 nil)
+	 (1 `(,name nil))
+	 (1 `(,name ,(random bound)))))
+
+(defun make-random-write-args ()
+  (let* ((arg-lists `(,@(mapcar #'make-random-key-param
+					    '(:array :circle :escape :gensym :pretty :radix :readably))
+				    ,(rcase (1 nil)
+					    (1 `(:base ,(+ 2 (random 35)))))
+				    ,(and (coin)
+					  `(:case ,(random-from-seq #(:upcase :downcase :capitalize))))
+				    ,@(mapcar #'make-random-key-integer-or-nil-param
+					      '(:length :level :lines :miser-width :right-margin)
+					      '(100 20 50 200 200)))))
+		(reduce #'append (random-permute arg-lists) :from-end t)))
+
+(defmacro def-random-write-test-fun (name write-args test-fn
+					  &key
+					  (prefix "")
+					  (suffix ""))
+  `(defun ,name (n)
+     (loop
+      for args = (make-random-write-args)
+      for package = (find-package (random-from-seq #("CL-TEST" "CL-USER" "KEYWORD")))
+      for obj = (random-thing (random 1))
+      for s1 = (let ((*package* package))
+		 (with-output-to-string (s) (apply #'write obj :stream s ,@write-args args)))
+      for s2 = (let ((*package* package))
+		 (with-output-to-string
+		   (*standard-output*)
+		   (apply #'output-test obj :fun ,test-fn args)))
+      repeat n
+      unless (string= (concatenate 'string ,prefix s1 ,suffix) s2)
+      collect (list obj s1 s2))))
+
+(def-random-write-test-fun random-write-test nil #'write)
+(def-random-write-test-fun random-prin1-test (:escape t) #'prin1)
+(def-random-write-test-fun random-princ-test (:escape nil :readably nil) #'princ)
+(def-random-write-test-fun random-print-test (:escape t) #'print :prefix (string #\Newline) :suffix " ")
+(def-random-write-test-fun random-pprint-test (:escape t :pretty t)
+  #'(lambda (obj) (assert (null (multiple-value-list (pprint obj)))) obj)
+  :prefix (string #\Newline))
+
+(defmacro def-random-write-to-string-test-fun (name write-args test-fn
+					  &key
+					  (prefix "")
+					  (suffix ""))
+  `(defun ,name (n)
+     (loop
+      for args = (make-random-write-args)
+      for package = (find-package (random-from-seq #("CL-TEST" "CL-USER" "KEYWORD")))
+      for obj = (random-thing (random 1))
+      for s1 = (let ((*package* package))
+		 (with-output-to-string (s) (apply #'write obj :stream s ,@write-args args)))
+      for s2 = (let ((*package* package))
+		 (apply ,test-fn obj args))
+      repeat n
+      unless (string= (concatenate 'string ,prefix s1 ,suffix) s2)
+      collect (list obj s1 s2))))
+
+(def-random-write-to-string-test-fun random-write-to-string-test nil #'write-to-string)
+(def-random-write-to-string-test-fun random-prin1-to-string-test (:escape t)
+  #'(lambda (obj &rest args)
+      (apply #'funcall-with-print-bindings #'(lambda () (prin1-to-string obj)) args)))
+(def-random-write-to-string-test-fun random-princ-to-string-test (:escape nil :readably nil)
+  #'(lambda (obj &rest args)
+      (apply #'funcall-with-print-bindings #'(lambda () (princ-to-string obj)) args)))
+
+;;; Routines for testing floating point printing
+
+(defun decode-fixed-decimal-string (s)
+  "Return a rational equal to the number represented by a decimal floating
+   (without exponent).  Trim off leading/trailing spaces."
+
+  (setq s (string-trim " " s))
+  (assert (> (length s) 0))
+  (let (neg)
+    (when (eql (elt s 0) #\-)
+      (setq s (subseq s 1))
+      (setq neg t))
+    ;; Check it's of the form {digits}.{digits}
+    (let ((dot-pos (position #\. s)))
+      (assert dot-pos)
+      (let ((prefix (subseq s 0 dot-pos))
+	    (suffix (subseq s (1+ dot-pos))))
+	(assert (every #'digit-char-p prefix))
+	(assert (every #'digit-char-p suffix))
+	(let* ((prefix-len (length prefix))
+	       (prefix-integer (if (eql prefix-len 0)
+				   0
+				 (parse-integer prefix)))
+	       (suffix-len (length suffix))
+	       (suffix-integer (if (eql suffix-len 0)
+				   0
+				 (parse-integer suffix)))
+	       (magnitude (+ prefix-integer
+			     (* suffix-integer (expt 1/10 suffix-len)))))
+	  (if neg (- magnitude) magnitude))))))
+
