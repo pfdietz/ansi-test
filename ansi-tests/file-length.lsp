@@ -62,12 +62,10 @@
   t)
 
 (deftest file-length.error.8
-  (signals-error
-   (with-open-file
-     (os "tmp.txt" :direction :output :if-exists :supersede)
-     (let ((s (make-broadcast-stream os)))
-       (unwind-protect (file-length s) (close s))))
-   type-error)
+  (with-open-file
+   (os "tmp.txt" :direction :output :if-exists :supersede)
+   (let ((s (make-broadcast-stream os)))
+     (eqlt (file-length s) (file-length os))))
   t)
 
 (deftest file-length.error.9
