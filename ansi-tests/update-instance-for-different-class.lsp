@@ -85,3 +85,59 @@
   t t
   (t t)
   2 1)
+
+
+;;; after method
+
+(defclass uifdc-class-02 () ((a :initform 'x :initarg :a)
+			      (b :initarg :b)))
+
+(defmethod update-instance-for-different-class :after
+  ((from-obj uifdc-class-01a)
+   (to-obj uifdc-class-02)
+   &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (setf (slot-value to-obj 'a) 100)
+  to-obj)
+
+(deftest update-instance-for-different-class.5
+  (let* ((obj (make-instance 'uifdc-class-01a))
+	 (class (find-class 'uifdc-class-02)))
+    (values
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)))
+  t (t nil) 100)
+
+(deftest update-instance-for-different-class.6
+  (let* ((obj (make-instance 'uifdc-class-01a :a 1))
+	 (class (find-class 'uifdc-class-02)))
+    (values
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)))
+  t (t nil) 100)
+
+(deftest update-instance-for-different-class.7
+  (let* ((obj (make-instance 'uifdc-class-01a :b 17))
+	 (class (find-class 'uifdc-class-02)))
+    (values
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  t (t t) 100 17)
+
+(deftest update-instance-for-different-class.8
+  (let* ((obj (make-instance 'uifdc-class-01a :b 17 :a 4))
+	 (class (find-class 'uifdc-class-02)))
+    (values
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  t (t t) 100 17)
+
+
+
+
