@@ -104,11 +104,17 @@
   (do-entry (get-entry name)))
 
 (defun equalp-with-case (x y)
+  "Like EQUALP, but doesn't do case conversion of characters.
+   Currently doesn't work on arrays of dimension > 1."
   (cond
    ((consp x)
     (and (consp y)
 	 (equalp-with-case (car x) (car y))
 	 (equalp-with-case (cdr x) (cdr y))))
+   ((and (typep x 'array)
+	 (typep y 'array)
+	 (not (eql (array-rank x) (array-rank y))))
+    nil)
    ((typep x 'vector)
     (and (typep y 'vector)
 	 (let ((x-len (length x))
@@ -118,6 +124,9 @@
 		 for e1 across x
 		 for e2 across y
 		 always (equalp-with-case e1 e2))))))
+   ((and (typep x 'array)
+	 (= (array-rank x) 0))
+    (equalp-with-case (aref x) (aref y)))
    (t (eql x y))))
 
 (defun do-entry (entry &optional

@@ -51,19 +51,21 @@
   (and (typep a1 'array)
        (typep a2 'array)
        (= (array-rank a1) (array-rank a2))
-       (let ((ad (array-dimensions a1)))
-	 (and (equal ad (array-dimensions a2))
-	      (if (= (array-rank a1) 1)
-		  (let ((as (first ad)))
-		    (loop
-		     for i from 0 below as
-		     always (equal (aref a1 i) (aref a2 i))))
-		(let ((as (array-total-size a1)))
-		  (and (= as (array-total-size a2))
-		       (loop
-			for i from 0 below as
-			always (equal (row-major-aref a1 i)
-				      (row-major-aref a2 i))))))))))
+       (if (= (array-rank a1) 0)
+	   (equal (aref a1) (aref a2))
+	 (let ((ad (array-dimensions a1)))
+	   (and (equal ad (array-dimensions a2))
+		(if (= (array-rank a1) 1)
+		    (let ((as (first ad)))
+		      (loop
+		       for i from 0 below as
+		       always (equal (aref a1 i) (aref a2 i))))
+		  (let ((as (array-total-size a1)))
+		    (and (= as (array-total-size a2))
+			 (loop
+			  for i from 0 below as
+			  always (equal (row-major-aref a1 i)
+					(row-major-aref a2 i)))))))))))
 
 ;;; *universe* is defined elsewhere -- it is a list of various
 ;;; lisp objects used when stimulating things in various tests.

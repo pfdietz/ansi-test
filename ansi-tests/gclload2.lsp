@@ -123,6 +123,9 @@
 (load "cons-test-24.lsp")
 (load "cons-test-25.lsp")
 
+;;; Tests on arrays
+(load "make-array.lsp")
+
 ;;; Tests of packages
 
 (load "packages.lsp")
