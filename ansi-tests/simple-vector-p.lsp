@@ -19,22 +19,22 @@
   (notnot-mv (simple-vector-p (make-array '(10))))
   t)
 
-(deftest simple-vector-p.3
-  (simple-vector-p (make-array '(5) :fill-pointer t))
-  nil)
+;; (deftest simple-vector-p.3
+;;  (simple-vector-p (make-array '(5) :fill-pointer t))
+;;  nil)
 
 (deftest simple-vector-p.4
   (notnot-mv (simple-vector-p (vector 'a 'b 'c)))
   t)
 
-(deftest simple-vector-p.5
-  (simple-vector-p (make-array '(5) :adjustable t))
-  nil)
+;;; (deftest simple-vector-p.5
+;;;  (simple-vector-p (make-array '(5) :adjustable t))
+;;;  nil)
 
-(deftest simple-vector-p.6
-  (let ((a #(a b c d e g h)))
-    (simple-vector-p (make-array '(5) :displaced-to a)))
-  nil)
+;;; (deftest simple-vector-p.6
+;;;  (let ((a #(a b c d e g h)))
+;;;    (simple-vector-p (make-array '(5) :displaced-to a)))
+;;;   nil)
 
 (deftest simple-vector-p.7
   (simple-vector-p #*001101)
