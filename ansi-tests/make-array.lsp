@@ -404,3 +404,61 @@
 			    :displaced-to a
 			    :displaced-index-offset 10))
   #*)
+
+(deftest make-array.displaced.11
+  (let ((a (make-array '(10) :element-type 'base-char
+		       :initial-contents "abcdefghij")))
+    (make-array-with-checks '(5) :element-type 'base-char
+			    :displaced-to a))
+  "abcde")
+
+(deftest make-array.displaced.12
+  (let ((a (make-array '(10) :element-type 'base-char
+		       :initial-contents "abcdefghij")))
+    (loop for i from 0 to 5 collect
+	  (make-array-with-checks '(5) :element-type 'base-char
+				  :displaced-to a
+				  :displaced-index-offset i)))
+  ("abcde"
+   "bcdef"
+   "cdefg"
+   "defgh"
+   "efghi"
+   "fghij"))
+
+(deftest make-array.displaced.13
+  (let ((a (make-array '(10) :element-type 'base-char
+		       :initial-contents "abcdefghij")))
+    (make-array-with-checks '(0) :element-type 'base-char
+			    :displaced-to a
+			    :displaced-index-offset 10))
+  "")
+
+(deftest make-array.displaced.14
+  (let ((a (make-array '(10) :element-type 'character
+		       :initial-contents "abcdefghij")))
+    (make-array-with-checks '(5) :element-type 'character
+			    :displaced-to a))
+  "abcde")
+
+(deftest make-array.displaced.15
+  (let ((a (make-array '(10) :element-type 'character
+		       :initial-contents "abcdefghij")))
+    (loop for i from 0 to 5 collect
+	  (make-array-with-checks '(5) :element-type 'character
+				  :displaced-to a
+				  :displaced-index-offset i)))
+  ("abcde"
+   "bcdef"
+   "cdefg"
+   "defgh"
+   "efghi"
+   "fghij"))
+
+(deftest make-array.displaced.16
+  (let ((a (make-array '(10) :element-type 'character
+		       :initial-contents "abcdefghij")))
+    (make-array-with-checks '(0) :element-type 'character
+			    :displaced-to a
+			    :displaced-index-offset 10))
+  "")
