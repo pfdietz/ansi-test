@@ -152,9 +152,17 @@
     (with-slots (a b c) obj (values a b c)))
   missing missing missing)
 
+(deftest with-slots.19
+  (let ((obj (make-instance 'with-slots-class-01 :a 'x :b 'y :c 'z)))
+    (with-slots (a b c) obj
+		(declare (optimize (speed 3) (safety 3)))
+		(values a b c)))
+  x y z)
 
-
-
-
-
-
+(deftest with-slots.20
+  (let ((obj (make-instance 'with-slots-class-01 :a 'x :b 'y :c 'z)))
+    (with-slots (a b c) obj
+		(declare (optimize (speed 3) (safety 3)))
+		(declare (special *x*))
+		(values a b c)))
+  x y z)
