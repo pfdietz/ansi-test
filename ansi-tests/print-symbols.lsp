@@ -304,45 +304,36 @@
   nil)
 
 (deftest print.symbol.random.3
-  (let ((result nil) (count 0) (tries 0))
-    (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
-      (when (find-package pkg-name)
-	(delete-package pkg-name)))
-    (block done
-      (do-all-symbols (s)
-	(when (symbol-package s)
-	  (incf tries)
-	  (let ((problem (randomly-check-readability s)))
-	    (when problem
-	      (setf result (nconc problem result))
-	      (when (= (incf count) 10)
-		(push (format nil "... ~A out of ~A, stopping test ..."
-			      count tries)
-		      result)
-		(return-from done)))))))
-    (reverse result))
+  (let ((count 0)
+	(symbols (make-array '(1000) :fill-pointer 0 :adjustable t)))
+    ;; Find all symbols that have a home package, put into array SYMBOLS
+    (do-all-symbols (s)
+      (when (symbol-package s)
+	(vector-push-extend s symbols (array-dimension symbols 0))))
+    (loop for i = (random (fill-pointer symbols))
+	  for s = (aref symbols i)
+	  for tries from 1 to 10000
+	  for problem = (randomly-check-readability s)
+	  nconc problem
+	  when problem do (incf count)
+	  while (< count 10)))
   nil)
 
 (deftest print.symbol.random.4
-  (let ((result nil) (count 0) (tries 0))
-    (let ((pkg-name "PRINT-SYMBOL-TEST-PACKAGE"))
-      (when (find-package pkg-name)
-	(delete-package pkg-name)))
-    (block done
-      (do-all-symbols (s)
-	(when (symbol-package s)
-	  (incf tries)
-	  (let ((problem
-		 (let ((*package* (symbol-package s)))
-		   (randomly-check-readability s))))
-	    (when problem
-	      (setf result (nconc problem result))
-	      (when (= (incf count) 10)
-		(push (format nil "... ~A out of ~A, stopping test ..."
-			      count tries)
-		      result)
-		(return-from done)))))))
-    (reverse result))
+  (let ((count 0)
+	(symbols (make-array '(1000) :fill-pointer 0 :adjustable t)))
+    ;; Find all symbols that have a home package, put into array SYMBOLS
+    (do-all-symbols (s)
+      (when (symbol-package s)
+	(vector-push-extend s symbols (array-dimension symbols 0))))
+    (loop for i = (random (fill-pointer symbols))
+	  for s = (aref symbols i)
+	  for tries from 1 to 10000
+	  for problem = (let ((*package* (symbol-package s)))
+			  (randomly-check-readability s))
+	  nconc problem
+	  when problem do (incf count)
+	  while (< count 10)))
   nil)
 
 ;;;; Tests of printing with escaping enabled
