@@ -392,6 +392,32 @@
   (subtypep* '(long-float 0.0l0 10.0l0) '(long-float 0.0l0 (10.0l0)))
   nil t)
 
+(deftest subtypep.float.24
+  (check-equivalence '(and (short-float 0.0s0 2.0s0)
+			   (short-float 1.0s0 3.0s0))
+		     '(short-float 1.0s0 2.0s0))
+  nil)
+
+(deftest subtypep.float.25
+  (check-equivalence '(and (single-float 0.0f0 2.0f0)
+			   (single-float 1.0f0 3.0f0))
+		     '(single-float 1.0f0 2.0f0))
+  nil)
+
+(deftest subtypep.float.26
+  (check-equivalence '(and (double-float 0.0d0 2.0d0)
+			   (double-float 1.0d0 3.0d0))
+		     '(double-float 1.0d0 2.0d0))
+  nil)
+
+(deftest subtypep.float.27
+  (check-equivalence '(and (long-float 0.0l0 2.0l0)
+			   (long-float 1.0l0 3.0l0))
+		     '(long-float 1.0l0 2.0l0))
+  nil)
+
+
+
 
 ;;; SUBTYPEP on CONS types
 
@@ -528,6 +554,12 @@
        (t (check-disjointness t1 t2)))))
   nil)
 
+(deftest subtypep.member.19
+  (let ((i1 (1+ most-positive-fixnum))
+	(i2 (1+ most-positive-fixnum)))
+    (check-equivalence `(member 0 ,i1) `(member 0 ,i2)))
+  nil)
+
 ;;; Tests of EQL types
 
 (deftest subtypep.eql.1
@@ -552,6 +584,11 @@
        (t (check-disjointness t1 t2)))))
   nil)
 
+(deftest subtypep.eql.3
+  (let ((i1 (1+ most-positive-fixnum))
+	(i2 (1+ most-positive-fixnum)))
+    (check-equivalence `(eql ,i1) `(eql ,i2)))
+  nil)
 
 
     
