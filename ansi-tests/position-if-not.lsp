@@ -217,6 +217,14 @@
      (position-if-not #'symbolp a :from-end t)))
   nil 0 nil 4)
 
+(deftest position-if-not-vector.14
+  (let* ((v1 #(x x x a b 1 d a b 2 d y y y y y))
+	 (v2 (make-array '(8) :displaced-to v1
+			:displaced-index-offset 3)))
+    (values (position-if-not #'symbolp v2)
+	    (position-if-not #'symbolp v2 :from-end t)))
+  2 6)
+
 ;;; Bit vector tests
 
 (deftest position-if-not-bit-vector.1
@@ -443,6 +451,20 @@
 	  (position-if-not #'digit-char-p a :from-end t)
 	  (position-if-not (complement #'digit-char-p) a :from-end t))))
   nil 0 nil 4)
+
+(deftest position-if-not-string.14
+  (do-special-strings
+   (s "12345a6  78b90" nil)
+   (let ((pos (position-if-not (complement #'alpha-char-p) s)))
+     (assert (eql pos 5) () "First alpha char in ~A is at position ~A" s pos)))
+  nil)
+
+(deftest position-if-not-string.15
+  (do-special-strings
+   (s "12345a6  78b90" nil)
+   (let ((pos (position-if-not (complement #'alpha-char-p) s :from-end t)))
+     (assert (eql pos 11) () "Last alpha char in ~A is at position ~A" s pos)))
+  nil)
 
 (deftest position-if-not.order.1
   (let ((i 0) a b c d e f)
