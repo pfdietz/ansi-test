@@ -82,11 +82,11 @@
       ;; Delete the P2 package, catching the continuable
       ;; error and deleting the package
       
-      (catch 'continue-failed
-	  (let ((*debugger-hook* #'catch-continue-debugger-hook)
-		(*catch-error-type* 'package-error))
-	    (declare (special *debugger-hook* *catch-error-type*))
-	    (delete-package P2)))
+      (handler-bind ((package-error
+		      #'(lambda (c)
+			  (let ((r (find-restart 'continue c)))
+			    (and r (invoke-restart r))))))
+		    (delete-package P2))
 
       (unless (and (equal (package-name P1) "P1")
 		   (null  (package-name P2))
@@ -131,13 +131,13 @@
 ;;;   some sort of interaction with the test harness.
 
 (deftest delete-package-6
-    (progn
-      (when (find-package "TEST-20") (delete-package "TEST-20"))
-      (catch 'continue-failed
-	(let ((*debugger-hook* #'catch-continue-debugger-hook)
-	      (*catch-error-type* 'package-error))
-	  (declare (special *debugger-hook* *catch-error-type*))
-	  (and (not (delete-package "TEST-20"))
-	       t))))
+  (progn
+    (when (find-package "TEST-20") (delete-package "TEST-20"))
+    (handler-bind ((package-error
+		    #'(lambda (c)
+			(let ((r (find-restart 'continue c)))
+			  (and r (invoke-restart r))))))
+		  (and (not (delete-package "TEST-20"))
+		       t)))
   t)
 
