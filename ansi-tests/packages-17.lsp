@@ -7,11 +7,11 @@
 (declaim (optimize (safety 3)))
 
 (deftest do-symbols-1
-    (equal
-     (sort-symbols (let ((all nil))
-		     (do-symbols (x "B" all) (push x all))))
-     (list (find-symbol "BAR" "B")
-	   (find-symbol "FOO" "A")))
+  (equal
+   (sort-symbols (let ((all nil))
+		   (do-symbols (x "B" all) (push x all))))
+   (list (find-symbol "BAR" "B")
+	 (find-symbol "FOO" "A")))
   t)
 
 ;;
@@ -37,15 +37,15 @@
   (DS2:A DS2::E DS2::F DS2:G DS2:H))
 
 (deftest do-symbols-4
-    (collect-symbols "DS3")
+  (collect-symbols "DS3")
   (DS1:A DS3:B DS2:G DS2:H DS3:I DS3:J DS3:K DS3::L DS3::M))
 
 (deftest do-symbols-5
-    (remove-duplicates
-     (collect-symbols "DS4")
-     :test #'(lambda (x y)
-	       (and (eq x y)
-		    (not (eq x 'DS4::B)))))
+  (remove-duplicates
+   (collect-symbols "DS4")
+   :test #'(lambda (x y)
+	     (and (eq x y)
+		  (not (eq x 'DS4::B)))))
   (DS1:A DS1:B DS2::F DS3:G DS3:I DS3:J DS3:K DS4::X DS4::Y DS4::Z))
 
 
