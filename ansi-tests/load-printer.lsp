@@ -30,3 +30,4 @@
 (load "pprint-linear.lsp")
 (load "pprint-tabular.lsp")
 (load "pprint-indent.lsp")
+(load "pprint-logical-block.lsp")
