@@ -282,6 +282,18 @@
 	 (equalpt x y)))
   t)
 
+(deftest remove-list.29
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (remove 3 x :count 1000000000000)))
+    (and (equalp orig x)
+	 y))
+  (1 2 2 6 1 2 4 1 2 7))
+
+;;; Assorted tests of remove and delete on vectors, strings,
+;;; and bit vectors.  These are mostly to exercise bugs previously
+;;; detected by the randomized tests
+
 (deftest remove-vector.1
   (remove 'a (vector 'b 'c 'd))
   #(b c d))
