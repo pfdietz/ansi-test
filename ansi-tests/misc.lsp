@@ -7174,3 +7174,23 @@ Broken at C::WT-C-INLINE-LOC.
 				 (rational (common-lisp:handler-case 0))))
 			    0)))))))
   0)
+
+(deftest misc.377
+  (funcall
+   (compile
+    nil
+    '(lambda (e) ; (a b c d e)
+       (declare (type (integer -46778182694 512) e))
+       (declare (optimize (speed 3) (space 3) (safety 2) (debug 2)
+			  (compilation-speed 3)))
+       (if (block b3
+	     (numerator (progn (tagbody (truncate (dotimes (iv3 0 0)
+						    (block b3 0)))
+					(multiple-value-bind (*s5*)
+					    (cons 0 e)
+					  (rationalize (cdr *s5*))))
+			       0)))
+	   0
+	 0)))
+   10)
+  0)
