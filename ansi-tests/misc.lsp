@@ -1404,7 +1404,7 @@
                         (if (= 55957 a) -117 (ignore-errors
                                                (return-from b3 a))))))))
    -589)
-  -117 0)
+  -589 0)
 
 ;;; sbcl (0.8.5.8) "The value NIL is not of type SB-C::CTRAN"
 
@@ -1425,15 +1425,50 @@
 (deftest misc.114
   (funcall
    (compile nil
-            '(lambda (a b c)
+            '(lambda (a b)
                (unwind-protect
                    (block b2
                      (flet ((%f1 nil b))
-                       (logior (if a (if (ldb-test (byte 23 1) 253966182) (return-from b2 a) -103275090) 62410)
+                       (logior (if a
+				   (if (ldb-test (byte 23 1) 253966182)
+				       (return-from b2 a)
+				     -103275090)
+				 62410)
                                (if (not (not (if (not nil) t (ldb-test (byte 2 27) 253671809))))
                                    (return-from b2 -22)
-                                 (%f1)
-                                 )))))))
-   777595384624 -1510893868 -41632818690)
+                                 (%f1))))))))
+   777595384624 -1510893868)
   777595384624)
 
+;;; clisp (1 Oct 2003 cvs HEAD) "Compiler bug!! Occurred in OPTIMIZE-LABEL."
+
+(deftest misc.115
+  (funcall
+   (compile nil
+            '(lambda (a b c)
+	       (declare (type (integer 0 1000) a b c))
+	       (if (and (if b (not (and (not (or a t)) nil)) nil)
+			(logbitp 6 c))
+		   c b)))
+   0 100 600)
+  100)
+
+(deftest misc.116
+  (funcall
+   (compile nil
+	    '(lambda (a c)
+	       (declare (type (integer 0 1000) a c))
+	       (if (if (and (not (and (not (or a t)) nil)) t) c nil)
+		   91 -1725615)))
+   0 0)
+  91)
+
+(deftest misc.117
+  (funcall
+   (compile nil
+	    '(lambda (a c)
+	       (declare (type (integer 0 1000) a c))
+	       (if (or c (not (or nil (not (and (not (or a t)) nil)))))
+		   373146181 115)))
+   0 0)
+  373146181)
