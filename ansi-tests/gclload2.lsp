@@ -128,4 +128,5 @@
 ;;; Tests of string comparison functions
 (compile-and-load "string-aux.lsp")
 (load "string-comparisons.lsp")
+(load "make-string.lsp")
 

@@ -139,7 +139,14 @@
 		 (and x y (eq comparison '=))))))))
 
 (defun make-random-string (n)
-  (let ((s (make-string n)))
+  (let ((s (random-case
+	    (make-string n)
+	    (make-array n :element-type 'character
+			:initial-element #\a)
+	    (make-array n :element-type 'standard-char
+			:initial-element #\a)
+	    (make-array n :element-type 'base-char
+			:initial-element #\a))))
     (if (coin)
 	(dotimes (i n)
 	  (setf (char s i) (elt #(#\a #\b #\A #\B) (random 4))))
@@ -151,12 +158,8 @@
 			 (random 62)))))))
     s))
 
-
-
-	     
-      
-		   
-		   
-
-
-  
+(defun string-all-the-same (s)
+  (let ((len (length s)))
+    (or (= len 0)
+	(let ((c (char s 0)))
+	  (loop for d across s always (eql c d))))))
