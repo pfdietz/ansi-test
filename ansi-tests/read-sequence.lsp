@@ -253,6 +253,7 @@
    type-error)
   t)
 
+;;; This test appears to cause Allegro CL to crash
 (deftest read-sequence.error.8
   (signals-error
    (read-sequence (make-string 3) (make-string-input-stream "abc")
