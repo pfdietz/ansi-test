@@ -69,3 +69,6 @@ Got:      (2 NULL)
     update-counter))
 Expected: 1
 Got:      0
+
+20. Add destructuring-bind and destructuring macro lambda list tests
+  for key and optional arguments, if they do not already exist
