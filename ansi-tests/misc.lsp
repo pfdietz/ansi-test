@@ -6226,3 +6226,127 @@ Broken at C::WT-C-INLINE-LOC.
 	 0)
   0)
 
+;;; Incorrect return value
+(deftest misc.337
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 2) (safety 2) (debug 0)
+			  (compilation-speed 0)))
+       (imagpart (block b8
+		   (logior (block b7 (return-from b8 225480400))))))))
+  0)
+
+;;; Inconsistent stack height 1 != 2
+(deftest misc.338
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile
+	 nil
+	 '(lambda (c)
+	    (conjugate (block b8 (max (if c (return-from b8 0) 0))))))
+	10))
+  0)
+
+;;; Inconsistent stack height 4 != 0
+(deftest misc.339
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda ()
+	(declare (optimize (speed 1) (space 3) (safety 3) (debug 0)
+			   (compilation-speed 0)))
+	(block b1
+	  (reduce #'min
+		  (list (return-from b1 0))
+		  :end    1
+		  :start  0
+		  :from-end t
+		  ))))))
+  0)
+
+;;;   The value INTEGER is not of type sequence.
+(deftest misc.340
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -4379340 -1962) a))
+       (declare (type (integer 1304043 3225940) b))
+       (declare (type (integer -3229571579853 -180689150012) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 3) (space 1) (safety 0) (debug 2)
+			  (compilation-speed 2)))
+       (coerce (rationalize (progn (tagbody (reduce #'logand
+						    (list b 0 (go tag3))
+						    :from-end
+						    t)
+					    tag3)
+				   0))
+	       'integer)))
+   -1625211 3052955 -2091182035681)
+  0)
+
+;;; Inconsistent stack height 1 != 2
+(deftest misc.341
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (c)
+	(declare (optimize (speed 2) (space 1) (safety 1) (debug 2)
+			   (compilation-speed 3)))
+	(logeqv (block b6
+		  (logeqv (case 0
+			    ((45293 29462 60403) (return-from b6 0))
+			    (t c)))))))
+    10))
+  10)
+
+;;;  Inconsistent stack height 0 != 1
+(deftest misc.342
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (a)
+	(declare (optimize (speed 1) (space 0) (safety 2) (debug 1)
+			   (compilation-speed 2)))
+	(progn (tagbody (imagpart (dotimes (iv3 0 a) (go 4)))
+			4)
+	       0)))
+    1))
+  0)
+
+;;; Expecting to find object/array on stack
+(deftest misc.343
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda ()
+	(declare (optimize (speed 2) (space 3) (safety 2) (debug 3)
+			   (compilation-speed 2)))
+	(mask-field (byte 0 0)
+		    (block b8
+		      (reduce 'logior
+			      (list (return-from b8 0) 0 0)
+			      :end      3
+			      :start    0
+			      :from-end t)))))))
+  0)
+
+    
+
+
