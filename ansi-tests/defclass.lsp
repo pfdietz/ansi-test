@@ -80,6 +80,3 @@
 (generate-slot-tests) ;; a macro
 
 
-
-
-

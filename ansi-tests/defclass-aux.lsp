@@ -112,6 +112,10 @@
 	 (initforms
 	  (loop for slot-option in slot-options
 		collect (collect-properties slot-option :initform)))
+	 (class-var-name
+	  (intern (concatenate 'string "*CLASS-" (symbol-name class-name)
+			       "-RETURNED-BY-DEFCLASS*")
+		  (find-package :cl-test)))
 	 )
 
     (declare (ignorable readers writers accessors allocations
@@ -161,9 +165,14 @@
       (setf (gethash class-name *my-classes*) my-class-obj))
 
     `(progn
-
+       (declaim (special ,class-var-name))
+       
        (eval-when (load eval compile)
-	 (ignore-errors (defclass ,@(cdr args))))
+	 (ignore-errors (setq ,class-var-name (defclass ,@(cdr args)))))
+
+       (deftest ,(make-defclass-test-name class-name "-DEFCLASS-RETURNS-CLASS")
+	 (eqt (find-class ',class-name) ,class-var-name)
+	 t)
 
        (deftest ,(make-defclass-test-name class-name
 					  "-IS-IN-ITS-METACLASS")
