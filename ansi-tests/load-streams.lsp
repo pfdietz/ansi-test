@@ -44,3 +44,4 @@
 (load "two-way-stream-output-stream.lsp")
 (load "echo-stream-input-stream.lsp")
 (load "echo-stream-output-stream.lsp")
+(load "make-echo-stream.lsp")
