@@ -41,7 +41,7 @@
     (let ((*print-readably* nil))
       (with-output-to-string (s)
 	(prin1 #\Space s))))
-  "#\ ")
+  "#\\ ")
 
 (deftest print.char.5
   (with-standard-io-syntax
