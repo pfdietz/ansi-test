@@ -4433,6 +4433,18 @@
 	done))))
   nil)
 
+(deftest misc.266a
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer -14356828946432 -24266) b))
+       (declare (optimize (speed 3) (space 1) (safety 1) (debug 3)
+			  (compilation-speed 2)))
+       (progn (tagbody (unwind-protect 0 (go 3)) 3) b)))
+   -30000)
+  -30000)
+
 ;;; Incorrect return value
 
 (deftest misc.267
@@ -4441,3 +4453,71 @@
 	     v8))
   0)
 
+(deftest misc.268
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (space 1) (safety 3) (debug 2)
+			  (compilation-speed 2)))
+       (catch 'ct7
+	 (rationalize (let ((v9 (1+ (throw 'ct7 0)))) 48955))))))
+  0)
+
+(deftest misc.269
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -1 20) a))
+       (declare (optimize (speed 3) (space 1) (safety 2) (debug 2)
+			  (compilation-speed 3)))
+       (if (if a (logbitp 34 a) nil) 0 -230678)))
+   14)
+  -230678)
+
+(deftest misc.270
+  (let ((*s3* (dotimes (iv4 0 10) (if t iv4 8))))
+    (declare (special *s3*))
+    *s3*)
+  10)
+
+(deftest misc.271
+  (let ((v2 (unwind-protect 0))) v2)
+  0)
+
+;;; wrong number of values passed to anonymous function
+
+(deftest misc.272
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 1) (safety 0) (debug 3)
+			  (compilation-speed 2)))
+       (flet ((%f17 (f17-1) 1))
+	 (multiple-value-call #'%f17 (values (floor 0)))))))
+  1)
+
+;;; clisp (10 jan 2004)
+;;; Improper handling of a jump to an exit point from unwind-protect
+;;; (see CLHS section 5.2)
+
+(deftest misc.273
+  (funcall
+   (compile
+    nil
+    '(lambda (d)
+       (declare (optimize (speed 3) (space 0) (safety 3)
+                          (debug 2) (compilation-speed 0)))
+       (gcd 39
+            (catch 'ct2
+              (block b7
+                (throw 'ct2
+                       (unwind-protect
+                           (return-from b7 17)
+                         (return-from b7
+                           (progv '(*s6*) (list 31) d))
+                         )))))))
+   65)
+  13)
