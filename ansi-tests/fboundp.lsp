@@ -38,6 +38,13 @@
   (let ((g (gensym))) (fboundp (list 'setf g)))
   nil)
 
+;;; See 11.1.2.1.1
+(deftest fboundp.8
+  (loop for x in *cl-non-function-macro-special-operator-symbols*
+	when (fboundp x)
+	collect x)
+  nil)
+
 (deftest fboundp.order.1
   (let ((i 0))
     (values (notnot (fboundp (progn (incf i) 'car))) i))
