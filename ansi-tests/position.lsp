@@ -692,7 +692,7 @@
 			 :displaced-index-offset 3
 			 :element-type (array-element-type s1))))
     (position #\c s2 :from-end t))
-  10)
+  6)
 
 (deftest position-string.33
   (do-special-strings
