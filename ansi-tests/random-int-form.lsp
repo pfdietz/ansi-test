@@ -211,7 +211,7 @@
        (print '(load "c.lsp") s)
        (finish-output s))
        ;; (cl-user::gc)
-       (make-list 1000000) ;; try to trigger a gc
+       ;; (make-list 1000000) 
       )
     (test-int-form form vars var-types vals-list opt-decls-1 opt-decls-2)))
 
@@ -542,7 +542,7 @@
      (50 (make-random-integer-binding-form size))
 
      ;; progv
-     #-(or armedbear)
+     #-(or armedbear ecl)
      (4 (make-random-integer-progv-form size))
      
      (4 `(let () ,(make-random-integer-form (1- size))))
@@ -752,7 +752,8 @@
   (destructuring-bind (s1 s2) (random-partition (1- size) 2)
     (let* ((var (random-from-seq2 (rcase
 				   (2 #(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10))
-				   (2 *random-special-vars*))))
+				   #-ecl (2 *random-special-vars*)
+				   )))
 	   (e1 (make-random-integer-form s1))
 	   (type (multiple-value-bind (type2 e)
 		     (make-random-type-for-var var e1)
@@ -1126,6 +1127,13 @@
 	(or
 	 (assert (cdr type))
 	 (make-random-element-of-type (random-from-seq (cdr type))))
+	(and
+	 (assert (cdr type))
+	 (loop repeat 100
+	       for x = (make-random-element-of-type (cadr type))
+	       when (typep x (cons 'and (cddr type)))
+	       return x
+	       finally (error "Cannot generate random element of ~A" type)))
 	(integer
 	 (let ((lo (let ((lo (cadr type)))
 		     (cond
@@ -1151,6 +1159,41 @@
 	     ;; of certain integers (near 0, near endpoints, near
 	     ;; powers of 2...)
 	     (random-from-interval (1+ hi) lo)))))
+	
+	((single-float double-float long-float short-float)
+	 (let ((lo (cadr type))
+	       (hi (caddr type))
+	       lo= hi=)
+	   (cond
+	    ((consp lo) nil)
+	    ((member lo '(* nil))
+	     (setq lo (most-negative-float type-op))
+	     (setq lo= t))
+	    (t
+	     (assert (typep lo type-op))
+	     (setq lo= t)))
+	   (cond
+	    ((consp hi) nil)
+	    ((member hi '(* nil))
+	     (setq hi (most-positive-float type-op))
+	     (setq hi= t))
+	    (t
+	     (assert (typep hi type-op))
+	     (setq hi= t)))
+	   (assert (<= lo hi))
+	   (assert (or (< lo hi) (and lo= hi=)))
+	   (let ((limit 100000))
+	     (cond
+	      ((or (<= hi 0)
+		   (>= lo 0)
+		   (and (<= (- limit) hi limit) (<= (- limit) lo limit)))
+	       (loop for x = (+ (random (- hi lo)) lo)
+		     do (when (or lo= (/= x lo)) (return x))))
+	      (t
+	       (rcase
+		(1 (random (min hi (float limit hi))))
+		(1 (- (random (min (float limit lo) (- lo)))))))))))
+	    
 	(mod
 	 (let ((modulus (second type)))
 	   (assert (and (integerp modulus)
@@ -1166,12 +1209,57 @@
 		 (assert (and (integerp bits) (>= bits 1)))
 		 (make-random-element-of-type
 		  `(integer 0 ,(1- (ash 1 bits)))))))))
+	(signed-byte
+	 (if (null (cdr type))
+	   (make-random-element-of-type 'integer)
+	   (let ((bits (second type)))
+	     (if (eq bits'*)
+		 (make-random-element-of-type 'integer)
+	       (progn
+		 (assert (and (integerp bits) (>= bits 1)))
+		 (make-random-element-of-type
+		  `(integer ,(- (ash 1 (1- bits))) ,(1- (ash 1 (1- bits))))))))))
 	(eql
 	 (assert (= (length type) 2))
 	 (cadr type))
 	(member
 	 (assert (cdr type))
 	 (random-from-seq (cdr type)))
+	((vector)
+	 (let ((etype-spec (if (cdr type) (cadr type) '*))
+	       (size-spec (if (cddr type) (caddr type) '*)))
+	   (make-random-vector etype-spec size-spec)))
+	((simple-vector)
+	 (let ((size-spec (if (cdr type) (cadr type) '*)))
+	   (make-random-vector t size-spec :simple t)))
+	((array simple-array)
+	 (let ((etype-spec (if (cdr type) (cadr type) '*))
+	       (size-spec (if (cddr type) (caddr type) '*)))
+	   (make-random-array etype-spec size-spec :simple (eql (car type) 'simple-array))))
+	((string simple-string)
+	 (let ((size-spec (if (cdr type) (cadr type) '*)))
+	   (make-random-string size-spec :simple (eql (car type) 'simple-string))))
+	((base-string simple-base-string)
+	 (let ((size-spec (if (cdr type) (cadr type) '*)))
+	   (make-random-vector 'base-char size-spec :simple (eql (car type) 'simple-base-string))))
+	((bit-vector simple-bit-vector)
+	 (let ((size-spec (if (cdr type) (cadr type) '*)))
+	   (make-random-vector 'bit size-spec :simple (eql (car type) 'simple-bit-vector))))
+	((cons)
+	 (cons (make-random-element-of-type (if (cdr type) (cadr type) t))
+	       (make-random-element-of-type (if (cddr type) (caddr type) t))))
+	((complex)
+	 (cond
+	  ((null (cdr type))
+	   (make-random-element-of-type 'complex))
+	  (t
+	   (assert (null (cddr type)))
+	   (let ((etype (cadr type)))
+	     (loop for v1 = (make-random-element-of-type etype)
+		   for v2 = (make-random-element-of-type etype)
+		   for c = (complex v1 v2)
+		   when (typep c type)
+		   return c)))))
 	)))
    (t
     (ecase type
@@ -1180,10 +1268,139 @@
       (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| car)))
       (unsigned-byte (random-from-interval
 		      (1+ (ash 1 (random *maximum-random-int-bits*))) 0))
+      (signed-byte (random-from-interval
+		    (1+ (ash 1 (random *maximum-random-int-bits*)))
+		    (- (ash 1 (random *maximum-random-int-bits*)))))
       (rational (locally (declare (notinline make-random-rational)) (make-random-rational)))
       (integer (let ((x (ash 1 (random *maximum-random-int-bits*))))
 		 (random-from-interval (1+ x) (- x))))
+      ((single-float short-float double-float long-float)
+       (make-random-element-of-type (list type)))
+      ((float)
+       (make-random-element-of-type (random-from-seq #(short-float single-float double-float long-float))))
+      ((real) (make-random-element-of-type (random-from-seq #(integer rational float))))
+      ((number) (make-random-element-of-type (random-from-seq #(integer rational float complex))))
+      ((bit-vector) (make-random-vector 'bit '*))
+      ((simple-bit-vector) (make-random-vector 'bit '* :simple t))
+      ((vector) (make-random-vector '* '*))
+      ((simple-vector) (make-random-vector 't '* :simple t))
+      ((array) (make-random-array '* '*))
+      ((simple-array) (make-random-array '* '* :simple t))
+      ((string) (make-random-string '*))
+      ((simple-string) (make-random-string '* :simple t))
+      ((simple-array) (make-random-string '* :simple t))
+      ((base-string) (make-random-vector 'base-char '*))
+      ((simple-base-string) (make-random-vector 'base-char '* :simple t))
+      ((base-char standard-char)
+       (random-from-seq +standard-chars+))
+      ((character) (make-random-character))
+      ;; Default
+      ((atom t *) (make-random-element-of-type
+	      (random-from-seq #(real symbol boolean integer unsigned-byte complex character
+				      (string 1) (bit-vector 1) complex))))
+      ((null) nil)
+      ((fixnum)
+       (random-from-interval (1+ most-positive-fixnum) most-negative-fixnum))
+      ((complex)
+       (make-random-element-of-type '(complex real)))
       ))))
+
+(defun make-random-character ()
+  (loop
+   when (rcase
+	 (3 (random-from-seq +standard-chars+))
+	 (3 (code-char (random (min 256 char-code-limit))))
+	 (1 (code-char (random (min (ash 1 16) char-code-limit))))
+	 (1 (code-char (random (min (ash 1 24) char-code-limit))))
+	 (1 (code-char (random char-code-limit))))
+   return it))
+
+(defun make-random-array-element-type ()
+  ;; Create random types for array elements
+  (let ((bits 40))
+    (rcase
+     (2 t)
+     (1 'symbol)
+     (1 `(unsigned-byte ,(1+ (random bits))))
+     (1 `(signed-byte ,(1+ (random bits))))
+     (1 'character)
+     (1 'base-char)
+     (1 'bit)
+     (1 (random-from-seq #(short-float single-float double-float long-float))))))
+
+(defun make-random-vector (etype-spec size-spec &key simple)
+  (let* ((etype (if (eql etype-spec '*)
+		    (make-random-array-element-type)
+		  etype-spec))
+	 (size (if (eql size-spec '*)
+		   (random (ash 1 (+ 2 (random 8))))
+		 size-spec))
+	 (displaced? (and (not simple) (coin 4)))
+	 (displaced-size (+ size (random (max 6 size))))
+	 (displacement (random (1+ (- displaced-size size))))
+	 (adjustable (and (not simple) (coin 3)))
+	 (fill-pointer (and (not simple)
+			    (rcase (3 nil) (1 t) (1 (random (1+ size)))))))
+    (assert (<= size 1000000))
+    (if displaced?
+	(let ((displaced-vector (make-array displaced-size :element-type etype
+					    :initial-contents (loop repeat displaced-size
+								    collect (make-random-element-of-type etype)))))
+	  (make-array size :element-type etype :adjustable adjustable
+		      :fill-pointer fill-pointer
+		      :displaced-to displaced-vector
+		      :displaced-index-offset displacement))
+      (make-array size
+		  :element-type etype
+		  :initial-contents (loop repeat size
+					  collect (make-random-element-of-type etype))
+		  :adjustable adjustable
+		  :fill-pointer fill-pointer
+		  ))))
+
+(defun make-random-array (etype-spec dim-specs &key simple)
+  (when (eql dim-specs '*)
+    (setq dim-specs (random 10)))
+  (when (numberp dim-specs)
+    (setq dim-specs (make-list dim-specs :initial-element '*)))
+  (let* ((etype (if (eql etype-spec '*) t etype-spec))
+	 (rank (length dim-specs))
+	 (dims (loop for dim in dim-specs
+		     collect (if (eql dim '*)
+				 (1+ (random (ash 1 (floor 9 rank))))
+			       dim))))
+    (assert (<= (reduce '* dims :initial-value 1) 1000000))
+    (assert (<= (reduce 'max dims :initial-value 1) 1000000))
+    (make-array dims
+		:element-type etype
+		:initial-contents
+		(labels ((%init (dims)
+				(if (null dims)
+				    (make-random-element-of-type etype)
+				  (loop repeat (car dims)
+					collect (%init (cdr dims))))))
+		  (%init dims))
+		:adjustable (and (not simple) (coin))
+		;; Do displacements later
+		)))
+
+(defun most-negative-float (float-type-symbol)
+  (ecase float-type-symbol
+    (short-float most-negative-short-float)
+    (single-float most-negative-single-float)
+    (double-float most-negative-double-float)
+    (long-float most-negative-long-float)
+    (float (min most-negative-short-float most-negative-single-float
+		most-negative-double-float most-negative-long-float))))
+
+(defun most-positive-float (float-type-symbol)
+  (ecase float-type-symbol
+    (short-float most-positive-short-float)
+    (single-float most-positive-single-float)
+    (double-float most-positive-double-float)
+    (long-float most-positive-long-float)
+    (float (max most-positive-short-float most-positive-single-float
+		most-positive-double-float most-positive-long-float))))
 
 (defun make-optimized-lambda-form (form vars var-types opt-decls)
   `(lambda ,vars
