@@ -10,43 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; intersection
 
-(defun is-intersection (x y z)
-  "Check that z is the intersection of x and y."
-  (and
-   (every #'(lambda (e)
-	      (or (not (member e y))
-		  (member e z)))
-	  x)
-   (every #'(lambda (e)
-	      (or (not (member e x))
-		  (member e z)))
-	  y)
-   (every #'(lambda (e)
-	      (and (member e x) (member e y)))
-	  z)
-   t))
-
-(defun shuffle (x)
-  (cond
-   ((null x) nil)
-   ((null (cdr x)) x)
-   (t
-    (multiple-value-bind
-	(y z)
-	(split-list x)
-      (append (shuffle y) (shuffle z))))))
-
-(defun split-list (x)
-  (cond
-   ((null x) (values nil nil))
-   ((null (cdr x)) (values x nil))
-   (t
-    (multiple-value-bind
-	(y z)
-	(split-list (cddr x))
-      (values (cons (car x) y) (cons (cadr x) z))))))
-   
-
 (deftest intersection-1
     (intersection nil nil)
   nil)
@@ -184,17 +147,6 @@
     (intersection-12-body 100 100)
   nil)
 
-(defun intersection-12-body (size niters &optional (maxelem (* 2 size)))
-  (let ((state (make-random-state)))
-  (loop
-   for i from 1 to niters do
-    (let ((x (shuffle (loop for j from 1 to size collect (random maxelem state))))
-	  (y (shuffle (loop for j from 1 to size collect (random maxelem state)))))
-      (let ((z (intersection x y)))
-	(let ((is-good (is-intersection x y z)))
-	  (unless is-good (return (values x y z)))))))
-  nil))
-
 
 ;;
 ;; :key argument
@@ -285,15 +237,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nintersection
-
-(defun nintersection-with-check (x y &key test)
-  (let ((ycopy (make-scaffold-copy y)))
-    (let ((result (if test
-		      (nintersection x y :test test)
-		    (nintersection x y))))
-      (if (check-scaffold-copy y ycopy)
-	  result
-	'failed))))
 
 (deftest nintersection-1
   (nintersection nil nil)
@@ -404,18 +347,6 @@
 (deftest nintersection-12
   (nintersection-12-body 100 100)
   nil)
-
-(defun nintersection-12-body (size niters &optional (maxelem (* 2 size)))
-  (let ((state (make-random-state t)))
-    (loop
-     for i from 1 to niters do
-     (let ((x (shuffle (loop for j from 1 to size collect (random maxelem state))))
-	   (y (shuffle (loop for j from 1 to size collect (random maxelem state)))))
-       (let ((z (nintersection-with-check (copy-list x) y)))
-	 (when (eqt z 'failed) (return (values x y z)))
-	 (let ((is-good (is-intersection x y z)))
-	   (unless is-good (return (values x y z)))))))
-    nil))
 
 ;; Key argument
 

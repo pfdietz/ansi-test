@@ -172,6 +172,18 @@ the condition to go uncaught if it cannot be classified."
 	 (check-scaffold-copy (car x) (scaffold-car xcopy))
 	 (check-scaffold-copy (cdr x) (scaffold-cdr xcopy))))))
 
+(defun create-c*r-test (n)
+  (cond
+   ((<= n 0) 'none)
+   (t
+    (cons (create-c*r-test (1- n))
+	  (create-c*r-test (1- n))))))
+
+(defun nth-1-body (x)
+  (loop
+      for e in x
+       and i from 0
+       count (not (eqt e (nth i x)))))
 
 ;;;
 ;;; The function SUBTYPEP returns two generalized booleans.
@@ -296,3 +308,608 @@ the condition to go uncaught if it cannot be classified."
      (handler-bind ((error #'has-non-abort-restart))
 		   ,@body)))
 
+;;; used in elt.lsp
+(defun elt-v-6-body ()
+  (let ((x (make-int-list 1000)))
+    (let ((a (make-array '(1000) :initial-contents x)))
+      (loop
+	  for i from 0 to 999 do
+	    (unless (eql i (elt a i)) (return nil))
+	  finally (return t)))))
+
+(defun make-adj-array (n &key initial-contents)
+  (if initial-contents
+      (make-array n :adjustable t :initial-contents initial-contents)
+    (make-array n :adjustable t)))
+
+;;; used in elt.lsp
+(defun elt-adj-array-6-body ()
+  (let ((x (make-int-list 1000)))
+    (let ((a (make-adj-array '(1000) :initial-contents x)))
+      (loop
+	  for i from 0 to 999 do
+	    (unless (eql i (elt a i)) (return nil))
+	  finally (return t)))))
+
+(defparameter *displaced* (make-int-array 100000))
+
+(defun make-displaced-array (n displacement)
+  (make-array n :displaced-to *displaced*
+	      :displaced-index-offset displacement))
+
+;;; used in fill.lsp
+(defun array-unsigned-byte-fill-test-fn (byte-size &rest fill-args)
+  (let* ((a (make-array '(5) :element-type (list 'unsigned-byte byte-size)
+			:initial-contents '(1 2 3 4 5)))
+	 (b (apply #'fill a fill-args)))
+    (values (eqt a b)
+	    (map 'list #'identity a))))
+
+;;; used in fill-strings.lsp
+(defun array-string-fill-test-fn (a &rest fill-args)
+  (setq a (copy-seq a))
+  (let ((b (apply #'fill a fill-args)))
+    (values (eqt a b) b)))
+
+;;; From types-and-class.lsp
+
+(defun is-t-or-nil (e)
+  (or (eqt e t) (eqt e nil)))
+
+(defun types-6-body ()
+  (loop
+      for p in *subtype-table* count
+	(let ((tp (car p)))
+	  (cond
+	   ((and (not (member tp '(sequence cons list t)))
+		 (not (subtypep* tp 'atom)))
+	    (format t "~%Problem!  Did not find to be an atomic type: ~S" tp)
+	    t)))))
+
+(defvar *type-list* nil)
+(defvar *supertype-table* nil)
+(declaim (special *subtype-table* *universe*))
+
+(defun types-9-body ()
+  (let ((tp-list (append '(keyword atom list)
+			 (loop for p in *subtype-table* collect (car p))))
+	(result-list))
+    (setf tp-list (remove-duplicates tp-list))
+    ;; TP-LIST is now a list of unique CL type names
+    ;; Store it in *TYPE-LIST* so we can inspect it later if this test
+    ;; fails.  The variable is also used in test TYPES-9A
+    (setf *type-list* tp-list)
+    ;; Compute all pairwise SUBTYPEP relationships among
+    ;; the elements of *TYPE-LIST*.
+    (let ((subs (make-hash-table :test #'eq))
+	  (sups (make-hash-table :test #'eq)))
+      (loop
+	  for x in tp-list do
+	    (loop
+		for y in tp-list do
+		  (multiple-value-bind (result good)
+		      (subtypep* x y)
+		    (declare (ignore good))
+		    (when result
+		      (pushnew x (gethash y subs))
+		      (pushnew y (gethash x sups))))))
+      ;; Store the supertype relations for later inspection
+      ;; and use in test TYPES-9A
+      (setf *supertype-table* sups)
+      ;; Check that the relation we just computed is transitive.
+      ;; Return a list of triples on which transitivity fails.
+      (loop
+	  for x in tp-list do
+	    (let ((sub-list (gethash x subs))
+		  (sup-list (gethash x sups)))
+	      (loop
+		  for t1 in sub-list do
+		    (loop
+			for t2 in sup-list do
+			  (multiple-value-bind (result good)
+			      (subtypep* t1 t2)
+			    (when (and good (not result))
+			      (pushnew (list t1 x t2) result-list
+				       :test #'equal)))))))
+      
+      result-list)))
+
+;;; TYPES-9-BODY returns a list of triples (T1 T2 T3)
+;;; where (AND (SUBTYPEP T1 T2) (SUBTYPEP T2 T3) (NOT (SUBTYPEP T1 T3)))
+;;;  (and where SUBTYPEP succeeds in each case, returning true as its
+;;;   second return value.)
+
+(defun types-9a-body ()
+  (cond
+     ((not (and *type-list* *supertype-table*))
+      (format nil "Run test type-9 first~%")
+      nil)
+     (t
+      (loop
+	  for tp in *type-list*
+	  sum
+	    (let ((sups (gethash tp *supertype-table*)))
+	      (loop
+		  for x in *universe*
+		  sum
+		    (handler-case
+		    (cond
+		     ((not (typep x tp)) 0)
+		     (t
+		      (loop
+			  for tp2 in sups
+			  count
+			    (handler-case
+				(and (not (typep x tp2))
+				     (progn
+				       (format t "Found element of ~S not in ~S: ~S~%"
+					       tp tp2 x)
+				       t))
+			      (condition (c) (format t "Error ~S occured: ~S~%"
+						c tp2)
+				t)))))
+		    (condition (c) (format t "Error ~S occured: ~S~%" c tp)
+		      1))))))))
+
+(defun even-size-p (a)
+  (some #'evenp (array-dimensions a)))
+
+(defun check-cons-copy (x y)
+  "Check that the tree x is a copy of the tree y,
+   returning t iff it is."
+  (cond
+   ((consp x)
+    (and (consp y)
+	 (not (eqt x y))
+	 (check-cons-copy (car x) (car y))
+	 (check-cons-copy (cdr x) (cdr y))))
+   ((eqt x y) t)
+   (t nil)))
+
+(defun check-sublis (a al &key (key 'no-key) test test-not)
+  "Apply sublis al a with various keys.  Check that
+   the arguments are not themselves changed.  Return nil
+   if the arguments do get changed."
+  (setf a (copy-tree a))
+  (setf al (copy-tree al))
+  (let ((acopy (make-scaffold-copy a))
+	(alcopy (make-scaffold-copy al)))
+    (let ((as
+	   (apply #'sublis al a
+		  `(,@(when test `(:test ,test))
+		    ,@(when test-not `(:test-not ,test-not))
+		    ,@(unless (eqt key 'no-key) `(:key ,key))))))
+      (and
+       (check-scaffold-copy a acopy)
+       (check-scaffold-copy al alcopy)
+       as))))
+
+(defun check-nsublis (a al &key (key 'no-key) test test-not)
+  "Apply nsublis al a, copying these arguments first."
+  (setf a (copy-tree a))
+  (setf al (copy-tree al))
+  (let ((as
+	 (apply #'sublis (copy-tree al) (copy-tree a)
+		`(,@(when test `(:test ,test))
+		    ,@(when test-not `(:test-not ,test-not))
+		    ,@(unless (eqt key 'no-key) `(:key ,key))))))
+    as))
+
+(defun check-subst (new old tree &key (key 'no-key) test test-not)
+  "Call subst new old tree, with keyword arguments if present.
+   Check that the arguments are not changed."
+  (setf new (copy-tree new))
+  (setf old (copy-tree old))
+  (setf tree (copy-tree tree))
+  (let ((newcopy (make-scaffold-copy new))
+	(oldcopy (make-scaffold-copy old))
+	(treecopy (make-scaffold-copy tree)))
+    (let ((result
+	   (apply #'subst new old tree
+		  `(,@(unless (eqt key 'no-key) `(:key ,key))
+		    ,@(when test `(:test ,test))
+		    ,@(when test-not `(:test-not ,test-not))))))
+      (and (check-scaffold-copy new newcopy)
+	   (check-scaffold-copy old oldcopy)
+	   (check-scaffold-copy tree treecopy)
+	   result))))
+
+
+(defun check-subst-if (new pred tree &key (key 'no-key))
+  "Call subst-if new pred tree, with various keyword arguments
+   if present.  Check that the arguments are not changed."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (let ((newcopy (make-scaffold-copy new))
+	(predcopy (make-scaffold-copy pred))
+	(treecopy (make-scaffold-copy tree)))
+    (let ((result
+	   (apply #'subst-if new pred tree
+		  (unless (eqt key 'no-key) `(:key ,key)))))
+      (and (check-scaffold-copy new newcopy)
+	   (check-scaffold-copy pred predcopy)
+	   (check-scaffold-copy tree treecopy)
+	   result))))
+
+(defun check-subst-if-not (new pred tree &key (key 'no-key))
+  "Call subst-if-not new pred tree, with various keyword arguments
+   if present.  Check that the arguments are not changed."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (let ((newcopy (make-scaffold-copy new))
+	(predcopy (make-scaffold-copy pred))
+	(treecopy (make-scaffold-copy tree)))
+    (let ((result
+	   (apply #'subst-if-not new pred tree
+		  (unless (eqt key 'no-key) `(:key ,key)))))
+      (and (check-scaffold-copy new newcopy)
+	   (check-scaffold-copy pred predcopy)
+	   (check-scaffold-copy tree treecopy)
+	   result))))
+
+(defun check-nsubst (new old tree &key (key 'no-key) test test-not)
+  "Call nsubst new old tree, with keyword arguments if present."
+  (setf new (copy-tree new))
+  (setf old (copy-tree old))
+  (setf tree (copy-tree tree))
+  (apply #'nsubst new old tree
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
+	     ,@(when test `(:test ,test))
+	     ,@(when test-not `(:test-not ,test-not)))))
+
+(defun check-nsubst-if (new pred tree &key (key 'no-key))
+  "Call nsubst-if new pred tree, with keyword arguments if present."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (apply #'nsubst-if new pred tree
+	 (unless (eqt key 'no-key) `(:key ,key))))
+
+(defun check-nsubst-if-not (new pred tree &key (key 'no-key))
+  "Call nsubst-if-not new pred tree, with keyword arguments if present."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (apply #'nsubst-if-not new pred tree
+		  (unless (eqt key 'no-key) `(:key ,key))))
+
+(defun check-copy-list-copy (x y)
+  "Check that y is a copy of the list x."
+  (if
+      (consp x)
+      (and (consp y)
+	   (not (eqt x y))
+	   (eqt (car x) (car y))
+	   (check-copy-list-copy (cdr x) (cdr y)))
+    (and (eqt x y) t)))
+
+(defun check-copy-list (x)
+  "Apply copy-list, checking that it properly copies,
+   and checking that it does not change its argument."
+  (let ((xcopy (make-scaffold-copy x)))
+    (let ((y (copy-list x)))
+      (and
+       (check-scaffold-copy x xcopy)
+       (check-copy-list-copy x y)
+       y))))
+
+(defun append-6-body ()
+  (let* ((cal (min 2048 call-arguments-limit))
+	 (step (max 1 (floor (/ cal) 64))))
+    (loop
+	for n from 0
+	below cal
+	by step
+	count
+	  (not
+	   (equal
+	    (apply #'append (loop for i from 1 to n
+				collect '(a)))
+	    (make-list n :initial-element 'a))))))
+
+(defun is-intersection (x y z)
+  "Check that z is the intersection of x and y."
+  (and
+   (every #'(lambda (e)
+	      (or (not (member e y))
+		  (member e z)))
+	  x)
+   (every #'(lambda (e)
+	      (or (not (member e x))
+		  (member e z)))
+	  y)
+   (every #'(lambda (e)
+	      (and (member e x) (member e y)))
+	  z)
+   t))
+
+(defun shuffle (x)
+  (cond
+   ((null x) nil)
+   ((null (cdr x)) x)
+   (t
+    (multiple-value-bind
+	(y z)
+	(split-list x)
+      (append (shuffle y) (shuffle z))))))
+
+(defun split-list (x)
+  (cond
+   ((null x) (values nil nil))
+   ((null (cdr x)) (values x nil))
+   (t
+    (multiple-value-bind
+	(y z)
+	(split-list (cddr x))
+      (values (cons (car x) y) (cons (cadr x) z))))))
+
+(defun intersection-12-body (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+  (loop
+   for i from 1 to niters do
+    (let ((x (shuffle (loop for j from 1 to size collect (random maxelem state))))
+	  (y (shuffle (loop for j from 1 to size collect (random maxelem state)))))
+      (let ((z (intersection x y)))
+	(let ((is-good (is-intersection x y z)))
+	  (unless is-good (return (values x y z)))))))
+  nil))
+
+(defun nintersection-with-check (x y &key test)
+  (let ((ycopy (make-scaffold-copy y)))
+    (let ((result (if test
+		      (nintersection x y :test test)
+		    (nintersection x y))))
+      (if (check-scaffold-copy y ycopy)
+	  result
+	'failed))))
+
+(defun nintersection-12-body (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state t)))
+    (loop
+     for i from 1 to niters do
+     (let ((x (shuffle (loop for j from 1 to size collect (random maxelem state))))
+	   (y (shuffle (loop for j from 1 to size collect (random maxelem state)))))
+       (let ((z (nintersection-with-check (copy-list x) y)))
+	 (when (eqt z 'failed) (return (values x y z)))
+	 (let ((is-good (is-intersection x y z)))
+	   (unless is-good (return (values x y z)))))))
+    nil))
+
+
+(defun union-with-check (x y &key test test-not)
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result (cond
+		   (test (union x y :test test))
+		   (test-not (union x y :test-not test-not))
+		   (t (union x y)))))
+      (if
+	  (and (check-scaffold-copy x xcopy)
+	       (check-scaffold-copy y ycopy))
+	  result
+	'failed))))
+
+(defun union-with-check-and-key (x y key &key test test-not)
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result  (cond
+		   (test (union x y :key key :test test))
+		   (test-not (union x y :key key :test-not test-not))
+		   (t (union x y :key key)))))
+      (if
+	  (and (check-scaffold-copy x xcopy)
+	       (check-scaffold-copy y ycopy))
+	  result
+	'failed))))
+
+(defun check-union (x y z)
+  (and (listp x)
+       (listp y)
+       (listp z)
+       (every #'(lambda (e) (or (member e x)
+				(member e y)))
+	      z)
+       (every #'(lambda (e) (member e z)) x)
+       (every #'(lambda (e) (member e z)) y)
+       t))
+
+(defun do-random-unions (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+    (loop
+       for i from 1 to niters do
+	  (let ((x (shuffle (loop for j from 1 to size collect
+				  (random maxelem state))))
+		(y (shuffle (loop for j from 1 to size collect
+				  (random maxelem state)))))
+	    (let ((z (union x y)))
+	      (let ((is-good (check-union x y z)))
+		(unless is-good (return (values x y z)))))))
+    nil))
+
+(defun nunion-with-copy (x y &key test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (cond
+   (test (nunion x y :test test))
+   (test-not (nunion x y :test-not test-not))
+   (t (nunion x y))))
+
+(defun nunion-with-copy-and-key (x y key &key test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (cond
+   (test (nunion x y :key key :test test))
+   (test-not (nunion x y :key key :test-not test-not))
+   (t (nunion x y :key key))))
+
+(defun do-random-nunions (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+    (loop
+       for i from 1 to niters do
+	  (let ((x (shuffle (loop for j from 1 to size collect
+				  (random maxelem state))))
+		(y (shuffle (loop for j from 1 to size collect
+				  (random maxelem state)))))
+	    (let ((z (nunion-with-copy x y)))
+	      (let ((is-good (check-union x y z)))
+		(unless is-good (return (values x y z)))))))
+    nil))
+
+(defun set-difference-with-check (x y &key (key 'no-key)
+					   test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result (apply #'set-difference
+			 x y
+			 `(,@(unless (eqt key 'no-key) `(:key ,key))
+			   ,@(when test `(:test ,test))
+			   ,@(when test-not `(:test-not ,test-not))))))  
+      (cond
+       ((and (check-scaffold-copy x xcopy)
+	     (check-scaffold-copy y ycopy))
+	result)
+       (t
+	'failed)))))
+
+(defun check-set-difference (x y z &key (key #'identity)
+					(test #'eql))
+  (and
+   (not (eqt 'failed z))
+   (every #'(lambda (e) (member e x :key key :test test)) z)
+   (every #'(lambda (e) (or (member e y :key key :test test)
+			    (member e z :key key :test test))) x)
+   (every #'(lambda (e) (not (member e z :key key :test test))) y)
+   t))
+
+(defun do-random-set-differences (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+    (loop
+       for i from 1 to niters do
+	  (let ((x (shuffle (loop for j from 1 to size collect
+				  (random maxelem state))))
+		(y (shuffle (loop for j from 1 to size collect
+				  (random maxelem state)))))
+	    (let ((z (set-difference-with-check x y)))
+	      (let ((is-good (check-set-difference x y z)))
+		(unless is-good (return (values x y z)))))))
+    nil))
+(defun nset-difference-with-check (x y &key (key 'no-key)
+					   test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (apply #'nset-difference
+	 x y
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
+	     ,@(when test `(:test ,test))
+	     ,@(when test-not `(:test-not ,test-not)))))
+
+(defun check-nset-difference (x y z &key (key #'identity)
+					(test #'eql))
+  (and
+   (every #'(lambda (e) (member e x :key key :test test)) z)
+   (every #'(lambda (e) (or (member e y :key key :test test)
+			    (member e z :key key :test test))) x)
+   (every #'(lambda (e) (not (member e z :key key :test test))) y)
+   t))
+
+(defun do-random-nset-differences (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+    (loop
+       for i from 1 to niters do
+	  (let ((x (shuffle (loop for j from 1 to size collect
+				  (random maxelem state))))
+		(y (shuffle (loop for j from 1 to size collect
+				  (random maxelem state)))))
+	    (let ((z (nset-difference-with-check x y)))
+	      (let ((is-good (check-nset-difference x y z)))
+		(unless is-good (return (values x y z)))))))
+    nil))
+
+(defun set-exclusive-or-with-check (x y &key (key 'no-key)
+					   test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result (apply #'set-exclusive-or
+			 x y
+			 `(,@(unless (eqt key 'no-key) `(:key ,key))
+			   ,@(when test `(:test ,test))
+			   ,@(when test-not `(:test-not ,test-not))))))  
+      (cond
+       ((and (check-scaffold-copy x xcopy)
+	     (check-scaffold-copy y ycopy))
+	result)
+       (t
+	'failed)))))
+
+(defun check-set-exclusive-or (x y z &key (key #'identity)
+					(test #'eql))
+  (and
+   (not (eqt 'failed z))
+   (every #'(lambda (e) (or (member e x :key key :test test)
+		            (member e y :key key :test test)))
+	  z)
+   (every #'(lambda (e) (if (member e y :key key :test test)
+			    (not (member e z :key key :test test))
+			  (member e z :key key :test test)))
+	  x)
+   (every #'(lambda (e) (if (member e x :key key :test test)
+			    (not (member e z :key key :test test))
+			  (member e z :key key :test test)))
+	  y)
+   t))
+
+(defun do-random-set-exclusive-ors (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+    (loop
+       for i from 1 to niters do
+	  (let ((x (shuffle (loop for j from 1 to size collect
+				  (random maxelem state))))
+		(y (shuffle (loop for j from 1 to size collect
+				  (random maxelem state)))))
+	    (let ((z (set-exclusive-or-with-check x y)))
+	      (let ((is-good (check-set-exclusive-or x y z)))
+		(unless is-good (return (values x y z)))))))
+    nil))
+
+(defun nset-exclusive-or-with-check (x y &key (key 'no-key)
+					   test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (apply #'nset-exclusive-or
+	 x y
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
+	     ,@(when test `(:test ,test))
+	     ,@(when test-not `(:test-not ,test-not)))))
+
+(defun do-random-nset-exclusive-ors (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+    (loop
+       for i from 1 to niters do
+	  (let ((x (shuffle (loop for j from 1 to size collect
+				  (random maxelem state))))
+		(y (shuffle (loop for j from 1 to size collect
+				  (random maxelem state)))))
+	    (let ((z (nset-exclusive-or-with-check x y)))
+	      (let ((is-good (check-set-exclusive-or x y z)))
+		(unless is-good (return (values x y z)))))))
+    nil))
+
+(defun subsetp-with-check (x y &key (key 'no-key) test test-not)
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result
+	   (apply #'subsetp x y
+		  `(,@(unless (eqt key 'no-key)
+			`(:key ,key))
+		    ,@(when test `(:test ,test))
+		    ,@(when test-not `(:test-not ,test-not))))))
+      (cond
+       ((and (check-scaffold-copy x xcopy)
+	     (check-scaffold-copy y ycopy))
+	(not (not result)))
+       (t 'failed)))))
+
+(defun safe-elt (x n)
+  (classify-error* (elt x n)))

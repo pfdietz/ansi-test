@@ -10,22 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nunion
 
-(defun nunion-with-copy (x y &key test test-not)
-  (setf x (copy-list x))
-  (setf y (copy-list y))
-  (cond
-   (test (nunion x y :test test))
-   (test-not (nunion x y :test-not test-not))
-   (t (nunion x y))))
-
-(defun nunion-with-copy-and-key (x y key &key test test-not)
-  (setf x (copy-list x))
-  (setf y (copy-list y))
-  (cond
-   (test (nunion x y :key key :test test))
-   (test-not (nunion x y :key key :test-not test-not))
-   (t (nunion x y :key key))))
-
 (deftest nunion-1
     (nunion nil nil)
   nil)
@@ -182,20 +166,7 @@
       (check-union x y result)))
   t)
 
-;; Do large numbers of random units
-
-(defun do-random-nunions (size niters &optional (maxelem (* 2 size)))
-  (let ((state (make-random-state)))
-    (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (nunion-with-copy x y)))
-	      (let ((is-good (check-union x y z)))
-		(unless is-good (return (values x y z)))))))
-    nil))
+;; Do large numbers of random nunions
 
 (deftest nunion-24
   (do-random-nunions 100 100 200)

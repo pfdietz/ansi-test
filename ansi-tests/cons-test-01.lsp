@@ -322,7 +322,6 @@
   (cddddr *cons-test-4*)
   p)
 
-
 ;; Test rplaca, rplacd
 
 (deftest rplaca-1

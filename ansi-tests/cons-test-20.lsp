@@ -10,43 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; union
 
-(defun union-with-check (x y &key test test-not)
-  (let ((xcopy (make-scaffold-copy x))
-	(ycopy (make-scaffold-copy y)))
-    (let ((result (cond
-		   (test (union x y :test test))
-		   (test-not (union x y :test-not test-not))
-		   (t (union x y)))))
-      (if
-	  (and (check-scaffold-copy x xcopy)
-	       (check-scaffold-copy y ycopy))
-	  result
-	'failed))))
-
-(defun union-with-check-and-key (x y key &key test test-not)
-  (let ((xcopy (make-scaffold-copy x))
-	(ycopy (make-scaffold-copy y)))
-    (let ((result  (cond
-		   (test (union x y :key key :test test))
-		   (test-not (union x y :key key :test-not test-not))
-		   (t (union x y :key key)))))
-      (if
-	  (and (check-scaffold-copy x xcopy)
-	       (check-scaffold-copy y ycopy))
-	  result
-	'failed))))
-
-(defun check-union (x y z)
-  (and (listp x)
-       (listp y)
-       (listp z)
-       (every #'(lambda (e) (or (member e x)
-				(member e y)))
-	      z)
-       (every #'(lambda (e) (member e z)) x)
-       (every #'(lambda (e) (member e z)) y)
-       t))
-
 (deftest union-1
     (union nil nil)
   nil)
@@ -204,19 +167,6 @@
   t)
 
 ;; Do large numbers of random units
-
-(defun do-random-unions (size niters &optional (maxelem (* 2 size)))
-  (let ((state (make-random-state)))
-    (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (union x y)))
-	      (let ((is-good (check-union x y z)))
-		(unless is-good (return (values x y z)))))))
-    nil))
 
 (deftest union-24
   (do-random-unions 100 100 200)

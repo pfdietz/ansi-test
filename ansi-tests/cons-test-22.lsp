@@ -10,34 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; set-difference
 
-(defun set-difference-with-check (x y &key (key 'no-key)
-					   test test-not)
-  (setf x (copy-list x))
-  (setf y (copy-list y))
-  (let ((xcopy (make-scaffold-copy x))
-	(ycopy (make-scaffold-copy y)))
-    (let ((result (apply #'set-difference
-			 x y
-			 `(,@(unless (eqt key 'no-key) `(:key ,key))
-			   ,@(when test `(:test ,test))
-			   ,@(when test-not `(:test-not ,test-not))))))  
-      (cond
-       ((and (check-scaffold-copy x xcopy)
-	     (check-scaffold-copy y ycopy))
-	result)
-       (t
-	'failed)))))
-
-(defun check-set-difference (x y z &key (key #'identity)
-					(test #'eql))
-  (and
-   (not (eqt 'failed z))
-   (every #'(lambda (e) (member e x :key key :test test)) z)
-   (every #'(lambda (e) (or (member e y :key key :test test)
-			    (member e z :key key :test test))) x)
-   (every #'(lambda (e) (not (member e z :key key :test test))) y)
-   t))
-
 (deftest set-difference-1
     (set-difference nil nil)
   nil)
@@ -97,19 +69,6 @@
     (set-difference-with-check '(a b c d e) '(d a b e)
 			       :test 'equal)
   (c))
-
-(defun do-random-set-differences (size niters &optional (maxelem (* 2 size)))
-  (let ((state (make-random-state)))
-    (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (set-difference-with-check x y)))
-	      (let ((is-good (check-set-difference x y z)))
-		(unless is-good (return (values x y z)))))))
-    nil))
 
 (deftest set-difference-13
     (do-random-set-differences 100 100)
@@ -193,25 +152,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-difference
 
-(defun nset-difference-with-check (x y &key (key 'no-key)
-					   test test-not)
-  (setf x (copy-list x))
-  (setf y (copy-list y))
-  (apply #'nset-difference
-	 x y
-	 `(,@(unless (eqt key 'no-key) `(:key ,key))
-	     ,@(when test `(:test ,test))
-	     ,@(when test-not `(:test-not ,test-not)))))
-
-(defun check-nset-difference (x y z &key (key #'identity)
-					(test #'eql))
-  (and
-   (every #'(lambda (e) (member e x :key key :test test)) z)
-   (every #'(lambda (e) (or (member e y :key key :test test)
-			    (member e z :key key :test test))) x)
-   (every #'(lambda (e) (not (member e z :key key :test test))) y)
-   t))
-
 (deftest nset-difference-1
     (nset-difference nil nil)
   nil)
@@ -271,19 +211,6 @@
     (nset-difference-with-check '(a b c d e) '(d a b e)
 			       :test 'equal)
   (c))
-
-(defun do-random-nset-differences (size niters &optional (maxelem (* 2 size)))
-  (let ((state (make-random-state)))
-    (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (nset-difference-with-check x y)))
-	      (let ((is-good (check-nset-difference x y z)))
-		(unless is-good (return (values x y z)))))))
-    nil))
 
 (deftest nset-difference-13
     (do-random-nset-differences 100 100)

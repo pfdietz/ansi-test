@@ -94,23 +94,9 @@
     (append nil nil nil nil nil nil nil nil 'a)
   a)
 
-#|
-(defun append-6-body ()
-  (let ((step (max 1 (min 256 (floor (/ call-arguments-limit 64))))))
-    (loop
-	for n from 0
-	to call-arguments-limit
-	by step
-	count
-	  (not
-	   (equal
-	    (apply #'append (loop for i from 1 to n
-				collect '(a)))
-	    (make-list n :initial-element 'a))))))
 (deftest append-6
-    (cons-178-body)
+    (append-6-body)
   0)
-|#
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

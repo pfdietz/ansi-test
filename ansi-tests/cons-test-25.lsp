@@ -10,13 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; setting of C*R accessors
 
-(defun create-c*r-test (n)
-  (cond
-   ((<= n 0) 'none)
-   (t
-    (cons (create-c*r-test (1- n))
-	  (create-c*r-test (1- n))))))
-
 (loop
     for fn in '(car cdr caar cadr cdar cddr
 		caaar caadr cadar caddr cdaar cdadr cddar cdddr
@@ -61,6 +54,3 @@
 	       (eql (,fn x) 'a)
 	       (nth ,(1- len) x)))
 	  a)))
-
-	  
-    

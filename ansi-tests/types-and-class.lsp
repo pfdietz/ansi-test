@@ -18,9 +18,6 @@
   (notnot (typep t 'boolean))
   t)
 
-(defun is-t-or-nil (e)
-  (or (eqt e t) (eqt e nil)))
-
 (deftest boolean-type-3
     (check-type-predicate 'is-t-or-nil 'boolean)
   0)
@@ -219,15 +216,6 @@
     (subtypep* 'simple-base-string 'sequence)
   t t)
 
-(defun types-6-body ()
-  (loop
-      for p in *subtype-table* count
-	(let ((tp (car p)))
-	  (cond
-	   ((and (not (member tp '(sequence cons list t)))
-		 (not (subtypep* tp 'atom)))
-	    (format t "~%Problem!  Did not find to be an atomic type: ~S" tp)
-	    t)))))
 
 (deftest types-6
     (types-6-body)
@@ -256,8 +244,8 @@
 	    t)))
   0)
 
-(defvar *type-list* nil)
-(defvar *supertype-table* nil)
+(declaim (special *type-list*
+		  *supertype-table*))
 
 ;;;
 ;;; TYPES-9 checks the transitivity of SUBTYPEP on pairs of types
@@ -266,54 +254,6 @@
 ;;; here.)
 ;;;
 
-(defun types-9-body ()
-  (let ((tp-list (append '(keyword atom list)
-			 (loop for p in *subtype-table* collect (car p))))
-	(result-list))
-    (setf tp-list (remove-duplicates tp-list))
-    ;; TP-LIST is now a list of unique CL type names
-    ;; Store it in *TYPE-LIST* so we can inspect it later if this test
-    ;; fails.  The variable is also used in test TYPES-9A
-    (setf *type-list* tp-list)
-    ;; Compute all pairwise SUBTYPEP relationships among
-    ;; the elements of *TYPE-LIST*.
-    (let ((subs (make-hash-table :test #'eq))
-	  (sups (make-hash-table :test #'eq)))
-      (loop
-	  for x in tp-list do
-	    (loop
-		for y in tp-list do
-		  (multiple-value-bind (result good)
-		      (subtypep* x y)
-		    (declare (ignore good))
-		    (when result
-		      (pushnew x (gethash y subs))
-		      (pushnew y (gethash x sups))))))
-      ;; Store the supertype relations for later inspection
-      ;; and use in test TYPES-9A
-      (setf *supertype-table* sups)
-      ;; Check that the relation we just computed is transitive.
-      ;; Return a list of triples on which transitivity fails.
-      (loop
-	  for x in tp-list do
-	    (let ((sub-list (gethash x subs))
-		  (sup-list (gethash x sups)))
-	      (loop
-		  for t1 in sub-list do
-		    (loop
-			for t2 in sup-list do
-			  (multiple-value-bind (result good)
-			      (subtypep* t1 t2)
-			    (when (and good (not result))
-			      (pushnew (list t1 x t2) result-list
-				       :test #'equal)))))))
-      
-      result-list)))
-
-;;; TYPES-9-BODY returns a list of triples (T1 T2 T3)
-;;; where (AND (SUBTYPEP T1 T2) (SUBTYPEP T2 T3) (NOT (SUBTYPEP T1 T3)))
-;;;  (and where SUBTYPEP succeeds in each case, returning true as its
-;;;   second return value.)
 (deftest types-9
     (types-9-body)
   nil)
@@ -329,48 +269,13 @@
 ;;;
 ;;; Test TYPES-9 must be run before this test.
 ;;;
-(defun types-9a-body ()
-  (cond
-     ((not (and *type-list* *supertype-table*))
-      (format nil "Run test type-9 first~%")
-      nil)
-     (t
-      (loop
-	  for tp in *type-list*
-	  sum
-	    (let ((sups (gethash tp *supertype-table*)))
-	      (loop
-		  for x in *universe*
-		  sum
-		    (handler-case
-		    (cond
-		     ((not (typep x tp)) 0)
-		     (t
-		      (loop
-			  for tp2 in sups
-			  count
-			    (handler-case
-				(and (not (typep x tp2))
-				     (progn
-				       (format t "Found element of ~S not in ~S: ~S~%"
-					       tp tp2 x)
-				       t))
-			      (condition (c) (format t "Error ~S occured: ~S~%"
-						c tp2)
-				t)))))
-		    (condition (c) (format t "Error ~S occured: ~S~%" c tp)
-		      1))))))))
 
 (deftest types-9a
     (types-9a-body)
   0)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; deftype
-
-(defun even-size-p (a)
-  (some #'evenp (array-dimensions a)))
 
 (deftype even-array (&optional type size)
   `(and (array ,type ,size)

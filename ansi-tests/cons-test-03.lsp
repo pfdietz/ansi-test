@@ -10,26 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-list
 
-(defun check-copy-list-copy (x y)
-  "Check that y is a copy of the list x."
-  (if
-      (consp x)
-      (and (consp y)
-	   (not (eqt x y))
-	   (eqt (car x) (car y))
-	   (check-copy-list-copy (cdr x) (cdr y)))
-    (and (eqt x y) t)))
-
-(defun check-copy-list (x)
-  "Apply copy-list, checking that it properly copies,
-   and checking that it does not change its argument."
-  (let ((xcopy (make-scaffold-copy x)))
-    (let ((y (copy-list x)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (check-copy-list-copy x y)
-       y))))
-
 (deftest copy-list-1
     (check-copy-list '(a b c d))
   (a b c d))

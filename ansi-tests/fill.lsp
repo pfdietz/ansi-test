@@ -147,13 +147,6 @@
 
 ;;; fill on arrays of unsigned eight bit bytes
 
-(defun array-unsigned-byte-fill-test-fn (byte-size &rest fill-args)
-  (let* ((a (make-array '(5) :element-type (list 'unsigned-byte byte-size)
-			:initial-contents '(1 2 3 4 5)))
-	 (b (apply #'fill a fill-args)))
-    (values (eqt a b)
-	    (map 'list #'identity a))))
-
 (deftest array-unsigned-byte8-fill-1
   (array-unsigned-byte-fill-test-fn 8 6)
   t (6 6 6 6 6))

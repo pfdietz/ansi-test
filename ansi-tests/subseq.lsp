@@ -20,51 +20,14 @@
   (subseq '(a b c) 1)
   (b c))
 
-(defun subseq-list-4-body ()
-  (block done
-    (let ((x (loop for i from 0 to 19 collect i)))
-      (loop
-       for i from 0 to 20 do
-       (loop
-	for j from i to 20 do
-	(let ((y (subseq x i j)))
-	  (loop
-	   for e in y and k from i to (1- j) do
-	   (unless (eqlt e k) (return-from done nil)))))))
-    t))
 
 (deftest subseq-list-4
   (subseq-list-4-body)
   t)
 
-(defun subseq-list-5-body ()
-  (block done
-    (let ((x (loop for i from 0 to 29 collect i)))
-      (loop
-       for i from 0 to 30 do
-       (unless (equalt (subseq x i)
-		       (loop for j from i to 29 collect j))
-	 (return-from done nil))))
-    t))
-
 (deftest subseq-list-5
   (subseq-list-5-body)
   t)
-
-(defun subseq-list-6-body ()
-  (let* ((x (make-list 100))
-	 (z (loop for e on x collect e))
-	 (y (subseq x 0)))
-    (loop
-     for e on x
-     and f on y
-     and g in z do
-     (when (or (not (eqt g e))
-	       (not (eqlt (car e) (car f)))
-	       (car e)
-	       (eqt e f))
-       (return nil))
-     finally (return t))))
 
 (deftest subseq-list-6    ;; check that no structure is shared
   (subseq-list-6-body)
@@ -113,133 +76,28 @@
 
 ;; subseq on vectors
 
-(defun subseq-vector-1-body ()
-  (block nil
-  (let* ((x (make-sequence 'vector 10 :initial-element 'a))
-	 (y (subseq x 4 8)))
-    (unless (every #'(lambda (e) (eqt e 'a)) x)
-      (return 1))
-    (unless (every #'(lambda (e) (eqt e 'a)) y)
-      (return 2))
-    (unless (eqlt (length x) 10) (return 3))
-    (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 'b))
-    (unless (every #'(lambda (e) (eqt e 'a)) y)
-      (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 'c))
-    (or
-     (not (not (every #'(lambda (e) (eqt e 'b)) x)))
-     6))))
 
 (deftest subseq-vector-1
   (subseq-vector-1-body)
   t)
 
-(defun subseq-vector-2-body ()
-  (block nil
-  (let* ((x (make-sequence '(vector fixnum) 10 :initial-element 1))
-	 (y (subseq x 4 8)))
-    (unless (every #'(lambda (e) (eqlt e 1)) x)
-      (return 1))
-    (unless (every #'(lambda (e) (eqlt e 1)) y)
-      (return 2))
-    (unless (eqlt (length x) 10) (return 3))
-    (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2))
-    (unless (every #'(lambda (e) (eqlt e 1)) y)
-      (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3))
-    (or
-     (not (not (every #'(lambda (e) (eqlt e 2)) x)))
-     6))))
 
 (deftest subseq-vector-2
     (subseq-vector-2-body)
   t) 
 
-(defun subseq-vector-3-body ()
-  (block nil
-  (let* ((x (make-sequence '(vector single-float) 10 :initial-element 1.0))
-	 (y (subseq x 4 8)))
-    (unless (every #'(lambda (e) (= e 1.0)) x)
-      (return 1))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 2))
-    (unless (eqlt (length x) 10) (return 3))
-    (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0))
-    (or
-     (not (not (every #'(lambda (e) (= e 2.0)) x)))
-     6))))
 
 (deftest subseq-vector-3
     (subseq-vector-3-body)
   t) 
 
-(defun subseq-vector-4-body ()
-  (block nil
-  (let* ((x (make-sequence '(vector double-float) 10 :initial-element 1.0d0))
-	 (y (subseq x 4 8)))
-    (unless (every #'(lambda (e) (= e 1.0)) x)
-      (return 1))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 2))
-    (unless (eqlt (length x) 10) (return 3))
-    (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0d0))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0d0))
-    (or
-     (not (not (every #'(lambda (e) (= e 2.0)) x)))
-     6))))
-
 (deftest subseq-vector-4
     (subseq-vector-4-body)
   t) 
 
-(defun subseq-vector-5-body ()
-  (block nil
-  (let* ((x (make-sequence '(vector short-float) 10 :initial-element 1.0s0))
-	 (y (subseq x 4 8)))
-    (unless (every #'(lambda (e) (= e 1.0)) x)
-      (return 1))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 2))
-    (unless (eqlt (length x) 10) (return 3))
-    (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0s0))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0s0))
-    (or
-     (not (not (every #'(lambda (e) (= e 2.0)) x)))
-     6))))
-
 (deftest subseq-vector-5
   (subseq-vector-5-body)
   t) 
-
-(defun subseq-vector-6-body ()
-  (block nil
-  (let* ((x (make-sequence '(vector long-float) 10 :initial-element 1.0l0))
-	 (y (subseq x 4 8)))
-    (unless (every #'(lambda (e) (= e 1.0)) x)
-      (return 1))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 2))
-    (unless (eqlt (length x) 10) (return 3))
-    (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0l0))
-    (unless (every #'(lambda (e) (= e 1.0)) y)
-      (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0l0))
-    (or
-     (not (not (every #'(lambda (e) (= e 2.0)) x)))
-     6))))
 
 (deftest subseq-vector-6
   (subseq-vector-6-body)
@@ -291,99 +149,27 @@
 ;;; subseq on strings
 
 (deftest subseq-string-1
-  (let* ((s1 "abcdefgh")
-	 (len (length s1)))
-    (loop for start from 0 below len
-	  always
-	  (string= (subseq s1 start)
-		   (coerce (loop for i from start to (1- len)
-				 collect (aref s1 i))
-			   'string))))
+  (subseq-string-1-body)
   t)
 
 (deftest subseq-string-2
-  (let* ((s1 "abcdefgh")
-	 (len (length s1)))
-    (loop for start from 0 below len
-	  always
-	  (loop for end from (1+ start) to len
-		always
-		(string= (subseq s1 start end)
-			 (coerce (loop for i from start below end
-				       collect (aref s1 i))
-				 'string)))))
+  (subseq-string-2-body)
   t)
 
 (deftest subseq-string-3
-  (let* ((s1 (make-array '(10) :initial-contents
-			 (coerce "abcdefghij" 'list)
-			 :fill-pointer 8
-			 :element-type 'character))
-	 (len (length s1)))
-    (and
-     (eqlt len 8)
-     (loop for start from 0 below len
-	  always
-	  (string= (subseq s1 start)
-		   (coerce (loop for i from start to (1- len)
-				 collect (aref s1 i))
-			   'string)))
-     (loop for start from 0 below len
-	   always
-	   (loop for end from (1+ start) to len
-		 always
-		 (string= (subseq s1 start end)
-			  (coerce (loop for i from start below end
-					collect (aref s1 i))
-				  'string))))))
+  (subseq-string-3-body)
   t)
 
 ;;; Tests on bit vectors
 
 (deftest subseq-bit-vector-1
-  (let* ((s1 #*11001000)
-	 (len (length s1)))
-    (loop for start from 0 below len
-	  always
-	  (equalp (subseq s1 start)
-		  (coerce (loop for i from start to (1- len)
-				collect (aref s1 i))
-			  'bit-vector))))
+  (subseq-bit-vector-1-body)
   t)
 
 (deftest subseq-bit-vector-2
-  (let* ((s1 #*01101011)
-	 (len (length s1)))
-    (loop for start from 0 below len
-	  always
-	  (loop for end from (1+ start) to len
-		always
-		(equalp (subseq s1 start end)
-			(coerce (loop for i from start below end
-				      collect (aref s1 i))
-				'bit-vector)))))
+  (subseq-bit-vector-2-body)
   t)
 
 (deftest subseq-bit-vector-3
-  (let* ((s1 (make-array '(10) :initial-contents
-			 (coerce #*1101100110 'list)
-			 :fill-pointer 8
-			 :element-type 'bit))
-	 (len (length s1)))
-    (and
-     (eqlt len 8)
-     (loop for start from 0 below len
-	  always
-	  (equalp (subseq s1 start)
-		  (coerce (loop for i from start to (1- len)
-				collect (aref s1 i))
-			  'bit-vector)))
-     (loop for start from 0 below len
-	   always
-	   (loop for end from (1+ start) to len
-		 always
-		 (equalp (subseq s1 start end)
-			 (coerce (loop for i from start below end
-				       collect (aref s1 i))
-				 'bit-vector))))))
+  (subseq-bit-vector-3-body)
   t)

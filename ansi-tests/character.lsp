@@ -5,11 +5,6 @@
 
 (in-package :cl-test)
 
-(defun char-type-error-check (fn)
-  (loop for x in *universe*
-	always (or (characterp x)
-		   (eqt (catch-type-error (funcall fn x)) 'type-error))))
-
 (deftest character-class.1
   (subtypep* 'character t)
   t t)
@@ -43,10 +38,7 @@
   t)
 
 (deftest standard-char.5
-  (loop for i from 0 below (min 65536 char-code-limit)
-	always (let ((c (code-char i)))
-		 (not (and (typep c 'standard-char)
-			   (not (standard-char-p c))))))
+  (standard-char.5.body)
   t)
 
 (deftest extended-char.1
@@ -58,35 +50,17 @@
   t t)
 
 (deftest extended-char.3
-  (loop for i from 0 below (min 65536 char-code-limit)
-	always (let ((c (code-char i)))
-		 (not (and (typep c 'extended-char)
-			   (typep c 'base-char)))))
+  (extended-char.3.body)
   t)
 
 ;;; 
 
 (deftest character.1
-  (loop for i from 0 below (min 65536 char-code-limit)
-	always (let ((c (code-char i)))
-		 (or (null c)
-		     (let ((s (string c)))
-		       (and
-			(eql (character c) c)
-			(eql (character s) c)
-			(eql (character (make-symbol s)) c))))))
+  (character.1.body)
   t)
 
 (deftest character.2
-  (loop for x in *universe*
-	when (not (or (characterp x)
-		      (and (stringp x) (eql (length x) 1))
-		      (and (symbolp x) (eql (length (symbol-name x)) 1))
-		      (let ((c (catch-type-error (character x))))
-			(or (eql c 'type-error)
-			    (let ((s (catch-type-error (string x))))
-			      (and (stringp s) (eql (char s 0) c)))))))
-	do (return x))
+  (character.2.body)
   nil)
 
 (deftest characterp.1
@@ -94,16 +68,11 @@
   t)
 
 (deftest characterp.2
-  (loop for i from 0 below (min 65536 char-code-limit)
-	always (let ((c (code-char i)))
-		 (or (null c) (characterp c))))
+  (characterp.2.body)
   t)
 
 (deftest characterp.3
-  (loop for x in *universe*
-	always (let ((p (characterp x))
-		     (q (typep x 'character)))
-		 (if p (not (not q)) (not q))))
+  (characterp.3.body)
   t)
 
 (deftest alpha-char-p.1
@@ -138,30 +107,15 @@
 
 
 (deftest alphanumericp.4
-  (loop for x in *universe*
-	always (or (not (characterp x))
-		   (if (or (digit-char-p x) (alpha-char-p x))
-		       (alphanumericp x)
-		     (not (alphanumericp x)))))
+  (alphanumericp.4.body)
   t)
 
 (deftest alphanumericp.5
-  (loop for i from 0 below (min 65536 char-code-limit)
-	for x = (code-char i)
-	always (or (not (characterp x))
-		   (if (or (digit-char-p x) (alpha-char-p x))
-		       (alphanumericp x)
-		     (not (alphanumericp x)))))
+  (alphanumericp.5.body)
   t)
 
 (deftest digit-char.1
-  (loop
-   for r from 2 to 36
-   always
-   (loop for i from 0 to 36
-	 always (let ((c (digit-char i r)))
-		  (if (>= i r) (null c)
-		    (eql c (char +extended-digit-chars+ i))))))
+  (digit-char.1.body)
   t)
 
 (deftest digit-char.2
@@ -172,36 +126,19 @@
    nil nil nil nil nil nil nil nil nil nil))
 
 (deftest digit-char-p.1
-  (loop for x in *universe*
-	always (not (and (characterp x)
-			 (not (alphanumericp x))
-			 (digit-char-p x))))
+  (digit-char-p.1.body)
   t)
 
 (deftest digit-char-p.2
-  (loop for i from 0 below (min 65536 char-code-limit)
-	for x = (code-char i)
-	always (or (not x)
-		   (not (and (not (alphanumericp x))
-			     (digit-char-p x)))))
+  (digit-char-p.2.body)
   t)
 		   
 (deftest digit-char-p.3
-  (loop for r from 2 to 35
-	always
-	(loop for i from r to 35
-	      for c = (char +extended-digit-chars+ i)
-	      never (or (digit-char-p c r)
-			(digit-char-p (char-downcase c) r))))
+  (digit-char-p.3.body)
   t)
 
 (deftest digit-char-p.4
-  (loop for r from 2 to 35
-	always
-	(loop for i from 0 below r
-	      for c = (char +extended-digit-chars+ i)
-	      always (and (eql (digit-char-p c r) i)
-			  (eql (digit-char-p (char-downcase c) r) i))))
+  (digit-char-p.4.body)
   t)
 
 (deftest digit-char-p.5
@@ -214,12 +151,12 @@
 (deftest digit-char-p.6
   (loop for i from 0 below 10
 	for c = (char +extended-digit-chars+ i)
-	always (eql (digit-char-p c) i))
+	always (eqlt (digit-char-p c) i))
   t)
 
 (deftest graphic-char-p.1
   (loop for c across +standard-chars+
-	always (if (eql c #\Newline)
+	always (if (eqlt c #\Newline)
 		   (not (graphic-char-p c))
 		 (graphic-char-p c)))
   t)
@@ -240,18 +177,11 @@
   t)
 
 (deftest standard-char-p.2
-  (loop for x in *universe*
-	always (or (not (characterp x))
-		   (find x +standard-chars+)
-		   (not (standard-char-p x))))
+  (standard-char-p.2.body)
   t)
 
 (deftest standard-char-p.2a
-  (loop for i from 0 below (min 65536 char-code-limit)
-	for x = (code-char i)
-	always (or (not (characterp x))
-		   (find x +standard-chars+)
-		   (not (standard-char-p x))))
+  (standard-char-p.2a.body)
   t)
 
 (deftest standard-char-p.3
@@ -259,24 +189,11 @@
   t)
 
 (deftest char-upcase.1
-  (loop for x in *universe*
-	always
-	(or (not (characterp x))
-	    (let ((u (char-upcase x))) 
-	      (and
-	       (or (lower-case-p x) (eql u x))
-	       (eql u (char-upcase u))))))
+  (char-upcase.1.body)
   t)
 
 (deftest char-upcase.2
-  (loop for i from 0 below (min 65536 char-code-limit)
-	for x = (code-char i)
-	always
-	(or (not x)
-	    (let ((u (char-upcase x)))
-	      (and
-	       (or (lower-case-p x) (eql u x))
-	       (eql u (char-upcase u))))))
+  (char-upcase.2.body)
   t)
 
 (deftest char-upcase.3
@@ -288,24 +205,11 @@
   t)	
 
 (deftest char-downcase.1
-  (loop for x in *universe*
-	always
-	(or (not (characterp x))
-	    (let ((u (char-downcase x))) 
-	      (and
-	       (or (upper-case-p x) (eql u x))
-	       (eql u (char-downcase u))))))
+  (char-downcase.1.body)
   t)
 
 (deftest char-downcase.2
-  (loop for i from 0 below (min 65536 char-code-limit)
-	for x = (code-char i)
-	always
-	(or (not x)
-	    (let ((u (char-downcase x)))
-	      (and
-	       (or (upper-case-p x) (eql u x))
-	       (eql u (char-downcase u))))))
+  (char-downcase.2.body)
   t)
 
 (deftest char-downcase.3
@@ -345,26 +249,11 @@
   t)
 
 (deftest both-case-p.1
-  (loop for x in *universe*
-	always (or (not (characterp x))
-		   (if (both-case-p x)
-		       (and (graphic-char-p x)
-			    (or (upper-case-p x)
-				(lower-case-p x)))
-		     (not (or (upper-case-p x)
-			      (lower-case-p x))))))
+  (both-case-p.1.body)
   t)
 
 (deftest both-case-p.2
-  (loop for i from 0 below (min 65536 char-code-limit)
-	for x = (code-char i)
-	always (or (not (characterp x))
-		   (if (both-case-p x)
-		       (and (graphic-char-p x)
-			    (or (upper-case-p x)
-				(lower-case-p x)))
-		     (not (or (upper-case-p x)
-			      (lower-case-p x))))))
+  (both-case-p.2.body)
   t)
 
 (deftest both-case-p.3
@@ -376,69 +265,22 @@
   t)
 
 (deftest char-code.2
-  (loop for i from 0 below (min 65536 char-code-limit)
-	for c = (code-char i)
-	always (or (not c)
-		   (eql (char-code c) i)))
+  (char-code.2.body)
   t)
 
 (deftest code-char.1
   (loop for x across +standard-chars+
-	always (eql (code-char (char-code x)) x))
+	always (eqlt (code-char (char-code x)) x))
   t)
 
 (deftest char-int.1
   (loop for x across +standard-chars+
-	always (eql (char-int x) (char-code x)))
+	always (eqlt (char-int x) (char-code x)))
   t)
-
-(defun char-int.2.fn ()
-  (declare (optimize (safety 3) (speed 1) (space 1)))
-  (let ((c->i (make-hash-table :test #'equal))
-	(i->c (make-hash-table :test #'eql)))
-    (flet ((%insert
-	    (c)
-	    (or (not (characterp c))
-		(let* ((i (char-int c))
-		       (j (gethash c c->i))
-		       (d (gethash i i->c)))
-		  (and
-		   (or (null j) (eql j i))
-		   (or (null d) (char= c d))
-		   (progn
-		     (setf (gethash c c->i) i)
-		     (setf (gethash i i->c) c)
-		     t))))))
-      (and
-       (loop for i from 0 below char-code-limit
-	     always (%insert (code-char i)))
-       (every #'%insert +standard-chars+)
-       (every #'%insert *universe*)
-       t))))
-
-(eval-when (load eval) (compile 'char-int.2.fn))
 
 (deftest char-int.2
   (char-int.2.fn)
   t)
-
-(defun char-name.1.fn ()
-  (declare (optimize (safety 3) (speed 1) (space 1)))
-  (flet ((%check
-	  (c)
-	  (or (not (characterp c))
-	      (let ((name (char-name c)))
-		(or (null name)
-		    (and (stringp name)
-			 (eql c (name-char name))))))))
-    (and
-     (loop for i from 0 below char-code-limit
-	   always (%check (code-char i)))
-     (every #'%check +standard-chars+)
-     (every #'%check *universe*)
-     t)))
-
-(eval-when (load eval) (compile 'char-name.1.fn))
 
 (deftest char-name.1
   (char-name.1.fn)
@@ -475,19 +317,7 @@
   t)
 
 (deftest name-char.1
-  (funcall
-   (compile nil
-	    '(lambda ()
-	       (declare (safety 3) (speed 1) (space 1))
-	       (notnot
-		(loop for x in *universe*
-		      for s = (catch-type-error (string x))
-		      always
-		      (or (eql s 'type-error)
-			  (let ((c (name-char x)))
-			    (or (not c)
-				(characterp c)
-				(string-equal (char-name c) s)))))))))
+  (name-char.1.body)
   t)
 
 (deftest name-char.2
@@ -498,5 +328,5 @@
 	      (c2 (name-char (string-downcase s)))
 	      (c3 (name-char (string-capitalize s)))
 	      (c4 (name-char s)))
-	  (and (eql c1 c2) (eql c2 c3) (eql c3 c4))))
+	  (and (eqlt c1 c2) (eqlt c2 c3) (eqlt c3 c4))))
   t)

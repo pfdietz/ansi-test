@@ -51,13 +51,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; setting of C*R accessors
 
-(defun create-c*r-test (n)
-  (cond
-   ((<= n 0) 'none)
-   (t
-    (cons (create-c*r-test (1- n))
-	  (create-c*r-test (1- n))))))
-
 (loop
     for fn in '(car cdr caar cadr cdar cddr
 		caaar caadr cadar caddr cdaar cdadr cddar cdddr
@@ -126,12 +119,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nth
-
-(defun nth-1-body (x)
-  (loop
-      for e in x
-       and i from 0
-       count (not (eqt e (nth i x)))))
 
 (deftest nth-1
     (nth-1-body (loop for i from 1 to 2000 collect (* 4 i)))

@@ -12,21 +12,6 @@
 
 (defvar cons-test-24-var '(78 "z" (8 9)))
 
-(defun subsetp-with-check (x y &key (key 'no-key) test test-not)
-  (let ((xcopy (make-scaffold-copy x))
-	(ycopy (make-scaffold-copy y)))
-    (let ((result
-	   (apply #'subsetp x y
-		  `(,@(unless (eqt key 'no-key)
-			`(:key ,key))
-		    ,@(when test `(:test ,test))
-		    ,@(when test-not `(:test-not ,test-not))))))
-      (cond
-       ((and (check-scaffold-copy x xcopy)
-	     (check-scaffold-copy y ycopy))
-	(not (not result)))
-       (t 'failed)))))
-
 (deftest subsetp-1
     (subsetp-with-check (copy-tree '(78)) cons-test-24-var)
   t)

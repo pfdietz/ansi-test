@@ -7,9 +7,6 @@
 
 (declaim (optimize (safety 3)))
 
-(defun safe-elt (x n)
-  (classify-error* (elt x n)))
-
 ;; elt on lists
 
 (deftest elt-1 (safe-elt nil 0) type-error)
@@ -121,14 +118,6 @@
 (deftest elt-v-5 (elt (make-array '(5) :initial-contents '(a b c d e)) 4)
   e)
 
-(defun elt-v-6-body ()
-  (let ((x (make-int-list 1000)))
-    (let ((a (make-array '(1000) :initial-contents x)))
-      (loop
-	  for i from 0 to 999 do
-	    (unless (eql i (elt a i)) (return nil))
-	  finally (return t)))))
-
 (deftest elt-v-6
     (elt-v-6-body)
   t)
@@ -178,11 +167,6 @@
 
 ;;;  Adjustable arrays
 
-(defun make-adj-array (n &key initial-contents)
-  (if initial-contents
-      (make-array n :adjustable t :initial-contents initial-contents)
-    (make-array n :adjustable t)))
-
 (deftest elt-adj-array-1
   (classify-error (elt (make-adj-array '(0)) 0))
   type-error)
@@ -200,14 +184,6 @@
 (deftest elt-adj-array-5
  (elt (make-adj-array '(5) :initial-contents '(a b c d e)) 4)
   e)
-
-(defun elt-adj-array-6-body ()
-  (let ((x (make-int-list 1000)))
-    (let ((a (make-adj-array '(1000) :initial-contents x)))
-      (loop
-	  for i from 0 to 999 do
-	    (unless (eql i (elt a i)) (return nil))
-	  finally (return t)))))
 
 (deftest elt-adj-array-6
     (elt-adj-array-6-body)
@@ -257,13 +233,6 @@
   (79999 foo 80001))
 
 ;; displaced arrays
-
-(defvar *displaced* nil)
-(setf *displaced* (make-int-array 100000))
-
-(defun make-displaced-array (n displacement)
-  (make-array n :displaced-to *displaced*
-	      :displaced-index-offset displacement))
 
 (deftest elt-displaced-array-1 
   (classify-error (elt (make-displaced-array '(0) 100) 0))
