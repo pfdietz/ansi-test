@@ -27,6 +27,9 @@
 (load "sin.lsp")
 (load "cos.lsp")
 (load "tan.lsp")
+(load "asin.lsp")
+(load "acos.lsp")
+(load "atan.lsp")
 
 (load "times.lsp")
 (load "plus.lsp")
