@@ -144,3 +144,11 @@
    append (loop for type in typelist
 		append (check-equivalence `(or ,type ,type) type)))
   nil)
+
+(deftest subtypep.and.2
+  (check-equivalence t '(and))
+  nil)
+
+(deftest subtypep.or.2
+  (check-equivalence nil '(or))
+  nil)
