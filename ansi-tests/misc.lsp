@@ -2929,39 +2929,39 @@
 ;;; sbcl 0.8.5.40
 ;;; Different results from exprs containing ROUND
 
-;;; (deftest misc.182
-;;;   (let* ((form '(labels ((%f14 (f14-1 f14-2)
-;;; 			       (labels ((%f16
-;;; 					 (f16-1 f16-2
-;;; 						&optional
-;;; 						(f16-3 (setq f14-1 (ash f14-1 (min 77 b)))))
-;;; 					 (logandc2 c -100)))
-;;; 				 (return-from %f14 (* 2 (gcd f14-1 (%f16 c f14-1)))))))
-;;; 		  (round (%f14 c c)
-;;; 			 (max 83 (%f14 (multiple-value-call #'%f14 (values 0 2)) 0)))))
-;;; 	 (fn1 `(lambda (a b c)
-;;; 		 (declare (type (integer 5628 8762) a))
-;;; 		 (declare (type (integer 778 33310188747) b))
-;;; 		 (declare (type (integer -6699 4554) c))
-;;; 		 (declare (optimize (speed 3)))
-;;; 		 (declare (optimize (safety 1)))
-;;; 		 (declare (optimize (debug 1)))
-;;; 		 ,form))
-;;; 	 (fn2 `(lambda (a b c)
-;;; 		 (declare (notinline values max round gcd * logandc2 min ash))
-;;; 		 (declare (optimize (safety 3)))
-;;; 		 (declare (optimize (speed 0)))
-;;; 		 (declare (optimize (debug 0)))
-;;; 		 ,form))
-;;; 	 (vals '(7395 1602862793 -2384))
-;;; 	 (cfn1 (compile nil fn1))
-;;; 	 (cfn2 (compile nil fn2))
-;;; 	 (result1 (multiple-value-list (apply cfn1 vals)))
-;;; 	 (result2 (multiple-value-list (apply cfn2 vals))))
-;;;     (if (equal result1 result2)
-;;; 	:good
-;;;       (values result1 result2)))
-;;;   :good)
+(deftest misc.182
+  (let* ((form '(labels ((%f14 (f14-1 f14-2)
+			       (labels ((%f16
+					 (f16-1 f16-2
+						&optional
+						(f16-3 (setq f14-1 (ash f14-1 (min 77 b)))))
+					 (logandc2 c -100)))
+				 (return-from %f14 (* 2 (gcd f14-1 (%f16 c f14-1)))))))
+		  (round (%f14 c c)
+			 (max 83 (%f14 (multiple-value-call #'%f14 (values 0 2)) 0)))))
+	 (fn1 `(lambda (a b c)
+		 (declare (type (integer 5628 8762) a))
+		 (declare (type (integer 778 33310188747) b))
+		 (declare (type (integer -6699 4554) c))
+		 (declare (optimize (speed 3)))
+		 (declare (optimize (safety 1)))
+		 (declare (optimize (debug 1)))
+		 ,form))
+	 (fn2 `(lambda (a b c)
+		 (declare (notinline values max round gcd * logandc2 min ash))
+		 (declare (optimize (safety 3)))
+		 (declare (optimize (speed 0)))
+		 (declare (optimize (debug 0)))
+		 ,form))
+	 (vals '(7395 1602862793 -2384))
+	 (cfn1 (compile nil fn1))
+	 (cfn2 (compile nil fn2))
+	 (result1 (multiple-value-list (apply cfn1 vals)))
+	 (result2 (multiple-value-list (apply cfn2 vals))))
+    (if (equal result1 result2)
+	:good
+      (values result1 result2)))
+  :good)
 
 ;;; sbcl 0.8.5.42
 ;;; failed AVER: "(NOT POPPING)"
@@ -3067,7 +3067,78 @@
    0 0 0)
   0)
 
+;;; sbcl 0.8.5.42
+;;; Different results
 
+(deftest misc.186
+  (let* ((form '(labels ((%f3 (f3-1 f3-2) f3-1))
+		  (apply #'%f3 b (catch 'ct8 (throw 'ct8 (logeqv (%f3 c 0)))) nil)))
+	 (vars '(b c))
+	 (fn1 `(lambda ,vars
+		 (declare (type (integer -2 19) b)
+			  (type (integer -1520 218978) c)
+			  (optimize (speed 3) (safety 1) (debug 1)))
+		 ,form))
+	 (fn2 `(lambda ,vars
+		 (declare (notinline logeqv apply)
+			  (optimize (safety 3) (speed 0) (debug 0)))
+		 ,form))
+	 (cf1 (compile nil fn1))
+	 (cf2 (compile nil fn2))
+	 (result1 (multiple-value-list (funcall cf1 2 18886)))
+	 (result2 (multiple-value-list (funcall cf2 2 18886))))
+    (if (equal result1 result2)
+	:good
+      (values result1 result2)))
+  :good)
 
-    
+;;; cmucl (11/2003 snapshot)
+;;; The assertion (NOT (EQ (C::FUNCTIONAL-KIND C::LEAF) :ESCAPE)) failed.
 
+(deftest misc.187
+  (apply
+   (eval '(function
+	   (lambda (a b c)
+	     (declare (notinline))
+	     (declare (optimize (safety 3)))
+	     (declare (optimize (speed 0)))
+	     (declare (optimize (debug 0)))
+	     (flet ((%f7 (&optional (f7-1 (catch (quote ct7) 0)) (f7-2 0))
+			 c))
+	       (let ((v8
+		      (flet ((%f14 (f14-1 &optional (f14-2 (%f7 b)))
+				   0))
+			0)))
+		 (%f7 b))))))
+   '(2374299 70496 -6321798384))
+  -6321798384)
+
+;;; ecl bug
+;;; Segmentation violation
+
+(deftest misc.188
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+          (declare (notinline floor min funcall))
+          (declare (optimize (safety 3) (speed 0) (debug 0)))
+          (floor (flet ((%f10 (f10-1 f10-2) b)) (%f10 (%f10 0 0) a))
+                 (min -37
+                      (labels ((%f6 (f6-1 f6-2 f6-3) b))
+                        (funcall #'%f6 b b b))))))
+   7187592 -3970792748407 -14760)
+  1 0)
+
+;;; Wrong number of arguments passed to an anonymous function
+(deftest misc.189
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (optimize (speed 3) (safety 1) (debug 1)))
+       (let* ((v7 (labels ((%f13 (f13-1 f13-2 f13-3) 0))
+		    (multiple-value-call #'%f13 (values a a a)))))
+	 (flet ((%f10 nil v7)) (%f10)))))
+   1733 3000 1314076)
+  0)
