@@ -318,6 +318,30 @@
 		     collect (list int-type real-type)))
   nil)
 
+(deftest subtypep.integer.real.8
+  (check-equivalence
+   '(and (integer 4) (real * 10))
+   '(integer 4 10))
+  nil)
+
+(deftest subtypep.integer.real.9
+  (check-equivalence
+   '(and (integer * 10) (real 4))
+   '(integer 4 10))
+  nil)
+
+(deftest subtypep.integer.real.10
+  (check-equivalence
+   '(and (integer 4) (real * (10)))
+   '(integer 4 9))
+  nil)
+
+(deftest subtypep.integer.real.11
+  (check-equivalence
+   '(and (integer * 10) (real (4)))
+   '(integer 5 10))
+  nil)
+
 
 ;;; Between integer and rational types
 

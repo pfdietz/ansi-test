@@ -176,7 +176,18 @@ Results: ~A~%" expected-number form n results))))
    (check-subtypep t `(or ,type2 (not ,type1)) t)
    (check-subtypep t `(or (not ,type2) ,type1) t)
    (check-subtypep t `(or (not ,type1) ,type2) t)))
-   
+
+(defun check-all-subtypep (type1 type2)
+  (append
+   (check-subtypep type1 type2 t)
+   (check-subtypep `(not ,type2) `(not ,type1) t)
+   (check-subtypep `(and ,type1 (not ,type2)) nil t)
+   (check-subtypep t `(or (not ,type1) ,type2) t)))   
+
+(defun check-all-not-subtypep (type1 type2)
+  (append
+   (check-subtypep type1 type2 nil)
+   (check-subtypep `(not ,type2) `(not ,type1) nil)))
 
 (defun check-subtypep (type1 type2 is-sub &optional should-be-valid)
   (multiple-value-bind

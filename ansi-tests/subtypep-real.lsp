@@ -185,13 +185,10 @@
 		     '(rational (1/11) (8/37)))
   nil)
 
-(deftest subtypep.rational.23
-  (subtypep*-or-fail '(not (real -1/2 1/2)) '(not (integer 0 0)))
-  t)
+(deftest subtypep.real.23
+  (check-all-subtypep '(not (real -1/2 1/2)) '(not (integer 0 0)))
+  nil)
 
-(deftest subtypep.rational.24
-  (subtypep*-or-fail '(not (real -1/2 1/2)) '(not (eql 0)))
-  t)
-
-
-
+(deftest subtypep.real.24
+  (check-all-subtypep '(not (real -1/2 1/2)) '(not (eql 0)))
+  nil)

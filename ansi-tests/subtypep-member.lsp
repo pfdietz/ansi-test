@@ -8,69 +8,69 @@
 ;;; SUBTYPEP on MEMBER types
 
 (deftest subtypep.member.1
-  (subtypep*-or-fail '(member a b c) '(member a b c d))
-  t)
+  (check-all-subtypep '(member a b c) '(member a b c d))
+  nil)
 
 (deftest subtypep.member.2
-  (subtypep*-not-or-fail '(member a b c) '(member a b))
-  t)
+  (check-all-not-subtypep '(member a b c) '(member a b))
+  nil)
 
 (deftest subtypep.member.3
   (check-equivalence '(member) nil)
   nil)
 
 (deftest subtypep.member.4
-  (subtypep*-or-fail '(eql b) '(member a b c))
-  t)
+  (check-all-subtypep '(eql b) '(member a b c))
+  nil)
 
 (deftest subtypep.member.5
-  (subtypep*-or-fail '(member a b c d e) 'symbol)
-  t)
+  (check-all-subtypep '(member a b c d e) 'symbol)
+  nil)
 
 (deftest subtypep.member.6
-  (subtypep*-not-or-fail '(member a b 10 d e) 'symbol)
-  t)
+  (check-all-not-subtypep '(member a b 10 d e) 'symbol)
+  nil)
 
 (deftest subtypep.member.7
-  (subtypep*-or-fail 'null '(member a b nil c d e))
-  t)
+  (check-all-subtypep 'null '(member a b nil c d e))
+  nil)
 
 (deftest subtypep.member.8
-  (subtypep*-not-or-fail 'null '(member a b c d e))
-  t)
+  (check-all-not-subtypep 'null '(member a b c d e))
+  nil)
 
 (deftest subtypep.member.9
   (let ((b1 (1+ most-positive-fixnum))
 	(b2 (1+ most-positive-fixnum)))
-    (subtypep*-or-fail `(member 10 ,b1 20) `(member 10 20 ,b2)))
-  t)
+    (check-all-subtypep `(member 10 ,b1 20) `(member 10 20 ,b2)))
+  nil)
 
 (deftest subtypep.member.10
-  (subtypep*-or-fail '(member :a :b :c) 'keyword)
-  t)
+  (check-all-subtypep '(member :a :b :c) 'keyword)
+  nil)
 
 (deftest subtypep.member.11
   (let ((b1 (copy-list '(a)))
 	(b2 (copy-list '(a))))
-    (subtypep*-not-or-fail `(member 10 ,b1 20) `(member 10 20 ,b2)))
-  t)
+    (check-all-not-subtypep `(member 10 ,b1 20) `(member 10 20 ,b2)))
+  nil)
 
 (deftest subtypep.member.12
   (let ((b1 '(a)))
-    (subtypep*-or-fail `(member 10 ,b1 20) `(member 10 20 ,b1)))
-  t)
+    (check-all-subtypep `(member 10 ,b1 20) `(member 10 20 ,b1)))
+  nil)
 
 (deftest subtypep.member.13
-  (subtypep*-or-fail '(member 10 20 30) '(integer 0 100))
-  t)
+  (check-all-subtypep '(member 10 20 30) '(integer 0 100))
+  nil)
 
 (deftest subtypep.member.14
-  (subtypep*-or-fail '(integer 3 6) '(member 0 1 2 3 4 5 6 7 8 100))
-  t)
+  (check-all-subtypep '(integer 3 6) '(member 0 1 2 3 4 5 6 7 8 100))
+  nil)
 
 (deftest subtypep.member.15
-  (subtypep*-not-or-fail '(integer 3 6) '(member 0 1 2 3 5 6 7 8))
-  t)
+  (check-all-not-subtypep '(integer 3 6) '(member 0 1 2 3 5 6 7 8))
+  nil)
 
 (deftest subtypep.member.16
   (check-equivalence '(integer 2 5) '(member 2 5 4 3))
