@@ -4777,11 +4777,9 @@
        (flet ((%f11 (f11-2) 0))
          (%f11 (unwind-protect
                    e
-                   (tagbody
-                   ;; (let* ((v4
-                            (unwind-protect (go 0))))
-                      0 ;;)
-                    0)
-                   (logand (handler-bind () 0)))))))
+	         (tagbody
+                  (let* ((v4 (unwind-protect (go 0)))) 0)
+                  0)
+                 (logand (handler-bind () 0)))))))
    10)
   0)
