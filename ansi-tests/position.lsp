@@ -692,7 +692,7 @@
 			 :displaced-index-offset 3
 			 :element-type (array-element-type s1))))
     (position #\c s2 :from-end t))
-  6)
+  10)
 
 (deftest position-string.33
   (do-special-strings
@@ -707,7 +707,7 @@
    (s "abcdabcdabcd" nil)
    (let* ((c #\c)
 	  (pos (position c s :from-end t)))
-     (assert (eql pos 2) () "Last position of ~A in ~A is ~A" c s pos)))
+     (assert (eql pos 10) () "Last position of ~A in ~A is ~A" c s pos)))
   nil)
 
 (defharmless position.test-and-test-not.1
