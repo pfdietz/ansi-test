@@ -10494,3 +10494,15 @@ Broken at C::WT-MAKE-CLOSURE.
 	   (make-array '(1) :element-type 'base-char :initial-element #\x
 		       :fill-pointer 0))
   "")
+
+;;; clisp (11 Jan 2005)
+
+;;; *** - SYSTEM::%RPLACA: NIL is not a pair
+
+(deftest misc.579
+  (funcall
+   (compile nil '(lambda ()
+		   (declare (optimize (speed 3) (safety 3) (debug 3) (space 0)))
+		   (member 61 '(432445) :allow-other-keys t :foo t))))
+  nil)
+
