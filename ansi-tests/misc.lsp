@@ -8662,6 +8662,8 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;; sbcl 0.8.17.24
 ;;; Bugs in the just-introduced fixnum arithmetic transforms
 
+;;; LOGAND bug
+
 (deftest misc.455
   (funcall
    (compile
@@ -8686,3 +8688,23 @@ Broken at C::WT-MAKE-CLOSURE.
            (logand (* -9964236 (setq c 6206) 2600) b c)))
     17296668225 -6574)
   4096)
+
+;;; DEPOSIT-FIELD (?) bug
+
+(deftest misc.457
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -455461 343063) a))
+       (declare (type (integer -1020097 -12430) b))
+       (declare (ignorable a b))
+       (declare
+	(optimize (speed 3)
+		  (space 0)
+		  (compilation-speed 3)
+		  (debug 0)
+		  (safety 3)))
+       (deposit-field (* (logeqv a a) b) (byte 6 24) 0)))
+   -212811 -985078)
+  0)
