@@ -349,3 +349,67 @@
   program-error)
 
 
+;;; Default constructor w. BOA constructor, and error cases
+
+(defstruct* (sbt-16 (:constructor)
+		    (:constructor sbt-16-con (a b c)))
+   a b c)
+
+(deftest structure-boa-test-16/1
+  (sbt-slots 'sbt-16 (make-sbt-16 :a 1 :b 2 :c 3) :a :b :c)
+  (1 2 3))
+
+(deftest structure-boa-test-16/2
+  (sbt-slots 'sbt-16 (sbt-16-con 4 5 6) :a :b :c)
+  (4 5 6))
+
+(deftest structure-boa-test-16/3
+  (classify-error (make-sbt-16 :d 1))
+  program-error)
+
+(deftest structure-boa-test-16/4
+  (classify-error (make-sbt-16 :a))
+  program-error)
+
+(deftest structure-boa-test-16/5
+  (classify-error (make-sbt-16 'a))
+  program-error)
+
+(deftest structure-boa-test-16/6
+  (classify-error (make-sbt-16 1 1))
+  program-error)
+
+(deftest structure-boa-test-16/7
+  (sbt-slots 'sbt-16 (make-sbt-16 :a 1 :b 2 :c 3 :d 5 :allow-other-keys t)
+	     :a :b :c)
+  (1 2 3))
+
+(deftest structure-boa-test-16/8
+  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t :a 1 :b 2 :c 3 :d 5)
+	     :a :b :c)
+  (1 2 3))
+
+;;; :allow-other-keys turns off keyword error checking, including
+;;; invalid (nonsymbol) keyword arguments
+(deftest structure-boa-test-16/9
+  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t :a 3 :b 6 :c 9 1000 1000)
+	     :a :b :c)
+  (3 6 9))
+
+;;; Repeated keyword arguments are allowed; the leftmost one is used
+(deftest structure-boa-test-16/10
+  (sbt-slots 'sbt-16 (make-sbt-16 :a 1 :a 2 :b 3 :b 4 :c 5 :c 6) :a :b :c)
+  (1 3 5))
+
+(deftest structure-boa-test-16/11
+  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t 
+				  :allow-other-keys nil
+				  :a 1 :b 2 :c 3 :d 5)
+	     :a :b :c)
+  (1 2 3))
+
+;; Checking of # of keywords is suppressed when :allow-other-keys is true
+(deftest structure-boa-test-16/12
+  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t :a 3 :b 6 :c 9 :a)
+	     :a :b :c)
+  (3 6 9))

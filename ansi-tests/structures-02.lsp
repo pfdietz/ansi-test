@@ -340,3 +340,66 @@
 
 (defstruct-with-tests (struct-test-59 (:include struct-test-58))
   "This is struct-test-59"  a-59 b-59)
+
+;;; When a field name of a structure is also a special variable,
+;;; the constructor must not bind that name.
+
+(defvar *st-60* 100)
+
+(defstruct-with-tests struct-test-60
+  (a60 *st-60* :type integer)
+  (*st-60* 0 :type integer)
+  (b60 *st-60* :type integer))
+
+(deftest structure-60-1
+  (let ((*st-60* 10))
+    (let ((s (make-struct-test-60 :*st-60* 200)))
+      (values (struct-test-60-a60 s)
+	      (struct-test-60-*st-60* s)
+	      (struct-test-60-b60 s))))
+  10 200 10)
+
+
+;;; When default initializers of the wrong type are given, they do not
+;;; cause an error unless actually invoked
+
+(defstruct struct-test-61
+  (a nil :type integer)
+  (b 0 :type symbol))
+
+(deftest structure-61-1
+  (let ((s (make-struct-test-61 :a 10 :b 'c)))
+    (values (struct-test-61-a s)
+	    (struct-test-61-b s)))
+  10 c)
+
+;;; Initializer forms are evaluated only when needed, and are
+;;; evaluated in the lexical environment in which they were defined
+
+(eval-when (load eval)
+  (let ((x nil))
+    (flet ((%f () x)
+	  (%g (y) (setf x y)))
+      (defstruct struct-test-62
+	(a (progn (setf x 'a) nil))
+	(f #'%f)
+	(g #'%g)))))
+
+(deftest structure-62-1
+  (let* ((s (make-struct-test-62 :a 1))
+	 (f (struct-test-62-f s)))
+    (values
+     (struct-test-62-a s)
+     (funcall f)))
+  1 nil)
+
+(deftest structure-62-2
+  (let* ((s (make-struct-test-62))
+	 (f (struct-test-62-f s))
+	 (g (struct-test-62-g s)))
+    (values
+     (struct-test-62-a s)
+     (funcall f)
+     (funcall g nil)
+     (funcall f)))
+  nil a nil nil)
