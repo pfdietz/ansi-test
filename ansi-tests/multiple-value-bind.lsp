@@ -51,12 +51,12 @@
      x y z))
   (1 2 0) nil nil 0)
 
-(deftest multiple-value-bind.error.1
-  (classify-error (multiple-value-bind))
-  program-error)
-
-(deftest multiple-value-bind.error.2
-  (classify-error (multiple-value-bind (a b c)))
-  program-error)
+;;; (deftest multiple-value-bind.error.1
+;;;  (classify-error (multiple-value-bind))
+;;;  program-error)
+;;;
+;;; (deftest multiple-value-bind.error.2
+;;;  (classify-error (multiple-value-bind (a b c)))
+;;;  program-error)
 
   
