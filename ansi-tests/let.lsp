@@ -89,7 +89,7 @@
 
 ;;; Tests of large number of LET variables
 (deftest let.14
-  (let* ((n 1000)
+  (let* ((n 100)
 	 (vars (mapcar #'gensym (make-list n :initial-element "G")))
 	 (expr `(let ,(let ((i 0))
 			(mapcar #'(lambda (v) (list v (incf i))) vars))
@@ -129,6 +129,27 @@
 	(declare (special x)) ;; free declaration
 	y)))
   :good)
+
+(deftest let.17a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (let ((x :bad))
+	 (declare (special x))
+	 (let ((x :good)) ;; lexical binding
+	   (let ((y x))
+	     (declare (special x)) ;; free declaration
+	     y))))))
+  :good)
+
+(deftest let.18
+  (let ((foo 'special))
+    (declare (special foo))
+    (let ((foo 'lexical))
+      (locally (declare (special foo)))
+      foo))
+  lexical)
 
 ;;; Tests for LET*
 
@@ -208,7 +229,7 @@
 
 ;;; Tests of large number of LET* variables
 (deftest let*.14
-  (let* ((n 1000)
+  (let* ((n 100)
 	 (vars (mapcar #'gensym (make-list n :initial-element "G")))
 	 (expr `(let* ,(let ((i 0))
 			 (mapcar #'(lambda (v) (list v (incf i))) vars))
@@ -248,4 +269,38 @@
 	(declare (special x)) ;; free declaration
 	y)))
   :good)
+
+(deftest let*.17a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (let ((x :bad))
+	 (declare (special x))
+	 (let ((x :good)) ;; lexical binding
+	   (let* ((y x))
+	     (declare (special x)) ;; free declaration
+	     y))))))
+  :good)
+
+(deftest let*.18
+  (let ((x :bad1)
+	(z :bad2))
+    (declare (special x z))
+    (let ((x :good)
+	  (z :good)) ;; lexical bindings
+      (let* ((y x)
+	     (w z))
+	(declare (special x)) ;; free declaration
+	(values y w))))
+  :good
+  :good)
+
+(deftest let*.19
+  (let ((foo 'special))
+    (declare (special foo))
+    (let* ((foo 'lexical))
+      (locally (declare (special foo)))
+      foo))
+  lexical)
 

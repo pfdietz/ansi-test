@@ -478,3 +478,29 @@
 		 y))
 	(%f))))
   :good)
+
+(deftest flet.64
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (flet () (declare (special x)))
+      x))
+  :good)
+
+(deftest flet.65
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (flet ((%f () (declare (special x)))))
+      x))
+  :good)
+
+(deftest flet.66
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (flet ((%f () (declare (special x))))
+	x)))
+  :good)
+
+		
