@@ -23,12 +23,12 @@
     (nreverse x))
   #(e d c b a))
 
-(deftest nreverse-nonsimple-vector.1
+(deftest nreverse-vector.4
   (let ((x (make-array 0 :fill-pointer t :adjustable t)))
     (nreverse x))
   #())
 
-(deftest nreverse-nonsimple-vector.2
+(deftest nreverse-vector.5
   (let* ((x (make-array 5 :initial-contents '(1 2 3 4 5)
 			:fill-pointer t :adjustable t))
 	 (y (nreverse x)))
@@ -36,13 +36,58 @@
   #(5 4 3 2 1)
   t)
 
-(deftest nreverse-nonsimple-vector.3
+(deftest nreverse-vector.6
   (let* ((x (make-array 10 :initial-contents '(1 2 3 4 5 6 7 8 9 10)
 			:fill-pointer 5))
 	 (y (nreverse x)))
     (values y (equalt (type-of x) (type-of y))))
   #(5 4 3 2 1)
   t)
+
+;;; Unusual vectors
+
+(deftest nreverse-vector.7
+  (do-special-integer-vectors
+   (v #(0 0 1 0 1 1) nil)
+   (let ((nv (nreverse v)))
+     (assert (= (length nv) 6))
+     (assert (every #'= nv #(1 1 0 1 0 0)))))
+  nil)
+
+(deftest nreverse-vector.8
+  (do-special-integer-vectors
+   (v #(0 0 -1 0 -1 -1 0 -1) nil)
+   (let ((nv (nreverse v)))
+     (assert (= (length nv) 8))
+     (assert (every #'= nv #(-1 0 -1 -1 0 -1 0 0)))))
+  nil)
+
+(deftest nreverse-vector.9
+  (let ((len 10))
+    (loop for etype in '(short-float single-float double-float long-float rational)
+	  for vals = (loop for i from 1 to len collect (coerce i etype))
+	  for vec = (make-array len :element-type etype :initial-contents vals)
+	  for nvec = (nreverse vec)
+	  unless (and (eql (length nvec) len)
+		      (every #'eql (reverse vals) nvec))
+	  collect (list etype vals nvec)))
+  nil)
+
+(deftest nreverse-vector.10
+  (let ((len 10))
+    (loop for cetype in '(short-float single-float double-float long-float rational integer)
+	  for etype = `(complex ,cetype)
+	  for vals = (loop for i from 1 to len collect (complex (coerce i cetype)
+								(coerce (- i) cetype)))
+	  for vec = (make-array len :element-type etype :initial-contents vals)
+	  for nvec = (nreverse vec)
+	  unless (and (eql (length nvec) len)
+		      (every #'eql (reverse vals) nvec))
+	  collect (list etype vals nvec)))
+  nil)
+
+
+;;; Bit vectors
 
 (deftest nreverse-bit-vector.1
   (nreverse #*)
@@ -60,6 +105,8 @@
 	 (y (nreverse x)))
     y)
   #*11000)
+
+;;; Strings
 
 (deftest nreverse-string.1
   (nreverse "")
@@ -95,12 +142,16 @@
      (assert (equal (array-element-type s) (array-element-type s2)))))
   nil)
 
+;;; Argument is evaluated only once
+
 (deftest nreverse.order.1
   (let ((i 0))
     (values
      (nreverse (progn (incf i) (list 'a 'b 'c 'd)))
      i))
   (d c b a) 1)
+
+;;; Error tests
 
 (deftest nreverse.error.1
   (signals-error (nreverse 'a) type-error)

@@ -89,6 +89,22 @@
   (concatenate '(vector * *) '(a b c) '(d e f) #(g h))
   #(a b c d e f g h))
 
+(deftest concatenate.18a
+  (concatenate '(vector *) '(a b c) '(d e f) #(g h))
+  #(a b c d e f g h))
+
+(deftest concatenate.18b
+  (concatenate '(vector) '(a b c) '(d e f) #(g h))
+  #(a b c d e f g h))
+
+(deftest concatenate.18c
+  (concatenate '(simple-vector *) '(a b c) '(d e f) #(g h))
+  #(a b c d e f g h))
+
+(deftest concatenate.18d
+  (concatenate '(simple-vector) '(a b c) '(d e f) #(g h))
+  #(a b c d e f g h))
+
 (deftest concatenate.19
   (concatenate '(vector * 8) '(a b c) '(d e f) #(g h))
   #(a b c d e f g h))
@@ -173,9 +189,25 @@
 			:fill-pointer 5 :element-type 'bit)))
     (values
      (concatenate 'bit-vector x '(0))
-     (concatenate 'bit-vector '(0) x)
-     (concatenate 'bit-vector x x)
-     (concatenate 'bit-vector x)
+     (concatenate '(bit-vector) '(0) x)
+     (concatenate '(bit-vector 10) x x)
+     (concatenate '(bit-vector *) x)
+     (not (simple-bit-vector-p (concatenate 'bit-vector x)))
+     ))
+  #*011000
+  #*001100
+  #*0110001100
+  #*01100
+  nil)
+
+(deftest concatenate.30a
+  (let* ((x (make-array '(10) :initial-contents #*0110010111
+			:fill-pointer 5 :element-type 'bit)))
+    (values
+     (concatenate 'simple-bit-vector x '(0))
+     (concatenate 'simple-bit-vector '(0) x)
+     (concatenate 'simple-bit-vector x x)
+     (concatenate 'simple-bit-vector x)
      (not (simple-bit-vector-p (concatenate 'bit-vector x)))
      ))
   #*011000
@@ -204,6 +236,36 @@
    (assert (string= (concatenate 'simple-base-string s "z" s "w" s) "abczabcwabc"))
    (assert (string= (concatenate '(vector character) s "z" s "w" s) "abczabcwabc")))
   nil)
+
+(deftest concatenate.34
+  (concatenate 'simple-string "abc" "def")
+  "abcdef")
+		     
+(deftest concatenate.35
+  (concatenate '(simple-string) "abc" "def")
+  "abcdef")
+		     
+(deftest concatenate.36
+  (concatenate '(simple-string *) "abc" "def")
+  "abcdef")
+		     
+(deftest concatenate.37
+  (concatenate '(simple-string 6) "abc" "def")
+  "abcdef")
+		     
+(deftest concatenate.38
+  (concatenate '(string) "abc" "def")
+  "abcdef")
+		     
+(deftest concatenate.39
+  (concatenate '(string *) "abc" "def")
+  "abcdef")
+		     
+(deftest concatenate.40
+  (concatenate '(string 6) "abc" "def")
+  "abcdef")
+
+;;; Order of evaluation tests
 		     
 (deftest concatenate.order.1
   (let ((i 0) w x y z)
@@ -232,8 +294,8 @@
   t)
 
 (deftest concatenate.error.2
-  (signals-error (concatenate 'fixnum '(a b c d e)) error)
-  t)
+  (signals-error-always (concatenate 'fixnum '(a b c d e)) error)
+  t t)
 
 (deftest concatenate.error.3
   (signals-error (concatenate '(vector * 3) '(a b c d e))
@@ -248,4 +310,11 @@
   (signals-error (locally (concatenate '(vector * 3) '(a b c d e)) t)
 		 type-error)
   t)
+
+(deftest concatenate.error.6
+  (let ((type '(or (vector bit) (vector t))))
+    (if (subtypep type 'vector)
+	(eval `(signals-error-always (concatenate ',type '(0 1 0) '(1 1 0)) error))
+      (values t t)))
+  t t)
 

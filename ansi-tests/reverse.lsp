@@ -25,12 +25,12 @@
   #(e d c b a)
   #(a b c d e))
 
-(deftest reverse-nonsimple-vector.1
+(deftest reverse-vector.3
   (let ((x (make-array 0 :fill-pointer t :adjustable t)))
     (reverse x))
   #())
 
-(deftest reverse-nonsimple-vector.2
+(deftest reverse-vector.4
   (let* ((x (make-array 5 :initial-contents '(1 2 3 4 5)
 			:fill-pointer t :adjustable t))
 	 (y (reverse x)))
@@ -38,12 +38,66 @@
   #(5 4 3 2 1)
   #(1 2 3 4 5))
 
-(deftest reverse-nonsimple-vector.3
+(deftest reverse-vector.5
   (let* ((x (make-array 10 :initial-contents '(1 2 3 4 5 6 7 8 9 10)
 			:fill-pointer 5))
 	 (y (reverse x)))
     y)
   #(5 4 3 2 1))
+
+;;; Other unusual vectors
+
+(deftest reverse-vector.6
+  (do-special-integer-vectors
+   (v #(1 1 0 1 1 0) nil)
+   (let ((nv (reverse v)))
+     (assert (typep nv 'simple-array))
+     (assert (not (eql v nv)))
+     (assert (equalp nv #(0 1 1 0 1 1)))
+     (assert (equalp v #(1 1 0 1 1 0)))))
+  nil)
+
+(deftest reverse-vector.7
+  (do-special-integer-vectors
+   (v #(-1 -1 0 -1 -1 0) nil)
+   (let ((nv (reverse v)))
+     (assert (typep nv 'simple-array))
+     (assert (not (eql v nv)))
+     (assert (equalp nv #(0 -1 -1 0 -1 -1)))
+     (assert (equalp v #(-1 -1 0 -1 -1 0)))))
+  nil)
+
+(deftest reverse-vector.8
+  (let ((len 10))
+    (loop for etype in '(short-float single-float double-float long-float rational)
+	  for vals = (loop for i from 1 to len collect (coerce i etype))
+	  for vec = (make-array len :element-type etype :initial-contents vals)
+	  for nvec = (reverse vec)
+	  unless (and (eql (length nvec) len)
+		      (typep nvec 'simple-array)
+		      (not (eql vec nvec))
+		      (every #'eql (reverse vals) nvec)
+		      (every #'eql vals vec))
+	  collect (list etype vals vec nvec)))
+  nil)
+
+(deftest reverse-vector.9
+  (let ((len 10))
+    (loop for cetype in '(short-float single-float double-float long-float rational integer)
+	  for etype = `(complex ,cetype)
+	  for vals = (loop for i from 1 to len collect (complex (coerce i cetype)
+								(coerce (- i) cetype)))
+	  for vec = (make-array len :element-type etype :initial-contents vals)
+	  for nvec = (reverse vec)
+	  unless (and (eql (length nvec) len)
+		      (typep nvec 'simple-array)
+		      (not (eql vec nvec))
+		      (every #'eql (reverse vals) nvec)
+		      (every #'eql vals vec))
+	  collect (list etype vals vec nvec)))
+  nil)
+
+;;; Bit vectors
 
 (deftest reverse-bit-vector.1
   (reverse #*)
@@ -62,6 +116,8 @@
 	 (y (reverse x)))
     y)
   #*11000)
+
+;;; Strings
 
 (deftest reverse-string.1
   (reverse "")
@@ -100,6 +156,8 @@
      (assert (string= "12345" s))
      (assert (string= "54321" s2))))
   nil)
+
+;;; Order, number of times of evaluation
 
 (deftest reverse.order.1
   (let ((i 0))

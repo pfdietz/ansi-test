@@ -73,7 +73,61 @@
      (setq a (sort a #'(lambda (i j) (aref cmp i j))))
      (and (eqlt (length a) 10)
 	  (equalpt (sort a #'<) #(0 1 2 3 4 5 6 7 8 9)))))
-  t)	
+  t)
+
+(deftest sort-vector.6
+  (do-special-integer-vectors
+   (v #(1 4 7 3 2 6 5) nil)
+   (let ((sv (sort v #'<)))
+     (assert (equalp sv #(1 2 3 4 5 6 7)))))
+  nil)
+
+(deftest sort-vector.7
+  (do-special-integer-vectors
+   (v #(0 1 1 0 1 1 0 1 0) nil)
+   (let ((sv (sort v #'<)))
+     (assert (equalp sv #(0 0 0 0 1 1 1 1 1)))))
+  nil)
+
+(deftest sort-vector.8
+  (do-special-integer-vectors
+   (v #(0 -1 -1 0 -1 -1 0 -1 0) nil)
+   (let ((sv (sort v #'>)))
+     (assert (equalp sv #(0 0 0 0 -1 -1 -1 -1 -1)))))
+  nil)
+
+(deftest sort-vector.9
+  (let* ((ivals '(1 4 7 3 2 6 5))
+	 (sivals '(1 2 3 4 5 6 7))
+	 (len (length ivals)))
+    (loop for etype in '(short-float single-float double-float long-float rational)
+	  for vals = (loop for i in ivals collect (coerce i etype))
+	  for svals = (loop for i in sivals collect (coerce i etype))
+	  for vec = (make-array len :element-type etype :initial-contents vals)
+	  for svec = (sort vec #'<)
+	  unless (and (eql (length svec) len)
+		      (every #'eql svals svec))
+	  collect (list etype vals svec)))
+  nil)
+
+(deftest sort-vector.10
+  (let* ((ivals '(1 4 7 3 2 6 5))
+	 (sivals '(1 2 3 4 5 6 7))
+	 (len (length ivals)))
+    (loop for cetype in '(short-float single-float double-float long-float rational)
+	  for etype = `(complex ,cetype)
+	  for vals = (loop for i in ivals collect (complex (coerce i cetype)
+							   (coerce (- i) cetype)))
+	  for svals = (loop for i in sivals collect (complex (coerce i cetype)
+							     (coerce (- i) cetype)))
+	  for vec = (make-array len :element-type etype :initial-contents vals)
+	  for svec = (sort vec #'(lambda (x y) (< (abs x) (abs y))))
+	  unless (and (eql (length svec) len)
+		      (every #'eql svals svec))
+	  collect (list etype vals svec)))
+  nil)
+
+;;; Bit vectors
 
 (deftest sort-bit-vector.1
   (let ((a (copy-seq #*10011101)))
