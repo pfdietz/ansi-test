@@ -38,8 +38,8 @@
   car :external)
 
 (deftest find-symbol-8
-  (ignore-errors (find-symbol "CAR" "COMMON-LISP-USER"))
-  car :inherited)
+  (values (ignore-errors (find-symbol "CAR" "COMMON-LISP-USER")))
+  car #| :inherited |# )
 
 (deftest find-symbol-9
   (ignore-errors (find-symbol "CAR" "CL-TEST"))
