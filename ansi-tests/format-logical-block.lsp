@@ -230,29 +230,34 @@
  3)"
   :margin 2)
 
+(def-pprint-test format.logical-block.26
+  (format nil "~:@<~@{~A~^~}~:@>" "1 2 3")
+  "(1 2 3)"
+  :margin 2)
+
 ;;; Circularity detection
 
-(def-pprint-test format.logical-block.26
+(def-pprint-test format.logical-block.circle.1
   (format nil "~:<~@{~A~^ ~}~:>" (let ((x (list 0))) (list x x)))
   "(#1=(0) #1#)"
   :circle t)
 
-(def-pprint-test format.logical-block.27
+(def-pprint-test format.logical-block.circle.2
   (format nil "~:<~@{~A~^ ~}~:>" (let ((x (list 0))) (cons x x)))
   "(#1=(0) . #1#)"
   :circle t)
 
-(def-pprint-test format.logical-block.28
+(def-pprint-test format.logical-block.circle.3
   (format nil "~:<~@{~A~^ ~}~:>" (let ((x (list 0)))
 				   (setf (cdr x) x)
 				   x))
   "#1=(0 . #1#)"
   :circle t)
 
-(def-pprint-test format.logical-block.29
+(def-pprint-test format.logical-block.circle.4
   (format nil "~:<~@{~A~^ ~}~:>" (let ((x (list 0))) (list x x)))
   "((0) (0))")
 
-(def-pprint-test format.logical-block.30
+(def-pprint-test format.logical-block.circle.5
   (format nil "~:<~@{~A~^ ~}~:>" (let ((x (list 0))) (cons x x)))
   "((0) 0)")
