@@ -1380,6 +1380,85 @@
 	 (apply #'%f14 0 0 0 nil)))))
   0)
 
+;;; "The value NIL is not of type SB-C::IR2-LVAR." (sbcl 0.8.14.18)
+
+(deftest misc.107b
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 7215 1030625885) a))
+       (declare (type (integer -4361 -6) b))
+       (declare (type (integer -3798210806 -898) c))
+       (declare (ignorable a b c))
+       (declare
+	(optimize (speed 2)
+		  (space 2)
+		  (safety 2)
+		  (debug 3)
+		  (compilation-speed 1)))
+       (block b4
+	 (let ((*s7* (cons c 0)))
+	   (declare (special *s7*))
+	   (return-from b4
+	     (prog1 0
+	       (the integer
+		 (integer-length
+		  (1+
+		   (let ()
+		     (gcd (cdr *s7*)
+			  (case b
+			    ((31 38 20 0 5 45) 2)
+			    ((34 35 64 61 47) 39)
+			    ((58) a)
+			    (t 131788)))))))))))))
+   734649164 -3343 -2306504518)
+  0)
+
+(deftest misc.107c
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (optimize (speed 2) (space 1) (safety 1) (debug 3)
+			  (compilation-speed 0)))
+       (let* ((*s6*
+	       (unwind-protect 0 (the integer (ash 2914825 (min 8 c))))))
+	 (declare (special *s6*))
+	 0)))
+   -105)
+  0)
+
+(deftest misc.107d
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 1) (space 1) (safety 1) (debug 3)
+			  (compilation-speed 1)))
+       (catch 'ct4
+	 (logorc1
+	  (the integer
+	    (case (dotimes (iv2 2 2) (progn 203))
+	      ((-51) -59598)
+	      ((-31 -150) a)
+	      (t b)))
+	  (throw 'ct4 0)))))
+   10)
+  0)
+
+(deftest misc.107e
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 1) (space 0) (safety 1)
+			  (debug 3) (compilation-speed 1)))
+       (flet ((%f11 (&key (key1 (the integer (- a 245241933)))) 0))
+	 (%f11))))
+   1)
+  0)
+
 ;;; cmucl bug (Argument X is not a NUMBER: NIL)
 
 (deftest misc.108
@@ -7435,4 +7514,19 @@ Broken at C::WT-C-INLINE-LOC.
    'x 'y)
   x)
 
+;;; sbcl 0.8.14.18
+;;; "The value #<SB-C::COMBINATION :FUN # :ARGS (# # #) {C44D1C1}>
+;;;   is not of type SB-C::REF."
 
+
+(deftest misc.392
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (notinline /=))
+       (declare (optimize (speed 1) (space 2) (safety 1)
+			  (debug 3) (compilation-speed 3)))
+       (prog2 0 0 (loop for lv4 below 3 count (or b (/= b))))))
+   1 2)
+  0)
