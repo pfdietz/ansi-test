@@ -6,6 +6,8 @@
 (in-package :cl-test)
 
 (compile-and-load "numbers-aux.lsp")
+(compile-and-load "random-aux.lsp")
+
 (load "number-comparison.lsp")
 (load "max.lsp")
 (load "min.lsp")
@@ -73,6 +75,12 @@
 (load "lognot.lsp")
 (load "logxor.lsp")
 (load "logbitp.lsp")
+
+(load "byte.lsp")
+(load "deposit-field.lsp")
+(load "dpb.lsp")
+(load "ldb.lsp")
+(load "mask-field.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
