@@ -47,7 +47,7 @@
 
 (deftest logbitp.3
   (logbitp most-positive-fixnum 0)
-  0)
+  nil)
 	
 (deftest logbitp.4
   (notnot-mv (logbitp most-positive-fixnum -1))
@@ -55,7 +55,7 @@
 
 (deftest logbitp.5
   (logbitp (1+ most-positive-fixnum) 0)
-  0)
+  nil)
 	
 (deftest logbitp.6
   (notnot-mv (logbitp (1+ most-positive-fixnum) -1))
