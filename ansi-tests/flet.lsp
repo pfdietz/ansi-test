@@ -456,3 +456,25 @@
    (flet ((%f (&key) :bad)) (%f nil nil))
    program-error)
   t)
+
+;;; Free declarations do not affect argument forms
+
+(deftest flet.62
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (flet ((%f (&optional (y x))
+		 (declare (special x))
+		 y))
+	(%f))))
+  :good)
+
+(deftest flet.63
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (flet ((%f (&key (y x))
+		 (declare (special x))
+		 y))
+	(%f))))
+  :good)

@@ -298,4 +298,26 @@
     (eqlt x (funcall x)))
   t)
 
+;;; Test that free declarations do not affect argument forms
+
+(deftest labels.41
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (labels ((%f (&optional (y x))
+		   (declare (special x))
+		   y))
+	(%f))))
+  :good)
+
+(deftest labels.42
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (labels ((%f (&key (y x))
+		   (declare (special x))
+		   y))
+	(%f))))
+  :good)
+
 
