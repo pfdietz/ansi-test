@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "random-aux.lsp")
+
 (deftest equalp.1
   (loop for c across +base-chars+
 	always (loop for d across +base-chars+
@@ -217,6 +219,70 @@
     (setf (gethash #\a ht2) "A")
     (equalpt ht1 ht2))
   t)
+
+(deftest equalp.30
+  (let ((ht1 (make-hash-table :test #'equal))
+	(ht2 (make-hash-table :test #'equal)))
+    (setf (gethash #\a ht1) t)
+    (setf (gethash #\A ht2) t)
+    (equalpt ht1 ht2))
+  nil)
+
+(deftest equalp.31
+  (let ((ht1 (make-hash-table :test #'equal))
+	(ht2 (make-hash-table :test #'equal)))
+    (setf (gethash #\a ht1) "a")
+    (setf (gethash #\a ht2) "A")
+    (equalpt ht1 ht2))
+  t)
+
+(deftest equalp.32
+  (let ((ht1 (make-hash-table :test #'equalp))
+	(ht2 (make-hash-table :test #'equalp)))
+    (setf (gethash #\a ht1) t)
+    (setf (gethash #\A ht2) t)
+    (equalpt ht1 ht2))
+  t)
+
+(deftest equalp.33
+  (let ((ht1 (make-hash-table :test #'equalp))
+	(ht2 (make-hash-table :test #'equalp)))
+    (setf (gethash #\a ht1) "a")
+    (setf (gethash #\a ht2) "A")
+    (equalpt ht1 ht2))
+  t)
+
+(deftest equalp.34
+  (let ((ht1 (make-hash-table :test #'equalp))
+	(ht2 (make-hash-table :test #'equalp)))
+    (setf (gethash '#:a ht1) t)
+    (setf (gethash '#:a ht2) t)
+    (equalpt ht1 ht2))
+  nil)
+
+(deftest equalp.35
+  (loop for test in '(eq eql equal equalp)
+	collect
+	(flet ((%make-table
+		()
+		(apply #'make-hash-table
+		       :test test
+		       `(,@(when (coin)
+			     (list :size (random 100)))
+			   ,@(when (coin)
+			       (list :rehash-size (1+ (random 50))))
+			   ,@(when (coin)
+			       (list :rehash-threshold (random 1.0)) )))))
+	  (loop repeat 200
+		count
+		(let ((ht1 (%make-table))
+		      (ht2 (%make-table))
+		      (pairs (loop for i below (random 100) collect (cons (gensym) i))))
+		  (loop for (k . v) in pairs do (setf (gethash k ht1) v))
+		  (setf pairs (random-permute pairs))
+		  (loop for (k . v) in pairs do (setf (gethash k ht2) v))
+		  (not (equalp ht1 ht2))))))
+  (0 0 0 0))
 
 (deftest equalp.order.1
   (let ((i 0) x y)
