@@ -175,7 +175,7 @@
 (defun make-random-vector (size)
   (if (> size 1)
       (let* ((nelems (min (1- size) (1+ (random (max 2 (floor size 4))))))
-	     (sizes (mapcar #'1+ (random-partition (- size nelems 1) nelems))))
+	     (sizes (mapcar #'1+ (random-partition* (- size nelems 1) nelems))))
 	(make-array nelems :initial-contents (mapcar #'make-random-vector sizes)))
     (rcase
      (1 (random-from-seq #(a b c d e f g)))
