@@ -183,6 +183,14 @@ condition itself on other errors."
 ")
 
 (defconstant +alpha-chars+ (subseq +standard-chars+ 0 52))
+(defconstant +lower-case-chars+ (subseq +alpha-chars+ 0 26))
+(defconstant +upper-case-chars+ (subseq +alpha-chars+ 26 52))
 (defconstant +alphanumeric-chars+ (subseq +standard-chars+ 0 62))
 (defconstant +digit-chars+ "0123456789")
 (defconstant +extended-digit-chars+ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+(defconstant +code-chars+
+  (coerce (loop for i from 0 below 256
+		for c = (code-char i)
+		when c collect c)
+	  'string))
+(defconstant +rev-code-chars+ (reverse +code-chars+))

@@ -129,6 +129,8 @@
 (load "make-string.lsp")
 
 ;;; Tests for character functions
+(compile-and-load "char-aux.lsp")
 (load "character.lsp")
+(load "char-compare.lsp")
 
 
