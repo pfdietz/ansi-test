@@ -8,3 +8,6 @@
 (load "directory.lsp")
 (load "probe-file.lsp")
 (load "ensure-directories-exist.lsp")
+(load "truename.lsp")
+(load "file-author.lsp")
+
