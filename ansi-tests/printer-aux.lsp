@@ -94,7 +94,11 @@
 					      (copy-readtable nil)
 					    *readtable*)))
 			 (read-from-string str))
-		       (reader-error () :error)))))
+		       (reader-error () :reader-error)
+		       (end-of-file () :end-of-file)
+		       (stream-error () :stream-error)
+		       (file-error () :file-error)
+		       ))))
 	 (unless (funcall test obj obj2)
 	   (list
 	    (list* obj str obj2 (%params)
