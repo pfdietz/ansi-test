@@ -383,6 +383,9 @@
 				    most-negative-double-float
 				    most-negative-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (and (<= (abs (float-exponent lower-bound)) 500)
+			   (<= (abs (float-exponent x)) 500)
+			   (<= (abs (float-exponent bound)) 500))
 		 when (<= (rational lower-bound)
 			  (rational x)
 			  (rational bound))
@@ -408,9 +411,15 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (and (<= (abs (float-exponent bound)) 500)
+			   (<= (abs (float-exponent x)) 500)
+			   (<= (abs (float-exponent upper-bound)) 500))
 		 when (<= (rational bound)
 			  (rational x)
 			  (rational upper-bound))
+;;		 do (print x)
+;;		    (print epsilon) (print bound) (print upper-bound) (print one) (terpri)
+;;		    (finish-output)
 		 nconc
 		 (let* ((y (float x one))
 			(z (* y (- one (* 2 epsilon)))))
@@ -432,6 +441,9 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (and (<= (abs (float-exponent lower-bound)) 500)
+			   (<= (abs (float-exponent x)) 500)
+			   (<= (abs (float-exponent upper-bound)) 500))
 		 when (<= (rational lower-bound)
 			  (rational x)
 			  (rational upper-bound))
@@ -584,6 +596,9 @@
 				    most-negative-double-float
 				    most-negative-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (and (<= (abs (float-exponent lower-bound)) 500)
+			   (<= (abs (float-exponent x)) 500)
+			   (<= (abs (float-exponent bound)) 500))
 		 when (<= (rational lower-bound)
 			  (rational x)
 			  (rational bound))
@@ -608,6 +623,9 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (and (<= (abs (float-exponent bound)) 500)
+			   (<= (abs (float-exponent x)) 500)
+			   (<= (abs (float-exponent upper-bound)) 500))
 		 when (<= (rational bound)
 			  (rational x)
 			  (rational upper-bound))
@@ -632,6 +650,9 @@
 				    most-positive-double-float
 				    most-positive-long-float)
 		 for one in '(1.0s0 1.0f0 1.0d0 1.0l0)
+		 when (and (<= (abs (float-exponent lower-bound)) 500)
+			   (<= (abs (float-exponent x)) 500)
+			   (<= (abs (float-exponent upper-bound)) 500))
 		 when (<= (rational lower-bound)
 			  (rational x)
 			  (rational upper-bound))

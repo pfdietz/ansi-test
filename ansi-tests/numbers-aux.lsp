@@ -19,6 +19,52 @@
     (eqlt (abs x) (abs y)))
    (t (eqlt x y))))
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun rational-safely (x)
+    "Rational a floating point number, making sure the rational
+   number isn't 'too big'.  This is important in implementations such
+   as clisp where the floating bounds can be very large."
+    (assert (floatp x))
+    (multiple-value-bind (significand exponent sign)
+	(integer-decode-float x)
+      (let ((limit 1000)
+	    (radix (float-radix x)))
+	(cond
+	 ((< exponent (- limit))
+	  (* significand (expt radix (- limit)) sign))
+	 ((> exponent limit)
+	(* significand (expt radix limit) sign))
+	 (t (rational x)))))))
+
+(defconstant +rational-most-negative-short-float+
+  (rational-safely most-negative-short-float))
+
+(defconstant +rational-most-negative-single-float+
+  (rational-safely most-negative-single-float))
+
+(defconstant +rational-most-negative-double-float+
+  (rational-safely most-negative-double-float))
+
+(defconstant +rational-most-negative-long-float+
+  (rational-safely most-negative-long-float))
+
+(defconstant +rational-most-positive-short-float+
+  (rational-safely most-positive-short-float))
+
+(defconstant +rational-most-positive-single-float+
+  (rational-safely most-positive-single-float))
+
+(defconstant +rational-most-positive-double-float+
+  (rational-safely most-positive-double-float))
+
+(defconstant +rational-most-positive-long-float+
+  (rational-safely most-positive-long-float))
+
+(defun float-exponent (x)
+  (if (floatp x)
+      (nth-value 1 (decode-float x))
+    0))
+
 (defun numbers-are-compatible (x y)
   (cond
    ((complexp x)
@@ -33,21 +79,21 @@
 	(not (floatp y))
 	(etypecase y
 	  (short-float
-	   (<= #.(rational most-negative-short-float)
+	   (<= +rational-most-negative-short-float+
 	       x
-	       #.(rational most-positive-short-float)))
+	       +rational-most-positive-short-float+))
 	  (single-float
-	   (<= #.(rational most-negative-single-float)
+	   (<= +rational-most-negative-single-float+
 	       x
-	       #.(rational most-positive-single-float)))
+	       +rational-most-positive-single-float+))
 	  (double-float
-	   (<= #.(rational most-negative-double-float)
+	   (<= +rational-most-negative-double-float+
 	       x
-	       #.(rational most-positive-double-float)))
+	       +rational-most-positive-double-float+))
 	  (long-float
-	   (<= #.(rational most-negative-long-float)
+	   (<= +rational-most-negative-long-float+
 	       x
-	       #.(rational most-positive-long-float))))))))
+	       +rational-most-positive-long-float+)))))))
 
 ;;; NOTE!  According to section 12.1.4.1, when a rational is compared
 ;;; to a float, the effect is as if the float is convert to a rational
