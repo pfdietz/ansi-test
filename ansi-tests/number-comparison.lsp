@@ -1188,7 +1188,7 @@
 
 (deftest bignum.float.compare.1a
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1201,7 +1201,7 @@
 
 (deftest bignum.float.compare.1b
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1214,7 +1214,7 @@
 
 (deftest bignum.float.compare.2a
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1227,7 +1227,7 @@
 
 (deftest bignum.float.compare.2b
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1240,7 +1240,7 @@
 
 (deftest bignum.float.compare.3a
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1253,7 +1253,7 @@
 
 (deftest bignum.float.compare.3b
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1266,7 +1266,7 @@
 
 (deftest bignum.float.compare.4a
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1279,7 +1279,7 @@
 
 (deftest bignum.float.compare.4b
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1292,7 +1292,7 @@
 
 (deftest bignum.float.compare.5a
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1305,7 +1305,7 @@
 
 (deftest bignum.float.compare.5b
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1318,7 +1318,7 @@
 
 (deftest bignum.float.compare.6a
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
@@ -1331,7 +1331,7 @@
 
 (deftest bignum.float.compare.6b
   (loop for x in *floats*
-	when (or (<= (abs x) 1)
+	when (or (<= (abs x) 1.0)
 		 (< (abs (log (abs x))) 10000))
 	nconc
 	(loop for r = (1+ (random (ash 1 (random 32))))
