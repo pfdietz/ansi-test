@@ -7158,4 +7158,32 @@ Broken at C::WT-C-INLINE-LOC.
    12851164 182468232812 -2243976802 309299185674 2538150 1855615980)
   0)
 
-    
+(deftest misc.376
+  (funcall
+   (compile
+    nil
+    '(lambda () ; (a b c d e f g h i)
+       #|
+       (declare (type (integer -3780481450018 4128865857054) a))
+       (declare (type (integer -15 7920255) b))
+       (declare (type (integer -2 1) c))
+       (declare (type (integer -6 157) d))
+       (declare (type (integer -3022 3523491) e))
+       (declare (type (integer -3 18632748) f))
+       (declare (type (integer -4 149) g))
+       (declare (type (integer -22 -1) h))
+       (declare (type (integer -176782576526 -1863239307) i))
+       (declare (ignorable a b c d e f g h i))
+       |#
+       (declare (optimize (speed 1) (space 1) (safety 2) (debug 1)
+			  (compilation-speed 0)))
+       (dotimes (iv4 3
+		     (multiple-value-bind (*s6*) (cons 0 0)
+		       (progn (cdr *s6*) 0)))
+	 (floor (rational (let ((*s2*
+				 (rational (common-lisp:handler-case 0))))
+			    0))))))
+   )
+  0)
+
+   
