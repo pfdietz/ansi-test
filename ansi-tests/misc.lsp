@@ -9533,6 +9533,7 @@ Broken at C::WT-MAKE-CLOSURE.
 					    (compilation-speed 3) (speed 1)))
 			 (let ((*s2* (* -507991378 14)))
 			      (declare (dynamic-extent *s2*))
+			      (declare (special *s2*))
 			      (1+ *s2*)))))
   -7111879291)
 
