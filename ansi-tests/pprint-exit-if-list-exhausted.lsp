@@ -268,6 +268,39 @@
   "[[1 . #1=(2 . #1#)]]"
   "[[1 . #1=(2 . #1#)]]")
 
+;;; pprint-pop when pprint-logical-block is given NIL
+
+(deftest pprint-pop.9
+  (flet ((%f (len)
+	     (with-standard-io-syntax
+	      (let ((*print-pretty* t)
+		    (*print-escape* nil)
+		    (*print-right-margin* 100)
+		    (*print-readably* nil)
+		    (*print-length* len))
+		(with-output-to-string
+		  (os)
+		  (pprint-logical-block
+		   (os nil :prefix "{" :suffix "}")
+		   (let ((vals (multiple-value-list (pprint-pop))))
+		     (assert (equal vals '(nil)) () "First call returned ~A" vals))
+		   (write 1 :stream os)
+		   (write #\Space :stream os)
+		   (let ((vals (multiple-value-list (pprint-pop))))
+		     (assert (equal vals '(nil)) () "Second call returned ~A" vals))
+		   (write 2 :stream os)
+		   (write #\Space :stream os)
+		   (let ((vals (multiple-value-list (pprint-pop))))
+		     (assert (equal vals '(nil)) () "Third call returned ~A" vals))
+		   (write 3 :stream os)
+		   ))))))
+    (values (%f nil) (%f 0) (%f 1) (%f 2) (%f 3) (%f 4)))
+  "{1 2 3}"
+  "{...}"
+  "{1 ...}"
+  "{1 2 ...}"
+  "{1 2 3}"
+  "{1 2 3}")
 
 ;;; Error cases
 
