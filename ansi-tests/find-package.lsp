@@ -82,6 +82,56 @@
 	 (eqt cl cl2)))
   t)
 
+(deftest find-package.12
+  (let* ((name (make-array '(7) :initial-contents "KEYWORD"
+			   :element-type 'base-char))
+	 (p (find-package name)))
+    (and p (eqt p (symbol-package :test))))
+  t)
+
+(deftest find-package.13
+  (let* ((name (make-array '(10) :initial-contents "KEYWORDXYZ"
+			   :fill-pointer 7
+			   :element-type 'base-char))
+	 (p (find-package name)))
+    (and p (eqt p (symbol-package :test))))
+  t)
+
+(deftest find-package.14
+  (let* ((name (make-array '(10) :initial-contents "KEYWORDXYZ"
+			   :fill-pointer 7
+			   :element-type 'character))
+	 (p (find-package name)))
+    (and p (eqt p (symbol-package :test))))
+  t)
+
+(deftest find-package.15
+  (let* ((name0 (make-array '(10) :initial-contents "XYKEYWORDZ"
+			    :element-type 'character))
+	 (name (make-array '(7) :displaced-to name0 :displaced-index-offset 2
+			   :element-type 'character))
+	 (p (find-package name)))
+    (and p (eqt p (symbol-package :test))))
+  t)
+
+(deftest find-package.16
+  (let* ((name (make-array '(7) :initial-contents "KEYWORDXYZ"
+			   :adjustable t
+			   :element-type 'base-char))
+	 (p (find-package name)))
+    (and p (eqt p (symbol-package :test))))
+  t)
+
+(deftest find-package.17
+  (let* ((name (make-array '(7) :initial-contents "KEYWORDXYZ"
+			   :adjustable t
+			   :element-type 'character))
+	 (p (find-package name)))
+    (and p (eqt p (symbol-package :test))))
+  t)
+
+;;; Error tests
+
 (deftest find-package.error.1
   (signals-error (find-package) program-error)
   t)

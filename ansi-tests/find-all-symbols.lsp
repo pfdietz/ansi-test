@@ -35,7 +35,83 @@
 					      (string c)))))
 	collect c)
   nil)
-  
+
+;;; Unusual strings
+
+(deftest find-all-symbols.3
+  (let* ((name (make-array '(3) :initial-contents "NIL"
+			   :element-type 'base-char))
+	 (symbols (find-all-symbols name)))
+    (values
+     (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
+     (some #'not symbols)))
+  t t)
+
+(deftest find-all-symbols.4
+  (let* ((name (make-array '(5) :initial-contents "NILXY"
+			   :fill-pointer 3
+			   :element-type 'character))
+	 (symbols (find-all-symbols name)))
+    (values
+     (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
+     (some #'not symbols)))
+  t t)
+
+(deftest find-all-symbols.5
+  (let* ((name (make-array '(5) :initial-contents "NILXY"
+			   :fill-pointer 3
+			   :element-type 'base-char))
+	 (symbols (find-all-symbols name)))
+    (values
+     (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
+     (some #'not symbols)))
+  t t)
+
+(deftest find-all-symbols.6
+  (let* ((name (make-array '(3) :initial-contents "NIL"
+			   :adjustable t
+			   :element-type 'base-char))
+	 (symbols (find-all-symbols name)))
+    (values
+     (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
+     (some #'not symbols)))
+  t t)
+
+(deftest find-all-symbols.7
+  (let* ((name (make-array '(3) :initial-contents "NIL"
+			   :adjustable t
+			   :element-type 'character))
+	 (symbols (find-all-symbols name)))
+    (values
+     (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
+     (some #'not symbols)))
+  t t)
+
+(deftest find-all-symbols.8
+  (let* ((type 'character)
+	 (name0 (make-array '(9) :initial-contents "XYZNILABC"
+			    :element-type type))
+	 (name (make-array '(3) :element-type type
+			   :displaced-to name0
+			   :displaced-index-offset 3))
+	 (symbols (find-all-symbols name)))
+    (values
+     (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
+     (some #'not symbols)))
+  t t)
+
+(deftest find-all-symbols.9
+  (let* ((type 'base-char)
+	 (name0 (make-array '(9) :initial-contents "XYZNILABC"
+			    :element-type type))
+	 (name (make-array '(3) :element-type type
+			   :displaced-to name0
+			   :displaced-index-offset 3))
+	 (symbols (find-all-symbols name)))
+    (values
+     (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
+     (some #'not symbols)))
+  t t)  
 
 ;;; Error tests
 

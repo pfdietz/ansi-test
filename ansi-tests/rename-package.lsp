@@ -160,6 +160,81 @@
 	t)))
   t)
 
+(deftest rename-package.7
+  (block nil
+    (let ((name1 (make-array '(5) :element-type 'base-char
+			     :initial-contents "TEST1"))
+	  (name2 (make-array '(5) :element-type 'base-char
+			     :initial-contents "TEST2")))
+      (safely-delete-package name1)
+      (safely-delete-package name2)
+      (let ((p (make-package name1)))
+	(unless (packagep p) (return nil))
+	(let ((p2 (rename-package name1 name2)))
+	  (unless (packagep p2)
+	    (safely-delete-package p)
+	    (return p2))
+	  (unless (and (eqt p p2)
+		       (equal (package-name p2) name2))
+	    (safely-delete-package p)
+	    (safely-delete-package p2)
+	    (return nil))
+	  (safely-delete-package p2)
+	  t))))
+  t)
+
+(deftest rename-package.8
+  (block nil
+    (let ((name1 (make-array '(10) :element-type 'base-char
+			     :fill-pointer 5
+			     :initial-contents "TEST1     "))
+	  (name2 (make-array '(9) :element-type 'character
+			     :fill-pointer 5
+			     :initial-contents "TEST2XXXX")))
+      (safely-delete-package name1)
+      (safely-delete-package name2)
+      (let ((p (make-package "TEST1")))
+	(unless (packagep p) (return nil))
+	(let ((p2 (rename-package name1 name2)))
+	  (unless (packagep p2)
+	    (safely-delete-package p)
+	    (return p2))
+	  (unless (and (eqt p p2)
+		       (string= (package-name p2) "TEST2"))
+	    (safely-delete-package p)
+	    (safely-delete-package p2)
+	    (return nil))
+	  (safely-delete-package p2)
+	  t))))
+  t)
+
+(deftest rename-package.9
+  (block nil
+    (let ((name1 (make-array '(5) :element-type 'character
+			     :adjustable t
+			     :initial-contents "TEST1"))
+	  (name2 (make-array '(5) :element-type 'base-char
+			     :adjustable t
+			     :initial-contents "TEST2")))
+      (safely-delete-package name1)
+      (safely-delete-package name2)
+      (let ((p (make-package "TEST1")))
+	(unless (packagep p) (return nil))
+	(let ((p2 (rename-package name1 name2)))
+	  (unless (packagep p2)
+	    (safely-delete-package p)
+	    (return p2))
+	  (unless (and (eqt p p2)
+		       (string= (package-name p2) "TEST2"))
+	    (safely-delete-package p)
+	    (safely-delete-package p2)
+	    (return nil))
+	  (safely-delete-package p2)
+	  t))))
+  t)
+
+
+
 (deftest rename-package.error.1
   (signals-error (rename-package) program-error)
   t)

@@ -4,7 +4,10 @@
 ;;;; Contains: Tests for FIND-SYMBOL
 
 (in-package :cl-test)
-(declaim (optimize (safety 3)))
+
+(compile-and-load "packages-00.lsp")
+
+;;(declaim (optimize (safety 3)))
 
 ;; Test find-symbol, with the various combinations of
 ;; package designators
@@ -74,6 +77,56 @@
 (deftest find-symbol.16
   (find-symbol "FOO" (find-package "B"))
   A::FOO :inherited)
+
+(deftest find-package.17
+  (let ((name (make-array '(3) :initial-contents "FOO"
+			  :element-type 'base-char)))
+    (find-symbol name "B"))
+  A::FOO :inherited)
+
+(deftest find-package.18
+  (let ((name (make-array '(4) :initial-contents "FOOD"
+			  :element-type 'character
+			  :fill-pointer 3)))
+    (find-symbol name "B"))
+  A::FOO :inherited)
+
+(deftest find-package.19
+  (let ((name (make-array '(4) :initial-contents "FOOD"
+			  :element-type 'base-char
+			  :fill-pointer 3)))
+    (find-symbol name "B"))
+  A::FOO :inherited)
+
+(deftest find-package.20
+  (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
+			    :element-type 'character))
+	 (name (make-array '(3) :element-type 'character
+			   :displaced-to name0
+			   :displaced-index-offset 1)))
+    (find-symbol name "B"))
+  A::FOO :inherited)
+
+(deftest find-package.21
+  (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
+			    :element-type 'base-char))
+	 (name (make-array '(3) :element-type 'base-char
+			   :displaced-to name0
+			   :displaced-index-offset 1)))
+    (find-symbol name "B"))
+  A::FOO :inherited)
+
+(deftest find-symbol.22
+  (find-symbol "FOO" (make-array '(1) :initial-element #\B :element-type 'base-char))
+  A::FOO :inherited)
+
+(deftest find-symbol.23
+  (find-symbol "FOO" (make-array '(2) :initial-element #\B
+				 :fill-pointer 1
+				 :element-type 'base-char))
+  A::FOO :inherited)
+
+
 
 (deftest find-symbol.order.1
   (let ((i 0) x y)
