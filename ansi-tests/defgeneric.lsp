@@ -16,7 +16,7 @@
     (if (not (typep fn 'generic-function))
 	(handler-case
 	 (progn (eval `(defgeneric ,name ())) :bad)
-	 (error () :good))
+	 (program-error () :good))
       :good))
   :good)
 
@@ -27,6 +27,41 @@
   (let* ((name 'defgeneric-testmacro-02))
     (handler-case
      (progn (eval `(defgeneric ,name ())) :bad)
-     (error () :good)))
+     (program-error () :good)))
   :good)
 
+(deftest defgeneric.error.3
+  ;; Cannot make special operators generic
+  (loop for name in *cl-special-operator-symbols*
+	for result =
+	(handler-case
+	 (progn (eval `(defgeneric ,name ())) t)
+	 (program-error () nil))
+	when result collect name)
+  nil)
+
+(deftest defgeneric.error.4
+  (classify-error (defgeneric defgeneric-error-fn.4 (x x)))
+  program-error)
+
+(deftest defgeneric.error.5
+  (classify-error (defgeneric defgeneric-error-fn.5 (x)
+		    (:documentation "some documentation")
+		    (:documentation "illegally repeated documentation")))
+  program-error)
+
+(deftest defgeneric.error.6
+  (classify-error (defgeneric defgeneric-error-fn.6 (x)
+		    (unknown-option nil)))
+  program-error)
+
+(deftest defgeneric.error.7
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.7 (x y)
+	      (:method ((x t)) x)))
+     :bad)
+   (error () :good))
+  :good)
+
+   
