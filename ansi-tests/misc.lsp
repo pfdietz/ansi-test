@@ -9009,6 +9009,87 @@ Broken at C::WT-MAKE-CLOSURE.
     (aref r))
   2797674503)
 
+(deftest misc.480
+  (let ((r (make-array nil :element-type 'integer))
+	(fn (compile nil '(lambda (r p1)
+			    (declare (optimize speed (safety 1))
+				     (type (simple-array integer nil) r)
+				     (type (integer -797971 -797511) p1))
+			    (setf (aref r) (logeqv p1 15 1078254884158 -12564176924 0 15096591909))
+			    (values)))))
+    (funcall fn r -797965)
+    (aref r))
+  -1075415510532)
 
-		     
-    
+(deftest misc.481
+  (let ((r (make-array nil :element-type '(unsigned-byte 16)))
+	(fn (compile nil '(lambda (r p1)
+			    (declare (optimize speed (safety 1))
+				     (type (simple-array (unsigned-byte 16) nil) r)
+				     (type (member 4194309 -123 1692 -4432 -760653 -1741 37) p1))
+			    (setf (aref r) (logorc1 (the (eql -4432) p1) 0))
+			    (values)))))
+    (funcall fn r -4432)
+    (aref r))
+  4431)
+
+;; Various incorrect results
+
+(deftest misc.482
+  (let ((r (make-array nil :element-type '(unsigned-byte 4)))
+	(fn (compile nil '(lambda (r p2)
+			    (declare (optimize speed (safety 1))
+				     (type (simple-array (unsigned-byte 4) nil) r)
+				     (type (eql -4) p2))
+			    (setf (aref r) (logorc2 13 p2))
+			    (values)))))
+    (funcall fn r -4)
+    (aref r))
+  15)
+
+(deftest misc.483
+  (let ((r (make-array nil :element-type '(unsigned-byte 4)))
+	(fn (compile nil '(lambda (r p1 p2)
+			    (declare (optimize speed (safety 1))
+				     (type (simple-array (unsigned-byte 4) nil) r)
+				     (type (integer * 28306533) p1) (type (integer * 1245601) p2))
+			    (setf (aref r) (logandc1 p1 (the (integer -3308174) p2)))
+			    (values)))))
+    (funcall fn r -519 -28180)
+    (aref r))
+  4)
+
+(deftest misc.484
+  (let ((r (make-array nil :element-type '(unsigned-byte 4)))
+	(fn (compile nil '(lambda (r p2)
+			    (declare (optimize speed (safety 1))
+				     (type (simple-array (unsigned-byte 4) nil) r)
+				     (type (member 260646 -348969 34359738370 -110167) p2))
+			    (setf (aref r) (logandc2 9 (the (eql -348969) p2)))
+			    (values)))))
+    (funcall fn r -348969)
+    (aref r))
+  8)
+
+(deftest misc.485
+  (let ((r (make-array nil :element-type 'bit))
+	(fn (compile nil '(lambda (r p2)
+			    (declare (optimize speed (safety 1)) (type (simple-array bit nil) r)
+				     (type (integer -108220 256178) p2))
+			    (setf (aref r) (logand 1 (the (member -1 2147483652 1 -5 3802) p2)))
+			    (values)))))
+    (funcall fn r -5)
+    (aref r))
+  1)
+
+(deftest misc.486
+  (let ((r (make-array nil :element-type '(unsigned-byte 4)))
+	(fn (compile nil '(lambda (r p1 p2)
+			    (declare (optimize speed (safety 1))
+				     (type (simple-array (unsigned-byte 4) nil) r) (type (integer -9) p1)
+				     (type (integer * 1234117) p2))
+			    (setf (aref r) (logior (the (integer -295 *) p1) (the (integer -90 *) p2)))
+			    (values)))))
+    (funcall fn r 6 6)
+    (aref r))
+  6)
