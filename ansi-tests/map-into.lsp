@@ -351,9 +351,15 @@
   (classify-error (map-into 'a #'(lambda () nil)))
   type-error)
 
+;;; The next test was changed because if the first argument
+;;; is NIL, map-into is said to 'return nil immediately', so
+;;; the 'should be prepared' notation for the error checking
+;;; means that error checking may be skipped.
 (deftest map-into.error.2
-  (classify-error (map-into nil #'identity 'a))
-  type-error)
+  (case (classify-error (map-into nil #'identity 'a))
+    ((nil type-error) 'good)
+    (t 'bad))
+  good)
 
 (deftest map-into.error.3
   (classify-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100))
