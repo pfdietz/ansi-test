@@ -52,7 +52,7 @@
   (loop for x in '(3.0s0 3.0f0 3.0d0 3.0l0)
 	collect (let ((y x))
 		  (list (decf y) y)))
-  ((2.0s0 2.0s0) (2.0f0 2.0f0) (2.0d0 2.0d0) (2.0l0 2.l0)))
+  ((2.0s0 2.0s0) (2.0f0 2.0f0) (2.0d0 2.0d0) (2.0l0 2.0l0)))
 
 (deftest decf.8
   (loop for x in '(3.0s0 3.0f0 3.0d0 3.0f0)
