@@ -254,13 +254,29 @@
     (subtypep-and-contrapositive-are-consistent t1 t2))
   t)
 
+(deftest subtypep.cons.29
+  (let ((t2 '(or (not (cons unsigned-byte cons))
+		 (not (cons (integer -6 22) rational)))))
+    (subtypep-and-contrapositive-are-consistent 'cons t2))
+  t)
 
+(deftest subtypep.cons.30
+  (let ((t1 '(not (cons t (cons t (cons cons t)))))
+	(t2 '(or (or (cons (cons t integer) t)
+		     (not (cons t (cons t cons))))
+		 (not (cons (cons (eql -27111309) t)
+			    (cons t (eql 1140730)))))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
 
-
-
-
-
-
-
-
-
+(deftest subtypep.cons.31
+  (let ((t2 '(or
+	      (not
+	       (cons (or (cons t ratio) (cons short-float t))
+		     (cons (cons (eql -7418623) (integer -9 53))
+			   (cons cons t))))
+	      (not
+	       (cons (cons t (eql -265039))
+		     (cons (cons t cons) t))))))
+    (subtypep-and-contrapositive-are-consistent 'cons t2))
+  t)

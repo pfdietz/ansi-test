@@ -3294,20 +3294,3 @@
 	 (if (%f5 0 0 0) (%f5 a) 0))))
    1 2)
   1)
-
-;;; sbcl subtypep bug
-(deftest misc.198
-  (let ((t1 'cons)
-	(t2 '(or
-	      (not
-	       (cons (or (cons t ratio) (cons short-float t))
-		     (cons (cons (eql -7418623) (integer -9 53))
-			   (cons cons t))))
-	      (not
-	       (cons (cons t (eql -265039))
-		     (cons (cons t cons) t))))))
-    (if (equal (multiple-value-list (subtypep* t1 t2)) '(nil t))
-	(not (subtypep `(not ,t2) `(not ,t1)))
-      t))
-  t)
-
