@@ -194,5 +194,16 @@
 	until (> i 12) collect i)
   :good)
 
+(deftest loop.11.33
+  (loop for i in '(4 8 9 A 13)
+	if (not (numberp i)) return :good end
+	while (< i 12) collect i)
+  :good)
+
+(deftest loop.11.34
+  (loop for i in '(4 8 9 A 13)
+	if (not (numberp i)) return :good end
+	until (> i 12) collect i)
+  :good)
 
 
