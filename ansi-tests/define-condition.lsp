@@ -306,3 +306,190 @@
 	(c (make-condition 'cond-18 :i1 4321)))
     (with-output-to-string (s) (print-object c s)))
   "cond-18: 4321")
+
+;;;
+;;; Tests of :default-initargs
+;;;
+;;; There is an inconsistency in the ANSI spec.  DEFINE-CONDITION
+;;; says that in (:default-initargs . <foo>), <foo> is a list of pairs.
+;;; However, DEFCLASS says it's a list whose alternate elements
+;;; are initargs and initforms.  I have taken the second interpretation.
+;;;
+
+(define-condition-with-tests cond-19 nil
+  ((s1 :reader cond-19/s1 :initarg :i1)
+   (s2 :reader cond-19/s2 :initarg :i2))
+  (:default-initargs :i1 10
+		     :i2 20))
+
+(deftest cond-19-slots.1
+  (let ((c (make-condition 'cond-19)))
+    (values
+     (notnot (typep c 'cond-19))
+     (cond-19/s1 c)
+     (cond-19/s2 c)))
+  t 10 20)
+
+(deftest cond-19-slots.2
+  (let ((c (make-condition 'cond-19 :i1 'a)))
+    (values
+     (notnot (typep c 'cond-19))
+     (cond-19/s1 c)
+     (cond-19/s2 c)))
+  t a 20)
+
+(deftest cond-19-slots.3
+  (let ((c (make-condition 'cond-19 :i2 'a)))
+    (values
+     (notnot (typep c 'cond-19))
+     (cond-19/s1 c)
+     (cond-19/s2 c)))
+  t 10 a)
+
+(deftest cond-19-slots.4
+  (let ((c (make-condition 'cond-19 :i1 'x :i2 'y)))
+    (values
+     (notnot (typep c 'cond-19))
+     (cond-19/s1 c)
+     (cond-19/s2 c)))
+  t x y)
+
+(deftest cond-19-slots.5
+  (let ((c (make-condition 'cond-19 :i2 'y :i1 'x)))
+    (values
+     (notnot (typep c 'cond-19))
+     (cond-19/s1 c)
+     (cond-19/s2 c)))
+  t x y)
+
+(defparameter *cond-20/s1-val* 0)
+(defparameter *cond-20/s2-val* 0)
+
+(define-condition-with-tests cond-20 nil
+  ((s1 :reader cond-20/s1 :initarg :i1)
+   (s2 :reader cond-20/s2 :initarg :i2))
+  (:default-initargs :i1 (incf *cond-20/s1-val*)
+		     :i2 (incf *cond-20/s2-val*)))
+
+(deftest cond-20-slots.1
+  (let ((*cond-20/s1-val* 0)
+	(*cond-20/s2-val* 10))
+    (declare (special *cond-20/s1-val* *cond-20/s2-val*))
+    (let ((c (make-condition 'cond-20)))
+      (values
+       (notnot (typep c 'cond-20))
+       (cond-20/s1 c)
+       (cond-20/s2 c)
+       *cond-20/s1-val*
+       *cond-20/s2-val*)))
+  t 1 11 1 11)
+
+(deftest cond-20-slots.2
+  (let ((*cond-20/s1-val* 0)
+	(*cond-20/s2-val* 10))
+    (declare (special *cond-20/s1-val* *cond-20/s2-val*))
+    (let ((c (make-condition 'cond-20 :i1 'x)))
+      (values
+       (notnot (typep c 'cond-20))
+       (cond-20/s1 c)
+       (cond-20/s2 c)
+       *cond-20/s1-val*
+       *cond-20/s2-val*)))
+  t x 11 0 11)
+
+(deftest cond-20-slots.3
+  (let ((*cond-20/s1-val* 0)
+	(*cond-20/s2-val* 10))
+    (declare (special *cond-20/s1-val* *cond-20/s2-val*))
+    (let ((c (make-condition 'cond-20 :i2 'y)))
+      (values
+       (notnot (typep c 'cond-20))
+       (cond-20/s1 c)
+       (cond-20/s2 c)
+       *cond-20/s1-val*
+       *cond-20/s2-val*)))
+  t 1 y 1 10)
+
+(deftest cond-20-slots.4
+  (let ((*cond-20/s1-val* 0)
+	(*cond-20/s2-val* 10))
+    (declare (special *cond-20/s1-val* *cond-20/s2-val*))
+    (let ((c (make-condition 'cond-20 :i2 'y :i1 'x)))
+      (values
+       (notnot (typep c 'cond-20))
+       (cond-20/s1 c)
+       (cond-20/s2 c)
+       *cond-20/s1-val*
+       *cond-20/s2-val*)))
+  t x y 0 10)
+
+
+;;;;;;;;; tests of inheritance
+
+(define-condition-with-tests cond-21 (cond-4) nil)
+
+(deftest cond-21-slots.1
+  (let ((c (make-condition 'cond-21 :slot1 'a :slot2 'b)))
+    (and (typep c 'cond-4)
+	 (typep c 'cond-21)
+	 (eqt (cond-4/slot-1 c) 'a)
+	 (eqt (cond-4/slot-2 c) 'b)))
+  t)
+
+(define-condition-with-tests cond-22 (cond-4)
+  ((slot3 :initarg :slot3 :reader cond-22/slot-3)
+   (slot4 :initarg :slot4 :reader cond-22/slot-4)))
+
+(deftest cond-22-slots.1
+  (let ((c (make-condition 'cond-22 :slot1 'a :slot2 'b
+			   :slot3 'c :slot4 'd)))
+    (and (typep c 'cond-4)
+	 (typep c 'cond-22)
+	 (eqt (cond-4/slot-1 c) 'a)
+	 (eqt (cond-4/slot-2 c) 'b)
+	 (eqt (cond-22/slot-3 c) 'c)
+	 (eqt (cond-22/slot-4 c) 'd)
+	 ))
+  t)
+
+(define-condition-with-tests cond-23 (cond-5) nil)
+
+(deftest cond-23-slots.1
+  (let ((c (make-condition 'cond-23 :slot1 'a :slot2 'b)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-23)
+	 (eqt (cond-4/slot-1 c) 'a)
+	 (eqt (cond-4/slot-2 c) 'b)
+	 ))
+  t)
+
+(deftest cond-23-slots.2
+  (let ((c (make-condition 'cond-23 :slot1 'a)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-23)
+	 (eqt (cond-4/slot-1 c) 'a)
+	 (eqt (cond-4/slot-2 c) 'y)
+	 ))
+  t)
+
+(deftest cond-23-slots.3
+  (let ((c (make-condition 'cond-23 :slot2 'b)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-23)
+	 (eqt (cond-4/slot-1 c) 'x)
+	 (eqt (cond-4/slot-2 c) 'b)
+	 ))
+  t)
+
+(deftest cond-23-slots.4
+  (let ((c (make-condition 'cond-23)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-23)
+	 (eqt (cond-4/slot-1 c) 'x)
+	 (eqt (cond-4/slot-2 c) 'y)
+	 ))
+  t)
+
+
+
+
