@@ -33,7 +33,7 @@
 				     ',objform ',(first expected-cpl))
 			     t)))	       
 	     (and (eql (first cpl) ',(first expected-cpl))
-		  (is-noncontiguous-sublist-of cpl ',expected-cpl))))
+		  (is-noncontiguous-sublist-of ',expected-cpl cpl))))
        t)))
 
 ;;; Condition types
