@@ -25,3 +25,5 @@
 
 (load "wild-pathname-p.lsp")
 (load "merge-pathnames.lsp")
+(load "pathname-match-p.lsp")
+
