@@ -875,7 +875,7 @@ the condition to go uncaught if it cannot be classified."
 	(and (is-similar* (car x) (car y))
 	     ;; If this causes stack problems,
 	     ;; convert to a loop
-	     (is-similar* (car x) (car y))))))
+	     (is-similar* (cdr x) (cdr y))))))
 
 (defmethod is-similar* ((x vector) (y vector))
   (or (and (eq x y) t)
