@@ -64,7 +64,7 @@ A A A "
 
 ;;; :linear
 
-(def-pprint-newline-test pprint-newline.linear.1
+(def-ppblock-test pprint-newline.linear.1
   (progn
    (dotimes (i 2) (write "A ") (pprint-newline :fill))
    (write "B ") (pprint-newline :linear)
@@ -73,7 +73,7 @@ A A A "
 A A A "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.linear.2
+(def-ppblock-test pprint-newline.linear.2
   (progn
    (dotimes (i 2) (write "A ") (pprint-newline :fill))
    (write "B ") (pprint-newline :linear)
@@ -85,24 +85,24 @@ C C D
 A A A "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.linear.3
+(def-ppblock-test pprint-newline.linear.3
   (dotimes (i 4) (write "A ") (pprint-newline :linear))
   "A A A A "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.linear.4
+(def-ppblock-test pprint-newline.linear.4
   (dotimes (i 4) (write "A ") (pprint-newline :linear))
   "A A A A "
   :margin 10
   :miser 10)
 
-(def-pprint-newline-test pprint-newline.linear.5
+(def-ppblock-test pprint-newline.linear.5
   (dotimes (i 10) (write "A ") (pprint-newline :linear))
   "A A A A A A A A A A "
   :margin 10
   :pretty nil)
 
-(def-pprint-newline-test pprint-newline.linear.6
+(def-ppblock-test pprint-newline.linear.6
   (dotimes (i 4) (write "A             ") (pprint-newline :linear))
   "A
 A
@@ -111,7 +111,7 @@ A
 "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.linear.7
+(def-ppblock-test pprint-newline.linear.7
   (progn
     (dotimes (i 4) (write "A ") (pprint-newline :linear))
     (terpri)
@@ -128,7 +128,7 @@ A
 "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.linear.8
+(def-ppblock-test pprint-newline.linear.8
   (progn
     (pprint-logical-block (*standard-output* nil)
 			  (dotimes (i 4)
@@ -143,7 +143,7 @@ A
 A A A A "
   :margin 10)
     
-(def-pprint-newline-test pprint-newline.linear.9
+(def-ppblock-test pprint-newline.linear.9
   (dotimes (i 10) (write "A ") (let ((*print-pretty* nil)) (pprint-newline :linear)))
   "A A A A A A A A A A "
   :margin 10)
@@ -162,24 +162,24 @@ A A A A "
 
 ;;; :miser
 
-(def-pprint-newline-test pprint-newline.miser.1
+(def-ppblock-test pprint-newline.miser.1
   (dotimes (i 10) (write "A ") (pprint-newline :miser))
   "A A A A A A A A A A "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.miser.2
+(def-ppblock-test pprint-newline.miser.2
   (dotimes (i 10) (write "A ") (pprint-newline :miser))
   "A A A A A A A A A A "
   :margin 10
   :miser 0)
 
-(def-pprint-newline-test pprint-newline.miser.3
+(def-ppblock-test pprint-newline.miser.3
   (dotimes (i 10) (write "A ") (pprint-newline :miser))
   "A A A A A A A A A A "
   :margin 10
   :miser 9)
 
-(def-pprint-newline-test pprint-newline.miser.4
+(def-ppblock-test pprint-newline.miser.4
   (dotimes (i 10) (write "A ") (pprint-newline :miser))
   "A
 A
@@ -195,14 +195,14 @@ A
   :margin 10
   :miser 10)
 
-(def-pprint-newline-test pprint-newline.miser.5
+(def-ppblock-test pprint-newline.miser.5
   (dotimes (i 10) (write "A ") (pprint-newline :miser))
   "A A A A A A A A A A "
   :margin 10
   :miser 10
   :pretty nil)
 
-(def-pprint-newline-test pprint-newline.miser.6
+(def-ppblock-test pprint-newline.miser.6
   (progn
     (terpri)
     (write "A")
@@ -213,7 +213,7 @@ A
   :margin 20
   :miser 20)
 
-(def-pprint-newline-test pprint-newline.miser.7
+(def-ppblock-test pprint-newline.miser.7
   (progn
     (pprint-newline :miser)
     (write "A")
@@ -224,7 +224,7 @@ A
   :margin 20
   :miser 20)
 
-(def-pprint-newline-test pprint-newline.miser.8
+(def-ppblock-test pprint-newline.miser.8
   (progn
     (write "AAAA ")
     (pprint-newline :linear)
@@ -236,7 +236,7 @@ A A A A "
   :margin 10
   :miser 8)
 
-(def-pprint-newline-test pprint-newline.miser.9
+(def-ppblock-test pprint-newline.miser.9
   (progn
     (write "AAAA ")
     (pprint-newline :fill)
@@ -248,7 +248,7 @@ A A A A "
   :margin 10
   :miser 8)
 
-(def-pprint-newline-test pprint-newline.miser.10
+(def-ppblock-test pprint-newline.miser.10
   (pprint-logical-block (*standard-output* nil :prefix "(" :suffix ")")
 			(write "A")
 			(pprint-newline :miser)
@@ -259,7 +259,7 @@ A A A A "
   :margin 20
   :miser 20)
 
-(def-pprint-newline-test pprint-newline.miser.11
+(def-ppblock-test pprint-newline.miser.11
   (pprint-logical-block (*standard-output* nil :prefix "(" :suffix ")")
 			(write "A")
 			(pprint-newline :miser)
@@ -270,7 +270,7 @@ A A A A "
   :margin 20
   :miser 19)
 
-(def-pprint-newline-test pprint-newline.miser.12
+(def-ppblock-test pprint-newline.miser.12
   (pprint-logical-block (*standard-output* nil :prefix "(" :suffix ")")
 			(write "A")
 			(pprint-newline :miser)
@@ -294,13 +294,13 @@ A A A A "
 
 ;;; :fill
 
-(def-pprint-newline-test pprint-newline.fill.1
+(def-ppblock-test pprint-newline.fill.1
   (dotimes (i 10) (write "A ") (pprint-newline :fill))
   "A A A A A
 A A A A A "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.fill.2
+(def-ppblock-test pprint-newline.fill.2
   (dotimes (i 10) (write "A ") (pprint-newline :fill))
   "A A A
 A A A
@@ -308,7 +308,7 @@ A A A
 A "
   :margin 6)
 
-(def-pprint-newline-test pprint-newline.fill.3
+(def-ppblock-test pprint-newline.fill.3
   (dotimes (i 10) (write "A ") (pprint-newline :fill))
   "A A A
 A A A
@@ -316,14 +316,14 @@ A A A
 A "
   :margin 7)
 
-(def-pprint-newline-test pprint-newline.fill.4
+(def-ppblock-test pprint-newline.fill.4
     (dotimes (i 10) (write "A ") (pprint-newline :fill))
   "A A A A A
 A A A A A "
   :margin 10
   :miser 9)
 
-(def-pprint-newline-test pprint-newline.fill.5
+(def-ppblock-test pprint-newline.fill.5
     (dotimes (i 10) (write "A ") (pprint-newline :fill))
   "A
 A
@@ -339,7 +339,7 @@ A
   :margin 10
   :miser 10)
 
-(def-pprint-newline-test pprint-newline.fill.6
+(def-ppblock-test pprint-newline.fill.6
     (dotimes (i 5)
       (write '(A B))
       (write #\Space)
@@ -349,7 +349,7 @@ A
 (A B) "
   :margin 12)
 
-(def-pprint-newline-test pprint-newline.fill.7
+(def-ppblock-test pprint-newline.fill.7
     (dolist (x '(A (A B) (A A A A A A A A) X (C D) (E F)))
       (pprint-fill nil x)
       (write #\Space)
@@ -361,7 +361,7 @@ X (C D)
 (E F) "
   :margin 12)
 
-(def-pprint-newline-test pprint-newline.fill.8
+(def-ppblock-test pprint-newline.fill.8
     (dotimes (i 5)
       (write '(A B) :pretty nil)
       (write #\Space)
@@ -396,7 +396,7 @@ X (C D)
 
 ;;; :mandatory
 
-(def-pprint-newline-test pprint-newline.mandatory.1
+(def-ppblock-test pprint-newline.mandatory.1
   (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
   "A
 A
@@ -404,7 +404,7 @@ A
 A
 ")
 
-(def-pprint-newline-test pprint-newline.mandatory.2
+(def-ppblock-test pprint-newline.mandatory.2
   (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
   "A
 A
@@ -413,7 +413,7 @@ A
 "
   :margin 10)
 
-(def-pprint-newline-test pprint-newline.mandatory.3
+(def-ppblock-test pprint-newline.mandatory.3
   (progn
     (write "A ")
     (pprint-newline :mandatory)
@@ -422,12 +422,12 @@ A
 A "
   :margin 1)
 
-(def-pprint-newline-test pprint-newline.mandatory.4
+(def-ppblock-test pprint-newline.mandatory.4
   (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
   "A A A A "
   :pretty nil)
 
-(def-pprint-newline-test pprint-newline.mandatory.5
+(def-ppblock-test pprint-newline.mandatory.5
   (pprint-logical-block
    (*standard-output* nil :prefix "<<<" :suffix ">>>")
    (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
