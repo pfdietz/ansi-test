@@ -280,3 +280,22 @@
 		     (cons (cons t cons) t))))))
     (subtypep-and-contrapositive-are-consistent 'cons t2))
   t)
+
+(deftest subtypep.cons.32
+  (let ((t2 '(cons t
+		   (or (not (cons integer (eql 0)))
+		       (not (cons (or float (eql 0)) cons))))))
+    (subtypep-and-contrapositive-are-consistent 'cons t2))
+  t)
+
+(deftest subtypep.cons.33
+  (let ((t2 '(or (not (cons (cons t cons) (cons t (cons unsigned-byte t))))
+		 (not (cons (cons integer t) (cons t (cons cons t)))))))
+    (subtypep-and-contrapositive-are-consistent 'cons t2))
+  t)
+
+(deftest subtypep.cons.34
+  (let ((t2 '(or (not (cons (or (eql 0) ratio) (not cons)))
+		 (not (cons integer cons)))))
+    (subtypep-and-contrapositive-are-consistent 'cons t2))
+  t)
