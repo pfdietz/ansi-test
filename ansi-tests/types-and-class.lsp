@@ -157,7 +157,7 @@
 	       (t2 (second pair)))
 	   (cond
 	    ((not (subtypep* t1 t2))
-	     (format t "~%~S not a subtype of ~S" t1 t2)
+	     (format t "~%Problem!  Did not find ~S to be a subtype of ~S" t1 t2)
 	     t)
 	    (t nil))))
      *subtype-table*)
@@ -226,7 +226,7 @@
 	  (cond
 	   ((and (not (member tp '(sequence cons list t)))
 		 (not (subtypep* tp 'atom)))
-	    (format t "~%Not an atomic type: ~S" tp)
+	    (format t "~%Problem!  Did not find to be an atomic type: ~S" tp)
 	    t)))))
 
 (deftest types-6
@@ -259,12 +259,24 @@
 (defvar *type-list* nil)
 (defvar *supertype-table* nil)
 
+;;;
+;;; TYPES-9 checks the transitivity of SUBTYPEP on pairs of types
+;;; occuring in *SUBTYPE-TABLE*, as well as the types KEYWORD, ATOM,
+;;; and LIST (the relationships given in *SUBTYPE-TABLE* are not used
+;;; here.)
+;;;
+
 (defun types-9-body ()
   (let ((tp-list (append '(keyword atom list)
 			 (loop for p in *subtype-table* collect (car p))))
 	(result-list))
     (setf tp-list (remove-duplicates tp-list))
+    ;; TP-LIST is now a list of unique CL type names
+    ;; Store it in *TYPE-LIST* so we can inspect it later if this test
+    ;; fails.  The variable is also used in test TYPES-9A
     (setf *type-list* tp-list)
+    ;; Compute all pairwise SUBTYPEP relationships among
+    ;; the elements of *TYPE-LIST*.
     (let ((subs (make-hash-table :test #'eq))
 	  (sups (make-hash-table :test #'eq)))
       (loop
@@ -277,7 +289,11 @@
 		    (when result
 		      (pushnew x (gethash y subs))
 		      (pushnew y (gethash x sups))))))
+      ;; Store the supertype relations for later inspection
+      ;; and use in test TYPES-9A
       (setf *supertype-table* sups)
+      ;; Check that the relation we just computed is transitive.
+      ;; Return a list of triples on which transitivity fails.
       (loop
 	  for x in tp-list do
 	    (let ((sub-list (gethash x subs))
@@ -294,10 +310,25 @@
       
       result-list)))
 
+;;; TYPES-9-BODY returns a list of triples (T1 T2 T3)
+;;; where (AND (SUBTYPEP T1 T2) (SUBTYPEP T2 T3) (NOT (SUBTYPEP T1 T3)))
+;;;  (and where SUBTYPEP succeeds in each case, returning true as its
+;;;   second return value.)
 (deftest types-9
     (types-9-body)
   nil)
 
+;;;
+;;; TYPES-9A takes the supertype relationship computed by test TYPE-9
+;;; and checks that TYPEP respects it for all elements of *UNIVERSE*.
+;;; That is, if T1 and T2 are two types, and X is an element of *UNIVERSE*,
+;;; then if (SUBTYPEP T1) then (TYPEP X T1) implies (TYPEP X T2).
+;;;
+;;; The function prints error messages when this fails, and returns the
+;;; number of occurences of failure.
+;;;
+;;; Test TYPES-9 must be run before this test.
+;;;
 (defun types-9a-body ()
   (cond
      ((not (and *type-list* *supertype-table*))
@@ -321,7 +352,7 @@
 			    (handler-case
 				(and (not (typep x tp2))
 				     (progn
-				       (format t "Found element of ~S not in ~S ~S~%"
+				       (format t "Found element of ~S not in ~S: ~S~%"
 					       tp tp2 x)
 				       t))
 			      (condition (c) (format t "Error ~S occured: ~S~%"
@@ -354,25 +385,24 @@
   nil)
 
 (deftest deftype-3
-    (not (not (typep (make-array '(10)) '(even-array t (*)))))
+  (notnot (typep (make-array '(10)) '(even-array t (*))))
   t)
 
 (deftest deftype-4
-    (typep (make-array '(5)) '(even-array t (*)))
+  (typep (make-array '(5)) '(even-array t (*)))
   nil)
 
 (deftest deftype-5
-    (not (not (typep (make-string 10) '(even-array character (*)))))
+  (notnot (typep (make-string 10) '(even-array character (*))))
   t)
 
 (deftest deftype-6
-    (not (not
-	  (typep (make-array '(3 5 6) :element-type '(unsigned-byte 8))
-	   '(even-array (unsigned-byte 8)))))
+  (notnot
+   (typep (make-array '(3 5 6) :element-type '(unsigned-byte 8))
+	  '(even-array (unsigned-byte 8))))
   t)
 
 ;; This should be greatly expanded
-
 
 (defparameter *type-and-class-fns*
   '(coerce subtypep type-of typep type-error-datum type-error-expected-type))
