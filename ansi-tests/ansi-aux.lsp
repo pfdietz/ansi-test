@@ -205,6 +205,11 @@ the condition to go uncaught if it cannot be classified."
 (defun is-eq-p (x) #'(lambda (y) (eqt x y)))
 (defun is-not-eq-p (x) #'(lambda (y) (not (eqt x y))))
 
+(defun is-eql-p (x) #'(lambda (y) (eqlt x y)))
+(defun is-not-eql-p (x) #'(lambda (y) (not (eqlt x y))))
+
+(defun onep (x) (eql x 1))
+
 (defun char-invertcase (c)
   (if (upper-case-p c) (char-downcase c)
     (char-upcase c)))
