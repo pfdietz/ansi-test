@@ -117,3 +117,12 @@
 	      unless (and (>= m x) (>= m y)
 			  (or (= m x) (= m y)))
 	      collect (list x y m))))
+
+(defun min.2-fn ()
+  (loop for x in *reals*
+	nconc
+	(loop for y in *reals*
+	      for m = (min x y)
+	      unless (and (<= m x) (<= m y)
+			  (or (= m x) (= m y)))
+	      collect (list x y m))))
