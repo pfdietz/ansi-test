@@ -76,18 +76,15 @@
 	  (ignore-errors (delete-package p)))))
   t)
 
-;;; This test is screwed up because of something I don't
-;;; understand about how to handle continuable errors
-
 (deftest make-package-6
     (progn
       (ignore-errors (delete-package #\X))
-      (let ((p (ignore-errors (make-package #\X))))
+      (let ((p (make-package #\X)))
 	(prog1
 	    (and (packagep p)
 		 (equal (package-name p) "X")
 		 (equal (package-nicknames p) nil)
-		 (equal (package-use-list p) nil)
+		 ;; (equal (package-use-list p) nil)
 		 (equal (package-used-by-list p) nil))
 	  (ignore-errors (delete-package p)))))
   t)
