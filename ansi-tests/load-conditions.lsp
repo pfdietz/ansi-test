@@ -10,4 +10,7 @@
 (load "handler-bind.lsp")
 (load "handler-case.lsp")
 (load "ignore-errors.lsp")
+(compile-and-load "define-condition-aux.lsp")
+(load "define-condition.lsp")
+
 
