@@ -8568,3 +8568,53 @@ Broken at C::WT-MAKE-CLOSURE.
 			(unwind-protect (throw 'ct7 b) 0)))))
    -1748290 -244489705763 38969920 -90 341977)
   -244489705763)
+
+;;; misc.444
+;;; misc.445
+
+;;; gcl 25 Nov 2004
+;;; Incorrect return value
+(deftest misc.446
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d)
+       (declare (type (integer -1254 1868060) a))
+       (declare (type (integer -1 0) b))
+       (declare (type (integer -424707253248 -82453721088) c))
+       (declare (type (integer -252962 3018671) d))
+       (declare (ignorable a b c d))
+       (declare (optimize (safety 3) (space 3) (speed 3)
+			  (compilation-speed 3) (debug 3)))
+       (* (labels ((%f8 (&optional (f8-1 0)) (setq b 0)))
+	    (if (> d 1668249724 (%f8)) 0 (complex a 0)))
+	  (if (oddp b) 0 c))))
+   796131 -1 -338008808923 530637)
+  -269099291056676913)
+
+(deftest misc.447
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 38632397 46632460288) a))
+       (declare (optimize (space 0) (safety 0) (debug 1)
+			  (compilation-speed 1) (speed 0)))
+       (catch 'ct2 (if (= a 0 (throw 'ct2 0)) 1 2289596))))
+   18160383912)
+  0)
+
+(deftest misc.448
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -3716 1269) a))
+       (declare (type (integer -1976579 2312) b))
+       (declare (optimize (compilation-speed 1) (safety 0)
+			  (speed 0) (space 0) (debug 3)))
+       (if (<= 0 b (setq a 117)) 0 a)))
+   -1147 -44004)
+  117)
+
+
