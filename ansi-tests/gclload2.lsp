@@ -34,6 +34,9 @@
 
 (load "packages.lsp")
 
+;;; Tests of numbers (section 12)
+(load "load-numbers.lsp")
+
 ;;; Tests of sequences
 (load "load-sequences.lsp")
 
