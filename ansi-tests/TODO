@@ -8,9 +8,10 @@ Things to do to the test suite (not a complete list)
 
 4. Extend random subtypep tester to complex and array types.
 
-5. Add JA's long form define-method-combination tests (from clisp).
+5. Add JA's long form define-method-combination tests (from clisp),
+  or write own.
 
-6. adjust-array
+6. adjust-array (partially done)
 
 7. Address synonym-stream issues (from Duane Rettig)
 
@@ -25,3 +26,7 @@ Things to do to the test suite (not a complete list)
    contradictions in the spec.
 
 12. Make sure all string operators work on displaced character vectors.
+
+13. Add tests for IMPORT.
+
+14. Finish testing DEFSETF
