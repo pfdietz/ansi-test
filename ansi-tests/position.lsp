@@ -150,6 +150,14 @@
 	    :start 2 :from-end t)
   4)
 
+(deftest position-list.29
+  (position 10 '(1 4 8 10 15 20) :test #'<)
+  4)
+
+(deftest position-list.30
+  (position 10 '(1 4 8 10 15 20) :test-not #'>=)
+  4)
+
 ;;; Tests on vectors
 
 (deftest position-vector.1
@@ -311,6 +319,14 @@
   (position 'a (make-array '(10) :initial-contents '(b a b b a a a a a a)
 			   :fill-pointer 5)
 	    :from-end t)
+  4)
+
+(deftest position-vector.32
+  (position 10 #(1 4 8 10 15 20) :test #'<)
+  4)
+
+(deftest position-vector.33
+  (position 10 #(1 4 8 10 15 20) :test-not #'>=)
   4)
 
 ;;; tests on bit vectors
@@ -484,6 +500,14 @@
 			  :fill-pointer 5))
   1)
 
+(deftest position-bit-vector.33
+  (position 0 #*1111000 :test #'>=)
+  4)
+
+(deftest position-bit-vector.34
+  (position 0 #*1111000 :test-not #'<)
+  4)
+
 ;;; strings
 
 (deftest position-string.1
@@ -636,6 +660,14 @@
 			    :element-type 'character
 			    :fill-pointer 5)
 	    :from-end t)
+  4)
+
+(deftest position-string.29
+  (position #\m "adfmpz" :test #'char<)
+  4)
+
+(deftest position-string.30
+  (position #\m "adfmpz" :test-not #'char>=)
   4)
 
 (deftest position.order.1
