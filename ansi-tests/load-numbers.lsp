@@ -13,3 +13,4 @@
 (load "plusp.lsp")
 (load "zerop.lsp")
 (load "floor.lsp")
+(load "ffloor.lsp")

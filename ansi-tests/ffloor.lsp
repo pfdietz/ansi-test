@@ -1,175 +1,150 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
-;;;; Created:  Mon Aug  4 22:16:00 2003
-;;;; Contains: Tests of FLOOR
+;;;; Created:  Tue Aug 12 06:59:54 2003
+;;;; Contains: Tests of FFLOOR
 
 (in-package :cl-test)
 
 (compile-and-load "numbers-aux.lsp")
-(compile-and-load "floor-aux.lsp")
+(compile-and-load "ffloor-aux.lsp")
 
-(deftest floor.error.1
-  (classify-error (floor))
+(deftest ffloor.error.1
+  (classify-error (ffloor))
   program-error)
 
-(deftest floor.error.2
-  (classify-error (floor 1.0 1 nil))
+(deftest ffloor.error.2
+  (classify-error (ffloor 1.0 1 nil))
   program-error)
 
 ;;;
 
-(deftest floor.1
-  (floor.1-fn)
+(deftest ffloor.1
+  (ffloor.1-fn)
   nil)
 
-(deftest floor.2
-  (floor.2-fn)
-  nil)
-
-(deftest floor.3
-  (floor.3-fn 2.0s4)
-  nil)
-
-(deftest floor.4
-  (floor.3-fn 2.0f4)
-  nil)
-
-(deftest floor.5
-  (floor.3-fn 2.0d4)
-  nil)
-
-(deftest floor.6
-  (floor.3-fn 2.0l4)
-  nil)
-
-(deftest floor.7
-  (floor.7-fn)
-  nil)
-
-(deftest floor.8
-  (floor.8-fn)
-  nil)
-
-(deftest floor.9
-  (floor.9-fn)
-  nil)
-
-(deftest floor.10
+(deftest ffloor.10
   (loop for x in (remove-if #'zerop *reals*)
-	for (q r) = (multiple-value-list (floor x x))
-	unless (and (eql q 1)
+	for (q r) = (multiple-value-list (ffloor x x))
+	unless (and (floatp q)
+		    (if (floatp x)
+			(eql q (float 1 x))
+		      (= q 1))
 		    (zerop r)
-		    (if (rationalp x) (eql r 0)
-		      (eql r (float 0 x))))
+		    (if (floatp x)
+			(eql r (float 0 x))
+		      (= r 0)))
 	collect x)
   nil)
 
-(deftest floor.11
-  (loop for x in (remove-if #'zerop *reals*)
-	for (q r) = (multiple-value-list (floor (- x) x))
-	unless (and (eql q -1)
+(deftest ffloor.11
+  (loop for x in (remove-if-not #'floatp (remove-if #'zerop *reals*))
+	for (q r) = (multiple-value-list (ffloor  (- x) x))
+	unless (and (floatp q)
+		    (if (floatp x)
+			(eql q (float -1 x))
+		      (= q -1))
 		    (zerop r)
-		    (if (rationalp x) (eql r 0)
-		      (eql r (float 0 x))))
+		    (if (floatp x)
+			(eql r (float 0 x))
+		      (= r 0)))
 	collect x)
   nil)
 
-(deftest floor.12
+(deftest ffloor.12
   (let* ((radix (float-radix 1.0s0))
 	 (rad (float radix 1.0s0))
 	 (rrad (/ 1.0s0 rad)))
     (loop for i from 1 to 1000
 	  for x = (+ i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q i)
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce i 'short-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
-(deftest floor.13
+(deftest ffloor.13
   (let* ((radix (float-radix 1.0s0))
 	 (rad (float radix 1.0s0))
 	 (rrad (/ 1.0s0 rad)))
     (loop for i from 1 to 1000
 	  for x = (- i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q (1- i))
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce (1- i) 'short-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
-(deftest floor.14
+(deftest ffloor.14
   (let* ((radix (float-radix 1.0f0))
 	 (rad (float radix 1.0f0))
 	 (rrad (/ 1.0f0 rad)))
     (loop for i from 1 to 1000
 	  for x = (+ i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q i)
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce i 'single-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
-(deftest floor.15
+(deftest ffloor.15
   (let* ((radix (float-radix 1.0f0))
 	 (rad (float radix 1.0f0))
 	 (rrad (/ 1.0f0 rad)))
     (loop for i from 1 to 1000
 	  for x = (- i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q (1- i))
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce (1- i) 'single-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
-(deftest floor.16
+(deftest ffloor.16
   (let* ((radix (float-radix 1.0d0))
 	 (rad (float radix 1.0d0))
 	 (rrad (/ 1.0d0 rad)))
     (loop for i from 1 to 1000
 	  for x = (+ i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q i)
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce i 'double-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
-(deftest floor.17
+(deftest ffloor.17
   (let* ((radix (float-radix 1.0d0))
 	 (rad (float radix 1.0d0))
 	 (rrad (/ 1.0d0 rad)))
     (loop for i from 1 to 1000
 	  for x = (- i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q (1- i))
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce (1- i) 'double-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
-(deftest floor.18
+(deftest ffloor.18
   (let* ((radix (float-radix 1.0l0))
 	 (rad (float radix 1.0l0))
 	 (rrad (/ 1.0l0 rad)))
     (loop for i from 1 to 1000
 	  for x = (+ i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q i)
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce i 'long-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
-(deftest floor.19
+(deftest ffloor.19
   (let* ((radix (float-radix 1.0l0))
 	 (rad (float radix 1.0l0))
 	 (rrad (/ 1.0l0 rad)))
     (loop for i from 1 to 1000
 	  for x = (- i rrad)
-	  for (q r) = (multiple-value-list (floor x))
-	  unless (and (eql q (1- i))
+	  for (q r) = (multiple-value-list (ffloor x))
+	  unless (and (eql q (coerce (1- i) 'long-float))
 		      (eql r rrad))
 	  collect (list i x q r)))
   nil)
 
 ;;; To add: tests that involve adding/subtracting EPSILON constants
 ;;; (suitably scaled) to floated integers.
-

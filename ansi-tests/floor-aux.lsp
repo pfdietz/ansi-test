@@ -60,6 +60,7 @@
 	repeat 10000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
+		    (rationalp r)
 		    (= n n2)
 		    (<= 0 r)
 		    (< r 1)
@@ -79,6 +80,7 @@
 	repeat 10000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
+		    (rationalp r)
 		    (>= 0 r)
 		    (> r d)
 		    (= n n2))
@@ -97,8 +99,10 @@
 	repeat 10000
 	unless (and (eql (length vals) 2)
 		    (integerp q)
+		    (rationalp r)
 		    (>= 0 r)
 		    (> r d)
 		    (= n n2))
 	collect (list n q d r n2)))
 
+;;; Need float tests
