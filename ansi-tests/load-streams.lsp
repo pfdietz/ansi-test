@@ -49,3 +49,4 @@
 (load "make-concatenated-stream.lsp")
 (load "get-output-stream-string.lsp")
 (load "make-string-input-stream.lsp")
+(load "make-string-output-stream.lsp")
