@@ -77,3 +77,14 @@
    '(cons (or symbol integer)
 	  (cons (or symbol integer) (or symbol integer))))
   nil)
+
+(deftest subtypep.cons.9
+  (check-equivalence
+   '(or
+     (cons (integer 0 (3)) (integer 0 (6)))
+     (cons (integer 3 (9)) (integer 0 (3)))
+     (cons (integer 0 (6)) (integer 6 (9)))
+     (cons (integer 6 (9)) (integer 3 (9)))
+     (cons (integer 3 (6)) (integer 3 (6))))
+   '(cons (integer 0 (9)) (integer 0 (9))))
+  nil)
