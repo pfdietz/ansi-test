@@ -1,0 +1,29 @@
+;-*- Mode:     Lisp -*-
+;;;; Author:   Paul Dietz
+;;;; Created:  Tue Jan 21 21:37:03 2003
+;;;; Contains: Tests of ARRAY-ROW-MAJOR-INDEX
+
+(in-package :cl-test)
+
+;;; More array-row-major-index tests are in make-array.lsp
+
+(deftest array-row-major-index.1
+  (array-row-major-index #0aNIL)
+  0)
+
+(deftest array-row-major-index.2
+  (loop for i from 0 to 4
+	collect (array-row-major-index #(a b c d e) i))
+  (0 1 2 3 4))
+
+(deftest array-row-major-index.3
+  (let ((a (make-array '(5) :fill-pointer 1)))
+    (loop for i from 0 to 4
+	  collect (array-row-major-index a i)))
+  (0 1 2 3 4))
+
+;;; Error tests
+
+(deftest array-row-major-index.error.1
+  (classify-error (array-row-major-index))
+  program-error)

@@ -49,7 +49,7 @@
   (classify-error (array-dimensions #(a b c) nil))
   program-error)
 
-(deftest array-dimension.error.3
+(deftest array-dimensions.error.3
   (loop for e in *mini-universe*
 	unless (or (typep e 'array)
 		   (eq 'type-error

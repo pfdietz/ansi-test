@@ -137,11 +137,14 @@
 (load "make-array.lsp")
 (load "adjustable-array-p.lsp")
 (load "array-displacement.lsp")
-(load "adjustable-array-p.lsp")
 (load "array-dimension.lsp")
 (load "array-dimensions.lsp")
 (load "array-in-bounds-p.lsp")
 (load "array-rank.lsp")
+(load "array-row-major-index.lsp")
+(load "array-total-size.lsp")
+(load "arrayp.lsp")
+(load "fill-pointer.lsp")
 
 ;;; Tests of packages
 

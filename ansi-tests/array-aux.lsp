@@ -29,10 +29,11 @@
 						  (list dimensions))))
   "Call MAKE-ARRAY and do sanity tests on the output."
   (declare (ignore element-type-p initial-contents initial-contents-p
-		   initial-element initial-element-p))
+		   initial-element initial-element-p dio-p))
   (let ((a (apply #'make-array dimensions options)))
     (cond
      ((not (typep a 'array)) :fail-not-array)
+     ((not (arrayp a)) :fail-not-arrayp)
 
      ((and (eq t element-type)
 	   (not adjustable)
@@ -121,6 +122,25 @@
 	   :fail-displacement-1)
 	  ((not (eql actual-dio displaced-index-offset))
 	   :fail-displaced-index-offset)))))
+
+     ;; Test of array-total-size
+     ((not (eql (array-total-size a)
+		(reduce #'* dimensions-list :initial-value 1)))
+      :fail-array-total-size)
+
+     ;; Test array-row-major-index on all zeros
+     ((and (> (array-total-size a) 0)
+	   (not (eql (apply #'array-row-major-index
+			    a (make-list (array-rank a) :initial-element 0))
+		     0)))
+      :fail-array-row-major-index-0)
+
+     ;; For the last entry
+     ((and (> (array-total-size a) 0)
+	   (not (eql (apply #'array-row-major-index
+			    a (mapcar #'1- dimensions-list))
+		     (1- (reduce #'* dimensions-list :initial-value 1)))))
+      :fail-array-row-major-index-last)
 
      ;; No problems -- return the array
      (t a))))
