@@ -139,6 +139,9 @@ Results: ~A~%" expected-number form n results))))
 ;;; Check that the subtype relationships implied
 ;;; by disjointness are not contradicted.  Return NIL
 ;;; if ok, or a list of error messages if not.
+
+;;; Assumes the types are nonempty.
+
 (defun check-disjointness (type1 type2)
   (remove 'nil
 	  (list
@@ -156,7 +159,7 @@ Results: ~A~%" expected-number form n results))))
 	   (check-subtypep type1 `(or (not ,type2) ,type1) t)
 	   (check-subtypep type2 `(or ,type2 (not ,type1)) t)
 	   (check-subtypep type2 `(or (not ,type1) ,type2) t)
-	   )))
+	    )))
 
 (defun check-subtypep (type1 type2 is-sub &optional should-be-valid)
   (multiple-value-bind
@@ -604,19 +607,25 @@ the condition to go uncaught if it cannot be classified."
       pathname stream random-state condition restart))
 
 (defparameter *disjoint-types-list2*
-  `((cons (cons t t) (cons t (cons t t)))
-    (symbol keyword boolean null)
+  `((cons (cons t t) (cons t (cons t t)) (eql (nil)))
+    (symbol keyword boolean null (eql a) (eql nil) (eql t) (eql *))
     (array vector simple-array simple-vector string simple-string
-	   base-string simple-base-string)
-    (character base-char standard-char extended-char)
-    (function compiled-function generic-function standard-generic-function)
-    (package)
-    (pathname logical-pathname)
+	   base-string simple-base-string (eql #()))
+    (character base-char standard-char (eql #\a)
+	       ,@(if (subtypep 'character 'base-char) nil
+		   (list 'extended-char)))
+    (function compiled-function generic-function standard-generic-function
+	      (eql ,#'car))
+    (package (eql ,(find-package "COMMON-LISP")))
+    (pathname logical-pathname (eql #p""))
     (stream broadcast-stream concatenated-stream echo-stream
 	    file-stream string-stream synonym-stream two-way-stream)
     (number real complex float integer rational ratio
 	    bit (integer 0 100) (float 0.0 100.0) (integer 0 *)
-	    (rational 0 *) (mod 10))
+	    (rational 0 *) (mod 10)
+	    (eql 0)
+	    ,@(and (not (subtypep 'bignum nil))
+		   (list 'bignum)))
     (random-state)
     ,*condition-types*
     (restart)
