@@ -349,8 +349,8 @@
 	 for j = (random bound)
 	 for y = (coerce j type)
 	 for one = (coerce 1.0 type)
-	 for cx = (complex 1.0 x)
-	 for cy = (complex 1.0 y)
+	 for cx = (complex one x)
+	 for cy = (complex one y)
 	 for prod = (* cx cy)
 	 repeat 1000
 	 unless (and (eql prod (complex (coerce (- 1 (* i j)) type)
