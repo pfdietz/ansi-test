@@ -38,7 +38,6 @@
     (safely-delete-package "H")
     (prog1
 	(let ((*PACKAGE* (make-package "H")))
-	  (declare (special *PACKAGE*))
 	  (intern "FOO")
 	  (multiple-value-bind* (sym access)
 	      (find-symbol "FOO")

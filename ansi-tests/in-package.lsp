@@ -11,7 +11,6 @@
 
 (deftest in-package.1
   (let ((*package* *package*))
-    (declare (special *package*))
     (let ((p2 (in-package "A")))
       (and (eqt p2 (find-package "A"))
 	   (eqt *package* p2))))
@@ -19,7 +18,6 @@
 
 (deftest in-package.2
   (let ((*package* *package*))
-    (declare (special *package*))
     (let ((p2 (in-package |A|)))
       (and (eqt p2 (find-package "A"))
 	   (eqt *package* p2))))
@@ -27,7 +25,6 @@
 
 (deftest in-package.3
   (let ((*package* *package*))
-    (declare (special *package*))
     (let ((p2 (in-package :|A|)))
       (and (eqt p2 (find-package "A"))
 	   (eqt *package* p2))))
@@ -35,7 +32,6 @@
 
 (deftest in-package.4
   (let ((*package* *package*))
-    (declare (special *package*))
     (let ((p2 (in-package #\A)))
       (and (eqt p2 (find-package "A"))
 	   (eqt *package* p2))))
@@ -43,7 +39,6 @@
 
 (deftest in-package.5
   (let ((*package* *package*))
-    (declare (special *package*))
     (safely-delete-package "H")
     (handler-case
      (eval '(in-package "H"))

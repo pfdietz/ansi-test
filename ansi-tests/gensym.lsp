@@ -21,14 +21,12 @@
 ;;; has been created.
 (deftest gensym.3
   (let ((*gensym-counter* 1))
-    (declare (special *gensym-counter*))
      (symbol-name (gensym)))
   #.(string '#:g1))
 
 ;;; Gensym uses the string argument instead of the default
 (deftest gensym.4
   (let ((*gensym-counter* 1327))
-    (declare (special *gensym-counter*))
     (symbol-name (gensym "FOO")))
   "FOO1327")
 
@@ -55,7 +53,6 @@
 ;;; *gensym-counter* is incremented by gensym
 (deftest gensym.9
   (let ((*gensym-counter* 12345))
-    (declare (special *gensym-counter*))
     (gensym)
     *gensym-counter*)
   12346)
@@ -65,14 +62,12 @@
 ;;; the symbol.)
 (deftest gensym.10
   (let ((*gensym-counter* 1234567890123456789012345678901234567890))
-    (declare (special *gensym-counter*))
     (symbol-name (gensym)))
   #.(string '#:g1234567890123456789012345678901234567890))
 
 ;;; gensym increments Really Big values of *gensym-counter*
 (deftest gensym.11
   (let ((*gensym-counter* 12345678901234567890123456789012345678901234567890))
-    (declare (special *gensym-counter*))
     (gensym)
     *gensym-counter*)
   12345678901234567890123456789012345678901234567891)
@@ -80,7 +75,6 @@
 ;;; Gensym uses an integer argument instead of the counter
 (deftest gensym.12
   (let ((*gensym-counter* 10))
-    (declare (special *gensym-counter*))
     (symbol-name (gensym 123)))
   #.(string '#:g123))
 
@@ -88,7 +82,6 @@
 ;;; *gensym-counter*
 (deftest gensym.13
   (let ((*gensym-counter* 10))
-    (declare (special *gensym-counter*))
     (gensym 123)
     *gensym-counter*)
   10)

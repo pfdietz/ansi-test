@@ -61,7 +61,6 @@
 (deftest do-symbols.7
   (let ((x nil)
 	(*package* (find-package "DS1")))
-    (declare (special *package*))
     (list
      (do-symbols (s) (push s x))
      (sort-symbols x)))
