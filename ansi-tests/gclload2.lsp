@@ -9,6 +9,8 @@
 (load "eval.lsp")
 (load "eval-and-compile.lsp")
 (load "compile.lsp")
+(load "compiler-macros.lsp")
+(load "constantp.lsp")
 (load "lambda.lsp")
 
 ;;; Tests of data and control flow
