@@ -1168,7 +1168,7 @@
 	collect x)
   nil)
 
-(deftest symbol-plist.error,4
+(deftest symbol-plist.error.4
   (loop for x in *mini-universe*
 	for form = `(signals-error (setf (symbol-plist ',x)
 					 (find-package "CL-USER"))
@@ -1202,4 +1202,10 @@
 	collect x)
   nil)
 
+(deftest symbol-value.error.5
+  (let ((sym (gensym)))
+    (declare (optimize safety))
+    (handler-case (progn (symbol-value sym) :bad)
+		  (unbound-variable () :good)))
+  :good)
 
