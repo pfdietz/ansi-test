@@ -24,7 +24,7 @@
 (deftest bit-andc1.3
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))
 	 (s2 (make-array nil :initial-element 1 :element-type 'bit)))
-    (values(bit-andc1 s1 s2) s1 s2))
+    (values (bit-andc1 s1 s2) s1 s2))
   #0a1
   #0a0
   #0a1)
@@ -217,6 +217,16 @@
   #2a((0 1)(0 1))
   #2a((0 0)(1 1))
   #2a((0 0)(1 0)))
+
+(deftest bit-andc1.20
+  (let* ((s1 (make-array 1 :initial-element 0 :element-type 'bit))
+	 (s2 (make-array 1 :initial-element 0 :element-type 'bit))
+	 (x 0) y z)
+    (values
+     (bit-andc1 (progn (setf y (incf x)) s1)
+		(progn (setf z (incf x)) s2))
+     x y z))
+  #*0 2 1 2)
 
 ;;; Error tests
 

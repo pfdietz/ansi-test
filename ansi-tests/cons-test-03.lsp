@@ -35,50 +35,82 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; list, list*
 
-(deftest list-1
-    (list 'a 'b 'c)
+(deftest list.1
+  (list 'a 'b 'c)
   (a b c))
 
-(deftest list-2
-    (list)
+(deftest list.2
+  (list)
   nil)
 
-(deftest list*-1
-    (list* 1 2 3)
+(deftest list.3
+  (let ((i 0))
+    (list (incf i) (incf i) (incf i) (incf i)))
+  (1 2 3 4))
+
+(deftest list.4
+  (let ((i 0))
+    (list (incf i) (incf i) (incf i) (incf i)
+	  (incf i) (incf i) (incf i) (incf i)))
+  (1 2 3 4 5 6 7 8))
+
+(deftest list.5
+  (let ((i 0))
+    (list (incf i) (incf i) (incf i) (incf i)
+	  (incf i) (incf i) (incf i) (incf i)
+	  (incf i) (incf i) (incf i) (incf i)
+	  (incf i) (incf i) (incf i) (incf i)))
+  (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16))
+
+(deftest list*.1
+  (list* 1 2 3)
   (1 2 . 3))
 
-(deftest list*-2
-    (list* 'a)
+(deftest list*.2
+  (list* 'a)
   a)
 
-(deftest list-list*-1
-    (list* 'a 'b 'c (list 'd 'e 'f))
+(deftest list-list*.1
+  (list* 'a 'b 'c (list 'd 'e 'f))
   (a b c d e f))
 
 (deftest list*-3
-    (list* 1)
+  (list* 1)
   1)
+
+(deftest list*.4
+  (let ((i 0))
+    (list* (incf i) (incf i) (incf i) (incf i)))
+  (1 2 3 . 4))
+
+(deftest list*.5
+  (let ((i 0))
+    (list* (incf i) (incf i) (incf i) (incf i)
+	   (incf i) (incf i) (incf i) (incf i)
+	   (incf i) (incf i) (incf i) (incf i)
+	   (incf i) (incf i) (incf i) (incf i)))
+  (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 . 16))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; list-length
 
 (deftest list-length-nil
-    (list-length nil)
+  (list-length nil)
   0)
 
 (deftest list-length-list
-    (list-length '(a b c d e f))
+  (list-length '(a b c d e f))
   6)
 
 ;; check that list-length returns nil
 ;; on a circular list
 
 (deftest list-length-circular-list
-    (let ((x (cons nil nil)))
-      (let ((y (list* 1 2 3 4 5 6 7 8 9 x)))
-	(setf (cdr x) y)
-	(let ((z (list* 'a 'b 'c 'd 'e y)))
-	  (list-length z))))
+  (let ((x (cons nil nil)))
+    (let ((y (list* 1 2 3 4 5 6 7 8 9 x)))
+      (setf (cdr x) y)
+      (let ((z (list* 'a 'b 'c 'd 'e y)))
+	(list-length z))))
   nil)
 
 
@@ -86,11 +118,11 @@
 ;; on arguments that are not proper lists or circular lists
 
 (deftest list-length.error.1
-    (loop
-	for x in (list 'a 1 1.0 #\w (make-array '(10))
-		       '(a b . c) (symbol-package 'cons))
-	count (not (eqt (catch-type-error (list-length x))
-		       'type-error)))
+  (loop
+   for x in (list 'a 1 1.0 #\w (make-array '(10))
+		  '(a b . c) (symbol-package 'cons))
+   count (not (eqt (catch-type-error (list-length x))
+		   'type-error)))
   0)
 
 (deftest list-length.error.2
@@ -220,6 +252,16 @@
 (deftest make-list-repeated-keyword
   (make-list 5 :initial-element 'a :initial-element 'b)
   (a a a a a))
+
+(deftest make-list.order
+  (let ((i 0) x y)
+    (values
+     (make-list (progn (setf x (incf i)) 5)
+		:initial-element
+		(progn (setf y (incf i)) 'a))
+     i x y))
+  (a a a a a)
+  2 1 2)
 
 (deftest make-list.error.1
   (catch-type-error (make-list -1))

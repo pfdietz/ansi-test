@@ -12,21 +12,21 @@
 ;;; copy-tree
 
 ;; Try copy-tree on a tree containing elements of various kinds
-(deftest copy-tree-1
-    (let ((x (cons 'a (list (cons 'b 'c)
-			    (cons 1 1.2)
-			    (list (list "abcde"
-					(make-array '(10) :initial-element (cons 'e 'f)))
-				  'g)))))
-      (let ((y (copy-tree x)))
-	(check-cons-copy x y)))
+(deftest copy-tree.1
+  (let ((x (cons 'a (list (cons 'b 'c)
+			  (cons 1 1.2)
+			  (list (list "abcde"
+				      (make-array '(10) :initial-element (cons 'e 'f)))
+				'g)))))
+    (let ((y (copy-tree x)))
+      (check-cons-copy x y)))
   t)
 
 ;; Try copy-tree on *universe*
-(deftest copy-tree-2
-    (let ((x (copy-list *universe*)))
-      (let ((y (copy-tree x)))
-	(check-cons-copy x y)))
+(deftest copy-tree.2
+  (let* ((x (copy-list *universe*))
+	 (y (copy-tree x)))
+    (check-cons-copy x y))
   t)
 
 (deftest copy-tree.error.1
@@ -37,63 +37,94 @@
   (classify-error (copy-tree 'a 'b))
   program-error)
 
-(deftest sublis-1
-    (check-sublis '((a b) g (d e 10 g h) 15 . g)
-		  '((e . e2) (g . 17)))
+(deftest sublis.1
+  (check-sublis '((a b) g (d e 10 g h) 15 . g)
+		'((e . e2) (g . 17)))
   ((a b) 17 (d e2 10 17 h) 15 . 17))
 
-(deftest sublis-2
-    (check-sublis '(f6 10 (f4 (f3 (f1 a b) (f1 a p)) (f2 a b)))
-		  '(((f1 a b) . (f2 a b)) ((f2 a b) . (f1 a b)))
-		  :test #'equal)
+(deftest sublis.2
+  (check-sublis '(f6 10 (f4 (f3 (f1 a b) (f1 a p)) (f2 a b)))
+		'(((f1 a b) . (f2 a b)) ((f2 a b) . (f1 a b)))
+		:test #'equal)
   (F6 10 (F4 (F3 (F2 A B) (F1 A P)) (F1 A B))))
 
-(deftest sublis-3
-    (check-sublis '(10 ((10 20 (a b c) 30)) (((10 20 30 40))))
-		  '((30 . "foo")))
+(deftest sublis.3
+  (check-sublis '(10 ((10 20 (a b c) 30)) (((10 20 30 40))))
+		'((30 . "foo")))
   (10 ((10 20 (a b c) "foo")) (((10 20 "foo" 40)))))
 
-(deftest sublis-4
-    (check-sublis (sublis
-		   (copy-tree '((a . 2) (b . 4) (c . 1)))
-		   (copy-tree '(a b c d e (a b c a d b) f)))
-		  '((t . "yes"))
-		  :key #'(lambda (x) (and (typep x 'integer)
-					  (evenp x))))
+(deftest sublis.4
+  (check-sublis (sublis
+		 (copy-tree '((a . 2) (b . 4) (c . 1)))
+		 (copy-tree '(a b c d e (a b c a d b) f)))
+		'((t . "yes"))
+		:key #'(lambda (x) (and (typep x 'integer)
+					(evenp x))))
   ("yes" "yes" 1 d e ("yes" "yes" 1 "yes" d "yes") f))
 
-(deftest sublis-5
-    (check-sublis '("fee" (("fee" "Fie" "foo"))
-		    fie ("fee" "fie"))
-		  `((,(copy-seq "fie") . #\f)))
+(deftest sublis.5
+  (check-sublis '("fee" (("fee" "Fie" "foo"))
+		  fie ("fee" "fie"))
+		`((,(copy-seq "fie") . #\f)))
   ("fee" (("fee" "Fie" "foo")) fie ("fee" "fie")))
 
-(deftest sublis-6
-    (check-sublis '("fee" fie (("fee" "Fie" "foo") 1)
-		    ("fee" "fie"))
-		  `((,(copy-seq "fie") . #\f))
-		  :test 'equal)
+(deftest sublis.6
+  (check-sublis '("fee" fie (("fee" "Fie" "foo") 1)
+		  ("fee" "fie"))
+		`((,(copy-seq "fie") . #\f))
+		:test 'equal)
   ("fee" fie (("fee" "Fie" "foo") 1) ("fee" #\f)))
 
-(deftest sublis-7
-    (check-sublis '(("aa" a b)
-		    (z "bb" d)
-		    ((x . "aa")))
-		  `((,(copy-seq "aa") . 1)
-		    (,(copy-seq "bb") . 2))
-		  :test 'equal
-		  :key #'(lambda (x) (if (consp x) (car x)
-				       '*not-present*)))
+(deftest sublis.7
+  (check-sublis '(("aa" a b)
+		  (z "bb" d)
+		  ((x . "aa")))
+		`((,(copy-seq "aa") . 1)
+		  (,(copy-seq "bb") . 2))
+		:test 'equal
+		:key #'(lambda (x) (if (consp x) (car x)
+				     '*not-present*)))
   (1 (z . 2) ((x . "aa"))))
 
 ;; Check that a null key arg is ignored.
 
-(deftest sublis-8
+(deftest sublis.8
   (check-sublis 
    '(1 2 a b)
    '((1 . 2) (a . b))
    :key nil)
   (2 2 b b))
+
+;;; Order of argument evaluation
+(deftest sublis.9
+  (let ((i 0) w x y z)
+    (values
+     (sublis
+      (progn (setf w (incf i))
+	     '((a . z)))
+      (progn (setf x (incf i))
+	     (copy-tree '(a b c d)))
+      :test (progn (setf y (incf i)) #'eql)
+      :key (progn (setf z (incf i)) #'identity))
+     i w x y z))
+  (z b c d)
+  4 1 2 3 4)
+
+(deftest sublis.10
+  (let ((i 0) w x y z)
+    (values
+     (sublis
+      (progn (setf w (incf i))
+	     '((a . z)))
+      (progn (setf x (incf i))
+	     (copy-tree '(a b c d)))
+      :key (progn (setf y (incf i)) #'identity)
+      :test-not (progn (setf z (incf i)) (complement #'eql))
+      )
+     i w x y z))
+  (z b c d)
+  4 1 2 3 4)
+
 
 ;;; Keyword tests
 
@@ -143,67 +174,97 @@
 
 ;; nsublis
 
-(deftest nsublis-1
-    (check-nsublis '((a b) g (d e 10 g h) 15 . g)
-		  '((e . e2) (g . 17)))
+(deftest nsublis.1
+  (check-nsublis '((a b) g (d e 10 g h) 15 . g)
+		 '((e . e2) (g . 17)))
   ((a b) 17 (d e2 10 17 h) 15 . 17))
 
-(deftest nsublis-2
-    (check-nsublis '(f6 10 (f4 (f3 (f1 a b) (f1 a p)) (f2 a b)))
-		  '(((f1 a b) . (f2 a b)) ((f2 a b) . (f1 a b)))
-		  :test #'equal)
+(deftest nsublis.2
+  (check-nsublis '(f6 10 (f4 (f3 (f1 a b) (f1 a p)) (f2 a b)))
+		 '(((f1 a b) . (f2 a b)) ((f2 a b) . (f1 a b)))
+		 :test #'equal)
   (F6 10 (F4 (F3 (F2 A B) (F1 A P)) (F1 A B))))
 
-(deftest nsublis-3
-    (check-nsublis '(10 ((10 20 (a b c) 30)) (((10 20 30 40))))
-		  '((30 . "foo")))
+(deftest nsublis.3
+  (check-nsublis '(10 ((10 20 (a b c) 30)) (((10 20 30 40))))
+		 '((30 . "foo")))
   (10 ((10 20 (a b c) "foo")) (((10 20 "foo" 40)))))
 
-(deftest nsublis-4
-    (check-nsublis
-		  (nsublis (copy-tree '((a . 2) (b . 4) (c . 1)))
-			   (copy-tree '(a b c d e (a b c a d b) f)))
-		  '((t . "yes"))
-		  :key #'(lambda (x) (and (typep x 'integer)
-					  (evenp x))))
+(deftest nsublis.4
+  (check-nsublis
+   (nsublis (copy-tree '((a . 2) (b . 4) (c . 1)))
+	    (copy-tree '(a b c d e (a b c a d b) f)))
+   '((t . "yes"))
+   :key #'(lambda (x) (and (typep x 'integer)
+			   (evenp x))))
   ("yes" "yes" 1 d e ("yes" "yes" 1 "yes" d "yes") f))
 
-(deftest nsublis-5
-    (check-nsublis '("fee" (("fee" "Fie" "foo"))
-		    fie ("fee" "fie"))
-		  `((,(copy-seq "fie") . #\f)))
+(deftest nsublis.5
+  (check-nsublis '("fee" (("fee" "Fie" "foo"))
+		   fie ("fee" "fie"))
+		 `((,(copy-seq "fie") . #\f)))
   ("fee" (("fee" "Fie" "foo")) fie ("fee" "fie")))
 
-(deftest nsublis-6
-    (check-nsublis '("fee" fie (("fee" "Fie" "foo") 1)
-		    ("fee" "fie"))
-		  `((,(copy-seq "fie") . #\f))
-		  :test 'equal)
+(deftest nsublis.6
+  (check-nsublis '("fee" fie (("fee" "Fie" "foo") 1)
+		   ("fee" "fie"))
+		 `((,(copy-seq "fie") . #\f))
+		 :test 'equal)
   ("fee" fie (("fee" "Fie" "foo") 1) ("fee" #\f)))
 
-(deftest nsublis-7
-    (check-nsublis '(("aa" a b)
-		    (z "bb" d)
-		    ((x . "aa")))
-		  `((,(copy-seq "aa") . 1)
-		    (,(copy-seq "bb") . 2))
-		  :test 'equal
-		  :key #'(lambda (x) (if (consp x) (car x)
-				       '*not-present*)))
+(deftest nsublis.7
+  (check-nsublis '(("aa" a b)
+		   (z "bb" d)
+		   ((x . "aa")))
+		 `((,(copy-seq "aa") . 1)
+		   (,(copy-seq "bb") . 2))
+		 :test 'equal
+		 :key #'(lambda (x) (if (consp x) (car x)
+				      '*not-present*)))
   (1 (z . 2) ((x . "aa"))))
 
-(deftest nsublis-9
+(deftest nsublis.8
   (nsublis nil 'a :bad-keyword t :allow-other-keys t)
   a)
 
 ;; Check that a null key arg is ignored.
 
-(deftest nsublis-8
+(deftest nsublis.9
   (check-nsublis 
    '(1 2 a b)
    '((1 . 2) (a . b))
    :key nil)
   (2 2 b b))
+
+;;; Order of argument evaluation
+(deftest nsublis.10
+  (let ((i 0) w x y z)
+    (values
+     (nsublis
+      (progn (setf w (incf i))
+	     '((a . z)))
+      (progn (setf x (incf i))
+	     (copy-tree '(a b c d)))
+      :test (progn (setf y (incf i)) #'eql)
+      :key (progn (setf z (incf i)) #'identity))
+     i w x y z))
+  (z b c d)
+  4 1 2 3 4)
+
+(deftest nsublis.11
+  (let ((i 0) w x y z)
+    (values
+     (nsublis
+      (progn (setf w (incf i))
+	     '((a . z)))
+      (progn (setf x (incf i))
+	     (copy-tree '(a b c d)))
+      :key (progn (setf y (incf i)) #'identity)
+      :test-not (progn (setf z (incf i)) (complement #'eql))
+      )
+     i w x y z))
+  (z b c d)
+  4 1 2 3 4)
 
 ;;; Keyword tests
 
@@ -252,43 +313,43 @@
   program-error)
 
 
-(deftest sublis-shared
-    (let* ((shared-piece (list 'a 'b))
-	   (a (list shared-piece shared-piece)))
-      (check-sublis a '((a . b) (b . a))))
+(deftest sublis.shared
+  (let* ((shared-piece (list 'a 'b))
+	 (a (list shared-piece shared-piece)))
+    (check-sublis a '((a . b) (b . a))))
   ((b a) (b a)))
 
 (defvar *subst-tree-1* '(10 (30 20 10) (20 10) (10 20 30 40)))
 
-(deftest subst-1
-    (check-subst "Z" 30 (copy-tree *subst-tree-1*))
+(deftest subst.1
+  (check-subst "Z" 30 (copy-tree *subst-tree-1*))
   (10 ("Z" 20 10) (20 10) (10 20 "Z" 40)))
 
-(deftest subst-2
-    (check-subst "A" 0 (copy-tree *subst-tree-1*))
+(deftest subst.2
+  (check-subst "A" 0 (copy-tree *subst-tree-1*))
   (10 (30 20 10) (20 10) (10 20 30 40)))
 
-(deftest subst-3
-    (check-subst "Z" 100 (copy-tree *subst-tree-1*) :test-not #'eql)
+(deftest subst.3
+  (check-subst "Z" 100 (copy-tree *subst-tree-1*) :test-not #'eql)
   "Z")
 
-(deftest subst-4
+(deftest subst.4
   (check-subst 'grape 'dick
 	       '(melville wrote (moby dick)))
   (MELVILLE WROTE (MOBY GRAPE)))
 
-(deftest subst-5
+(deftest subst.5
   (check-subst 'cha-cha-cha 'nil '(melville wrote (moby dick)))
   (MELVILLE WROTE (MOBY DICK . CHA-CHA-CHA) . CHA-CHA-CHA))
 
-(deftest subst-6
+(deftest subst.6
   (check-subst
    '(1 2) '(foo . bar)
    '((foo . baz) (foo . bar) (bar . foo) (baz foo . bar))
    :test #'equal)
   ((foo . baz) (1 2) (bar . foo) (baz 1 2)))
 
-(deftest subst-7
+(deftest subst.7
   (check-subst
    'foo "aaa"
    '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
@@ -298,7 +359,7 @@
    :test #'string=)
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
-(deftest subst-8
+(deftest subst.8
   (check-subst
    'foo nil
    '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
@@ -308,11 +369,39 @@
    :test-not #'equal)
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
-(deftest subst-9
+(deftest subst.9
   (check-subst 'a 'b
 	       (copy-tree '(a b c d a b))
 	       :key nil)
   (a a c d a a))
+
+;;; Order of argument evaluation
+(deftest subst.10
+  (let ((i 0) v w x y z)
+    (values
+     (subst (progn (setf v (incf i)) 'b)
+	    (progn (setf w (incf i)) 'a)
+	    (progn (setf x (incf i)) (copy-tree '((10 a . a) a b c ((a)) z)))
+	    :key (progn (setf y (incf i)) #'identity)
+	    :test (progn (setf z (incf i)) #'eql))
+     i v w x y z))
+  ((10 b . b) b b c ((b)) z)
+  5 1 2 3 4 5)
+
+(deftest subst.11
+  (let ((i 0) v w x y z)
+    (values
+     (subst (progn (setf v (incf i)) 'b)
+	    (progn (setf w (incf i)) 'a)
+	    (progn (setf x (incf i)) (copy-tree '((10 a . a) a b c ((a)) z)))
+	    :test-not (progn (setf y (incf i)) (complement #'eql))
+	    :key (progn (setf z (incf i)) #'identity)
+	    )
+     i v w x y z))
+  ((10 b . b) b b c ((b)) z)
+  5 1 2 3 4 5)
+
+
 
 ;;; Keyword tests for subst
 
@@ -344,77 +433,103 @@
 
 ;;; Tests for subst-if, subst-if-not
   
-(deftest subst-if-1
-    (check-subst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
+(deftest subst-if.1
+  (check-subst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
   A)
 
-(deftest subst-if-not-1
-    (check-subst-if-not '(x) 'consp '(1 (1 2) (1 2 3) (1 2 3 4)))
+(deftest subst-if-not.1
+  (check-subst-if-not '(x) 'consp '(1 (1 2) (1 2 3) (1 2 3 4)))
   ((X)
    ((X) (X) X)
    ((X) (X) (X) X)
    ((X) (X) (X) (X) X)
    X))
 
-(deftest subst-if-2
-    (check-subst-if 17 (complement #'listp) '(a (a b) (a c d) (a nil e f g)))
+(deftest subst-if.2
+  (check-subst-if 17 (complement #'listp) '(a (a b) (a c d) (a nil e f g)))
   (17 (17 17) (17 17 17) (17 nil 17 17 17)))
 
-(deftest subst-if-3
-    (check-subst-if '(z)
-		    (complement #'consp)
-		    '(a (a b) (c d e) (f g h i)))
+(deftest subst-if.3
+  (check-subst-if '(z)
+		  (complement #'consp)
+		  '(a (a b) (c d e) (f g h i)))
   ((Z)
    ((Z) (Z) Z)
    ((Z) (Z) (Z) Z)
    ((Z) (Z) (Z) (Z) Z)
    Z))
 
-(deftest subst-if-not-2
-    (check-subst-if-not 'a (complement #'listp)
-			'((100 1) (2 3) (4 3 2 1) (a b c)))
+(deftest subst-if-not.2
+  (check-subst-if-not 'a (complement #'listp)
+		      '((100 1) (2 3) (4 3 2 1) (a b c)))
   A)
 
-(deftest subst-if-4
-    (check-subst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
-		    :key #'listp)
+(deftest subst-if.4
+  (check-subst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
+		  :key #'listp)
   B)
 
-(deftest subst-if-not-3
-    (check-subst-if-not 'c #'identity
-			'((100 1) (2 3) (4 3 2 1) (a b c))
-			:key (complement #'listp))
+(deftest subst-if-not.3
+  (check-subst-if-not 'c #'identity
+		      '((100 1) (2 3) (4 3 2 1) (a b c))
+		      :key (complement #'listp))
   C)
 
-(deftest subst-if-5
-    (check-subst-if 4 #'(lambda (x) (eql x 1))
-		    '((1 3) (1) (1 10 20 30) (1 3 x y))
-		    :key #'(lambda (x)
-			     (and (consp x)
-				  (car x))))
+(deftest subst-if.5
+  (check-subst-if 4 #'(lambda (x) (eql x 1))
+		  '((1 3) (1) (1 10 20 30) (1 3 x y))
+		  :key #'(lambda (x)
+			   (and (consp x)
+				(car x))))
   (4 4 4 4))
 
-(deftest subst-if-not-4
-    (check-subst-if-not
-     40
-     #'(lambda (x) (not (eql x 17)))
-     '((17) (17 22) (17 22 31) (17 21 34 54))
-     :key #'(lambda (x)
-	      (and (consp x)
-		   (car x))))
+(deftest subst-if-not.4
+  (check-subst-if-not
+   40
+   #'(lambda (x) (not (eql x 17)))
+   '((17) (17 22) (17 22 31) (17 21 34 54))
+   :key #'(lambda (x)
+	    (and (consp x)
+		 (car x))))
   (40 40 40 40))
 
-(deftest subst-if-6
+(deftest subst-if.6
   (check-subst-if 'a  #'(lambda (x) (eql x 'b))
 		  '((a) (b) (c) (d))
 		  :key nil)
   ((a) (a) (c) (d)))
-  
-(deftest subst-if-not-5
+
+(deftest subst-if-not.5
   (check-subst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
 		      '((a) (b) (c) (d))
 		      :key nil)
   ((a) (a) (c) (d)))
+
+(deftest subst-if.7
+  (let ((i 0) w x y z)
+    (values
+     (subst-if
+      (progn (setf w (incf i)) 'a)
+      (progn (setf x (incf i)) #'(lambda (x) (eql x 'b)))
+      (progn (setf y (incf i)) (copy-list '(1 2 a b c)))
+      :key (progn (setf z (incf i)) #'identity))
+     i w x y z))
+  (1 2 a a c)
+  4 1 2 3 4)
+
+(deftest subst-if-not.7
+  (let ((i 0) w x y z)
+    (values
+     (subst-if-not
+      (progn (setf w (incf i)) 'a)
+      (progn (setf x (incf i)) #'(lambda (x) (not (eql x 'b))))
+      (progn (setf y (incf i)) (copy-list '(1 2 a b c)))
+      :key (progn (setf z (incf i)) #'identity))
+     i w x y z))
+  (1 2 a a c)
+  4 1 2 3 4)
+  
+	       
 
 ;;; Keyword tests for subst-if
 
@@ -471,59 +586,85 @@
 
 (defvar *nsubst-tree-1* '(10 (30 20 10) (20 10) (10 20 30 40)))
 
-(deftest nsubst-1
-    (check-nsubst "Z" 30 (copy-tree *nsubst-tree-1*))
+(deftest nsubst.1
+  (check-nsubst "Z" 30 (copy-tree *nsubst-tree-1*))
   (10 ("Z" 20 10) (20 10) (10 20 "Z" 40)))
 
-(deftest nsubst-2
-    (check-nsubst "A" 0 (copy-tree *nsubst-tree-1*))
+(deftest nsubst.2
+  (check-nsubst "A" 0 (copy-tree *nsubst-tree-1*))
   (10 (30 20 10) (20 10) (10 20 30 40)))
 
-(deftest nsubst-3
-    (check-nsubst "Z" 100 (copy-tree *nsubst-tree-1*) :test-not #'eql)
+(deftest nsubst.3
+  (check-nsubst "Z" 100 (copy-tree *nsubst-tree-1*) :test-not #'eql)
   "Z")
 
-(deftest nsubst-4
-    (check-nsubst 'grape 'dick
-		 '(melville wrote (moby dick)))
+(deftest nsubst.4
+  (check-nsubst 'grape 'dick
+		'(melville wrote (moby dick)))
   (MELVILLE WROTE (MOBY GRAPE)))
 
-(deftest nsubst-5
-    (check-nsubst 'cha-cha-cha 'nil '(melville wrote (moby dick)))
+(deftest nsubst.5
+  (check-nsubst 'cha-cha-cha 'nil '(melville wrote (moby dick)))
   (MELVILLE WROTE (MOBY DICK . CHA-CHA-CHA) . CHA-CHA-CHA))
 
-(deftest nsubst-6
-    (check-nsubst
-     '(1 2) '(foo . bar)
-     '((foo . baz) (foo . bar) (bar . foo) (baz foo . bar))
-     :test #'equal)
+(deftest nsubst.6
+  (check-nsubst
+   '(1 2) '(foo . bar)
+   '((foo . baz) (foo . bar) (bar . foo) (baz foo . bar))
+   :test #'equal)
   ((foo . baz) (1 2) (bar . foo) (baz 1 2)))
 
-(deftest nsubst-7
-    (check-nsubst
-     'foo "aaa"
-     '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
-     :key #'(lambda (x) (if (and (numberp x) (evenp x))
-			    "aaa"
-			  nil))
-     :test #'string=)
+(deftest nsubst.7
+  (check-nsubst
+   'foo "aaa"
+   '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
+   :key #'(lambda (x) (if (and (numberp x) (evenp x))
+			  "aaa"
+			nil))
+   :test #'string=)
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
-(deftest nsubst-8
-    (check-nsubst
-     'foo nil
-     '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
-     :key #'(lambda (x) (if (and (numberp x) (evenp x))
-			    (copy-seq "aaa")
-			  nil))
-     :test-not #'equal)
+(deftest nsubst.8
+  (check-nsubst
+   'foo nil
+   '((1 . 2) (4 . 5) (6 7 8 9 10 (11 12)))
+   :key #'(lambda (x) (if (and (numberp x) (evenp x))
+			  (copy-seq "aaa")
+			nil))
+   :test-not #'equal)
   ((1 . foo) (foo . 5) (foo 7 foo 9 foo (11 foo))))
 
-(deftest nsubst-9
+(deftest nsubst.9
   (check-nsubst 'a 'b
 		(copy-tree '(a b c d a b))
 		:key nil)
   (a a c d a a))
+
+;;; Order of argument evaluation
+(deftest nsubst.10
+  (let ((i 0) v w x y z)
+    (values
+     (nsubst (progn (setf v (incf i)) 'b)
+	     (progn (setf w (incf i)) 'a)
+	     (progn (setf x (incf i)) (copy-tree '((10 a . a) a b c ((a)) z)))
+	     :key (progn (setf y (incf i)) #'identity)
+	     :test (progn (setf z (incf i)) #'eql))
+     i v w x y z))
+  ((10 b . b) b b c ((b)) z)
+  5 1 2 3 4 5)
+
+(deftest nsubst.11
+  (let ((i 0) v w x y z)
+    (values
+     (nsubst (progn (setf v (incf i)) 'b)
+	     (progn (setf w (incf i)) 'a)
+	     (progn (setf x (incf i)) (copy-tree '((10 a . a) a b c ((a)) z)))
+	     :test-not (progn (setf y (incf i)) (complement #'eql))
+	     :key (progn (setf z (incf i)) #'identity)
+	     )
+     i v w x y z))
+  ((10 b . b) b b c ((b)) z)
+  5 1 2 3 4 5)
 
 ;;; Keyword tests for nsubst
 
@@ -554,85 +695,109 @@
 
 ;;; Tests for nsubst-if, nsubst-if-not
 
-(deftest nsubst-if-1
+(deftest nsubst-if.1
     (check-nsubst-if 'a #'consp '((100 1) (2 3) (4 3 2 1) (a b c)))
   A)
 
-(deftest nsubst-if-not-1
-    (check-nsubst-if-not '(x) 'consp '(1 (1 2) (1 2 3) (1 2 3 4)))
+(deftest nsubst-if-not.1
+  (check-nsubst-if-not '(x) 'consp '(1 (1 2) (1 2 3) (1 2 3 4)))
   ((X)
    ((X) (X) X)
    ((X) (X) (X) X)
    ((X) (X) (X) (X) X)
    X))
 
-(deftest nsubst-if-2
-    (check-nsubst-if 17 (complement #'listp) '(a (a b) (a c d) (a nil e f g)))
+(deftest nsubst-if.2
+  (check-nsubst-if 17 (complement #'listp) '(a (a b) (a c d) (a nil e f g)))
   (17 (17 17) (17 17 17) (17 nil 17 17 17)))
 
-(deftest nsubst-if-3
-    (check-nsubst-if '(z)
-		    (complement #'consp)
-		    '(a (a b) (c d e) (f g h i)))
+(deftest nsubst-if.3
+  (check-nsubst-if '(z)
+		   (complement #'consp)
+		   '(a (a b) (c d e) (f g h i)))
   ((Z)
    ((Z) (Z) Z)
    ((Z) (Z) (Z) Z)
    ((Z) (Z) (Z) (Z) Z)
    Z))
 
-(deftest nsubst-if-not-2
-    (check-nsubst-if-not 'a (complement #'listp)
-			'((100 1) (2 3) (4 3 2 1) (a b c)))
+(deftest nsubst-if-not.2
+  (check-nsubst-if-not 'a (complement #'listp)
+		       '((100 1) (2 3) (4 3 2 1) (a b c)))
   A)
 
-(deftest nsubst-if-4
-    (check-nsubst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
-		    :key #'listp)
+(deftest nsubst-if.4
+  (check-nsubst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
+		   :key #'listp)
   B)
 
-(deftest nsubst-if-not-3
-    (check-nsubst-if-not 'c #'identity
-			'((100 1) (2 3) (4 3 2 1) (a b c))
-			:key (complement #'listp))
+(deftest nsubst-if-not.3
+  (check-nsubst-if-not 'c #'identity
+		       '((100 1) (2 3) (4 3 2 1) (a b c))
+		       :key (complement #'listp))
   C)
 
-(deftest nsubst-if-5
-    (check-nsubst-if 4 #'(lambda (x) (eql x 1))
-		    '((1 3) (1) (1 10 20 30) (1 3 x y))
-		    :key #'(lambda (x)
-			     (and (consp x)
-				  (car x))))
+(deftest nsubst-if.5
+  (check-nsubst-if 4 #'(lambda (x) (eql x 1))
+		   '((1 3) (1) (1 10 20 30) (1 3 x y))
+		   :key #'(lambda (x)
+			    (and (consp x)
+				 (car x))))
   (4 4 4 4))
 
-(deftest nsubst-if-not-4
-    (check-nsubst-if-not
-     40
-     #'(lambda (x) (not (eql x 17)))
-     '((17) (17 22) (17 22 31) (17 21 34 54))
-     :key #'(lambda (x)
-	      (and (consp x)
-		   (car x))))
+(deftest nsubst-if-not.4
+  (check-nsubst-if-not
+   40
+   #'(lambda (x) (not (eql x 17)))
+   '((17) (17 22) (17 22 31) (17 21 34 54))
+   :key #'(lambda (x)
+	    (and (consp x)
+		 (car x))))
   (40 40 40 40))
 
-(deftest nsubst-if-6
+(deftest nsubst-if.6
   (check-nsubst-if 'a  #'(lambda (x) (eql x 'b))
 		   '((a) (b) (c) (d))
 		   :key nil)
   ((a) (a) (c) (d)))
-  
-(deftest nsubst-if-not-5
+
+(deftest nsubst-if-not.5
   (check-nsubst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
 		       '((a) (b) (c) (d))
 		       :key nil)
   ((a) (a) (c) (d)))
 
-(deftest nsubst-if-7
+(deftest nsubst-if.7
   (nsubst-if 'a #'null nil :bad t :allow-other-keys t)
   a)
 
-(deftest nsubst-if-not-6
+(deftest nsubst-if-not.6
   (nsubst-if-not 'a #'null nil :bad t :allow-other-keys t)
   nil)
+
+(deftest nsubst-if.8
+  (let ((i 0) w x y z)
+    (values
+     (nsubst-if
+      (progn (setf w (incf i)) 'a)
+      (progn (setf x (incf i)) #'(lambda (x) (eql x 'b)))
+      (progn (setf y (incf i)) (copy-list '(1 2 a b c)))
+      :key (progn (setf z (incf i)) #'identity))
+     i w x y z))
+  (1 2 a a c)
+  4 1 2 3 4)
+
+(deftest nsubst-if-not.7
+  (let ((i 0) w x y z)
+    (values
+     (nsubst-if-not
+      (progn (setf w (incf i)) 'a)
+      (progn (setf x (incf i)) #'(lambda (x) (not (eql x 'b))))
+      (progn (setf y (incf i)) (copy-list '(1 2 a b c)))
+      :key (progn (setf z (incf i)) #'identity))
+     i w x y z))
+  (1 2 a a c)
+  4 1 2 3 4)
 
 ;;; Keyword tests for nsubst-if
 

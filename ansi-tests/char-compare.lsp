@@ -35,6 +35,15 @@
 		 #'(lambda (c1 c2) (not (char= c1 c2))))
   t)
 
+(deftest char=.5
+  (let ((i 0) a b c)
+    (values
+     (char= (progn (setq a (incf i)) #\a)
+	    (progn (setq b (incf i)) #\a)
+	    (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)
+
 (deftest char/=.1
   (is-ordered-by +code-chars+ #'char/=)
   t)
@@ -51,6 +60,15 @@
 (deftest char/=.4
   (is-ordered-by +rev-code-chars+ #'char/=)
   t)
+
+(deftest char/=.5
+  (let ((i 0) a b c)
+    (values
+     (char/= (progn (setq a (incf i)) #\a)
+	     (progn (setq b (incf i)) #\b)
+	     (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)
 
 (deftest char<=.1
   (loop for c across +code-chars+
@@ -85,6 +103,15 @@
   (notnot-mv (or (char<= #\9 #\a) (char<= #\z #\0)))
   t)
 
+(deftest char<=.9
+  (let ((i 0) a b c)
+    (values
+     (char<= (progn (setq a (incf i)) #\a)
+	     (progn (setq b (incf i)) #\b)
+	     (progn (setq c (incf i)) #\a))
+     i a b c))
+  nil 3 1 2 3)
+
 (deftest char<.1
   (loop for c across +code-chars+
 	never (char< c c))
@@ -118,6 +145,14 @@
   (notnot-mv (or (char< #\9 #\a) (char< #\z #\0)))
   t)
   
+(deftest char<.9
+  (let ((i 0) a b c)
+    (values
+     (char< (progn (setq a (incf i)) #\a)
+	    (progn (setq b (incf i)) #\b)
+	    (progn (setq c (incf i)) #\a))
+     i a b c))
+  nil 3 1 2 3)
 
 (deftest char>=.1
   (loop for c across +code-chars+
@@ -152,6 +187,15 @@
   (notnot-mv (or (char>= #\a #\9) (char>= #\0 #\z)))
   t)
 
+(deftest char>=.9
+  (let ((i 0) a b c)
+    (values
+     (char>= (progn (setq a (incf i)) #\b)
+	     (progn (setq b (incf i)) #\a)
+	     (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)
+
 (deftest char>.1
   (loop for c across +code-chars+
 	never (char> c c))
@@ -185,6 +229,15 @@
   (notnot-mv (or (char> #\a #\9) (char> #\0 #\z)))
   t)
 
+(deftest char>.9
+  (let ((i 0) a b c)
+    (values
+     (char> (progn (setq a (incf i)) #\b)
+	    (progn (setq b (incf i)) #\a)
+	    (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)
+
 ;;; Case-insensitive comparisons
 
 (deftest char-equal.1
@@ -213,6 +266,15 @@
 			 (not (char-equal c1 c2)))))
   t)
 
+(deftest char-equal.5
+  (let ((i 0) a b c)
+    (values
+     (char-equal (progn (setq a (incf i)) #\a)
+		 (progn (setq b (incf i)) #\a)
+		 (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)
+
 (deftest char-not-equal.1
   (is-ordered-by +code-chars+ #'(lambda (c1 c2)
 				  (or (char= (char-downcase c1)
@@ -235,6 +297,15 @@
 						 (char-downcase c2))
 					  (char-not-equal c1 c2))))
   t)
+
+(deftest char-not-equal.5
+  (let ((i 0) a b c)
+    (values
+     (char-not-equal (progn (setq a (incf i)) #\a)
+		     (progn (setq b (incf i)) #\b)
+		     (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)
 
 (deftest char-not-greaterp.1
   (loop for c across +code-chars+
@@ -269,6 +340,15 @@
   (notnot-mv (or (char-not-greaterp #\9 #\a) (char-not-greaterp #\z #\0)))
   t)
 
+(deftest char-not-greaterp.9
+  (let ((i 0) a b c)
+    (values
+     (char-not-greaterp (progn (setq a (incf i)) #\a)
+			(progn (setq b (incf i)) #\b)
+			(progn (setq c (incf i)) #\a))
+     i a b c))
+  nil 3 1 2 3)
+
 (deftest char-lessp.1
   (loop for c across +code-chars+
 	never (char-lessp c c))
@@ -301,6 +381,15 @@
 (deftest char-lessp.8
   (notnot-mv (or (char-lessp #\9 #\a) (char-lessp #\z #\0)))
   t)
+
+(deftest char-lessp.9
+  (let ((i 0) a b c)
+    (values
+     (char-lessp (progn (setq a (incf i)) #\a)
+		 (progn (setq b (incf i)) #\b)
+		 (progn (setq c (incf i)) #\a))
+     i a b c))
+  nil 3 1 2 3)
 
 (deftest char-not-lessp.1
   (loop for c across +code-chars+
@@ -336,6 +425,15 @@
   (notnot-mv (or (char-not-lessp #\a #\9) (char-not-lessp #\0 #\z)))
   t)
 
+(deftest char-not-lessp.9
+  (let ((i 0) a b c)
+    (values
+     (char-not-lessp (progn (setq a (incf i)) #\b)
+		     (progn (setq b (incf i)) #\a)
+		     (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)
+
 (deftest char-greaterp.1
   (loop for c across +code-chars+
 	never (char-greaterp c c))
@@ -369,3 +467,12 @@
 (deftest char-greaterp.8
   (notnot-mv (or (char-greaterp #\a #\9) (char-greaterp #\0 #\z)))
   t)
+
+(deftest char-greaterp.9
+  (let ((i 0) a b c)
+    (values
+     (char-greaterp (progn (setq a (incf i)) #\b)
+		    (progn (setq b (incf i)) #\a)
+		    (progn (setq c (incf i)) #\b))
+     i a b c))
+  nil 3 1 2 3)

@@ -52,11 +52,3 @@
 (deftest etypecase.11
   (etypecase 1 (integer) (t 'a))
   nil)
-
-
-
-
-    
-
-
-

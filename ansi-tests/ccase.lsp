@@ -166,5 +166,9 @@
      x))
   y b)
 
+(deftest ccase.30
+  (ccase 'a (a))
+  nil)
+
 ;;; Need to add tests for continuability of the error,
 ;;; and resetting of the place.

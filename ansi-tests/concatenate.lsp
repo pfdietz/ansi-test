@@ -184,6 +184,26 @@
   #*01100
   nil)
 
+(deftest concatenate.31
+  (let ((i 0) w x y z)
+    (values
+     (concatenate (progn (setf w (incf i)) 'string)
+		  (progn (setf x (incf i)) "abc")
+		  (progn (setf y (incf i)) "def")
+		  (progn (setf z (incf i)) "ghi"))
+     i w x y z))
+  "abcdefghi" 4 1 2 3 4)
+
+(deftest concatenate.32
+  (let ((i 0) x y z)
+    (values
+     (concatenate 'string
+		  (progn (setf x (incf i)) "abc")
+		  (progn (setf y (incf i)) "def")
+		  (progn (setf z (incf i)) "ghi"))
+     i x y z))
+  "abcdefghi" 3 1 2 3)
+
 ;;; Error tests
 
 (deftest concatenate-error.1

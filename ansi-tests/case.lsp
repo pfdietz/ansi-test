@@ -153,3 +153,16 @@
 (deftest case.31
   (case (values 'b 'c) (c 0) ((a b) 10) (t 20))
   10)
+
+(deftest case.32
+  (case 'a (a) (t 'b))
+  nil)
+
+(deftest case.33
+  (case 'a (b 'b) (t))
+  nil)
+
+(deftest case.34
+  (case 'a (b 'b) (otherwise))
+  nil)
+

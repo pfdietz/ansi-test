@@ -12,39 +12,39 @@
 ;; Test the subtype relationships between null, list, cons and atom
 ;;
 (deftest subtypep-null-list
-    (subtypep* 'null 'list)
+  (subtypep* 'null 'list)
   t t)
 
 (deftest subtypep-cons-list
-    (subtypep* 'cons 'list)
+  (subtypep* 'cons 'list)
   t t)
 
 (deftest subtypep-null-cons
-   (subtypep* 'null 'cons)
+  (subtypep* 'null 'cons)
   nil t)
 
 (deftest subtypep-cons-null
-    (subtypep* 'cons 'null)
+  (subtypep* 'cons 'null)
   nil t)
 
 (deftest subtypep-null-atom
-    (subtypep* 'null 'atom)
+  (subtypep* 'null 'atom)
   t t)
 
 (deftest subtypep-cons-atom
-    (subtypep* 'cons 'atom)
+  (subtypep* 'cons 'atom)
   nil t)
 
 (deftest subtypep-atom-cons
-    (subtypep* 'atom 'cons)
+  (subtypep* 'atom 'cons)
   nil t)
 
 (deftest subtypep-atom-list
-    (subtypep* 'atom 'list)
+  (subtypep* 'atom 'list)
   nil t)
 
 (deftest subtypep-list-atom
-    (subtypep* 'list 'atom)
+  (subtypep* 'list 'atom)
   nil t)
 
 ;;
@@ -52,56 +52,56 @@
 ;; are those for which the null predice is true.
 ;;
 (deftest null-null-universe
-    (check-type-predicate 'null 'null)
+  (check-type-predicate 'null 'null)
   0)
 
 (defvar *cons-fns*
-    (list 'cons 'consp 'atom 'rplaca 'rplacd
-		 'car 'cdr 'caar 'cadr 'cdar 'cddr
-		 'caaar 'caadr 'cadar 'caddr
-		 'cdaar 'cdadr 'cddar 'cdddr
-		 'caaaar 'caaadr 'caadar 'caaddr
-		 'cadaar 'cadadr 'caddar 'cadddr
-		 'cdaaar 'cdaadr 'cdadar 'cdaddr
-		 'cddaar 'cddadr 'cdddar 'cddddr
-		 'copy-tree 'sublis 'nsublis
-		 'subst 'subst-if 'subst-if-not
-		 'nsubst 'nsubst-if 'nsubst-if-not
-		 'tree-equal
-		 'copy-list
-		 'list
-		 'list*
-		 'list-length
-		 'listp
-		 'make-list
-		 'first 'second 'third 'fourth
-		 'fifth 'sixth 'seventh 'eighth 'ninth 'tenth
-		 'nth
-		 'endp
-		 'null
-		 'nconc
-		 'append
-		 'revappend 'nreconc
-		 'butlast 'nbutlast
-		 'last 'ldiff 'tailp
-		 'nthcdr 'rest
-		 'member 'member-if 'member-if-not
-		 'mapc 'mapcar 'mapcan 'mapl 'maplist 'mapcon
-		 'acons
-		 'assoc 'assoc-if 'assoc-if-not
-		 'copy-alist
-		 'pairlis
-		 'rassoc 'rassoc-if 'rassoc-if-not
-		 'get-properties
-		 'getf
-		 'intersection
-		 'nintersection
-		 'adjoin
-		 'set-difference 'nset-difference
-		 'set-exclusive-or 'nset-exclusive-or
-		 'subsetp
-		 'union 'nunion
-		 ))
+  (list 'cons 'consp 'atom 'rplaca 'rplacd
+	'car 'cdr 'caar 'cadr 'cdar 'cddr
+	'caaar 'caadr 'cadar 'caddr
+	'cdaar 'cdadr 'cddar 'cdddr
+	'caaaar 'caaadr 'caadar 'caaddr
+	'cadaar 'cadadr 'caddar 'cadddr
+	'cdaaar 'cdaadr 'cdadar 'cdaddr
+	'cddaar 'cddadr 'cdddar 'cddddr
+	'copy-tree 'sublis 'nsublis
+	'subst 'subst-if 'subst-if-not
+	'nsubst 'nsubst-if 'nsubst-if-not
+	'tree-equal
+	'copy-list
+	'list
+	'list*
+	'list-length
+	'listp
+	'make-list
+	'first 'second 'third 'fourth
+	'fifth 'sixth 'seventh 'eighth 'ninth 'tenth
+	'nth
+	'endp
+	'null
+	'nconc
+	'append
+	'revappend 'nreconc
+	'butlast 'nbutlast
+	'last 'ldiff 'tailp
+	'nthcdr 'rest
+	'member 'member-if 'member-if-not
+	'mapc 'mapcar 'mapcan 'mapl 'maplist 'mapcon
+	'acons
+	'assoc 'assoc-if 'assoc-if-not
+	'copy-alist
+	'pairlis
+	'rassoc 'rassoc-if 'rassoc-if-not
+	'get-properties
+	'getf
+	'intersection
+	'nintersection
+	'adjoin
+	'set-difference 'nset-difference
+	'set-exclusive-or 'nset-exclusive-or
+	'subsetp
+	'union 'nunion
+	))
 
 ;; All the cons functions have a function binding
 
@@ -110,8 +110,8 @@
    for x in *cons-fns* count
    (when (or (not (fboundp x))
 	     (not (functionp (symbol-function x))))
-	 (format t "~%~S not bound to a function" x)
-	 t))
+     (format t "~%~S not bound to a function" x)
+     t))
   0)
 
 ;; All the cons-related macros have a macro binding
@@ -147,6 +147,12 @@
   (equalt (cons 'a (cons 'b (cons 'c nil)))
 	  (list 'a 'b 'c))
   t)
+
+;;; Order of evaluation of cons arguments
+(deftest cons-order-of-args
+  (let ((i 0)) (values (cons (incf i) (incf i)) i))
+  (1 . 2)
+  2)	   
 
 ;; Lists satisfy consp
 (deftest consp-list
@@ -351,7 +357,7 @@
 
 ;; Test rplaca, rplacd
 
-(deftest rplaca-1
+(deftest rplaca.1
   (let ((x (cons 'a 'b)))
     (let ((y x))
       (and (eqt (rplaca x 'c) y)
@@ -360,7 +366,16 @@
 	   (eqt (cdr x) 'b))))
   t)
 
-(deftest rplacd-1
+(deftest rplaca.2
+  (let ((x (cons 'a 'b))
+	(i 0) a b)
+    (values
+     (rplaca (progn (setf a (incf i)) x)
+	     (progn (setf b (incf i)) 'c))
+     i a b))
+  (c . b) 2 1 2)
+
+(deftest rplacd.1
   (let ((x (cons 'a 'b)))
     (let ((y x))
       (and (eqt (rplacd x 'd) y)
@@ -368,6 +383,15 @@
 	   (eqt (car x) 'a)
 	   (eqt (cdr x) 'd))))
   t)
+
+(deftest rplacd.2
+  (let ((x (cons 'a 'b))
+	(i 0) a b)
+    (values
+     (rplacd (progn (setf a (incf i)) x)
+	     (progn (setf b (incf i)) 'c))
+     i a b))
+  (a . c) 2 1 2)
 
 ;; rplaca on a fixnum is a type error
 (deftest rplaca.error.1

@@ -10,15 +10,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ldiff, tailp
 
-(deftest ldiff-1
-    (let* ((x (copy-tree '(a b c d e f)))
-	   (xcopy (make-scaffold-copy x)))
-      (let ((result (ldiff x (cdddr x))))
-	(and (check-scaffold-copy x xcopy)
-	     result)))
+(deftest ldiff.1
+  (let* ((x (copy-tree '(a b c d e f)))
+	 (xcopy (make-scaffold-copy x)))
+    (let ((result (ldiff x (cdddr x))))
+      (and (check-scaffold-copy x xcopy)
+	   result)))
   (a b c))
 
-(deftest ldiff-2
+(deftest ldiff.2
   (let* ((x (copy-tree '(a b c d e f)))
 	 (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x 'a)))
@@ -32,17 +32,17 @@
   (a b c d e f))
 
 ;; Works when the end of the dotted list is a symbol
-(deftest ldiff-3
-    (let* ((x (copy-tree '(a b c d e . f)))
-	   (xcopy (make-scaffold-copy x)))
-      (let ((result (ldiff x 'a)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 result)))
+(deftest ldiff.3
+  (let* ((x (copy-tree '(a b c d e . f)))
+	 (xcopy (make-scaffold-copy x)))
+    (let ((result (ldiff x 'a)))
+      (and
+       (check-scaffold-copy x xcopy)
+       result)))
   (a b c d e . f))
 
 ;; Works when the end of the dotted list is a fixnum
-(deftest ldiff-4
+(deftest ldiff.4
   (let* ((n 18)
 	 (x (list* 'a 'b 'c 18))
 	 (xcopy (make-scaffold-copy x)))
@@ -54,7 +54,7 @@
 
 ;; Works when the end of the dotted list is a larger
 ;; integer (that is eql, but probably not eq).
-(deftest ldiff-5
+(deftest ldiff.5
   (let* ((n 18000000000000)
 	 (x (list* 'a 'b 'c (1- 18000000000001)))
 	 (xcopy (make-scaffold-copy x)))
@@ -65,7 +65,7 @@
   (a b c))
 
 ;; Test works when the end of a dotted list is a string
-(deftest ldiff-6
+(deftest ldiff.6
   (let* ((n (copy-seq "abcde"))
 	 (x (list* 'a 'b 'c n))
 	 (xcopy (make-scaffold-copy x)))
@@ -77,7 +77,7 @@
 
 ;; Check that having the cdr of a dotted list be string-equal, but
 ;; not eql, does not result in success
-(deftest ldiff-6b
+(deftest ldiff.7
   (let* ((n (copy-seq "abcde"))
 	 (x (list* 'a 'b 'c n))
 	 (xcopy (make-scaffold-copy x)))
@@ -90,16 +90,25 @@
 ;; Check that on failure, the list returned by ldiff is
 ;; a copy of the list, not the list itself.
 
-(deftest ldiff-6a
-    (let ((x (list 'a 'b 'c 'd)))
-      (let ((result (ldiff x '(e))))
-	(and (equal x result)
-	     (loop
-		 for c1 on x
-		 for c2 on result
-		 count (eqt c1 c2)))))
+(deftest ldiff.8
+  (let ((x (list 'a 'b 'c 'd)))
+    (let ((result (ldiff x '(e))))
+      (and (equal x result)
+	   (loop
+	    for c1 on x
+	    for c2 on result
+	    count (eqt c1 c2)))))
   0)
-	       
+
+(deftest ldiff.9
+  (let ((i 0) x y)
+    (values
+     (ldiff (progn (setf x (incf i))
+		   (list* 'a 'b 'c 'd))
+	    (progn (setf y (incf i))
+		   'd))
+     i x y))
+  (a b c) 2 1 2)	       
 
 ;; Error checking
 
@@ -148,11 +157,11 @@
 ;;
 #|
 (defun ldiff-12-body ()
-    (loop
-	for x in *universe*
-	count (and (not (listp x))
-		   (not (eqt 'type-error
-			    (catch-type-error (ldiff x x)))))))
+  (loop
+   for x in *universe*
+   count (and (not (listp x))
+	      (not (eqt 'type-error
+			(catch-type-error (ldiff x x)))))))
 
 (deftest ldiff-12
     (ldiff-12-body)
@@ -162,35 +171,35 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; tailp
 
-(deftest tailp-1
-    (let ((x (copy-tree '(a b c d e . f))))
-      (and
-       (tailp x x)
-       (tailp (cdr x) x)
-       (tailp (cddr x) x)
-       (tailp (cdddr x) x)
-       (tailp (cddddr x) x)
-       t))
+(deftest tailp.1
+  (let ((x (copy-tree '(a b c d e . f))))
+    (and
+     (tailp x x)
+     (tailp (cdr x) x)
+     (tailp (cddr x) x)
+     (tailp (cdddr x) x)
+     (tailp (cddddr x) x)
+     t))
   t)
 
 
 ;; The next four tests test that tailp handles dotted lists.  See
 ;; TAILP-NIL:T in the X3J13 documentation.
 
-(deftest tailp-2
+(deftest tailp.2
   (notnot-mv (tailp 'e (copy-tree '(a b c d . e))))
   t)
 
-(deftest tailp-3
+(deftest tailp.3
   (tailp 'z (copy-tree '(a b c d . e)))
   nil)
 
-(deftest tailp-4
+(deftest tailp.4
   (notnot-mv (tailp 10203040506070
 		    (list* 'a 'b (1- 10203040506071))))
   t)
 
-(deftest tailp-5
+(deftest tailp.5
   (let ((x "abcde")) (tailp x (list* 'a 'b (copy-seq x))))
   nil)
 
@@ -208,7 +217,7 @@
 
 ;; Test that tailp does not modify its arguments
 
-(deftest tailp-6
+(deftest tailp.6
     (let* ((x (copy-list '(a b c d e)))
 	   (y (cddr x)))
       (let ((xcopy (make-scaffold-copy x))
@@ -230,15 +239,24 @@
 ;;
 
 #|
-(defun tailp-7-body ()
+(defun tailp.7-body ()
   (loop
       for x in *universe*
       count (and (not (listp x))
 		 (eqt 'type-error
 		     (catch-type-error (tailp x x))))))
 
-(deftest tailp-7
-    (tailp-7-body)
+(deftest tailp.7
+    (tailp.7-body)
   0)
 |#
     
+(deftest tailp.8
+  (let ((i 0) x y)
+    (values
+     (notnot
+      (tailp (progn (setf x (incf i)) 'd)
+	     (progn (setf y (incf i)) '(a b c . d))))
+     i x y))
+  t 2 1 2)
+

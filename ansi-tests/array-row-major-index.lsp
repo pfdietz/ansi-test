@@ -22,6 +22,16 @@
 	  collect (array-row-major-index a i)))
   (0 1 2 3 4))
 
+(deftest array-row-major-index.4
+  (let ((x 0) y z
+	(a #(a b c d e f)))
+    (values
+     (array-row-major-index
+      (progn (setf y (incf x)) a)
+      (progn (setf z (incf x)) 0))
+     x y z))
+  0 2 1 2)      
+
 ;;; Error tests
 
 (deftest array-row-major-index.error.1

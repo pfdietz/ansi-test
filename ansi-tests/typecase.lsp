@@ -57,6 +57,13 @@
   (typecase 1 (integer) (t 'a))
   nil)
 
+(deftest typecase.13
+  (typecase 1 (symbol 'a) (t))
+  nil)
+
+(deftest typecase.14
+  (typecase 1 (symbol 'a) (otherwise))
+  nil)
 
 
 

@@ -54,31 +54,38 @@
   (classify-error (locally (nthcdr 'a (copy-tree '(a b c d))) t))
   type-error)
 
-(deftest nthcdr-7
+(deftest nthcdr.1
   (nthcdr 0 (copy-tree '(a b c d . e)))
   (a b c d . e))
 
-(deftest nthcdr-8
+(deftest nthcdr.2
   (nthcdr 1 (copy-tree '(a b c d)))
   (b c d))
 
-(deftest nthcdr-9
+(deftest nthcdr.3
   (nthcdr 10 nil)
   nil)
 
-(deftest nthcdr-10
+(deftest nthcdr.4
   (nthcdr 4 (list 'a 'b 'c))
   nil)
 
-(deftest nthcdr-11
+(deftest nthcdr.5
   (nthcdr 1 (cons 'a 'b))
   b)
 
+(deftest nthcdr.6
+  (let ((i 0) x y)
+    (values
+     (nthcdr (setf x (incf i))
+	     (progn (setf y (incf i)) '(a b c d)))
+     i x y))
+  (b c d) 2 1 2)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rest
 
-(deftest rest-1
+(deftest rest.1
   (rest (list 'a 'b 'c))
   (b c))
 

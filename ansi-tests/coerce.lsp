@@ -130,6 +130,14 @@
   (funcall (coerce '(lambda () 10) 'function))
   10)
 
+(deftest coerce.23
+  (let ((i 0) a b)
+    (values
+     (coerce (progn (setf a (incf i)) 10)
+	     (progn (setf b (incf i)) 'single-float))
+     i a b))
+  10.0f0 2 1 2)
+
 ;;; Error tests
 
 ;;; (deftest coerce.error.1

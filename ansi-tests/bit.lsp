@@ -108,3 +108,26 @@
   (1 0 0 1 1 0 0 0 1 1)
   (1 0 0 1 1 0 0 0 1 1)
   (1 0 0 1 1 0 0 0 1 1))
+
+;;; Order of evaluation tests
+
+(deftest bit.9
+  (let ((x 0) y z
+	(b (copy-seq #*01010)))
+    (values
+     (bit (progn (setf y (incf x)) b)
+	  (progn (setf z (incf x)) 1))
+     x y z))
+  1 2 1 2)
+
+(deftest bit.10
+  (let ((x 0) y z w
+	(b (copy-seq #*01010)))
+    (values
+     (setf (bit (progn (setf y (incf x)) b)
+		(progn (setf z (incf x)) 1))
+	   (progn (setf w (incf x)) 0))
+     b
+     x y z w))
+  0 #*00010 3 1 2 3)
+

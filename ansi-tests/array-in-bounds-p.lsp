@@ -132,6 +132,18 @@
   (array-in-bounds-p #(a b c) -1000000000000000000)
   nil)
 
+;;; Order of evaluation tests
+
+(deftest array-in-bounds-p.24
+  (let ((x 0) y z)
+    (values
+     (array-in-bounds-p (progn (setf y (incf x))
+			       #())
+			(progn (setf z (incf x))
+			       10))
+     x y z))
+  nil 2 1 2)
+
 ;;; Error tests
 
 (deftest array-in-bounds-p.error.1

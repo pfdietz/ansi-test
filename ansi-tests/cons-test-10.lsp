@@ -10,45 +10,53 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; last
 
-(deftest last-1
-    (last nil)
+(deftest last.1
+  (last nil)
   nil)
 
-(deftest last-2
-    (last (copy-tree '(a b)))
+(deftest last.2
+  (last (copy-tree '(a b)))
   (b))
 
-(deftest last-3
-    (last (copy-tree '(a b . c)))
+(deftest last.3
+  (last (copy-tree '(a b . c)))
   (b . c))
 
-(deftest last-4
-    (last (copy-tree '(a b c d)) 0)
+(deftest last.4
+  (last (copy-tree '(a b c d)) 0)
   nil)
 
-(deftest last-5
-    (last (copy-tree '(a b c d)) 1)
+(deftest last.5
+  (last (copy-tree '(a b c d)) 1)
   (d))
 
-(deftest last-6
-    (last (copy-tree '(a b c d)) 2)
+(deftest last.6
+  (last (copy-tree '(a b c d)) 2)
   (c d))
 
-(deftest last-7
-    (last (copy-tree '(a b c d)) 5)
+(deftest last.7
+  (last (copy-tree '(a b c d)) 5)
   (a b c d))
 
-(deftest last-8
-    (last (cons 'a 'b) 0)
+(deftest last.8
+  (last (cons 'a 'b) 0)
   b)
 
-(deftest last-9
-    (last (cons 'a 'b) 1)
+(deftest last.9
+  (last (cons 'a 'b) 1)
   (a . b))
 
-(deftest last-10
-    (last (cons 'a 'b) 2)
+(deftest last.10
+  (last (cons 'a 'b) 2)
   (a . b))
+
+(deftest last.11
+  (let ((i 0) x y)
+    (values
+     (last (progn (setf x (incf i)) (list 'a 'b 'c 'd))
+	   (setf y (incf i)))
+     i x y))
+  (c d) 2 1 2)
 
 (deftest last.error.1
   (classify-error (last (list 'a 'b 'c) -1))

@@ -42,3 +42,13 @@
 (deftest apply.5
   (apply 'cons '(a b))
   (a . b))
+
+(deftest apply.6
+  (let ((x 0) y z)
+    (values
+     (apply (progn (setf y (incf x))
+		   #'identity)
+	    (progn (setf z (incf x))
+		   (list 'a)))
+     x y z))
+  a 2 1 2)

@@ -143,3 +143,7 @@
 (deftest ecase.31
   (ecase (values 'b 'c) (c 0) ((a b) 10) (d 20))
   10)
+
+(deftest ecase.32
+  (ecase 'a (a) (b 'b))
+  nil)

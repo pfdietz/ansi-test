@@ -1205,7 +1205,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-symbol
 
-(deftest copy-symbol-1
+(deftest copy-symbol.1
   (notnot-mv
    (every
     #'(lambda (x)
@@ -1221,7 +1221,7 @@
     '(nil t a b |a| |123|)))
   t)
 
-(deftest copy-symbol-2
+(deftest copy-symbol.2
   (progn
     (setf (symbol-plist '|foo|) '(a b c d))
     (makunbound '|foo|)
@@ -1242,7 +1242,7 @@
       '(nil t a b |foo| |a| |123|))))
   t)
 
-(deftest copy-symbol-3
+(deftest copy-symbol.3
   (progn
     (setf (symbol-plist '|foo|) '(a b c d))
     (setf (symbol-value '|a|) 12345)
@@ -1269,15 +1269,26 @@
       '(nil t a b |foo| |a| |123|))))
   t)
 
-(deftest copy-symbol-4
+(deftest copy-symbol.4
   (eqt (copy-symbol 'a) (copy-symbol 'a))
   nil)
 
-(deftest copy-symbol-5
+(deftest copy-symbol.5
+  (let ((i 0) x y (s '#:|x|))
+    (let ((s2 (copy-symbol
+	       (progn (setf x (incf i)) s)
+	       (progn (setf y (incf i)) nil))))
+      (values
+       (symbol-name s2)
+       (eq s s2)
+       i x y)))
+  "x" nil 2 1 2)
+
+(deftest copy-symbol.error.1
   (classify-error (copy-symbol))
   program-error)
 
-(deftest copy-symbol-6
+(deftest copy-symbol.error.2
   (classify-error (copy-symbol 'a t 'foo))
   program-error)
 

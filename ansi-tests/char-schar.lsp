@@ -78,6 +78,24 @@
     s)
   "aaaXa")
 
+(deftest char.11
+  (let ((i 0) a b)
+    (values
+     (char (progn (setf a (incf i)) "abc")
+	   (progn (setf b (incf i)) 1))
+     i a b))
+  #\b 2 1 2)
+
+(deftest char.12
+  (let ((i 0) a b c (s (make-string 5 :initial-element #\z)))
+    (values
+     (setf
+      (char (progn (setf a (incf i)) s)
+	    (progn (setf b (incf i)) 1))
+      (progn (setf c (incf i)) #\a))
+     s i a b c))
+  #\a "zazzz" 3 1 2 3)
+
 ;;; Tests of schar
 
 (deftest schar.1
@@ -126,3 +144,21 @@
     (setf (schar s 2) #\X)
     s)
   "xxXxxx")
+
+(deftest schar.11
+  (let ((i 0) a b)
+    (values
+     (schar (progn (setf a (incf i)) "abc")
+	    (progn (setf b (incf i)) 1))
+     i a b))
+  #\b 2 1 2)
+
+(deftest schar.12
+  (let ((i 0) a b c (s (copy-seq "zzzzz")))
+    (values
+     (setf
+      (schar (progn (setf a (incf i)) s)
+	     (progn (setf b (incf i)) 1))
+      (progn (setf c (incf i)) #\a))
+     s i a b c))
+  #\a "zazzz" 3 1 2 3)
