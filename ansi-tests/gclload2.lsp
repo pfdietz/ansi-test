@@ -70,6 +70,7 @@
 ;;; Tests of system construction, environment
 (load "features.lsp")
 (load "disassemble.lsp")
+(load "room.lsp")
 (load "environment-functions.lsp")
 (load "user-homedir-pathname.lsp")
 
