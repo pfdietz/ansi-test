@@ -124,3 +124,10 @@ Got:      0
 40, Check that OPEN, etc. do pathname merging.
 
 41. Add tests for MOD, REM
+
+42. Add randomized tests for BIT-* functions (requested by piso on #lisp)
+
+43. Add tests for structs that defining subtypes using :include doesn't change
+    the parent type(s).  (This came up in ABCL.)
+
+44. Add tests for SPECIAL declarations in MACROLET (requested by piso on #lisp)
