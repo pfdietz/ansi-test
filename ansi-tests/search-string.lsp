@@ -176,3 +176,22 @@
 	(target '"adgmnpq"))
     (search pat target :test-not #'char>=))
   4)
+
+;;; Specialized strings
+
+(deftest search-string.19
+  (do-special-strings
+   (s "a" nil)
+   (assert (eql (search s "xyza123apqr") 3))
+   (assert (eql (search s "xyza1a3apqr" :start2 4) 5))
+   (assert (eql (search s "xyza123apqr" :from-end t) 7)))
+  nil)
+
+(deftest search-string.20
+  (do-special-strings
+   (s "xababcdefabc123ababc18" nil)
+   (assert (eql (search "abc" s) 3))
+   (assert (eql (search "abc" s :start2 4) 9))
+   (assert (eql (search "abc" s :from-end t) 17)))
+  nil)
+

@@ -597,6 +597,21 @@
      (mismatch m a :from-end t)))
   (4 4 5 nil nil 6 5 6))
 
+(deftest mistmatch-string.25
+  (let ((s0 "12345")
+	(s1 "123A")
+	(s2 "245"))
+    (do-special-strings
+     (s s0 nil)
+     (assert (null (mismatch s s0)))
+     (assert (null (mismatch s0 s)))
+     (assert (null (mismatch s s0 :from-end t)))
+     (assert (null (mismatch s0 s :from-end t)))
+     (assert (eql (mismatch s s1) 3))
+     (assert (eql (mismatch s1 s) 3))
+     ))
+  nil)
+
 ;;; test and test-not tests
 
 (defharmless mismatch.test-and-test-not.1
