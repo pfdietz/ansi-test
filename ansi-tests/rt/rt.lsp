@@ -31,6 +31,8 @@
 (defvar *in-test* nil "Used by TEST")
 (defvar *debug* nil "For debugging")
 (defvar *catch-errors* t "When true, causes errors in a test to be caught.")
+(defvar *print-circle-on-failure* nil
+  "Failure reports are printed with *PRINT-CIRCLE* bound to this value.")
 
 (defstruct (entry (:conc-name nil)
 		  (:type list))
@@ -136,17 +138,18 @@
 	    (or aborted
 		(not (equalp-with-case r (vals entry)))))
       (when (pend entry)
-	(format s "~&Test ~:@(~S~) failed~
+	(let ((*print-circle* *print-circle-on-failure*))
+	  (format s "~&Test ~:@(~S~) failed~
                    ~%Form: ~S~
                    ~%Expected value~P: ~
                       ~{~S~^~%~17t~}~%"
-		*test* (form entry)
-		(length (vals entry))
-		(vals entry))
-	(format s "Actual value~P: ~
+		  *test* (form entry)
+		  (length (vals entry))
+		  (vals entry))
+	  (format s "Actual value~P: ~
                       ~{~S~^~%~15t~}.~%"
-		(length r) r))))
-      (when (not (pend entry)) *test*))
+		  (length r) r)))))
+  (when (not (pend entry)) *test*))
 
 (defun continue-testing ()
   (if *in-test*

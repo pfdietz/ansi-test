@@ -1,20 +1,24 @@
 ;-*- Mode:     Lisp -*-
-;;;; Copyright 1998 Motorola, Inc.  All right reserved.
-;;;; Motorola Internal Use Only.
-;;;;
 ;;;; Author:   Paul Dietz
-;;;; Created:  Sat Mar  7 10:32:13 1998
-;;;; Contains: Package definition for RT system (new form)
+;;;; Created:  Tue Dec 17 21:10:53 2002
+;;;; Contains: Package definition for RT
 
 (eval-when
  ;;(:execute :compile-toplevel :load-toplevel)
  (load eval compile)
  (defpackage :rt
-    (:nicknames)
     (:use :cl)
     (:export
-     "DEFTEST" "GET-TEST" "DO-TEST" "REM-TEST"
-     "REM-ALL-TESTS" "DO-TESTS" "PENDING-TESTS"
-     "CONTINUE-TESTING" "*TEST*" "*DO-TESTS-WHEN-DEFINED*")))
+     "*DO-TESTS-WHEN-DEFINED*"
+     "*TEST*"
+     "CONTINUE-TESTING"
+     "DEFTEST"
+     "DO-TEST"
+     "DO-TESTS"
+     "GET-TEST"
+     "PENDING-TESTS"
+     "REM-ALL-TESTS"
+     "REM-TEST"
+     )))
 
 (in-package :rt)
