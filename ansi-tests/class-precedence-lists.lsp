@@ -32,7 +32,7 @@
 		      (progn (format t "~%Note: ~S not an instance of ~A~%"
 				     ',objform ',(first expected-cpl))
 			     t)))	       
-	     (and (eql (first cpl) ',(first expected-cpl))
+	     (and ,(if ordered t `(eql (first cpl) ',(first expected-cpl)))
 		  (is-noncontiguous-sublist-of ',expected-cpl cpl))))
        t)))
 
