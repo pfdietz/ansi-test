@@ -7,7 +7,7 @@
 
 (defmacro def-print-test (name form result &rest bindings)
   `(deftest ,name
-     (equalt
+     (equalpt
       (with-standard-io-syntax
        (let ,bindings
 	 (with-output-to-string (*standard-output*) (prin1 ,form))))
