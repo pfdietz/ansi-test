@@ -9,3 +9,7 @@
 (load "hash-table-rehash-threshold.lsp")
 (load "hash-table-test.lsp")
 (load "gethash.lsp")
+(load "remhash.lsp")
+(load "clrhash.lsp")
+(load "maphash.lsp")
+

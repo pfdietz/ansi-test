@@ -36,6 +36,52 @@
      (gethash 'x table)))
   y 1 y)
 
+(deftest gethash.order.1
+  (let ((i 0) x y
+	(table (make-hash-table)))
+    (setf (gethash 'a table) 'b)
+    (values
+     (gethash (progn (setf x (incf i)) 'a)
+	      (progn (setf y (incf i)) table))
+     i x y))
+  b 2 1 2)
+
+(deftest gethash.order.2
+  (let ((i 0) x y z
+	(table (make-hash-table)))
+    (setf (gethash 'a table) 'b)
+    (values
+     (gethash (progn (setf x (incf i)) 'a)
+	      (progn (setf y (incf i)) table)
+	      (progn (setf z (incf i)) 'missing))
+     i x y z))
+  b 3 1 2 3)
+
+(deftest gethash.order.3
+  (let ((i 0) x y
+	(table (make-hash-table)))
+    (values
+      (setf (gethash (progn (setf x (incf i)) 'a)
+		     (progn (setf y (incf i)) table))
+	    'b)
+      i x y
+      (gethash 'a table)))
+  b 2 1 2 b)
+
+(deftest gethash.order.4
+  (let ((i 0) x y z
+	(table (make-hash-table)))
+    (values
+      (setf (gethash (progn (setf x (incf i)) 'a)
+		     (progn (setf y (incf i)) table)
+		     (setf z (incf i)))
+	    'b)
+      i x y z
+      (gethash 'a table)))
+  b 3 1 2 3 b)
+
+;;;; Error tests
+
 (deftest gethash.error.1
   (classify-error (gethash))
   program-error)
@@ -47,4 +93,3 @@
 (deftest gethash.error.3
   (classify-error (gethash 'foo (make-hash-table) nil nil))
   program-error)
-
