@@ -295,6 +295,10 @@
   (classify-error (rassoc 'a '((b . a)(c . d)) :key #'cons))
   program-error)
 
+(deftest rassoc.error.10
+  (classify-error (rassoc 'z '((a . b) . c)))
+  type-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc-if
@@ -423,6 +427,10 @@
 
 (deftest rassoc-if.error.10
   (classify-error (rassoc-if #'identity '((a . b)(c . d)) :key #'car))
+  type-error)
+
+(deftest rassoc-if.error.11
+  (classify-error (rassoc-if #'not '((a . b) . c)))
   type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -556,4 +564,8 @@
 
 (deftest rassoc-if-not.error.10
   (classify-error (rassoc-if-not #'identity '((a . b)(c . d)) :key #'car))
+  type-error)
+
+(deftest rassoc-if-not.error.11
+  (classify-error (rassoc-if-not #'identity '((a . b) . c)))
   type-error)

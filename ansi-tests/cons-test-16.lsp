@@ -310,6 +310,10 @@
   (classify-error (assoc 'a '((a . b)) :key #'cons))
   program-error)
 
+(deftest assoc.error.10
+  (classify-error (assoc 'z '((a . b) . c)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if
 
@@ -442,6 +446,9 @@
   (classify-error (assoc-if #'identity '((a b)(c d)) :key #'car))
   type-error)
 
+(deftest assoc-if.error.11
+  (classify-error (assoc-if #'null '((a . b) . c)))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if-not
@@ -577,6 +584,10 @@
   (classify-error (assoc-if-not #'identity '((a b)(c d)) :key #'car))
   type-error)
 
+(deftest assoc-if-not.error.11
+  (classify-error (assoc-if-not #'identity '((a . b) . c)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-alist
 
@@ -605,6 +616,10 @@
 (deftest copy-alist.error.2
   (classify-error (copy-alist nil nil))
   program-error)
+
+(deftest copy-alist.error.3
+  (classify-error (copy-alist '((a . b) . c)))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; pairlis
@@ -676,3 +691,11 @@
 (deftest pairlis.error.3
   (classify-error (pairlis nil nil nil nil))
   program-error)
+
+(deftest pairlist.error.4
+  (classify-error (pairlis 'a '(1) '(a b c)))
+  type-error)
+
+(deftest pairlist.error.5
+  (classify-error (pairlis '(a) 'b '(a b c)))
+  type-error)

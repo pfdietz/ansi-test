@@ -126,6 +126,10 @@
   (let ((i 0)) (values (append (incf i)) i))
   1 1)
 
+(deftest append.error.1
+  (classify-error (append '(a . b) '(z)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; revappend
 
@@ -175,6 +179,10 @@
   (classify-error (revappend nil nil nil))
   program-error)
 
+(deftest revappend.error.4
+  (classify-error (revappend '(a . b) '(z)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nreconc
 
@@ -209,3 +217,7 @@
 (deftest nreconc.error.3
   (classify-error (nreconc nil nil nil))
   program-error)
+
+(deftest nreconc.error.4
+  (classify-error (nreconc (cons 'a 'b) (list 'z)))
+  type-error)

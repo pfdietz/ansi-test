@@ -198,6 +198,11 @@
 			  :test-not #'identity))
   program-error)
 
+(deftest sublis.error.8
+  (classify-error (sublis '((a . 1) . bad)
+			  (list 'a 'b 'c 'd)))
+  type-error)
+
 ;; nsublis
 
 (deftest nsublis.1
@@ -355,6 +360,11 @@
 			   (list 'a 'b 'c 'd)
 			   :test-not #'identity))
   program-error)
+
+(deftest nsublis.error.8
+  (classify-error (nsublis '((a . 1) . bad)
+			   (list 'a 'b 'c 'd)))
+  type-error)
 
 ;;;;;;
 
