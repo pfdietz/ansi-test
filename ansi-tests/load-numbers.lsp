@@ -51,6 +51,7 @@
 (load "incf.lsp")
 (load "decf.lsp")
 (load "lcm.lsp")
+(load "log.lsp")
 (load "signum.lsp")
 (load "sqrt.lsp")
 (load "isqrt.lsp")
