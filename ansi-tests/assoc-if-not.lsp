@@ -97,53 +97,63 @@
 ;;; Error tests
 
 (deftest assoc-if-not.error.1
-  (classify-error (assoc-if-not))
-  program-error)
+  (signals-error (assoc-if-not) program-error)
+  t)
 
 (deftest assoc-if-not.error.2
-  (classify-error (assoc-if-not #'null))
-  program-error)
+  (signals-error (assoc-if-not #'null) program-error)
+  t)
 
 (deftest assoc-if-not.error.3
-  (classify-error (assoc-if-not #'null nil :bad t))
-  program-error)
+  (signals-error (assoc-if-not #'null nil :bad t)
+		 program-error)
+  t)
 
 (deftest assoc-if-not.error.4
-  (classify-error (assoc-if-not #'null nil :key))
-  program-error)
+  (signals-error (assoc-if-not #'null nil :key)
+		 program-error)
+  t)
 
 (deftest assoc-if-not.error.5
-  (classify-error (assoc-if-not #'null nil 1 1))
-  program-error)
+  (signals-error (assoc-if-not #'null nil 1 1)
+		 program-error)
+  t)
 
 (deftest assoc-if-not.error.6
-  (classify-error (assoc-if-not #'null nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (assoc-if-not #'null nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest assoc-if-not.error.7
-  (classify-error (assoc-if-not #'cons '((a b)(c d))))
-  program-error)
+  (signals-error (assoc-if-not #'cons '((a b)(c d)))
+		 program-error)
+  t)
 
 (deftest assoc-if-not.error.8
-  (classify-error (assoc-if-not #'identity '((a b)(c d)) :key #'cons))
-  program-error)
+  (signals-error (assoc-if-not #'identity '((a b)(c d)) :key #'cons)
+		 program-error)
+  t)
 
 (deftest assoc-if-not.error.9
-  (classify-error (assoc-if-not #'car '((a b)(c d))))
-  type-error)
+  (signals-error (assoc-if-not #'car '((a b)(c d)))
+		 type-error)
+  t)
 
 (deftest assoc-if-not.error.10
-  (classify-error (assoc-if-not #'identity '((a b)(c d)) :key #'car))
-  type-error)
+  (signals-error (assoc-if-not #'identity '((a b)(c d)) :key #'car)
+		 type-error)
+  t)
 
 (deftest assoc-if-not.error.11
-  (classify-error (assoc-if-not #'identity '((a . b) . c)))
-  type-error)
+  (signals-error (assoc-if-not #'identity '((a . b) . c))
+		 type-error)
+  t)
 
 (deftest assoc-if-not.error.12
-  (classify-error (assoc-if-not #'identity '((a . b) :bad (c . d))))
-  type-error)
+  (signals-error (assoc-if-not #'identity '((a . b) :bad (c . d)))
+		 type-error)
+  t)
 
 (deftest assoc-if-not.error.13
-  (classify-error (assoc-if-not #'identity 'y))
-  type-error)
+  (signals-error (assoc-if-not #'identity 'y) type-error)
+  t)

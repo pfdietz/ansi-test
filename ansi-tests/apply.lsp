@@ -8,20 +8,21 @@
 ;;; Error cases
 
 (deftest apply.error.1
-  (classify-error (apply))
-  program-error)
+  (signals-error (apply) program-error)
+  t)
 
 (deftest apply.error.2
-  (classify-error (apply #'cons))
-  program-error)
+  (signals-error (apply #'cons) program-error)
+  t)
 
 (deftest apply.error.3
-  (classify-error (apply #'cons nil))
-  program-error)
+  (signals-error (apply #'cons nil) program-error)
+  t)
 
 (deftest apply.error.4
-  (classify-error (apply #'cons (list 1 2 3)))
-  program-error)
+  (signals-error (apply #'cons (list 1 2 3))
+		 program-error)
+  t)
 
 ;;; Non-error cases
 

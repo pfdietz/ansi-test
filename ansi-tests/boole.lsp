@@ -36,35 +36,35 @@
 	#'logxor))
 
 (deftest boole.error.1
-  (classify-error (boole))
-  program-error)
+  (signals-error (boole) program-error)
+  t)
 
 (deftest boole.error.2
-  (classify-error (boole boole-1))
-  program-error)
+  (signals-error (boole boole-1) program-error)
+  t)
 
 (deftest boole.error.3
-  (classify-error (boole boole-1 1))
-  program-error)
+  (signals-error (boole boole-1 1) program-error)
+  t)
 
 (deftest boole.error.4
-  (classify-error (boole boole-1 1 2 nil))
-  program-error)
+  (signals-error (boole boole-1 1 2 nil) program-error)
+  t)
 
 (deftest boole.error.5
   (let ((bad (loop for i from 1 until (not (member i *boole-vals*)))))
-    (eval `(classify-error (boole ,bad 1 1))))
-  type-error)
+    (eval `(signals-error (boole ,bad 1 1) type-error)))
+  t)
 
 (deftest boole.error.6
   (loop for n in *boole-val-names*
-	unless (eq (eval `(classify-error (boole ,n nil 1))) 'type-error)
+	unless (eval `(signals-error (boole ,n nil 1) type-error))
 	collect n)
   nil)
 
 (deftest boole.error.7
   (loop for n in *boole-val-names*
-	unless (eq (eval `(classify-error (boole ,n 1 nil))) 'type-error)
+	unless (eval `(signals-error (boole ,n 1 nil) type-error))
 	collect n)
   nil)
 

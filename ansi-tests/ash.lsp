@@ -5,31 +5,35 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest ash.error.1
-  (classify-error (ash))
-  program-error)
+  (signals-error (ash) program-error)
+  t)
 
 (deftest ash.error.2
-  (classify-error (ash 1 1 1))
-  program-error)
+  (signals-error (ash 1 1 1) program-error)
+  t)
 
 (deftest ash.error.3
-  (classify-error (ash 1 1 nil))
-  program-error)
+  (signals-error (ash 1 1 nil) program-error)
+  t)
 
 (deftest ash.error.4
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (ash ',x 0))) 'type-error))
+		   (eval `(signals-error (ash ',x 0) type-error)))
 	collect x)
   nil)
 
 (deftest ash.error.5
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (ash 0 ',x))) 'type-error))
+		   (eval `(signals-error (ash 0 ',x) type-error)))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest ash.1
   (loop for x in *integers*

@@ -46,17 +46,17 @@
   3 1 2 3)
 
 (deftest acons.error.1
-  (classify-error (acons))
-  program-error)
+  (signals-error (acons) program-error)
+  t)
 
 (deftest acons.error.2
-  (classify-error (acons 'a))
-  program-error)
+  (signals-error (acons 'a) program-error)
+  t)
 
 (deftest acons.error.3
-  (classify-error (acons 'a 'b))
-  program-error)
+  (signals-error (acons 'a 'b) program-error)
+  t)
 
 (deftest acons.error.4
-  (classify-error (acons 'a 'b 'c 'd))
-  program-error)
+  (signals-error (acons 'a 'b 'c 'd) program-error)
+  t)

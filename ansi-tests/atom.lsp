@@ -11,9 +11,9 @@
   nil 1)
 
 (deftest atom.error.1
-  (classify-error (atom))
-  program-error)
+  (signals-error (atom) program-error)
+  t)
 
 (deftest atom.error.2
-  (classify-error (atom 'a 'b))
-  program-error)
+  (signals-error (atom 'a 'b) program-error)
+  t)

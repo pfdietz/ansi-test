@@ -46,12 +46,9 @@
 ;;; Error tests
 
 (deftest arrayp.error.1
-  (classify-error (arrayp))
-  program-error)
+  (signals-error (arrayp) program-error)
+  t)
 
 (deftest arrayp.error.2
-  (classify-error (arrayp #(a b c) nil))
-  program-error)
-
-
-
+  (signals-error (arrayp #(a b c) nil) program-error)
+  t)

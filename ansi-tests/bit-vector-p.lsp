@@ -68,12 +68,10 @@
   nil 1 1)
 
 
-    
-
 (deftest bit-vector-p.error.1
-  (classify-error (bit-vector-p))
-  program-error)
+  (signals-error (bit-vector-p) program-error)
+  t)
 
 (deftest bit-vector-p.error.2
-  (classify-error (bit-vector-p #* #*))
-  program-error)
+  (signals-error (bit-vector-p #* #*) program-error)
+  t)

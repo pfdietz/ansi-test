@@ -8,16 +8,16 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest abs.error.1
-  (classify-error (abs))
-  program-error)
+  (signals-error (abs) program-error)
+  t)
 
 (deftest abs.error.2
-  (classify-error (abs 0 0))
-  program-error)
+  (signals-error (abs 0 0) program-error)
+  t)
 
 (deftest abs.error.3
-  (classify-error (abs 0 nil nil))
-  program-error)
+  (signals-error (abs 0 nil nil) program-error)
+  t)
 
 (deftest abs.1
   (loop for x in *numbers*

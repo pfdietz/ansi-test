@@ -101,53 +101,63 @@
 ;;; Error cases
 
 (deftest assoc-if.error.1
-  (classify-error (assoc-if))
-  program-error)
+  (signals-error (assoc-if) program-error)
+  t)
 
 (deftest assoc-if.error.2
-  (classify-error (assoc-if #'null))
-  program-error)
+  (signals-error (assoc-if #'null) program-error)
+  t)
 
 (deftest assoc-if.error.3
-  (classify-error (assoc-if #'null nil :bad t))
-  program-error)
+  (signals-error (assoc-if #'null nil :bad t)
+		 program-error)
+  t)
 
 (deftest assoc-if.error.4
-  (classify-error (assoc-if #'null nil :key))
-  program-error)
+  (signals-error (assoc-if #'null nil :key)
+		 program-error)
+  t)
 
 (deftest assoc-if.error.5
-  (classify-error (assoc-if #'null nil 1 1))
-  program-error)
+  (signals-error (assoc-if #'null nil 1 1)
+		 program-error)
+  t)
 
 (deftest assoc-if.error.6
-  (classify-error (assoc-if #'null nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (assoc-if #'null nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest assoc-if.error.7
-  (classify-error (assoc-if #'cons '((a b)(c d))))
-  program-error)
+  (signals-error (assoc-if #'cons '((a b)(c d)))
+		 program-error)
+  t)
 
 (deftest assoc-if.error.8
-  (classify-error (assoc-if #'identity '((a b)(c d)) :key #'cons))
-  program-error)
+  (signals-error (assoc-if #'identity '((a b)(c d)) :key #'cons)
+		 program-error)
+  t)
 
 (deftest assoc-if.error.9
-  (classify-error (assoc-if #'car '((a b)(c d))))
-  type-error)
+  (signals-error (assoc-if #'car '((a b)(c d)))
+		 type-error)
+  t)
 
 (deftest assoc-if.error.10
-  (classify-error (assoc-if #'identity '((a b)(c d)) :key #'car))
-  type-error)
+  (signals-error (assoc-if #'identity '((a b)(c d)) :key #'car)
+		 type-error)
+  t)
 
 (deftest assoc-if.error.11
-  (classify-error (assoc-if #'null '((a . b) . c)))
-  type-error)
+  (signals-error (assoc-if #'null '((a . b) . c))
+		 type-error)
+  t)
 
 (deftest assoc-if.error.12
-  (classify-error (assoc-if #'null '((a . b) :bad (c . d))))
-  type-error)
+  (signals-error (assoc-if #'null '((a . b) :bad (c . d)))
+		 type-error)
+  t)
 
 (deftest assoc-if.error.13
-  (classify-error (assoc-if #'null 'y))
-  type-error)
+  (signals-error (assoc-if #'null 'y) type-error)
+  t)

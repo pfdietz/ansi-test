@@ -231,13 +231,15 @@
 ;;; Error tests
 
 (deftest bit-and.error.1
-  (classify-error (bit-and))
-  program-error)
+  (signals-error (bit-and) program-error)
+  t)
 
 (deftest bit-and.error.2
-  (classify-error (bit-and #*000))
-  program-error)
+  (signals-error (bit-and #*000) program-error)
+  t)
 
 (deftest bit-and.error.3
-  (classify-error (bit-and #*000 #*0100 nil nil))
-  program-error)
+  (signals-error (bit-and #*000 #*0100 nil nil)
+		 program-error)
+  t)
+

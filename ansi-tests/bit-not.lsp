@@ -130,10 +130,9 @@
 ;;; Error tests
 
 (deftest bit-not.error.1
-  (classify-error (bit-not))
-  program-error)
+  (signals-error (bit-not) program-error)
+  t)
 
 (deftest bit-not.error.2
-  (classify-error (bit-not #*000 nil nil))
-  program-error)
-
+  (signals-error (bit-not #*000 nil nil) program-error)
+  t)

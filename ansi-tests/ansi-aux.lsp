@@ -335,6 +335,18 @@ the condition to go uncaught if it cannot be classified."
 (defmacro classify-error (form)
   `(classify-error** ',form))
 
+;;; The above is badly designed, since it fails when some signals
+;;; may be in more than one class/
+
+(defmacro signals-error (form error-name)
+  `(handler-bind
+    ((warning #'(lambda (c) (declare (ignore c))
+			      (muffle-warning))))
+    (proclaim '(optimize (safety 3)))
+    (handler-case
+     (apply #'values nil (multiple-value-list (normally ,form)))
+     (,error-name (c) t))))
+
 ;;;
 ;;; A scaffold is a structure that is used to remember the object
 ;;; identities of the cons cells in a (noncircular) data structure.

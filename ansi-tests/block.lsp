@@ -78,8 +78,9 @@
 
 #|
 (deftest return.error.1
-  (classify-error
+  (signals-error
    (block nil
-     (return 'a 'b)))
-  program-error)
+     (return 'a 'b))
+   program-error)
+  t)
 |#

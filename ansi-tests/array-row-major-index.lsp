@@ -35,5 +35,6 @@
 ;;; Error tests
 
 (deftest array-row-major-index.error.1
-  (classify-error (array-row-major-index))
-  program-error)
+  (signals-error (array-row-major-index) program-error)
+  t)
+

@@ -231,14 +231,16 @@
 ;;; Error tests
 
 (deftest bit-orc1.error.1
-  (classify-error (bit-orc1))
-  program-error)
+  (signals-error (bit-orc1) program-error)
+  t)
 
 (deftest bit-orc1.error.2
-  (classify-error (bit-orc1 #*000))
-  program-error)
+  (signals-error (bit-orc1 #*000) program-error)
+  t)
 
 (deftest bit-orc1.error.3
-  (classify-error (bit-orc1 #*000 #*0100 nil nil))
-  program-error)
+  (signals-error (bit-orc1 #*000 #*0100 nil nil)
+		 program-error)
+  t)
+
 

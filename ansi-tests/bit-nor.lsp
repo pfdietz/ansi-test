@@ -231,14 +231,14 @@
 ;;; Error tests
 
 (deftest bit-nor.error.1
-  (classify-error (bit-nor))
-  program-error)
+  (signals-error (bit-nor) program-error)
+  t)
 
 (deftest bit-nor.error.2
-  (classify-error (bit-nor #*000))
-  program-error)
+  (signals-error (bit-nor #*000) program-error)
+  t)
 
 (deftest bit-nor.error.3
-  (classify-error (bit-nor #*000 #*0100 nil nil))
-  program-error)
-
+  (signals-error (bit-nor #*000 #*0100 nil nil)
+		 program-error)
+  t)

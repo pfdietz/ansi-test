@@ -42,22 +42,23 @@
   :error)
 
 (deftest add-method.error.4
-  (classify-error (add-method))
-  program-error)
+  (signals-error (add-method) program-error)
+  t)
 
 (deftest add-method.error.5
-  (classify-error (add-method #'add-method-gf-01))
-  program-error)
+  (signals-error (add-method #'add-method-gf-01) program-error)
+  t)
 
 (deftest add-method.error.6
-  (classify-error
+  (signals-error
    (let* ((gf (eval '(defgeneric add-method-gf-07 (x)
 		       (:method ((x t)) 'a))))
 	  (method (find-method #'add-method-gf-07 nil (list (find-class t))))
 	  (gf2 (eval '(defgeneric add-method-gf-08 (x)))))
      (remove-method gf method)
-     (add-method gf2 method nil)))
-  program-error)
+     (add-method gf2 method nil))
+   program-error)
+  t)
 
 (deftest add-method.error.7
   (let* ((gf (eval '(defgeneric add-method-gf-09 (x y)

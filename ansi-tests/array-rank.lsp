@@ -28,12 +28,12 @@
 ;;; Error tests
 
 (deftest array-rank.error.1
-  (classify-error (array-rank))
-  program-error)
+  (signals-error (array-rank) program-error)
+  t)
 
 (deftest array-rank.error.2
-  (classify-error (array-rank #(a b c) nil))
-  program-error)
+  (signals-error (array-rank #(a b c) nil)  program-error)
+  t)
 
 (deftest array-rank.error.3
   (loop for e in *mini-universe*
@@ -44,9 +44,10 @@
   nil)
 
 (deftest array-rank.error.4
-  (classify-error (array-rank nil))
-  type-error)
+  (signals-error (array-rank nil) type-error)
+  t)
 
 (deftest array-rank.error.5
-  (classify-error (locally (array-rank nil) t))
-  type-error)
+  (signals-error (locally (array-rank nil) t)
+		 type-error)
+  t)

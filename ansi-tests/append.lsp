@@ -62,9 +62,11 @@
   1 1)
 
 (deftest append.error.1
-  (classify-error (append '(a . b) '(z)))
-  type-error)
+  (signals-error (append '(a . b) '(z))
+		 type-error)
+  t)
 
 (deftest append.error.2
-  (classify-error (append '(x y z) '(a . b) '(z)))
-  type-error)
+  (signals-error (append '(x y z) '(a . b) '(z))
+		 type-error)
+  t)

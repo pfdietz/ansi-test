@@ -42,12 +42,13 @@
   good)
 
 (deftest abort.5
-  (classify-error
+  (signals-error
    (let ((c1 (make-condition 'error))
 	 (c2 (make-condition 'error)))
      (with-condition-restarts
       c1
       (compute-restarts)
       ;; All conditions are now associated with c1
-      (abort c2))))
-  control-error)
+      (abort c2)))
+   control-error)
+  t)

@@ -6,28 +6,28 @@
 (in-package :cl-test)
 
 (deftest boundp.error.1
-  (classify-error (boundp))
-  program-error)
+  (signals-error (boundp) program-error)
+  t)
 
 (deftest boundp.error.2
-  (classify-error (boundp 'a 'a))
-  program-error)
+  (signals-error (boundp 'a 'a) program-error)
+  t)
 
 (deftest boundp.error.3
-  (classify-error (boundp 1))
-  type-error)
+  (signals-error (boundp 1) type-error)
+  t)
 
 (deftest boundp.error.4
-  (classify-error (boundp '(setf car)))
-  type-error)
+  (signals-error (boundp '(setf car)) type-error)
+  t)
 
 (deftest boundp.error.5
-  (classify-error (boundp "abc"))
-  type-error)
+  (signals-error (boundp "abc") type-error)
+  t)
 
 (deftest boundp.error.6
-  (classify-error (locally (boundp "abc") t))
-  type-error)
+  (signals-error (locally (boundp "abc") t) type-error)
+  t)
 
 ;;; See other tests in cl-symbols.lsp
 

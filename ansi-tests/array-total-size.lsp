@@ -37,12 +37,12 @@
 ;;; Error tests
 
 (deftest array-total-size.error.1
-  (classify-error (array-total-size))
-  program-error)
+  (signals-error (array-total-size) program-error)
+  t)
 
 (deftest array-total-size.error.2
-  (classify-error (array-total-size #(a b c) nil))
-  program-error)
+  (signals-error (array-total-size #(a b c) nil) program-error)
+  t)
 
 (deftest array-total-size.error.3
   (let (why)
@@ -55,9 +55,10 @@
   nil)
 
 (deftest array-total-size.error.4
-  (classify-error (array-total-size 0))
-  type-error)
+  (signals-error (array-total-size 0) type-error)
+  t)
 
 (deftest array-total-size.error.5
-  (classify-error (locally (array-total-size 0) t))
-  type-error)
+  (signals-error (locally (array-total-size 0) t)
+		 type-error)
+  t)

@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest byte.error.1
-  (classify-error (byte))
-  program-error)
+  (signals-error (byte) program-error)
+  t)
 
 (deftest byte.error.2
-  (classify-error (byte 1))
-  program-error)
+  (signals-error (byte 1) program-error)
+  t)
 
 (deftest byte.error.3
-  (classify-error (byte 1 1 nil))
-  program-error)
+  (signals-error (byte 1 1 nil) program-error)
+  t)
 
 (deftest byte.1
   (progn (byte 0 0) :good)
@@ -36,17 +36,18 @@
   t)
 
 (deftest byte-position.error.1
-  (classify-error (byte-position))
-  program-error)
+  (signals-error (byte-position) program-error)
+  t)
 
 (deftest byte-position.error.2
-  (classify-error (byte-position (byte 1 1) nil))
-  program-error)
+  (signals-error (byte-position (byte 1 1) nil)
+		 program-error)
+  t)
 
 (deftest byte-size.error.1
-  (classify-error (byte-size))
-  program-error)
+  (signals-error (byte-size) program-error)
+  t)
 
 (deftest byte-size.error.2
-  (classify-error (byte-size (byte 1 1) nil))
-  program-error)
+  (signals-error (byte-size (byte 1 1) nil) program-error)
+  t)

@@ -36,16 +36,16 @@
 ;;; Error tests
 
 (deftest adjustable-array-p.error.1
-  (classify-error (adjustable-array-p))
-  program-error)
+  (signals-error (adjustable-array-p) program-error)
+  t)
 
 (deftest adjustable-array-p.error.2
-  (classify-error (adjustable-array-p "aaa" nil))
-  program-error)
+  (signals-error (adjustable-array-p "aaa" nil) program-error)
+  t)
 
 (deftest adjustable-array-p.error.3
-  (classify-error (adjustable-array-p 10))
-  type-error)
+  (signals-error (adjustable-array-p 10) type-error)
+  t)
 
 (deftest adjustable-array-p.error.4
   (let (why)
@@ -58,11 +58,12 @@
   nil)
 
 (deftest adjustable-array-p.error.5
-  (classify-error (locally (adjustable-array-p 10)))
-  type-error)
+  (signals-error (locally (adjustable-array-p 10)) type-error)
+  t)
 
 (deftest adjustable-array-p.error.6
-  (classify-error (let ((x 10))
+  (signals-error (let ((x 10))
 		    (locally (declare (optimize (safety 3)))
-			   (adjustable-array-p x))))
-  type-error)
+			   (adjustable-array-p x)))
+		 type-error)
+  t)

@@ -108,8 +108,8 @@
 ;;; Error tests
 
 (deftest allocate-instance.error.1
-  (classify-error (allocate-instance))
-  program-error)
+  (signals-error (allocate-instance) program-error)
+  t)
 
 ;;; Duane Rettig made a convincing argument that the next two
 ;;; tests are bad, since the caller of allocate-instance
@@ -117,12 +117,14 @@
 
 #|
 (deftest allocate-instance.error.2
-  (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
-				     :b))
-  program-error)
+  (signals-error (allocate-instance (find-class 'allocate-instance-class-01)
+				     :b)
+		 program-error)
+  t)
 
 (deftest allocate-instance.error.3
-  (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
-				     '(a b c) nil))
-  program-error)
+  (signals-error (allocate-instance (find-class 'allocate-instance-class-01)
+				     '(a b c) nil)
+		 program-error)
+  t)
 |#

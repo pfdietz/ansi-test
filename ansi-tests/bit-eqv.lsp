@@ -232,14 +232,14 @@
 ;;; Error tests
 
 (deftest bit-eqv.error.1
-  (classify-error (bit-eqv))
-  program-error)
+  (signals-error (bit-eqv) program-error)
+  t)
 
 (deftest bit-eqv.error.2
-  (classify-error (bit-eqv #*000))
-  program-error)
+  (signals-error (bit-eqv #*000) program-error)
+  t)
 
 (deftest bit-eqv.error.3
-  (classify-error (bit-eqv #*000 #*0100 nil nil))
-  program-error)
-
+  (signals-error (bit-eqv #*000 #*0100 nil nil)
+		 program-error)
+  t)

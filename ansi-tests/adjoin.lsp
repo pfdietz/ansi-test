@@ -156,42 +156,41 @@
   (a b c))
 
 (deftest adjoin.error.1
-  (classify-error (adjoin))
-  program-error)
+  (signals-error (adjoin) program-error)
+  t)
 
 (deftest adjoin.error.2
-  (classify-error (adjoin 'a))
-  program-error)
+  (signals-error (adjoin 'a) program-error)
+  t)
 
 (deftest adjoin.error.3
-  (classify-error (adjoin 'a '(b c) :bad t))
-  program-error)
+  (signals-error (adjoin 'a '(b c) :bad t) program-error)
+  t)
 
 (deftest adjoin.error.4
-  (classify-error (adjoin 'a '(b c) :allow-other-keys nil :bad t))
-  program-error)
+  (signals-error (adjoin 'a '(b c) :allow-other-keys nil :bad t) program-error)
+  t)
 
 (deftest adjoin.error.5
-  (classify-error (adjoin 'a '(b c) 1 2))
-  program-error)
+  (signals-error (adjoin 'a '(b c) 1 2) program-error)
+  t)
 
 (deftest adjoin.error.6
-  (classify-error (adjoin 'a '(b c) :test))
-  program-error)
+  (signals-error (adjoin 'a '(b c) :test) program-error)
+  t)
 
 (deftest adjoin.error.7
-  (classify-error (adjoin 'a '(b c) :test #'identity))
-  program-error)
+  (signals-error (adjoin 'a '(b c) :test #'identity) program-error)
+  t)
 
 (deftest adjoin.error.8
-  (classify-error (adjoin 'a '(b c) :test-not #'identity))
-  program-error)
+  (signals-error (adjoin 'a '(b c) :test-not #'identity) program-error)
+  t)
 
 (deftest adjoin.error.9
-  (classify-error (adjoin 'a '(b c) :key #'cons))
-  program-error)
+  (signals-error (adjoin 'a '(b c) :key #'cons) program-error)
+  t)
 
 (deftest adjoin.error.10
-  (classify-error (adjoin 'a (list* 'b 'c 'd)))
-  type-error)
-
+  (signals-error (adjoin 'a (list* 'b 'c 'd)) type-error)
+  t)

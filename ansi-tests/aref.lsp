@@ -136,9 +136,10 @@
 ;;; To add: aref on displaced arrays, arrays with fill pointers, etc.
 
 (deftest aref.error.1
-  (classify-error (aref))
-  program-error)
+  (signals-error (aref) program-error)
+  t)
 
 (deftest aref.error.2
-  (classify-error (funcall #'aref))
-  program-error)
+  (signals-error (funcall #'aref) program-error)
+  t)
+

@@ -75,22 +75,24 @@
   (a b c) 1)
 
 (deftest butlast.error.1
-  (classify-error (butlast (copy-tree '(a b c d)) 'a))
-  type-error)
+  (signals-error (butlast (copy-tree '(a b c d)) 'a)
+		 type-error)
+  t)
 
 (deftest butlast.error.2
-  (classify-error (butlast 'a 0))
-  type-error)
+  (signals-error (butlast 'a 0) type-error)
+  t)
 
 (deftest butlast.error.3
-  (classify-error (butlast))
-  program-error)
+  (signals-error (butlast) program-error)
+  t)
 
 (deftest butlast.error.4
-  (classify-error (butlast '(a b c) 3 3))
-  program-error)
+  (signals-error (butlast '(a b c) 3 3) program-error)
+  t)
 
 (deftest butlast.error.5
-  (classify-error (locally (butlast 'a 0) t))
-  type-error)
+  (signals-error (locally (butlast 'a 0) t) type-error)
+  t)
+
 

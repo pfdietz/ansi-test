@@ -231,14 +231,14 @@
 ;;; Error tests
 
 (deftest bit-nand.error.1
-  (classify-error (bit-nand))
-  program-error)
+  (signals-error (bit-nand) program-error)
+  t)
 
 (deftest bit-nand.error.2
-  (classify-error (bit-nand #*000))
-  program-error)
+  (signals-error (bit-nand #*000) program-error)
+  t)
 
 (deftest bit-nand.error.3
-  (classify-error (bit-nand #*000 #*0100 nil nil))
-  program-error)
-
+  (signals-error (bit-nand #*000 #*0100 nil nil)
+		 program-error)
+  t)

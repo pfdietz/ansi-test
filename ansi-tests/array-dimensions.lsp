@@ -42,12 +42,13 @@
 ;;; Error tests
 
 (deftest array-dimensions.error.1
-  (classify-error (array-dimensions))
-  program-error)
+  (signals-error (array-dimensions) program-error)
+  t)
 
 (deftest array-dimensions.error.2
-  (classify-error (array-dimensions #(a b c) nil))
-  program-error)
+  (signals-error (array-dimensions #(a b c) nil)
+		 program-error)
+  t)
 
 (deftest array-dimensions.error.3
   (let (why)
@@ -60,10 +61,10 @@
   nil)
 
 (deftest array-dimensions.error.4
-  (classify-error (array-dimensions nil))
-  type-error)
+  (signals-error (array-dimensions nil) type-error)
+  t)
 
 (deftest array-dimensions.error.5
-  (classify-error (locally (array-dimensions nil)))
-  type-error)
-
+  (signals-error (locally (array-dimensions nil))
+		 type-error)
+  t)

@@ -240,49 +240,56 @@
 
 
 (deftest assoc.error.1
-  (classify-error (assoc))
-  program-error)
+  (signals-error (assoc) program-error)
+  t)
 
 (deftest assoc.error.2
-  (classify-error (assoc nil))
-  program-error)
+  (signals-error (assoc nil) program-error)
+  t)
 
 (deftest assoc.error.3
-  (classify-error (assoc nil nil :bad t))
-  program-error)
+  (signals-error (assoc nil nil :bad t) program-error)
+  t)
 
 (deftest assoc.error.4
-  (classify-error (assoc nil nil :key))
-  program-error)
+  (signals-error (assoc nil nil :key) program-error)
+  t)
 
 (deftest assoc.error.5
-  (classify-error (assoc nil nil  1 1))
-  program-error)
+  (signals-error (assoc nil nil 1 1) program-error)
+  t)
 
 (deftest assoc.error.6
-  (classify-error (assoc nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (assoc nil nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest assoc.error.7
-  (classify-error (assoc 'a '((a . b)) :test #'identity))
-  program-error)
+  (signals-error (assoc 'a '((a . b)) :test #'identity)
+		 program-error)
+  t)
 
 (deftest assoc.error.8
-  (classify-error (assoc 'a '((a . b)) :test-not #'identity))
-  program-error)
+  (signals-error (assoc 'a '((a . b)) :test-not #'identity)
+		 program-error)
+  t)
 
 (deftest assoc.error.9
-  (classify-error (assoc 'a '((a . b)) :key #'cons))
-  program-error)
+  (signals-error (assoc 'a '((a . b)) :key #'cons)
+		 program-error)
+  t)
 
 (deftest assoc.error.10
-  (classify-error (assoc 'z '((a . b) . c)))
-  type-error)
+  (signals-error (assoc 'z '((a . b) . c))
+		 type-error)
+  t)
 
 (deftest assoc.error.11
-  (classify-error (assoc 'z '((a . b) :bad (c . d))))
-  type-error)
+  (signals-error (assoc 'z '((a . b) :bad (c . d)))
+		 type-error)
+  t)
 
 (deftest assoc.error.12
-  (classify-error (assoc 'x 'y))
-  type-error)
+  (signals-error (assoc 'x 'y) type-error)
+  t)
+
