@@ -418,6 +418,12 @@
 		   (count-if-not #'%onep a :from-end t)))))
   2 3 2 3)
 
+(deftest count-if-not-string.18
+  (do-special-strings
+   (s "a1ha^%&%#( 873ff83nfa!" nil)
+   (assert (= (count-if-not #'alpha-char-p s) 14)))
+  nil)
+
 ;;; Argument order tests
 
 (deftest count-if-not.order.1

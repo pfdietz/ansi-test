@@ -286,3 +286,5 @@
 		    :foo (setf e (incf i)))
      i a b c d e))
   (a a a a a) 5 1 2 3 4 5)
+
+;;; FIXME: Add tests for upgrading of character subtypes

@@ -103,3 +103,5 @@ Got:      0
 30. Add more pathname equality tests to equal.lsp
 
 31. Add tests for GENTEMP
+
+32. Check that the fields of standardized error conditions are set properly

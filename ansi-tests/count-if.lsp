@@ -417,6 +417,12 @@
 	    (count-if #'digit-char-p s :start 1 :end 2)))
   3 3 2 2 1)
 
+(deftest count-if-string.18
+  (do-special-strings
+   (s "1abC3!?deZ" nil)
+   (assert (= (count-if #'alpha-char-p s) 6)))
+  nil)
+
 ;;; Argument order tests
 
 (deftest count-if.order.1

@@ -89,6 +89,18 @@
     y)
   "edcba")
 
+;;; Specialized string tests
+
+(deftest reverse-string.5
+  (do-special-strings
+   (s (copy-seq "12345") nil)
+   (let ((s2 (reverse s)))
+     (assert (typep s2 'simple-array))
+     (assert (equal (array-element-type s) (array-element-type s2)))
+     (assert (string= "12345" s))
+     (assert (string= "54321" s2))))
+  nil)
+
 (deftest reverse.order.1
   (let ((i 0))
     (values

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "subseq-aux.lsp")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; subseq, on lists
 
@@ -159,6 +161,23 @@
 (deftest subseq-string.3
   (subseq-string.3-body)
   t)
+
+;;; Specialized string tests
+
+(deftest subseq.specialized-string.1
+  (let* ((s0 "abcde")
+	 (len (length s0)))
+    (do-special-strings
+     (s "abcde" nil)
+     (loop for i from 0 below len
+	   for s1 = (subseq s i)
+	   do (assert (typep s1 'simple-array))
+	   do (assert (string= (subseq s i) (subseq s0 i)))
+	   do (loop for j from i to len
+		    for s2 = (subseq s i j)
+		    do (assert (typep s2 'simple-array))
+		    (assert (string= s2 (subseq s0 i j)))))))
+  nil)
 
 ;;; Tests on bit vectors
 

@@ -369,6 +369,18 @@
    type-error)
   t)
 
+;;; Specialized strings
+
+(deftest elt.special-strings.1
+  (do-special-strings
+   (s "abcde" nil)
+   (assert (char= (elt s 0) #\a))
+   (assert (char= (elt s 3) #\d))
+   (assert (char= (elt s 4) #\e)))
+  nil)
+
+;;; Error tests
+
 (deftest elt.error.1
   (signals-error (elt) program-error)
   t)

@@ -245,6 +245,30 @@
     (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
 
+;;; Specialized string tests
+
+(deftest map.specialized-string.1
+  (do-special-strings
+   (s "abcde" nil)
+   (let ((s2 (map 'list #'identity s)))
+     (assert (equal s2 '(#\a #\b #\c #\d #\e)))))
+  nil)
+
+(deftest map.specialized-string.2
+  (do-special-strings
+   (s "abcde" nil)
+   (let ((s2 (map 'list #'(lambda (x y) y) '(1 2 3 4 5) s)))
+     (assert (equal s2 '(#\a #\b #\c #\d #\e)))))
+  nil)
+
+(deftest map.specialized-string.3
+  (let ((s (map 'base-string #'identity '(#\a #\b #\c))))
+    (assert (typep s 'base-string))
+    s)
+  "abc")
+
+;;; FIXME: Add tests for building strings of other character types
+
 ;;; Order of evaluation tests
 
 (deftest map.order.1

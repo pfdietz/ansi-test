@@ -91,6 +91,14 @@
     (stable-sort a #'char<))
   "00111")
 
+(deftest stable-sort-string.4
+  (do-special-strings
+   (s "aebdc" nil)
+   (let ((s2 (stable-sort s #'char<)))
+     (assert (eq s s2))
+     (assert (string= s2 "abcde"))))
+  nil)
+
 ;;; Order of evaluation tests
 
 (deftest stable-sort.order.1

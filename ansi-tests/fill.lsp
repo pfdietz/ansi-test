@@ -534,3 +534,37 @@
 	   :start (progn (setf w (incf i)) 0))
      i x y z p q r s w))
   #(a z z a) 8 1 2 3 4 5 6 7 8)
+
+;;; Specialized strings
+
+(deftest fill.specialized-strings.1
+  (do-special-strings
+   (s (copy-seq "abcde") nil)
+   (assert (string= s "abcde"))
+   (assert (eq s (fill s #\x)))
+   (assert (string= s "xxxxx")))
+  nil)
+
+(deftest fill.specialized-strings.2
+  (do-special-strings
+   (s (copy-seq "abcde") nil)
+   (assert (string= s "abcde"))
+   (assert (eq s (fill s #\x  :start 2)))
+   (assert (string= s "abxxx")))
+  nil)
+
+(deftest fill.specialized-strings.3
+  (do-special-strings
+   (s (copy-seq "abcde") nil)
+   (assert (string= s "abcde"))
+   (assert (eq s (fill s #\x  :end 3)))
+   (assert (string= s "xxxde")))
+  nil)
+
+(deftest fill.specialized-strings.4
+  (do-special-strings
+   (s (copy-seq "abcde") nil)
+   (assert (string= s "abcde"))
+   (assert (eq s (fill s #\x  :start 1 :end 4)))
+   (assert (string= s "axxxe")))
+  nil)

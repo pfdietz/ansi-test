@@ -299,6 +299,27 @@
 	    'string))
   "dcba")
 
+(deftest reduce-string.18
+  (do-special-strings
+   (s "12345" nil)
+   (let ((x (reduce #'(lambda (x y) (cons y x)) s)))
+     (assert (equal x '(#\5 #\4 #\3 #\2 . #\1)))))
+  nil)
+
+(deftest reduce-string.19
+  (do-special-strings
+   (s "54321" nil)
+   (let ((x (reduce #'cons s :from-end t)))
+     (assert (equal x '(#\5 #\4 #\3 #\2 . #\1)))))
+  nil)
+
+(deftest reduce-string.20
+  (do-special-strings
+   (s "12345" nil)
+   (let ((x (reduce #'(lambda (x y) (cons y x)) s :initial-value nil)))
+     (assert (equal x '(#\5 #\4 #\3 #\2 #\1)))))
+  nil)
+
 ;;;;;;;;
 
 (deftest reduce-bitstring.1

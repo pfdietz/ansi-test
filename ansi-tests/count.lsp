@@ -535,6 +535,12 @@
   (count #\1 "00001100100" :test-not #'char>)
   3)
 
+(deftest count-string.23
+  (do-special-strings
+   (s "a1a3abcda" nil)
+   (assert (= (count #\a s) 4)))
+  nil)
+
 (defharmless count-string.test-and-test-not.1
   (count #\0 "0011010101100010000" :test #'eql :test-not #'eql))
 

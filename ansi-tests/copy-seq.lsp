@@ -159,6 +159,19 @@
   (copy-seq (make-array '(0) :element-type nil))
   "")
 
+;;; Specialized string tests
+
+(deftest copy-seq.20
+  (do-special-strings
+   (s "abcde" nil)
+   (let ((s2 (copy-seq s)))
+     (assert (typep s2 'simple-array))
+     (assert (string= s s2))
+     (assert (equal (array-element-type s) (array-element-type s2)))))
+  nil)
+
+;;; Order of evaluation test
+
 (deftest copy-seq.order.1
   (let ((i 0))
     (values (copy-seq (progn (incf i) "abc")) i))

@@ -267,6 +267,23 @@
   6
   "abcdef")
 
+(deftest map-into-string.13
+  (do-special-strings
+   (s (copy-seq "12345") nil)
+   (let ((s2 (map-into s #'identity "abcde")))
+     (assert (eq s s2))
+     (assert (string= s2 "abcde"))))
+  nil)
+
+(deftest map-into-string.14
+  (do-special-strings
+   (s "abcde" nil)
+   (let* ((s1 (copy-seq "123456"))
+	  (s2 (map-into s1 #'identity s)))
+     (assert (eq s1 s2))
+     (assert (string= s2 "abcde6"))))
+  nil)
+
 ;;; Tests on bit vectors
 
 (deftest map-into.bit-vector.1
@@ -356,7 +373,7 @@
 ;;; the 'should be prepared' notation for the error checking
 ;;; means that error checking may be skipped.
 (deftest map-into.error.2
-  (and (locally (declare (safety 3))
+  (and (locally (declare (optimize (safety 3)))
 		(handler-case (eval '(map-into nil #'identity 'a))
 			      (type-error () nil)))
        :bad)

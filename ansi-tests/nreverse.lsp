@@ -86,6 +86,15 @@
     y)
   "edcba")
 
+(deftest nreverse-string.5
+  (do-special-strings
+   (s (copy-seq "12345") nil)
+   (let ((s2 (nreverse s)))
+     (assert (stringp s2))
+     (assert (string= s2 "54321"))
+     (assert (equal (array-element-type s) (array-element-type s2)))))
+  nil)
+
 (deftest nreverse.order.1
   (let ((i 0))
     (values
