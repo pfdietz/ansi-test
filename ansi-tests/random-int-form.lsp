@@ -72,7 +72,16 @@
 
 (declaim (special *s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
 
+(defparameter *random-special-vars*
+  #(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
+
 (defparameter *loop-random-int-form-period* 2000)
+
+(defmacro cl-handler-bind (&rest args)
+  `(cl:handler-bind ,@args))
+
+(defmacro cl-handler-case (&rest args)
+  `(cl:handler-case ,@args))
 
 ;;; Run the random tester, collecting failures into the special
 ;;; variable $y.
@@ -144,6 +153,7 @@
 	do (when (= (mod i 100) 0)
 	     ;; #+sbcl (print "Do gc...")
 	     ;; #+sbcl (sb-ext::gc :full t)
+	     ;; #+lispworks-personal-edition (cl-user::normal-gc)
 	     (prin1 i) (princ " ") (finish-output *standard-output*))
 	nconc (let ((result (test-random-integer-form
 			     (if random-size (1+ (random size)) size)
@@ -208,7 +218,7 @@
 (defun make-random-optimize-settings ()
   (loop for settings = (list*
 			(list 'speed (random 4))
-			; #+sbcl '(sb-c:insert-step-conditions 0)
+			#+sbcl '(sb-c:insert-step-conditions 0)
 			(loop for s in '(space safety debug compilation-speed)
 			      for n = (random 4)
 			      collect (list s n)))
@@ -344,7 +354,8 @@
 				     numerator denominator
 				     identity progn floor
 				     #-(or armedbear) ignore-errors
-				     cl:handler-case restart-case
+				     cl:handler-case
+				     restart-case
 				     ceiling truncate round realpart imagpart
 				     integer-length logcount values
 				     locally))))
@@ -414,7 +425,7 @@
      ;; eval
      (2 (make-random-integer-eval-form size))
       
-     #-(or cmu allegro)
+     #-(or cmu allegro poplog)
      (20
       (destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
@@ -491,7 +502,7 @@
      (5 (make-random-tagbody-and-progn size))
 
      ;; conditionals
-     (20
+     (100
       (let* ((cond-size (random (max 1 (floor size 2))))
 	     (then-size (random (- size cond-size)))
 	     (else-size (- size 1 cond-size then-size))
@@ -499,6 +510,7 @@
 	     (then-part (make-random-integer-form then-size))
 	     (else-part (make-random-integer-form else-size)))
 	`(if ,pred ,then-part ,else-part)))
+     #-poplog
      (5
       (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
 	`(,(random-from-seq '(deposit-field dpb))
@@ -506,7 +518,7 @@
 	  ,(make-random-byte-spec-form s2)
 	  ,(make-random-integer-form s3))))
 
-     #-:allegro
+     #-(or allegro poplog)
      (10
       (destructuring-bind (s1 s2) (random-partition (1- size) 2)
 	  `(,(random-from-seq '(ldb mask-field))
@@ -674,10 +686,8 @@
   (flet ((%arg (size)
 	       (let ((*flet-names* nil)
 		     (*vars* (remove-if-not #'(lambda (s)
-						(member (var-desc-name s)
-							'(*s1* *s2* *s3* *s4* *s5*
-							       *s6* *s7* *s8* *s9*)
-							:test #'eq))
+						(find (var-desc-name s)
+						      *random-special-vars*))
 					    *vars*))
 		     (*random-int-form-blocks* nil)
 		     (*go-tags* nil))
@@ -694,7 +704,7 @@
   (let (desc)
     (values
      (cond
-      ((and (member var '(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8*) :test #'eq)
+      ((and (find var *random-special-vars*)
 	    (setq desc (find var *vars* :key #'var-desc-name)))
        (var-desc-type desc))
       (t (rcase
@@ -723,7 +733,7 @@
   (destructuring-bind (s1 s2) (random-partition (1- size) 2)
     (let* ((var (rcase
 		 (2 (random-from-seq #(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10)))
-		 (2 (random-from-seq #(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8*)))))
+		 (2 (random-from-seq *random-special-vars*))))
 	   (e1 (make-random-integer-form s1))
 	   (type (multiple-value-bind (type2 e)
 		     (make-random-type-for-var var e1)
@@ -745,7 +755,7 @@
 
 (defun make-random-integer-progv-form (size)
   (let* ((num-vars (random 4))
-	 (possible-vars #(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8*))
+	 (possible-vars *random-special-vars*)
 	 (vars nil))
     (loop repeat num-vars
 	  do (loop for r = (elt possible-vars (random (length possible-vars)))
@@ -819,12 +829,12 @@
 	 ((subtypep '(integer * *) type)
 	  (assert (not (member var '(lv1 lv2 lv3 lv4 lv5 lv6 lv7 lv8))))
 	  (rcase
-	   (1 (when (member var '(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
+	   (1 (when (find var *random-special-vars*)
 		(setq op (random-from-seq #(setf shiftf))
 		      var `(symbol-value ',var))))
 	   (1 (setq op 'multiple-value-setq)
 	      (setq var (list var)))
-	   (5 nil))
+	   (5 (setf op (random-from-seq #(setq setf shiftf incf decf)))))
 	  `(,op ,var ,(make-random-integer-form (1- size))))
 	 ((and (consp type)
 	       (eq (car type) 'integer)
@@ -832,7 +842,7 @@
 	       (integerp (third type)))
 	  (assert (not (member var '(lv1 lv2 lv3 lv4 lv5 lv6 lv7 lv8))))
 	  (rcase
-	   (1 (when (member var '(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
+	   (1 (when (find var *random-special-vars*)
 		(setq op (random-from-seq #(setf shiftf))
 		      var `(symbol-value ',var))))
 	   (1 (setq op 'multiple-value-setq)
@@ -918,8 +928,10 @@
 						  (find-package "CL-TEST"))))
 	     (allow-other-keys (and keyarg-p (coin 3)))
 	     )
-	(destructuring-bind (s1 s2 . opt-sizes)
-	    (random-partition (1- size) (+ 2 keyarg-n (- maxargs minargs)))
+	(let* ((sizes (random-partition (1- size) (+ 2 keyarg-n (- maxargs minargs))))
+	       (s1 (car sizes))
+	       (s2 (cadr sizes))
+	       (opt-sizes (cddr sizes)))
 	  (let* ((form1
 		  ;; Allow return-from of the flet/labels function
 		  (let ((*random-int-form-blocks*
@@ -1008,11 +1020,11 @@
 	   `(,(random-from-seq '(and or))
 	     ,(make-random-pred-form leftsize)
 	     ,(make-random-pred-form rightsize))))
-      (1 (destructuring-bind (leftsize rightsize)
-	     (random-partition (1- size) 2)
-	   `(,(random-from-seq '(< <= > >= = /= eql equal))
-	     ,(make-random-integer-form leftsize)
-	     ,(make-random-integer-form rightsize))))
+      (1 (let* ((nsizes (+ 1 (random 3)))
+		(sizes (random-partition (1- size) nsizes)))
+	   `(,(random-from-seq (if (= nsizes 2) #(< <= > >= = /= eql equal)
+				 #(< <= > >= = /=)))
+	     ,@(mapcar #'make-random-integer-form sizes))))
       (3 (let* ((cond-size (random (max 1 (floor size 2))))
 		(then-size (random (- size cond-size)))
 		(else-size (- size 1 cond-size then-size))
@@ -1020,11 +1032,14 @@
 		(then-part (make-random-pred-form then-size))
 		(else-part (make-random-pred-form else-size)))
 	   `(if ,pred ,then-part ,else-part)))
+      #-poplog
       (1 (destructuring-bind (s1 s2)
 	     (random-partition (1- size) 2)
 	   `(ldb-test ,(make-random-byte-spec-form s1)
 		      ,(make-random-integer-form s2))))
-
+      (2 (let ((form (make-random-integer-form (1- size)))
+	       (op (random-from-seq #(evenp oddp minusp plusp zerop))))
+	   `(,op ,form)))
       (2 (destructuring-bind (s1 s2)
 	     (random-partition (1- size) 2)
 	   (let ((arg1 (make-random-integer-form s1))
@@ -1052,9 +1067,15 @@
        (let ((subform (make-random-integer-form (- size 2)))
 	     (type
 	      (rcase
+	       (1 `(real ,@(make-random-integer-range)))
+	       (1 `(rational ,@(make-random-integer-range)))
+	       (1 `(rational ,(+ 1/2 (make-random-integer))))
+	       (1 `(rational * ,(+ 1/2 (make-random-integer))))
 	       (1 `(integer ,@(make-random-integer-range)))
 	       (1 `(integer ,(make-random-integer)))
 	       (1 `(integer * ,(make-random-integer)))
+	       (1 'fixnum)
+	       (1 'bignum)
 	       (1 `(integer)))))
 	 `(typep ,subform ',type)))
       )))
@@ -1128,7 +1149,7 @@
     (ecase type
       (bit (random 2))
       (boolean (random-from-seq #(nil t)))
-      (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| cl:car)))
+      (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| car)))
       (unsigned-byte (random-from-interval
 		      (1+ (ash 1 (random *maximum-random-int-bits*))) 0))
       (integer (let ((x (ash 1 (random *maximum-random-int-bits*))))
@@ -1231,8 +1252,8 @@
 			       :kind kind)))))
 	      
 	    (let ((unopt-result
-		   (cl:handler-case
-		    (cl:handler-bind
+		   (cl-handler-case
+		    (cl-handler-bind
 		     (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			     (warning #'muffle-warning))
 		     (identity ;; multiple-value-list
@@ -1243,8 +1264,8 @@
 					(with-output-to-string
 					  (s) (prin1 c s)))))))
 		  (opt-result
-		   (cl:handler-case
-		    (cl:handler-bind
+		   (cl-handler-case
+		    (cl-handler-bind
 		     (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			     (warning #'muffle-warning))
 		     (identity ;; multiple-value-list
@@ -1560,15 +1581,32 @@
 	      (try (eval form)))
 	    (prune-fn form try-fn)))
 
+	 ((incf decf)
+	  (try 0)
+	  (assert (member (length form) '(2 3)))
+	  (try (first args))
+	  (try (second args))
+	  (when (second args)
+	    (try `(,op ,(first args))))
+	  (unless (integerp (second args))
+	    (prune (second args)
+		   #'(lambda (form)
+		       (try `(,op ,(first args) ,form))))))
+
 	 ((setq setf shiftf)
 	  (try 0)
 	  ;; Assumes only one assignment
 	  (assert (= (length form) 3))
+	  (try (first args))
 	  (try (second args))
 	  (unless (integerp (second args))
 	    (prune (second args)
 		   #'(lambda (form)
 		       (try `(,op ,(first args) ,form))))))
+
+	 ((rotatef)
+	  (try 0)
+	  (mapc try-fn (cdr form)))
 
 	 ((multiple-value-setq)
 	  (try 0)
@@ -1932,6 +1970,14 @@
       (prune-list cases
 		  #'(lambda (case try-fn)
 		      (declare (type function try-fn))
+		      (when (and (listp (car case))
+				 (> (length (car case)) 1))
+			;; try removing constants
+			(loop for i below (length (car case))
+			      do (funcall try-fn
+					  `((,@(subseq (car case) 0 i)
+					     ,@(subseq (car case) (1+ i)))
+					    ,@(cdr case)))))
 		      (when (eql (length case) 2)
 			(prune (cadr case)
 			       #'(lambda (form)
