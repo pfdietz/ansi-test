@@ -3142,3 +3142,46 @@
 	 (flet ((%f10 nil v7)) (%f10)))))
    1733 3000 1314076)
   0)
+
+;;; gcl bug
+;;; Error in FUNCALL [or a callee]: #<compiled-closure 088ab770> is not of type NUMBER.
+
+(deftest misc.190
+  (let* ((form '(flet ((%f15 ()
+			     (labels ((%f4 (f4-1) 0))
+			       (flet ((%f6 (&optional
+					    (f6-2
+					     (logand (apply #'%f4 (list (%f4 0)))
+						     (round (* a)))))
+					   -284))
+				 (%f6)))))
+		  (funcall #'%f15)))
+	 (fn `(lambda (a b c)
+		(declare (notinline values equal abs isqrt < >= byte
+				    mask-field funcall + * logcount logand logior
+				    round list apply min))
+		(declare (optimize (safety 3)))
+		(declare (optimize (speed 0)))
+		(declare (optimize (debug 0)))
+		,form))
+	 (vals '(538754530150 -199250645748 105109641)))
+    (apply (compile nil fn) vals))
+  -284)
+
+;;; gcl
+;;; Error in COMPILER::CMP-ANON [or a callee]: 0 is not of type FUNCTION.
+
+(deftest misc.191
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+          (declare (optimize (speed 3) (safety 1)))
+          (labels ((%f1 nil c))
+            (flet ((%f12 (f12-1)
+                         (labels ((%f9 (f9-1 f9-2 f9-3) (%f1)))
+                           (apply #'%f9 (%f9 a b 0) a 0 nil))))
+              (apply #'%f12 0 nil)))))
+   0 0 0)
+  0)
+
