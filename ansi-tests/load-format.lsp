@@ -33,3 +33,6 @@
 (load "format-logical-block.lsp")
 (load "format-i.lsp")
 (load "format-slash.lsp")
+
+;;; 22.3.6
+(load "format-t.lsp")
