@@ -143,6 +143,120 @@
      (every #'alpha-char-p v)))
   t #\0 nil)
 
+;;; Displaced vectors
+
+(deftest every.23
+  (let* ((v1 (make-array '(10) :initial-contents '(1 3 2 4 6 8 5 7 9 1)))
+	 (v2 (make-array '(4) :displaced-to v1
+			 :displaced-index-offset 2)))
+    (values
+     (every #'evenp v1)
+     (notnot (every 'evenp v2))))
+  nil t)
+
+(deftest every.24
+  (loop for i from 1 to 40
+	for type = `(unsigned-byte ,i)
+	unless
+	(let* ((v1 (make-array '(10) :initial-contents '(1 1 0 0 0 0 1 1 1 1)
+			       :element-type type))
+	       (v2 (make-array '(4) :displaced-to v1
+			       :displaced-index-offset 2
+			       :element-type type)))
+	  (and (not (every 'evenp v1))
+	       (every #'evenp v2)))
+	collect i)
+  nil)
+
+(deftest every.25
+  (loop for i from 1 to 40
+	for type = `(signed-byte ,i)
+	unless
+	(let* ((v1 (make-array '(10) :initial-contents '(-1 -1 0 0 0 0 -1 -1 -1 -1)
+			       :element-type type))
+	       (v2 (make-array '(4) :displaced-to v1
+			       :displaced-index-offset 2
+			       :element-type type)))
+	  (and (not (every 'evenp v1))
+	       (every #'evenp v2)))
+	collect i)
+  nil)
+
+(deftest every.26
+  (let* ((s1 (make-array '(8) :initial-contents "12abc345" :element-type 'character)))
+    (loop for i from 0 to 6
+	  for s2 = (make-array '(2) :element-type 'character
+			       :displaced-to s1
+			       :displaced-index-offset i)
+	  collect (notnot (every 'alpha-char-p s2))))
+  (nil nil t t nil nil nil))
+
+(deftest every.27
+  (let* ((s1 (make-array '(8) :initial-contents "12abc345" :element-type 'base-char)))
+    (loop for i from 0 to 6
+	  for s2 = (make-array '(2) :element-type 'base-char
+			       :displaced-to s1
+			       :displaced-index-offset i)
+	  collect (notnot (every 'alpha-char-p s2))))
+  (nil nil t t nil nil nil))
+
+;;; adjustable vectors
+
+(deftest every.28
+  (let ((v (make-array '(10) :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+		       :adjustable t)))
+    (values
+     (notnot (every #'plusp v))
+     (progn
+       (adjust-array v '(11) :initial-element -1)
+       (every #'plusp v))))
+  t nil)
+
+(deftest every.29
+  (let ((v (make-array '(10) :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+		       :fill-pointer 10
+		       :adjustable t)))
+    (values
+     (notnot (every #'plusp v))
+     (progn
+       (adjust-array v '(11) :initial-element -1)
+       (every #'plusp v))))
+  t t)
+
+;;; Float, complex vectors
+
+(deftest every.30
+  (loop for type in '(short-float single-float double-float long-float)
+	for v = (make-array '(6)
+			    :element-type type
+			    :initial-contents
+			    (mapcar #'(lambda (x) (coerce x type)) '(1 2 3 4 5 6)))
+	unless (every #'plusp v)
+	collect (list type v))
+  nil)
+
+(deftest every.31
+  (loop for type in '(short-float single-float double-float long-float)
+	for v = (make-array '(6)
+			    :element-type type
+			    :fill-pointer 5
+			    :initial-contents
+			    (mapcar #'(lambda (x) (coerce x type)) '(1 2 3 4 5 -1)))
+	unless (every #'plusp v)
+	collect (list type v))
+  nil)
+
+(deftest every.32
+  (loop for type in '(short-float single-float double-float long-float)
+	for ctype = `(complex ,type)
+	for v = (make-array '(6)
+			    :element-type ctype
+			    :initial-contents
+			    (mapcar #'(lambda (x) (complex x (coerce x type))) '(1 2 3 4 5 6)))
+	unless (every #'complexp v)
+	collect (list type v))
+  nil)
+
 ;;; Order of arguments
 
 (deftest every.order.1
@@ -216,3 +330,6 @@
   (signals-error (every #'car '(a b c)) type-error)
   t)
 
+(deftest every.error.14
+  (signals-error (every #'identity '(1 2 3 . 4)) type-error)
+  t)
