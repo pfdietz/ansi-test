@@ -25,6 +25,7 @@
 (load "labels.lsp")
 (load "lambda-list-keywords.lsp")
 (load "lambda-parameters-limit.lsp")
+(load "let.lsp")
 (load "macrolet.lsp")
 
 ;;; Tests of conses
