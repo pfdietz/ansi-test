@@ -33,15 +33,19 @@
 ;;;
 
 (declaim (special *optimized-fn-src* *unoptimized-fn-src* *int-form-vals*
-		  *opt-result* *unopt-result* $x $y $z))
+		  *opt-result* *unopt-result* $x $y $z
+		  *compile-unoptimized-form*))
 
 (defun f (i) (let ((plist (elt $y i)))
 	       (apply (compile nil (getf plist :optimized-lambda-form))
 		      (getf plist :vals))))
 
 (defun g (i) (let ((plist (elt $y i)))
-	       (apply (compile nil (getf plist :unoptimized-lambda-form))
-		      (getf plist :vals))))
+	       (if *compile-unoptimized-form*
+		   (apply (compile nil (getf plist :unoptimized-lambda-form))
+			  (getf plist :vals))
+		 (apply (eval `(function ,(getf plist :unoptimized-lambda-form)))
+			(getf plist :vals)))))
 
 (defun loop-random-int-forms (&optional (size 200) (nvars 3))
   (unless (boundp '$x) (setq $x nil))
@@ -60,6 +64,7 @@
      (terpri))))
 
 (defvar *random-int-form-blocks* nil)
+(defvar *random-int-form-catch-tags* nil)
 
 (defvar *maximum-random-int-bits* 45)
 
@@ -117,7 +122,9 @@
 	 (form (let ((*vars* (loop for v in vars
 				   for tp in var-types
 				   collect (make-var-desc :name v
-							  :type tp))))
+							  :type tp)))
+		     (*random-int-form-blocks* nil)
+		     (*random-int-form-catch-tags* nil))
 		 (make-random-integer-form size)))
 	 (vals-list
 	  (loop repeat 20
@@ -241,12 +248,13 @@
      (4
       (let ((arg (let ((*flet-names* nil)
 		       (*vars* nil)
-		       (*random-int-form-blocks* nil))
+		       (*random-int-form-blocks* nil)
+		       (*random-int-form-catch-tags* nil))
 		   (make-random-integer-form (1- size)))))
 	(rcase
 	 (2 `(load-time-value ,arg t))
 	 (1 `(load-time-value ,arg))
-	 (1 `(load-time-value ,arg nil)))))	     
+	 (1 `(load-time-value ,arg nil)))))
 
      #-(or cmu allegro)
      (2
@@ -335,10 +343,17 @@
 	     (2 `(multiple-value-bind (,var) ,e1 ,e2)))))))
      
      (4 `(let () ,(make-random-integer-form (1- size))))
+
      (10
       (let* ((name (random-from-seq #(b1 b2 b3 b4 b5 b6 b7 b8)))
 	     (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
 	`(block ,name ,(make-random-integer-form (1- size)))))
+
+     (20
+      (let* ((tag (list 'quote (random-from-seq #(ct1 ct2 ct2 ct4 ct5 ct6 ct7 ct8))))
+	     (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
+	`(catch ,tag ,(make-random-integer-form (1- size)))))
+     
      (4 ;; setq
       (if *vars*
 	  (let* ((vdesc (random-from-seq *vars*))
@@ -362,6 +377,14 @@
 		(form (make-random-integer-form (1- size))))
 	    `(return-from ,name ,form))
 	;; No blocks -- try again
+	(make-random-integer-form size)))
+
+     (20
+      (if *random-int-form-catch-tags*
+	  (let ((tag (random-from-seq *random-int-form-catch-tags*))
+		(form (make-random-integer-form (1- size))))
+	    `(throw ,tag ,form))
+	;; No catch tags -- try again
 	(make-random-integer-form size)))
 
      (5
@@ -415,7 +438,9 @@
 	(make-random-integer-form size)
       (let* ((op (random-from-seq #(flet labels)))
 	     (minargs (random 4))
-	     (maxargs (rcase
+	     (maxargs #+:allegro minargs
+		      #-:allegro
+		      (rcase
 		       (1 minargs)
 		       (1 (+ minargs (random 4)))))
 	     (arg-names (loop for i from 1 to maxargs
@@ -598,7 +623,7 @@
      #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
      (declare (optimize (safety 3)))
      (declare (optimize (speed 0)))
-     (declare (optimize (debug 0)))
+     (declare (optimize (debug 3)))
      ,form))
 
 (defvar *compile-using-defun*
@@ -752,18 +777,20 @@
   (when (gethash form *prune-table*)
     (return-from prune nil))
   (flet ((try (x) (funcall try-fn x)))
-    (when (consp form)
+    (cond
+     ((keywordp form) nil)
+     ((integerp form)
+      (unless (zerop form) (try 0)))
+     ((consp form)
       (let* ((op (car form))
 	     (args (cdr form))
 	     (nargs (length args)))
 	(case op
 	 
 	 ((signum integer-length logcount
-		  gcd lcm logandc1 logandc2 lognand lognor logorc1 logorc2
+		  logandc1 logandc2 lognand lognor logorc1 logorc2
 		  realpart imagpart)
 	  (mapc #'try args)
-	  (try 0)
-	  (try -1)
 	  (prune-fn form try-fn))
 	 
 	 ((abs 1+ 1- identity values progn prog1 multiple-value-prog1 unwind-protect
@@ -773,7 +800,7 @@
 
 	 ((typep)
 	  (try (car args))
-	  (prune (cadr args)
+	  (prune (car args)
 		 #'(lambda (form) `(,op ,form ,@(cdr args)))))
 
 	 ((load-time-value)
@@ -799,10 +826,20 @@
 	  (when (every #'constantp args)
 	    (try (eval form)))
 	  (mapc try-fn args)
+	  (prune-fn form try-fn)
+	  (try t)
+	  (try nil))
+
+	 ((and or = < > <= >= /=)
+	  (when (every #'constantp args)
+	    (try (eval form)))
+	  (try t)
+	  (try nil)
+	  (mapc try-fn args)
+	  (prune-nary-fn form try-fn)
 	  (prune-fn form try-fn))
 	 
-	 ((- + * min max logand logior logxor logeqv
-	     and or = < > <= >= /=)
+	 ((- + * min max logand logior logxor logeqv gcd lcm)
 	  (when (every #'constantp args)
 	    (try (eval form)))
 	  (mapc try-fn args)
@@ -913,6 +950,38 @@
 		       #'(lambda (x)
 			   (try `(block ,name ,x))))))))
 
+	 ((catch)
+	  (let* ((tag (second form))
+		 (name (if (consp tag) (cadr tag) tag))
+		 (body (cddr form)))
+	    (when (and body (null (cdr body)))
+	      (let ((form1 (first body)))
+
+		;; Try removing the catch entirely if it is not in use
+		;; We make assumptions here about what throws can
+		;; be present.
+		(when (or (not (find-in-tree 'throw body))
+			  (not (find-in-tree name body)))
+		  (try form1))
+		
+		;; Try removing the block if its only use is an immediately
+		;; enclosed return-from: (block <n> (return-from <n> <e>))
+		(when (and (consp form1)
+			   (eq (first form1) 'throw)
+			   (equal (second form1) name)
+			   (not (find-in-tree name (third form1))))
+		  (try (third form1)))
+		
+		;; Otherwise, try to simplify the subexpression
+		(prune form1
+		       #'(lambda (x)
+			   (try `(catch ,tag ,x))))))))
+
+	 ((throw)
+	  (try (second args))
+	  (prune (second args)
+		 #'(lambda (x) (try `(throw ,(first args) ,x)))))
+
 	 ((flet labels)
 	  (prune-flet form try-fn))
 
@@ -988,7 +1057,7 @@
 	    (prune-list fn-args
 			#'prune
 			#'(lambda (args)
-			    (funcall try-fn `(funcall ,fn ,@args))))))
+			    (try `(funcall ,fn ,@args))))))
 
 	 ((apply)
 	  (let ((fn (second form))
@@ -1001,18 +1070,19 @@
 	    (prune-list fn-args
 			#'prune
 			#'(lambda (args)
-			    (funcall try-fn `(apply ,fn ,@args ,list-arg))))
+			    (try `(apply ,fn ,@args ,list-arg))))
 	    (when (and (consp list-arg)
 		       (eq (car list-arg) 'list))
+	      (try `(apply ,fn ,@fn-args ,@(cdr list-arg) nil))
 	      (prune-list (cdr list-arg)
 			#'prune
 			#'(lambda (args)
-			    (funcall try-fn `(apply ,fn ,@fn-args
-						    (list ,@args))))))))
+			    (try `(apply ,fn ,@fn-args
+					 (list ,@args))))))))
 	 
 	 (otherwise
 	  (prune-fn form try-fn))
-	 ))))
+	 )))))
   (setf (gethash form *prune-table*) t)
   nil)
 
