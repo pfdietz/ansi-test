@@ -158,19 +158,44 @@
 ;;;
 
 (deftest wild-pathname-p.27
-  (loop for p in *pathnames*
+  (loop for p in (append *pathnames* *logical-pathnames*)
 	unless (if (wild-pathname-p p) (wild-pathname-p p nil)
 		 (not (wild-pathname-p p nil)))
 	collect p)
   nil)
 
 (deftest wild-pathname-p.28
-  (loop for p in *pathnames*
+  (loop for p in (append *pathnames* *logical-pathnames*)
 	when (and (loop for key in '(:host :device :directory
 					   :name :type :version)
 			thereis (wild-pathname-p p key))
 		  (not (wild-pathname-p p)))
 	collect p)
+  nil)
+
+;;; On streams associated with files
+
+(deftest wild-pathname-p.29
+  (with-open-file (s "foo.lsp"
+		     :direction :output
+		     :if-exists :append
+		     :if-does-not-exist :create)
+		  (wild-pathname-p s))
+  nil)
+
+(deftest wild-pathname-p.30
+  (let ((s (open "foo.lsp"
+		 :direction :output
+		 :if-exists :append
+		 :if-does-not-exist :create)))
+    (close s)
+    (wild-pathname-p s))
+  nil)
+
+;;; logical pathname designators
+
+(deftest wild-pathname-p.31
+  (wild-pathname-p "CLTEST:FOO.LISP")
   nil)
 
 ;;;
