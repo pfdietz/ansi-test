@@ -12,9 +12,14 @@ Things to do to the test suite (not a complete list)
 
 6. adjust-array
 
-7. Address broadcast-stream issues (from Duane Rettig)
+7. Address synonym-stream issues (from Duane Rettig)
 
 8. accuracy tests for numeric functions
 
 9. Test that the streams operators that manipulate files
   do the right things with *default-pathname-defaults*.
+
+10. Two-arg tests of FILE-POSITION on binary streams.
+
+11. Address issues with broadcast streams (C. Rhodes) -- apparent
+   contradictions in the spec

@@ -1,0 +1,21 @@
+This file contains notes on problems in the ANSI CL spec found
+during the construction of the tests.
+
+1. When building a composite stream, what happens when the component
+  streams have different element types?
+
+2. Should there be an UPGRADED-STREAM-ELEMENT-TYPE function.
+
+3. The spec requires that arrays specialized to type NIL exist.
+  Was this intended?
+
+4. If NIL specialized arrays exist, then NIL vectors are also strings.
+  Was this intended?
+
+5. The spec requires that (UPGRADED-COMPLEX-PART-TYPE NIL) be (type
+  equivalent to) NIL.
+
+6. The definition of UPGRADED-COMPLEX-PART-TYPE appears to require that
+  it work on arbitrary typespecs, including SATISFIES, which is not
+  possible.
+
