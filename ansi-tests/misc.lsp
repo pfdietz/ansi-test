@@ -8833,3 +8833,18 @@ Broken at C::WT-MAKE-CLOSURE.
 			       (min 98 442719))
 			  #(0 96) :test '=))))
   0)
+
+(deftest misc.465
+  (funcall
+   (compile nil '(lambda (a)
+		   (declare (type (integer -18822 -1280) a))
+		   (declare (optimize (debug 0) (speed 1)
+				      (compilation-speed 3) (safety 0)
+				      (space 0)))
+		   (ash (the integer
+			  (logand a (if t a (imagpart -2607360))))
+			(min 79 (catch 'ct7 0)))))
+   -17635)
+  -17635)
+
+  
