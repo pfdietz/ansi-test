@@ -107,3 +107,51 @@
 	     (notnot-mv methods))))
     (%m))
   t)
+
+;;; User-defined methods
+
+(defclass make-load-form-class-04 ()
+  ((a :initarg :a) (b :initarg :b) (c :initarg :c)))
+
+(defmethod make-load-form ((obj make-load-form-class-04)
+			   &optional (env t))
+  (declare (ignore env))
+  (let ((newobj (gensym)))
+    `(let ((,newobj (allocate-instance (find-class 'make-load-form-class-04))))
+       ,@(loop for slot-name in '(a b c)
+	      when (slot-boundp obj slot-name)
+	      collect `(setf (slot-value ,newobj ',slot-name)
+			     ',(slot-value obj slot-name)))
+       ,newobj)))
+
+(deftest make-load-form.13
+  (let* ((obj (make-instance 'make-load-form-class-04))
+	 (obj2 (eval (make-load-form obj))))
+    (values
+     (eqt (class-of obj2) (class-of obj))
+     (map-slot-boundp* obj2 '(a b c))))
+  t (nil nil nil))
+
+(deftest make-load-form.14
+  (let* ((obj (make-instance 'make-load-form-class-04 :a 1 :b '(a b c) :c 'a))
+	 (obj2 (eval (make-load-form obj))))
+    (values
+     (eqt (class-of obj2) (class-of obj))
+     (map-slot-boundp* obj2 '(a b c))
+     (map-slot-value obj2 '(a b c))))
+  t
+  (t t t)
+  (1 (a b c) a))
+
+(deftest make-load-form.15
+  (let* ((obj (make-instance 'make-load-form-class-04 :b '(a b c) :c 'a))
+	 (obj2 (eval (make-load-form obj nil))))
+    (values
+     (eqt (class-of obj2) (class-of obj))
+     (map-slot-boundp* obj2 '(a b c))
+     (map-slot-value obj2 '(b c))))
+  t
+  (nil t t)
+  ((a b c) a))
+
+;;; Additional tests will be in the files testing file compilation

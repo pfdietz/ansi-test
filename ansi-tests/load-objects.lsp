@@ -27,4 +27,4 @@
 (load "make-instance.lsp")
 (load "make-instances-obsolete.lsp")
 (load "make-load-form.lsp")
-
+(load "make-load-form-saving-slots.lsp")
