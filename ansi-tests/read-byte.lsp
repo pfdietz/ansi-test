@@ -51,8 +51,10 @@
 	unless (let ((s (open "foo.txt"
 			      :direction :input
 			      :element-type `(unsigned-byte ,i))))
-		 (and (eql (setq b1 (read-byte s)) (1- (ash 1 i)))
-		      (eql (setq b2 (read-byte s)) 1)))
+		 (prog1
+		   (and (eql (setq b1 (read-byte s)) (1- (ash 1 i)))
+			(eql (setq b2 (read-byte s)) 1))
+		   (close s)))
 	collect (list i b1 b2))
   nil)
 
@@ -70,8 +72,10 @@
 	unless (let ((s (open "foo.txt"
 			      :direction :input
 			      :element-type `(unsigned-byte ,i))))
-		 (and (eql (setq b1 (read-byte s)) (1- (ash 1 i)))
-		      (eql (setq b2 (read-byte s)) 1)))
+		 (prog1
+		     (and (eql (setq b1 (read-byte s)) (1- (ash 1 i)))
+			  (eql (setq b2 (read-byte s)) 1))
+		   (close s)))
 	collect (list i b1 b2))
   nil)
 
