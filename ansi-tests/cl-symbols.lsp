@@ -1418,3 +1418,20 @@
   nil)
 
 	    
+;;; Check that all types that are classes name classes.
+
+;;; "Many but not all of the predefined type specifiers have
+;;;  a corresponding class with the same proper name as the type.
+;;;  These type specifiers are listed in Figure 4-8." -- section 4.3.7
+
+(deftest cl-types-that-are-classes-symbols.1
+  ;; Collect class names that violate the condition in the
+  ;; above quotation.
+  (loop
+   for s in *cl-types-that-are-classes-symbols*
+   for c = (find-class s nil)
+   unless (and c
+	       (eq (class-name c) s)
+	       (typep c 'class))
+   collect s)
+  nil)
