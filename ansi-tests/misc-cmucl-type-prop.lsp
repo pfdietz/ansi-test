@@ -10,7 +10,7 @@
 ;;; These tests seem to all have (space 2) (speed 3)
 
 ; X86::FAST-LOGAND-C/FIXNUM=>FIXNUM
-(deftest cmcul-type-prop.1
+(deftest cmucl-type-prop.1
   (funcall
    (compile
     nil
@@ -22,7 +22,7 @@
   2129952)
 
 ; X86::FAST-LOGAND/SIGNED-UNSIGNED=>UNSIGNED
-(deftest cmcul-type-prop.2
+(deftest cmucl-type-prop.2
   (funcall
    (compile
     nil
@@ -34,7 +34,7 @@
   1619551060)
 
 ; X86::FAST-LOGIOR-C/FIXNUM=>FIXNUM
-(deftest cmcul-type-prop.3
+(deftest cmucl-type-prop.3
   (funcall
    (compile
     nil
@@ -46,7 +46,7 @@
   -65869185)
 
 ; X86::FAST-LOGIOR/FIXNUM=>FIXNUM
-(deftest cmcul-type-prop.4
+(deftest cmucl-type-prop.4
   (funcall
    (compile
     nil
@@ -58,7 +58,7 @@
   -1)
 
 ; X86::FAST-LOGAND-C/SIGNED=>SIGNED
-(deftest cmcul-type-prop.5
+(deftest cmucl-type-prop.5
   (funcall
    (compile
     nil
@@ -70,7 +70,7 @@
   -1)
 
 ; X86::FAST-LOGAND-C/SIGNED-UNSIGNED=>UNSIGNED
-(deftest cmcul-type-prop.6
+(deftest cmucl-type-prop.6
   (funcall
    (compile
     nil
@@ -82,7 +82,7 @@
   -3393245321)
 
 ; X86::FAST-LOGAND/UNSIGNED-SIGNED=>UNSIGNED
-(deftest cmcul-type-prop.7
+(deftest cmucl-type-prop.7
   (funcall
    (compile
     nil
@@ -95,7 +95,7 @@
   12309)
 
 ; X86::FAST-LOGIOR-C/SIGNED=>SIGNED
-(deftest cmcul-type-prop.8
+(deftest cmucl-type-prop.8
   (funcall
    (compile
     nil
@@ -107,7 +107,7 @@
   -2241)
 
 ; X86::FAST-LOGXOR/FIXNUM=>FIXNUM
-(deftest cmcul-type-prop.9
+(deftest cmucl-type-prop.9
   (funcall
    (compile
     nil
@@ -120,7 +120,7 @@
   9536)
 
 ; X86::FAST-LOGXOR/SIGNED=>SIGNED
-(deftest cmcul-type-prop.10
+(deftest cmucl-type-prop.10
   (funcall
    (compile
     nil
@@ -132,7 +132,7 @@
   617035953)
 
 ; X86::FAST-LOGXOR-C/FIXNUM=>FIXNUM
-(deftest cmcul-type-prop.11
+(deftest cmucl-type-prop.11
   (funcall
    (compile
     nil
@@ -144,7 +144,7 @@
   -1679389)
 
 ; X86::FAST-LOGXOR-C/SIGNED=>SIGNED
-(deftest cmcul-type-prop.12
+(deftest cmucl-type-prop.12
   (funcall
    (compile
     nil
@@ -156,7 +156,7 @@
   1038360149)
 
 ; X86::-/SINGLE-FLOAT
-(deftest cmcul-type-prop.13
+(deftest cmucl-type-prop.13
   (notnot
    (typep
     (funcall
@@ -171,7 +171,7 @@
   t)
 
 ; X86::-/DOUBLE-FLOAT
-(deftest cmcul-type-prop.14
+(deftest cmucl-type-prop.14
   (notnot
    (typep
     (funcall
@@ -186,7 +186,7 @@
   t)
 
 ; X86::-/SINGLE-FLOAT
-(deftest cmcul-type-prop.15
+(deftest cmucl-type-prop.15
   (notnot
    (typep
     (funcall
@@ -201,7 +201,7 @@
   t)
 
 ; X86::FAST--/FIXNUM=>FIXNUM 
-(deftest cmcul-type-prop.16
+(deftest cmucl-type-prop.16
   (funcall
    (compile nil '(lambda (p2)
 		   (declare (optimize (speed 2) (safety 2) (debug 3) (space 3))
@@ -211,7 +211,7 @@
   -32893)
 
 ; X86::FAST---C/FIXNUM=>FIXNUM
-(deftest cmcul-type-prop.17
+(deftest cmucl-type-prop.17
   (funcall
    (compile nil '(lambda (p1)
 		   (declare (optimize (speed 2) (safety 1) (debug 1) (space 3))
@@ -221,7 +221,7 @@
   5535031)
 
 ; X86::FAST--/SIGNED=>SIGNED
-(deftest cmcul-type-prop.18
+(deftest cmucl-type-prop.18
   (funcall
    (compile nil '(lambda (p2)
 		   (declare (optimize (speed 2) (safety 2) (debug 2) (space 3))
@@ -231,7 +231,7 @@
   3536392)
 
 ; X86::FAST-+-C/FIXNUM=>FIXNUM
-(deftest cmcul-type-prop.19
+(deftest cmucl-type-prop.19
   (funcall
    (compile nil '(lambda (p2)
 		   (declare (optimize (speed 2) (safety 3) (debug 2) (space 3))
@@ -241,7 +241,7 @@
   491841)
 
 ; X86::+/DOUBLE-FLOAT
-(deftest cmcul-type-prop.20
+(deftest cmucl-type-prop.20
   (notnot (typep (funcall (compile nil '(lambda (p1)
 					  (declare (optimize (speed 2) (safety 3) (debug 3) (space 3))
 						   (type (rational -1255531/68466 4) p1))
@@ -251,7 +251,7 @@
   t)
 
 ;  X86::+/SINGLE-FLOAT
-(deftest cmcul-type-prop.21
+(deftest cmucl-type-prop.21
   (notnot (typep (funcall (compile nil '(lambda (p1)
 					  (declare (optimize (speed 2) (safety 2) (debug 1) (space 3))
 						   (type (integer -284887911 *) p1))
@@ -261,7 +261,7 @@
   t)
 
 ; X86::=0/DOUBLE-FLOAT
-(deftest cmcul-type-prop.22
+(deftest cmucl-type-prop.22
   (funcall (compile nil '(lambda (p1)
 			   (declare (optimize (speed 2) (safety 3) (debug 1) (space 3))
 				    (type (complex double-float) p1))
@@ -270,7 +270,7 @@
   nil)
 
 ; X86::=/SINGLE-FLOAT
-(deftest cmcul-type-prop.23
+(deftest cmucl-type-prop.23
   (funcall (compile nil '(lambda (p2)
 			   (declare (optimize (speed 2) (safety 2) (debug 1) (space 3))
 				    (type (complex single-float) p2))
@@ -279,7 +279,7 @@
   nil)
 
 ; X86::FAST-EQL/FIXNUM
-(deftest cmcul-type-prop.24
+(deftest cmucl-type-prop.24
   (notnot
    (funcall (compile nil '(lambda (p1 p2)
 			    (declare (optimize (speed 2) (safety 1) (debug 3) (space 3))
@@ -289,7 +289,7 @@
   t)
 
 ; X86::FAST-EQL-C/FIXNUM
-(deftest cmcul-type-prop.25
+(deftest cmucl-type-prop.25
   (notnot
    (funcall (compile nil '(lambda (p1)
 			    (declare (optimize (speed 2) (safety 3) (debug 2) (space 3))
@@ -299,7 +299,7 @@
   t)
 
 ; X86::FAST-IF->-C/FIXNUM
-(deftest cmcul-type-prop.26
+(deftest cmucl-type-prop.26
   (funcall (compile nil '(lambda (p2)
 			   (declare (optimize (speed 2) (safety 2) (debug 3) (space 3))
 				    (type (integer -451 204073899) p2))
@@ -308,7 +308,7 @@
   nil)
 
 ; X86::FAST-IF-<-C/FIXNUM
-(deftest cmcul-type-prop.27
+(deftest cmucl-type-prop.27
   (funcall (compile nil '(lambda (p2)
 			   (declare (optimize (speed 2) (safety 2) (debug 2) (space 3))
 				    (type (integer -93662 *) p2))
@@ -343,14 +343,14 @@
 			    (declare (optimize (speed 2) (safety 2) (debug 0) (space 2)))
 			    (copy-seq
 			     ,(make-array '(0) :adjustable t)))))))
-    (and (adjustable-array-p a)
+    (and (not (adjustable-array-p a))
 	 (= (length a) 0)
 	 t))
   t)
 
 ; Bug for PACKAGEP
 
-(deftest cmcul-type-prop.31
+(deftest cmucl-type-prop.31
   (funcall (compile nil '(lambda (x)
 			   (declare (optimize (speed 2) (space 3)))
 			   (packagep x)))
