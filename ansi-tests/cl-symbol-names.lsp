@@ -999,6 +999,9 @@
      (mapcar #'(lambda (str) (intern str pkg))
 	     *cl-symbol-names*))))
 
+(defparameter *cl-symbols-vector*
+  (make-array (length *cl-symbols*) :initial-contents *cl-symbols*))
+
 ;;; Symbols classified by their kind in the spec
 (defparameter *cl-function-symbols*
   '(
