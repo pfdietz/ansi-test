@@ -29,14 +29,24 @@
 ;;; Error cases
 
 (deftest clear-input.error.1
+  :notes (:assume-no-simple-streams)
   (signals-error (clear-input t nil) program-error)
   t)
 
 (deftest clear-input.error.2
+  :notes (:assume-no-simple-streams)
   (signals-error (clear-input nil nil) program-error)
   t)
 
 (deftest clear-input.error.3
+  (signals-error (clear-input t nil nil) program-error)
+  t)
+
+(deftest clear-input.error.4
+  (signals-error (clear-input nil nil nil) program-error)
+  t)
+
+(deftest clear-input.error.5
   (loop for x in *mini-universe*
 	unless (or (member x '(nil t))
 		   (typep x 'stream)

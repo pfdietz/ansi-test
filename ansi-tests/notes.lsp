@@ -19,3 +19,10 @@
 
 (defnote :type-of/strict-builtins
   "Interpret requirement 1.a on the TYPE-OF page to apply to all built-in types that contain the object, not just to some builtin type that contains the object.")
+
+(defnote :assume-no-gray-streams
+  "Disable the test if gray streams are present.")
+
+(defnote :assume-no-simple-streams
+  "Disable the test if simple streams are present.")
+
