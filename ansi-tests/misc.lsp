@@ -9312,3 +9312,21 @@ Broken at C::WT-MAKE-CLOSURE.
 		   (+ a (setq a 35035201))))
    29207264)
   64242465)
+
+;;; ABCL 27 Dec 2004
+;;; Different results
+
+(deftest misc.503
+  (funcall
+   (compile nil '(lambda (a)
+		   ; (declare (type (integer -3392166213 2904445263) a))
+		   (declare (optimize (space 3) (debug 1) (speed 2) (safety 0)
+				      (compilation-speed 1)))
+		   (catch 'ct1
+		     (throw 'ct1
+			    (catch 'ct5
+			      (reduce 'min
+				      (vector 0 0 0 a a 0 0 (values 0 0) (throw 'ct5 -6))
+				      :end 8 :start 6 :from-end t))))))
+   17)
+  -6)
