@@ -17,3 +17,4 @@
 (load "pathname-type.lsp")
 (load "pathname-version.lsp")
 
+(load "translate-logical-pathname.lsp")

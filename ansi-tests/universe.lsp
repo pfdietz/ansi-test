@@ -336,6 +336,15 @@
      (ignore-errors (list (make-pathname :version :newest)))
      ))
 
+(eval-when (load eval compile)
+  (setf (logical-pathname-translations "CLTESTROOT")
+	`(("**;*.*.*" ,(make-pathname :directory '(:absolute))))))
+
+(defparameter *logical-pathnames*
+  (append
+   (ignore-errors (list (logical-pathname "CLTESTROOT:")))
+   ))
+
 (defparameter *streams*
     (remove-duplicates
      (remove-if
@@ -406,6 +415,7 @@
       *arrays*
       *hash-tables*
       *pathnames*
+      *logical-pathnames*
       *streams*
       *readtables*
       *structures*
@@ -428,6 +438,7 @@
 		  *arrays*
 		  *hash-tables*
 		  *pathnames*
+		  *logical-pathnames*
 		  *streams*
 		  *readtables*
 		  *structures*
