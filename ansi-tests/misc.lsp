@@ -5189,6 +5189,30 @@ Broken at C::WT-C-INLINE-LOC.
 	 (complex (%f) 0)))))
   0)
 
+(deftest misc.293c
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+           (declare (type (integer -6556 -33) a))
+           (declare (type (integer -1973908574551 1125) b))
+           (declare (ignorable a b))
+           (declare
+            (optimize (compilation-speed 0)
+                      (space 2)
+                      (safety 0)
+                      (debug 2)
+                      (speed 0)
+                      #+sbcl (sb-c:insert-step-conditions 0)
+		      ))
+           (block b4
+             (multiple-value-prog1 0
+               (catch 'ct7 (return-from b4 (catch 'ct6 (if a 0 b))))
+               0
+               0))))
+   -237 -1365751422718)
+  0)
+
 ;;; failed AVER: "(SUBSETP START START-STACK)"
 
 (deftest misc.294
@@ -8307,3 +8331,70 @@ Broken at C::WT-MAKE-CLOSURE.
    3021871717588 -866608 -2 -17194)
   0)
 
+;;; In sbcl 0.8.16.18
+;;;   #<SB-C:TN INTEGER!1> is not valid as the first argument to VOP:
+;;;   SB-VM::FAST-ASH-LEFT-MOD32/UNSIGNED=>UNSIGNED
+;;; Primitive type: T
+;;; SC restrictions:
+;;;   (SB-VM::UNSIGNED-REG)
+;;; The primitive type disallows these loadable SCs:
+;;;   (SB-VM::UNSIGNED-REG)
+
+(deftest misc.436
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -2917822 2783884) a))
+       (declare (type (integer 0 160159) b))
+       (declare (ignorable a b))
+       (declare
+	(optimize (compilation-speed 1)
+		  (speed 3)
+		  (safety 3)
+		  (space 0)
+		  ; #+sbcl (sb-c:insert-step-conditions 0)
+		  (debug 0)))
+       (if
+	   (oddp
+	    (loop for
+		  lv1
+		  below
+		  2
+		  count
+		  (logbitp 0
+			   (1-
+			    (ash b
+				 (min 8
+				      (count 0
+					     '(-10197561 486 430631291
+							 9674068))))))))
+	   b
+	 0)))
+   1265797 110757)
+  0)
+
+;;;  The value NIL is not of type INTEGER.
+;;; (in (SB-C::TN-SC-OFFSET 1 #<SB-C:TN #:G27!1>))
+
+(deftest misc.437
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d e)
+       (declare (notinline values complex eql))
+       (declare
+	(optimize (compilation-speed 3)
+		  (speed 3)
+		  ; #+sbcl (sb-c:insert-step-conditions 0)
+		  (debug 1)
+		  (safety 1)
+		  (space 0)))
+       (flet ((%f10
+	       (f10-1 f10-2 f10-3
+		      &optional (f10-4 (ignore-errors 0)) (f10-5 0)
+		      &key &allow-other-keys)
+	       (if (or (eql 0 0) t) 0 (if f10-1 0 0))))
+	 (complex (multiple-value-call #'%f10 (values a c b 0 0)) 0))))
+   80043 74953652306 33658947 -63099937105 -27842393)
+  0)
