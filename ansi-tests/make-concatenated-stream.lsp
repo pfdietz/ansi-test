@@ -266,7 +266,7 @@
      (notnot-mv (listen s))))
   t)
 
-(deftest make-concatenated-stream.28
+(deftest make-concatenated-stream.28a
   (listen (make-concatenated-stream))
   nil)
 
