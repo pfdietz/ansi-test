@@ -76,3 +76,7 @@ Got:      0
 21. The random tester showed (SETF AREF) wasn't being tested enough.  Add tests.
 22. Add more symbol printing tests.  In particular, there doesn't appear to
  be a test that (princ :foo) >> :FOO  (noticed by PG in ABCL)
+
+23. Modify rt so that when failing tests are reported, they are grouped by
+  :notes and the :notes comment is printed out.  This will help explain
+  what the failures mean.
