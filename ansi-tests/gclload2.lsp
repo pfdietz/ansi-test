@@ -44,6 +44,8 @@
 (load "lambda-parameters-limit.lsp")
 (load "let.lsp")
 (load "macrolet.lsp")
+(load "multiple-value-bind.lsp")
+(load "multiple-value-call.lsp") ;; include multiple-value-list
 (load "nil.lsp")
 (load "not-and-null.lsp")
 (load "notany.lsp")
