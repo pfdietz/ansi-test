@@ -48,7 +48,7 @@
   nil)
 
 (eval-when #+gcl (eval compile)
-	   #-gcl (:load-toplevel :compile-toplevel)
+	   #-gcl (:load-toplevel :compile-toplevel :execute)
   (ignore-errors
     (defun (setf function-7-accessor) (y x) (setf (car x) y) y)))
 

@@ -377,7 +377,7 @@
 ;;; evaluated in the lexical environment in which they were defined
 
 (eval-when #+gcl (load eval)
-	   #-gcl (:load-toplevel)
+	   #-gcl (:load-toplevel :execute)
   (let ((x nil))
     (flet ((%f () x)
 	  (%g (y) (setf x y)))

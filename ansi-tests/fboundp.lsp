@@ -27,8 +27,8 @@
   (not-mv (fboundp 'fboundp-5-fn))
   nil)
 
-(eval-when #+gcl (eval compile)
-	   #-gcl (:load-toplevel :compile-toplevel)
+(eval-when #+gcl (eval compile load)
+	   #-gcl (:load-toplevel :compile-toplevel :execute)
   (ignore-errors
     (defun (setf fboundp-6-accessor) (y x) (setf (car x) y))))
 
