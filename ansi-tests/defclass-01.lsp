@@ -613,7 +613,6 @@
 
 (let ((*class-21-s1-initvar-1* 0)
       (*class-21-s1-initvar-2* 0))
-  (declaim (special *class-21-s1-initvar-1* *class-21-s1-initvar-2*))
   (defclass class-21 ()
     ((s1 :initarg :s1  :initarg :s1b)
      (s2 :initarg :s1b :initarg :s2))
