@@ -95,7 +95,7 @@
 							  :can-fail t)))
   nil)
 
-(deftest print.arrau.0.13
+(deftest print.array.0.13
   (subseq (write-to-string (make-array nil :initial-element 0)
 			   :readably nil :array nil)
 	  0 2)
@@ -125,7 +125,7 @@
 			    :initial-element (coerce 17 type))
 	for result = (write-to-string a :readably nil :array nil)
 	unless (string= (subseq result 0 2) "#<")
-	collect (list i result))
+	collect (list type result))
   nil)
 
 (deftest print.array.0.17
@@ -136,7 +136,7 @@
 			    :initial-element (complex (coerce 3 type0)))
 	for result = (write-to-string a :readably nil :array nil)
 	unless (string= (subseq result 0 2) "#<")
-	collect (list i result))
+	collect (list type result))
   nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -350,6 +350,49 @@
   nil)
 
 
+(deftest print.array.2.27
+  (subseq (write-to-string (make-array '(2 3) :initial-element 0)
+			   :readably nil :array nil)
+	  0 2)
+  "#<")
+
+(deftest print.array.2.28
+  (loop for i from 1 to 64
+	for type = `(unsigned-byte ,i)
+	for a = (make-array '(4 3) :element-type type :initial-element 1)
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list i result))
+  nil)
+
+(deftest print.array.2.29
+  (loop for i from 1 to 64
+	for type = `(signed-byte ,i)
+	for a = (make-array '(4 8) :element-type type :initial-element -1)
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list i result))
+  nil)
+
+(deftest print.array.2.30
+  (loop for type in '(short-float single-float double-float long-float)
+	for a = (make-array '(5 7) :element-type type
+			    :initial-element (coerce 17 type))
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list type result))
+  nil)
+
+(deftest print.array.2.31
+  (loop for type0 in '(short-float single-float double-float
+				   long-float float real)
+	for type = `(complex ,type0)
+	for a = (make-array '(13 5) :element-type type
+			    :initial-element (complex (coerce 3 type0)))
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list type result))
+  nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Three D arrays
