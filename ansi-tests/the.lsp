@@ -99,12 +99,20 @@
   1 1)
 
 (deftest the.14
-  (the (values &rest (cons t (cons t null))) (values 'a 'b))
+  (the (values &rest t) (values 'a 'b))
   a b)
 
 (deftest the.15
-  (the (values &rest (cons symbol (cons symbol null))) (values 'a 'b))
+  (the (values &rest symbol) (values 'a 'b))
   a b)
 
 (deftest the.16
   (the (values &rest null) (values)))
+
+(deftest the.17
+  (the (values symbol integer &rest null) (values 'a 1))
+  a 1)
+
+(deftest the.18
+  (the (values symbol integer &rest t) (values 'a 1 'foo '(x y)))
+  a 1 foo (x y))
