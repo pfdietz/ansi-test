@@ -21,7 +21,7 @@
 (load "round.lsp")
 (load "fround.lsp")
 
-;;; trancdental functions go here
+;;; transcendental functions go here
 
 (load "times.lsp")
 (load "plus.lsp")
@@ -50,6 +50,13 @@
 (load "phase.lsp")
 (load "realpart.lsp")
 (load "imagpart.lsp")
+(load "realp.lsp")
+(load "numerator-denominator.lsp")
+(load "rationalp.lsp")
+
+(load "ash.lsp")
+(load "integer-length.lsp")
+(load "integerp.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
