@@ -77,6 +77,7 @@
   t)
 
 (deftest make-string.10
+  :notes (:nil-vectors-are-strings)
   (let ((s (make-string 0 :element-type nil)))
     (values
      (notnot (stringp s))

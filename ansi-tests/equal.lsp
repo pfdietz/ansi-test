@@ -62,12 +62,14 @@
   nil)
 
 (deftest equal.13
+  :notes (:nil-vectors-are-strings)
   (let ((x (make-array '(0) :element-type nil))
 	(y (make-array '(0) :element-type nil)))
     (equalt x y))
   t)
 
 (deftest equal.14
+  :notes (:nil-vectors-are-strings)
   (and
    (equalt (make-array '(0) :element-type nil) "")
    (equalt "" (make-array '(0) :element-type nil)))

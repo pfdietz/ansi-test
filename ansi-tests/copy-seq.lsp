@@ -155,6 +155,7 @@
   t)
 
 (deftest copy-seq.19
+  :notes (:nil-vectors-are-strings)
   (copy-seq (make-array '(0) :element-type nil))
   "")
 

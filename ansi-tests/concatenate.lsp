@@ -185,10 +185,12 @@
   nil)
 
 (deftest concatenate.31
+  :notes (:nil-vectors-are-strings)
   (concatenate 'string "abc" (make-array '(0) :element-type nil) "def")
   "abcdef")
 
 (deftest concatenate.32
+  :notes (:nil-vectors-are-strings)
   (concatenate '(array nil (*)))
   "")
 

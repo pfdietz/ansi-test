@@ -142,10 +142,12 @@
   "")
 
 (deftest string-right-trim.20
+  :notes (:nil-vectors-are-strings)
   (string-right-trim "abcd" (make-array '(0) :element-type nil))
   "")
 
 (deftest string-right-trim.21
+  :notes (:nil-vectors-are-strings)
   (string-right-trim (make-array '(0) :element-type nil) "abcd")
   "abcd")
 

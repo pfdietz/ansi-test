@@ -14,3 +14,5 @@
 ;;; (load "ansi-aux.o")
 
 (load "cl-symbol-names.lsp")
+(load "notes.lsp")
+

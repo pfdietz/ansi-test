@@ -65,6 +65,7 @@
   "")
 
 (deftest nstring-capitalize.12
+  :notes (:nil-vectors-are-strings)
   (nstring-capitalize (make-array '(0) :element-type nil))
   "")
 

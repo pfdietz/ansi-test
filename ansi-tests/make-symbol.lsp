@@ -47,6 +47,7 @@
   "")
 
 (deftest make-symbol.11
+  :notes (:nil-vectors-are-strings)
   (symbol-name (make-symbol (make-array '(0) :element-type nil)))
   "")
 

@@ -28,10 +28,12 @@
   nil)
 
 (deftest equalp.5
+  :notes (:allow-nil-arrays)
   (equalpt (make-array '(0) :element-type nil) #())
   t)
 
 (deftest equalp.6
+  :notes (:allow-nil-arrays)
   (equalpt (make-array '(0) :element-type nil) "")
   t)
 

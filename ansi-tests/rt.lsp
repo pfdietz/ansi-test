@@ -357,7 +357,7 @@
      (let ((note (make-note :name ',name
 			    :contents ',contents
 			    :disabled ',disabled)))
-       (setf (gethash *notes* (note-name note)) note)
+       (setf (gethash (note-name note) *notes*) note)
        note)))
 
 (defun disable-note (n)

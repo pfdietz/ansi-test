@@ -506,6 +506,7 @@
 ;;; Tests on nil arrays
 
 (deftest string=.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (notnot (string= s1 s1))
@@ -518,6 +519,7 @@
   t t t t t nil nil)
 
 (deftest string/=.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string/= s1 s1)
@@ -530,6 +532,7 @@
    nil nil nil nil nil 0 0)
 
 (deftest string<.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string< s1 s1)
@@ -542,6 +545,7 @@
   nil nil nil nil nil 0 nil)
 
 (deftest string<=.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string<= s1 s1)
@@ -554,6 +558,7 @@
   0 0 0 0 0 0 nil)
 
 (deftest string>.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string> s1 s1)
@@ -566,6 +571,7 @@
   nil nil nil nil nil nil 0)
 
 (deftest string>=.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string>= s1 s1)
@@ -578,6 +584,7 @@
   0 0 0 0 0 nil 0)
 
 (deftest string-equal.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (notnot (string-equal s1 s1))
@@ -590,6 +597,7 @@
   t t t t t nil nil)
 
 (deftest string-not-equal.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string-not-equal s1 s1)
@@ -602,6 +610,7 @@
    nil nil nil nil nil 0 0)
 
 (deftest string-lessp.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string-lessp s1 s1)
@@ -614,6 +623,7 @@
   nil nil nil nil nil 0 nil)
 
 (deftest string-not-greaterp.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string-not-greaterp s1 s1)
@@ -626,6 +636,7 @@
   0 0 0 0 0 0 nil)
 
 (deftest string-greaterp.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string-greaterp s1 s1)
@@ -638,6 +649,7 @@
   nil nil nil nil nil nil 0)
 
 (deftest string-not-lessp.nil-array.1
+  :notes (:nil-vectors-are-strings)
   (let ((s1 (make-array '(0) :element-type nil)))
     (values
      (string-not-lessp s1 s1)
@@ -648,15 +660,3 @@
      (string-not-lessp s1 "a")
      (string-not-lessp "a" s1)))
   0 0 0 0 0 nil 0)
-
-
-
-
-
-
-
-
-  
-
-
-

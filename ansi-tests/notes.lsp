@@ -8,5 +8,10 @@
 (defnote :allow-nil-arrays
   "Allow specialized arrays of type (array nil).")
 
-(defnote :allow-nonzero-nil-arrays
-  "Allow specialized arrays of type (array nil <dims>) of nonzero size.")
+(defnote :allow-nonzero-nil-vectors
+  "Allow specialized vectors of type (vector nil) of nonzero size.")
+
+(defnote :nil-vectors-are-strings
+  "Assume that (VECTOR NIL) objects are strings.")
+
+
