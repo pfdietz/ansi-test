@@ -69,9 +69,9 @@
 	(unwind-protect
 	    (equalt (multiple-value-list (subtypep* 'character etype))
 		    '(nil t))
-	  (close s)))))(def-read-sequence-bv-test read-sequence.bv.3 #*00000000000000 (:end 14)
-  14 #*01100110101110)
+	  (close s)))))
   nil)
+
 
 (deftest stream-element-type.error.1
   (signals-error (stream-element-type) program-error)
