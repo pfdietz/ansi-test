@@ -10653,3 +10653,21 @@ Broken at C::WT-MAKE-CLOSURE.
   (equalp #*0 "0")
   nil)
 
+;;; clisp 21 Mar 2005 (-ansi -q, x86 Linux, gcc 3.2.2)
+;;; *** - Compiler bug!! Occurred in SP-DEPTH at <0.
+
+(deftest misc.593
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (ignorable a b))
+       (declare (optimize (space 3) (debug 0) (safety 1)
+			  (compilation-speed 3) (speed 1)))
+       (prog2
+	   (catch 'ct1 (if (or (and t (not (and (and (or a t) nil) nil))) nil)
+			   a
+			 (reduce #'(lambda (lmv5 lmv2) 0) (vector b 0 a))))
+	   0)))
+   2212755 3154856)
+  0)
