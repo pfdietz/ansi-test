@@ -12,47 +12,54 @@
 ;;; nconc
 
 (deftest nconc-1
-    (nconc)
+  (nconc)
   nil)
 
 (deftest nconc-2
-    (nconc (copy-tree '(a b c d e f)))
+  (nconc (copy-tree '(a b c d e f)))
   (a b c d e f))
 
 (deftest nconc-3
-    (nconc 1)
+  (nconc 1)
   1)
 
 (deftest nconc-4
-    (let ((x (list 'a 'b 'c))
-	  (y (list 'd 'e 'f)))
-      (let ((ycopy (make-scaffold-copy y)))
-	(let ((result (nconc x y)))
-	  (and
-	   (check-scaffold-copy y ycopy)
-	   (eqt (cdddr x) y)
-	   result))))
+  (let ((x (list 'a 'b 'c))
+	(y (list 'd 'e 'f)))
+    (let ((ycopy (make-scaffold-copy y)))
+      (let ((result (nconc x y)))
+	(and
+	 (check-scaffold-copy y ycopy)
+	 (eqt (cdddr x) y)
+	 result))))
   (a b c d e f))
 
 (deftest nconc-5
-    (let ((x (list 'a 'b 'c)))
-      (nconc x x)
-      (and
-       (eqt (cdddr x) x)
-       (null (list-length x))))
+  (let ((x (list 'a 'b 'c)))
+    (nconc x x)
+    (and
+     (eqt (cdddr x) x)
+     (null (list-length x))))
   t)
 
 (deftest nconc-6
-    (let ((x (list 'a 'b 'c))
-	  (y (list 'd 'e 'f 'g 'h))
-	  (z (list 'i 'j 'k)))
-      (let ((result (nconc x y z 'foo)))
-	(and
-	 (eqt (nthcdr 3 x) y)
-	 (eqt (nthcdr 5 y) z)
-	 (eqt (nthcdr 3 z) 'foo)
-	 result)))
+  (let ((x (list 'a 'b 'c))
+	(y (list 'd 'e 'f 'g 'h))
+	(z (list 'i 'j 'k)))
+    (let ((result (nconc x y z 'foo)))
+      (and
+       (eqt (nthcdr 3 x) y)
+       (eqt (nthcdr 5 y) z)
+       (eqt (nthcdr 3 z) 'foo)
+       result)))
   (a b c d e f g h i j k . foo))
+
+(deftest nconc-7
+  (nconc (copy-tree '(a . b))
+	 (copy-tree '(c . d))
+	 (copy-tree '(e . f))
+	 'foo)
+  (a c e . foo))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; append
