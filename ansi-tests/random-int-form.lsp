@@ -28,13 +28,26 @@
 ;;; values, and results are collected.  A list of all these discrepancies is returned
 ;;; after testing finishes (assuming nothing breaks).
 ;;;
+;;; The variable *compile-unoptimized-form* controls whether the low optimization
+;;; form is compiled, or if a form funcalling it is EVALed.  The latter is often
+;;; faster, and may find more problems since an interpreter and compiler may evaluate
+;;; forms in very different ways.
+;;;
 ;;; The rctest/ subdirectory contains fragments of a more OO random form generator
 ;;; that will eventually replace this preliminary effort.
+;;;
+;;; The file misc.lsp contains tests that were mostly for bugs found by this
+;;; random tester in various Common Lisp implementations.
 ;;;
 
 (declaim (special *optimized-fn-src* *unoptimized-fn-src* *int-form-vals*
 		  *opt-result* *unopt-result* $x $y $z
 		  *compile-unoptimized-form*))
+
+;;; Little functions used to run collected tests.
+;;; (f i) runs the ith collected optimized test
+;;; (g i) runs the ith collected unoptimized test
+;;; (p i) prints the ith test (forms, input values, and other information)
 
 (defun f (i) (let ((plist (elt $y i)))
 	       (apply (compile nil (getf plist :optimized-lambda-form))
@@ -55,6 +68,9 @@
 (declaim (special *s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
 
 (defparameter *loop-random-int-form-period* 2000)
+
+;;; Run the random tester, collecting failures into the special
+;;; variable $y.
 
 (defun loop-random-int-forms (&optional (size 200) (nvars 3))
   (unless (boundp '$x) (setq $x nil))
@@ -149,7 +165,7 @@
 		     (*random-int-form-catch-tags* nil)
 		     (*go-tags* nil)
 		     )
-		 (make-random-integer-form size)))
+		 (make-random-integer-form (1+ (random size)))))
 	 (vals-list
 	  (loop repeat *random-vals-list-bound*
 		collect
@@ -303,7 +319,6 @@
       
      (1 `(cl:handler-bind nil ,(make-random-integer-form (1- size))))
      (1 `(restart-bind nil ,(make-random-integer-form (1- size))))
-     #-(or armedbear)
      (1 `(macrolet () ,(make-random-integer-form (1- size))))
 
      ;; dotimes
