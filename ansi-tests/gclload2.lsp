@@ -122,3 +122,5 @@
 (load "nstring-downcase.lsp")
 (load "nstring-capitalize.lsp")
 (load "string-trim.lsp")
+(load "string-left-trim.lsp")
+(load "string-right-trim.lsp")
