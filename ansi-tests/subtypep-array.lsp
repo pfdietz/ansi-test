@@ -188,7 +188,7 @@
 
 (deftest simple-string-is-simple-1d-array-of-character.5
   (subtypep* '(simple-string 17) '(simple-array character (17)))
-  t t)
+  nil t)
 
 (deftest simple-string-is-simple-1d-array-of-character.6
   (subtypep* '(simple-array character (17)) '(simple-string 17))
