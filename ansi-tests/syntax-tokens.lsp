@@ -62,6 +62,38 @@
 	    
 ;;; Dot tokens
 
+(def-syntax-test syntax.dot-token.1
+  (read-from-string "\\.")
+  |.| 2)
+
+(def-syntax-test syntax.dot-token.2
+  (read-from-string ".\\.")
+  |..| 3)
+
+(def-syntax-test syntax.dot-token.3
+  (read-from-string "\\..")
+  |..| 3)
+
+(def-syntax-test syntax.dot-token.4
+  (read-from-string "..\\.")
+  |...| 4)
+
+(def-syntax-test syntax.dot-token.5
+  (read-from-string ".\\..")
+  |...| 4)
+
+(def-syntax-test syntax.dot-token.6
+  (read-from-string "\\...")
+  |...| 4)
+
+(def-syntax-test syntax.dot-token.7
+  (read-from-string ".||")
+  |.| 3)
+
+(def-syntax-test syntax.dot-token.8
+  (read-from-string "..||")
+  |..| 4)
+
 (def-syntax-test syntax.dot-error.1
   (signals-error (read-from-string ".") reader-error)
   t)
