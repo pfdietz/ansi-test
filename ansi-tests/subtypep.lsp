@@ -108,14 +108,26 @@
     (values t t))
   t t)
 
-(deftest subtypep.bignum.1
-  (if (subtypep* 'integer 'fixnum)
-      (subtypep* 'bignum nil)
-    (values t t))
-  t t)
+;;; (deftest subtypep.bignum.1
+;;;   (if (subtypep* 'integer 'fixnum)
+;;;      (subtypep* 'bignum nil)
+;;;    (values t t))
+;;;  t t)
 
 (deftest subtypep.fixnum-or-bignum
   (check-equivalence '(or fixnum bignum) 'integer)
+  nil)
+
+(deftest subtypep.fixnum.integer
+  (check-equivalence `(integer ,most-negative-fixnum ,most-positive-fixnum)
+		     'fixnum)
+  nil)
+
+(deftest subtypep.bignum.integer
+  (check-equivalence
+   `(or (integer * (,most-negative-fixnum))
+	(integer (,most-positive-fixnum) *))
+   'bignum)
   nil)
 
 (deftest subtypep.integer.1
@@ -147,9 +159,9 @@
        (check-equivalence 'single-float 'double-float)
        (check-equivalence 'single-float 'long-float)
        (check-equivalence 'double-float 'long-float)
-       (check-disjointness 'short-float 'single-float)
-       (check-disjointness 'short-float 'double-float)
-       (check-disjointness 'short-float 'long-float))
+       (classes-are-disjoint 'short-float 'single-float)
+       (classes-are-disjoint 'short-float 'double-float)
+       (classes-are-disjoint 'short-float 'long-float))
     nil)
   nil)
 
@@ -163,7 +175,7 @@
        (loop for tp in '(short-float single-float)
 	     append
 	     (loop for tp2 in '(double-float long-float)
-		   append (check-disjointness tp tp2))))
+		   append (classes-are-disjoint tp tp2))))
     nil)
   nil)
 
@@ -172,11 +184,11 @@
 	   (not (subtypep 'single-float 'double-float))
 	   (subtypep 'double-float 'long-float))
       (append
-       (check-disjointness 'short-float 'single-float)
-       (check-disjointness 'short-float 'double-float)
-       (check-disjointness 'short-float 'long-float)
-       (check-disjointness 'single-float 'double-float)
-       (check-disjointness 'single-float 'long-float)
+       (classes-are-disjoint 'short-float 'single-float)
+       (classes-are-disjoint 'short-float 'double-float)
+       (classes-are-disjoint 'short-float 'long-float)
+       (classes-are-disjoint 'single-float 'double-float)
+       (classes-are-disjoint 'single-float 'long-float)
        (check-equivalence 'double-float 'long-float))
     nil)
   nil)
@@ -187,9 +199,9 @@
 	   (not (subtypep 'double-float 'long-float)))
       (append
        (check-equivalence 'short-float 'single-float)
-       (check-disjointness 'single-float 'double-float)
-       (check-disjointness 'single-float 'long-float)
-       (check-disjointness 'double-float 'long-float))
+       (classes-are-disjoint 'single-float 'double-float)
+       (classes-are-disjoint 'single-float 'long-float)
+       (classes-are-disjoint 'double-float 'long-float))
     nil)
   nil)
 
@@ -201,7 +213,7 @@
 	    append
 	    (loop for tp2 in +float-types+
 		  unless (eq tp tp2)
-		  append (check-disjointness tp tp2)))
+		  append (classes-are-disjoint tp tp2)))
     nil)
   nil)
 
