@@ -460,27 +460,27 @@
   5)
 
 (deftest count-string.17
-  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+  (count #\a (make-array 10 :initial-contents "abaaacaaaa"
 			 :fill-pointer 7
 			 :element-type 'character))
   5)
 
 (deftest count-string.18
-  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+  (count #\a (make-array 10 :initial-contents "abaaacaaaa"
 			 :fill-pointer 7
 			 :element-type 'character)
 	 :start 1)
   4)
 
 (deftest count-string.19
-  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+  (count #\a (make-array 10 :initial-contents "abaaacaaaa"
 			 :fill-pointer 7
 			 :element-type 'character)
 	 :end nil)
   5)
 
 (deftest count-string.20
-  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+  (count #\a (make-array 10 :initial-contents "abaaacaaaa"
 			 :fill-pointer 7
 			 :element-type 'character)
 	 :start 2 :end 5)

@@ -496,7 +496,7 @@
    (#\6)))
 
 (deftest find-if-string.19
-  (let ((a (make-array '(10) :initial-contents (coerce "123456789a" 'list)
+  (let ((a (make-array '(10) :initial-contents "123456789a"
 		       :fill-pointer 5
 		       :element-type 'character)))
     (values

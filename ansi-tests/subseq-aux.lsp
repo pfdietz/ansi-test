@@ -174,8 +174,7 @@
 				 'string))))))
 
 (defun subseq-string-3-body ()
-  (let* ((s1 (make-array '(10) :initial-contents
-			 (coerce "abcdefghij" 'list)
+  (let* ((s1 (make-array '(10) :initial-contents "abcdefghij"
 			 :fill-pointer 8
 			 :element-type 'character))
 	 (len (length s1)))
@@ -218,8 +217,7 @@
 				'bit-vector))))))
 
 (defun subseq-bit-vector-3-body ()
-  (let* ((s1 (make-array '(10) :initial-contents
-			 (coerce #*1101100110 'list)
+  (let* ((s1 (make-array '(10) :initial-contents #*1101100110
 			 :fill-pointer 8
 			 :element-type 'bit))
 	 (len (length s1)))

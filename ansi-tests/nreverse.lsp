@@ -71,7 +71,7 @@
   "011011011000")
 
 (deftest nreverse-string.3
-  (let* ((x (make-array 10 :initial-contents (coerce "abcdefghij" 'list)
+  (let* ((x (make-array 10 :initial-contents "abcdefghij"
 			:fill-pointer 5
 			:element-type 'character))
 	 (y (nreverse x)))
@@ -79,7 +79,7 @@
   "edcba")
 
 (deftest nreverse-string.4
-  (let* ((x (make-array 10 :initial-contents (coerce "abcdefghij" 'list)
+  (let* ((x (make-array 10 :initial-contents "abcdefghij"
 			:fill-pointer 5
 			:element-type 'base-char))
 	 (y (nreverse x)))

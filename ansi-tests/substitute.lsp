@@ -655,28 +655,28 @@
    "0a0aaaa0aa")
 
 (deftest substitute-string.28
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute #\z #\a x)))
     result)
   "zbzcb")
 
 (deftest substitute-string.29
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute #\z #\a x :from-end t)))
     result)
   "zbzcb")
 
 (deftest substitute-string.30
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute #\z #\a x :count 1)))
     result)
   "zbacb")
 
 (deftest substitute-string.31
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute #\z #\a x :from-end t :count 1)))
     result)

@@ -137,7 +137,7 @@
   #(a b c d e))
 
 (deftest concatenate.28
-  (let* ((x (make-array '(10) :initial-contents (coerce "abcdefghij" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abcdefghij"
 			:fill-pointer 5 :element-type 'character)))
     (values
      (concatenate 'string x '(#\z))
@@ -153,7 +153,7 @@
   nil)
 
 (deftest concatenate.29
-  (let* ((x (make-array '(10) :initial-contents (coerce "abcdefghij" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abcdefghij"
 			:fill-pointer 5 :element-type 'base-char)))
     (values
      (concatenate 'string x '(#\z))
@@ -169,7 +169,7 @@
   nil)
 
 (deftest concatenate.30
-  (let* ((x (make-array '(10) :initial-contents (coerce #*0110010111 'list)
+  (let* ((x (make-array '(10) :initial-contents #*0110010111
 			:fill-pointer 5 :element-type 'bit)))
     (values
      (concatenate 'bit-vector x '(0))

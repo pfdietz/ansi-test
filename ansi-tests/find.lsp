@@ -730,7 +730,7 @@
   #\c)
 
 (deftest find-string.25
-  (let ((s (make-array '(10) :initial-contents (coerce "abcdefghij" 'list)
+  (let ((s (make-array '(10) :initial-contents "abcdefghij"
 		       :element-type 'character
 		       :fill-pointer 5)))
     (values

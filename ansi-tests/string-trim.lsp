@@ -72,7 +72,7 @@
   "cd")
 
 (deftest string-trim.9
-  (let* ((s (make-array 7 :initial-contents (coerce "abcdaba" 'list)
+  (let* ((s (make-array 7 :initial-contents "abcdaba"
 			:element-type 'character
 			))
 	 (s2 (string-trim "ab" s)))
@@ -81,7 +81,7 @@
   "cd")
 
 (deftest string-trim.10
-  (let* ((s (make-array 9 :initial-contents (coerce "abcdabadd" 'list)
+  (let* ((s (make-array 9 :initial-contents "abcdabadd"
 			:element-type 'character
 			:fill-pointer 7))
 	 (s2 (string-trim "ab" s)))
@@ -90,7 +90,7 @@
   "cd")
 
 (deftest string-trim.11
-  (let* ((s (make-array 7 :initial-contents (coerce "abcdaba" 'list)
+  (let* ((s (make-array 7 :initial-contents "abcdaba"
 			:element-type 'standard-char
 			))
 	 (s2 (string-trim "ab" s)))
@@ -99,7 +99,7 @@
   "cd")
 
 (deftest string-trim.12
-  (let* ((s (make-array 7 :initial-contents (coerce "abcdaba" 'list)
+  (let* ((s (make-array 7 :initial-contents "abcdaba"
 			:element-type 'base-char
 			))
 	 (s2 (string-trim "ab" s)))

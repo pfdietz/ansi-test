@@ -407,7 +407,7 @@
 
 (deftest count-if-string.17
   (let ((s (make-array '(10)
-		       :initial-contents (coerce "00a0aa0a0a" 'list)
+		       :initial-contents "00a0aa0a0a"
 		       :element-type 'character
 		       :fill-pointer 6)))
     (values (count-if #'digit-char-p s)

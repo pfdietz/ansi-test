@@ -132,7 +132,7 @@
   nil)
 
 (deftest search-string.15
-  (let ((a (make-array '(10) :initial-contents (coerce "abbaaababb" 'list)
+  (let ((a (make-array '(10) :initial-contents "abbaaababb"
 		       :fill-pointer 5
 		       :element-type 'character)))
     (values

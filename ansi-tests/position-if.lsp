@@ -432,8 +432,7 @@
 (deftest position-if-string.13
   (flet ((%f (c) (eql c #\0))
 	 (%g (c) (eql c #\1)))
-    (let ((a (make-array '(10) :initial-contents
-			 (coerce "1111100000" 'list)
+    (let ((a (make-array '(10) :initial-contents "1111100000"
 		       :fill-pointer 5
 		       :element-type 'character)))
     (values (position-if #'%f a)

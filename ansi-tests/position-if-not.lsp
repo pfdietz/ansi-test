@@ -433,7 +433,7 @@
    (nil)))
 
 (deftest position-if-not-string.13
-  (let ((a (make-array '(10) :initial-contents (coerce "55555aaaaa" 'list)
+  (let ((a (make-array '(10) :initial-contents "55555aaaaa"
 		       :fill-pointer 5
 		       :element-type 'character)))
     (and (stringp a)

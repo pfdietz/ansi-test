@@ -85,7 +85,7 @@
   "11111000")
 
 (deftest stable-sort-string.3
-  (let ((a (make-array 10 :initial-contents (coerce "1001111011" 'list)
+  (let ((a (make-array 10 :initial-contents "1001111011"
 		       :element-type 'character
 		       :fill-pointer 5)))
     (stable-sort a #'char<))

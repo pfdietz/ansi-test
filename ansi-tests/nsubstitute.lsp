@@ -495,28 +495,28 @@
   "1234567x9")
 
 (deftest nsubstitute-string.28
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (nsubstitute #\z #\a x)))
     result)
   "zbzcb")
 
 (deftest nsubstitute-string.29
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (nsubstitute #\z #\a x :from-end t)))
     result)
   "zbzcb")
 
 (deftest nsubstitute-string.30
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (nsubstitute #\z #\a x :count 1)))
     result)
   "zbacb")
 
 (deftest nsubstitute-string.31
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (nsubstitute #\z #\a x :from-end t :count 1)))
     result)

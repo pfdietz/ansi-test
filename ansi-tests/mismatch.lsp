@@ -365,7 +365,7 @@
   5)
 
 (deftest mismatch-bit-vector.23
-  (let ((a (make-array '(9) :initial-contents (coerce #*001011000 'list)
+  (let ((a (make-array '(9) :initial-contents #*001011000
 		       :fill-pointer 5
 		       :element-type 'bit)))
     (values
@@ -378,7 +378,7 @@
   nil nil 4 5 4 4)
 
 (deftest mismatch-bit-vector.24
-  (let ((m (make-array '(6) :initial-contents (coerce #*001011 'list)
+  (let ((m (make-array '(6) :initial-contents #*001011
 		       :fill-pointer 4
 		       :element-type 'bit))
 	(a #*00101))
@@ -569,7 +569,7 @@
   5)
 
 (deftest mismatch-string.23
-  (let ((a (make-array '(9) :initial-contents (coerce "123456789" 'list)
+  (let ((a (make-array '(9) :initial-contents "123456789"
 		       :fill-pointer 5
 		       :element-type 'character)))
     (values
@@ -582,7 +582,7 @@
   nil nil 4 5 4 0)
 
 (deftest mismatch-string.24
-  (let ((m (make-array '(6) :initial-contents (coerce "123456" 'list)
+  (let ((m (make-array '(6) :initial-contents "123456"
 		       :fill-pointer 4
 		       :element-type 'character))
 	(a "12345"))

@@ -429,28 +429,28 @@
 
 
 (deftest substitute-if-string.28
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute-if #\z (is-eql-p #\a) x)))
     result)
   "zbzcb")
 
 (deftest substitute-if-string.29
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute-if #\z (is-eql-p #\a) x :from-end t)))
     result)
   "zbzcb")
 
 (deftest substitute-if-string.30
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute-if #\z (is-eql-p #\a) x :count 1)))
     result)
   "zbacb")
 
 (deftest substitute-if-string.31
-  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+  (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
 		       :fill-pointer 5 :element-type 'character))
 	 (result (substitute-if #\z (is-eql-p #\a) x :from-end t :count 1)))
     result)

@@ -408,7 +408,7 @@
 (deftest count-if-not-string.17
   (flet ((%zerop (c) (eql c #\0))
 	 (%onep (c) (eql c #\1)))
-    (let ((a (make-array '(10) :initial-contents (coerce "0001110100" 'list)
+    (let ((a (make-array '(10) :initial-contents "0001110100"
 			 :fill-pointer 5
 			 :element-type 'character)))
       (and (stringp a)

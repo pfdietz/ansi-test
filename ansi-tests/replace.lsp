@@ -564,7 +564,7 @@
 
 (deftest replace-string.18
   (let* ((x (copy-seq "abcdef"))
-	 (y (make-array '(6) :initial-contents (coerce "123456" 'list)
+	 (y (make-array '(6) :initial-contents "123456"
 			:fill-pointer 3
 			:element-type 'character))
 	 (result (replace x y :start1 1)))

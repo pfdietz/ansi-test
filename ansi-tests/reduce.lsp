@@ -228,7 +228,7 @@
   0)
 
 (deftest reduce-string.14
-  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+  (let ((s (make-array '(8) :initial-contents "abcdefgh"
 		       :fill-pointer 6
 		       :element-type 'character)))
     (coerce (reduce #'(lambda (x y) (cons y x)) s :initial-value nil)
@@ -236,7 +236,7 @@
   "fedcba")
 
 (deftest reduce-string.15
-  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+  (let ((s (make-array '(8) :initial-contents "abcdefgh"
 		       :fill-pointer 6
 		       :element-type 'character)))
     (coerce (reduce #'(lambda (x y) (cons y x)) s :initial-value nil
@@ -245,7 +245,7 @@
   "fedcb")
 
 (deftest reduce-string.16
-  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+  (let ((s (make-array '(8) :initial-contents "abcdefgh"
 		       :fill-pointer 6
 		       :element-type 'character)))
     (coerce (reduce #'(lambda (x y) (cons y x)) s :end nil 
@@ -254,7 +254,7 @@
   "fedcba")
 
 (deftest reduce-string.17
-  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+  (let ((s (make-array '(8) :initial-contents "abcdefgh"
 		       :fill-pointer 6
 		       :element-type 'character)))
     (coerce (reduce #'(lambda (x y) (cons y x)) s :end 4 

@@ -294,27 +294,27 @@
   "123")
 
 (deftest merge-string.15
-  (let* ((x (make-array '(10) :initial-contents (coerce "adgkmpruwv" 'list)
+  (let* ((x (make-array '(10) :initial-contents "adgkmpruwv"
 			:fill-pointer 5 :element-type 'character))
 	 (y (copy-seq "bci")))
     (merge 'string x y #'char<))
   "abcdgikm")
 
 (deftest merge-string.16
-  (let* ((x (make-array '(10) :initial-contents (coerce "adgkmpruwv" 'list)
+  (let* ((x (make-array '(10) :initial-contents "adgkmpruwv"
 			:fill-pointer 5 :element-type 'character))
 	 (y (copy-seq "bci")))
     (merge 'string y x #'char<))
   "abcdgikm")
 
 (deftest merge-string.17
-  (let* ((x (make-array '(10) :initial-contents (coerce "adgkmpruwv" 'list)
+  (let* ((x (make-array '(10) :initial-contents "adgkmpruwv"
 			:fill-pointer 5 :element-type 'character)))
     (merge 'string nil x #'char<))
   "adgkm")
 
 (deftest merge-string.18
-  (let* ((x (make-array '(10) :initial-contents (coerce "adgkmpruwv" 'list)
+  (let* ((x (make-array '(10) :initial-contents "adgkmpruwv"
 			:fill-pointer 5 :element-type 'character)))
     (merge 'string x nil #'char<))
   "adgkm")
@@ -435,27 +435,27 @@
   #*011)
 
 (deftest merge-bit-vector.16
-  (let* ((x (make-array '(10) :initial-contents (coerce #*0001101010 'list)
+  (let* ((x (make-array '(10) :initial-contents #*0001101010
 			:fill-pointer 5 :element-type 'bit))
 	 (y (copy-seq #*001)))
     (merge 'bit-vector x y #'<))
   #*00000111)
 
 (deftest merge-bit-vector.17
-  (let* ((x (make-array '(10) :initial-contents (coerce #*0001101010 'list)
+  (let* ((x (make-array '(10) :initial-contents #*0001101010
 			:fill-pointer 5 :element-type 'bit))
 	 (y (copy-seq #*001)))
     (merge 'bit-vector y x #'<))
   #*00000111)
 
 (deftest merge-bit-vector.18
-  (let* ((x (make-array '(10) :initial-contents (coerce #*0001101010 'list)
+  (let* ((x (make-array '(10) :initial-contents #*0001101010
 			:fill-pointer 5 :element-type 'bit)))
     (merge 'bit-vector nil x #'<))
   #*00011)
 
 (deftest merge-bit-vector.19
-  (let* ((x (make-array '(10) :initial-contents (coerce #*0001101010 'list)
+  (let* ((x (make-array '(10) :initial-contents #*0001101010
 			:fill-pointer 5 :element-type 'bit)))
     (merge 'bit-vector x nil #'<))
   #*00011)

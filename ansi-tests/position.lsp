@@ -613,26 +613,26 @@
   4)
 
 (deftest position-string.25
-  (position #\a (make-array '(10) :initial-contents (coerce "bbbbbaaaaa" 'list)
+  (position #\a (make-array '(10) :initial-contents "bbbbbaaaaa"
 			    :element-type 'character
 			    :fill-pointer 5))
   nil)
 
 (deftest position-string.26
-  (position #\a (make-array '(10) :initial-contents (coerce "bbbbbaaaaa" 'list)
+  (position #\a (make-array '(10) :initial-contents "bbbbbaaaaa"
 			    :element-type 'character
 			    :fill-pointer 5)
 	    :from-end t)
   nil)
 
 (deftest position-string.27
-  (position #\a (make-array '(10) :initial-contents (coerce "bbbbaaaaaa" 'list)
+  (position #\a (make-array '(10) :initial-contents "bbbbaaaaaa"
 			    :element-type 'character
 			    :fill-pointer 5))
   4)
 
 (deftest position-string.28
-  (position #\a (make-array '(10) :initial-contents (coerce "babbaaaaaa" 'list)
+  (position #\a (make-array '(10) :initial-contents "babbaaaaaa"
 			    :element-type 'character
 			    :fill-pointer 5)
 	    :from-end t)
