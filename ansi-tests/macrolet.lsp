@@ -347,6 +347,15 @@
       (%f)))
   :good)
 
+;;; The &environment parameter is bound first
+
+(deftest macrolet.38
+  (macrolet ((foo () 1))
+    (macrolet ((%f (&optional (x (macroexpand '(foo) env)) &environment env)
+		   x))
+      (%f)))
+  1)
+
 ;;; Symbol-macrolet tests
 
 (deftest symbol-macrolet.1
