@@ -219,7 +219,7 @@
   "~@{~}" ((formatter "X~AY") 1) "X1Y")
 
 (def-format-test format.@{.13
-  "~v@{~}" (1 (formatter "X") 'foo) "X")
+  "~v@{~}" (1 (formatter "X") 'foo) "X" 1)
 
 ;;; ~:@{
 
