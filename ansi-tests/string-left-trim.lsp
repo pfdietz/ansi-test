@@ -106,3 +106,37 @@
     (values s s2))
   "abcdaba"
   "cdaba")
+
+;;; Test that trimming is case sensitive
+(deftest string-left-trim.13
+  (let* ((s (copy-seq "aA"))
+	 (s2 (string-left-trim "a" s)))
+    (values s s2))
+  "aA" "A")
+
+(deftest string-left-trim.14
+  (let* ((s '|abcdaba|)
+	 (s2 (string-left-trim "ab" s)))
+    (values (symbol-name s) s2))
+  "abcdaba"
+  "cdaba")
+
+(deftest string-left-trim.15
+  (string-left-trim "abc" "")
+  "")
+
+(deftest string-left-trim.16
+  (string-left-trim "a" #\a)
+  "")
+
+(deftest string-left-trim.17
+  (string-left-trim "b" #\a)
+  "a")
+
+(deftest string-left-trim.18
+  (string-left-trim "" (copy-seq "abcde"))
+  "abcde")
+
+(deftest string-left-trim.19
+  (string-left-trim "abc" (copy-seq "abcabcabc"))
+  "")
