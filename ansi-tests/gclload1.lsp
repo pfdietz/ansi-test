@@ -17,13 +17,18 @@
 (load "cl-symbol-names.lsp")
 (load "notes.lsp")
 
-#+cmu (setq *compile-verbose* nil *compile-print* nil
-	    ext:*gc-verbose* nil)
-#+gcl (setq compiler:*suppress-compiler-notes* t
-	    compiler:*suppress-compiler-warnings* t
-	    *compile-verbose* nil
-	    *compile-print* nil
-	    compiler:*compile-verbose* nil
-	    compiler:*compile-print* nil
-	    *load-verbose* nil)
+(setq *compile-verbose* nil
+      *compile-print* nil
+      *load-verbose* nil)
 
+#+cmu (setq ext:*gc-verbose* nil)
+
+#+gcl (setq compiler:*suppress-compiler-notes* t
+            compiler:*suppress-compiler-warnings* t
+            compiler:*compile-verbose* nil
+            compiler:*compile-print* nil)
+
+#+lispworks (setq compiler::*compiler-warnings* nil)
+
+#+ecl (setq c:*suppress-compiler-warnings* t
+            c:*suppress-compiler-notes* t)
