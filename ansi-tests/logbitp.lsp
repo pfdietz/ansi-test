@@ -61,6 +61,22 @@
   (notnot-mv (logbitp (1+ most-positive-fixnum) -1))
   t)
 
+(deftest logbitp.7
+  (loop for len = (random 100)
+	for i = (random-from-interval (ash 1 len))
+	for k = (random (1+ len))
+	repeat 1000
+	unless (if (ldb-test (byte 1 k) i)
+		   (logbitp k i)
+		 (not (logbitp k i)))
+	collect (list i k))
+  nil)
+
+(deftest logbitp.8
+  (loop for k from 1 to 1000
+	always (logbitp k -1))
+  t)
+
 (deftest logbitp.order.1
   (let ((i 0) a b)
     (values

@@ -249,3 +249,35 @@
 ;;; Approximate equality function
 (defun approx= (x y &optional (eps (epsilon x)))
   (<= (abs (/ (- x y) (max (abs x) 1))) eps))
+
+(defun test-log-op-with-decls (op xlo xhi ylo yhi niters
+				  &optional
+				  (decls '((optimize (speed 3) (safety 1)
+						     (debug 1)))))
+  "Test that a compiled form of the LOG* function OP computes
+   the expected result on two random integers drawn from the
+   types `(integer ,xlo ,xhi) and `(integer ,ylo ,yhi).  Try
+   niters choices.  Return a list of pairs on which the test fails."
+
+  (assert (symbolp op))
+  (assert (integerp xlo))
+  (assert (integerp xhi))
+  (assert (integerp ylo))
+  (assert (integerp yhi))
+  (assert (integerp niters))
+  (assert (<= xlo xhi))
+  (assert (<= ylo yhi))
+
+  (let* ((source
+	  `(lambda (x y)
+	     (declare (type (integer ,xlo ,xhi) x)
+		      (type (integer ,ylo ,yhi) y)
+		      ,@ decls)
+	     (,op x y)))
+	 (fn (compile nil source)))
+    (loop for i below niters
+	  for x = (random-from-interval xhi xlo)
+	  for y = (random-from-interval yhi ylo)
+	  unless (eql (funcall (the symbol op) x y)
+		      (funcall fn x y))
+	  collect (list x y))))
