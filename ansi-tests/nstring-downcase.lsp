@@ -1,0 +1,70 @@
+;-*- Mode:     Lisp -*-
+;;;; Author:   Paul Dietz
+;;;; Created:  Thu Oct  3 21:33:16 2002
+;;;; Contains: Tests for NSTRING-DOWNCASE
+
+(in-package :cl-test)
+
+(deftest nstring-downcase.1
+  (let* ((s (copy-seq "A"))
+	 (s2 (nstring-downcase s)))
+    (values (eq s s2) s))
+  t "a")
+
+(deftest nstring-downcase.2
+  (let* ((s (copy-seq "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"))
+	 (s2 (nstring-downcase s)))
+    (values (eq s s2) s))
+  t
+  "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz")
+
+(deftest nstring-downcase.3
+  (let* ((s (copy-seq "0123456789!@#$%^&*()_-+=|\\{}[]:\";'<>?,./ "))
+	 (s2 (nstring-downcase s)))
+    (values (eq s s2) s))
+  t
+  "0123456789!@#$%^&*()_-+=|\\{}[]:\";'<>?,./ ")
+
+(deftest nstring-downcase.6
+  (let* ((s (make-array 6 :element-type 'character
+			:initial-contents '(#\A #\B #\C #\D #\E #\F)))
+	 (s2 (nstring-downcase s)))
+    (values (eq s s2) s))
+  t "abcdef")
+
+(deftest nstring-downcase.7
+  (let* ((s (make-array 6 :element-type 'standard-char
+			:initial-contents '(#\A #\B #\7 #\D #\E #\F)))
+	 (s2 (nstring-downcase s)))
+    (values (eq s s2) s))
+  t
+  "ab7def")
+
+;; Tests with :start, :end
+
+(deftest nstring-downcase.8
+  (let ((s "ABCDEF"))
+     (loop for i from 0 to 6
+	   collect (nstring-downcase (copy-seq s) :start i)))
+  ("abcdef" "Abcdef" "ABcdef" "ABCdef" "ABCDef" "ABCDEf" "ABCDEF"))
+
+(deftest nstring-downcase.9
+  (let ((s "ABCDEF"))
+     (loop for i from 0 to 6
+	   collect (nstring-downcase (copy-seq s) :start i :end nil)))
+  ("abcdef" "Abcdef" "ABcdef" "ABCdef" "ABCDef" "ABCDEf" "ABCDEF"))
+
+(deftest nstring-downcase.10
+  (let ((s "ABCDE"))
+    (loop for i from 0 to 4
+	  collect (loop for j from i to 5
+			collect (string-invertcase
+				 (nstring-downcase (copy-seq s)
+						   :start i :end j)))))
+  (("abcde" "Abcde" "ABcde" "ABCde" "ABCDe" "ABCDE")
+   ("abcde" "aBcde" "aBCde" "aBCDe" "aBCDE")
+   ("abcde" "abCde" "abCDe" "abCDE")
+   ("abcde" "abcDe" "abcDE")
+   ("abcde" "abcdE")))
+
+

@@ -118,3 +118,6 @@
 (load "string-upcase.lsp")
 (load "string-downcase.lsp")
 (load "string-capitalize.lsp")
+(load "nstring-upcase.lsp")
+(load "nstring-downcase.lsp")
+(load "nstring-capitalize.lsp")

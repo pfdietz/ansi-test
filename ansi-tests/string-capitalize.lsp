@@ -15,8 +15,8 @@
 (deftest string-capitalize.2
   (let ((s "0adA2Cdd3wXy"))
     (values (string-capitalize s) s))
-  "0adA2Cdd3wXy"
-  "0ada2cdd3wxy")
+  "0ada2cdd3wxy"
+  "0adA2Cdd3wXy")
 
 (deftest string-capitalize.3
   (let ((s "1a"))
@@ -83,6 +83,3 @@
    ("ABCDEF" "ABCDEF" "ABCDEf")
    ("ABCDEF" "ABCDEF"))
   "ABCDEF")
-
-
-
