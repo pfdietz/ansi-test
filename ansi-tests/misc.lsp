@@ -10065,3 +10065,31 @@ Broken at C::WT-MAKE-CLOSURE.
     (declare (type (eql #c(-1 1/2)) x))
     x)
   #c(-1 1/2))
+
+;;; SBCL
+;;; 0.8.19.39
+;;; The function SB-KERNEL:CHARACTER-STRING-P is undefined.
+
+(deftest misc.546
+  (funcall
+   (compile
+    nil
+    '(lambda (p1)
+       (declare (optimize (speed 0) (safety 1) (debug 2) (space 3))
+		(type (eql a) p1))
+       (typep p1 (type-of ""))))
+   'a)
+  nil)
+
+;;; The function SB-KERNEL:SIMPLE-CHARACTER-STRING-P is undefined.
+
+(deftest misc.547
+  (funcall
+   (compile
+    nil
+    '(lambda (p1)
+       (declare (optimize (speed 3) (safety 3) (debug 0) (space 3))
+		(type symbol p1))
+       (typep (the (eql :c1) p1) (type-of "b"))))
+   :c1)
+  nil)
