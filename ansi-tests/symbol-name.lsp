@@ -33,6 +33,8 @@
   (symbol-name :|abcdefg|)
   "abcdefg")
 
+;;; Error tests
+
 (deftest symbol-name.error.1
   (signals-error (symbol-name) program-error)
   t)
@@ -40,4 +42,12 @@
 (deftest symbol-name.error.2
   (signals-error (symbol-name 'a 'b) program-error)
   t)
+
+(deftest symbol-name.error.3
+  (loop for x in *mini-universe*
+	for form = `(signals-error (symbol-name ',x) type-error)
+	unless (or (symbolp x) (eval form))
+	collect x)
+  nil)
+
 
