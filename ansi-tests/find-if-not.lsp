@@ -484,6 +484,33 @@
    (nil #\6)
    (#\6)))
 
+
+;;; Keyword tests
+
+(deftest find-if-not.allow-other-keys.1
+  (find-if-not #'oddp '(1 2 3 4 5) :bad t :allow-other-keys t)
+  2)
+
+(deftest find-if-not.allow-other-keys.2
+  (find-if-not #'oddp '(1 2 3 4 5) :allow-other-keys t :also-bad t)
+  2)
+
+;;; The leftmost of two :allow-other-keys arguments is the one that  matters.
+(deftest find-if-not.allow-other-keys.3
+  (find-if-not #'oddp '(1 2 3 4 5)
+	    :allow-other-keys t
+	    :allow-other-keys nil
+	    :bad t)
+  2)
+
+(deftest find-if-not.keywords.4
+  (find-if-not #'oddp '(1 2 3 4 5) :key #'identity :key #'1+)
+  2)
+
+(deftest find-if-not.allow-other-keys.5
+  (find-if-not #'null '(nil a b c nil) :allow-other-keys nil)
+  a)
+
 ;;; Error tests
 
 (deftest find-if-not.error.1

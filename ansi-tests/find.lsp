@@ -741,6 +741,35 @@
   (#\a #\b #\c #\d #\e nil nil nil nil nil)
   (#\a #\b #\c #\d #\e nil nil nil nil nil))
 
+;;; Keyword tests
+
+(deftest find.allow-other-keys.1
+  (find 0 '(1 2 3 4 5) :key #'(lambda (x) (mod x 2))
+	:bad t :allow-other-keys t)
+  2)
+
+(deftest find.allow-other-keys.2
+  (find 0 '(1 2 3 4 5) :key #'(lambda (x) (mod x 2))
+	       :allow-other-keys t :also-bad t)
+  2)
+
+;;; The leftmost of two :allow-other-keys arguments is the one that  matters.
+(deftest find.allow-other-keys.3
+  (find 0 '(1 2 3 4 5) :key #'(lambda (x) (mod x 2))
+	:allow-other-keys t
+	:allow-other-keys nil
+	:bad t)
+  2)
+
+(deftest find.keywords.4
+  (find 2 '(1 2 3 4 5) :key #'identity :key #'1+)
+  2)
+
+(deftest find.allow-other-keys.5
+  (find 'b '(nil a b c nil) :allow-other-keys nil)
+  b)
+
+
 ;;; Error tests
 
 (deftest find.error.1
