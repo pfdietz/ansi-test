@@ -133,10 +133,10 @@ the condition to go uncaught if it cannot be classified."
     (values (not (not result))
 	    (not (not good)))))
 
-(eval-when (load eval compile)
-  (unless (fboundp 'complement)
-    (defun complement (fn)
-      #'(lambda (&rest args) (not (apply fn args))))))
+;;; (eval-when (load eval compile)
+;;;   (unless (fboundp 'complement)
+;;;     (defun complement (fn)
+;;;       #'(lambda (&rest args) (not (apply fn args))))))
 
 (defun compose (&rest fns)
   (let ((rfns (reverse fns)))
