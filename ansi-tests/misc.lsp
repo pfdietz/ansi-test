@@ -9537,3 +9537,18 @@ Broken at C::WT-MAKE-CLOSURE.
 			      (1+ *s2*)))))
   -7111879291)
 
+;;; gcl 29 Dec 2004
+;;; Interference of special variable bindings?
+
+(deftest misc.517
+  (funcall
+   (compile nil '(lambda ()
+		   (declare (optimize (safety 3) (space 3) (debug 1) (speed 1)
+				      (compilation-speed 0)))
+		   (let* ((*s8* (let ((*s8* (make-array nil :initial-element 0)))
+				  (declare (special *s8*))
+				  (progn (shiftf (aref *s8*) 31508066) 0))
+				))
+		     (declare (special *s8*))
+		     0))))
+  0)
