@@ -46,7 +46,7 @@
 		     (reader-error () :error)))))
        (unless (funcall test obj obj2)
 	 (list
-	  (list obj obj2
+	  (list obj str obj2
 		(list '*print-array* *print-array*)
 		(list '*print-base* *print-base*)
 		(list '*print-radix* *print-radix*)
