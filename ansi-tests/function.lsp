@@ -32,10 +32,10 @@
 		     (not (special-operator-p s))
 		     (not (macro-function s))
 		     (symbol-function s))
-	always (or (null f)
-		   (typep f 'function)
-		   ))
-  t)
+	unless (or (null f)
+		   (typep f 'function))
+	collect x)
+  nil)
 
 (deftest function.5
   (typep '(setf car) 'function)
@@ -67,12 +67,12 @@
 ;;; In ANSI CL, symbols and cons can no longer also be of type FUNCTION.
 (deftest function.10
   (loop for x in *universe*
-	never
-	(and (or (numberp x) (characterp x)
-		 (symbolp x) (consp x)
-		 (typep x 'array))
-	     (typep x 'function)))
-  t)
+	when (and (or (numberp x) (characterp x)
+		      (symbolp x) (consp x)
+		      (typep x 'array))
+		  (typep x 'function))
+	collect x)
+  nil)
 
 (deftest function.11
   (flet ((%f () nil)) (typep '%f 'function))
