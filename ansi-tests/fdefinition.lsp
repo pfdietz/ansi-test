@@ -8,28 +8,28 @@
 ;;; Error cases
 
 (deftest fdefinition.error.1
-  (classify-error (fdefinition))
-  program-error)
+  (signals-error (fdefinition) program-error)
+  t)
 
 (deftest fdefinition.error.2
-  (classify-error (fdefinition 'cons nil))
-  program-error)
+  (signals-error (fdefinition 'cons nil) program-error)
+  t)
 
 (deftest fdefinition.error.3
-  (classify-error (fdefinition (gensym)))
-  undefined-function)
+  (signals-error (fdefinition (gensym)) undefined-function)
+  t)
 
 (deftest fdefinition.error.4
-  (classify-error (fdefinition 10))
-  type-error)
+  (signals-error (fdefinition 10) type-error)
+  t)
 
 (deftest fdefinition.error.5
-  (classify-error (fdefinition (list 'setf (gensym))))
-  undefined-function)
+  (signals-error (fdefinition (list 'setf (gensym))) undefined-function)
+  t)
 
 (deftest fdefinition.error.6
-  (classify-error (locally (fdefinition 10) t))
-  type-error)
+  (signals-error (locally (fdefinition 10) t) type-error)
+  t)
 
 ;;; Non-error cases
 

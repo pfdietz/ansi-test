@@ -207,22 +207,24 @@
      p))
   (x) (a (x)))
 
+;;; Error tests
+
 (deftest getf.error.1
-  (classify-error (getf))
-  program-error)
+  (signals-error (getf) program-error)
+  t)
 
 (deftest getf.error.2
-  (classify-error (getf nil))
-  program-error)
+  (signals-error (getf nil) program-error)
+  t)
 
 (deftest getf.error.3
-  (classify-error (getf nil nil nil nil))
-  program-error)
+  (signals-error (getf nil nil nil nil) program-error)
+  t)
 
 (deftest getf.error.4
-  (classify-error (getf '(a . b) 'c))
-  type-error)
+  (signals-error (getf '(a . b) 'c) type-error)
+  t)
 
 (deftest getf.error.5
-  (classify-error (getf '(a 10 . b) 'c))
-  type-error)
+  (signals-error (getf '(a 10 . b) 'c) type-error)
+  t)

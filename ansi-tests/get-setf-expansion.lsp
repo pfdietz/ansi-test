@@ -6,11 +6,12 @@
 (in-package :cl-test)
 
 (deftest get-setf-expansion.error.1
-  (classify-error (get-setf-expansion))
-  program-error)
+  (signals-error (get-setf-expansion) program-error)
+  t)
 
 (deftest get-setf-expansion.error.2
-  (classify-error (get-setf-expansion 'x nil nil))
-  program-error)
+  (signals-error (get-setf-expansion 'x nil nil) program-error)
+  t)
 
+;;; FIXME
 ;;; Tests for proper behavior will go here

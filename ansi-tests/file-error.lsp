@@ -74,14 +74,14 @@
   t t t)
 
 (deftest file-error-pathname.error.1
-  (classify-error (file-error-pathname))
-  program-error)
+  (signals-error (file-error-pathname) program-error)
+  t)
 
 (deftest file-error-pathname.error.2
-  (classify-error (file-error-pathname (make-condition 'file-error :pathname "foo.txt") nil))
-  program-error)
-
-
+  (signals-error
+   (file-error-pathname (make-condition 'file-error :pathname "foo.txt") nil)
+   program-error)
+  t)
 
 
 

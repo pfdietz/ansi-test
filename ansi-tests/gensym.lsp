@@ -106,33 +106,38 @@
 ;;; argument defaults to "G", with NIL causing an error.
 
 (deftest gensym.error.1
-  (classify-error (gensym 'aaa))
-  type-error)
+  (signals-error (gensym 'aaa) type-error)
+  t)
 
 (deftest gensym.error.2
-  (classify-error (gensym 12.3))
-  type-error)
+  (signals-error (gensym 12.3) type-error)
+  t)
 
 (deftest gensym.error.3
-  (classify-error (gensym t))
-  type-error)
+  (signals-error (gensym t) type-error)
+  t)
 
 (deftest gensym.error.4
-  (classify-error (gensym nil))
-  type-error) ;; NIL /= no argument!
+  (signals-error (gensym nil) type-error) ;; NIL /= no argument!
+  t)
 
 (deftest gensym.error.5
-  (classify-error (gensym '(a)))
-  type-error)
+  (signals-error (gensym '(a)) type-error)
+  t)
 
 (deftest gensym.error.6
-  (classify-error (gensym #\x))
-  type-error)
+  (signals-error (gensym #\x) type-error)
+  t)
 
 (deftest gensym.error.7
-  (classify-error (gensym 10 'foo))
-  program-error)
+  (signals-error (gensym 10 'foo) program-error)
+  t)
 
 (deftest gensym.error.8
-  (classify-error (locally (gensym t) t))
-  type-error)
+  (signals-error (locally (gensym t) t) type-error)
+  t)
+
+(deftest gensym.error.9
+  (signals-error (gensym "FOO" nil) program-error)
+  t)
+

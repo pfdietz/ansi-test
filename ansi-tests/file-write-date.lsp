@@ -56,21 +56,24 @@
 ;;;
 
 (deftest file-write-date.error.1
-  (classify-error (file-write-date))
-  program-error)
+  (signals-error (file-write-date) program-error)
+  t)
 
 (deftest file-write-date.error.2
-  (classify-error (file-write-date "file-write-date.lsp" nil))
-  program-error)
+  (signals-error (file-write-date "file-write-date.lsp" nil)
+		 program-error)
+  t)
 
 (deftest file-write-date.error.3
-  (classify-error
+  (signals-error
    (file-write-date (make-pathname :name :wild :type "lsp"
-				   :defaults *default-pathname-defaults*)))
-  file-error)
+				   :defaults *default-pathname-defaults*))
+   file-error)
+  t)
 
 (deftest file-write-date.error.4
-  (classify-error
+  (signals-error
    (file-write-date (make-pathname :name "file-write-date" :type :wild
-				   :defaults *default-pathname-defaults*)))
-  file-error)
+				   :defaults *default-pathname-defaults*))
+   file-error)
+  t)

@@ -9,12 +9,12 @@
 (ignore-errors (compile-and-load "fceiling-aux.lsp"))
 
 (deftest fceiling.error.1
-  (classify-error (fceiling))
-  program-error)
+  (signals-error (fceiling) program-error)
+  t)
 
 (deftest fceiling.error.2
-  (classify-error (fceiling 1.0 1 nil))
-  program-error)
+  (signals-error (fceiling 1.0 1 nil) program-error)
+  t)
 
 ;;;
 

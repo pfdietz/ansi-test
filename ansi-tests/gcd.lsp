@@ -8,12 +8,16 @@
 (compile-and-load "numbers-aux.lsp")
 (compile-and-load "gcd-aux.lsp")
 
+;;; Error tests
+
 (deftest gcd.error.1
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (gcd ',x))) 'type-error))
+		   (eval `(signals-error (gcd ',x) type-error)))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest gcd.1
   (gcd)

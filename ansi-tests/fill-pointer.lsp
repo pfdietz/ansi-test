@@ -47,36 +47,38 @@
 ;;; Error tests
 
 (deftest fill-pointer.error.1
-  (classify-error (fill-pointer))
-  program-error)
+  (signals-error (fill-pointer) program-error)
+  t)
 
 (deftest fill-pointer.error.2
-  (classify-error (fill-pointer (make-array '(10) :fill-pointer 4)
-				nil))
-  program-error)
+  (signals-error (fill-pointer (make-array '(10) :fill-pointer 4) nil)
+		 program-error)
+  t)
 
 (deftest fill-pointer.error.3
-  (classify-error (fill-pointer (make-array '(10) :fill-pointer nil)))
-  type-error)
+  (signals-error (fill-pointer (make-array '(10) :fill-pointer nil))
+		 type-error)
+  t)
 
 (deftest fill-pointer.error.4
-  (classify-error (fill-pointer #0aNIL))
-  type-error)
+  (signals-error (fill-pointer #0aNIL) type-error)
+  t)
 
 (deftest fill-pointer.error.5
-  (classify-error (fill-pointer #2a((a b c)(d e f))))
-  type-error)
+  (signals-error (fill-pointer #2a((a b c)(d e f))) type-error)
+  t)
 
 (deftest fill-pointer.error.6
-  (let (why)
-    (loop for e in *mini-universe*
-	  when (and (or (not (typep e 'vector))
-			(not (array-has-fill-pointer-p e)))
-		    (not (eql (setq why (classify-error** `(fill-pointer ',e)))
-			      'type-error)))
-	  collect (list e why)))
+  (loop for e in *mini-universe*
+	when (and (or (not (typep e 'vector))
+		      (not (array-has-fill-pointer-p e)))
+		  (not (eval `(signals-error
+			       (fill-pointer ',e)
+			       type-error))))
+	collect (list e))
   nil)
 
 (deftest fill-pointer.error.7
-  (classify-error (locally (fill-pointer #2a((a b c)(d e f))) t))
-  type-error)
+  (signals-error (locally (fill-pointer #2a((a b c)(d e f))) t)
+		 type-error)
+  t)

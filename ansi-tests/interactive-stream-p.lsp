@@ -17,15 +17,16 @@
 (deftest interactive-stream-p.error.1
   (loop for x in *mini-universe*
 	unless (or (typep x 'stream)
-		   (eql (eval `(classify-error (interactive-stream-p ',x)))
-			'type-error))
+		   (eval `(signals-error (interactive-stream-p ',x)
+					 type-error)))
 	collect x)
   nil)
 
 (deftest interactive-stream-p.error.2
-  (classify-error (interactive-stream-p))
-  program-error)
+  (signals-error (interactive-stream-p) program-error)
+  t)
 
 (deftest interactive-stream-p.error.3
-  (classify-error (interactive-stream-p *terminal-io* nil))
-  program-error)
+  (signals-error (interactive-stream-p *terminal-io* nil)
+		 program-error)
+  t)

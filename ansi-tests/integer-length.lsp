@@ -6,22 +6,22 @@
 (in-package :cl-test)
 
 (deftest integer-length.error.1
-  (classify-error (integer-length))
-  program-error)
+  (signals-error (integer-length) program-error)
+  t)
 
 (deftest integer-length.error.2
-  (classify-error (integer-length 1 1))
-  program-error)
+  (signals-error (integer-length 1 1) program-error)
+  t)
 
 (deftest integer-length.error.3
-  (classify-error (integer-length 1 nil))
-  program-error)
+  (signals-error (integer-length 1 nil) program-error)
+  t)
 
 (deftest integer-length.error.4
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (eval `(classify-error (integer-length ',x)))
-		       'type-error))
+		   (eval `(signals-error (integer-length ',x)
+					 type-error)))
 	collect x)
   nil)
 

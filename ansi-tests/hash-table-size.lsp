@@ -6,17 +6,18 @@
 (in-package :cl-test)
 
 (deftest hash-table-size.error.1
-  (classify-error (hash-table-size))
-  program-error)
+  (signals-error (hash-table-size) program-error)
+  t)
 
 (deftest hash-table-size.error.2
-  (classify-error (hash-table-size (make-hash-table) nil))
-  program-error)
+  (signals-error (hash-table-size (make-hash-table) nil)
+		 program-error)
+  t)
 
 (deftest hash-table-size.error.3
   (loop for x in *mini-universe*
 	unless (hash-table-p x)
-	unless (eq (eval `(classify-error (hash-table-size ',x)))
-		   'type-error)
+	unless (eval `(signals-error (hash-table-size ',x)
+				     type-error))
 	collect x)
   nil)

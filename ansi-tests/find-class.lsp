@@ -278,9 +278,9 @@
 ;;; Error tests
 
 (deftest find-class.error.1
-  (classify-error (find-class))
-  program-error)
+  (signals-error (find-class) program-error)
+  t)
 
 (deftest find-class.error.2
-  (classify-error (find-class 'symbol nil nil nil))
-  program-error)
+  (signals-error (find-class 'symbol nil nil nil) program-error)
+  t)

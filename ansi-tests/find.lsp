@@ -839,64 +839,65 @@
 ;;; Error tests
 
 (deftest find.error.1
-  (classify-error (find 'a 'b))
-  type-error)
+  (signals-error (find 'a 'b) type-error)
+  t)
 
 (deftest find.error.2
-  (classify-error (find 'a 10))
-  type-error)
+  (signals-error (find 'a 10) type-error)
+  t)
 
 (deftest find.error.3
-  (classify-error (find 'a 1.4))
-  type-error)
+  (signals-error (find 'a 1.4) type-error)
+  t)
 
 (deftest find.error.4
-  (classify-error (find 'e '(a b c . d)))
-  type-error)
+  (signals-error (find 'e '(a b c . d)) type-error)
+  t)
 
 (deftest find.error.5
-  (classify-error (find))
-  program-error)
+  (signals-error (find) program-error)
+  t)
 
 (deftest find.error.6
-  (classify-error (find 'a))
-  program-error)
+  (signals-error (find 'a) program-error)
+  t)
 
 (deftest find.error.7
-  (classify-error (find 'a nil :bad t))
-  program-error)
+  (signals-error (find 'a nil :bad t) program-error)
+  t)
 
 (deftest find.error.8
-  (classify-error (find 'a nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (find 'a nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest find.error.9
-  (classify-error (find 'a nil 1 1))
-  program-error)
+  (signals-error (find 'a nil 1 1) program-error)
+  t)
 
 (deftest find.error.10
-  (classify-error (find 'a nil :key))
-  program-error)
+  (signals-error (find 'a nil :key) program-error)
+  t)
 
 (deftest find.error.11
-  (classify-error (locally (find 'a 'b) t))
-  type-error)
+  (signals-error (locally (find 'a 'b) t) type-error)
+  t)
 
 (deftest find.error.12
-  (classify-error (find 'b '(a b c) :test #'identity))
-  program-error)
+  (signals-error (find 'b '(a b c) :test #'identity) program-error)
+  t)
 
 (deftest find.error.13
-  (classify-error (find 'b '(a b c) :test-not #'identity))
-  program-error)
+  (signals-error (find 'b '(a b c) :test-not #'identity) program-error)
+  t)
 
 (deftest find.error.14
-  (classify-error (find 'c '(a b c) :key #'cons))
-  program-error)
+  (signals-error (find 'c '(a b c) :key #'cons) program-error)
+  t)
 
 (deftest find.error.15
-  (classify-error (find 'c '(a b c) :key #'car))
-  type-error)
+  (signals-error (find 'c '(a b c) :key #'car) type-error)
+  t)
 
 
 ;;; Order of evaluation tests

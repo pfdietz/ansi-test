@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest integerp.error.1
-  (classify-error (integerp))
-  program-error)
+  (signals-error (integerp) program-error)
+  t)
 
 (deftest integerp.error.2
-  (classify-error (integerp 0 0))
-  program-error)
+  (signals-error (integerp 0 0) program-error)
+  t)
 
 (deftest integerp.error.3
-  (classify-error (integerp nil nil))
-  program-error)
+  (signals-error (integerp nil nil) program-error)
+  t)
 
 (deftest integerp.1
   (loop for i in *integers*

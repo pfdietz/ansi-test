@@ -75,31 +75,33 @@
 ;;; Unknown keyword parameter should throw a program-error in safe code
 ;;; (section 3.5.1.4)
 (deftest flet.12
-  (classify-error
-   (flet ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :c 4)))
-  program-error)
+  (signals-error
+   (flet ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :c 4))
+   program-error)
+  t)
 
 ;;; Odd # of keyword args should throw a program-error in safe code
 ;;; (section 3.5.1.6)
 (deftest flet.13
-  (classify-error
-   (flet ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :a)))
-  program-error)
+  (signals-error
+   (flet ((%f (&key a (b 0 b-p)) (values a b (not (not b-p))))) (%f :a))
+   program-error)
+  t)
 
 ;;; Too few arguments (section 3.5.1.2)
 (deftest flet.14
-  (classify-error (flet ((%f (a) a)) (%f)))
-  program-error)
+  (signals-error (flet ((%f (a) a)) (%f)) program-error)
+  t)
 
 ;;; Too many arguments (section 3.5.1.3)
 (deftest flet.15
-  (classify-error (flet ((%f (a) a)) (%f 1 2)))
-  program-error)
+  (signals-error (flet ((%f (a) a)) (%f 1 2)) program-error)
+  t)
 
 ;;; Invalid keyword argument (section 3.5.1.5)
 (deftest flet.16
-  (classify-error (flet ((%f (&key a) a)) (%f '(foo))))
-  program-error)
+  (signals-error (flet ((%f (&key a) a)) (%f '(foo))) program-error)
+  t)
 
 
 ;;; Definition of a (setf ...) function
@@ -352,34 +354,6 @@
 		 (%f)))
 	 (%g :x 'worse))))
   good)
-
-;;; Test that [:&]allow-other-keys suppress errors for illegal keywords
-;;; or odd numbers of keyword arguments
-
-;;; Note -- These are apparently bad tests! -- PFD
-;;;(deftest flet.41
-;;;  (classify-error
-;;;   (flet ((%f (&key (a :good)) a))
-;;;     (%f :allow-other-keys t :b)))
-;;;  :good)
-;;;
-;;;(deftest flet.42
-;;;  (classify-error
-;;;   (flet ((%f (&key (a :good)) a))
-;;;     (%f :allow-other-keys t 10 20)))
-;;;  :good)
-;;;
-;;;(deftest flet.43
-;;;  (classify-error
-;;;   (flet ((%f (&key (a :good) &allow-other-keys) a))
-;;;     (%f :b)))
-;;;  :good)
-;;;
-;;;(deftest flet.44
-;;;  (classify-error
-;;;   (flet ((%f (&key (a :good) &allow-other-keys) a))
-;;;     (%f 10 20)))
-;;;  :good)
 
 
 (deftest flet.45

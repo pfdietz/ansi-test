@@ -8,15 +8,17 @@
 (compile-and-load "numbers-aux.lsp")
 (ignore-errors (compile-and-load "fround-aux.lsp"))
 
+;;; Error tests
+
 (deftest fround.error.1
-  (classify-error (fround))
-  program-error)
+  (signals-error (fround) program-error)
+  t)
 
 (deftest fround.error.2
-  (classify-error (fround 1.0 1 nil))
-  program-error)
+  (signals-error (fround 1.0 1 nil) program-error)
+  t)
 
-;;;
+;;; Non-error tests
 
 (deftest fround.1
   (fround.1-fn)

@@ -27,17 +27,18 @@
 ;;; Error tests
 
 (deftest input-stream-p.error.1
-  (classify-error (input-stream-p))
-  program-error)
+  (signals-error (input-stream-p) program-error)
+  t)
 
 (deftest input-stream-p.error.2
-  (classify-error (input-stream-p *standard-input* nil))
-  program-error)
+  (signals-error (input-stream-p *standard-input* nil)
+		 program-error)
+  t)
 
 (deftest input-stream-p.error.3
   (loop for x in *mini-universe*
 	unless (or (typep x 'stream)
-		   (eq (eval `(classify-error (input-stream-p ',x)))
-		       'type-error))
+		   (eval `(signals-error (input-stream-p ',x)
+					 type-error)))
 	collect x)
   nil)

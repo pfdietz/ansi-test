@@ -26,18 +26,18 @@
   nil)
 
 (deftest hash-table-rehash-threshold.error.1
-  (classify-error (hash-table-rehash-threshold))
-  program-error)
+  (signals-error (hash-table-rehash-threshold) program-error)
+  t)
 
 (deftest hash-table-rehash-threshold.error.2
-  (classify-error (hash-table-rehash-threshold (make-hash-table) nil))
-  program-error)
+  (signals-error (hash-table-rehash-threshold (make-hash-table) nil)
+		 program-error)
+  t)
 
 (deftest hash-table-rehash-threshold.error.3
   (loop for x in *mini-universe*
 	unless (hash-table-p x)
-	unless (eq (eval `(classify-error (hash-table-rehash-threshold ',x)))
-		   'type-error)
+	unless (eval `(signals-error (hash-table-rehash-threshold ',x)
+				     type-error))
 	collect x)
   nil)
-

@@ -6,45 +6,47 @@
 (in-package :cl-test)
 
 (deftest fill.error.1
-  (classify-error (fill 'a 'b))
-  type-error)
+  (signals-error (fill 'a 'b) type-error)
+  t)
 
 (deftest fill.error.2
-  (classify-error (fill))
-  program-error)
+  (signals-error (fill) program-error)
+  t)
 
 (deftest fill.error.3
-  (classify-error (fill (list 'a 'b)))
-  program-error)
+  (signals-error (fill (list 'a 'b)) program-error)
+  t)
 
 (deftest fill.error.4
-  (classify-error (fill (list 'a 'b) 'c :bad t))
-  program-error)
+  (signals-error (fill (list 'a 'b) 'c :bad t) program-error)
+  t)
 
 (deftest fill.error.5
-  (classify-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest fill.error.6
-  (classify-error (fill (list 'a 'b) 'c :start))
-  program-error)
+  (signals-error (fill (list 'a 'b) 'c :start) program-error)
+  t)
 
 (deftest fill.error.7
-  (classify-error (fill (list 'a 'b) 'c :end))
-  program-error)
+  (signals-error (fill (list 'a 'b) 'c :end) program-error)
+  t)
 
 (deftest fill.error.8
-  (classify-error (fill (list 'a 'b) 'c 1 2))
-  program-error)
+  (signals-error (fill (list 'a 'b) 'c 1 2) program-error)
+  t)
 
 (deftest fill.error.10
-  (classify-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil
-			:allow-other-keys t))
-  program-error)
+  (signals-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil
+			:allow-other-keys t)
+		 program-error)
+  t)
 
 (deftest fill.error.11
-  (classify-error (locally (fill 'a 'b) t))
-  type-error)
+  (signals-error (locally (fill 'a 'b) t) type-error)
+  t)
 
 ;;; Fill on arrays
 
@@ -91,28 +93,32 @@
   t (x x x x x))
 
 (deftest array-fill-7
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5))))
-     (fill a 'x :start -1)))
-  type-error)
+     (fill a 'x :start -1))
+   type-error)
+  t)
 
 (deftest array-fill-8
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5))))
-     (fill a 'x :start 'a)))
-  type-error)
+     (fill a 'x :start 'a))
+   type-error)
+  t)
 
 (deftest array-fill-9
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5))))
-     (fill a 'x :end -1)))
-  type-error)
+     (fill a 'x :end -1))
+   type-error)
+  t)
 
 (deftest array-fill-10
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5))))
-     (fill a 'x :end 'a)))
-  type-error)
+     (fill a 'x :end 'a))
+   type-error)
+  t)
 
 ;;; fill on arrays of fixnums
 
@@ -159,28 +165,32 @@
   t (-1 -1 -1 -1 -1))
 
 (deftest array-fixnum-fill-7
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5) :element-type 'fixnum)))
-     (fill a 10 :start -1)))
-  type-error)
+     (fill a 10 :start -1))
+   type-error)
+  t)
 
 (deftest array-fixnum-fill-8
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5) :element-type 'fixnum)))
-     (fill a 100 :start 'a)))
-  type-error)
+     (fill a 100 :start 'a))
+   type-error)
+  t)
 
 (deftest array-fixnum-fill-9
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5) :element-type 'fixnum)))
-     (fill a -5 :end -1)))
-  type-error)
+     (fill a -5 :end -1))
+   type-error)
+  t)
 
 (deftest array-fixnum-fill-10
-  (classify-error
+  (signals-error
    (let* ((a (make-array '(5) :element-type 'fixnum)))
-     (fill a 17 :end 'a)))
-  type-error)
+     (fill a 17 :end 'a))
+   type-error)
+  t)
 
 ;;; fill on arrays of unsigned eight bit bytes
 
@@ -209,20 +219,24 @@
   t (0 0 0 0 0))
 
 (deftest array-unsigned-byte8-fill-7
-  (classify-error (array-unsigned-byte-fill-test-fn 8 0 :start -1))
-  type-error)
+  (signals-error (array-unsigned-byte-fill-test-fn 8 0 :start -1)
+		 type-error)
+  t)
 
 (deftest array-unsigned-byte8-fill-8
-  (classify-error (array-unsigned-byte-fill-test-fn 8 100 :start 'a))
-  type-error)
+  (signals-error (array-unsigned-byte-fill-test-fn 8 100 :start 'a)
+		 type-error)
+  t)
 
 (deftest array-unsigned-byte8-fill-9
-  (classify-error (array-unsigned-byte-fill-test-fn 8 19 :end -1))
-  type-error)
+  (signals-error (array-unsigned-byte-fill-test-fn 8 19 :end -1)
+		 type-error)
+  t)
 
 (deftest array-unsigned-byte8-fill-10
-  (classify-error (array-unsigned-byte-fill-test-fn 8 17 :end 'a))
-  type-error)
+  (signals-error (array-unsigned-byte-fill-test-fn 8 17 :end 'a)
+		 type-error)
+  t)
 
 ;;; Tests on arrays with fill pointers
 

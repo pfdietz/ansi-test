@@ -159,18 +159,16 @@
   (5 4 3 2 1))
 
 (deftest handler-case.23
-  (classify-error
-   (handler-case
-    (values 1 2)
-    (:no-error (x) x)))
-  program-error)
+  (signals-error
+   (handler-case (values 1 2) (:no-error (x) x))
+   program-error)
+  t)
 
 (deftest handler-case.24
-  (classify-error
-   (handler-case
-    (values)
-    (:no-error (x) x)))
-  program-error)
+  (signals-error
+   (handler-case (values) (:no-error (x) x))
+   program-error)
+  t)
 
 (deftest handler-case.25
   (handler-case

@@ -7,28 +7,32 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest isqrt.error.1
-  (classify-error (isqrt))
-  program-error)
+  (signals-error (isqrt) program-error)
+  t)
 
 (deftest isqrt.error.2
-  (classify-error (isqrt 0 0))
-  program-error)
+  (signals-error (isqrt 0 0) program-error)
+  t)
 
 (deftest isqrt.error.3
-  (classify-error (isqrt 0 nil))
-  program-error)
+  (signals-error (isqrt 0 nil) program-error)
+  t)
 
 (deftest isqrt.error.4
-  (classify-error (isqrt 0 0 0))
-  program-error)
+  (signals-error (isqrt 0 0 0) program-error)
+  t)
 
 (deftest isqrt.error.5
   (loop for x in *mini-universe*
 	unless (or (and (integerp x) (>= x 0))
-		   (eq (eval `(classify-error (isqrt ',x))) 'type-error))
+		   (eval `(signals-error (isqrt ',x) type-error)))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest isqrt.1
   (loop for i from 0 to 10000

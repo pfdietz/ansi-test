@@ -8,15 +8,17 @@
 (compile-and-load "numbers-aux.lsp")
 (ignore-errors (compile-and-load "ftruncate-aux.lsp"))
 
+;;; Error tests
+
 (deftest ftruncate.error.1
-  (classify-error (ftruncate))
-  program-error)
+  (signals-error (ftruncate) program-error)
+  t)
 
 (deftest ftruncate.error.2
-  (classify-error (ftruncate 1.0 1 nil))
-  program-error)
+  (signals-error (ftruncate 1.0 1 nil) program-error)
+  t)
 
-;;;
+;;; Non-error tests
 
 (deftest ftruncate.1
   (ftruncate.1-fn)

@@ -84,21 +84,22 @@
 ;;; Error tests
 
 (deftest find-method.error.1
-  (classify-error (find-method))
-  program-error)
+  (signals-error (find-method) program-error)
+  t)
 
 (deftest find-method.error.2
-  (classify-error (find-method #'find-method-gf-01))
-  program-error)
+  (signals-error (find-method #'find-method-gf-01) program-error)
+  t)
 
 (deftest find-method.error.3
-  (classify-error (find-method #'find-method-gf-01 nil))
-  program-error)
+  (signals-error (find-method #'find-method-gf-01 nil) program-error)
+  t)
 
 (deftest find-method.error.4
-  (classify-error
-   (find-method #'find-method-gf-01 nil (list (find-class 'integer)) nil nil))
-  program-error)
+  (signals-error
+   (find-method #'find-method-gf-01 nil (list (find-class 'integer)) nil nil)
+   program-error)
+  t)
 
 (deftest find-method.error.5
   (handler-case

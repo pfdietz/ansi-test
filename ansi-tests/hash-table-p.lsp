@@ -34,10 +34,11 @@
   t)
 
 (deftest hash-table-p.error.1
-  (classify-error (hash-table-p))
-  program-error)
+  (signals-error (hash-table-p) program-error)
+  t)
 
 (deftest hash-table-p.error.2
-  (classify-error (let ((h (make-hash-table))) (hash-table-p h nil)))
-  program-error)
+  (signals-error (let ((h (make-hash-table))) (hash-table-p h nil))
+		 program-error)
+  t)
 

@@ -62,25 +62,25 @@
   (c d (c d)) 2 1 2)
 
 (deftest get-properties.error.1
-  (classify-error (get-properties))
-  program-error)
+  (signals-error (get-properties) program-error)
+  t)
 
 (deftest get-properties.error.2
-  (classify-error (get-properties nil))
-  program-error)
+  (signals-error (get-properties nil) program-error)
+  t)
 
 (deftest get-properties.error.3
-  (classify-error (get-properties nil nil nil))
-  program-error)
+  (signals-error (get-properties nil nil nil) program-error)
+  t)
 
 (deftest get-properties.error.4
-  (classify-error (get-properties '(a 1 b 2 c 3) '(x . y)))
-  type-error)
+  (signals-error (get-properties '(a 1 b 2 c 3) '(x . y)) type-error)
+  t)
 
 (deftest get-properties.error.5
-  (classify-error (get-properties '(a 1 b 2 c 3 . d) '(x y)))
-  type-error)
+  (signals-error (get-properties '(a 1 b 2 c 3 . d) '(x y)) type-error)
+  t)
 
 (deftest get-properties.error.6
-  (classify-error (get-properties '(a 1 b 2 c . d) '(x y)))
-  type-error)
+  (signals-error (get-properties '(a 1 b 2 c . d) '(x y)) type-error)
+  t)

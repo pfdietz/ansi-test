@@ -6,12 +6,12 @@
 (in-package :cl-test)
 
 (deftest float.error.1
-  (classify-error (float))
-  program-error)
+  (signals-error (float) program-error)
+  t)
 
 (deftest float.error.2
-  (classify-error (float 0 0.0 nil))
-  program-error)
+  (signals-error (float 0 0.0 nil) program-error)
+  t)
 
 ;;;
 

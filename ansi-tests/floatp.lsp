@@ -5,13 +5,17 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest floatp.error.1
-  (classify-error (floatp))
-  program-error)
+  (signals-error (floatp) program-error)
+  t)
 
 (deftest floatp.error.2
-  (classify-error (floatp 1.0 nil))
-  program-error)
+  (signals-error (floatp 1.0 nil) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest floatp.1
   (notnot-mv (floatp 1.0))

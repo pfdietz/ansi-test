@@ -537,64 +537,66 @@
 ;;; Error tests
 
 (deftest find-if.error.1
-  (classify-error (find-if #'null 'b))
-  type-error)
+  (signals-error (find-if #'null 'b) type-error)
+  t)
 
 (deftest find-if.error.2
-  (classify-error (find-if #'identity 10))
-  type-error)
+  (signals-error (find-if #'identity 10) type-error)
+  t)
 
 (deftest find-if.error.3
-  (classify-error (find-if '1+ 1.4))
-  type-error)
+  (signals-error (find-if '1+ 1.4) type-error)
+  t)
 
 (deftest find-if.error.4
-  (classify-error (find-if 'null '(a b c . d)))
-  type-error)
+  (signals-error (find-if 'null '(a b c . d)) type-error)
+  t)
 
 (deftest find-if.error.5
-  (classify-error (find-if))
-  program-error)
+  (signals-error (find-if) program-error)
+  t)
 
 (deftest find-if.error.6
-  (classify-error (find-if #'null))
-  program-error)
+  (signals-error (find-if #'null) program-error)
+  t)
 
 (deftest find-if.error.7
-  (classify-error (find-if #'null nil :bad t))
-  program-error)
+  (signals-error (find-if #'null nil :bad t) program-error)
+  t)
 
 (deftest find-if.error.8
-  (classify-error (find-if #'null nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (find-if #'null nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest find-if.error.9
-  (classify-error (find-if #'null nil 1 1))
-  program-error)
+  (signals-error (find-if #'null nil 1 1) program-error)
+  t)
 
 (deftest find-if.error.10
-  (classify-error (find-if #'null nil :key))
-  program-error)
+  (signals-error (find-if #'null nil :key) program-error)
+  t)
 
 (deftest find-if.error.11
-  (classify-error (locally (find-if #'null 'b) t))
-  type-error)
+  (signals-error (locally (find-if #'null 'b) t) type-error)
+  t)
 
 (deftest find-if.error.12
-  (classify-error (find-if #'cons '(a b c)))
-  program-error)
+  (signals-error (find-if #'cons '(a b c)) program-error)
+  t)
 
 (deftest find-if.error.13
-  (classify-error (find-if #'car '(a b c)))
-  type-error)
+  (signals-error (find-if #'car '(a b c)) type-error)
+  t)
 
 (deftest find-if.error.14
-  (classify-error (find-if #'identity '(a b c) :key #'cons))
-  program-error)
+  (signals-error (find-if #'identity '(a b c) :key #'cons) program-error)
+  t)
 
 (deftest find-if.error.15
-  (classify-error (find-if #'identity '(a b c) :key #'car))
-  type-error)
+  (signals-error (find-if #'identity '(a b c) :key #'car)
+		 type-error)
+  t)
 
 ;;; Order of evaluation tests
 

@@ -87,9 +87,9 @@
   t 1)
 
 (deftest functionp.error.1
-  (classify-error (functionp))
-  program-error)
+  (signals-error (functionp) program-error)
+  t)
 
 (deftest functionp.error.2
-  (classify-error (functionp #'cons nil))
-  program-error)
+  (signals-error (functionp #'cons nil) program-error)
+  t)

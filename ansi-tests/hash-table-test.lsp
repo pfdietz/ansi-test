@@ -34,19 +34,16 @@
 ;;; Error cases
 
 (deftest hash-table-test.error.1
-  (classify-error (hash-table-test))
-  program-error)
+  (signals-error (hash-table-test) program-error)
+  t)
 
 (deftest hash-table-test.error.2
-  (classify-error (hash-table-test (make-hash-table) nil))
-  program-error)
+  (signals-error (hash-table-test (make-hash-table) nil)  program-error)
+  t)
 
 (deftest hash-table-test.error.3
   (loop for x in *mini-universe*
 	unless (hash-table-p x)
-	unless (eq (eval `(classify-error (hash-table-test ',x)))
-		   'type-error)
+	unless (eval `(signals-error (hash-table-test ',x) type-error))
 	collect x)
   nil)
-
-

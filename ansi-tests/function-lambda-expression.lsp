@@ -28,15 +28,9 @@
   1)
 
 (deftest function-lambda-expression.error.1
-  (classify-error (function-lambda-expression))
-  program-error)
+  (signals-error (function-lambda-expression) program-error)
+  t)
 
 (deftest function-lambda-expression.error.2
-  (classify-error (function-lambda-expression #'cons nil))
-  program-error)
-
-
-
-
-
-
+  (signals-error (function-lambda-expression #'cons nil) program-error)
+  t)

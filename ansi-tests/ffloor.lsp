@@ -9,12 +9,12 @@
 (ignore-errors (compile-and-load "ffloor-aux.lsp"))
 
 (deftest ffloor.error.1
-  (classify-error (ffloor))
-  program-error)
+  (signals-error (ffloor) program-error)
+  t)
 
 (deftest ffloor.error.2
-  (classify-error (ffloor 1.0 1 nil))
-  program-error)
+  (signals-error (ffloor 1.0 1 nil) program-error)
+  t)
 
 ;;;
 

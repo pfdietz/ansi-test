@@ -514,64 +514,68 @@
 ;;; Error tests
 
 (deftest find-if-not.error.1
-  (classify-error (find-if-not #'null 'b))
-  type-error)
+  (signals-error (find-if-not #'null 'b) type-error)
+  t)
 
 (deftest find-if-not.error.2
-  (classify-error (find-if-not #'identity 10))
-  type-error)
+  (signals-error (find-if-not #'identity 10) type-error)
+  t)
 
 (deftest find-if-not.error.3
-  (classify-error (find-if-not '1+ 1.4))
-  type-error)
+  (signals-error (find-if-not '1+ 1.4) type-error)
+  t)
 
 (deftest find-if-not.error.4
-  (classify-error (find-if-not 'identity '(a b c . d)))
-  type-error)
+  (signals-error (find-if-not 'identity '(a b c . d))
+		 type-error)
+  t)
 
 (deftest find-if-not.error.5
-  (classify-error (find-if-not))
-  program-error)
+  (signals-error (find-if-not) program-error)
+  t)
 
 (deftest find-if-not.error.6
-  (classify-error (find-if-not #'null))
-  program-error)
+  (signals-error (find-if-not #'null) program-error)
+  t)
 
 (deftest find-if-not.error.7
-  (classify-error (find-if-not #'null nil :bad t))
-  program-error)
+  (signals-error (find-if-not #'null nil :bad t) program-error)
+  t)
 
 (deftest find-if-not.error.8
-  (classify-error (find-if-not #'null nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (find-if-not #'null nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest find-if-not.error.9
-  (classify-error (find-if-not #'null nil 1 1))
-  program-error)
+  (signals-error (find-if-not #'null nil 1 1) program-error)
+  t)
 
 (deftest find-if-not.error.10
-  (classify-error (find-if-not #'null nil :key))
-  program-error)
+  (signals-error (find-if-not #'null nil :key) program-error)
+  t)
 
 (deftest find-if-not.error.11
-  (classify-error (locally (find-if-not #'null 'b) t))
-  type-error)
+  (signals-error (locally (find-if-not #'null 'b) t) type-error)
+  t)
 
 (deftest find-if-not.error.12
-  (classify-error (find-if-not #'cons '(a b c)))
-  program-error)
+  (signals-error (find-if-not #'cons '(a b c)) program-error)
+  t)
 
 (deftest find-if-not.error.13
-  (classify-error (find-if-not #'car '(a b c)))
-  type-error)
+  (signals-error (find-if-not #'car '(a b c)) type-error)
+  t)
 
 (deftest find-if-not.error.14
-  (classify-error (find-if-not #'identity '(a b c) :key #'cons))
-  program-error)
+  (signals-error (find-if-not #'identity '(a b c) :key #'cons)
+		 program-error)
+  t)
 
 (deftest find-if-not.error.15
-  (classify-error (find-if-not #'identity '(a b c) :key #'car))
-  type-error)
+  (signals-error (find-if-not #'identity '(a b c) :key #'car)
+		 type-error)
+  t)
 
 ;;; Order of evaluation tests
 

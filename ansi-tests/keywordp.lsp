@@ -28,14 +28,5 @@
     (values (keywordp (progn (incf i) nil)) i))
   nil 1)
 
-(deftest keywordp.error.1 (classify-error (keywordp)) program-error)
-(deftest keywordp.error.2 (classify-error (keywordp :x :x)) program-error)
-
-(deftest keywordp.error.3
-  (classify-error (keywordp))
-  program-error)
-
-(deftest keywordp.error.4
-  (classify-error (keywordp nil nil))
-  program-error)
-
+(deftest keywordp.error.1 (signals-error (keywordp) program-error) t)
+(deftest keywordp.error.2 (signals-error (keywordp :x :x) program-error) t)

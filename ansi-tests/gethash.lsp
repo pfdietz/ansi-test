@@ -83,13 +83,13 @@
 ;;;; Error tests
 
 (deftest gethash.error.1
-  (classify-error (gethash))
-  program-error)
+  (signals-error (gethash) program-error)
+  t)
 
 (deftest gethash.error.2
-  (classify-error (gethash 'foo))
-  program-error)
+  (signals-error (gethash 'foo) program-error)
+  t)
 
 (deftest gethash.error.3
-  (classify-error (gethash 'foo (make-hash-table) nil nil))
-  program-error)
+  (signals-error (gethash 'foo (make-hash-table) nil nil) program-error)
+  t)

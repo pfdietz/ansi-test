@@ -26,9 +26,10 @@
   1 1)
 
 (deftest identity.error.1
-  (classify-error (identity))
-  program-error)
+  (signals-error (identity) program-error)
+  t)
 
 (deftest identity.error.2
-  (classify-error (identity 'a 'a))
-  program-error)
+  (signals-error (identity 'a 'a) program-error)
+  t)
+

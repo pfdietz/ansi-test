@@ -350,49 +350,56 @@
 ;;; Error tests
 
 (deftest intersection.error.1
-  (classify-error (intersection))
-  program-error)
+  (signals-error (intersection) program-error)
+  t)
 
 (deftest intersection.error.2
-  (classify-error (intersection nil))
-  program-error)
+  (signals-error (intersection nil) program-error)
+  t)
 
 (deftest intersection.error.3
-  (classify-error (intersection nil nil :bad t))
-  program-error)
+  (signals-error (intersection nil nil :bad t) program-error)
+  t)
 
 (deftest intersection.error.4
-  (classify-error (intersection nil nil :key))
-  program-error)
+  (signals-error (intersection nil nil :key) program-error)
+  t)
 
 (deftest intersection.error.5
-  (classify-error (intersection nil nil 1 2))
-  program-error)
+  (signals-error (intersection nil nil 1 2) program-error)
+  t)
 
 (deftest intersection.error.6
-  (classify-error (intersection nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (intersection nil nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest intersection.error.7
-  (classify-error (intersection '(a b c) '(d e f) :test #'identity))
-  program-error)
+  (signals-error (intersection '(a b c) '(d e f) :test #'identity)
+		 program-error)
+  t)
 
 (deftest intersection.error.8
-  (classify-error (intersection '(a b c) '(d e f) :test-not #'identity))
-  program-error)
+  (signals-error (intersection '(a b c) '(d e f) :test-not #'identity)
+		 program-error)
+  t)
 
 (deftest intersection.error.9
-  (classify-error (intersection '(a b c) '(d e f) :key #'cons))
-  program-error)
+  (signals-error (intersection '(a b c) '(d e f) :key #'cons)
+		 program-error)
+  t)
 
 (deftest intersection.error.10
-  (classify-error (intersection '(a b c) '(d e f) :key #'car))
-  type-error)
+  (signals-error (intersection '(a b c) '(d e f) :key #'car)
+		 type-error)
+  t)
 
 (deftest intersection.error.11
-  (classify-error (intersection '(a b c) '(d e f . g)))
-  type-error)
+  (signals-error (intersection '(a b c) '(d e f . g))
+		 type-error)
+  t)
 
 (deftest intersection.error.12
-  (classify-error (intersection '(a b . c) '(d e f)))
-  type-error)
+  (signals-error (intersection '(a b . c) '(d e f))
+		 type-error)
+  t)

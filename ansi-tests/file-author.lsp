@@ -58,27 +58,26 @@
 ;;; Error tests
 
 (deftest file-author.error.1
-  (classify-error (file-author))
-  program-error)
+  (signals-error (file-author) program-error)
+  t)
 
 (deftest file-author.error.2
-  (classify-error (file-author "file-author.lsp" nil))
-  program-error)
+  (signals-error (file-author "file-author.lsp" nil) program-error)
+  t)
 
 (deftest file-author.error.3
-  (classify-error
+  (signals-error
    (file-author (make-pathname :name :wild :type "lsp"
-			       :defaults *default-pathname-defaults*)))
-  file-error)
+			       :defaults *default-pathname-defaults*))
+   file-error)
+  t)
 
 (deftest file-author.error.4
-  (classify-error
+  (signals-error
    (file-author (make-pathname :name "file-author" :type :wild
-			       :defaults *default-pathname-defaults*)))
-  file-error)
-
-
-
+			       :defaults *default-pathname-defaults*))
+   file-error)
+  t)
 
 
 

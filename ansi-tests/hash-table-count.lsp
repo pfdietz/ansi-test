@@ -59,9 +59,10 @@
 ;; This function is mostly tested by calls to test-hash-table-1
 
 (deftest hash-table-count.error.1
-  (classify-error (hash-table-count))
-  program-error)
+  (signals-error (hash-table-count) program-error)
+  t)
 
 (deftest hash-table-count.error.2
-  (classify-error (hash-table-count (make-hash-table) nil))
-  program-error)
+  (signals-error (hash-table-count (make-hash-table) nil)
+		 program-error)
+  t)

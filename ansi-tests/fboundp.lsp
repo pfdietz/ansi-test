@@ -51,25 +51,25 @@
   t 1)
 
 (deftest fboundp.error.1
-  (classify-error (fboundp 1))
-  type-error)
+  (signals-error (fboundp 1) type-error)
+  t)
 
 (deftest fboundp.error.2
-  (classify-error (fboundp #\a))
-  type-error)
+  (signals-error (fboundp #\a) type-error)
+  t)
 
 (deftest fboundp.error.3
-  (classify-error (fboundp '(foo)))
-  type-error)
+  (signals-error (fboundp '(foo)) type-error)
+  t)
 
 (deftest fboundp.error.4
-  (classify-error (fboundp))
-  program-error)
+  (signals-error (fboundp) program-error)
+  t)
 
 (deftest fboundp.error.5
-  (classify-error (fboundp 'cons nil))
-  program-error)
+  (signals-error (fboundp 'cons nil) program-error)
+  t)
 
 (deftest fboundp.error.6
-  (classify-error (locally (fboundp 1) t))
-  type-error)
+  (signals-error (locally (fboundp 1) t) type-error)
+  t)

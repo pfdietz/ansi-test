@@ -8,15 +8,17 @@
 (compile-and-load "numbers-aux.lsp")
 (compile-and-load "floor-aux.lsp")
 
+;;; Error tests
+
 (deftest floor.error.1
-  (classify-error (floor))
-  program-error)
+  (signals-error (floor) program-error)
+  t)
 
 (deftest floor.error.2
-  (classify-error (floor 1.0 1 nil))
-  program-error)
+  (signals-error (floor 1.0 1 nil) program-error)
+  t)
 
-;;;
+;;; Non-error tests
 
 (deftest floor.1
   (floor.1-fn)

@@ -6,17 +6,17 @@
 (in-package :cl-test)
 
 (deftest imagpart.error.1
-  (classify-error (imagpart))
-  program-error)
+  (signals-error (imagpart) program-error)
+  t)
 
 (deftest imagpart.error.2
-  (classify-error (imagpart #c(1.0 2.0) nil))
-  program-error)
+  (signals-error (imagpart #c(1.0 2.0) nil) program-error)
+  t)
 
 (deftest imagpart.error.3
   (loop for x in *mini-universe*
 	unless (or (numberp x)
-		   (eq (eval `(classify-error (imagpart ',x))) 'type-error))
+		   (eval `(signals-error (imagpart ',x) type-error)))
 	collect x)
   nil)
 
