@@ -12,6 +12,12 @@
     (format nil "~s" nil))
   "NIL")
 
+(deftest formatter.s.1
+  (let ((*print-readably* nil)
+	(*print-case* :upcase))
+    (formatter-call-to-string (formatter "~s") nil))
+  "NIL")
+
 (def-format-test format.s.2
   "~:s" (nil) "()")
 
@@ -21,10 +27,22 @@
     (format nil "~:s" '(nil)))
   "(NIL)")
 
+(deftest formatter.s.3
+  (let ((*print-readably* nil)
+	(*print-case* :upcase))
+    (formatter-call-to-string (formatter "~:s") '(nil)))
+  "(NIL)")
+
 (deftest format.s.4
   (let ((*print-readably* nil)
 	(*print-case* :downcase))
     (format nil "~s" 'nil))
+  "nil")
+
+(deftest formatter.s.4
+  (let ((*print-readably* nil)
+	(*print-case* :downcase))
+    (formatter-call-to-string (formatter "~s") 'nil))
   "nil")
 
 (deftest format.s.5
@@ -33,32 +51,44 @@
     (format nil "~s" 'nil))
   "Nil")
 
+(deftest formatter.s.5
+  (let ((*print-readably* nil)
+	(*print-case* :capitalize))
+    (formatter-call-to-string (formatter "~s") 'nil))
+  "Nil")
+
 (def-format-test format.s.6
   "~:s" (#(nil)) "#(NIL)")
 
 (deftest format.s.7
-  (with-standard-io-syntax
-   (let ((*print-readably* nil))
-     (loop for c across +standard-chars+
-	   for s = (format nil "~S" c)
-	   for c2 = (read-from-string s)
-	   unless (eql c c2)
-	   collect (list c s c2))))
+  (let ((fn (formatter "~S")))
+    (with-standard-io-syntax
+     (let ((*print-readably* nil))
+       (loop for c across +standard-chars+
+	     for s = (format nil "~S" c)
+	     for s2 = (formatter-call-to-string fn c)
+	     for c2 = (read-from-string s)
+	     unless (and (eql c c2) (string= s s2))
+	     collect (list c s c2 s2)))))
   nil)
 
 (deftest format.s.8
-  (with-standard-io-syntax
-   (let ((*print-readably* nil))
-     (loop with count = 0
-	   for i from 0 below (min #x10000 char-code-limit)
-	   for c = (code-char i)
-	   for s1 = (and c (format nil "#\\~:c" c))
-	   for s2 = (and c (format nil "~S" c))
-	   unless (or (null c)
-		      (graphic-char-p c)
-		      (string= s1 s2))
-	   do (incf count) and collect (list c s1 s2)
-	   when (> count 100) collect "count limit exceeded" and do (loop-finish))))
+  (let ((fn (formatter "~s")))
+    (with-standard-io-syntax
+     (let ((*print-readably* nil))
+       (loop with count = 0
+	     for i from 0 below (min #x10000 char-code-limit)
+	     for c = (code-char i)
+	     for s1 = (and c (format nil "#\\~:c" c))
+	     for s2 = (and c (format nil "~S" c))
+	     for s3 = (formatter-call-to-string fn c)
+	     unless (or (null c)
+			(graphic-char-p c)
+			(and (string= s1 s2) (string= s2 s3)))
+	      do (incf count) and collect (list c s1 s2)
+	     when (> count 100)
+	      collect "count limit exceeded"
+	      and do (loop-finish)))))
   nil)
 
 (deftest format.s.9
@@ -67,9 +97,12 @@
      (apply
       #'values
       (loop for i from 1 to 10
-	    for s1 = (format nil "~~~d@s" i)
-	    for s2 = (format nil s1 nil)
-	    collect s2))))
+	    for fmt = (format nil "~~~d@s" i)
+	    for s = (format nil fmt nil)
+	    for fn = (eval `(formatter ,fmt))
+	    for s2 = (formatter-call-to-string fn nil)
+	    do (assert (string= s s2))
+	    collect s))))
   "NIL"
   "NIL"
   "NIL"
@@ -87,9 +120,12 @@
      (apply
       #'values
       (loop for i from 1 to 10
-	    for s1 = (format nil "~~~dS" i)
-	    for s2 = (format nil s1 nil)
-	    collect s2))))
+	    for fmt = (format nil "~~~dS" i)
+	    for s = (format nil fmt nil)
+	    for fn = (eval `(formatter ,fmt))
+	    for s2 = (formatter-call-to-string fn nil)
+	    do (assert (string= s s2))
+	    collect s))))
   "NIL"
   "NIL"
   "NIL"
@@ -107,9 +143,12 @@
      (apply
       #'values
       (loop for i from 1 to 10
-	    for s1 = (format nil "~~~d@:S" i)
-	    for s2 = (format nil s1 nil)
-	    collect s2))))
+	    for fmt = (format nil "~~~d@:S" i)
+	    for s = (format nil fmt nil)
+	    for fn = (eval `(formatter ,fmt))
+	    for s2 = (formatter-call-to-string fn nil)
+	    do (assert (string= s s2))
+	    collect s))))
   "()"
   "()"
   " ()"
@@ -127,9 +166,12 @@
      (apply
       #'values
       (loop for i from 1 to 10
-	    for s1 = (format nil "~~~d:s" i)
-	    for s2 = (format nil s1 nil)
-	    collect s2))))
+	    for fmt = (format nil "~~~d:s" i)
+	    for s = (format nil fmt nil)
+	    for fn = (eval `(formatter ,fmt))
+	    for s2 = (formatter-call-to-string fn nil)
+	    do (assert (string= s s2))
+	    collect s))))
   "()"
   "()"
   "() "
@@ -143,12 +185,15 @@
 
 (deftest format.s.13
   (with-standard-io-syntax
-   (let ((*print-readably* nil))
+   (let ((*print-readably* nil)
+	 (fn (formatter "~V:s")))
      (apply
       #'values
       (loop for i from 1 to 10
-	    for s2 = (format nil "~v:S" i nil)
-	    collect s2))))
+	    for s = (format nil "~v:S" i nil)
+	    for s2 = (formatter-call-to-string fn i nil)
+	    do (assert (string= s s2))
+	    collect s))))
   "()"
   "()"
   "() "
@@ -162,12 +207,15 @@
 
 (deftest format.s.14
   (with-standard-io-syntax
-   (let ((*print-readably* nil))
+   (let ((*print-readably* nil)
+	 (fn (formatter "~V@:s")))
      (apply
       #'values
       (loop for i from 1 to 10
-	    for s2 = (format nil "~v:@s" i nil)
-	    collect s2))))
+	    for s = (format nil "~v:@s" i nil)
+	    for s2 = (formatter-call-to-string fn i nil)
+	    do (assert (string= s s2))
+	    collect s))))
   "()"
   "()"
   " ()"
@@ -228,9 +276,13 @@
 (deftest format.s.29
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*package* (find-package :cl-test)))
+	 (*package* (find-package :cl-test))
+	 (fn (formatter "~V,,2s")))
      (loop for i from -4 to 10
-	   collect (format nil "~v,,2S" i 'ABC))))
+	   for s = (format nil "~v,,2S" i 'ABC)
+	   for s2 = (formatter-call-to-string fn i 'ABC)
+	   do (assert (string= s s2))
+	   collect s)))
   ("ABC  "
    "ABC  "
    "ABC  "
@@ -296,9 +348,13 @@
 (deftest format.s.44
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*package* (find-package :cl-test)))
+	 (*package* (find-package :cl-test))
+	 (fn (formatter "~3,,vs")))
      (loop for i from 0 to 6
-	   collect (format nil "~3,,vS" i 'ABC))))
+	   for s = (format nil "~3,,vS" i 'ABC)
+	   for s2 = (formatter-call-to-string fn i 'ABC)
+	   do (assert (string= s s2))
+	   collect s)))
   ("ABC"
    "ABC "
    "ABC  "
@@ -310,9 +366,13 @@
 (deftest format.s.44a
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*package* (find-package :cl-test)))
+	 (*package* (find-package :cl-test))
+	 (fn (formatter "~3,,V@S")))
      (loop for i from 0 to 6
-	   collect (format nil "~3,,v@S" i 'ABC))))
+	   for s = (format nil "~3,,v@S" i 'ABC)
+	   for s2 = (formatter-call-to-string fn i 'ABC)
+	   do (assert (string= s s2))
+	   collect s)))
   ("ABC"
    " ABC"
    "  ABC"
