@@ -46,21 +46,63 @@
 		 (list (symbol-name sym) (string c)))))
      (t t)))
 
-(loop for c across "!\"#$%&'()*,;<=>?@[]^_`~{}+-/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+(loop for c across "\\|!\"#$%&'()*,;<=>?@[]^_`~{}+-/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
       do (eval `(def-set-syntax-from-char-alphabetic-trait-test ,c)))
+
+;;; The invalid constituent character trait of invalid and whitespace characters
+;;; is exposed when they are turned into constituent characters
 
 (defmacro def-set-syntax-from-char-invalid-trait-test (c)
   `(def-set-syntax-from-char-trait-test ,c
-     (let ((form (subst c 'c '(signals-error
-			       (let* ((*package* (find-package "CL-TEST"))
-				      (sym (read-from-string (concatenate 'string (string c) "Z"))))
-				 sym)
-			       reader-error))))
-       (multiple-value-list (eval form)))
-     (t)))
+     (handler-case
+      (let* ((*package* (find-package "CL-TEST"))
+	     (sym (read-from-string (concatenate 'string (string c) "Z"))))
+	sym)
+      (reader-error (c) (declare (ignore c)) :good))
+     :good))
 
 (loop for name in '("Backspace" "Tab" "Newline" "Linefeed" "Page" "Return" "Space" "Rubout")
       do (eval `(def-set-syntax-from-char-invalid-trait-test ,name)))
 
-		    
-	
+;;; Turning characters into single escape characters
+
+(deftest set-syntax-from-char.single-escape
+  (loop for c across +standard-chars+
+	nconc
+	(with-standard-io-syntax
+	 (let ((*readtable* (copy-readtable nil))
+	       (*package* (find-package "CL-TEST")))
+	   (setf (readtable-case *readtable*) :preserve)
+	   (let ((results
+		  (list
+		   (set-syntax-from-char c #\\)
+		   (read-from-string (concatenate 'string (list c #\Z))))))
+	     (unless (equal results '(t |Z|))
+	       (list c results))))))
+  nil)
+
+(deftest set-syntax-from-char.multiple-escape.1
+  (loop for c across +standard-chars+
+	nconc
+	(with-standard-io-syntax
+	 (let ((*readtable* (copy-readtable nil))
+	       (*package* (find-package "CL-TEST")))
+	   (setf (readtable-case *readtable*) :preserve)
+	   (let ((results
+		  (list
+		   (set-syntax-from-char c #\|)
+		   (handler-case
+		    (read-from-string (concatenate 'string (list c #\Z c)))
+		    (error (c) c))
+		   (handler-case
+		    (read-from-string (concatenate 'string (list c #\Z #\|)))
+		    (error (c) c))
+		   (handler-case
+		    (read-from-string (concatenate 'string (list #\| #\Z c)))
+		    (error (c) c)))))
+	     (unless (or (eql c #\Z) (equal results '(t |Z| |Z| |Z|)))
+	       (list c results))))))
+  nil)
+
+
+		
