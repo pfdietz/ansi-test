@@ -26,9 +26,11 @@
 (deftest functionp.4
   (loop for x in *cl-symbol-names*
 	for s = (find-symbol x "CL")
-	for f = (and (fboundp s) (symbol-function s)
+	for f = (and (fboundp s)
+		     (symbol-function s)
 		     (not (special-operator-p s))
-		     (not (macro-function s)))
+		     (not (macro-function s))
+		     (symbol-function s))
 	always (or (null f)
 		   (functionp f)))
   t)
