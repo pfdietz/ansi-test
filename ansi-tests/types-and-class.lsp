@@ -31,17 +31,19 @@
 
 
 (deftest types-3
-    (count-if
-     #'(lambda (pair)
-	 (let ((t1 (first pair))
-	       (t2 (second pair)))
-	   (cond
-	    ((not (subtypep* t1 t2))
-	     (format t "~%Problem!  Did not find ~S to be a subtype of ~S" t1 t2)
-	     t)
-	    (t nil))))
-     *subtype-table*)
-  0)
+  (loop
+   for (t1 t2) in *subtype-table*
+   for m1 = (check-subtypep t1 t2 t t)
+   for m2 = (check-subtypep `(and ,t1 ,t2) t1 t)
+   for m3 = (check-subtypep `(and ,t2 ,t1) t1 t)
+   for m4 = (check-subtypep `(and ,t1 (not ,t2)) nil t)
+   for m5 = (check-subtypep `(and (not ,t2) ,t1) nil t)
+   when m1 collect m1
+   when m2 collect m2
+   when m3 collect m3
+   when m4 collect m4
+   when m5 collect m5)
+  nil)
 
 (declaim (special +float-types+ *subtype-table*))
 
@@ -89,13 +91,13 @@
     ))
 
 (deftest types-4
-    (types-4-body)
+  (types-4-body)
   0)
 |#
 
 (deftest types-6
-    (types-6-body)
-  0)
+  (types-6-body)
+  nil)
 
 (declaim (special *disjoint-types-list*))
 
@@ -192,6 +194,14 @@
 
 (deftest integer-and-ratio-are-disjoint
   (check-disjointness 'integer 'ratio)
+  nil)
+
+(deftest bignum-and-ratio-are-disjoint
+  (check-disjointness 'bignum 'ratio)
+  nil)
+
+(deftest bignum-and-fixnum-are-disjoint
+  (check-disjointness 'bignum 'fixnum)
   nil)
 
 (deftest fixnum-and-ratio-are-disjoint

@@ -148,6 +148,14 @@ Results: ~A~%" expected-number form n results))))
 	   (check-subtypep type2 `(not ,type1) t)
 	   (check-subtypep `(and ,type1 ,type2) nil t)
 	   (check-subtypep `(and ,type2 ,type1) nil t)
+	   (check-subtypep `(and ,type1 (not ,type2)) type1 t)
+	   (check-subtypep `(and (not ,type2) ,type1) type1 t)
+	   (check-subtypep `(and ,type2 (not ,type1)) type2 t)
+	   (check-subtypep `(and (not ,type1) ,type2) type2 t)
+	   (check-subtypep type1 `(or ,type1 (not ,type2)) t)
+	   (check-subtypep type1 `(or (not ,type2) ,type1) t)
+	   (check-subtypep type2 `(or ,type2 (not ,type1)) t)
+	   (check-subtypep type2 `(or (not ,type1) ,type2) t)
 	   )))
 
 (defun check-subtypep (type1 type2 is-sub &optional should-be-valid)
@@ -621,12 +629,12 @@ the condition to go uncaught if it cannot be classified."
 
 (defun types-6-body ()
   (loop
-      for p in *subtype-table* count
-      (let ((tp (car p)))
-	(when (and (not (member tp '(sequence cons list t)))
-		   (not (subtypep* tp 'atom)))
-	  (format t "~%Problem!  Did not find to be an atomic type: ~S" tp)
-	  t))))
+      for p in *subtype-table*
+      for tp = (car p)
+      append
+      (and (not (member tp '(sequence cons list t)))
+	   (let ((message (check-subtypep tp 'atom t t)))
+	     (if message (list message))))))
 
 (defparameter *type-list* nil)
 (defparameter *supertype-table* nil)
