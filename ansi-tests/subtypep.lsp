@@ -418,3 +418,53 @@
 (deftest subtypep.member.16
   (check-equivalence '(integer 2 5) '(member 2 5 4 3))
   nil)
+
+(deftest subtypep.member.17
+  (let ((s1 (copy-seq "abc"))
+	(s2 (copy-seq "abc")))
+    (let ((t1 `(member ,s1))
+	  (t2 `(member ,s2)))
+      (cond
+       ((subtypep t1 t2) "T1 is subtype of T2")
+       ((subtypep t2 t1) "T2 is subtype of T1")
+       (t (check-disjointness t1 t2)))))
+  nil)
+
+(deftest subtypep.member.18
+  (let ((s1 (copy-seq '(a b c)))
+	(s2 (copy-seq '(a b c))))
+    (let ((t1 `(member ,s1))
+	  (t2 `(member ,s2)))
+      (cond
+       ((subtypep t1 t2) "T1 is subtype of T2")
+       ((subtypep t2 t1) "T2 is subtype of T1")
+       (t (check-disjointness t1 t2)))))
+  nil)
+
+;;; Tests of EQL types
+
+(deftest subtypep.eql.1
+  (let ((s1 (copy-seq "abc"))
+	(s2 (copy-seq "abc")))
+    (let ((t1 `(eql ,s1))
+	  (t2 `(eql ,s2)))
+      (cond
+       ((subtypep t1 t2) "T1 is subtype of T2")
+       ((subtypep t2 t1) "T2 is subtype of T1")
+       (t (check-disjointness t1 t2)))))
+  nil)
+    
+(deftest subtypep.eql.2
+  (let ((s1 (copy-seq '(a b c)))
+	(s2 (copy-seq '(a b c))))
+    (let ((t1 `(eql ,s1))
+	  (t2 `(eql ,s2)))
+      (cond
+       ((subtypep t1 t2) "T1 is subtype of T2")
+       ((subtypep t2 t1) "T2 is subtype of T1")
+       (t (check-disjointness t1 t2)))))
+  nil)
+
+
+
+    
