@@ -73,6 +73,8 @@
 
 ;;; Tests of iteration forms
 (load "iteration.lsp")
+(load "loop.lsp")
+(load "loop1.lsp")
 
 ;;; Tests of conses
 
