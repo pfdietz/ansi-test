@@ -886,3 +886,60 @@
 		    (* x 390)))
     10604862)
   4135896180)
+
+;;; cmucl bug (cvs, 10/10/2003)
+(deftest misc.68
+  (funcall
+   (compile nil
+	    '(lambda (b)
+	       (flet ((%f8 () (rem b (identity (return-from %f8 0)))))
+		 (lognor (%f8) 0))))
+   0)
+  -1)
+
+(deftest misc.69
+  (funcall
+   (compile nil
+	    '(lambda (b)
+	       (flet ((%f11 () (logorc2 (block b1 (let () (return-from b1 b)))
+					-1984)))
+		 b)))
+   0)
+  0)
+
+(deftest misc.70
+  (funcall
+   (compile nil '(lambda (c)
+		   (declare (type (integer 46156191457 126998564334) c))
+		   (truncate c (min -16 186196583))))
+   87723029763)
+  -5482689360
+  3)
+
+(deftest misc.71
+  (funcall
+   (compile nil
+	    '(lambda ()
+	       (block b8
+		 (if (identity (return-from b8 30))
+		     1
+		   (identity
+		    (block b5
+		      (labels ((%f10 () (min -52 (return-from b5 10))))
+			20))))))))
+  30)
+
+(deftest misc.72
+  (funcall
+   (compile nil '(lambda ()
+		   (flet ((%f13 () (rem 1 (min 0 (return-from %f13 17)))))
+		     (%f13)))))
+  17)
+
+(deftest misc.73
+  (funcall
+   (compile nil '(lambda (c)
+		   (declare (type (integer 46156191457 126998564334) c))
+		   (rem c (min -1 0))))
+   87723029763)
+  0)
