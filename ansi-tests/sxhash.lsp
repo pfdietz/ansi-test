@@ -124,13 +124,13 @@
 		for package = (find-package name)
 		unless package do (return name)))
 	 (sx1
-	  (let* ((package (make-package package-name nil nil))
+	  (let* ((package (make-package package-name :nicknames nil :use nil))
 		 (symbol (intern "FOO" package)))
 	    (prog1
 	       (sxhash symbol)
 	      (delete-package package))))
 	 (sx2
-	  (let* ((package (make-package package-name nil nil))
+	  (let* ((package (make-package package-name :nicknames nil :use nil))
 		 (symbol (intern "FOO" package)))
 	    (prog1
 	       (sxhash symbol)
