@@ -15,40 +15,66 @@
 (defparameter *find-method-gf-01-method4*
   (defmethod find-method-gf-01 ((x t)) 'd))
 
-(deftest find-method.2
+(deftest find-method.1
   (eqt (find-method #'find-method-gf-01 nil (list (find-class 'integer)))
        *find-method-gf-01-method1*)
   t)
 
-(deftest find-method.4
+(deftest find-method.2
   (eqt (find-method #'find-method-gf-01 nil (list (find-class 'rational)))
        *find-method-gf-01-method2*)
   t)
 
-(deftest find-method.6
+(deftest find-method.3
   (eqt (find-method #'find-method-gf-01 nil (list (find-class 'real)))
        *find-method-gf-01-method3*)
   t)
 
-(deftest find-method.8
+(deftest find-method.4
   (eqt (find-method #'find-method-gf-01 nil (list (find-class t)))
        *find-method-gf-01-method4*)
   t)
 
-(deftest find-method.9
+(deftest find-method.5
   (find-method #'find-method-gf-01 (list :around) (list (find-class t))
 	       nil)
   nil)
 
-(deftest find-method.10
+(deftest find-method.6
   (find-method #'find-method-gf-01 (list :after)
 	       (list (find-class 'integer)) nil)
   nil)
 
-(deftest find-method.11
+(deftest find-method.7
   (find-method #'find-method-gf-01 (list :before) (list (find-class 'real))
 	       nil)
   nil)
+
+;;; EQL specializers
+
+(defgeneric find-method-gf-02 (x))
+
+(defparameter *find-method-gf-02-method1*
+  (defmethod find-method-gf-02 ((x (eql 1234567890))) 'a))
+
+(defparameter *find-method-02-method2-value* (list 'a))
+
+(defparameter *find-method-gf-02-method2*
+  (defmethod find-method-gf-02 ((x (eql *find-method-02-method2-value*)))
+    'b))
+
+(deftest find-method.8
+  (eqt (find-method #'find-method-gf-02 nil (list '(eql 1234567890)))
+       *find-method-gf-02-method1*)
+  t)
+
+(deftest find-method.9
+  (eqt (find-method #'find-method-gf-02 nil
+		    (list (list 'eql *find-method-02-method2-value*)))
+       *find-method-gf-02-method2*)
+  t)
+
+;;; Error tests
 
 (deftest find-method.error.1
   (classify-error (find-method))
