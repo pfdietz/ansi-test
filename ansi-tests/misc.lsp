@@ -6921,4 +6921,22 @@ Broken at C::WT-C-INLINE-LOC.
    112475717 -25829)
   0)
 
-  
+;;; sbcl 0.8.10.25
+;;; "The value -3 is not of type (INTEGER -5 -2)."
+(deftest misc.368
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -5 -2) a))
+       (declare (ignorable a))
+       (declare
+	(optimize (speed 2) (space 3) (safety 1)
+		  (debug 1) (compilation-speed 1)))
+       (if
+	   (and (not (not (> a (numerator (setf a -4)))))
+		(logbitp 0 (conjugate a)))
+	   0
+	 0)))
+   -3)
+  0)
