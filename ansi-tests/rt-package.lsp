@@ -11,6 +11,7 @@
     (:nicknames :rtest #-lispworks :rt)
     (:export
      #:*do-tests-when-defined*
+     #:*compile-tests*
      #:*test*
      #:continue-testing
      #:deftest
