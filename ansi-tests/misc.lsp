@@ -6211,4 +6211,10 @@ Broken at C::WT-C-INLINE-LOC.
    3966745735633 -1123 2030094113)
   -1123)
 
-
+;;; The value NIL is not of type number.
+(deftest misc.335
+  (let ((c 10))
+    (denominator (progn (tagbody (realpart (loop for lv4 below 2 sum (go 0)))
+				 0)
+			c)))
+  1)
