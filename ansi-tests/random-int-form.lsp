@@ -1793,7 +1793,7 @@
    #'(lambda (form)
        (and (consp form)
 	    (or
-	     (and (member (car form) '(setq setf) :test #'eq)
+	     (and (member (car form) '(setq setf shiftf) :test #'eq)
 		  (eq (cadr form) var))
 	     (and (eql (car form) 'multiple-value-setq)
 		  (member var (cadr form))))))
