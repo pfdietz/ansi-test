@@ -4,7 +4,6 @@
 ;;;; Contains: Aux. functions for CL-TEST
 
 (in-package :cl-test)
-(use-package :rt)
 
 (declaim (optimize (safety 3)))
 
@@ -287,7 +286,7 @@ the condition to go uncaught if it cannot be classified."
 			      (muffle-warning))))
 		(proclaim '(optimize (safety 3)))
 		(classify-error*
-		 (if rt::*compile-tests*
+		 (if regression-test::*compile-tests*
 		     (funcall (compile nil `(lambda ()
 					      (declare (optimize (safety 3)))
 					      ,form)))

@@ -23,7 +23,7 @@
 
 ;This is the December 19, 1990 version of the regression tester.
 
-(in-package :rt)
+(in-package :regression-test)
 
 (defvar *test* nil "Current test name")
 (defvar *do-tests-when-defined* nil)

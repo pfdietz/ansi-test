@@ -4,12 +4,11 @@
 ;;;; Contains: Tests on readtables (just started, very incomplete)
 
 (in-package :cl-test)
-(use-package :rt)
 
 (declaim (optimize (safety 3)))
 
 (deftest readtable-valid (not (readtablep *readtable*)) nil)
-(deftest readtablep-1
+(deftest readtablep.1
     (and (not (readtablep nil))
 	 (not (readtablep 'a))
 	 (not (readtablep 0))
@@ -36,17 +35,17 @@
 	 )
   t)
 
-(deftest read-symbol-1
+(deftest read-symbol.1
     (let ((*package* (find-package "CL-TEST")))
       (ignore-errors (read-from-string "a")))
   a 1)
 
-(deftest read-symbol-2
+(deftest read-symbol.2
     (let ((*package* (find-package "CL-TEST")))
       (ignore-errors (read-from-string "|a|")))
   |a| 3)
 
-(deftest read-symbol-3
+(deftest read-symbol.3
   (multiple-value-bind (s n)
       (ignore-errors (read-from-string "#:abc"))
     (not
@@ -56,7 +55,7 @@
 	  (string-equal (symbol-name s) "abc"))))
   nil)
 
-(deftest read-symbol-4
+(deftest read-symbol.4
   (multiple-value-bind (s n)
       (ignore-errors (read-from-string "#:|abc|"))
     (not
@@ -66,7 +65,7 @@
 	  (string= (symbol-name s) "abc"))))
   nil)
 
-(deftest read-symbol-5
+(deftest read-symbol.5
   (multiple-value-bind (s n)
       (ignore-errors (read-from-string "#:||"))
     (if (not (symbolp s))
@@ -77,7 +76,7 @@
 		 (string= (symbol-name s) ""))))))
   t)
 
-(deftest read-symbol-6
+(deftest read-symbol.6
   (let ((str "cl-test::abcd0123"))
     (multiple-value-bind (s n)
 	(ignore-errors (read-from-string str))
@@ -90,7 +89,7 @@
 				 "abcd0123")))))))
   t)
 
-(deftest read-symbol-7
+(deftest read-symbol.7
   (multiple-value-bind (s n)
       (ignore-errors (read-from-string ":ABCD"))
     (if (not (symbolp s))
@@ -102,7 +101,7 @@
 			       "ABCD"))))))
   t)
 	     
-(defun read-symbol-9-body (natoms maxlen)
+(defun read-symbol.9-body (natoms maxlen)
   (let* ((chars (concatenate 'string
 		  "abcdefghijklmnopqrstuvwxyz"
 		  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -136,11 +135,11 @@
 			  actual-string s2 sym :readably t)
 		  t)))))))
 
-(deftest read-symbol-9
-    (read-symbol-9-body 1000 100)
+(deftest read-symbol.9
+    (read-symbol.9-body 1000 100)
   0)
 
-(deftest read-symbol-10
+(deftest read-symbol.10
   (handler-case
    (not (not
 	 (equal (symbol-name

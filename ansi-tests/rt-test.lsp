@@ -27,7 +27,7 @@
 
 (in-package :user)
 ;; (require "RT")
-(use-package :rt)
+(use-package :regression-tes)
 
 (defmacro setup (&rest body)
   `(do-setup '(progn ., body)))
@@ -35,9 +35,9 @@
 (defun do-setup (form)
   (let ((*test* nil)
 	(*do-tests-when-defined* nil)
-	(rt::*entries* (list nil))
-	(rt::*in-test* nil)
-	(rt::*debug* t)
+	(regression-test::*entries* (list nil))
+	(regression-test::*in-test* nil)
+	(regression-test::*debug* t)
 	result)
     (deftest t1 4 4)
     (deftest (t 2) 4 3)
@@ -46,7 +46,7 @@
 	      (with-output-to-string (*standard-output*)
 		(setq result
 		      (multiple-value-list
-			(catch 'rt::*debug* (eval form))))))
+			(catch 'regression-test::*debug* (eval form))))))
 	    result))))
 
 (defun normalize (string)

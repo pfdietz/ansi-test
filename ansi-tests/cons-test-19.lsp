@@ -4,7 +4,7 @@
 ;;;; Contains: Testing of CL Features related to "CONS", part 19
 
 (in-package :cl-test)
-(use-package :rt)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

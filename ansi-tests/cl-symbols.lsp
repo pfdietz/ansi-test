@@ -5,7 +5,6 @@
 ;;;;           and symbol-related functions
 
 (in-package :cl-test)
-(use-package :rt)
 
 (declaim (optimize (safety 3)))
 
@@ -1103,27 +1102,27 @@
 ;;; symbol-name
 
 (deftest symbol-name.1
-  (safe-symbol-name '|ABCD|)
+  (symbol-name '|ABCD|)
   "ABCD")
 
 (deftest symbol-name.2
-  (safe-symbol-name '|1234abcdABCD|)
+  (symbol-name '|1234abcdABCD|)
   "1234abcdABCD")
 
 (deftest symbol-name.3
-  (safe-symbol-name 1)
+  (classify-error (symbol-name 1))
   type-error)
 
 (deftest symbol-name.4
-  (safe-symbol-name '(a))
+  (classify-error (symbol-name '(a)))
   type-error)
 
 (deftest symbol-name.5
-  (safe-symbol-name "ABCDE")
+  (classify-error (symbol-name "ABCDE"))
   type-error)
 
 (deftest symbol-name.6
-  (safe-symbol-name 12913.0213)
+  (classify-error (symbol-name 12913.0213))
   type-error)
 
 (deftest symbol-name.7
@@ -1179,7 +1178,7 @@
   nil)
 
 (deftest make-symbol.10
-  (symbol-name (safe-make-symbol ""))
+  (symbol-name (make-symbol ""))
   "")
 
 (deftest make-symbol.order.1
@@ -1190,35 +1189,35 @@
   "ABC" 1)
 
 (deftest make-symbol.error.1
-  (safe-make-symbol nil)
+  (classify-error (make-symbol nil))
   type-error)
 
 (deftest make-symbol.error.2
-  (safe-make-symbol 'a)
+  (classify-error (make-symbol 'a))
   type-error)
 
 (deftest make-symbol.error.3
-  (safe-make-symbol 1)
+  (classify-error (make-symbol 1))
   type-error)
 
 (deftest make-symbol.error.4
-  (safe-make-symbol -1)
+  (classify-error (make-symbol -1))
   type-error)
 
 (deftest make-symbol.error.5
-  (safe-make-symbol 1.213)
+  (classify-error (make-symbol 1.213))
   type-error)
 
 (deftest make-symbol.error.6
-  (safe-make-symbol -1312.2)
+  (classify-error (make-symbol -1312.2))
   type-error)
 
 (deftest make-symbol.error.7
-  (safe-make-symbol #\w)
+  (classify-error (make-symbol #\w))
   type-error)
 
 (deftest make-symbol.error.8
-  (safe-make-symbol '(a))
+  (classify-error (make-symbol '(a)))
   type-error)
 
 (deftest make-symbol.error.9
@@ -1228,6 +1227,10 @@
 (deftest make-symbol.error.10
   (classify-error (make-symbol "a" "a"))
   program-error)
+
+(deftest make-symbol.error.11
+  (classify-error (make-symbol '(#\a #\b #\c)))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-symbol

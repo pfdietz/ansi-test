@@ -6,8 +6,9 @@
 (eval-when
  ;;(:execute :compile-toplevel :load-toplevel)
  (load eval compile)
- (defpackage :rt
+ (defpackage :regression-test
     (:use :cl)
+    (:nicknames :rtest #-lispworks :rt)
     (:export
      "*DO-TESTS-WHEN-DEFINED*"
      "*TEST*"
@@ -21,4 +22,4 @@
      "REM-TEST"
      )))
 
-(in-package :rt)
+(in-package :regression-test)

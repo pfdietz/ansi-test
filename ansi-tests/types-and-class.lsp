@@ -6,7 +6,6 @@
 ;; We should check for every type that NIL is a subtype, and T a supertype
 
 (in-package :cl-test)
-(use-package :rt)
 
 (declaim (optimize (safety 3)))
 

@@ -4,7 +4,7 @@
 ;;;; Contains: CL test case package definition
 
 (defpackage :cl-test
-  (:use :cl :rt)
+  (:use :cl :regression-test)
   #+gcl (:use defpackage)
   (:nicknames)
   (:import-from "COMMON-LISP-USER" "COMPILE-AND-LOAD" "==>")
