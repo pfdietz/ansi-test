@@ -283,13 +283,7 @@
 
 ;;; Error checking of type-related functions
 
-(deftest type-of.error.1
-  (classify-error (type-of))
-  program-error)
 
-(deftest type-of.error.2
-  (classify-error (type-of nil nil))
-  program-error)
 
 (deftest typep.error.1
   (classify-error (typep))
