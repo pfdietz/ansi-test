@@ -94,6 +94,38 @@
 	result))
   t)
 
+(deftest print.string.11
+  (let* ((s (make-array '(8) :element-type 'base-char
+			:initial-contents "abcdefgh"
+			:adjustable t))
+	 (result
+	  (with-standard-io-syntax
+	   (write-to-string s :escape t :readably nil))))
+    (or (and (string= result "\"abcdefgh\"") t)
+	result))
+  t)
+
+(deftest print.string.12
+  (let* ((s1 (make-array '(8) :element-type 'character
+			 :initial-contents "abcdefgh"))
+	 (s2 (make-array '(4) :element-type 'character
+			 :displaced-to s1
+			 :displaced-index-offset 2))
+	 (result
+	  (with-standard-io-syntax
+	   (write-to-string s2 :escape t :readably nil))))
+    (or (and (string= result "\"cdef\"") t)
+	result))
+  t)
+
+;;; *print-array* should not affect string printing
+
+(deftest print.string.13
+  (with-standard-io-syntax
+   (write-to-string "1234" :array nil :readably nil :escape t))
+  "\"1234\"")
+    
+
 ;;; The ever-popular nil string
 
 (deftest print.string.nil.1
