@@ -247,7 +247,15 @@
 	collect sym)
   nil)
 		  
-	
+;;; Confirm that only the symbols exported from CL that are supposed
+;;; to be types are actually classes (see section 11.1.2.1.1)
+
+(deftest all-exported-cl-class-names-are-valid
+  (loop for sym being the external-symbols of "COMMON-LISP"
+	when (and (find-class sym nil)
+		  (not (member sym *cl-all-type-symbols* :test #'eq)))
+	collect sym)
+  nil)
 
 
 

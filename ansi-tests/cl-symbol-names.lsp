@@ -2116,3 +2116,9 @@
     vector
     warning
     ))
+
+(defparameter *cl-all-type-symbols*
+  (reduce #'union
+	  (list *cl-type-symbols* *cl-types-that-are-classes-symbols*
+		*cl-system-class-symbols* *cl-class-symbols*
+		*cl-condition-type-symbols*)))
