@@ -7301,3 +7301,42 @@ Broken at C::WT-C-INLINE-LOC.
 			       0 0)))))))))
    -38169486910)
   13423701584)
+
+;;; cmucl 11/2003
+;;; Wrong value
+(deftest misc.383
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -93650 118967004056) a))
+       (declare (type (integer -429173946 -3892) b))
+       (declare (type (integer -229669685 -50537386) c))
+       (declare (ignorable a b c))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (speed 3) (space 1) (safety 0) (debug 3) (compilation-speed 2)))
+       (logorc2
+	(let* ((*s3* (cons 0 a)))
+	  (declare (dynamic-extent *s3*))
+	  (shiftf c -124766263))
+	411942919)))
+   79909316946 -347537841 -210771963)
+  -142606339)
+
+;;; abcl 7 Jun 2004
+;;; catch-throw now enabled in the abcl compiler
+
+;;; Inconsistent stack height
+(deftest misc.384
+  (let
+      #+armedbear ((jvm::*catch-errors* nil))
+      nil
+      (funcall
+       (compile
+	nil
+	'(lambda ()
+	   (catch 'ct8 (throw 'ct8 (catch 'ct7 0)))))))
+  0)
+
+
