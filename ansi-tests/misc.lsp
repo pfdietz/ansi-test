@@ -7422,6 +7422,7 @@ Broken at C::WT-C-INLINE-LOC.
    399997)
   1125898833500797)
 
+			   
 ;;; gcl (31 May 2004, cvs head)
 ;;; Error in SYSTEM:ASET [or a callee]: Expected a FIXNUM
 
@@ -10144,3 +10145,15 @@ Broken at C::WT-MAKE-CLOSURE.
    '+ 823)
   3775)
 
+;;; cmucl (mar 2005 snapshot)
+
+(deftest misc.552
+  (funcall
+   (compile
+    nil
+    '(lambda (p1)
+       (declare (optimize (speed 3) (safety 1) (debug 2) (space 2))
+		(type unsigned-byte p1))
+       (logbitp (the (integer -780969457 *) p1) 9)))
+   26)
+  nil)
