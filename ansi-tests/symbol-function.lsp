@@ -38,9 +38,14 @@
 	collect x)
   nil)
 
-
 (deftest symbol-function.error.5
   (let ((sym (gensym)))
-    (eval `(signals-error (symbol-function ',sym) undefined-function)))
-  t)
+    (handler-case (progn (symbol-function sym) nil)
+		  (undefined-function
+		   (c)
+		   (assert (eq (cell-error-name c) sym))
+		   :good)))
+  :good)
+
+
 

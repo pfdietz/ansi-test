@@ -1206,6 +1206,7 @@
   (let ((sym (gensym)))
     (declare (optimize safety))
     (handler-case (progn (symbol-value sym) :bad)
-		  (unbound-variable () :good)))
+		  (unbound-variable (c)
+				    (assert (eq (cell-error-name c) sym))
+				    :good)))
   :good)
-
