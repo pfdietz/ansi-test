@@ -49,8 +49,8 @@
   "#0A0")
 
 (deftest print.array.0.7
-  (let ((a (make-array nil :initial-element 123123)))
-    (loop repeat 10 nconc (randomly-check-readability a :test #'is-similar)))
+  (loop for a = (make-array nil :initial-element (- (random 1000000) 500000))
+	repeat 30 nconc (randomly-check-readability a :test #'is-similar))
   nil)
 
 (deftest print.array.0.8
@@ -58,8 +58,44 @@
 	for type = `(unsigned-byte ,i)
 	nconc
 	(let ((a (make-array nil :initial-element 1 :element-type type)))
-	  (loop repeat 5 nconc (randomly-check-readability a :test #'is-similar))))
+	  (loop repeat 5 nconc (randomly-check-readability a :test #'is-similar
+							   :can-fail t))))
   nil)
+
+(deftest print.array.0.9
+  (loop for a = (make-array nil :initial-element (random 1000000) :adjustable t)
+	repeat 30
+	nconc (randomly-check-readability a :test #'is-similar))
+  nil)
+
+(deftest print.array.0.10
+  (loop for a = (make-array nil :initial-element (random 1000000000))
+	for b = (make-array nil :displaced-to a :displaced-index-offset 0)
+	repeat 30 nconc (randomly-check-readability b :test #'is-similar))
+  nil)
+
+(deftest print.array.0.11
+  (loop for type in '(short-float single-float double-float long-float float)
+	for zero = (coerce 0 type)
+	for a = (make-array nil :initial-element zero
+			    :element-type type)
+	nconc
+	(loop repeat 30 nconc (randomly-check-readability a :test #'is-similar
+							  :can-fail t)))
+  nil)
+
+(deftest print.array.0.12
+  (loop for type0 in '(short-float single-float double-float long-float float)
+	for type = `(complex ,type0)
+	for zero = (coerce 0 type)
+	for a = (make-array nil :initial-element zero
+			    :element-type type)
+	nconc
+	(loop repeat 30 nconc (randomly-check-readability a :test #'is-similar
+							  :can-fail t)))
+  nil)
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Two-d arrays
@@ -223,6 +259,55 @@
     (with-standard-io-syntax
      (write-to-string b :readably nil :array t)))
   "#2A((3 8) (2 67))")
+
+(deftest print.array.0.21
+  (loop for a = (make-array (list (random 4) (random 4))
+			    :initial-element (- (random 1000000) 500000))
+	repeat 100 nconc (randomly-check-readability a :test #'is-similar))
+  nil)
+
+(deftest print.array.0.22
+  (loop for a = (make-array (list (random 4) (random 4))
+			    :initial-element (- (random 1000000) 500000)
+			    :adjustable t)
+	repeat 100 nconc (randomly-check-readability a :test #'is-similar))
+  nil)
+
+(deftest print.array.0.23
+  (loop for d1 = (random 10)
+	for d2 = (random 10)
+	for a = (make-array (list d1 d2)
+			    :initial-element (- (random 1000000) 500000))
+	for d1a = (random (1+ d1))
+	for d2a = (random (1+ d2))
+	for offset = (random (1+ (- (* d1 d2) (* d1a d2a))))
+	for b = (make-array (list d1a d2a) :displaced-to a
+			    :displaced-index-offset offset)
+	repeat 100 nconc (randomly-check-readability b :test #'is-similar))
+  nil)
+
+(deftest print.array.2.24
+  (loop for i from 1 to 64
+	for type = `(unsigned-byte ,i)
+	nconc
+	(let ((a (make-array '(3 4) :initial-element 1 :element-type type)))
+	  (loop repeat 5 nconc (randomly-check-readability a :test #'is-similar
+							   :can-fail t))))
+  nil)
+
+(deftest print.array.2.25
+  (let ((a (make-array '(3 4) :initial-element #\a :element-type 'character)))
+    (loop repeat 10 nconc (randomly-check-readability a :test #'is-similar
+						      :can-fail t)))
+  nil)
+
+(deftest print.array.2.26
+  (let ((a (make-array '(3 4) :initial-element #\a :element-type 'base-char)))
+    (loop repeat 10 nconc (randomly-check-readability a :test #'is-similar
+						      :can-fail t)))
+  nil)
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Three D arrays
