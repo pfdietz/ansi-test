@@ -154,4 +154,16 @@
   (nil t t)
   ((a b c) a))
 
-;;; Additional tests will be in the files testing file compilation
+;;; Other error tests
+
+(deftest make-load-form.error.1
+  (classify-error (make-load-form))
+  program-error)
+
+(deftest make-load-form.error.2
+  (classify-error
+   (let ((obj (make-instance 'make-load-form-class-04 :b '(a b c) :c 'a)))
+     (make-load-form obj nil nil)))
+  program-error)
+
+
