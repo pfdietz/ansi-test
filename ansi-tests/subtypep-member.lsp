@@ -174,3 +174,6 @@
   (check-all-not-subtypep  '(satisfies symbolp) '(member a b c d))
   nil)
 
+(deftest subtypep.member.36
+  (check-disjointness '(eql a) '(or (member b c d) (eql e)))
+  nil)
