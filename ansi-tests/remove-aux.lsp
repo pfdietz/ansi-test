@@ -35,7 +35,7 @@
 		(let ((seq (if (and (subtypep type 'vector)
 				    (coin 3))
 			       (make-array
-				(list (+ len (random len)))
+				(list (+ len (random (1+ len))))
 				:initial-element (make-random-element element-type)
 				:fill-pointer len
 				:element-type element-type)
