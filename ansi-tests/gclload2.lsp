@@ -3,6 +3,9 @@
 ;;; Tests of symbols
 (load "cl-symbols.lsp")
 
+;;; Tests of evaluation and compilation
+(load "compile.lsp")
+
 ;;; Tests of data and control flow
 
 (load "places.lsp")
