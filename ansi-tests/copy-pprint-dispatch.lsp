@@ -9,6 +9,7 @@
   (with-standard-io-syntax
    (let ((obj '(foo bar))
 	 (*package* (find-package :cl-test))
+	 (*print-readably* nil)
 	 (*print-pretty* t))
      (values
       (prin1-to-string obj)
@@ -27,6 +28,7 @@
   (with-standard-io-syntax
    (let ((obj '(foo bar))
 	 (*package* (find-package :cl-test))
+	 (*print-readably* nil)
 	 (*print-pretty* t))
      (values
       (prin1-to-string obj)
@@ -46,6 +48,7 @@
   (with-standard-io-syntax
    (let ((obj '(foo bar))
 	 (*package* (find-package :cl-test))
+	 (*print-readably* nil)
 	 (*print-pretty* t))
      (values
       (prin1-to-string obj)
@@ -64,6 +67,7 @@
   (with-standard-io-syntax
    (let ((obj '(foo bar))
 	 (*package* (find-package :cl-test))
+	 (*print-readably* nil)
 	 (*print-pretty* t))
      (values
       (prin1-to-string obj)
