@@ -6573,4 +6573,19 @@ Broken at C::WT-C-INLINE-LOC.
    -115168466439)
   0)
 
+(deftest misc.356
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda ()
+	(declare (optimize (speed 2) (space 2) (safety 1) (debug 0)
+			   (compilation-speed 3)))
+	(let ((*s7* 0))
+	  (dotimes (iv2 0 0)
+	    (block b3
+	      (block b3 (block b3 (setq *s7* (return-from b3 0)))))))))))
+  0)
 
