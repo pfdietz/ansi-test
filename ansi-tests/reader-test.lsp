@@ -146,8 +146,9 @@
 		(unless (and (symbolp sym)
 			     (eql nread (+ 4 actual-len))
 			     (string-equal s2 (symbol-name sym)))
-		  (format t "Symbol read failed: ~S (~S) read as ~S~%"
-			  actual-string s2 sym :readably t)
+		  (let ((*print-readably* t))
+		    (format t "Symbol read failed: ~S (~S) read as ~S~%"
+			    actual-string s2 sym))
 		  t)))))))
 
 (deftest read-symbol.9
