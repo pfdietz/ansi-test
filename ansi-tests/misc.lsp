@@ -8847,4 +8847,17 @@ Broken at C::WT-MAKE-CLOSURE.
    -17635)
   -17635)
 
-  
+;;; ACL 6.2 (x86 linux)
+;;; Bug in type propagation for ISQRT
+;;; Found with the special purpose random tester for type propagation
+
+;;; While compiling (:ANONYMOUS-LAMBDA 22203):
+;;; Error: -1 is illegal argument to isqrt
+
+(deftest misc.466
+  (funcall (compile nil '(lambda (x)
+			   (declare (type (member 4 -1) x)
+				    (optimize speed (safety 1)))
+			   (isqrt x)))
+	   4)
+  2)
