@@ -15,6 +15,7 @@
 (load "export.lsp")
 (load "rename-package.lsp")
 (load "shadow.lsp")
+(load "shadowing-import.lsp")
 (load "delete-package.lsp")
 (load "make-package.lsp")
 (load "with-package-iterator.lsp")

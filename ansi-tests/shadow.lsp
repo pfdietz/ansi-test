@@ -16,7 +16,7 @@
 	(safely-delete-package "TEST4")
 	(handler-case
 	 (let* ((p1 (prog1
-			(make-package "TEST4")
+			(make-package "TEST4" :use nil)
 		      (export (intern "A" "TEST4") "TEST4")))
 		(p2 (make-package "TEST5" :use '("TEST4")))
 		(r1 (package-shadowing-symbols "TEST4"))
@@ -56,7 +56,7 @@
     (safely-delete-package "G")
     (handler-case
      (let* ((p1 (prog1
-		    (make-package "G")
+		    (make-package "G" :use nil)
 		  (export (intern "A" "G") "G")))
 	    (p2 (make-package "H" :use '("G")))
 	    (r1 (package-shadowing-symbols "G"))
@@ -94,7 +94,7 @@
     (safely-delete-package "G")
     (handler-case
      (let* ((p1 (prog1
-		    (make-package "G")
+		    (make-package "G" :use nil)
 		  (export (intern "A" "G") "G")))
 	    (p2 (make-package "H" :use '("G")))
 	    (r1 (package-shadowing-symbols "G"))
@@ -131,7 +131,7 @@
       (handler-case
        (progn
 	 (safely-delete-package :G)
-	 (make-package :G)
+	 (make-package :G :use nil)
 	 (let ((s1 (intern "X" :G)))
 	   (shadow "X" :G)
 	   (multiple-value-bind* (s2 kind)
@@ -152,7 +152,7 @@
        (progn
 	 (safely-delete-package :H)
 	 (safely-delete-package :G)
-	 (make-package :G)
+	 (make-package :G :use nil)
 	 (export (intern "X" :G) :G)
 	 (make-package :H :use '("G"))
 	 (shadow "X" :H)
@@ -174,7 +174,7 @@
       (handler-case
        (progn
 	 (safely-delete-package :G)
-	 (make-package :G)
+	 (make-package :G :use nil)
 	 (shadow '("X" "Y" |Z|) :G)
 	 (let ((results
 		(append (multiple-value-list
@@ -202,7 +202,7 @@
       (handler-case
        (let ((i 0) x y)
 	 (safely-delete-package :G)
-	 (make-package :G)
+	 (make-package :G :use nil)
 	 (shadow (progn (setf x (incf i)) '(#\X #\Y))
 		 (progn (setf y (incf i)) :G))
 	 (let ((results
@@ -221,6 +221,73 @@
        (error (c) c))
     (safely-delete-package :G))
   (2 1 2 "X" :internal "Y" :internal 2))
+
+;;; Specialized string tests
+
+(deftest shadow.8
+  (prog1
+      (handler-case
+       (progn
+	 (safely-delete-package :G)
+	 (make-package :G :use nil)
+	 (let* ((name (make-array '(1) :initial-contents "X"
+				  :element-type 'base-char))
+		(s1 (intern name :G)))
+	   (shadow name :G)
+	   (multiple-value-bind* (s2 kind)
+	       (find-symbol "X" :G)
+	     (list (eqt s1 s2)
+		   (symbol-name s2)
+		   (package-name (symbol-package s2))
+		   kind))))
+       (error (c) c))
+    (safely-delete-package "G"))
+  (t "X" "G" :internal))
+
+(deftest shadow.9
+  (prog1
+      (handler-case
+       (progn
+	 (safely-delete-package :G)
+	 (make-package :G :use nil)
+	 (let* ((name (make-array '(3) :initial-contents "XYZ"
+				  :fill-pointer 1
+				  :element-type 'character))
+		(s1 (intern name :G)))
+	   (shadow name :G)
+	   (multiple-value-bind* (s2 kind)
+	       (find-symbol "X" :G)
+	     (list (eqt s1 s2)
+		   (symbol-name s2)
+		   (package-name (symbol-package s2))
+		   kind))))
+       (error (c) c))
+    (safely-delete-package "G"))
+  (t "X" "G" :internal))
+
+(deftest shadow.10
+  (prog1
+      (handler-case
+       (progn
+	 (safely-delete-package :G)
+	 (make-package :G :use nil)
+	 (let* ((name (make-array '(1) :initial-contents "X"
+				  :adjustable t
+				  :element-type 'base-char))
+		(s1 (intern name :G)))
+	   (shadow name :G)
+	   (multiple-value-bind* (s2 kind)
+	       (find-symbol "X" :G)
+	     (list (eqt s1 s2)
+		   (symbol-name s2)
+		   (package-name (symbol-package s2))
+		   kind))))
+       (error (c) c))
+    (safely-delete-package "G"))
+  (t "X" "G" :internal))
+
+
+
 
 (deftest shadow.error.1
   (signals-error (shadow) program-error)

@@ -143,6 +143,61 @@
 		    (delete-package "TEST-20"))))
   :good)
 
+;;; Specialized sequences
+
+(defmacro def-delete-package-test (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form))
+       (safely-delete-package name)
+       (let ((p (make-package name :use nil)))
+	 (list
+	  (notnot (delete-package :test1))
+	  (notnot (packagep p))
+	  (package-name p))))
+     (t t nil)))
+
+(def-delete-package-test delete-package.7
+  (make-array '(5) :initial-contents "TEST1"
+	      :element-type 'base-char))
+
+(def-delete-package-test delete-package.8
+  (make-array '(10) :initial-contents "TEST1XXXXX"
+	      :fill-pointer 5
+	      :element-type 'base-char))
+
+(def-delete-package-test delete-package.9
+  (make-array '(10) :initial-contents "TEST1XXXXX"
+	      :fill-pointer 5
+	      :element-type 'character))
+
+(def-delete-package-test delete-package.10
+  (make-array '(5) :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'base-char))
+
+(def-delete-package-test delete-package.11
+  (make-array '(5) :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'character))
+
+(def-delete-package-test delete-package.12
+  (let* ((etype 'character)
+	 (name2 (make-array '(10) :initial-contents "XXXTEST1YY"
+			    :element-type etype)))
+    (make-array '(5) :displaced-to name2
+		:displaced-index-offset 3
+		:element-type etype)))
+
+(def-delete-package-test delete-package.13
+  (let* ((etype 'base-char)
+	 (name2 (make-array '(10) :initial-contents "XXXTEST1YY"
+			    :element-type etype)))
+    (make-array '(5) :displaced-to name2
+		:displaced-index-offset 3
+		:element-type etype)))
+
+;;; Error tests
+
 (deftest delete-package.error.1
   (signals-error (delete-package) program-error)
   t)

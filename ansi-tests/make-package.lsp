@@ -260,6 +260,177 @@
 	(safely-delete-package p))))
   t)
 
+;;; Specialized sequences as designators
+
+;;; The package name being a specialized sequence
+
+(defmacro def-make-package-test1 (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form))
+       (assert (string= name "TEST1"))
+       (safely-delete-package "TEST1")
+       (let ((p (ignore-errors (make-package name))))
+	 (prog1
+	     (and (packagep p)
+		  (equalt (package-name p) "TEST1")
+		  (equalt (package-nicknames p) nil)
+		  (equalt (package-used-by-list p) nil))
+	   (safely-delete-package p))))
+     t))
+
+(def-make-package-test1 make-package.14
+  (make-array 5 :initial-contents "TEST1"
+	      :element-type 'base-char))
+
+(def-make-package-test1 make-package.15
+  (make-array 12 :initial-contents "TEST1xxxyyyz"
+	      :fill-pointer 5
+	      :element-type 'base-char))
+
+(def-make-package-test1 make-package.16
+  (make-array 12 :initial-contents "TEST1xxxyyyz"
+	      :fill-pointer 5
+	      :element-type 'character))
+
+(def-make-package-test1 make-package.17
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'base-char))
+
+(def-make-package-test1 make-package.18
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'character))
+
+(def-make-package-test1 make-package.19
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+			    :element-type etype)))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 2)))
+
+(def-make-package-test1 make-package.20
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+			    :element-type etype)))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 2)))
+
+;;; Nicknames being specialized sequences
+
+(defmacro def-make-package-test2 (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form)
+	   (nickname "TEST1-NICKNAME"))
+       (safely-delete-package "TEST1")
+       (safely-delete-package nickname)
+       (let ((p (make-package name :nicknames (list nickname))))
+	 (prog1
+	     (and (packagep p)
+		  (equalt (package-name p) "TEST1")
+		  (equalt (package-nicknames p) (list nickname))
+		  (equalt (package-used-by-list p) nil))
+	   (safely-delete-package p))))
+     t))
+
+(def-make-package-test2 make-package.21
+  (make-array 5 :initial-contents "TEST1"
+	      :element-type 'base-char))
+
+(def-make-package-test2 make-package.22
+  (make-array 12 :initial-contents "TEST1xxxyyyz"
+	      :fill-pointer 5
+	      :element-type 'base-char))
+
+(def-make-package-test2 make-package.23
+  (make-array 12 :initial-contents "TEST1xxxyyyz"
+	      :fill-pointer 5
+	      :element-type 'character))
+
+(def-make-package-test2 make-package.24
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'base-char))
+
+(def-make-package-test2 make-package.25
+  (make-array 5 :initial-contents "TEST1"
+	      :adjustable t
+	      :element-type 'character))
+
+(def-make-package-test2 make-package.26
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+			    :element-type etype)))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 2)))
+
+(def-make-package-test2 make-package.27
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+			    :element-type etype)))
+    (make-array 5 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 2)))
+
+;;; USE names being specialized sequences
+
+(defmacro def-make-package-test3 (test-name name-form)
+  `(deftest ,test-name
+     (let ((name ,name-form))
+       (safely-delete-package "TEST1")
+       (assert (find-package name))
+       (let ((p (ignore-errors (make-package "TEST1" :use (list name)))))
+	 (prog1
+	     (and (packagep p)
+		  (equalt (package-name p) "TEST1")
+		  (equalt (package-nicknames p) nil)
+		  (equalt (package-use-list p) (list (find-package name)))
+		  (equalt (package-used-by-list p) nil))
+	   (safely-delete-package p))))
+     t))
+
+(def-make-package-test3 make-package.28
+  (make-array 1 :initial-contents "A" :element-type 'base-char))
+
+(def-make-package-test3 make-package.29
+  (make-array 8 :initial-contents "Axxxyyyz"
+	      :fill-pointer 1
+	      :element-type 'base-char))
+
+(def-make-package-test3 make-package.30
+  (make-array 8 :initial-contents "Axxxyyyz"
+	      :fill-pointer 1
+	      :element-type 'character))
+
+(def-make-package-test3 make-package.31
+  (make-array 1 :initial-contents "A"
+	      :adjustable t
+	      :element-type 'base-char))
+
+(def-make-package-test3 make-package.32
+  (make-array 1 :initial-contents "A"
+	      :adjustable t
+	      :element-type 'character))
+
+(def-make-package-test3 make-package.33
+  (let* ((etype 'base-char)
+	 (name0 (make-array 10 :initial-contents "xxAyyy0123"
+			    :element-type etype)))
+    (make-array 1 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 2)))
+
+(def-make-package-test3 make-package.34
+  (let* ((etype 'character)
+	 (name0 (make-array 10 :initial-contents "xxAzzzzyyy"
+			    :element-type etype)))
+    (make-array 1 :element-type etype
+		:displaced-to name0
+		:displaced-index-offset 2)))
+
 ;; Signal a continuable error if the package or any nicknames
 ;; exist as packages or nicknames of packages
 
