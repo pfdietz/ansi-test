@@ -157,7 +157,7 @@
 ;;; Keyword arguments
 
 (defstruct* (sbt-08 (:constructor sbt-08-con
-				 (&key ((foo a)))))
+				 (&key ((:foo a)))))
   a)
 
 (deftest structure-boa-test-08/1
@@ -166,11 +166,11 @@
 
 (defstruct* (sbt-09 (:constructor sbt-09-con
 				 (&key (a 'p a-p)
-				       ((x b) 'q)
+				       ((:x b) 'q)
 				       (c 'r)
 				       d
-				       ((y e))
-				       ((z f) 's z-p)
+				       ((:y e))
+				       ((:z f) 's z-p)
 				       &aux (g (list (notnot a-p)
 						     (notnot z-p))))))
   a b c d e f g)
@@ -306,4 +306,46 @@
 (deftest structure-boa-test-14/5
   (sbt-slots 'sbt-14 (sbt-14-con :d 9) :a :b :c)
   (1 2 3))
+
+;;; Keywords are in the correct package, and slot names are not
+;;; keyword parameters if not specified.
+
+(defstruct* (sbt-15 (:constructor sbt-15-con
+				  (&key ((:x a) nil)
+					((y  b) nil)
+					(c nil))))
+  a b c)
+
+(deftest structure-boa-test-15/1
+  (sbt-slots 'sbt-15 (sbt-15-con :x 1 'y 2 :c 3) :a :b :c)
+  (1 2 3))
+
+(deftest structure-boa-test-15/2
+  (classify-error (sbt-15-con :a 1))
+  program-error)
+
+(deftest structure-boa-test-15/3
+  (classify-error (sbt-15-con :b 1))
+  program-error)
+
+(deftest structure-boa-test-15/4
+  (classify-error (sbt-15-con 'x 1))
+  program-error)
+
+(deftest structure-boa-test-15/5
+  (classify-error (sbt-15-con :y 1))
+  program-error)
+
+(deftest structure-boa-test-15/6
+  (classify-error (sbt-15-con 'c 1))
+  program-error)
+
+(deftest structure-boa-test-15/7
+  (classify-error (sbt-15-con 'a 1))
+  program-error)
+
+(deftest structure-boa-test-15/8
+  (classify-error (sbt-15-con 'b 1))
+  program-error)
+
 
