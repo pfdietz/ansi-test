@@ -51,3 +51,4 @@
 (load "make-string-input-stream.lsp")
 (load "make-string-output-stream.lsp")
 (load "with-input-from-string.lsp")
+(load "with-output-to-string.lsp")
