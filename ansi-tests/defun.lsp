@@ -5,23 +5,6 @@
 
 (in-package :cl-test)
 
-(deftest defun.error.1
-  (signals-error (funcall (macro-function 'defun))
-		 program-error)
-  t)
-
-(deftest defun.error.2
-  (signals-error (funcall (macro-function 'defun)
-			   '(defun nonexistent-function ()))
-		 program-error)
-  t)
-
-(deftest defun.error.3
-  (signals-error (funcall (macro-function 'defun)
-			   '(defun nonexistent-function ())
-			   nil nil)
-		 program-error)
-  t)
 
 ;;; Tests for implicit blocks
 
@@ -59,4 +42,57 @@
 (report-and-ignore-errors
  (defun (setf defun-test-fun-4) (newval x)
    (return-from defun-test-fun-4 (setf (car x) newval))))
+
+;;; Error tests
+
+(deftest defun.error.1
+  (signals-error (funcall (macro-function 'defun))
+		 program-error)
+  t)
+
+(deftest defun.error.2
+  (signals-error (funcall (macro-function 'defun)
+			   '(defun nonexistent-function ()))
+		 program-error)
+  t)
+
+(deftest defun.error.3
+  (signals-error (funcall (macro-function 'defun)
+			   '(defun nonexistent-function ())
+			   nil nil)
+		 program-error)
+  t)
+
+;;; More comprehensive error handling tests of calls to
+;;; user-defined functions
+
+(deftest defun.error.4
+  (let* ((name (gensym)))
+    (loop for i below (min 100 lambda-parameters-limit)
+	  for params = nil then (cons (gensym) params)
+	  for args = nil then (cons nil args)
+	  for expected = '(1 2 3)
+	  for fn = (eval `(prog2 (proclaim '(optimize (safety 0)))
+				 (defun ,name ,params (values ,@expected))
+				 (proclaim '(optimize safety))))
+	  when
+	  (cond
+	   ((not (equal (multiple-value-list (apply fn args)) expected))
+	    (list i :fail1))
+	   ((not (equal (multiple-value-list
+			 (apply (symbol-function fn) args))
+			expected))
+	    (list i :fail2))
+	   ((not (equal (multiple-value-list (eval `(,name ,@args)))
+			expected))
+	    (list i :fail3))
+	   ;; Error cases
+	   ((and (> i 0)
+		 (let ((val (eval `(signals-error (,name ,@(cdr args)) program-error))))
+		   (and (not (eq val t)) :fail4))))
+	   ((and (< i (1- call-arguments-limit))
+		 (let ((val (eval `(signals-error (,name nil ,@args) program-error))))
+		   (and (not (eq val t)) :fail5)))))
+	  collect it))
+  nil)
 
