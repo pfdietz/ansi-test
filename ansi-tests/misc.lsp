@@ -7130,8 +7130,32 @@ Broken at C::WT-C-INLINE-LOC.
     -57 35725118))
   -1)
 
+;;; abcl (23 May 2004)
+;;; 0 is not of type LIST
+(deftest misc.375
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d e f)
+       (declare (type (integer -3172868 25583841) a))
+       (declare (type (integer -8176159 1565888775976) b))
+       (declare (type (integer -2601325109 147819602) c))
+       (declare (type (integer -502316251909 515874281072) d))
+       (declare (type (integer 174 2604648) e))
+       (declare (type (integer 1627646459 3124243119) f))
+       (declare (ignorable a b c d e f))
+       (declare (optimize (speed 3) (space 0) (safety 3) (debug 2)
+			  (compilation-speed 2)))
+       (let* ((*s6* (make-array nil :initial-element 0 :adjustable t)))
+	 (if (logbitp 0
+		      (denominator (prog2 (truncate (dotimes (iv3 0 0)
+						      (progn 0)))
+				       (multiple-value-bind (*s7*)
+					   (cons d 0)
+					 (cdr *s7*)))))
+	     0
+	   0))))
+   12851164 182468232812 -2243976802 309299185674 2538150 1855615980)
+  0)
 
-
-
-
-
+    
