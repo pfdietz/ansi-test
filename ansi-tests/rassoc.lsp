@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "cons-aux.lsp")
+
 (deftest rassoc.1
   (rassoc nil nil)
   nil)
@@ -63,7 +65,7 @@
   (rassoc #\e
 	  (copy-tree
 	   (rev-assoc-list '(("abefd" . 1) ("aevgd" . 2) ("edada" . 3))))
-	  :key #'(lambda (x) (char x 1)))
+	  :key #'(lambda (x) (schar x 1)))
   (2 . "aevgd"))
 
 (deftest rassoc.13

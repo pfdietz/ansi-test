@@ -67,8 +67,9 @@
 (defun extended-char.3.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
 	always (let ((c (code-char i)))
-		 (not (and (typep c 'extended-char)
-			   (typep c 'base-char))))))
+		 (not (and (typep c 'base-char)
+			   (typep c 'extended-char)
+			   )))))
 
 (defun character.1.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
@@ -88,7 +89,7 @@
 		      (let ((c (catch-type-error (character x))))
 			(or (eqlt c 'type-error)
 			    (let ((s (catch-type-error (string x))))
-			      (and (stringp s) (eqlt (char s 0) c)))))))
+			      (and (stringp s) (eqlt (my-aref s 0) c)))))))
 	do (return x)))
 
 (defun characterp.2.body ()

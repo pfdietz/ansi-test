@@ -12,9 +12,13 @@
 	 (len (length sequence)))
     (unless end (setq end len))
     (unless key (setq key #'identity))
+    (setf key (coerce key 'function))
     (cond
-      (test (assert (not test-not)))
-      (test-not (setq test #'(lambda (x y) (not (funcall test x y)))))
+      (test (setf test (coerce test 'function))
+	    (assert (not test-not)))
+      (test-not (setf test-not (coerce test-not 'function))
+		(setq test #'(lambda (x y)
+			       (not (funcall (the function test) x y)))))
       (t (setq test #'eql)))
     (assert (integerp start))
     (assert (integerp end))
@@ -32,13 +36,13 @@
 	    do (push (elt sequence i) result))
       (loop for i from start below end
 	    for x = (elt sequence i)
-	    for kx = (if key (funcall key x) x)
+	    for kx = (if key (funcall (the function key) x) x)
 	    unless (position kx
 			     sequence
 			     :start (1+ i)
 			     :end end
-			     :test test
-			     :key key)
+			     :test (the function test)
+			     :key (the function key))
 	    do (push x result))
       (loop for i from end below len
 	    do (push (elt sequence i) result))

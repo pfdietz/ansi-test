@@ -7,6 +7,8 @@
 
 (declaim (special *x*))
 
+(compile-and-load "defgeneric-method-combination-aux.lsp")
+
 (deftest defgeneric-method-combination.max.1
   (let ((*x* nil)
 	(fn

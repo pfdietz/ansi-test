@@ -238,12 +238,15 @@
 			(:method ((x find-class-class-01)) :good)
 			(:method ((x t)) nil))))
 	   (obj (make-instance class1)))
-      (values
-       (funcall fn nil)
-       (funcall fn obj)
-       (setf (find-class 'find-class-class-01) nil)
-       (funcall fn nil)
-       (funcall fn obj))))
+      (assert (typep fn 'function))
+      (locally
+       (declare (type function fn))
+       (values
+	(funcall fn nil)
+	(funcall fn obj)
+	(setf (find-class 'find-class-class-01) nil)
+	(funcall fn nil)
+	(funcall fn obj)))))
   nil :good nil nil :good)
 
 (deftest find-class.23
@@ -259,14 +262,17 @@
 			(:method ((x t)) t))))
 	   (obj1 (make-instance class1))
 	   (obj2 (make-instance class2)))
-      (values
-       (funcall fn nil)
-       (funcall fn obj1)
-       (funcall fn obj2)
-       (setf (find-class 'find-class-class-01) nil)
-       (funcall fn nil)
-       (funcall fn obj1)
-       (funcall fn obj2))))
+      (assert (typep fn 'function))
+      (locally
+       (declare (type function fn))
+       (values
+	(funcall fn nil)
+	(funcall fn obj1)
+	(funcall fn obj2)
+	(setf (find-class 'find-class-class-01) nil)
+	(funcall fn nil)
+	(funcall fn obj1)
+	(funcall fn obj2)))))
   t 1 2 nil t 1 2)
 
 ;;; Error tests

@@ -92,6 +92,7 @@
 	 (method (find-method #'add-method-gf-13
 			      nil (list (find-class 'integer))))
 	 (gf2 (eval '(defgeneric add-method-gf-14 (x)))))
+    (declare (type generic-function gf gf2))
     (values
      (funcall gf 0)
      (funcall gf 'x)
@@ -114,6 +115,7 @@
 		       (:method ((x integer)) 'c)
 		       (:method ((x t)) 'd))))
 	 (method2 (find-method gf2 nil specializers)))
+    (declare (type generic-function gf gf2))
     (values
      (funcall gf 0)
      (funcall gf 'x)

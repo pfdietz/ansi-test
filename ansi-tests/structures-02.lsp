@@ -297,7 +297,7 @@
 
 (deftest structure-53-1
   (let ((s (make-struct-test-53 :a53 10 :b53 'a)))
-    (values (aref s 5) (aref s 6)))
+    (values (my-aref s 5) (my-aref s 6)))
   10 a)
 
 (defstruct-with-tests (struct-test-54 (:type vector)
@@ -308,7 +308,7 @@
 
 (deftest structure-54-1
   (let ((s (make-struct-test-54 :a53 8 :b53 'g :a54 10 :b54 'a)))
-    (values (aref s 5) (aref s 6) (aref s 9) (aref s 10)))
+    (values (my-aref s 5) (my-aref s 6) (my-aref s 9) (my-aref s 10)))
   8 g 10 a)
 
 (defstruct-with-tests (struct-test-55 (:type list)
@@ -388,20 +388,25 @@
 (deftest structure-62-1
   (let* ((s (make-struct-test-62 :a 1))
 	 (f (struct-test-62-f s)))
+    (assert (typep f 'function))
     (values
      (struct-test-62-a s)
-     (funcall f)))
+     (funcall (the function f))))
   1 nil)
 
 (deftest structure-62-2
   (let* ((s (make-struct-test-62))
 	 (f (struct-test-62-f s))
 	 (g (struct-test-62-g s)))
-    (values
-     (struct-test-62-a s)
-     (funcall f)
-     (funcall g nil)
-     (funcall f)))
+    (assert (typep f 'function))
+    (assert (typep g 'function))
+    (locally
+     (declare (type function f g))
+     (values
+      (struct-test-62-a s)
+      (funcall f)
+      (funcall g nil)
+      (funcall f))))
   nil a nil nil)
 
 ;;; Keywords are allowed in defstruct

@@ -141,6 +141,8 @@
 (declaim (special *shared-init-var-02-init*
 		  *shared-init-var-02-query*))
 
+(declaim (type function *shared-init-var-02-init* *shared-init-var-02-query*))
+
 (let ((ainit 0) (binit 0))
   (flet ((%init (a b) (setf ainit a binit b))
 	 (%query () (list ainit binit)))

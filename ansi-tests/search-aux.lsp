@@ -54,6 +54,7 @@
     (>= start2 0)
     (<= (+ start1 len) (length seq1))
     (<= (+ start2 len) (length seq2))))
+  (setq test (coerce test 'function))
   (if (and (listp seq1) (listp seq2))
       (loop for i from 0 to (1- len)
 	    for e1 in (nthcdr start1 seq1)
@@ -61,7 +62,7 @@
 	    always (funcall test e1 e2))
     (loop for i from 0 to (1- len)
 	  always
-	  (funcall test
+	  (funcall (the function test)
 		   (elt seq1 (+ start1 i))
 		   (elt seq2 (+ start2 i))))))
 

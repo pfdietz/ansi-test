@@ -59,7 +59,7 @@
 
 (deftest assoc.12
     (assoc #\e '(("abefd" . 1) ("aevgd" . 2) ("edada" . 3))
-	   :key #'(lambda (x) (char x 1)))
+	   :key #'(lambda (x) (schar x 1)))
   ("aevgd" . 2))
 
 (deftest assoc.13

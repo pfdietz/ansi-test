@@ -55,8 +55,8 @@
 	  i1
 	nil)))
     (t
-     (let ((c1 (char string1 i1))
-	   (c2 (char string2 i2)))
+     (let ((c1 (my-aref string1 i1))
+	   (c2 (my-aref string2 i2)))
        (cond
 	((funcall equal-fn c1 c2))
 	(t ;; mismatch found -- what kind?
@@ -138,6 +138,8 @@
 	     (or (eql x y)
 		 (and x y (eqt comparison '=))))))))
 
+(defparameter *use-random-byte* t)
+
 (defun make-random-string (n)
   (let ((s (random-case
 	    (make-string n)
@@ -153,7 +155,7 @@
       (dotimes (i n)
 	(dotimes (i n)
 	  (setf (char s i)
-		(or (code-char (random 256))
+		(or (and *use-random-byte* (code-char (random 256)))
 		    (elt "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 			 (random 62)))))))
     s))
@@ -161,5 +163,7 @@
 (defun string-all-the-same (s)
   (let ((len (length s)))
     (or (= len 0)
-	(let ((c (char s 0)))
-	  (loop for d across s always (eql c d))))))
+	(let ((c (my-aref s 0)))
+	  (loop for i below len
+		for d = (my-aref s i)
+		always (eql c d))))))

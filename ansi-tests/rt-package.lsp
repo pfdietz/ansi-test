@@ -21,6 +21,7 @@
      #:rem-all-tests
      #:rem-test
      #:defnote
+     #:my-aref
      )))
 
 (in-package :regression-test)

@@ -53,10 +53,10 @@
       (return 2))
     (unless (eqlt (length x) 10) (return 3))
     (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 'b))
+    (loop for i from 0 to 9 do (setf (elt x i) 'b))
     (unless (every #'(lambda (e) (eqt e 'a)) y)
       (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 'c))
+    (loop for i from 0 to 3 do (setf (elt y i) 'c))
     (or
      (not (not (every #'(lambda (e) (eqt e 'b)) x)))
      6))))
@@ -71,10 +71,10 @@
       (return 2))
     (unless (eqlt (length x) 10) (return 3))
     (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2))
+    (loop for i from 0 to 9 do (setf (elt x i) 2))
     (unless (every #'(lambda (e) (eqlt e 1)) y)
       (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3))
+    (loop for i from 0 to 3 do (setf (elt y i) 3))
     (or
      (not (not (every #'(lambda (e) (eqlt e 2)) x)))
      6))))
@@ -89,10 +89,10 @@
       (return 2))
     (unless (eqlt (length x) 10) (return 3))
     (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0))
+    (loop for i from 0 to 9 do (setf (elt x i) 2.0))
     (unless (every #'(lambda (e) (= e 1.0)) y)
       (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0))
+    (loop for i from 0 to 3 do (setf (elt y i) 3.0))
     (or
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
@@ -107,10 +107,10 @@
       (return 2))
     (unless (eqlt (length x) 10) (return 3))
     (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0d0))
+    (loop for i from 0 to 9 do (setf (elt x i) 2.0d0))
     (unless (every #'(lambda (e) (= e 1.0)) y)
       (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0d0))
+    (loop for i from 0 to 3 do (setf (elt y i) 3.0d0))
     (or
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
@@ -125,10 +125,10 @@
       (return 2))
     (unless (eqlt (length x) 10) (return 3))
     (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0s0))
+    (loop for i from 0 to 9 do (setf (elt x i) 2.0s0))
     (unless (every #'(lambda (e) (= e 1.0)) y)
       (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0s0))
+    (loop for i from 0 to 3 do (setf (elt y i) 3.0s0))
     (or
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
@@ -143,10 +143,10 @@
       (return 2))
     (unless (eqlt (length x) 10) (return 3))
     (unless (eqlt (length y) 4)  (return 4))
-    (loop for i from 0 to 9 do (setf (aref x i) 2.0l0))
+    (loop for i from 0 to 9 do (setf (elt x i) 2.0l0))
     (unless (every #'(lambda (e) (= e 1.0)) y)
       (return 5))
-    (loop for i from 0 to 3 do (setf (aref y i) 3.0l0))
+    (loop for i from 0 to 3 do (setf (elt y i) 3.0l0))
     (or
      (not (not (every #'(lambda (e) (= e 2.0)) x)))
      6))))
@@ -158,7 +158,7 @@
 	  always
 	  (string= (subseq s1 start)
 		   (coerce (loop for i from start to (1- len)
-				 collect (aref s1 i))
+				 collect (elt s1 i))
 			   'string)))))
 
 (defun subseq-string.2-body ()
@@ -170,7 +170,7 @@
 		always
 		(string= (subseq s1 start end)
 			 (coerce (loop for i from start below end
-				       collect (aref s1 i))
+				       collect (elt s1 i))
 				 'string))))))
 
 (defun subseq-string.3-body ()
@@ -184,7 +184,7 @@
 	  always
 	  (string= (subseq s1 start)
 		   (coerce (loop for i from start to (1- len)
-				 collect (aref s1 i))
+				 collect (elt s1 i))
 			   'string)))
      (loop for start from 0 below len
 	   always
@@ -192,7 +192,7 @@
 		 always
 		 (string= (subseq s1 start end)
 			  (coerce (loop for i from start below end
-					collect (aref s1 i))
+					collect (elt s1 i))
 				  'string)))))))
 (defun subseq-bit-vector.1-body ()
   (let* ((s1 #*11001000)
@@ -201,7 +201,7 @@
 	  always
 	  (equalp (subseq s1 start)
 		  (coerce (loop for i from start to (1- len)
-				collect (aref s1 i))
+				collect (elt s1 i))
 			  'bit-vector)))))
 
 (defun subseq-bit-vector.2-body ()
@@ -213,7 +213,7 @@
 		always
 		(equalp (subseq s1 start end)
 			(coerce (loop for i from start below end
-				      collect (aref s1 i))
+				      collect (elt s1 i))
 				'bit-vector))))))
 
 (defun subseq-bit-vector.3-body ()
@@ -227,7 +227,7 @@
 	  always
 	  (equalp (subseq s1 start)
 		  (coerce (loop for i from start to (1- len)
-				collect (aref s1 i))
+				collect (elt s1 i))
 			  'bit-vector)))
      (loop for start from 0 below len
 	   always
@@ -235,5 +235,5 @@
 		 always
 		 (equalp (subseq s1 start end)
 			 (coerce (loop for i from start below end
-				       collect (aref s1 i))
+				       collect (elt s1 i))
 				 'bit-vector)))))))

@@ -833,6 +833,8 @@
 (declaim (special *class-28-reset-fn*
 		  *class-28-query-fn*))
 
+(declaim (type function *class-28-reset-fn* *class-28-query-fn*))
+
 (let ((x 0) (y 0))
   (flet ((%reset (a b) (setf x a y b))
 	 (%query () (list x y)))

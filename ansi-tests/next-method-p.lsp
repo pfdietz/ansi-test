@@ -36,10 +36,10 @@
 
 (defgeneric nmp-gf-03 (x y)
   (:method ((x integer) (y symbol)) #'next-method-p)
-  (:method ((x t) (y (eql nil))) 'foo))
+  (:method ((x t) (y (eql nil))) (constantly 1)))
 
 (deftest next-method-p.6
-  (notnot-mv (funcall (nmp-gf-03 10 nil)))
+  (notnot-mv (funcall (the function (nmp-gf-03 10 nil))))
   t)
   
 (deftest next-method-p.7
@@ -47,10 +47,10 @@
   nil)
 
 (defmethod nmp-gf-04 ((x integer) (y symbol)) #'next-method-p)
-(defmethod nmp-gf-04 ((x t) (y (eql nil))) 'foo)
+(defmethod nmp-gf-04 ((x t) (y (eql nil))) (constantly 2))
 
 (deftest next-method-p.8
-  (notnot-mv (funcall (nmp-gf-04 10 nil)))
+  (notnot-mv (funcall (the function (nmp-gf-04 10 nil))))
   t)
   
 (deftest next-method-p.9
