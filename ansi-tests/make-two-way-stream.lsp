@@ -26,8 +26,21 @@
      (get-output-stream-string os)))
   #\f #\b #\o #\a #\o #\r "bar")
 
+(deftest make-two-way-stream.2
+   (let* ((is (make-string-input-stream "foo"))
+	  (os (make-string-output-stream))
+	  (s (make-two-way-stream is os)))
+     (values
+      (close s)
+      (open-stream-p s)
+      (notnot (open-stream-p is))
+      (notnot (open-stream-p os))
+      (write-char #\8 os)
+      (get-output-stream-string os)))
+   t nil t t #\8 "8")
+
 ;;; FIXME
-;;; Add tests for: close,
+;;; Add tests for:
 ;;;  peek-char, read-char-no-hang, terpri, fresh-line, unread-char,
 ;;;  read-line, write-line, write-string, read-sequence, write-sequence,
 ;;;  read-byte, write-byte, listen, clear-input, finish-output, force-output,
