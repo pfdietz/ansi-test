@@ -59,6 +59,7 @@
 (load "integerp.lsp")
 
 (load "parse-integer.lsp")
+(load "boole.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
