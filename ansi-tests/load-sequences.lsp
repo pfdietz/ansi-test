@@ -14,6 +14,7 @@
 (load "reverse.lsp")
 (load "nreverse.lsp")
 (load "sort.lsp")
+(load "stable-sort.lsp")
 (load "find.lsp")
 (load "find-if.lsp")
 (load "find-if-not.lsp")
