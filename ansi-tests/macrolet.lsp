@@ -120,6 +120,12 @@
   ((a2) (%m a1 a2))
   ((a2) (%m a1 a2)))
 
+;;; Interaction with symbol-macrolet
 
-
-
+(deftest macrolet.13
+  (symbol-macrolet ((a b))
+    (macrolet ((foo (x &environment env)
+		    (let ((y (macroexpand x env)))
+		      (if (eq y 'a) 1 2))))
+      (foo a)))
+  2)
