@@ -309,28 +309,28 @@
 ;;; # parameters
 
 (def-format-test format.a.49
-  "~#A" ("abc" nil nil nil) "abc ")
+  "~#A" ("abc" nil nil nil) "abc " 3)
 
 (def-format-test format.a.50
-  "~#@a" ("abc" nil nil nil nil nil) "   abc")
+  "~#@a" ("abc" nil nil nil nil nil) "   abc" 5)
 
 (def-format-test format.a.51
-  "~5,#a" ("abc" nil nil nil) "abc    ")
+  "~5,#a" ("abc" nil nil nil) "abc    " 3)
 
 (def-format-test format.a.52
-  "~5,#@A" ("abc" nil nil nil) "    abc")
+  "~5,#@A" ("abc" nil nil nil) "    abc" 3)
 
 (def-format-test format.a.53
-  "~4,#A" ("abc" nil nil) "abc   ")
+  "~4,#A" ("abc" nil nil) "abc   " 2)
 
 (def-format-test format.a.54
-  "~4,#@A" ("abc" nil nil) "   abc")
+  "~4,#@A" ("abc" nil nil) "   abc" 2)
 
 (def-format-test format.a.55
-  "~#,#A" ("abc" nil nil nil) "abc    ")
+  "~#,#A" ("abc" nil nil nil) "abc    " 3)
 
 (def-format-test format.a.56
-  "~#,#@A" ("abc" nil nil nil) "    abc")
+  "~#,#@A" ("abc" nil nil nil) "    abc" 3)
 
 (def-format-test format.a.57
   "~-100A" ("xyz") "xyz")

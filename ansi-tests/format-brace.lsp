@@ -43,7 +43,7 @@
   nil)
 
 (def-format-test format.{.9
-  "~#{~A~}" ('(1 2 3 4 5 6 7) nil nil nil) "1234")
+  "~#{~A~}" ('(1 2 3 4 5 6 7) nil nil nil) "1234" 3)
 
 ;;; (missing tests involved ~^ and have been moved to format-circumflex.lsp
 ;;;  and renamed.)
@@ -154,7 +154,7 @@
   "~V:{X~}" (nil '((1) (2) (3) nil (5))) "XXXXX")
 
 (def-format-test format.\:{.13
-  "~#:{~A~}" ('((1) (2) (3) (4) (5)) 'foo 'bar) "123")
+  "~#:{~A~}" ('((1) (2) (3) (4) (5)) 'foo 'bar) "123" 2)
 
 (def-format-test format.\:{.14
   "~:{~A~:}" ('((1 X) (2 Y) (3) (4 A B))) "1234")
@@ -243,7 +243,7 @@
   "~:@{~A~:}" ('(1 A) '(2 B) '(3) '(4 C D)) "1234")
 
 (def-format-test format.\:@.7
-  "~0:@{~A~:}" ('(1 A) '(2 B) '(3) '(4 C D)) "")
+  "~0:@{~A~:}" ('(1 A) '(2 B) '(3) '(4 C D)) "" 4)
 
 (def-format-test format.\:@.8
   "~#:@{A~:}" (nil nil nil) "AAA")

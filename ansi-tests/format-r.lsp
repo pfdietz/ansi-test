@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 ;;; Test of various radixes
-
+(compile-and-load "printer-aux.lsp")
 (compile-and-load "roman-numerals.lsp")
 
 (deftest format.r.1
@@ -115,7 +115,7 @@
   "~vr" (nil 5) "five")
 
 (def-format-test format.r.9
-  "~#r" (4 nil nil) "11")
+  "~#r" (4 nil nil) "11" 2)
 
 (deftest format.r.10
   (with-standard-io-syntax
@@ -281,7 +281,7 @@
   nil)
 
 (def-format-test format.r.26
-  "~10,#r" (12345 nil nil nil nil nil) " 12345")
+  "~10,#r" (12345 nil nil nil nil nil) " 12345" 5)
 
 (def-format-test format.r.27
   "~10,12,vr" (#\/ 123456789) "///123456789")
@@ -299,7 +299,7 @@
   "~8,,,,v:R" (2 #o12345670) "12,34,56,70")
 
 (def-format-test format.r.32
-  "~16,,,,#:r" (#x12345670 nil nil nil) "1234,5670")
+  "~16,,,,#:r" (#x12345670 nil nil nil) "1234,5670" 3)
 
 (def-format-test format.r.33
   "~16,,,,1:r" (#x12345670) "1,2,3,4,5,6,7,0")

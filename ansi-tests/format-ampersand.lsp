@@ -4,6 +4,7 @@
 ;;;; Contains: Tests of format with ~& directive
 
 (in-package :cl-test)
+(compile-and-load "printer-aux.lsp")
 
 (def-format-test format.&.1
   "~0&" nil "")
@@ -66,7 +67,9 @@
 
 (def-format-test format.&.13
   "X~#%" ('a 'b 'c) #.(let ((nl (string #\Newline)))
-			(concatenate 'string "X" nl nl nl)))
+			(concatenate 'string "X" nl nl nl))
+  3)
+
 
 
 

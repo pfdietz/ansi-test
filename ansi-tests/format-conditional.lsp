@@ -31,19 +31,19 @@
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (def-format-test format.cond.8
-  "~0[a~;b~;c~;d~]" (3) "a")
+  "~0[a~;b~;c~;d~]" (3) "a" 1)
 
 (def-format-test format.cond.9
-  "~-1[a~;b~;c~;d~]" (3) "")
+  "~-1[a~;b~;c~;d~]" (3) "" 1)
 
 (def-format-test format.cond.10
-  "~1[a~;b~;c~;d~]" (3) "b")
+  "~1[a~;b~;c~;d~]" (3) "b" 1)
 
 (def-format-test format.cond.11
-  "~4[a~;b~;c~;d~]" (3) "")
+  "~4[a~;b~;c~;d~]" (3) "" 1)
 
 (def-format-test format.cond.12
-  "~100000000000000000000000000000000[a~;b~;c~;d~]" (3) "")
+  "~100000000000000000000000000000000[a~;b~;c~;d~]" (3) "" 1)
 
 (deftest format.cond.13
   (loop for i from -1 to 10
@@ -59,7 +59,7 @@
   "~#[A~;B~]" nil "A")
 
 (def-format-test format.cond.16
-  "~#[A~;B~]" (nil) "B")
+  "~#[A~;B~]" (nil) "B" 1)
 
 ;;; ~[ .~:;  ~]
 
@@ -98,7 +98,7 @@
   "~#[A~:;B~]" nil "A")
 
 (def-format-test format.cond\:.9
-  "~#[A~:;B~]" (nil nil) "B")
+  "~#[A~:;B~]" (nil nil) "B" 2)
 
 ;;; ~:[...~]
 

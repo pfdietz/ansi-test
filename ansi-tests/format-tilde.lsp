@@ -4,6 +4,7 @@
 ;;;; Contains: Tests of format directive ~~
 
 (in-package :cl-test)
+(compile-and-load "printer-aux.lsp")
 
 (def-format-test format.~.1
   "~~" nil "~")

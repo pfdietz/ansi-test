@@ -403,7 +403,7 @@
 
 ;;; Macro to define both FORMAT and FORMATTER tests
 
-(defmacro def-format-test (name string args expected-output)
+(defmacro def-format-test (name string args expected-output &optional (num-left 0))
   (assert (symbolp name))
   (let* ((s (symbol-name name))
 	 (expected-prefix (string 'format.))
@@ -422,23 +422,21 @@
       `(progn
 	 (deftest ,name
 	   (with-standard-io-syntax
-	    (let ((*print-readably* nil))
+	    (let ((*print-readably* nil)
+		  (*package* (symbol-package 'ABC)))
 	      (format nil ,string ,@args)))
 	   ,expected-output)
 	 (deftest ,formatter-test-name
 	   (let ((fn ,formatter-form)
 		 (args (list ,@args)))
 	     (with-standard-io-syntax
-	      (let ((*print-readably* nil))
+	      (let ((*print-readably* nil)
+		    (*package* (symbol-package 'ABC)))
 		(with-output-to-string
 		  (stream)
-		  (apply fn stream args)
-		  ;; FIXME -- Need to check for tail return
-		  ;; The plan is to add an extra optional argument
-		  ;; to def-format-test that, when present, gives the
-		  ;; number of arguments that should be left over.
-		  ;; The FORMAT test will ignore this, but the FORMATTER
-		  ;; test will check that a list of that many values is
-		  ;; returned, and that they are the last values in ARGS.
-		  ))))
+		  (let ((tail (apply fn stream args)))
+		    ;; FIXME -- Need to check that TAIL really is a tail of ARGS
+		    (assert (= (length tail) ,num-left) (tail) "Tail is ~A, length should be ~A"
+			    tail ,num-left)
+		  )))))
 	   ,expected-output)))))

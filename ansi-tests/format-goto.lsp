@@ -13,7 +13,7 @@
   "~A~*~A" (1 2 3) "13")
 
 (def-format-test format.*.2
-  "~A~0*~A" (1 2 3) "12")
+  "~A~0*~A" (1 2 3) "12" 1)
 
 (def-format-test format.*.3
   "~A~v*~A" (1 0 2) "12")
@@ -40,25 +40,25 @@
 ;;; ~:*
 
 (def-format-test format.\:*.1
-  "~A~:*~A" (1 2 3) "11")
+  "~A~:*~A" (1 2 3) "11" 2)
 
 (def-format-test format.\:*.2
-  "~A~A~:*~A" (1 2 3) "122")
+  "~A~A~:*~A" (1 2 3) "122" 1)
 
 (def-format-test format.\:*.3
   "~A~A~0:*~A" (1 2 3) "123")
 
 (def-format-test format.\:*.4
-  "~A~A~2:*~A" (1 2 3) "121")
+  "~A~A~2:*~A" (1 2 3) "121" 2)
 
 (def-format-test format.\:*.5
   "~A~A~v:*~A" (1 2 0 3) "123")
 
 (def-format-test format.\:*.6
-  "~A~A~v:*~A" (6 7 2 3) "677")
+  "~A~A~v:*~A" (6 7 2 3) "677" 2)
 
 (def-format-test format.\:*.7
-  "~A~A~v:*~A" (6 7 nil 3) "67NIL")
+  "~A~A~v:*~A" (6 7 nil 3) "67NIL" 1)
 
 (def-format-test format.\:*.8
   "~A~1{~A~:*~A~}~A" (0 '(1 2 3) 4) "0114")
@@ -81,10 +81,10 @@
 ;;; ~@*
 
 (def-format-test format.@*.1
-  "~A~A~@*~A~A" (1 2 3 4) "1212")
+  "~A~A~@*~A~A" (1 2 3 4) "1212" 2)
 
 (def-format-test format.@*.2
-  "~A~A~1@*~A~A" (1 2 3 4) "1223")
+  "~A~A~1@*~A~A" (1 2 3 4) "1223" 1)
 
 (def-format-test format.@*.3
   "~A~A~2@*~A~A" (1 2 3 4) "1234")
@@ -93,13 +93,13 @@
   "~A~A~3@*~A~A" (1 2 3 4 5) "1245")
 
 (def-format-test format.@*.5
-  "~A~A~v@*~A~A" (1 2 nil 3 4) "1212")
+  "~A~A~v@*~A~A" (1 2 nil 3 4) "1212" 3)
 
 (def-format-test format.@*.6
-  "~A~A~v@*~A~A" (1 2 1 3 4) "1221")
+  "~A~A~v@*~A~A" (1 2 1 3 4) "1221" 2)
 
 (def-format-test format.@*.7
-  "~A~A~v@*~A~A" (6 7 2 3 4) "6723")
+  "~A~A~v@*~A~A" (6 7 2 3 4) "6723" 1)
 
 (def-format-test format.@*.8
   "~A~{~A~A~@*~A~A~}~A" (0 '(1 2) 9) "012129")
