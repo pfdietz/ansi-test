@@ -4551,7 +4551,7 @@
   (funcall
    (compile
     nil
-    '(lambda (a b c d)
+    '(lambda (b)
        (declare (notinline funcall min coerce))
        (declare
 	(optimize (speed 1)
@@ -4567,5 +4567,5 @@
 			0))
 		     'integer)))
 	 (funcall #'%f12 0))))
-   1611561761 -33 -62834 -1127955)
+   -33)
   0)
