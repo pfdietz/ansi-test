@@ -171,6 +171,18 @@
   (make-array 10 :initial-element nil :fill-pointer 5)
   (:end nil) "abcdefghijk" 5 #(#\a #\b #\c #\d #\e))
 
+;;; Nil vectors
+
+(deftest read-sequence.nil-vector.1
+  :notes (:nil-vectors-are-strings)
+  (let ((s (make-array 0 :element-type nil)))
+    (with-input-from-string
+     (is "abcde")
+     (values
+      (read-sequence s is)
+      s)))
+  0 "")
+
 ;;; Read into a bit vector
 
 (defmacro def-read-sequence-bv-test (name init args &rest expected)
