@@ -6314,8 +6314,8 @@ Broken at C::WT-C-INLINE-LOC.
   1)
 
 (deftest misc.336
-  (PROG2 (PROGN (TAGBODY (- (COMMON-LISP:HANDLER-CASE (GO TAG2)))
-			 TAG2)
+  (prog2 (progn (tagbody (- (common-lisp:handler-case (go tag2)))
+			 tag2)
 		0)
 	 0)
   0)
@@ -7400,3 +7400,21 @@ Broken at C::WT-C-INLINE-LOC.
    -49966124671 -68547159 12944)
   8015)
 
+;;; Evaluation order bug
+(deftest misc.390
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -257 -140) a))
+       (declare (type (integer -1 1069496658) b))
+       (declare (type (integer -4 2001960914944) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 2) (space 0) (safety 1) (debug 0)
+			  (compilation-speed 1)))
+       (labels ((%f12 (f12-1 &optional (f12-2 (setq b 63838027)) &key
+			     (key1 0) (key2 0))
+		      b))
+	 (boole boole-orc2 b (let ((*s3* (%f12 0))) -14)))))
+   -173 1028908375 1289968133290)
+  1028908383)
