@@ -148,6 +148,12 @@
   (copy-seq #())
   #())
 
+(deftest copy-seq.18
+  (let* ((x (make-array '(10) :initial-contents '(a b c d e f g h i j)))
+	 (y (copy-seq x)))
+    (equal-array x y))
+  t)
+
 ;;; Error tests
 
 (deftest copy-seq.error.1

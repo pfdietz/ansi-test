@@ -123,14 +123,16 @@
   (let ((a (make-array 6 :initial-element 'x
 		       :fill-pointer 3)))
     (map-into a #'identity '(1 2 3 4 5))
-    a)
+    (and (eqlt (fill-pointer a) 5)
+	 a))
   #(1 2 3 4 5))
 
 (deftest map-into-array.10
   (let ((a (make-array 6 :initial-element 'x
 		       :fill-pointer 3)))
     (map-into a #'(lambda () 'y))
-    a)
+    (and (eqlt (fill-pointer a) 6)
+	 a))
   #(y y y y y y))
 
 ;;; mapping into strings
@@ -156,6 +158,65 @@
   t
   "1234")
 
+(deftest map-into-string.4
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'character
+		       :fill-pointer 3)))
+    (map-into a #'identity "abcde")
+    (values
+     (fill-pointer a)
+     (aref a 5)
+     a))
+  5
+  #\x
+  "abcde")
+
+(deftest map-into-string.5
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'character
+		       :fill-pointer 3)))
+    (map-into a #'(lambda () #\y))
+    (values (fill-pointer a)
+	    a))
+  6
+  "yyyyyy")
+
+(deftest map-into-string.6
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'character)))
+    (map-into a #'(lambda () #\y))
+    a)
+  "yyyyyy")
+
+(deftest map-into-string.7
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'base-char
+		       :fill-pointer 3)))
+    (map-into a #'identity "abcde")
+    (values (fill-pointer a)
+	    (aref a 5)
+	    a))
+  5
+  #\x
+  "abcde")
+
+(deftest map-into-string.8
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'base-char
+		       :fill-pointer 3)))
+    (map-into a #'(lambda () #\y))
+    (values (fill-pointer a)
+	    a))
+  6
+  "yyyyyy")
+
+(deftest map-into-string.9
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'base-char)))
+    (map-into a #'(lambda () #\y))
+    a)
+  "yyyyyy")
+
 (deftest map-into-error.1
   (classify-error (map-into 'a #'(lambda () nil)))
   type-error)
@@ -167,3 +228,4 @@
 (deftest map-into-error.3
   (classify-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100))
   type-error)
+
