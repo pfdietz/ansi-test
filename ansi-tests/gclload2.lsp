@@ -153,6 +153,7 @@
 (load "vector.lsp")
 (load "vector-pop.lsp")
 (load "vector-push.lsp")
+(load "vector-push-extend.lsp")
 
 ;;; Tests of packages
 

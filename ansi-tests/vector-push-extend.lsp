@@ -1,317 +1,351 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
-;;;; Created:  Sat Jan 25 00:55:43 2003
-;;;; Contains: Tests for VECTOR-PUSH
+;;;; Created:  Sat Jan 25 08:04:35 2003
+;;;; Contains: Tests for VECTOR-PUSH-EXTEND
 
 (in-package :cl-test)
 
-(deftest vector-push.1
+(deftest vector-push-extend.1
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(a b c d e))))
     (values
      (fill-pointer a)
-     (vector-push 'x a)
+     (vector-push-extend 'x a)
      (fill-pointer a)
      a))
   2 2 3 #(a b x))
 
 
-(deftest vector-push.2
+(deftest vector-push-extend.2
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(a b c d e))))
     (values
      (fill-pointer a)
-     (vector-push 'x a)
+     (vector-push-extend 'x a)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #(a b c d e))
+  5 5 6 nil #(a b c d e x))
 
-(deftest vector-push.3
+(deftest vector-push-extend.3
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents "abcde"
 		       :element-type 'base-char)))
     (values
      (fill-pointer a)
-     (vector-push #\x a)
+     (vector-push-extend #\x a)
      (fill-pointer a)
      a))
   2 2 3 "abx")
 
-(deftest vector-push.4
+(deftest vector-push-extend.4
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents "abcde"
 		       :element-type 'base-char)))
     (values
      (fill-pointer a)
-     (vector-push #\x a)
+     (vector-push-extend #\x a 1)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 "abcde")
+  5 5 6 nil "abcdex")
 
-(deftest vector-push.5
+(deftest vector-push-extend.5
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents "abcde"
 		       :element-type 'character)))
     (values
      (fill-pointer a)
-     (vector-push #\x a)
+     (vector-push-extend #\x a)
      (fill-pointer a)
      a))
   2 2 3 "abx")
 
-(deftest vector-push.6
+(deftest vector-push-extend.6
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents "abcde"
 		       :element-type 'character)))
     (values
      (fill-pointer a)
-     (vector-push #\x a)
+     (vector-push-extend #\x a 10)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 "abcde")
+  5 5 6 nil "abcdex")
 
-(deftest vector-push.7
+(deftest vector-push-extend.7
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(0 1 1 0 0)
 		       :element-type 'bit)))
     (values
      (fill-pointer a)
-     (vector-push 0 a)
+     (vector-push-extend 0 a)
      (fill-pointer a)
      a))
   2 2 3 #*010)
 
-(deftest vector-push.8
+(deftest vector-push-extend.8
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(0 0 0 0 0)
 		       :element-type 'bit)))
     (values
      (fill-pointer a)
-     (vector-push 1 a)
+     (vector-push-extend 1 a 100)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #*00000)
+  5 5 6 nil #*000001)
 
-(deftest vector-push.9
+(deftest vector-push-extend.9
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(1 2 3 4 5)
 		       :element-type 'fixnum)))
     (values
      (fill-pointer a)
-     (vector-push 0 a)
+     (vector-push-extend 0 a)
      (fill-pointer a)
      a))
   2 2 3 #(1 2 0))
 
-(deftest vector-push.10
+(deftest vector-push-extend.10
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(1 2 3 4 5)
 		       :element-type 'fixnum)))
     (values
      (fill-pointer a)
-     (vector-push 0 a)
+     (vector-push-extend 0 a 1)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #(1 2 3 4 5))
+  5 5 6 nil #(1 2 3 4 5 0))
 
-(deftest vector-push.11
+(deftest vector-push-extend.11
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(1 2 3 4 5)
 		       :element-type '(integer 0 (256)))))
     (values
      (fill-pointer a)
-     (vector-push 0 a)
+     (vector-push-extend 0 a)
      (fill-pointer a)
      a))
   2 2 3 #(1 2 0))
 
-(deftest vector-push.12
+(deftest vector-push-extend.12
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(1 2 3 4 5)
 		       :element-type '(integer 0 (256)))))
     (values
      (fill-pointer a)
-     (vector-push 0 a)
+     (vector-push-extend 0 a 1)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #(1 2 3 4 5))
+  5 5 6 nil #(1 2 3 4 5 0))
 
-(deftest vector-push.13
+(deftest vector-push-extend.13
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0)
 		       :element-type 'short-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0s0 a)
+     (vector-push-extend 0.0s0 a)
      (fill-pointer a)
      a))
   2 2 3 #(1.0s0 2.0s0 0.0s0))
 
-(deftest vector-push.14
+(deftest vector-push-extend.14
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0)
 		       :element-type 'short-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0s0 a)
+     (vector-push-extend 0.0s0 a 1)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0))
+  5 5 6 nil #(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0 0.0s0))
 
-(deftest vector-push.15
+(deftest vector-push-extend.15
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0)
 		       :element-type 'single-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0f0 a)
+     (vector-push-extend 0.0f0 a)
      (fill-pointer a)
      a))
   2 2 3 #(1.0f0 2.0f0 0.0f0))
 
-(deftest vector-push.16
+(deftest vector-push-extend.16
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0)
 		       :element-type 'single-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0f0 a)
+     (vector-push-extend 0.0f0 a 1)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0))
+  5 5 6 nil #(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0 0.0f0))
 
 
-(deftest vector-push.17
+(deftest vector-push-extend.17
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0)
 		       :element-type 'double-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0d0 a)
+     (vector-push-extend 0.0d0 a)
      (fill-pointer a)
      a))
   2 2 3 #(1.0d0 2.0d0 0.0d0))
 
-(deftest vector-push.18
+(deftest vector-push-extend.18
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0)
 		       :element-type 'double-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0d0 a)
+     (vector-push-extend 0.0d0 a 1)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0))
+  5 5 6 nil #(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0 0.0d0))
 
-(deftest vector-push.19
+(deftest vector-push-extend.19
   (let ((a (make-array '(5) :fill-pointer 2
 		       :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0)
 		       :element-type 'long-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0l0 a)
+     (vector-push-extend 0.0l0 a)
      (fill-pointer a)
      a))
   2 2 3 #(1.0l0 2.0l0 0.0l0))
 
-(deftest vector-push.20
+(deftest vector-push-extend.20
   (let ((a (make-array '(5) :fill-pointer 5
+		       :adjustable t
 		       :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0)
 		       :element-type 'long-float)))
     (values
      (fill-pointer a)
-     (vector-push 0.0l0 a)
+     (vector-push-extend 0.0l0 a 1)
      (fill-pointer a)
+     (<= (array-total-size a) 5)
      a))
-  5 nil 5 #(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0))
+  5 5 6 nil #(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0 0.0l0))
 
 
 
 ;;; Error tests
 
-(defun vector-push-error-test (seq val)
+(defun vector-push-extend-error-test (seq val)
   (declare (optimize (safety 3)))
   (handler-case
    (eval `(let ((a (copy-seq ,seq)))
 	    (declare (optimize (safety 3)))
 	    (or (notnot (array-has-fill-pointer-p a))
-		(vector-push ',val a))))
+		(vector-push-extend ',val a 1))))
    (error () t)))
 
-(deftest vector-push.error.1
-  (vector-push-error-test #(a b c d) 'x)
+(deftest vector-push-extend.error.1
+  (vector-push-extend-error-test #(a b c d) 'x)
   t)
 
-(deftest vector-push.error.2
-  (vector-push-error-test #*00000 1)
+(deftest vector-push-extend.error.2
+  (vector-push-extend-error-test #*00000 1)
   t)
 
-(deftest vector-push.error.3
-  (vector-push-error-test "abcde" #\x)
+(deftest vector-push-extend.error.3
+  (vector-push-extend-error-test "abcde" #\x)
   t)
 
-(deftest vector-push.error.4
-  (vector-push-error-test #() 'x)
+(deftest vector-push-extend.error.4
+  (vector-push-extend-error-test #() 'x)
   t)
 
-(deftest vector-push.error.5
-  (vector-push-error-test #* 1)
+(deftest vector-push-extend.error.5
+  (vector-push-extend-error-test #* 1)
   t)
 
-(deftest vector-push.error.6
-  (vector-push-error-test "" #\x)
+(deftest vector-push-extend.error.6
+  (vector-push-extend-error-test "" #\x)
   t)
 
-(deftest vector-push.error.7
-  (vector-push-error-test (make-array '5 :element-type 'base-char
+(deftest vector-push-extend.error.7
+  (vector-push-extend-error-test (make-array '5 :element-type 'base-char
 				      :initial-element #\a)
 			  #\x)
   t)
 
-(deftest vector-push.error.8
-  (vector-push-error-test (make-array '5 :element-type '(integer 0 (256))
+(deftest vector-push-extend.error.8
+  (vector-push-extend-error-test (make-array '5 :element-type '(integer 0 (256))
 				      :initial-element 0)
 			  17)
   t)
 
-(deftest vector-push.error.9
-  (vector-push-error-test (make-array '5 :element-type 'float
+(deftest vector-push-extend.error.9
+  (vector-push-extend-error-test (make-array '5 :element-type 'float
 				      :initial-element 1.0)
 			  2.0)
   t)
 
-(deftest vector-push.error.10
-  (vector-push-error-test (make-array '5 :element-type 'short-float
+(deftest vector-push-extend.error.10
+  (vector-push-extend-error-test (make-array '5 :element-type 'short-float
 				      :initial-element 1.0s0)
 			  2.0s0)
   t)
 
-(deftest vector-push.error.11
-  (vector-push-error-test (make-array '5 :element-type 'long-float
+(deftest vector-push-extend.error.11
+  (vector-push-extend-error-test (make-array '5 :element-type 'long-float
 				      :initial-element 1.0l0)
 			  2.0l0)
   t)
 
-(deftest vector-push.error.12
-  (vector-push-error-test (make-array '5 :element-type 'single-float
+(deftest vector-push-extend.error.12
+  (vector-push-extend-error-test (make-array '5 :element-type 'single-float
 				      :initial-element 1.0f0)
 			  2.0f0)
   t)
 
-(deftest vector-push.error.13
-  (vector-push-error-test (make-array '5 :element-type 'double-float
+(deftest vector-push-extend.error.13
+  (vector-push-extend-error-test (make-array '5 :element-type 'double-float
 				      :initial-element 1.0d0)
 			  2.0d0)
   t)
 
-(deftest vector-push.error.14
-  (classify-error (vector-push))
+(deftest vector-push-extend.error.14
+  (classify-error (vector-push-extend))
   program-error)
 
-(deftest vector-push.error.15
-  (classify-error (vector-push (vector 1 2 3)))
+(deftest vector-push-extend.error.15
+  (classify-error (vector-push-extend (vector 1 2 3)))
   program-error)
 
-(deftest vector-push.error.16
-  (classify-error (vector-push (vector 1 2 3) 4 nil))
+(deftest vector-push-extend.error.16
+  (classify-error (vector-push-extend (vector 1 2 3) 4 1 nil))
   program-error)
+
+(deftest vector-push-extend.error.17
+  (let ((a (make-array '5 :fill-pointer t :adjustable nil
+		       :initial-element nil)))
+    (declare (optimize (safety 3)))
+    (or (notnot (adjustable-array-p a))  ;; It's actually adjustable, or...
+	(handler-case (vector-push-extend a 'x) ;;; ... this fails
+		      (error () t))))
+  t)
+
+
+
+
+
