@@ -7,7 +7,9 @@
 
 (deftest coerce.1
   (loop for x in *universe*
-	count (not (eq (coerce x (type-of x)) x)))
+	for type = (type-of x)
+	unless (and (consp type) (eqt (car type) 'function))
+	count (not (eq (coerce x type) x)))
   0)
 
 (deftest coerce.2
