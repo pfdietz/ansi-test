@@ -48,6 +48,20 @@
      (assert (search "APROPOS" result :test #'string-equal))))
   t)
 
+(deftest apropos.6
+  (let ((s (with-output-to-string
+	     (*standard-output*)
+	     (assert (null (multiple-value-list (apropos "CAR" "CL")))))))
+    (notnot (search "CAR" s :test #'string-equal)))
+  t)
+
+(deftest apropos.7
+  (let ((s (with-output-to-string
+	     (*standard-output*)
+	     (assert (null (multiple-value-list (apropos "CAR" :|CL|)))))))
+    (notnot (search "CAR" s :test #'string-equal)))
+  t)
+
 ;;; Error tests
 
 (deftest apropos.error.1
