@@ -215,6 +215,35 @@
 					     (make-array (- 10 j) :initial-element 'a)))))))
   t)
 
+(deftest nsubstitute-if-not-vector.28
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (nsubstitute-if-not 'z (is-not-eql-p 'a) x)))
+    result)
+  #(z b z c b))
+
+(deftest nsubstitute-if-not-vector.29
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (nsubstitute-if-not 'z (is-not-eql-p 'a) x :from-end t)))
+    result)
+  #(z b z c b))
+
+(deftest nsubstitute-if-not-vector.30
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (nsubstitute-if-not 'z (is-not-eql-p 'a) x :count 1)))
+    result)
+  #(z b a c b))
+
+(deftest nsubstitute-if-not-vector.31
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (nsubstitute-if-not 'z (is-not-eql-p 'a) x
+				    :from-end t :count 1)))
+    result)
+  #(a b z c b))
+
 ;;; Tests on strings
 
 (deftest nsubstitute-if-not-string.1
@@ -323,142 +352,172 @@
 					     (make-array (- 10 j) :initial-element #\a)))))))
   t)
 
-;;; Tests on bitstrings
+(deftest nsubstitute-if-not-string.28
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (nsubstitute-if-not #\z (is-not-eql-p #\a) x)))
+    result)
+  "zbzcb")
 
-(deftest nsubstitute-if-not-bitstring.1
+(deftest nsubstitute-if-not-string.29
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (nsubstitute-if-not #\z (is-not-eql-p #\a) x :from-end t)))
+    result)
+  "zbzcb")
+
+(deftest nsubstitute-if-not-string.30
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (nsubstitute-if-not #\z (is-not-eql-p #\a) x :count 1)))
+    result)
+  "zbacb")
+
+(deftest nsubstitute-if-not-string.31
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (nsubstitute-if-not #\z (is-not-eql-p #\a) x
+				    :from-end t :count 1)))
+    result)
+  "abzcb")
+
+
+;;; Tests on bit-vectors
+
+(deftest nsubstitute-if-not-bit-vector.1
   (let* ((orig #*)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 0 (is-not-eq-p 1) x)))
     result)
   #*)
 
-(deftest nsubstitute-if-not-bitstring.2
+(deftest nsubstitute-if-not-bit-vector.2
   (let* ((orig #*)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x)))
     result)
   #*)
 
-(deftest nsubstitute-if-not-bitstring.3
+(deftest nsubstitute-if-not-bit-vector.3
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 0 (is-not-eq-p 1) x)))
     result)
   #*000000)
 
-(deftest nsubstitute-if-not-bitstring.4
+(deftest nsubstitute-if-not-bit-vector.4
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x)))
     result)
   #*111111)
 
-(deftest nsubstitute-if-not-bitstring.5
+(deftest nsubstitute-if-not-bit-vector.5
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :start 1)))
     result)
   #*011111)
   
-(deftest nsubstitute-if-not-bitstring.6
+(deftest nsubstitute-if-not-bit-vector.6
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 0 (is-not-eq-p 1) x :start 2 :end nil)))
     result)
   #*010000)
 
-(deftest nsubstitute-if-not-bitstring.7
+(deftest nsubstitute-if-not-bit-vector.7
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :end 4)))
     result)
   #*111101)
   
-(deftest nsubstitute-if-not-bitstring.8
+(deftest nsubstitute-if-not-bit-vector.8
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 0 (is-not-eq-p 1) x :end nil)))
     result)
   #*000000)
 
-(deftest nsubstitute-if-not-bitstring.9
+(deftest nsubstitute-if-not-bit-vector.9
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 0 (is-not-eq-p 1) x :end 3)))
     result)
   #*000101)
 
-(deftest nsubstitute-if-not-bitstring.10
+(deftest nsubstitute-if-not-bit-vector.10
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 0 (is-not-eq-p 1) x :start 2 :end 4)))
     result)
   #*010001)
 
-(deftest nsubstitute-if-not-bitstring.11
+(deftest nsubstitute-if-not-bit-vector.11
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :start 2 :end 4)))
     result)
   #*011101)
 
-(deftest nsubstitute-if-not-bitstring.12
+(deftest nsubstitute-if-not-bit-vector.12
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count 1)))
     result)
   #*110101)
 
-(deftest nsubstitute-if-not-bitstring.13
+(deftest nsubstitute-if-not-bit-vector.13
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count 0)))
     result)
   #*010101)
 
-(deftest nsubstitute-if-not-bitstring.14
+(deftest nsubstitute-if-not-bit-vector.14
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count -1)))
     result)
   #*010101)
 
-(deftest nsubstitute-if-not-bitstring.15
+(deftest nsubstitute-if-not-bit-vector.15
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count 1 :from-end t)))
     result)
   #*010111)
 
-(deftest nsubstitute-if-not-bitstring.16
+(deftest nsubstitute-if-not-bit-vector.16
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count 0 :from-end t)))
     result)
   #*010101)
 
-(deftest nsubstitute-if-not-bitstring.17
+(deftest nsubstitute-if-not-bit-vector.17
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count -1 :from-end t)))
     result)
   #*010101)
 
-(deftest nsubstitute-if-not-bitstring.18
+(deftest nsubstitute-if-not-bit-vector.18
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count nil)))
     result)
   #*111111)
 
-(deftest nsubstitute-if-not-bitstring.19
+(deftest nsubstitute-if-not-bit-vector.19
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 0) x :count nil :from-end t)))
     result)
   #*111111)
 
-(deftest nsubstitute-if-not-bitstring.20
+(deftest nsubstitute-if-not-bit-vector.20
   (loop for i from 0 to 9 always
 	(loop for j from i to 10 always
 	      (loop for c from 0 to (- j i) always
@@ -472,7 +531,7 @@
 				 (make-list (- 10 (+ i c)) :initial-element 0)))))))
   t)
 
-(deftest nsubstitute-if-not-bitstring.21
+(deftest nsubstitute-if-not-bit-vector.21
   (loop for i from 0 to 9 always
 	(loop for j from i to 10 always
 	      (loop for c from 0 to (- j i) always
@@ -532,16 +591,44 @@
     result)
   "01a2342015")
 
-(deftest nsubstitute-if-not-bitstring.26
+(deftest nsubstitute-if-not-bit-vector.26
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 1) x :key #'1+)))
     result)
   #*11111111111111111)
     
-(deftest nsubstitute-if-not-bitstring.27
+(deftest nsubstitute-if-not-bit-vector.27
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
 	 (result (nsubstitute-if-not 1 (is-not-eq-p 1) x :key #'1+ :start 1 :end 10)))
     result)
   #*01111111111010110)
+
+(deftest nsubstitute-if-not-bit-vector.30
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (nsubstitute-if-not 1 #'onep x)))
+    result)
+  #*11111)
+
+(deftest nsubstitute-if-not-bit-vector.31
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (nsubstitute-if-not 1 #'onep x :from-end t)))
+    result)
+  #*11111)
+
+(deftest nsubstitute-if-not-bit-vector.32
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (nsubstitute-if-not 1 #'onep x :count 1)))
+    result)
+  #*11011)
+
+(deftest nsubstitute-if-not-bit-vector.33
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (nsubstitute-if-not 1 #'onep x :from-end t :count 1)))
+    result)
+  #*01111)

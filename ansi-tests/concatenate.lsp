@@ -113,6 +113,77 @@
   (concatenate 'null nil nil)
   nil)
 
+;;; Tests on vectors with fill pointers
+
+(deftest concatenate.25
+  (let ((x (make-array '(10) :initial-contents '(a b c d e f g h i j)
+		       :fill-pointer 5)))
+    (concatenate 'list x x))
+  (a b c d e a b c d e))
+
+(deftest concatenate.26
+  (let ((x (make-array '(10) :initial-contents '(a b c d e f g h i j)
+		       :fill-pointer 5)))
+    (concatenate 'list x))
+  (a b c d e))
+
+(deftest concatenate.27
+  (let* ((x (make-array '(10) :initial-contents '(a b c d e f g h i j)
+		       :fill-pointer 5))
+	 (result (concatenate 'vector x)))
+    (values (not (simple-vector-p result))
+	    result))
+  nil
+  #(a b c d e))
+
+(deftest concatenate.28
+  (let* ((x (make-array '(10) :initial-contents (coerce "abcdefghij" 'list)
+			:fill-pointer 5 :element-type 'character)))
+    (values
+     (concatenate 'string x '(#\z))
+     (concatenate 'string '(#\z) x)
+     (concatenate 'string x x)
+     (concatenate 'string x)
+     (not (simple-string-p (concatenate 'string x)))
+     ))
+  "abcdez"
+  "zabcde"
+  "abcdeabcde"
+  "abcde"
+  nil)
+
+(deftest concatenate.29
+  (let* ((x (make-array '(10) :initial-contents (coerce "abcdefghij" 'list)
+			:fill-pointer 5 :element-type 'base-char)))
+    (values
+     (concatenate 'string x '(#\z))
+     (concatenate 'string '(#\z) x)
+     (concatenate 'string x x)
+     (concatenate 'string x)
+     (not (simple-string-p (concatenate 'string x)))
+     ))
+  "abcdez"
+  "zabcde"
+  "abcdeabcde"
+  "abcde"
+  nil)
+
+(deftest concatenate.30
+  (let* ((x (make-array '(10) :initial-contents (coerce #*0110010111 'list)
+			:fill-pointer 5 :element-type 'bit)))
+    (values
+     (concatenate 'bit-vector x '(0))
+     (concatenate 'bit-vector '(0) x)
+     (concatenate 'bit-vector x x)
+     (concatenate 'bit-vector x)
+     (not (simple-bit-vector-p (concatenate 'bit-vector x)))
+     ))
+  #*011000
+  #*001100
+  #*0110001100
+  #*01100
+  nil)
+
 ;;; Error tests
 
 (deftest concatenate-error.1

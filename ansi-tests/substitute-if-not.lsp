@@ -247,6 +247,36 @@
 						 (make-array (- 10 j) :initial-element 'a))))))))
   t)
 
+(deftest substitute-if-not-vector.28
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if-not 'z (is-not-eql-p 'a) x)))
+    result)
+  #(z b z c b))
+
+(deftest substitute-if-not-vector.29
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if-not 'z (is-not-eql-p 'a) x :from-end t)))
+    result)
+  #(z b z c b))
+
+(deftest substitute-if-not-vector.30
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if-not 'z (is-not-eql-p 'a) x :count 1)))
+    result)
+  #(z b a c b))
+
+(deftest substitute-if-not-vector.31
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if-not 'z (is-not-eql-p 'a) x
+				    :from-end t :count 1)))
+    result)
+  #(a b z c b))
+
+
 ;;; Tests on strings
 
 (deftest substitute-if-not-string.1
@@ -370,6 +400,37 @@
 						 (make-array c :initial-element #\x)
 						 (make-array (- 10 j) :initial-element #\a))))))))
   t)
+
+(deftest substitute-if-not-string.28
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if-not #\z (is-not-eql-p #\a) x)))
+    result)
+  "zbzcb")
+
+(deftest substitute-if-not-string.29
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if-not #\z (is-not-eql-p #\a) x :from-end t)))
+    result)
+  "zbzcb")
+
+(deftest substitute-if-not-string.30
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if-not #\z (is-not-eql-p #\a) x :count 1)))
+    result)
+  "zbacb")
+
+(deftest substitute-if-not-string.31
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if-not #\z (is-not-eql-p #\a) x
+				    :from-end t :count 1)))
+    result)
+  "abzcb")
+
+
 
 ;;; Tests on bitstrings
 
@@ -621,3 +682,31 @@
     (and (equalp orig x)
 	 result))
   #*01111111111010110)
+
+(deftest substitute-if-not-bit-vector.30
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if-not 1 #'onep x)))
+    result)
+  #*11111)
+
+(deftest substitute-if-not-bit-vector.31
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if-not 1 #'onep x :from-end t)))
+    result)
+  #*11111)
+
+(deftest substitute-if-not-bit-vector.32
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if-not 1 #'onep x :count 1)))
+    result)
+  #*11011)
+
+(deftest substitute-if-not-bit-vector.33
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if-not 1 #'onep x :from-end t :count 1)))
+    result)
+  #*01111)

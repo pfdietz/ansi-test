@@ -123,6 +123,7 @@
 					   (make-list (- 10 j) :initial-element 'a))))))))
   t)
 
+
 ;;; Tests on vectors
 
 (deftest substitute-if-vector.1
@@ -179,17 +180,20 @@
   #(a b a c))
 
 (deftest substitute-if-vector.12
-  (let ((x #(a b a c))) (values (substitute-if 'b (is-eq-p 'a) x :count 1 :from-end t) x))
+  (let ((x #(a b a c)))
+    (values (substitute-if 'b (is-eq-p 'a) x :count 1 :from-end t) x))
   #(a b b c)
   #(a b a c))
 
 (deftest substitute-if-vector.13
-  (let ((x #(a b a c))) (values (substitute-if 'b (is-eq-p 'a) x :count 0 :from-end t) x))
+  (let ((x #(a b a c)))
+    (values (substitute-if 'b (is-eq-p 'a) x :count 0 :from-end t) x))
   #(a b a c)
   #(a b a c))
 
 (deftest substitute-if-vector.14
-  (let ((x #(a b a c))) (values (substitute-if 'b (is-eq-p 'a) x :count -1 :from-end t) x))
+  (let ((x #(a b a c)))
+    (values (substitute-if 'b (is-eq-p 'a) x :count -1 :from-end t) x))
   #(a b a c)
   #(a b a c))
 
@@ -200,10 +204,12 @@
 		     (x (copy-seq orig))
 		     (y (substitute-if 'x (is-eq-p 'a) x :start i :end j)))
 		(and (equalp orig x)
-		     (equalp y (concatenate 'simple-vector
-					   (make-array i :initial-element 'a)
-					   (make-array (- j i) :initial-element 'x)
-					   (make-array (- 10 j) :initial-element 'a)))))))
+		     (equalp y
+			     (concatenate
+			      'simple-vector
+			      (make-array i :initial-element 'a)
+			      (make-array (- j i) :initial-element 'x)
+			      (make-array (- 10 j) :initial-element 'a)))))))
   t)
 
 (deftest substitute-if-vector.16
@@ -213,10 +219,12 @@
 		     (x (copy-seq orig))
 		     (y (substitute-if 'x (is-eq-p 'a) x :start i :end j :from-end t)))
 		(and (equalp orig x)
-		     (equalp y (concatenate 'simple-vector
-					   (make-array i :initial-element 'a)
-					   (make-array (- j i) :initial-element 'x)
-					   (make-array (- 10 j) :initial-element 'a)))))))
+		     (equalp y
+			     (concatenate 
+			      'simple-vector
+			      (make-array i :initial-element 'a)
+			      (make-array (- j i) :initial-element 'x)
+			      (make-array (- 10 j) :initial-element 'a)))))))
   t)
 
 (deftest substitute-if-vector.17
@@ -225,12 +233,16 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig #(a a a a a a a a a a))
 			   (x (copy-seq orig))
-			   (y (substitute-if 'x (is-eq-p 'a) x :start i :end j :count c)))
+			   (y (substitute-if 'x (is-eq-p 'a) x
+					     :start i :end j :count c)))
 		      (and (equalp orig x)
-			   (equalp y (concatenate 'simple-vector
-						 (make-array i :initial-element 'a)
-						 (make-array c :initial-element 'x)
-						 (make-array (- 10 (+ i c)) :initial-element 'a))))))))
+			   (equalp
+			    y (concatenate
+			       'simple-vector
+			       (make-array i :initial-element 'a)
+			       (make-array c :initial-element 'x)
+			       (make-array (- 10 (+ i c))
+					   :initial-element 'a))))))))
   t)
 
 (deftest substitute-if-vector.18
@@ -239,13 +251,46 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig #(a a a a a a a a a a))
 			   (x (copy-seq orig))
-			   (y (substitute-if 'x (is-eq-p 'a) x :start i :end j :count c :from-end t)))
+			   (y (substitute-if 'x (is-eq-p 'a) x
+					     :start i :end j :count c
+					     :from-end t)))
 		      (and (equalp orig x)
-			   (equalp y (concatenate 'simple-vector
-						 (make-array (- j c) :initial-element 'a)
-						 (make-array c :initial-element 'x)
-						 (make-array (- 10 j) :initial-element 'a))))))))
+			   (equalp
+			    y
+			    (concatenate
+			     'simple-vector
+			     (make-array (- j c) :initial-element 'a)
+			     (make-array c :initial-element 'x)
+			     (make-array (- 10 j) :initial-element 'a))))))))
   t)
+
+(deftest substitute-if-vector.28
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if 'z (is-eql-p 'a) x)))
+    result)
+  #(z b z c b))
+
+(deftest substitute-if-vector.29
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if 'z (is-eql-p 'a) x :from-end t)))
+    result)
+  #(z b z c b))
+
+(deftest substitute-if-vector.30
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if 'z (is-eql-p 'a) x :count 1)))
+    result)
+  #(z b a c b))
+
+(deftest substitute-if-vector.31
+  (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
+		       :fill-pointer 5))
+	 (result (substitute-if 'z (is-eql-p 'a) x :from-end t :count 1)))
+    result)
+  #(a b z c b))
 
 ;;; Tests on strings
 
@@ -335,12 +380,15 @@
 	(loop for j from i to 10 always
 	      (let* ((orig "aaaaaaaaaa")
 		     (x (copy-seq orig))
-		     (y (substitute-if #\x (is-eq-p #\a) x :start i :end j :from-end t)))
+		     (y (substitute-if #\x (is-eq-p #\a) x
+				       :start i :end j :from-end t)))
 		(and (equalp orig x)
-		     (equalp y (concatenate 'simple-string
-					   (make-array i :initial-element #\a)
-					   (make-array (- j i) :initial-element #\x)
-					   (make-array (- 10 j) :initial-element #\a)))))))
+		     (equalp y
+			     (concatenate 
+			      'simple-string
+			      (make-array i :initial-element #\a)
+			      (make-array (- j i) :initial-element #\x)
+			      (make-array (- 10 j) :initial-element #\a)))))))
   t)
 
 (deftest substitute-if-string.17
@@ -349,12 +397,16 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig "aaaaaaaaaa")
 			   (x (copy-seq orig))
-			   (y (substitute-if #\x (is-eq-p #\a) x :start i :end j :count c)))
+			   (y (substitute-if #\x (is-eq-p #\a) x
+					     :start i :end j :count c)))
 		      (and (equalp orig x)
-			   (equalp y (concatenate 'simple-string
-						 (make-array i :initial-element #\a)
-						 (make-array c :initial-element #\x)
-						 (make-array (- 10 (+ i c)) :initial-element #\a))))))))
+			   (equalp y
+				   (concatenate
+				    'simple-string
+				    (make-array i :initial-element #\a)
+				    (make-array c :initial-element #\x)
+				    (make-array (- 10 (+ i c))
+						:initial-element #\a))))))))
   t)
 
 (deftest substitute-if-string.18
@@ -363,17 +415,50 @@
 	      (loop for c from 0 to (- j i) always
 		    (let* ((orig "aaaaaaaaaa")
 			   (x (copy-seq orig))
-			   (y (substitute-if #\x (is-eq-p #\a) x :start i :end j :count c :from-end t)))
+			   (y (substitute-if #\x (is-eq-p #\a) x
+					     :start i :end j :count c
+					     :from-end t)))
 		      (and (equalp orig x)
-			   (equalp y (concatenate 'simple-string
-						 (make-array (- j c) :initial-element #\a)
-						 (make-array c :initial-element #\x)
-						 (make-array (- 10 j) :initial-element #\a))))))))
+			   (equalp y (concatenate
+				      'simple-string
+				      (make-array (- j c) :initial-element #\a)
+				      (make-array c :initial-element #\x)
+				      (make-array (- 10 j)
+						  :initial-element #\a))))))))
   t)
 
-;;; Tests on bitstrings
 
-(deftest substitute-if-bitstring.1
+(deftest substitute-if-string.28
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if #\z (is-eql-p #\a) x)))
+    result)
+  "zbzcb")
+
+(deftest substitute-if-string.29
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if #\z (is-eql-p #\a) x :from-end t)))
+    result)
+  "zbzcb")
+
+(deftest substitute-if-string.30
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if #\z (is-eql-p #\a) x :count 1)))
+    result)
+  "zbacb")
+
+(deftest substitute-if-string.31
+  (let* ((x (make-array '(10) :initial-contents (coerce "abacbadeaf" 'list)
+		       :fill-pointer 5 :element-type 'character))
+	 (result (substitute-if #\z (is-eql-p #\a) x :from-end t :count 1)))
+    result)
+  "abzcb")
+
+;;; Tests on bit-vectors
+
+(deftest substitute-if-bit-vector.1
   (let* ((orig #*)
 	 (x (copy-seq orig))
 	 (result (substitute-if 0 (is-eq-p 1) x)))
@@ -381,7 +466,7 @@
 	 result))
   #*)
 
-(deftest substitute-if-bitstring.2
+(deftest substitute-if-bit-vector.2
   (let* ((orig #*)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 'zerop x)))
@@ -389,7 +474,7 @@
 	 result))
   #*)
 
-(deftest substitute-if-bitstring.3
+(deftest substitute-if-bit-vector.3
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 0 (is-eq-p 1) x)))
@@ -397,7 +482,7 @@
 	 result))
   #*000000)
 
-(deftest substitute-if-bitstring.4
+(deftest substitute-if-bit-vector.4
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x)))
@@ -405,7 +490,7 @@
 	 result))
   #*111111)
 
-(deftest substitute-if-bitstring.5
+(deftest substitute-if-bit-vector.5
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :start 1)))
@@ -413,7 +498,7 @@
 	 result))
   #*011111)
   
-(deftest substitute-if-bitstring.6
+(deftest substitute-if-bit-vector.6
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 0 (is-eq-p 1) x :start 2 :end nil)))
@@ -421,7 +506,7 @@
 	 result))
   #*010000)
 
-(deftest substitute-if-bitstring.7
+(deftest substitute-if-bit-vector.7
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :end 4)))
@@ -429,7 +514,7 @@
 	 result))
   #*111101)
   
-(deftest substitute-if-bitstring.8
+(deftest substitute-if-bit-vector.8
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 0 (is-eq-p 1) x :end nil)))
@@ -437,7 +522,7 @@
 	 result))
   #*000000)
 
-(deftest substitute-if-bitstring.9
+(deftest substitute-if-bit-vector.9
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 0 (is-eq-p 1) x :end 3)))
@@ -445,7 +530,7 @@
 	 result))
   #*000101)
 
-(deftest substitute-if-bitstring.10
+(deftest substitute-if-bit-vector.10
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 0 (is-eq-p 1) x :start 2 :end 4)))
@@ -453,7 +538,7 @@
 	 result))
   #*010001)
 
-(deftest substitute-if-bitstring.11
+(deftest substitute-if-bit-vector.11
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :start 2 :end 4)))
@@ -461,7 +546,7 @@
 	 result))
   #*011101)
 
-(deftest substitute-if-bitstring.12
+(deftest substitute-if-bit-vector.12
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count 1)))
@@ -469,7 +554,7 @@
 	 result))
   #*110101)
 
-(deftest substitute-if-bitstring.13
+(deftest substitute-if-bit-vector.13
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count 0)))
@@ -477,7 +562,7 @@
 	 result))
   #*010101)
 
-(deftest substitute-if-bitstring.14
+(deftest substitute-if-bit-vector.14
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count -1)))
@@ -485,7 +570,7 @@
 	 result))
   #*010101)
 
-(deftest substitute-if-bitstring.15
+(deftest substitute-if-bit-vector.15
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count 1 :from-end t)))
@@ -493,7 +578,7 @@
 	 result))
   #*010111)
 
-(deftest substitute-if-bitstring.16
+(deftest substitute-if-bit-vector.16
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count 0 :from-end t)))
@@ -501,7 +586,7 @@
 	 result))
   #*010101)
 
-(deftest substitute-if-bitstring.17
+(deftest substitute-if-bit-vector.17
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count -1 :from-end t)))
@@ -509,7 +594,7 @@
 	 result))
   #*010101)
 
-(deftest substitute-if-bitstring.18
+(deftest substitute-if-bit-vector.18
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count nil)))
@@ -517,7 +602,7 @@
 	 result))
   #*111111)
 
-(deftest substitute-if-bitstring.19
+(deftest substitute-if-bit-vector.19
   (let* ((orig #*010101)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 #'zerop x :count nil :from-end t)))
@@ -525,7 +610,7 @@
 	 result))
   #*111111)
 
-(deftest substitute-if-bitstring.20
+(deftest substitute-if-bit-vector.20
   (loop for i from 0 to 9 always
 	(loop for j from i to 10 always
 	      (loop for c from 0 to (- j i) always
@@ -540,7 +625,7 @@
 				      (make-list (- 10 (+ i c)) :initial-element 0))))))))
   t)
 
-(deftest substitute-if-bitstring.21
+(deftest substitute-if-bit-vector.21
   (loop for i from 0 to 9 always
 	(loop for j from i to 10 always
 	      (loop for c from 0 to (- j i) always
@@ -606,7 +691,7 @@
 	 result))
   "01a2342015")
 
-(deftest substitute-if-bitstring.26
+(deftest substitute-if-bit-vector.26
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 (is-eq-p 1) x :key #'1+)))
@@ -614,10 +699,38 @@
 	 result))
   #*11111111111111111)
     
-(deftest substitute-if-bitstring.27
+(deftest substitute-if-bit-vector.27
   (let* ((orig #*00111001011010110)
 	 (x (copy-seq orig))
 	 (result (substitute-if 1 (is-eq-p 1) x :key #'1+ :start 1 :end 10)))
     (and (equalp orig x)
 	 result))
   #*01111111111010110)
+
+(deftest substitute-if-bit-vector.30
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if 1 #'zerop x)))
+    result)
+  #*11111)
+
+(deftest substitute-if-bit-vector.31
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if 1 #'zerop x :from-end t)))
+    result)
+  #*11111)
+
+(deftest substitute-if-bit-vector.32
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if 1 #'zerop x :count 1)))
+    result)
+  #*11011)
+
+(deftest substitute-if-bit-vector.33
+  (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
+		       :fill-pointer 5 :element-type 'bit))
+	 (result (substitute-if 1 #'zerop x :from-end t :count 1)))
+    result)
+  #*01111)
