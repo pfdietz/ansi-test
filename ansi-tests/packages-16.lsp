@@ -18,7 +18,7 @@
    for n in '("H" #:|H| #\H) count
    (not
     (progn
-      (ignore-errors (delete-package "H"))
+      (safely-delete-package "H")
       (let ((p (ignore-errors (eval `(defpackage ,n)))))
 	(and
 	 (packagep p)
@@ -40,7 +40,7 @@
    (not
     (ignore-errors
       (progn
-	(ignore-errors (delete-package "H"))
+	(safely-delete-package "H")
 	(let ((p (ignore-errors
 		   (eval `(defpackage "H" (:nicknames ,n "J"))))))
 	  (and
@@ -60,7 +60,7 @@
 ;; Do not check use-list, because it is implementation dependent
 (deftest defpackage-3
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (ignore-errors
       (let ((p (eval '(defpackage "H" (:documentation "This is a doc string")))))
 	(and
@@ -87,7 +87,7 @@
    (not
     (ignore-errors
       (progn
-	(ignore-errors (delete-package "H"))
+	(safely-delete-package "H")
 	(let ((p (ignore-errors (eval `(defpackage "H" (:use ,n))))))
 	  (and
 	   (packagep p)
@@ -105,7 +105,7 @@
 ;; Test defpackage shadow option, and null use
 (deftest defpackage-5
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (ignore-errors
       (let ((p (ignore-errors (eval `(defpackage "H" (:use) 
 				       (:shadow "foo"))))))
@@ -136,7 +136,7 @@
    for s in '(:|f| #\f)
    collect
    (ignore-errors
-     (ignore-errors (delete-package "H"))
+     (safely-delete-package "H")
      (let ((p (ignore-errors (eval `(defpackage "H" 
 				      (:use)
 				      (:shadow ,s))))))
@@ -166,8 +166,8 @@
 ;; Test several ways of specifying the symbol name
 (deftest defpackage-7
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (let ((pg (make-package "G" :use nil)))
       ;; Populate package G with several symbols
       (export (intern "A" pg) pg)
@@ -179,7 +179,7 @@
        for n in '("A" :|A| #\A)
        collect
        (ignore-errors
-	 (ignore-errors (delete-package "H"))
+	 (safely-delete-package "H")
 	 (let ((p (ignore-errors
 		    (eval
 		     `(defpackage "H"
@@ -213,8 +213,8 @@
 ;;   the symbol is imported
 (deftest defpackage-8
     (progn
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
+      (safely-delete-package "H")
+      (safely-delete-package "G")
       (let ((pg (eval '(defpackage "G" (:use) (:intern "A" "B" "C")))))
 	(loop
 	  for pn in '("G" #:|G| #\G)
@@ -223,7 +223,7 @@
 	   for n in '("B" #:|B| #\B)
 	   collect
 	   (ignore-errors
-	     (ignore-errors (delete-package "H"))
+	     (safely-delete-package "H")
 	     (let ((p (ignore-errors
 			(eval `(defpackage
 				 "H" (:use)
@@ -262,7 +262,7 @@
      for n in '("Z" #:|Z| #\Z)
      collect
      (ignore-errors
-       (ignore-errors (delete-package "H"))
+       (safely-delete-package "H")
        (let ((p (ignore-errors
 		  (eval `(defpackage
 			   "H"
@@ -298,7 +298,7 @@
      for n in '("Z" #:|Z| #\Z)
      collect
      (ignore-errors
-       (ignore-errors (delete-package "H"))
+       (safely-delete-package "H")
        (let ((p (ignore-errors
 		  (eval `(defpackage
 			   "H"
@@ -330,7 +330,7 @@
 
 (deftest defpackage-11
   (ignore-errors
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (let ((p (ignore-errors
 	       (eval '(defpackage "H" (:use) (:size 0))))))
       (mapcar
@@ -347,7 +347,7 @@
 
 (deftest defpackage-12
   (ignore-errors
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (let ((p (ignore-errors
 	       (eval '(defpackage "H" (:use) (:size 10000))))))
       (mapcar
@@ -367,7 +367,7 @@
 ;; Repeated size field should cause a program-error
 (deftest defpackage-13
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (classify-error
      (eval '(defpackage "H" (:use) (:size 10) (:size 20)))))
   program-error)
@@ -375,7 +375,7 @@
 ;; Repeated documentation field should cause a program-error
 (deftest defpackage-14
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (classify-error
      (eval '(defpackage "H" (:use)
 	      (:documentation "foo")
@@ -387,7 +387,7 @@
 
 (deftest defpackage-15
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (classify-error
      (eval '(defpackage "H" (:use)
 	      (:nicknames "A")))))
@@ -395,7 +395,7 @@
 
 (deftest defpackage-16
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (classify-error
      (eval '(defpackage "H" (:use)
 	      (:nicknames "Q")))))
@@ -407,8 +407,8 @@
 ;; :shadow and :shadowing-import-from
 (deftest defpackage-17
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
     (classify-error
      (eval '(defpackage "H" (:use)
@@ -419,8 +419,8 @@
 ;; :shadow and :import-from
 (deftest defpackage-18
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
     (classify-error
      (eval '(defpackage "H" (:use)
@@ -431,7 +431,7 @@
 ;; :shadow and :intern
 (deftest defpackage-19
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (classify-error
      (eval '(defpackage "H" (:use)
 	      (:shadow "A")
@@ -441,8 +441,8 @@
 ;; :shadowing-import-from and :import-from
 (deftest defpackage-20
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
     (classify-error
      (eval '(defpackage "H" (:use)
@@ -453,8 +453,8 @@
 ;; :shadowing-import-from and :intern
 (deftest defpackage-21
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
     (classify-error
      (eval '(defpackage "H" (:use)
@@ -465,8 +465,8 @@
 ;; :import-from and :intern
 (deftest defpackage-22
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (eval '(defpackage "G" (:use) (:export "A")))
     (classify-error
      (eval '(defpackage "H" (:use)
@@ -478,7 +478,7 @@
 ;;  otherwise signal a program-error
 (deftest defpackage-23
   (progn
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (classify-error
      (eval '(defpackage "H" (:use)
 	      (:export "A")
@@ -489,8 +489,8 @@
 ;;  if the symbol is not accessible in the named package
 (deftest defpackage-24
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (eval '(defpackage "G" (:use)))
     (handle-non-abort-restart
      (eval '(defpackage "H" (:shadowing-import-from
@@ -502,8 +502,8 @@
 
 (deftest defpackage-25
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (eval '(defpackage "G" (:use)))
     (handle-non-abort-restart
      (eval '(defpackage "H" (:import-from "G" "NOT-THERE")))))
@@ -516,10 +516,10 @@
     (flet
 	((%do-it%
 	  (args)
-	  (ignore-errors (delete-package "H"))
-	  (ignore-errors (delete-package "G1"))
-	  (ignore-errors (delete-package "G2"))
-	  (ignore-errors (delete-package "G3"))
+	  (safely-delete-package "H")
+	  (safely-delete-package "G1")
+	  (safely-delete-package "G2")
+	  (safely-delete-package "G3")
 	  (let ((pg1 
 		 (progn
 		   (format t "Making G1...~%")
@@ -612,7 +612,3 @@
 	(list (%do-it% args)
 	      (%do-it% (reverse args))))))
   (success success))
-
-
-
-      

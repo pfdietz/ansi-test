@@ -44,7 +44,7 @@
 (deftest in-package-5
   (let ((*package* *package*))
     (declare (special *package*))
-    (ignore-errors (delete-package "H"))
+    (safely-delete-package "H")
     (handler-case
      (eval '(in-package "H"))
      (package-error () 'package-error)

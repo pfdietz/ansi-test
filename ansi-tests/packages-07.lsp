@@ -10,214 +10,214 @@
 ;;; shadow
 
 (deftest shadow-1
-    (prog1
-	(progn
-      (ignore-errors (delete-package "TEST5"))
-      (ignore-errors (delete-package "TEST4"))
-      (handler-case
-	  (let* ((p1 (prog1
-			 (make-package "TEST4")
-		       (export (intern "A" "TEST4") "TEST4")))
-		 (p2 (make-package "TEST5" :use '("TEST4")))
-		 (r1 (package-shadowing-symbols "TEST4"))
-		 (r2 (package-shadowing-symbols "TEST5")))
-	    (multiple-value-bind (s1 kind1)
-		(find-symbol "A" p1)
-	      (multiple-value-bind (s2 kind2)
-		  (find-symbol "A" p2)
-		(let ((r3 (shadow "A" p2)))
-		  (multiple-value-bind (s3 kind3)
-		      (find-symbol "A" p2)
-		    (list 
-		     (package-name p1)
-		     (package-name p2)
-		     r1 r2
-		     (symbol-name s1)
-		     (package-name (symbol-package s1))
-		     kind1
-		     (symbol-name s2)
-		     (package-name (symbol-package s2))
-		     kind2
-		     r3
-		     (symbol-name s3)
-		     (package-name (symbol-package s3))
-		     kind3))))))
-	(error (c) c)))
-      (ignore-errors (delete-package "TEST5"))
-      (ignore-errors (delete-package "TEST4")))
+  (prog1
+      (progn
+	(safely-delete-package "TEST5")
+	(safely-delete-package "TEST4")
+	(handler-case
+	 (let* ((p1 (prog1
+			(make-package "TEST4")
+		      (export (intern "A" "TEST4") "TEST4")))
+		(p2 (make-package "TEST5" :use '("TEST4")))
+		(r1 (package-shadowing-symbols "TEST4"))
+		(r2 (package-shadowing-symbols "TEST5")))
+	   (multiple-value-bind (s1 kind1)
+	       (find-symbol "A" p1)
+	     (multiple-value-bind (s2 kind2)
+		 (find-symbol "A" p2)
+	       (let ((r3 (shadow "A" p2)))
+		 (multiple-value-bind (s3 kind3)
+		     (find-symbol "A" p2)
+		   (list 
+		    (package-name p1)
+		    (package-name p2)
+		    r1 r2
+		    (symbol-name s1)
+		    (package-name (symbol-package s1))
+		    kind1
+		    (symbol-name s2)
+		    (package-name (symbol-package s2))
+		    kind2
+		    r3
+		    (symbol-name s3)
+		    (package-name (symbol-package s3))
+		    kind3))))))
+	 (error (c) c)))
+    (safely-delete-package "TEST5")
+    (safely-delete-package "TEST4"))
   ("TEST4" "TEST5" nil nil "A" "TEST4" :external
-	   "A" "TEST4" :inherited
-	   t
-	   "A" "TEST5" :internal))
+   "A" "TEST4" :inherited
+   t
+   "A" "TEST5" :internal))
 
 (deftest shadow-2
-    (progn
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (handler-case
-	  (let* ((p1 (prog1
-			 (make-package "G")
-		       (export (intern "A" "G") "G")))
-		 (p2 (make-package "H" :use '("G")))
-		 (r1 (package-shadowing-symbols "G"))
-		 (r2 (package-shadowing-symbols "H")))
-	    (multiple-value-bind (s1 kind1)
-		(find-symbol "A" p1)
-	      (multiple-value-bind (s2 kind2)
-		  (find-symbol "A" p2)
-		(let ((r3 (shadow "A" "H")))
-		  (multiple-value-bind (s3 kind3)
-		      (find-symbol "A" p2)
-		    (prog1
-			(list (package-name p1) (package-name p2)
-			      r1 r2 (symbol-name s1) (package-name (symbol-package s1))
-			      kind1 (symbol-name s2) (package-name (symbol-package s2))
-			      kind2 r3 (symbol-name s3) (package-name (symbol-package s3))
-			      kind3)
-		      (ignore-errors (delete-package p2))
-		      (ignore-errors (delete-package p1))
-		      ))))))
-	(error (c)
-	  (ignore-errors (delete-package "H"))
-	  (ignore-errors (delete-package "G"))
-	  c)))
+  (progn
+    (safely-delete-package "H")
+    (safely-delete-package "G")
+    (handler-case
+     (let* ((p1 (prog1
+		    (make-package "G")
+		  (export (intern "A" "G") "G")))
+	    (p2 (make-package "H" :use '("G")))
+	    (r1 (package-shadowing-symbols "G"))
+	    (r2 (package-shadowing-symbols "H")))
+       (multiple-value-bind (s1 kind1)
+	   (find-symbol "A" p1)
+	 (multiple-value-bind (s2 kind2)
+	     (find-symbol "A" p2)
+	   (let ((r3 (shadow "A" "H")))
+	     (multiple-value-bind (s3 kind3)
+		 (find-symbol "A" p2)
+	       (prog1
+		   (list (package-name p1) (package-name p2)
+			 r1 r2 (symbol-name s1) (package-name (symbol-package s1))
+			 kind1 (symbol-name s2) (package-name (symbol-package s2))
+			 kind2 r3 (symbol-name s3) (package-name (symbol-package s3))
+			 kind3)
+		 (safely-delete-package p2)
+		 (safely-delete-package p1)
+		 ))))))
+     (error (c)
+	    (safely-delete-package "H")
+	    (safely-delete-package "G")
+	    c)))
   ("G" "H" nil nil "A" "G" :external
-	   "A" "G" :inherited
-	   t
-	   "A" "H" :internal))
+   "A" "G" :inherited
+   t
+   "A" "H" :internal))
 
 ;; shadow in which the package is given
 ;; by a character
 (deftest shadow-3
-    (progn
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
-      (handler-case
-	  (let* ((p1 (prog1
-			 (make-package "G")
-		       (export (intern "A" "G") "G")))
-		 (p2 (make-package "H" :use '("G")))
-		 (r1 (package-shadowing-symbols "G"))
-		 (r2 (package-shadowing-symbols "H")))
-	    (multiple-value-bind (s1 kind1)
-		(find-symbol "A" p1)
-	      (multiple-value-bind (s2 kind2)
-		  (find-symbol "A" p2)
-		(let ((r3 (shadow "A" #\H)))
-		  (multiple-value-bind (s3 kind3)
-		      (find-symbol "A" p2)
-		    (prog1
-			(list (package-name p1) (package-name p2)
-			      r1 r2 (symbol-name s1) (package-name (symbol-package s1))
-			      kind1 (symbol-name s2) (package-name (symbol-package s2))
-			      kind2 r3 (symbol-name s3) (package-name (symbol-package s3))
-			      kind3)
-		      (ignore-errors (delete-package p2))
-		      (ignore-errors (delete-package p1))
-		      ))))))
-	(error (c)
-	  (ignore-errors (delete-package "H"))
-	  (ignore-errors (delete-package "G"))
-	  c)))
+  (progn
+    (safely-delete-package "H")
+    (safely-delete-package "G")
+    (handler-case
+     (let* ((p1 (prog1
+		    (make-package "G")
+		  (export (intern "A" "G") "G")))
+	    (p2 (make-package "H" :use '("G")))
+	    (r1 (package-shadowing-symbols "G"))
+	    (r2 (package-shadowing-symbols "H")))
+       (multiple-value-bind (s1 kind1)
+	   (find-symbol "A" p1)
+	 (multiple-value-bind (s2 kind2)
+	     (find-symbol "A" p2)
+	   (let ((r3 (shadow "A" #\H)))
+	     (multiple-value-bind (s3 kind3)
+		 (find-symbol "A" p2)
+	       (prog1
+		   (list (package-name p1) (package-name p2)
+			 r1 r2 (symbol-name s1) (package-name (symbol-package s1))
+			 kind1 (symbol-name s2) (package-name (symbol-package s2))
+			 kind2 r3 (symbol-name s3) (package-name (symbol-package s3))
+			 kind3)
+		 (safely-delete-package p2)
+		 (safely-delete-package p1)
+		 ))))))
+     (error (c)
+	    (safely-delete-package "H")
+	    (safely-delete-package "G")
+	    c)))
   ("G" "H" nil nil "A" "G" :external
-	   "A" "G" :inherited
-	   t
-	   "A" "H" :internal))
+   "A" "G" :inherited
+   t
+   "A" "H" :internal))
 
 
 ;; shadow on an existing internal symbol returns the existing symbol
 (deftest shadow-4
-    (prog1
-	(handler-case
-	    (progn
-	      (ignore-errors (delete-package :G))
-	      (make-package :G)
-	      (let ((s1 (intern "X" :G)))
-		(shadow "X" :G)
-		(multiple-value-bind (s2 kind)
-		    (find-symbol "X" :G)
-		  (list (eqt s1 s2)
-			(symbol-name s2)
-			(package-name (symbol-package s2))
-			kind))))
-	  (error (c) c))
-      (ignore-errors (delete-package "G")))
+  (prog1
+      (handler-case
+       (progn
+	 (safely-delete-package :G)
+	 (make-package :G)
+	 (let ((s1 (intern "X" :G)))
+	   (shadow "X" :G)
+	   (multiple-value-bind (s2 kind)
+	       (find-symbol "X" :G)
+	     (list (eqt s1 s2)
+		   (symbol-name s2)
+		   (package-name (symbol-package s2))
+		   kind))))
+       (error (c) c))
+    (safely-delete-package "G"))
   (t "X" "G" :internal))
 
 
 ;; shadow of an existing shadowed symbol returns the symbol
 (deftest shadow-5
-    (prog1
-	(handler-case
-	    (progn
-	      (ignore-errors (delete-package :H))
-	      (ignore-errors (delete-package :G))
-	      (make-package :G)
-	      (export (intern "X" :G) :G)
-	      (make-package :H :use '("G"))
-	      (shadow "X" :H)
-	      (multiple-value-bind (s1 kind1)
-		  (find-symbol "X" :H)
-		(shadow "X" :H)
-		(multiple-value-bind (s2 kind2)
-		    (find-symbol "X" :H)
-		  (list (eqt s1 s2) kind1 kind2))))
-	  (error (c) c))
-      (ignore-errors (delete-package :H))
-      (ignore-errors (delete-package :G)))
+  (prog1
+      (handler-case
+       (progn
+	 (safely-delete-package :H)
+	 (safely-delete-package :G)
+	 (make-package :G)
+	 (export (intern "X" :G) :G)
+	 (make-package :H :use '("G"))
+	 (shadow "X" :H)
+	 (multiple-value-bind (s1 kind1)
+	     (find-symbol "X" :H)
+	   (shadow "X" :H)
+	   (multiple-value-bind (s2 kind2)
+	       (find-symbol "X" :H)
+	     (list (eqt s1 s2) kind1 kind2))))
+       (error (c) c))
+    (safely-delete-package :H)
+    (safely-delete-package :G))
   (t :internal :internal))
 
 ;; Shadow several names simultaneously
 
 (deftest shadow-6
-    (prog1
-	(handler-case
-	    (progn
-	      (ignore-errors (delete-package :G))
-	      (make-package :G)
-	      (shadow '("X" "Y" |Z|) :G)
-	      (let ((results
-		     (append (multiple-value-list
-				 (find-symbol "X" :G))
-			     (multiple-value-list
-				 (find-symbol "Y" :G))
-			     (multiple-value-list
-				 (find-symbol "Z" :G))
-			     nil)))
-		(list
-		 (symbol-name (first results))
-		 (second results)
-		 (symbol-name (third results))
-		 (fourth results)
-		 (symbol-name (fifth results))
-		 (sixth results)
-		 (length (package-shadowing-symbols :G)))))
-	  (error (c) c))
-      (ignore-errors (delete-package :G)))
+  (prog1
+      (handler-case
+       (progn
+	 (safely-delete-package :G)
+	 (make-package :G)
+	 (shadow '("X" "Y" |Z|) :G)
+	 (let ((results
+		(append (multiple-value-list
+			 (find-symbol "X" :G))
+			(multiple-value-list
+			 (find-symbol "Y" :G))
+			(multiple-value-list
+			 (find-symbol "Z" :G))
+			nil)))
+	   (list
+	    (symbol-name (first results))
+	    (second results)
+	    (symbol-name (third results))
+	    (fourth results)
+	    (symbol-name (fifth results))
+	    (sixth results)
+	    (length (package-shadowing-symbols :G)))))
+       (error (c) c))
+    (safely-delete-package :G))
   ("X" :internal "Y" :internal "Z" :internal 3))
 
 ;; Same, but shadow character string designators
 (deftest shadow-7
-    (prog1
-	(handler-case
-	    (progn
-	      (ignore-errors (delete-package :G))
-	      (make-package :G)
-	      (shadow '(#\X #\Y) :G)
-	      (let ((results
-		     (append (multiple-value-list
-				 (find-symbol "X" :G))
-			     (multiple-value-list
-				 (find-symbol "Y" :G))
-			     nil)))
-		(list
-		 (symbol-name (first results))
-		 (second results)
-		 (symbol-name (third results))
-		 (fourth results)
-		 (length (package-shadowing-symbols :G)))))
-	  (error (c) c))
-      (ignore-errors (delete-package :G)))
+  (prog1
+      (handler-case
+       (progn
+	 (safely-delete-package :G)
+	 (make-package :G)
+	 (shadow '(#\X #\Y) :G)
+	 (let ((results
+		(append (multiple-value-list
+			 (find-symbol "X" :G))
+			(multiple-value-list
+			 (find-symbol "Y" :G))
+			nil)))
+	   (list
+	    (symbol-name (first results))
+	    (second results)
+	    (symbol-name (third results))
+	    (fourth results)
+	    (length (package-shadowing-symbols :G)))))
+       (error (c) c))
+    (safely-delete-package :G))
   ("X" :internal "Y" :internal 2))
 
 (deftest shadow.error.1

@@ -12,7 +12,7 @@
 (deftest unexport-1
   (handler-case
    (progn
-     (ignore-errors (delete-package "X"))
+     (safely-delete-package "X")
      (let* ((p (make-package "X" :use nil))
 	    (r (export (intern "X" p) p)))
        (multiple-value-bind (sym1 access1)
@@ -32,7 +32,7 @@
 (deftest unexport-2
   (handler-case
    (progn
-     (ignore-errors (delete-package "X"))
+     (safely-delete-package "X")
      (let* ((p (make-package "X" :use nil))
 	    (r (export (intern "X" p) p)))
        (multiple-value-bind (sym1 access1)
@@ -52,7 +52,7 @@
 (deftest unexport-3
   (handler-case
    (progn
-     (ignore-errors (delete-package "X"))
+     (safely-delete-package "X")
      (let* ((p (make-package "X" :use nil))
 	    (r1 (export (intern "X" p) p))
 	    (r2 (export (intern "Y" p) p)))
@@ -82,7 +82,7 @@
 (deftest unexport-4
   (handler-case
    (progn
-     (ignore-errors (delete-package "X"))
+     (safely-delete-package "X")
      (let* ((p (make-package "X" :use nil))
 	    (r (export (intern "X" p) p)))
        (multiple-value-bind (sym1 access1)

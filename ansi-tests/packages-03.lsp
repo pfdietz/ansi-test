@@ -103,7 +103,7 @@
 	 (pname1 (package-name p)))
     (rename-package "TEMP1" "TEMP2")
     (let ((pname2 (package-name p)))
-      (ignore-errors (delete-package p))
+      (safely-delete-package p)
       (list pname1 pname2 (package-name p))))
   ("TEMP1" "TEMP2" nil))
 

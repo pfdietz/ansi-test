@@ -13,96 +13,91 @@
 ;; Simple unintern of an internal symbol, package explicitly
 ;; given as a package object
 (deftest unintern-1
-    (progn
-      (when (packagep (find-package "H"))
-	(delete-package "H"))
-      (prog1
-	  (let ((p (make-package "H")))
-	    (intern "FOO" p)
-	    (multiple-value-bind (sym access)
-		(find-symbol "FOO" p)
-	      (and
-	       (eqt access :internal)
-	       (unintern sym p)
-	       (null (symbol-package sym))
-	       (not (find-symbol "FOO" p)))))
-	(delete-package "H")))
+  (progn
+    (safely-delete-package "H")
+    (prog1
+	(let ((p (make-package "H")))
+	  (intern "FOO" p)
+	  (multiple-value-bind (sym access)
+	      (find-symbol "FOO" p)
+	    (and
+	     (eqt access :internal)
+	     (unintern sym p)
+	     (null (symbol-package sym))
+	     (not (find-symbol "FOO" p)))))
+      (safely-delete-package "H")))
   t)
 
 ;; Simple unintern, package taken from the *PACKAGES*
 ;; special variable (should this have unwind protect?)
 (deftest unintern-2
-    (progn
-      (when (packagep (find-package "H"))
-	(delete-package "H"))
-      (prog1
-	  (let ((*PACKAGE* (make-package "H")))
-	    (declare (special *PACKAGE*))
-	    (intern "FOO")
-	    (multiple-value-bind (sym access)
-		(find-symbol "FOO")
-	      (and
-	       (eqt access :internal)
-	       (unintern sym)
-	       (null (symbol-package sym))
-	       (not (find-symbol "FOO")))))
-	(delete-package "H")))
+  (progn
+    (safely-delete-package "H")
+    (prog1
+	(let ((*PACKAGE* (make-package "H")))
+	  (declare (special *PACKAGE*))
+	  (intern "FOO")
+	  (multiple-value-bind (sym access)
+	      (find-symbol "FOO")
+	    (and
+	     (eqt access :internal)
+	     (unintern sym)
+	     (null (symbol-package sym))
+	     (not (find-symbol "FOO")))))
+      (safely-delete-package "H")))
   t)
 
 ;; Simple unintern, package given as string
 (deftest unintern-3
-    (progn
-      (when (packagep (find-package "H"))
-	(delete-package "H"))
-      (prog1
-	  (let ((p (make-package "H")))
-	    (intern "FOO" p)
-	    (multiple-value-bind (sym access)
-		(find-symbol "FOO" p)
-	      (and
-	       (eqt access :internal)
-	       (unintern sym "H")
-	       (null (symbol-package sym))
-	       (not (find-symbol "FOO" p)))))
-	(delete-package "H")))
+  (progn
+    (safely-delete-package "H")
+    (prog1
+	(let ((p (make-package "H")))
+	  (intern "FOO" p)
+	  (multiple-value-bind (sym access)
+	      (find-symbol "FOO" p)
+	    (and
+	     (eqt access :internal)
+	     (unintern sym "H")
+	     (null (symbol-package sym))
+	     (not (find-symbol "FOO" p)))))
+      (safely-delete-package "H")))
   t)
 
 ;; Simple unintern, package given as symbol
 (deftest unintern-4
-    (progn
-      (when (packagep (find-package "H"))
-	(delete-package "H"))
-      (prog1
-	  (let ((p (make-package "H")))
-	    (intern "FOO" p)
-	    (multiple-value-bind (sym access)
-		(find-symbol "FOO" p)
-	      (and
-	       (eqt access :internal)
-	       (unintern sym '#:|H|)
-	       (null (symbol-package sym))
-	       (not (find-symbol "FOO" p)))))
-	(delete-package "H")))
+  (progn
+    (safely-delete-package "H")
+    (prog1
+	(let ((p (make-package "H")))
+	  (intern "FOO" p)
+	  (multiple-value-bind (sym access)
+	      (find-symbol "FOO" p)
+	    (and
+	     (eqt access :internal)
+	     (unintern sym '#:|H|)
+	     (null (symbol-package sym))
+	     (not (find-symbol "FOO" p)))))
+      (safely-delete-package "H")))
   t)
 
 ;; Simple unintern, package given as character
 (deftest unintern-5
-    (handler-case
-	(progn
-	  (when (packagep (find-package "H"))
-	    (delete-package "H"))
-	  (prog1
-	      (let ((p (make-package "H")))
-		(intern "FOO" p)
-		(multiple-value-bind (sym access)
-		    (find-symbol "FOO" p)
-		  (and
-		   (eqt access :internal)
-		   (unintern sym #\H)
-		   (null (symbol-package sym))
-		   (not (find-symbol "FOO" p)))))
-	    (delete-package "H")))
-      (error (c) c))
+  (handler-case
+   (progn
+     (safely-delete-package "H")
+     (prog1
+	 (let ((p (make-package "H")))
+	   (intern "FOO" p)
+	   (multiple-value-bind (sym access)
+	       (find-symbol "FOO" p)
+	     (and
+	      (eqt access :internal)
+	      (unintern sym #\H)
+	      (null (symbol-package sym))
+	      (not (find-symbol "FOO" p)))))
+       (safely-delete-package "H")))
+   (error (c) c))
   t)
 
 
@@ -111,39 +106,39 @@
 ;; Unintern an external symbol that is also inherited
 
 (deftest unintern-6
-    (handler-case
-	(progn
-	  (ignore-errors (delete-package "H"))
-	  (ignore-errors (delete-package "G"))
-	  (make-package "G")
-	  (export (intern "FOO" "G") "G")
-	  (make-package "H" :use '("G"))
-	  (export (intern "FOO" "H") "H")
-	  ;; At this point, G:FOO is also an external
-	  ;; symbol of H.
-	  (multiple-value-bind (sym1 access1)
-	      (find-symbol "FOO" "H")
-	    (and sym1
-		 (eqt access1 :external)
-		 (equal "FOO" (symbol-name sym1))
-		 (eqt (find-package "G")
-		     (symbol-package sym1))
-		 (unintern sym1 "H")
-		 (multiple-value-bind (sym2 access2)
-		     (find-symbol "FOO" "H")
-		   (and (eqt sym1 sym2)
-			(eqt (symbol-package sym1)
-			    (find-package "G"))
-			(eqt access2 :inherited))))))
-      (error (c) c))
+  (handler-case
+   (progn
+     (safely-delete-package "H")
+     (safely-delete-package "G")
+     (make-package "G")
+     (export (intern "FOO" "G") "G")
+     (make-package "H" :use '("G"))
+     (export (intern "FOO" "H") "H")
+     ;; At this point, G:FOO is also an external
+     ;; symbol of H.
+     (multiple-value-bind (sym1 access1)
+	 (find-symbol "FOO" "H")
+       (and sym1
+	    (eqt access1 :external)
+	    (equal "FOO" (symbol-name sym1))
+	    (eqt (find-package "G")
+		 (symbol-package sym1))
+	    (unintern sym1 "H")
+	    (multiple-value-bind (sym2 access2)
+		(find-symbol "FOO" "H")
+	      (and (eqt sym1 sym2)
+		   (eqt (symbol-package sym1)
+			(find-package "G"))
+		   (eqt access2 :inherited))))))
+   (error (c) c))
   t)
 
 ;; unintern a symbol that is shadowing another symbol
 
 (deftest unintern-7
     (block failed
-      (ignore-errors (delete-package "H"))
-      (ignore-errors (delete-package "G"))
+      (safely-delete-package "H")
+      (safely-delete-package "G")
       (let* ((pg (make-package "G"))
 	     (ph (make-package "H" :use (list pg))))
 	(handler-case
@@ -171,9 +166,9 @@
 ;; a name conflict from two used packages
 (deftest unintern-8
   (block failed
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G1"))
-    (ignore-errors (delete-package "G2"))
+    (safely-delete-package "H")
+    (safely-delete-package "G1")
+    (safely-delete-package "G2")
     (let* ((pg1 (make-package "G1"))
 	   (pg2 (make-package "G2"))
 	   (ph (make-package "H" :use (list pg1 pg2))))
@@ -207,10 +202,10 @@
 ;; is removed
 (deftest unintern-9
   (block failed
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G1"))
-    (ignore-errors (delete-package "G2"))
-    (ignore-errors (delete-package "G3"))
+    (safely-delete-package "H")
+    (safely-delete-package "G1")
+    (safely-delete-package "G2")
+    (safely-delete-package "G3")
     (let* ((pg3 (make-package "G3"))
 	   (pg1 (make-package "G1" :use (list pg3)))
 	   (pg2 (make-package "G2" :use (list pg3)))

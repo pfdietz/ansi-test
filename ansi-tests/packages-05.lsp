@@ -11,7 +11,7 @@
 
 (deftest export-1
   (let ((return-value nil))
-    (ignore-errors (delete-package "TEST1"))
+    (safely-delete-package "TEST1")
     (let ((p (make-package "TEST1")))
       (let ((sym (intern "FOO" p)))
 	(setf return-value (export sym p))
@@ -28,30 +28,32 @@
   t)
 
 (deftest export-2
-  (progn (ignore-errors (delete-package "TEST1"))
-	 (let ((p (make-package "TEST1")))
-	   (let ((sym (intern "FOO" p)))
-	     (export (list sym) p)
-	     (multiple-value-bind (sym2 status)
-		 (find-symbol "FOO" p)
-	       (prog1
-		   (and sym2
-			(eqt (symbol-package sym2) p)
-			(string= (symbol-name sym2) "FOO")
-			(eqt sym sym2)
-			(eqt status :external))
-		 (delete-package p))))))
+  (progn
+    (safely-delete-package "TEST1")
+    (let ((p (make-package "TEST1")))
+      (let ((sym (intern "FOO" p)))
+	(export (list sym) p)
+	(multiple-value-bind (sym2 status)
+	    (find-symbol "FOO" p)
+	  (prog1
+	      (and sym2
+		   (eqt (symbol-package sym2) p)
+		   (string= (symbol-name sym2) "FOO")
+		   (eqt sym sym2)
+		   (eqt status :external))
+	    (delete-package p))))))
   t)
 
 (deftest export-3
   (handler-case
    (progn
+     (safely-delete-package "F")
      (make-package "F")
      (let ((sym (intern "FOO" "F")))
        (export sym #\F)
        (delete-package "F")
        t))
-   (error (c) (delete-package "F") c))
+   (error (c) (safely-delete-package "F") c))
   t)
 
 ;;
@@ -73,6 +75,8 @@
 ;;
 (deftest export-5
   (progn
+    (safely-delete-package "TEST1")
+    (safely-delete-package "TEST2")
     (make-package "TEST1")
     (make-package "TEST2" :use '("TEST1"))
     (export (intern "X" "TEST2") "TEST2")

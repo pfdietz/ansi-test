@@ -11,8 +11,8 @@
 
 (deftest use-package-1
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (let* ((pg (make-package "G" :use nil))
 	   (ph (make-package "H" :use nil))
 	   (sym1 (intern "FOO" pg)))
@@ -38,8 +38,8 @@
 
 (deftest use-package-2
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (let* ((pg (make-package "G" :use nil))
 	   (ph (make-package "H" :use nil))
 	   (sym1 (intern "FOO" pg)))
@@ -65,8 +65,8 @@
 
 (deftest use-package-3
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (let* ((pg (make-package "G" :use nil))
 	   (ph (make-package "H" :use nil))
 	   (sym1 (intern "FOO" pg)))
@@ -92,8 +92,8 @@
 
 (deftest use-package-4
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (let* ((pg (make-package "G" :use nil))
 	   (ph (make-package "H" :use nil))
 	   (sym1 (intern "FOO" pg)))
@@ -124,7 +124,7 @@
   (let ((pkgs '("H" "G1" "G2" "G3"))
 	(vars '("FOO1" "FOO2" "FOO3")))
     (dolist (p pkgs)
-      (ignore-errors (delete-package p))
+      (safely-delete-package p)
       (make-package p :use nil))
     (and
      (every (complement #'package-use-list) pkgs)
@@ -154,8 +154,8 @@
 
 (deftest use-package-6
   (progn
-    (ignore-errors (delete-package "H"))
-    (ignore-errors (delete-package "G"))
+    (safely-delete-package "H")
+    (safely-delete-package "G")
     (let ((pg (make-package "G"))
 	  (ph (make-package "H"))
 	  sym1 sym2 sym3 sym4
@@ -186,8 +186,8 @@
 	      (eqt (symbol-package sym2) ph)
 	      (unuse-package pg ph)
 	      (unuse-package ph pg))))
-	(ignore-errors (delete-package pg))
-	(ignore-errors (delete-package ph)))))
+	(safely-delete-package pg)
+	(safely-delete-package ph))))
   t)
 
 ;; Also: need to check that *PACKAGE* is used as a default
@@ -198,8 +198,8 @@
 
 (deftest use-package.error.2
   (progn
-    (ignore-errors (delete-package "UPE2A"))
-    (ignore-errors (delete-package "UPE2"))
+    (safely-delete-package "UPE2A")
+    (safely-delete-package "UPE2")
     (make-package "UPE2" :use ())
     (make-package "UPE2A" :use ())
     (classify-error (use-package "UPE2" "UPE2A" nil)))
