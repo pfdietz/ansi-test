@@ -303,7 +303,46 @@
 	 (notnot (every #'eql seq vals))))))
   t)
 
-;;; Add -- tests for when the filespec is a stream
+;;; FIXME: Add -- tests for when the filespec is a stream
+
+(deftest open.66
+  (let ((pn #p"tmp.dat"))
+    (delete-all-versions pn)
+    (with-open-file
+     (s pn :direction :io :if-exists :rename-and-delete
+	:if-does-not-exist :create)
+     (format s "some stuff~%")
+     (finish-output s)
+     (let ((is (open s :direction :input)))
+       (unwind-protect
+	   (values
+	    (read-char is)
+	    (notnot (file-position s :start))
+	    (read-line is)
+	    (read-line s))
+	 (close is)))))
+  #\s
+  t
+  "ome stuff"
+  "some stuff")
+
+(deftest open.67
+  (let ((pn #p"tmp.dat"))
+    (delete-all-versions pn)
+    (let ((s (open pn :direction :output)))
+      (unwind-protect
+	  (progn
+	    (format s "some stuff~%")
+	    (finish-output s)
+	    (close s)
+	    (let ((is (open s :direction :input)))
+	      (unwind-protect
+		  (values (read-line is))
+		(close is))))
+	(when (open-stream-p s) (close s)))))
+  "some stuff")
+
+;;; FIXME: Add -- tests for when element-type is :default
 
 ;;; Tests of file creation
 

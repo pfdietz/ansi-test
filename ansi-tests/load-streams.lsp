@@ -28,4 +28,4 @@
 (load "file-position.lsp")
 (load "file-string-length.lsp")
 (load "open.lsp")
-
+(load "stream-external-format.lsp")
