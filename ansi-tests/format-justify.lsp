@@ -139,6 +139,10 @@
   (format nil "~<XXXXXX~;YYYYYYY~^~>")
   "XXXXXX")
 
+(def-pprint-test format.justify.13a
+  (format nil "~<~<XXXXXX~;YYYYYYY~^~>~>")
+  "XXXXXX")
+
 (def-pprint-test format.justify.14
   (format nil "~<XXXXXX~;YYYYYYY~^~;ZZZZZ~>")
   "XXXXXX")
