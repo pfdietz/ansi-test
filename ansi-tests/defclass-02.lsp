@@ -250,7 +250,7 @@
      (eq cobj1 cobj3)
      (eq cobj2 cobj4)
      (class-name cobj1)
-     (class-name cobj3)
+     (class-name cobj2)
      (slot-value (make-instance 'class-0209a) 'a)
      (slot-value (make-instance 'class-0209b) 'a)))
   t t
