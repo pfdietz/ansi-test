@@ -234,7 +234,7 @@
 			'(,sym))))
 	 nil))))
 
-(defun compute-class-precedence-list (class-name)
+(defun my-compute-class-precedence-list (class-name)
   "Compute the class precdence list for classes defined using
    DEFCLASS-WITH-TESTS."
   (let ((class-names nil)
