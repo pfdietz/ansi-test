@@ -53,9 +53,7 @@
   c
   (c b))
 
-(defun (setf defun-test-fun-4) (newval x)
-  (return-from defun-test-fun-4 (setf (car x) newval)))
-
-
-
-
+(eval-when (load eval compile)
+  (ignore-errors
+    (defun (setf defun-test-fun-4) (newval x)
+      (return-from defun-test-fun-4 (setf (car x) newval)))))
