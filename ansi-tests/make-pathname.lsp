@@ -88,6 +88,12 @@
   (make-pathname-test :case :common)
   t)
 
+(deftest make-pathname.14
+  (let ((*default-pathname-defaults*
+	 (make-pathname :name "foo" :type "lsp" :version :newest)))
+    (make-pathname-test))
+  t)
+
 ;;; Works on the components of actual pathnames
 (deftest make-pathname.rebuild
   (loop for p in *pathnames*

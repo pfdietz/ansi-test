@@ -20,4 +20,7 @@
 
 (load "load-logical-pathname-translations.lsp")
 (load "logical-pathname.lsp")
+(load "logical-pathname-translations.lsp")
 (load "translate-logical-pathname.lsp")
+
+(load "merge-pathnames.lsp")
