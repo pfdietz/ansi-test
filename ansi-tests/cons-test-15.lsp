@@ -64,7 +64,7 @@
 	   *mapc.6-var*)))
   (h g f e d c b a))
 
-(deftest mapc.7
+(deftest mapc.order.1
   (let ((i 0) x y z)
     (values
      (mapc (progn (setf x (incf i))
@@ -155,7 +155,7 @@
 	   (list *mapc.6-var* result))))
  ((h g f e d c b a) (a b c d e f g h)))
 
-(deftest mapcar.7
+(deftest mapcar.order.1
   (let ((i 0) x y z)
     (values
      (mapcar (progn (setf x (incf i))
@@ -231,7 +231,7 @@
     (mapcan 'mapcan.6-fun (copy-list '(a b c d))))
   (a b a c b a d c b a))
 
-(deftest mapcan.7
+(deftest mapcan.order.1
   (let ((i 0) x y z)
     (values
      (mapcan (progn (setf x (incf i))
@@ -363,7 +363,7 @@
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
    (a 1) (b 2) (c 3) (d 4)))
 
-(deftest mapl.6
+(deftest mapl.order.1
   (let ((i 0) x y z)
     (values
      (mapl (progn
@@ -468,7 +468,7 @@
 	   )
   (a c c e e g g))
 
-(deftest maplist.8
+(deftest maplist.order.1
   (let ((i 0) x y z)
     (values
      (maplist
@@ -548,7 +548,7 @@
   (mapcon (constantly 1) (list 'a))
   1)
 
-(deftest mapcon.5
+(deftest mapcon.order.1
   (let ((i 0) x y z)
     (values
      (mapcon (progn (setf x (incf i))
