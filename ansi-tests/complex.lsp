@@ -48,3 +48,14 @@
 		    (eql (float 0 x) (realpart c))
 		    (eql x (imagpart c))))
   t)
+
+;;; Tests of some properties of complex numbers
+
+(deftest complex.5
+  (loop for c in *complexes*
+	unless (loop for type in '(short-float single-float double-float long-float)
+		     always (if (typep (realpart c) type)
+				(typep (imagpart c) type)
+			      (not (typep (imagpart c) type))))
+	collect c)
+  nil)
