@@ -9885,4 +9885,23 @@ Broken at C::WT-MAKE-CLOSURE.
     (eqlt (aref r) (+ -319284 c)))
   t)
 
+;;; sbcl 0.8.19.35
+;;; Incorrect return value from conditional
+
+(deftest misc.534
+  (let ((r0 (make-array nil)))
+    (funcall
+     (compile
+      nil
+      '(lambda (r p1 p2 p3)
+	 (declare (optimize speed (safety 1))
+		  (type (eql 4134713351/6105637898) p2)
+		  (type (eql 2685) p3))
+	 (setf (aref r)
+	       (if p1
+		   (the (eql 4134713351/6105637898) p2)
+		 (the (integer * 8391301) p3)))))
+     r0 t 4134713351/6105637898 2685)
+    (aref r0))
+  4134713351/6105637898)
 
