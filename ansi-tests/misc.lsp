@@ -7021,3 +7021,117 @@ Broken at C::WT-C-INLINE-LOC.
    -1233959 -4 -2643533316361)
   -4214677583716)
 
+;;; Armed Bear CL
+
+;;; inconsistent stack height
+(deftest misc.371
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (a b c)
+	(declare (type (integer -7288 10764) a))
+	(declare (type (integer -7 24) b))
+	(declare (type (integer 7951930344 11209871544) c))
+	(declare (ignorable a b c))
+	(declare (optimize (speed 2) (space 2) (safety 0) (debug 0)
+			   (compilation-speed 0)))
+	(rationalize (block b1
+		       (if b
+			   (return-from b1
+			     (progn (tagbody (return-from b1
+					       (let* ((*s1*
+						       (cons (go tag3)
+							     0)))
+						 (declare (dynamic-extent
+							   *s1*))
+						 0))
+					     tag3)
+				    0))
+			 0)))))
+    -5566 9 10557204445))
+  0)
+
+;;; 0 is not of type LIST
+(deftest misc.372
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -738508 627) a))
+       (declare (type (integer -100241328874 104421) b))
+       (declare (type (integer -71651668566 4932238952300) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 3) (space 2) (safety 1) (debug 3)
+			  (compilation-speed 2)))
+       (sbit #*0
+	     (min 0
+		  (max 0
+		       (multiple-value-bind (v1)
+			   (cons c
+				 (truncate 0
+					   (min -42 0)))
+			 (cdr v1)))))))
+   -657195 -10801112339 -4291316763)
+  0)
+
+;;; inconsistent stack height
+(deftest misc.373
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (a b c)
+	(declare (type (integer 0 179061) a))
+	(declare (type (integer -15793 42532) b))
+	(declare (type (integer -2 0) c))
+	(declare (ignorable a b c))
+	(declare (optimize (speed 3) (space 0) (safety 2) (debug 1)
+			   (compilation-speed 0)))
+	(reduce 'logxor
+		(list 0 b 0 0
+		      a 0 0 0
+		      (block b6
+			(let* ((v6 (cons (if c (return-from b6 0) 0) b)))
+			  0))
+		      0)
+		:end 6
+		:from-end t)))
+    141814 1445 -2))
+  142419)
+
+(deftest misc.374
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil  
+   (funcall
+    (compile
+     nil
+     '(lambda (a b)
+	(declare (type (integer -99 4) a))
+	(declare (type (integer 35621436 36172433) b))
+	(declare (ignorable a b))
+	(declare (optimize (speed 2) (space 1) (safety 3) (debug 1)
+			   (compilation-speed 0)))
+	(lognand (let ((v6 0)) (declare (dynamic-extent v6)) v6)
+		 (block b6
+		   (let* ((v10
+			   (cons (expt (case 0
+					 ((30207) (return-from b6 0))
+					 (t b))
+				       0)
+				 0)))
+		     (declare (dynamic-extent v10))
+		     0)))))
+    -57 35725118))
+  -1)
+
+
+
+
+
+
