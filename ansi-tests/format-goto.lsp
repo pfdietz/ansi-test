@@ -41,6 +41,10 @@
   (format nil "~A~{~A~*~A~}~A" 0 '(1 2 3 4 5 6) 7)
   "013467")
 
+(deftest format.*.9
+  (format nil "~A~{~A~A~A~A~v*~^~A~A~A~A~}~A" 0 '(1 2 3 4 nil 6 7 8 9 #\A) 5)
+  "01234789A5")
+
 ;;; ~:*
 
 (deftest format.\:*.1
@@ -70,6 +74,30 @@
 (def-pprint-test format.\:*.7
   (format nil "~A~A~v:*~A" 6 7 nil 3)
   "67NIL")
+
+(deftest format.\:*.8
+  (format nil "~A~1{~A~:*~A~}~A" 0 '(1 2 3) 4)
+  "0114")
+
+(deftest format.\:*.9
+  (format nil "~A~1{~A~A~A~:*~A~}~A" 0 '(1 2 3 4) 5)
+  "012335")
+
+(deftest format.\:*.10
+  (format nil "~A~1{~A~A~A~2:*~A~A~}~A" 0 '(1 2 3 4) 5)
+  "0123235")
+
+(deftest format.\:*.11
+  (format nil "~A~{~A~A~A~3:*~A~A~A~A~}~A" 0 '(1 2 3 4) 5)
+  "012312345")
+
+(deftest format.\:*.12
+  (format nil "~A~{~A~A~A~A~4:*~^~A~A~A~A~}~A" 0 '(1 2 3 4) 5)
+  "0123412345")
+
+(def-pprint-test format.\:*.13
+  (format nil "~A~{~A~A~A~A~v:*~^~A~}~A" 0 '(1 2 3 4 nil) 5)
+  "01234NIL5")
 
 ;;; ~@*
 
@@ -101,4 +129,19 @@
   (format nil "~A~A~v@*~A~A" 6 7 2 3 4)
   "6723")
 
+(deftest format.@*.8
+  (format nil "~A~{~A~A~@*~A~A~}~A" 0 '(1 2) 9)
+  "012129")
+
+(deftest format.@*.9
+  (format nil "~A~{~A~A~0@*~A~A~}~A" 0 '(1 2) 9)
+  "012129")
+
+(deftest format.@*.10
+  (format nil "~A~1{~A~A~v@*~A~A~}~A" 0 '(1 2 nil) 9)
+  "012129")
+
+(deftest format.@*.11
+  (format nil "~A~{~A~A~1@*~A~}~A" 0 '(1 2) 9)
+  "01229")
 
