@@ -493,3 +493,227 @@
 	 (eqt (cond-5/slot-2 c) 'y)
 	 ))
   t)
+
+(define-condition-with-tests cond-24 (cond-5)
+  nil
+  (:default-initargs :slot1 'z))
+
+(deftest cond-24-slots.1
+  (let ((c (make-condition 'cond-24)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-24)
+	 (eqt (cond-5/slot-1 c) 'z)
+	 (eqt (cond-5/slot-2 c) 'y)
+	 ))
+  t)
+
+(deftest cond-24-slots.2
+  (let ((c (make-condition 'cond-24 :slot1 'a)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-24)
+	 (eqt (cond-5/slot-1 c) 'a)
+	 (eqt (cond-5/slot-2 c) 'y)
+	 ))
+  t)
+
+(deftest cond-24-slots.3
+  (let ((c (make-condition 'cond-24 :slot2 'a)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-24)
+	 (eqt (cond-5/slot-1 c) 'z)
+	 (eqt (cond-5/slot-2 c) 'a)
+	 ))
+  t)
+
+(deftest cond-24-slots.4
+  (let ((c (make-condition 'cond-24 :slot1 'b :slot2 'a)))
+    (and (typep c 'cond-5)
+	 (typep c 'cond-24)
+	 (eqt (cond-5/slot-1 c) 'b)
+	 (eqt (cond-5/slot-2 c) 'a)
+	 ))
+  t)
+
+;;; Multiple inheritance
+
+(define-condition-with-tests cond-25a nil
+  ((s1 :initarg :s1 :initform 'a :reader cond-25a/s1)))
+
+(define-condition-with-tests cond-25b nil
+  ((s2 :initarg :s2 :initform 'b :reader cond-25b/s2)))
+
+(define-condition-with-tests cond-25 (cond-25a cond-25b)
+  ((s3 :initarg :s3 :initform 'c :reader cond-25/s3)))
+
+(deftest cond-25-slots.1
+  (let ((c (make-condition 'cond-25)))
+    (and (typep c 'cond-25a)
+	 (typep c 'cond-25b)
+	 (typep c 'cond-25)
+	 (eqt (cond-25a/s1 c) 'a)
+	 (eqt (cond-25b/s2 c) 'b)
+	 (eqt (cond-25/s3 c) 'c)))
+  t)
+
+(deftest cond-25-slots.2
+  (let ((c (make-condition 'cond-25 :s1 'x)))
+    (and (typep c 'cond-25a)
+	 (typep c 'cond-25b)
+	 (typep c 'cond-25)
+	 (eqt (cond-25a/s1 c) 'x)
+	 (eqt (cond-25b/s2 c) 'b)
+	 (eqt (cond-25/s3 c) 'c)))
+  t)
+
+(deftest cond-25-slots.3
+  (let ((c (make-condition 'cond-25 :s2 'x)))
+    (and (typep c 'cond-25a)
+	 (typep c 'cond-25b)
+	 (typep c 'cond-25)
+	 (eqt (cond-25a/s1 c) 'a)
+	 (eqt (cond-25b/s2 c) 'x)
+	 (eqt (cond-25/s3 c) 'c)))
+  t)
+
+(deftest cond-25-slots.4
+  (let ((c (make-condition 'cond-25 :s3 'x)))
+    (and (typep c 'cond-25a)
+	 (typep c 'cond-25b)
+	 (typep c 'cond-25)
+	 (eqt (cond-25a/s1 c) 'a)
+	 (eqt (cond-25b/s2 c) 'b)
+	 (eqt (cond-25/s3 c) 'x)))
+  t)
+
+(deftest cond-25-slots.5
+  (let ((c (make-condition 'cond-25 :s3 'z :s2 'y :s1 'x)))
+    (and (typep c 'cond-25a)
+	 (typep c 'cond-25b)
+	 (typep c 'cond-25)
+	 (eqt (cond-25a/s1 c) 'x)
+	 (eqt (cond-25b/s2 c) 'y)
+	 (eqt (cond-25/s3 c) 'z)))
+  t)
+
+;;;
+
+(define-condition-with-tests cond-26a nil
+  ((s1 :initarg :s1 :initform 'a :reader cond-26a/s1)))
+
+(define-condition-with-tests cond-26b (cond-26a) nil)
+(define-condition-with-tests cond-26c (cond-26a) nil)
+(define-condition-with-tests cond-26 (cond-26b cond-26c) nil)
+
+(deftest cond-26-slots.1
+  (let ((c (make-condition 'cond-26)))
+    (and (typep c 'cond-26a)
+	 (typep c 'cond-26b)
+	 (typep c 'cond-26c)
+	 (typep c 'cond-26)
+	 (eqt (cond-26a/s1 c) 'a)))
+  t)
+
+(deftest cond-26-slots.2
+  (let ((c (make-condition 'cond-26 :s1 'x)))
+    (and (typep c 'cond-26a)
+	 (typep c 'cond-26b)
+	 (typep c 'cond-26c)
+	 (typep c 'cond-26)
+	 (eqt (cond-26a/s1 c) 'x)))
+  t)
+
+
+;;; Test that a slot reader is truly a generic function
+
+(define-condition-with-tests cond-27a nil
+  ((s0 :initarg :s0 :initform 10 :reader cond-27a/s0)
+   (s1 :initarg :s1 :initform 'a :reader cond-27/s1)))
+
+(define-condition-with-tests cond-27b nil
+  ((s1 :initarg :s1 :initform 'a :reader cond-27/s1)
+   (s2 :initarg :s2 :initform 16 :reader cond-27b/s2)))
+
+(deftest cond-27-slots.1
+  (let ((c (make-condition 'cond-27a)))
+    (and (typep c 'cond-27a)
+	 (not (typep c 'cond-27b))
+	 (eqt (cond-27/s1 c) 'a)))
+  t)
+
+(deftest cond-27-slots.2
+  (let ((c (make-condition 'cond-27b)))
+    (and (typep c 'cond-27b)
+	 (not (typep c 'cond-27a))
+	 (eqt (cond-27/s1 c) 'a)))
+  t)
+
+(deftest cond-27-reader-is-generic
+  (notnot-mv (typep #'cond-27/s1 'generic-function))
+  t)
+
+;;; More inheritance
+
+;;; These test that condition slots are inherited like CLOS
+;;; slots.  It's not entirely clear to me if the standard
+;;; demands this (one of the issues does, but that issue wasn't
+;;; fully integrated into the standard.)
+
+#|
+(define-condition-with-tests cond-28a nil
+  ((s1 :initarg :i1 :initform 'x :reader cond-28a/s1)))
+
+(define-condition-with-tests cond-28 (cond-28a)
+  ((s1 :initarg :i1a :reader cond-28/s1)))
+
+(deftest cond-28-slots.1
+  (let ((c (make-condition 'cond-28)))
+    (and (typep c 'cond-28a)
+	 (typep c 'cond-28)
+	 (eqt (cond-28a/s1 c) 'x)
+	 (eqt (cond-28/s1 c) 'x)))
+  t)
+
+(deftest cond-28-slots.2
+  (let ((c (make-condition 'cond-28 :i1 'z)))
+    (and (typep c 'cond-28a)
+	 (typep c 'cond-28)
+	 (eqt (cond-28a/s1 c) 'z)
+	 (eqt (cond-28/s1 c) 'z)))
+  t)
+
+(deftest cond-28-slots.3
+  (let ((c (make-condition 'cond-28 :i1a 'w)))
+    (and (typep c 'cond-28a)
+	 (typep c 'cond-28)
+	 (eqt (cond-28a/s1 c) 'w)
+	 (eqt (cond-28/s1 c) 'w)))
+  t)
+
+(deftest cond-28-slots.4
+  (let ((c (make-condition 'cond-28 :i1 'y :i1a 'w)))
+    (and (typep c 'cond-28a)
+	 (typep c 'cond-28)
+	 (eqt (cond-28a/s1 c) 'y)
+	 (eqt (cond-28/s1 c) 'y)))
+  t)
+
+(deftest cond-28-slots.5
+  (let ((c (make-condition 'cond-28 :i1a 'y :i1 'w)))
+    (and (typep c 'cond-28a)
+	 (typep c 'cond-28)
+	 (eqt (cond-28a/s1 c) 'y)
+	 (eqt (cond-28/s1 c) 'y)))
+  t)
+|#
+
+
+;;; Documentation
+
+;;; Pitman says this should have been in the spec, but it isn't really
+;;; (define-condition-with-tests cond-29 nil
+;;;  ((s1 :initarg :i1 :initform 'x
+;;;       :documentation "This is slot s1 in condition cond-29")))
+
+(define-condition-with-tests cond-30 nil
+  ((s1 :initarg :i1 :initform 'x))
+  (:documentation "This is class cond-30"))
