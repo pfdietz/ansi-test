@@ -115,4 +115,5 @@
 
 (load "char-schar.lsp")
 (load "string.lsp")
-
+(load "string-upcase.lsp")
+(load "string-downcase.lsp")
