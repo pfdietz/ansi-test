@@ -57,6 +57,9 @@
 ;;; Tests of pathnames
 (load "load-pathnames.lsp")
 
+;;; Tests of file operations
+(load "load-files.lsp")
+
 ;;; Tests of system construction
 (load "features.lsp")
 (load "disassemble.lsp")
