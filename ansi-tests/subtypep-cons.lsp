@@ -212,3 +212,55 @@
    '(cons single-float integer)
    '(or (cons single-float fixnum) (cons single-float bignum)))
   nil)
+
+;;; More test cases from SBCL, CMUCL, culled from random test failures
+
+(deftest subtype.cons.23
+  (let ((t1 '(cons t (cons (not long-float) symbol)))
+	(t2 '(not (cons symbol (cons integer integer)))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
+
+(deftest subtype.cons.24
+  (let ((t1 '(cons (eql 3671) (cons short-float (eql -663423073525))))
+	(t2 '(not (cons t (cons (not complex) (cons integer t))))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
+
+(deftest subtype.cons.25
+  (let ((t1 '(cons t (cons (not long-float) (integer 44745969 61634129))))
+	(t2 '(not (cons (eql -3) (cons short-float (cons t float))))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
+
+(deftest subtype.cons.26
+  (let ((t1 '(cons integer (cons single-float (cons t t))))
+	(t2 '(cons t (cons (not complex) (not (eql 8))))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
+
+(deftest subtype.cons.27
+  (let ((t1 '(cons (not (integer -27 30))
+		   (cons rational (cons integer integer))))
+	(t2 '(not (cons integer (cons integer (eql 378132631))))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
+
+(deftest subtype.cons.28
+  (let ((t1 '(cons (integer -1696888 -1460338)
+		   (cons single-float symbol)))
+	(t2 '(not (cons (not (integer -14 20))
+			(cons (not integer) cons)))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
+
+
+
+
+
+
+
+
+
+
+

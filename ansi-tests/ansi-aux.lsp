@@ -220,6 +220,15 @@ Results: ~A~%" expected-number form n results))))
 	`(((SUBTYPEP ,type1 ,type2) cl-user::==> ,sub ,valid))
       nil)))
 
+(defun subtypep-and-contrapositive-are-consistent (t1 t2)
+  (multiple-value-bind (sub1 success1)
+      (subtypep* t1 t2)
+    (multiple-value-bind (sub2 success2)
+	(subtypep* `(not ,t2) `(not ,t1))
+      (or (not success1)
+	  (not success2)
+	  (eqlt sub1 sub2)))))
+
 (defun check-type-predicate (P TYPE)
   "Check that a predicate P is the same as #'(lambda (x) (typep x TYPE))
    by applying both to all elements of *UNIVERSE*.  Print message
