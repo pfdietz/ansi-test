@@ -1,3 +1,4 @@
+#+:ecl (si::package-lock (find-package "COMMON-LISP") nil)
 (load "compile-and-load.lsp")
 (load "rt-package.lsp")
 (compile-and-load "rt.lsp")
