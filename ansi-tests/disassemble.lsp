@@ -27,11 +27,12 @@
   t nil)
 
 (deftest disassemble.4
-  (disassemble-it #'(lambda (x y) (cons y z)))
+  (disassemble-it (eval '(function (lambda (x y) (cons y z)))))
   t nil)
 
 (deftest disassemble.5
-  (disassemble-it (let ((x 0)) #'(lambda () (incf x))))
+  (disassemble-it
+   (funcall (compile nil '(lambda () (let ((x 0)) #'(lambda () (incf x)))))))
   t nil)
 
 (deftest disassemble.6
