@@ -9971,14 +9971,14 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;; Error: `#c(0 -8)' is not of the expected type `REAL'
 
 (deftest misc.539
-  (=t
-   (funcall
-    (compile nil '(lambda (x)
-		    (declare (OPTIMIZE SPEED (SAFETY 1))
-			     (type (eql #c(0 -8)) x))
-		    (sqrt x)))
-    #c(0 -8))
-   #c(2 -2))
+  (notnot-mv
+   (complexp
+    (funcall
+     (compile nil '(lambda (x)
+		     (declare (OPTIMIZE SPEED (SAFETY 1))
+			      (type (eql #c(0 -8)) x))
+		     (sqrt x)))
+     #c(0 -8))))
   t)
 
 ;;; Illegal instruction
