@@ -991,6 +991,8 @@ the condition to go uncaught if it cannot be classified."
 	  (unuse-package package using-package)))
       (delete-package package))))
 
+(defconstant +fail-count-limit+ 20)
+
 (defmacro test-with-package-iterator (package-list-expr &rest symbol-types)
   "Build an expression that tests the with-package-iterator form."
   (let ((name (gensym))

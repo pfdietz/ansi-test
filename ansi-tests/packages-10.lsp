@@ -9,8 +9,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; with-package-iterator
 
-(defconstant +fail-count-limit+ 20)
-
 (deftest with-package-iterator-1
     (with-package-iterator-internal (list (find-package "COMMON-LISP-USER")))
   t)
