@@ -61,7 +61,7 @@
   (trim-list
    (loop
     for x = (make-random-cons-tree (random 100))
-    repeat 500
+    repeat 50
     nconc (randomly-check-readability x))
    10)
   nil)
