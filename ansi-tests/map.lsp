@@ -188,7 +188,7 @@
 (deftest map.fill.2
   (let ((s1 (make-array '(10) :initial-contents '(a b c d e f g h i j)
 			:fill-pointer 8)))
-    (map 'list #'identity '(1 2 3 4 5 6 7 8 9 10) s1))
+    (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
 
 (deftest map.fill.3
@@ -202,7 +202,7 @@
   (let ((s1 (make-array '(10) :initial-element #\a
 			:element-type 'base-char
 			:fill-pointer 8)))
-    (map 'list #'identity '(1 2 3 4 5 6 7 8 9 10) s1))
+    (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
 
 (deftest map.fill.5
@@ -216,5 +216,5 @@
   (let ((s1 (make-array '(10) :initial-element 1
 			:element-type 'bit
 			:fill-pointer 8)))
-    (map 'list #'identity '(1 2 3 4 5 6 7 8 9 10) s1))
+    (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
