@@ -8,6 +8,9 @@
 
 (declaim (optimize (safety 3)))
 
+;;; Comparison functions that are like various builtins,
+;;; but are guaranteed to return T for true.
+
 (defun eqt (x y)
   "Like EQ, but guaranteed to return T for true."
   (if (eq x y) t nil))
@@ -28,6 +31,9 @@
   "Like =, but guaranteed to return T for true."
   (if (apply #'= x args) t nil))
 
+
+;;; A function for coercing truth values to BOOLEAN
+
 (defun notnot (x) (not (not x)))
 
 (defun make-int-list (n)
@@ -37,6 +43,9 @@
   (let ((a (funcall fn n)))
     (loop for i from 0 below n do (setf (aref a i) i))
     a))
+
+;;; Return true if A1 and A2 are arrays with the same rank
+;;; and dimensions whose elements are EQUAL
 
 (defun equal-array (a1 a2)
   (and (typep a1 'array)
@@ -56,13 +65,14 @@
 			always (equal (row-major-aref a1 i)
 				      (row-major-aref a2 i))))))))))
 
+;;; *universe* is defined elsewhere -- it is a list of various
+;;; lisp objects used when stimulating things in various tests.
 (declaim (special *universe*))
 
 (defun check-type-predicate (P TYPE)
   "Check that a predicate P is the same as #'(lambda (x) (typep x TYPE))
    by applying both to all elements of *UNIVERSE*.  Print message
    when a mismatch is found, and return number of mistakes."
-  
   (loop
       for x in *universe* count
 	(block failed
@@ -193,8 +203,8 @@ the condition to go uncaught if it cannot be classified."
 (defun subtypep* (obj type)
   (multiple-value-bind (result good)
       (subtypep obj type)
-    (values (not (not result))
-	    (not (not good)))))
+    (values (notnot result)
+	    (notnot good))))
 
 ;;; (eval-when (load eval compile)
 ;;;   (unless (fboundp 'complement)
@@ -206,10 +216,10 @@ the condition to go uncaught if it cannot be classified."
     #'(lambda (x) (loop for f in rfns do (setf x (funcall f x))) x)))
 
 (defun evendigitp (c)
-  (not (not (find c "02468"))))
+  (notnot (find c "02468")))
 
 (defun odddigitp (c)
-  (not (not (find c "13579"))))
+  (notnot (find c "13579")))
 
 (defun nextdigit (c)
   (cadr (member c '(#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))))
@@ -335,6 +345,7 @@ the condition to go uncaught if it cannot be classified."
 
 (defun make-displaced-array (n displacement)
   (make-array n :displaced-to *displaced*
+
 	      :displaced-index-offset displacement))
 
 ;;; used in fill.lsp
@@ -366,16 +377,15 @@ the condition to go uncaught if it cannot be classified."
 (defun types-6-body ()
   (loop
       for p in *subtype-table* count
-	(let ((tp (car p)))
-	  (cond
-	   ((and (not (member tp '(sequence cons list t)))
-		 (not (subtypep* tp 'atom)))
-	    (format t "~%Problem!  Did not find to be an atomic type: ~S" tp)
-	    t)))))
+      (let ((tp (car p)))
+	(when (and (not (member tp '(sequence cons list t)))
+		   (not (subtypep* tp 'atom)))
+	  (format t "~%Problem!  Did not find to be an atomic type: ~S" tp)
+	  t))))
 
 (defvar *type-list* nil)
 (defvar *supertype-table* nil)
-(declaim (special *subtype-table* *universe*))
+(declaim (special *subtype-table*))
 
 (defun types-9-body ()
   (let ((tp-list (append '(keyword atom list)
@@ -428,42 +438,42 @@ the condition to go uncaught if it cannot be classified."
 
 (defun types-9a-body ()
   (cond
-     ((not (and *type-list* *supertype-table*))
-      (format nil "Run test type-9 first~%")
-      nil)
-     (t
-      (loop
-	  for tp in *type-list*
-	  sum
-	    (let ((sups (gethash tp *supertype-table*)))
-	      (loop
-		  for x in *universe*
-		  sum
-		    (handler-case
-		    (cond
-		     ((not (typep x tp)) 0)
-		     (t
-		      (loop
-			  for tp2 in sups
-			  count
-			    (handler-case
-				(and (not (typep x tp2))
-				     (progn
-				       (format t "Found element of ~S not in ~S: ~S~%"
-					       tp tp2 x)
-				       t))
-			      (condition (c) (format t "Error ~S occured: ~S~%"
-						c tp2)
-				t)))))
-		    (condition (c) (format t "Error ~S occured: ~S~%" c tp)
-		      1))))))))
+   ((not (and *type-list* *supertype-table*))
+    (format nil "Run test type-9 first~%")
+    nil)
+   (t
+    (loop
+     for tp in *type-list*
+     sum
+     (let ((sups (gethash tp *supertype-table*)))
+       (loop
+	for x in *universe*
+	sum
+	(handler-case
+	 (cond
+	  ((not (typep x tp)) 0)
+	  (t
+	   (loop
+	    for tp2 in sups
+	    count
+	    (handler-case
+	     (and (not (typep x tp2))
+		  (progn
+		    (format t "Found element of ~S not in ~S: ~S~%"
+			    tp tp2 x)
+		    t))
+	     (condition (c) (format t "Error ~S occured: ~S~%"
+				    c tp2)
+			t)))))
+	 (condition (c) (format t "Error ~S occured: ~S~%" c tp)
+		    1))))))))
 
 (defun even-size-p (a)
   (some #'evenp (array-dimensions a)))
 
 (defun check-cons-copy (x y)
   "Check that the tree x is a copy of the tree y,
-   returning t iff it is."
+   returning t if it is, nil if not."
   (cond
    ((consp x)
     (and (consp y)
@@ -602,30 +612,30 @@ the condition to go uncaught if it cannot be classified."
   (let* ((cal (min 2048 call-arguments-limit))
 	 (step (max 1 (floor (/ cal) 64))))
     (loop
-	for n from 0
-	below cal
-	by step
-	count
-	  (not
-	   (equal
-	    (apply #'append (loop for i from 1 to n
-				collect '(a)))
-	    (make-list n :initial-element 'a))))))
+     for n from 0
+     below cal
+     by step
+     count
+     (not
+      (equal
+       (apply #'append (loop for i from 1 to n
+			     collect '(a)))
+       (make-list n :initial-element 'a))))))
 
 (defun is-intersection (x y z)
   "Check that z is the intersection of x and y."
   (and
-   (every #'(lambda (e)
-	      (or (not (member e y))
-		  (member e z)))
-	  x)
-   (every #'(lambda (e)
-	      (or (not (member e x))
-		  (member e z)))
-	  y)
-   (every #'(lambda (e)
-	      (and (member e x) (member e y)))
-	  z)
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in x
+	 always (or (not (member e y))
+		    (member e z)))
+   (loop for e in y
+	 always (or (not (member e x))
+		    (member e z)))
+   (loop for e in z
+	 always (and (member e x) (member e y)))
    t))
 
 (defun shuffle (x)
@@ -650,14 +660,16 @@ the condition to go uncaught if it cannot be classified."
 
 (defun intersection-12-body (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
-  (loop
-   for i from 1 to niters do
-    (let ((x (shuffle (loop for j from 1 to size collect (random maxelem state))))
-	  (y (shuffle (loop for j from 1 to size collect (random maxelem state)))))
-      (let ((z (intersection x y)))
-	(let ((is-good (is-intersection x y z)))
-	  (unless is-good (return (values x y z)))))))
-  nil))
+    (loop
+     for i from 1 to niters do
+     (let ((x (shuffle (loop for j from 1 to size
+			     collect (random maxelem state))))
+	   (y (shuffle (loop for j from 1 to size
+			     collect (random maxelem state)))))
+       (let ((z (intersection x y)))
+	 (let ((is-good (is-intersection x y z)))
+	   (unless is-good (return (values x y z)))))))
+    nil))
 
 (defun nintersection-with-check (x y &key test)
   (let ((ycopy (make-scaffold-copy y)))
@@ -672,8 +684,10 @@ the condition to go uncaught if it cannot be classified."
   (let ((state (make-random-state t)))
     (loop
      for i from 1 to niters do
-     (let ((x (shuffle (loop for j from 1 to size collect (random maxelem state))))
-	   (y (shuffle (loop for j from 1 to size collect (random maxelem state)))))
+     (let ((x (shuffle (loop for j from 1 to size
+			     collect (random maxelem state))))
+	   (y (shuffle (loop for j from 1 to size
+			     collect (random maxelem state)))))
        (let ((z (nintersection-with-check (copy-list x) y)))
 	 (when (eqt z 'failed) (return (values x y z)))
 	 (let ((is-good (is-intersection x y z)))
@@ -688,8 +702,7 @@ the condition to go uncaught if it cannot be classified."
 		   (test (union x y :test test))
 		   (test-not (union x y :test-not test-not))
 		   (t (union x y)))))
-      (if
-	  (and (check-scaffold-copy x xcopy)
+      (if (and (check-scaffold-copy x xcopy)
 	       (check-scaffold-copy y ycopy))
 	  result
 	'failed))))
@@ -701,8 +714,7 @@ the condition to go uncaught if it cannot be classified."
 		   (test (union x y :key key :test test))
 		   (test-not (union x y :key key :test-not test-not))
 		   (t (union x y :key key)))))
-      (if
-	  (and (check-scaffold-copy x xcopy)
+      (if (and (check-scaffold-copy x xcopy)
 	       (check-scaffold-copy y ycopy))
 	  result
 	'failed))))
@@ -711,11 +723,9 @@ the condition to go uncaught if it cannot be classified."
   (and (listp x)
        (listp y)
        (listp z)
-       (every #'(lambda (e) (or (member e x)
-				(member e y)))
-	      z)
-       (every #'(lambda (e) (member e z)) x)
-       (every #'(lambda (e) (member e z)) y)
+       (loop for e in z always (or (member e x) (member e y)))
+       (loop for e in x always (member e z))
+       (loop for e in y always (member e z))
        t))
 
 (defun do-random-unions (size niters &optional (maxelem (* 2 size)))
@@ -781,27 +791,30 @@ the condition to go uncaught if it cannot be classified."
 (defun check-set-difference (x y z &key (key #'identity)
 					(test #'eql))
   (and
-   (not (eqt 'failed z))
-   (every #'(lambda (e) (member e x :key key :test test)) z)
-   (every #'(lambda (e) (or (member e y :key key :test test)
-			    (member e z :key key :test test))) x)
-   (every #'(lambda (e) (not (member e z :key key :test test))) y)
+   ;; (not (eqt 'failed z))
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in z always (member e x :key key :test test))
+   (loop for e in x always (or (member e y :key key :test test)
+			       (member e z :key key :test test)))
+   (loop for e in y never  (member e z :key key :test test))
    t))
 
 (defun do-random-set-differences (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
     (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (set-difference-with-check x y)))
-	      (let ((is-good (check-set-difference x y z)))
-		(unless is-good (return (values x y z)))))))
+     for i from 1 to niters do
+     (let ((x (shuffle (loop for j from 1 to size collect
+			     (random maxelem state))))
+	   (y (shuffle (loop for j from 1 to size collect
+			     (random maxelem state)))))
+       (let ((z (set-difference-with-check x y)))
+	 (let ((is-good (check-set-difference x y z)))
+	   (unless is-good (return (values x y z)))))))
     nil))
 (defun nset-difference-with-check (x y &key (key 'no-key)
-					   test test-not)
+				     test test-not)
   (setf x (copy-list x))
   (setf y (copy-list y))
   (apply #'nset-difference
@@ -811,29 +824,32 @@ the condition to go uncaught if it cannot be classified."
 	     ,@(when test-not `(:test-not ,test-not)))))
 
 (defun check-nset-difference (x y z &key (key #'identity)
-					(test #'eql))
+				(test #'eql))
   (and
-   (every #'(lambda (e) (member e x :key key :test test)) z)
-   (every #'(lambda (e) (or (member e y :key key :test test)
-			    (member e z :key key :test test))) x)
-   (every #'(lambda (e) (not (member e z :key key :test test))) y)
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in z always (member e x :key key :test test))
+   (loop for e in x always (or (member e y :key key :test test)
+			       (member e z :key key :test test)))
+   (loop for e in y never  (member e z :key key :test test))
    t))
 
 (defun do-random-nset-differences (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
     (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (nset-difference-with-check x y)))
-	      (let ((is-good (check-nset-difference x y z)))
-		(unless is-good (return (values x y z)))))))
+     for i from 1 to niters do
+     (let ((x (shuffle (loop for j from 1 to size collect
+			     (random maxelem state))))
+	   (y (shuffle (loop for j from 1 to size collect
+			     (random maxelem state)))))
+       (let ((z (nset-difference-with-check x y)))
+	 (let ((is-good (check-nset-difference x y z)))
+	   (unless is-good (return (values x y z)))))))
     nil))
 
 (defun set-exclusive-or-with-check (x y &key (key 'no-key)
-					   test test-not)
+				      test test-not)
   (setf x (copy-list x))
   (setf y (copy-list y))
   (let ((xcopy (make-scaffold-copy x))
@@ -841,8 +857,8 @@ the condition to go uncaught if it cannot be classified."
     (let ((result (apply #'set-exclusive-or
 			 x y
 			 `(,@(unless (eqt key 'no-key) `(:key ,key))
-			   ,@(when test `(:test ,test))
-			   ,@(when test-not `(:test-not ,test-not))))))  
+			     ,@(when test `(:test ,test))
+			     ,@(when test-not `(:test-not ,test-not))))))  
       (cond
        ((and (check-scaffold-copy x xcopy)
 	     (check-scaffold-copy y ycopy))
@@ -851,37 +867,37 @@ the condition to go uncaught if it cannot be classified."
 	'failed)))))
 
 (defun check-set-exclusive-or (x y z &key (key #'identity)
-					(test #'eql))
+				 (test #'eql))
   (and
-   (not (eqt 'failed z))
-   (every #'(lambda (e) (or (member e x :key key :test test)
-		            (member e y :key key :test test)))
-	  z)
-   (every #'(lambda (e) (if (member e y :key key :test test)
-			    (not (member e z :key key :test test))
-			  (member e z :key key :test test)))
-	  x)
-   (every #'(lambda (e) (if (member e x :key key :test test)
-			    (not (member e z :key key :test test))
-			  (member e z :key key :test test)))
-	  y)
+   ;; (not (eqt 'failed z))
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in z always (or (member e x :key key :test test)
+			       (member e y :key key :test test)))
+   (loop for e in x always (if (member e y :key key :test test)
+			       (not (member e z :key key :test test))
+			     (member e z :key key :test test)))
+   (loop for e in y always (if (member e x :key key :test test)
+			       (not (member e z :key key :test test))
+			     (member e z :key key :test test)))
    t))
 
 (defun do-random-set-exclusive-ors (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
     (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (set-exclusive-or-with-check x y)))
-	      (let ((is-good (check-set-exclusive-or x y z)))
-		(unless is-good (return (values x y z)))))))
+     for i from 1 to niters do
+     (let ((x (shuffle (loop for j from 1 to size collect
+			     (random maxelem state))))
+	   (y (shuffle (loop for j from 1 to size collect
+			     (random maxelem state)))))
+       (let ((z (set-exclusive-or-with-check x y)))
+	 (let ((is-good (check-set-exclusive-or x y z)))
+	   (unless is-good (return (values x y z)))))))
     nil))
 
 (defun nset-exclusive-or-with-check (x y &key (key 'no-key)
-					   test test-not)
+				       test test-not)
   (setf x (copy-list x))
   (setf y (copy-list y))
   (apply #'nset-exclusive-or
@@ -893,14 +909,14 @@ the condition to go uncaught if it cannot be classified."
 (defun do-random-nset-exclusive-ors (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
     (loop
-       for i from 1 to niters do
-	  (let ((x (shuffle (loop for j from 1 to size collect
-				  (random maxelem state))))
-		(y (shuffle (loop for j from 1 to size collect
-				  (random maxelem state)))))
-	    (let ((z (nset-exclusive-or-with-check x y)))
-	      (let ((is-good (check-set-exclusive-or x y z)))
-		(unless is-good (return (values x y z)))))))
+     for i from 1 to niters do
+     (let ((x (shuffle (loop for j from 1 to size collect
+			     (random maxelem state))))
+	   (y (shuffle (loop for j from 1 to size collect
+			     (random maxelem state)))))
+       (let ((z (nset-exclusive-or-with-check x y)))
+	 (let ((is-good (check-set-exclusive-or x y z)))
+	   (unless is-good (return (values x y z)))))))
     nil))
 
 (defun subsetp-with-check (x y &key (key 'no-key) test test-not)
@@ -910,8 +926,8 @@ the condition to go uncaught if it cannot be classified."
 	   (apply #'subsetp x y
 		  `(,@(unless (eqt key 'no-key)
 			`(:key ,key))
-		    ,@(when test `(:test ,test))
-		    ,@(when test-not `(:test-not ,test-not))))))
+		      ,@(when test `(:test ,test))
+		      ,@(when test-not `(:test-not ,test-not))))))
       (cond
        ((and (check-scaffold-copy x xcopy)
 	     (check-scaffold-copy y ycopy))

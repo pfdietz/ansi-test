@@ -35,8 +35,8 @@
   (cond
    ((null args) t)
    ((car args)
-    (every #'identity (cdr args)))
-   (t (every #'not (cdr args)))))
+    (loop for e in (cdr args) always e))
+   (t (loop for e in (cdr args) never e))))
 
 ;;; From character.lsp
 (defun char-type-error-check (fn)
@@ -86,7 +86,7 @@
   (loop for x in *universe*
 	always (let ((p (characterp x))
 		     (q (typep x 'character)))
-		 (if p (not (not q)) (not q)))))
+		 (if p (notnot q) (not q)))))
 
 (defun alphanumericp.4.body ()
   (loop for x in *universe*
