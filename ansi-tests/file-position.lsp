@@ -104,7 +104,31 @@
 		       (assert (eql byte (logand (1- n) i)))))))
   nil)
 
+(deftest file-position.9
+  (with-input-from-string
+   (s "abcdefghijklmnopqrstuvwxyz")
+   (loop repeat 26
+	 for p = (file-position s)
+	 unless (or (not p)
+		    (progn
+		      (file-position s p)
+		      (eql (file-position s) p)))
+	 collect p
+	 do (read-char s)))
+  nil)
 
+(deftest file-position.10
+  (with-output-to-string
+   (s)
+   (loop repeat 26
+	 for p = (file-position s)
+	 unless (or (not p)
+		    (progn
+		      (file-position s p)
+		      (eql (file-position s) p)))
+	 collect p
+	 do (write-char #\x s)))
+  "xxxxxxxxxxxxxxxxxxxxxxxxxx")
 
 ;;; Error tests
 
