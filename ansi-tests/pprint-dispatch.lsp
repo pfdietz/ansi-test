@@ -246,5 +246,27 @@
 		 program-error)
   t)
 
+(deftest set-pprint-dispatch.error.1
+  (signals-error (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil)))
+		   (set-pprint-dispatch))
+		 program-error)
+  t)
+
+(deftest set-pprint-dispatch.error.2
+  (signals-error (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil)))
+		   (set-pprint-dispatch t))
+		 program-error)
+  t)
+
+(deftest set-pprint-dispatch.error.3
+  (signals-error (let ((table (copy-pprint-dispatch nil)))
+		   (set-pprint-dispatch t 'identity 0 table nil))
+		 program-error)
+  t)
+
+
+
+
+
 
 
