@@ -188,10 +188,61 @@
 	(write-to-string '|Y|)))))
   "X" nil "ABC" nil "ABC" "DEF")
 
+;;; Funtion designators in pprint-dispatch
+
+(defun pprint-dispatch-test-fn.1 (stream obj) (declare (ignore obj)) (write "ABC" :stream stream))
+(defun pprint-dispatch-test-fn.2 (stream obj) (declare (ignore obj)) (write "DEF" :stream stream))
+
+(deftest pprint-dispatch.9
+  (my-with-standard-io-syntax
+   (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
+	 (*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t))
+     (values
+      (write-to-string '|X|)
+      (multiple-value-list (set-pprint-dispatch '(eql |X|) 'pprint-dispatch-test-fn.1))
+      (write-to-string '|X|)
+      (multiple-value-list (set-pprint-dispatch '(eql |X|) 'pprint-dispatch-test-fn.2))
+      (write-to-string '|X|))))
+  "X" (nil) "ABC" (nil) "DEF")
+
+(deftest pprint-dispatch.10
+  (my-with-standard-io-syntax
+   (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
+	 (*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t))
+     (let ((f #'(lambda (stream obj)
+		  (declare (ignore obj))
+		  (write "ABC" :stream stream)))
+	   (g #'(lambda (stream obj)
+		  (declare (ignore obj))
+		  (write "DEF" :stream stream)))
+	   (sym (gensym)))
+       (setf (symbol-function sym) f)
+       (values
+	(write-to-string '|X|)
+	(set-pprint-dispatch '(eql |X|) sym)
+	(write-to-string '|X|)
+	(progn
+	  (setf (symbol-function sym) g)
+	  (write-to-string '|X|))))))
+  "X" nil "ABC" "DEF")
+
+;;; Error tests
+
+(deftest pprint-dispatch.error.1
+  (signals-error (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil)))
+		   (pprint-dispatch))
+		 program-error)
+  t)
+
+(deftest pprint-dispatch.error.2
+  (signals-error (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil)))
+		   (pprint-dispatch nil nil nil))
+		 program-error)
+  t)
 
 
 
-			     
-
-	
-	
