@@ -28,6 +28,12 @@ random-test:
 		#-allegro (quit) #+allegro (excl::exit)))" | $(LISP)
 	rm -f gazonk*
 
+rt_1000_8:
+		echo "(load \"gclload1.lsp\") \
+		(compile-and-load \"random-int-form.lsp\")  \
+		(in-package :cl-test) (loop-random-int-forms 1000 8)" | $(LISP)
+
+
 clean:
 	@rm -f test.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
 	@rm -rf scratch/ scratch.txt
