@@ -22,3 +22,4 @@
 (load "read-line.lsp")
 (load "write-string.lsp")
 (load "write-line.lsp")
+(load "read-sequence.lsp")
