@@ -144,8 +144,23 @@ do the defstruct."
 	 ;; List of symbols that are the names of the slots
 	 (slot-names
 	  (loop
-	      for x in slot-descriptions collect
-		(if (consp x) (car x) x)))
+	   for x in slot-descriptions collect
+	   (if (consp x) (car x) x)))
+
+	 ;; List of slot types, if any
+	 (slot-types
+	  (loop
+	   for x in slot-descriptions collect
+	   (if (consp x)
+	       (getf (cddr x) :type :none)
+	     :none)))
+
+	 ;; read-only flags for slots
+	 (slot-read-only
+	  (loop
+	   for x in slot-descriptions collect
+	   (and (consp x)
+		(getf (cddr x) :read-only))))
 
 	 ;; Symbol obtained by prepending MAKE- to the name symbol
 	 (make-fn (make-struct-make-fn name))
@@ -189,29 +204,26 @@ do the defstruct."
 			"")
 		       (t (string (cadr conc-option)))))
 
+	 ;; Accessor names
+	 (field-fns
+	  (loop for slot-name in slot-names
+		collect (make-struct-field-fn conc-prefix slot-name)))
+
 	 ;; a list of initial values
 	 (initial-value-alist
 	  (loop
-	      for slot-desc in slot-descriptions
-	      collect
-		(let ((slot-name (if (consp slot-desc)
-				     (car slot-desc)
-				   slot-desc))
-		      (slot-attrs (if (consp slot-desc)
-				      (cdr slot-desc)
-				    nil)))
-		  (when (and (consp slot-attrs)
-			     (not (keywordp (car slot-attrs))))
-		    (pop slot-attrs))
-		  (let ((type (getf slot-attrs :type)))
-		    (if type
-			(cons slot-name (create-instance-of-type type))
-		      (cons slot-name (gensym)))))))
+	   for slot-desc in slot-descriptions
+	   for slot-name in slot-names
+	   for type      in slot-types
+	   collect (if (not (eq type :none))
+		       (cons slot-name (create-instance-of-type type))
+		     (cons slot-name (gensym)))))
 	 )
     ;; Build the tests in an eval-when form
     `(eval-when (compile load eval)
-       (defstruct ,name-and-options
-	 ,@slot-descriptions-and-documentation)
+       (ignore-errors
+	 (eval '(defstruct ,name-and-options
+		  ,@slot-descriptions-and-documentation)))
 
        ;; Test that structure is of the correct type
        (deftest ,(make-struct-test-name name 1)
@@ -229,15 +241,6 @@ do the defstruct."
 		    (symbol-function (quote ,p-fn))
 		    (notnot (,p-fn (,make-fn))))
 	       t)))
-
-       ;; When the predicate is not the default, check
-       ;; that the default is not defined.  Tests should
-       ;; be designed so that this function name doesn't
-       ;; collide with anything else.
-       ,@(unless (eq p-fn p-fn-default)
-	   `((deftest ,(make-struct-test-name name 10)
-	       (fboundp (quote ,p-fn-default))
-	       nil)))
 
        ;; Test that the elements of *universe* are not
        ;; of this type
@@ -258,14 +261,14 @@ do the defstruct."
 		(var (gensym "X")))
 	    (loop
 	     for (slot-name . initval) in initial-value-alist
+	     for field-fn in field-fns
 	     do
 	     (setf inits
 		   (list* (intern (string slot-name) "KEYWORD")
 			  (list 'quote initval)
 			  inits))
 	     (push `(eqlt (quote ,initval)
-			  (,(make-struct-field-fn conc-prefix slot-name)
-			   ,var))
+			  (,field-fn ,var))
 		   tests))
 	    `(let ((,var (,make-fn . ,inits)))
 	       (and ,@tests t)))
@@ -283,15 +286,14 @@ do the defstruct."
 		 (tests
 		  (loop
 		   for (slot-name . initval) in initial-value-alist
+		   for read-only-p in slot-read-only
 		   for slot-desc in slot-descriptions
-		   unless (and (consp slot-desc)
-			       (getf (cddr slot-desc) :read-only))
+		   for field-fn in field-fns
+		   unless read-only-p
 		   collect
-		   (let ((field-fn (make-struct-field-fn conc-prefix
-							 slot-name)))
-		     `(let ((,var2 (quote ,initval)))
-			(setf (,field-fn ,var) ,var2)
-			(eqlt (,field-fn ,var) ,var2))))))
+		   `(let ((,var2 (quote ,initval)))
+		      (setf (,field-fn ,var) ,var2)
+		      (eqlt (,field-fn ,var) ,var2)))))
 	    `(let ((,var (,make-fn)))
 	       (and ,@tests t)))
 	 t)
@@ -304,15 +306,6 @@ do the defstruct."
 		    (symbol-function (quote ,copy-fn))
 		    t)
 	       t)))
-
-       ;; When the copy function name is not the default, check
-       ;; that the default function is not defined.  Tests should
-       ;; be designed so that this name is not accidently defined
-       ;; for something else.
-       ,@(unless (eq copy-fn copy-fn-default)
-	   `((deftest ,(make-struct-test-name name 11)
-	       (fboundp (quote ,copy-fn-default))
-	       nil)))
 
        ;; Check that the copy function properly copies fields
        ,@(when copy-fn
@@ -331,11 +324,41 @@ do the defstruct."
 			(not (eqlt ,var ,var2))
 			,@(loop
 			   for (slot-name . nil) in initial-value-alist
+			   for fn in field-fns
 			   collect
-			   (let ((fn (make-struct-field-fn conc-prefix
-							   slot-name)))
-			     `(eqlt (,fn ,var) (,fn ,var2))))
+			   `(eqlt (,fn ,var) (,fn ,var2)))
 			t))))
 	       t)))
+
+       ;; When the predicate is not the default, check
+       ;; that the default is not defined.  Tests should
+       ;; be designed so that this function name doesn't
+       ;; collide with anything else.
+       ,@(unless (eq p-fn p-fn-default)
+	   `((deftest ,(make-struct-test-name name 10)
+	       (fboundp (quote ,p-fn-default))
+	       nil)))
+
+       ;; When the copy function name is not the default, check
+       ;; that the default function is not defined.  Tests should
+       ;; be designed so that this name is not accidently defined
+       ;; for something else.
+       ,@(unless (eq copy-fn copy-fn-default)
+	   `((deftest ,(make-struct-test-name name 11)
+	       (fboundp (quote ,copy-fn-default))
+	       nil)))
+
+       ;; When there are read-only slots, test that the SETF
+       ;; form for them is not FBOUNDP
+       ,@(when (loop for x in slot-read-only thereis x)
+	   `((deftest ,(make-struct-test-name name 12)
+	       (and
+		,@(loop for slot-name in slot-names
+			for read-only in slot-read-only
+			for field-fn in field-fns
+			when read-only
+			collect `(not (fboundp '(setf ,field-fn))))
+		t)
+	       t)))		  
        nil
        )))

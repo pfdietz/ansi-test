@@ -151,4 +151,30 @@
 (defstruct-with-tests (struct-test-21 (:copier struct-test-21-alt-copier))
   a21 b21)
 
+(defstruct-with-tests struct-test-22 (a22) (b22))
+(defstruct-with-tests struct-test-23 (a23 1) (b23 2))
+(defstruct-with-tests struct-test-24
+  (a24 1 :type fixnum)
+  (b24 2 :type integer))
+
+(defstruct-with-tests struct-test-25)
+(defstruct-with-tests struct-test-26
+  (a26 nil :read-only nil)
+  (b26 'a  :read-only nil))
+
+(defstruct-with-tests struct-test-27
+  (a27 1    :read-only t)
+  (b27 1.4  :read-only a))
+
+(defstruct-with-tests struct-test-28
+  (a28 1    :type integer :read-only t)
+  (b28 'xx  :read-only a :type symbol))
+
+(defstruct-with-tests struct-test-29
+  a29
+  (b29 'xx  :read-only 1)
+  c29)
+
+
+
 
