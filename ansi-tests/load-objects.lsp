@@ -46,3 +46,4 @@
 (load "next-method-p.lsp")
 (load "call-next-method.lsp")
 (load "compute-applicable-methods.lsp")
+(load "find-method.lsp")
