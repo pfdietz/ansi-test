@@ -1,4 +1,5 @@
 #+:ecl (si::package-lock (find-package "COMMON-LISP") nil)
+#+:armedbear (require 'pprint)
 
 (load "compile-and-load.lsp")
 (load "rt-package.lsp")
