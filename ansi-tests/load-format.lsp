@@ -32,3 +32,4 @@
 (load "format-underscore.lsp")
 (load "format-logical-block.lsp")
 (load "format-i.lsp")
+(load "format-slash.lsp")
