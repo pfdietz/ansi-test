@@ -108,6 +108,46 @@
   t
   (a b c d y f g))
 
+(deftest replace-list.16
+  (let* ((x (copy-seq '(a b c d e f)))
+	 (y #(1 2 3))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  (a 1 2 3 e f))
+
+(deftest replace-list.17
+  (let* ((x (copy-seq '(a b c d e f)))
+	 (y (make-array '(3) :initial-contents '(1 2 3)
+			:fill-pointer t))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  (a 1 2 3 e f))
+
+(deftest replace-list.18
+  (let* ((x (copy-seq '(a b c d e f)))
+	 (y (make-array '(6) :initial-contents '(1 2 3 4 5 6)
+			:fill-pointer 3))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  (a 1 2 3 e f))
+
+(deftest replace-list.19
+  (let* ((x (copy-seq '(a b c d e f)))
+	 (result (replace x x :start1 0 :end1 3 :start2 1 :end2 4)))
+    (values (eqt x result) result))
+  t
+  (b c d d e f))
+
+(deftest replace-list.20
+  (let* ((x (copy-seq '(a b c d e f)))
+	 (result (replace x x :start1 1 :end1 4 :start2 0 :end2 3)))
+    (values (eqt x result) result))
+  t
+  (a a b c e f))
+
 
 ;;; Tests of vectors
 
@@ -214,69 +254,109 @@
   t
   #(a b c d y f g))
 
-;;; tests on bit strings
+(deftest replace-vector.16
+  (let* ((x (copy-seq #(a b c d e f)))
+	 (y '(1 2 3))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  #(a 1 2 3 e f))
 
-(deftest replace-bitstring.1
+(deftest replace-vector.17
+  (let* ((x (copy-seq #(a b c d e f)))
+	 (y (make-array '(3) :initial-contents '(1 2 3)
+			:fill-pointer t))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  #(a 1 2 3 e f))
+
+(deftest replace-vector.18
+  (let* ((x (copy-seq #(a b c d e f)))
+	 (y (make-array '(6) :initial-contents '(1 2 3 4 5 6)
+			:fill-pointer 3))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  #(a 1 2 3 e f))
+
+(deftest replace-vector.19
+  (let* ((x (copy-seq #(a b c d e f)))
+	 (result (replace x x :start1 0 :end1 3 :start2 1 :end2 4)))
+    (values (eqt x result) result))
+  t
+  #(b c d d e f))
+
+(deftest replace-vector.21
+  (let* ((x (copy-seq #(a b c d e f)))
+	 (result (replace x x :start1 1 :end1 4 :start2 0 :end2 3)))
+    (values (eqt x result) result))
+  t
+  #(a a b c e f))
+
+;;; tests on bit vectors
+
+(deftest replace-bit-vector.1
   (let* ((x (copy-seq #*1101001))
 	 (result (replace x #*011)))
     (values (eqt x result) result))
   t
   #*0111001)
 
-(deftest replace-bitstring.2
+(deftest replace-bit-vector.2
   (let* ((x (copy-seq #*1101001))
 	 (result (replace x #*011 :start1 1)))
     (values (eqt x result) result))
   t
   #*1011001)
 
-(deftest replace-bitstring.3
+(deftest replace-bit-vector.3
   (let* ((x (copy-seq #*1101001))
 	 (result (replace x #*011 :start1 4)))
     (values (eqt x result) result))
   t
   #*1101011)
 
-(deftest replace-bitstring.4
+(deftest replace-bit-vector.4
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*111 :start1 5)))
     (values (eqt x result) result))
   t
   #*0000011)
 
-(deftest replace-bitstring.5
+(deftest replace-bit-vector.5
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*100 :start1 6)))
     (values (eqt x result) result))
   t
   #*0000001)
 
-(deftest replace-bitstring.6
+(deftest replace-bit-vector.6
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x '(1 1 1) :start1 2)))
     (values (eqt x result) result))
   t
   #*0011100)
 
-(deftest replace-bitstring.7
+(deftest replace-bit-vector.7
   (replace #* #*111)
   #*)
 
-(deftest replace-bitstring.8
+(deftest replace-bit-vector.8
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*111 :end1 1)))
     (values (eqt x result) result))
   t
   #*1000000)
 
-(deftest replace-bitstring.9
+(deftest replace-bit-vector.9
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*110 :start1 3 :end1 4)))
     (values (eqt x result) result))
   t
   #*0001000)
 
-(deftest replace-bitstring.10
+(deftest replace-bit-vector.10
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*111 :start1 0 :end1 5)))
     (values (eqt x result) result))
@@ -284,40 +364,81 @@
   #*1110000)
 
 
-(deftest replace-bitstring.11
+(deftest replace-bit-vector.11
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*011 :start2 1)))
     (values (eqt x result) result))
   t
   #*1100000)
 
-(deftest replace-bitstring.12
+(deftest replace-bit-vector.12
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*011 :start2 1 :end1 nil)))
     (values (eqt x result) result))
   t
   #*1100000)
 
-(deftest replace-bitstring.13
+(deftest replace-bit-vector.13
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*011 :start2 1 :end2 nil)))
     (values (eqt x result) result))
   t
   #*1100000)
 
-(deftest replace-bitstring.14
+(deftest replace-bit-vector.14
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*011 :start2 1 :end2 2)))
     (values (eqt x result) result))
   t
   #*1000000)
 
-(deftest replace-bitstring.15
+(deftest replace-bit-vector.15
   (let* ((x (copy-seq #*0000000))
 	 (result (replace x #*011 :start1 4 :end1 5 :start2 1 :end2 2)))
     (values (eqt x result) result))
   t
   #*0000100)
+
+(deftest replace-bit-vector.16
+  (let* ((x (copy-seq #*001011))
+	 (y '(1 0 1))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  #*010111)
+
+(deftest replace-bit-vector.17
+  (let* ((x (copy-seq #*001011))
+	 (y (make-array '(3) :initial-contents '(1 0 1)
+			:fill-pointer t :element-type 'bit))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  #*010111)
+
+(deftest replace-bit-vector.18
+  (let* ((x (copy-seq #*001011))
+	 (y (make-array '(6) :initial-contents '(1 0 1 0 0 1)
+			:fill-pointer 3
+			:element-type 'bit))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  #*010111)
+
+(deftest replace-bit-vector.19
+  (let* ((x (copy-seq #*001011))
+	 (result (replace x x :start1 0 :end1 3 :start2 1 :end2 4)))
+    (values (eqt x result) result))
+  t
+  #*010011)
+
+(deftest replace-bit-vector.21
+  (let* ((x (copy-seq #*001011))
+	 (result (replace x x :start1 1 :end1 4 :start2 0 :end2 3)))
+    (values (eqt x result) result))
+  t
+  #*000111)
 
 ;;; Tests on strings
 
@@ -423,3 +544,44 @@
     (values (eqt x result) result))
   t
   "abcdyfg")
+
+(deftest replace-string.16
+  (let* ((x (copy-seq "abcdef"))
+	 (y (coerce "123" 'list))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  "a123ef")
+
+(deftest replace-string.17
+  (let* ((x (copy-seq "abcdef"))
+	 (y (make-array '(3) :initial-contents '(#\1 #\2 #\3)
+			:fill-pointer t :element-type 'character))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  "a123ef")
+
+(deftest replace-string.18
+  (let* ((x (copy-seq "abcdef"))
+	 (y (make-array '(6) :initial-contents (coerce "123456" 'list)
+			:fill-pointer 3
+			:element-type 'character))
+	 (result (replace x y :start1 1)))
+    (values (eqt x result) result))
+  t
+  "a123ef")
+
+(deftest replace-string.19
+  (let* ((x (copy-seq "abcdef"))
+	 (result (replace x x :start1 0 :end1 3 :start2 1 :end2 4)))
+    (values (eqt x result) result))
+  t
+  "bcddef")
+
+(deftest replace-string.21
+  (let* ((x (copy-seq "abcdef"))
+	 (result (replace x x :start1 1 :end1 4 :start2 0 :end2 3)))
+    (values (eqt x result) result))
+  t
+  "aabcef")
