@@ -991,6 +991,18 @@
 (deftest symbol-yes-or-no-p (test-if-not-in-cl-package "yes-or-no-p") nil)
 (deftest symbol-zerop (test-if-not-in-cl-package "zerop") nil)
 
+;;; Test there are no extra exported symbols
+
+(deftest no-extra-symbols-exported-from-common-lisp
+  (let ((ht (make-hash-table :test 'equal)))
+    (loop for n in *cl-symbol-names* do (setf (gethash n ht) t))
+    (let ((extras nil))
+      (do-external-symbols (s "CL")
+			   (unless (gethash (symbol-name s) ht)
+			     (push s extras)))
+      extras))
+  nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Test that all keywords have themselves as their value,
 ;;; are external if present in KEYWORD, and have themselves
