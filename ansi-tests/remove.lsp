@@ -793,6 +793,10 @@
   (signals-error (remove 'a nil 'bad t) program-error)
   t)
 
+(deftest remove.error.4a
+  (signals-error (remove 'a nil nil t) program-error)
+  t)
+
 (deftest remove.error.5
   (signals-error (remove 'a nil 'bad t :allow-other-keys nil) program-error)
   t)
