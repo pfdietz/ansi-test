@@ -151,7 +151,7 @@
 			     :index (+ index i)
 			     :file-prefix file-prefix)))
 		(when result
-		  (let ((*print-readably* t))
+		  (let ((*print-readably* nil))
 		    (format t "~%~A~%" (format nil "~S" (car result)))
 		    (finish-output *standard-output*)))
 		result)))
@@ -206,15 +206,16 @@
     (test-int-form form vars var-types vals-list opt-decls-1 opt-decls-2)))
 
 (defun make-random-optimize-settings ()
-  (loop for settings = (cons
-			(list 'speed (1+ (random 3)))
+  (loop for settings = (list*
+			(list 'speed (random 4))
+			#+sbcl '(sb-c:insert-step-conditions 0)
 			(loop for s in '(space safety debug compilation-speed)
 			      for n = (random 4)
 			      collect (list s n)))
 	while
 	#+allegro (subsetp '((speed 3) (safety 0)) settings :test 'equal)
 	#-allegro nil
-	finally (return settings)))
+	finally (return (random-permute settings))))
 
 (defun fn-symbols-in-form (form)
   "Return a list of the distinct standardized lisp function
@@ -258,6 +259,19 @@
 (defun make-random-integer ()
   (let ((r (ash 1 (1+ (random 32)))))
     (- (random r) (floor (/ r 2)))))
+
+(defun make-random-rational ()
+  (let* ((r (ash 1 (1+ (random 32))))
+	 (n (random r))
+	 (d (loop for x = (random r) unless (zerop x) do (return x))))
+    (if (coin) (/ n d) (- (/ n d)))))
+
+(defun make-random-float ()
+  (rcase
+   (1 (random most-positive-short-float))
+   (1 (random most-positive-single-float))
+   (1 (random most-positive-double-float))
+   (1 (random most-positive-long-float))))
 
 (defun random-var-desc ()
   (loop
@@ -401,7 +415,7 @@
      (2 (make-random-integer-eval-form size))
       
      #-(or cmu allegro)
-     (2
+     (20
       (destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
 	`(ash ,(make-random-integer-form s1)
@@ -512,6 +526,7 @@
 	     (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
 	`(block ,name ,(make-random-integer-form (1- size)))))
 
+     #-armedbear
      (20
       (let* ((tag (list 'quote (random-from-seq #(ct1 ct2 ct2 ct4 ct5 ct6 ct7 ct8))))
 	     (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
@@ -549,7 +564,7 @@
 	;; No blocks -- try again
 	(make-random-integer-form size)))
 
-     ; #-(or armedbear)
+     #-(or armedbear)
      (20
       (make-random-flet-form size))
 
@@ -917,7 +932,8 @@
 		 (form2 (let ((*flet-names* (cons (list fname minargs maxargs keyarg-p)
 						  *flet-names*)))
 			  (make-random-integer-form s2)))
-		 (opt-forms (mapcar #'make-random-integer-form opt-sizes)))
+		 (opt-forms (mapcar #'make-random-integer-form opt-sizes)
+			    ))
 	    (if opt-forms
 		`(,op ((,fname (,@(subseq arg-names 0 minargs)
 				  &optional
@@ -1490,8 +1506,7 @@
 	 ((coerce)
 	  (try 0)
 	  (try (car args))
-	  (prune #'(lambda (form) (try `(coerce ,form ,(cadr args))))
-		 (car args)))
+	  (prune (car args) #'(lambda (form) (try `(coerce ,form ,(cadr args))))))
 	  
 
 	 ((multiple-value-call)
