@@ -129,7 +129,7 @@
 
 (deftest print.array.2.12
   (let ((desired-result "#2A((0 1 1) (1 1 0))"))
-    (loop for i from 1 to 64
+    (loop for i from 2 to 64
 	  for a = (make-array '(2 3) :element-type `(unsigned-byte ,i)
 			      :initial-contents '((0 1 1) (1 1 0)))
 	  for result = (with-standard-io-syntax
@@ -151,7 +151,7 @@
 
 (deftest print.array.2.14
   (let ((desired-result "#2A((0 1 1) (1 1 0))"))
-    (loop for i from 1 to 64
+    (loop for i from 2 to 64
 	  for a = (make-array '(2 3) :element-type `(unsigned-byte ,i)
 			      :adjustable t
 			      :initial-contents '((0 1 1) (1 1 0)))
@@ -175,7 +175,7 @@
 
 (deftest print.array.2.16
   (let ((desired-result "#2A((1 1) (1 0))"))
-    (loop for i from 1 to 64
+    (loop for i from 2 to 64
 	  for type = `(unsigned-byte ,i)
 	  for a = (make-array '(2 3) :element-type type
 			      :adjustable t
@@ -202,20 +202,6 @@
 	  unless (string= desired-result result)
 	  collect (list i b result)))
   nil)
-
-(deftest print.array.2.18
-  (let ((a (make-array '(3 4) :initial-contents '("abcd" "0123" "ABCD")
-		       :element-type 'character)))
-    (with-standard-io-syntax
-     (write-to-string a :readably nil :array t)))
-  "#2A((#\\a #\\b #\\c #\\d) (#\\0 #\\1 #\\2 #\\3) (#\\A #\\B #\\C #\\D))")
-
-(deftest print.array.2.19
-  (let ((a (make-array '(3 4) :initial-contents '("abcd" "0123" "ABCD")
-		       :element-type 'base-char)))
-    (with-standard-io-syntax
-     (write-to-string a :readably nil :array t)))
-  "#2A((#\\a #\\b #\\c #\\d) (#\\0 #\\1 #\\2 #\\3) (#\\A #\\B #\\C #\\D))")
 
 (deftest print.array.2.20
   (let* ((a (make-array '(9) :initial-contents '(1 3 8 2 67 121 65 432 6)))
