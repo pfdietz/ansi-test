@@ -14,3 +14,5 @@
 (load "allocate-instance.lsp")
 (load "reinitialize-instance.lsp")
 (load "shared-initialize.lsp")
+(load "change-class.lsp")
+

@@ -1477,3 +1477,8 @@ the condition to go uncaught if it cannot be classified."
 
 (defun map-typep* (object types)
   (mapcar (applyf #'typep* object) types))
+
+(defun slot-value-or-nil (object slot-name)
+  (and (slot-exists-p object slot-name)
+       (slot-boundp object slot-name)
+       (slot-value object slot-name)))
