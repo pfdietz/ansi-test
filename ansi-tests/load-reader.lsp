@@ -13,4 +13,5 @@
 (load "read-delimited-list.lsp")
 (load "read-from-string.lsp")
 (load "readtable-case.lsp")
+(load "readtablep.lsp")
 
