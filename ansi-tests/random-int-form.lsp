@@ -123,7 +123,7 @@
      ;; Unary ops
      (40
       (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn floor
-				     ceiling truncate round
+				     ceiling truncate round realpart imagpart
 				     integer-length logcount values))))
 	`(,op ,(make-random-integer-form (1- size) vars))))
      (2 `(isqrt (abs ,(make-random-integer-form (- size 2) vars))))
@@ -136,7 +136,7 @@
      
      ;; binary floor, ceiling, truncate, round
      (4
-      (let ((op (random-from-seq #(floor ceiling truncate round)))
+      (let ((op (random-from-seq #(floor ceiling truncate round mod rem)))
 	    (op2 (random-from-seq #(max min))))
 	(destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
@@ -511,7 +511,8 @@
 	(case op
 	 
 	 ((signum integer-length logcount
-		  gcd lcm logandc1 logandc2 lognand lognor logorc1 logorc2)
+		  gcd lcm logandc1 logandc2 lognand lognor logorc1 logorc2
+		  realpart imagpart)
 	  (mapc #'try args)
 	  (try 0)
 	  (try 1)
@@ -595,6 +596,7 @@
 	    (assert (consp arg))
 	    (assert (eq (first arg) 'abs))
 	    (let ((arg2 (second arg)))
+	      (try arg2)
 	      ;; Try to fold
 	      (when (integerp arg2)
 		(try (isqrt (abs arg2))))
@@ -623,7 +625,7 @@
 			    `(ash ,form1 (,(first form2) ,(second form2)
 					  ,form)))))))))
 
-	 ((floor ceiling truncate round)
+	 ((floor ceiling truncate round mod rem)
 	  (let ((form1 (second form))
 		(form2 (third form)))
 	    (try form1)
@@ -672,37 +674,41 @@
 
 (defun prune-case (form try-fn)
   (declare (type function try-fn))
-  (let* ((op (first form))
-	 (expr (second form))
-	 (cases (cddr form)))
-
-    ;; Try just the top expression
-    (funcall try-fn expr)
-
-    ;; Try simplifying the expr
-    (prune expr
-	   #'(lambda (form)
-	       (funcall try-fn `(,op ,form ,@cases))))
-
-    ;; Try deleting individual cases
-    (loop for i from 0 below (1- (length cases))
-	  do (funcall try-fn `(,op ,expr
-				  ,@(subseq cases 0 i)
-				  ,@(subseq cases (1+ i)))))
-
-    ;; Try simplifying the cases
-    ;; Assume each case has a single form
-    (prune-list cases
-		#'(lambda (case try-fn)
-		    (declare (function try-fn))
-		    (when (eql (length case) 2)
-		      (prune (cadr case)
-			     #'(lambda (form)
-				 (funcall try-fn
-					  (list (car case) form))))))
-		#'(lambda (cases)
-		    (funcall try-fn `(,op ,expr ,@cases))))))
-    
+  (flet ((try (e) (funcall try-fn e)))
+    (let* ((op (first form))
+	   (expr (second form))
+	   (cases (cddr form)))
+      
+      ;; Try just the top expression
+      (try expr)
+      
+      ;; Try simplifying the expr
+      (prune expr
+	     #'(lambda (form)
+		 (try `(,op ,form ,@cases))))
+      
+      ;; Try individual cases
+      (loop for case in cases
+	    do (try (first (last (rest case)))))
+      
+      ;; Try deleting individual cases
+      (loop for i from 0 below (1- (length cases))
+	    do (try `(,op ,expr
+			  ,@(subseq cases 0 i)
+			  ,@(subseq cases (1+ i)))))
+      
+      ;; Try simplifying the cases
+      ;; Assume each case has a single form
+      (prune-list cases
+		  #'(lambda (case try-fn)
+		      (declare (function try-fn))
+		      (when (eql (length case) 2)
+			(prune (cadr case)
+			       #'(lambda (form)
+				   (funcall try-fn
+					    (list (car case) form))))))
+		  #'(lambda (cases)
+		      (try `(,op ,expr ,@cases)))))))
 
 (defun prune-fn (form try-fn)
   "Attempt to simplify a function call form.  It is considered
