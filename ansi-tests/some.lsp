@@ -105,26 +105,3 @@
 (deftest some.23
   (classify-error (some #'eq () 'a))
   type-error)
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-

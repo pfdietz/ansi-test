@@ -106,27 +106,3 @@
 (deftest notany.23
   (classify-error (notany #'eq () 'a))
   type-error)
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-

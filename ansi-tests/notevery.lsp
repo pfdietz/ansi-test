@@ -106,26 +106,3 @@
 (deftest notevery.23
   (classify-error (notevery #'eq () 'a))
   type-error)
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-
