@@ -110,3 +110,9 @@
 ;;; Tests of the reader
 
 (load "reader-test.lsp")
+
+;;; Tests of strings
+
+(load "char-schar.lsp")
+(load "string.lsp")
+
