@@ -126,7 +126,7 @@
 
 (deftest delete-package.6
   (progn
-    (safely-delete-package "TEST-20)")
+    (safely-delete-package "TEST-20")
     (handler-bind ((package-error
 		    #'(lambda (c)
 			(let ((r (find-restart 'continue c)))
