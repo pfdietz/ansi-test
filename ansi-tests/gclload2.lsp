@@ -8,6 +8,7 @@
 (load "places.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
+(load "fboundp.lsp")
 (load "function.lsp")
 (load "functionp.lsp")
 (load "lambda-list-keywords.lsp")

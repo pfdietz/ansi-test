@@ -235,4 +235,17 @@
       (values (setf (%m x) 2)
 	      (1+ (car x)))))
   2 3)
-      
+
+;;; section 5.1.2.8 -- symbol macros
+(deftest setf-symbol-macro.1
+  (symbol-macrolet ((x y))
+    (let ((y nil))
+      (values (setf x 1) x y)))
+  1 1 1)
+
+;;; Symbol macros in SETQs are treated as if the form were a SETF
+(deftest setf-symbol-macro.2
+  (symbol-macrolet ((x y))
+    (let ((y nil))
+      (values (setq x 1) x y)))
+  1 1 1)

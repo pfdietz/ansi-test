@@ -39,8 +39,9 @@
   (typep '(lambda (x) x) 'function)
   nil)
 
-(defun function-7-accessor-fn (x y) (setf (car x) y) y)
-(defsetf function-7-accessor function-7-accessor-fn)
+(eval-when (eval compile)
+  (ignore-errors
+    (defun (setf function-7-accessor) (y x) (setf (car x) y) y)))
 
 (deftest function.7
   (not (typep #'(setf function-7-accessor) 'function))

@@ -39,8 +39,9 @@
   (functionp '(lambda (x) x))
   nil)
 
-(defun functionp-7-accessor-fn (x y) (setf (car x) y) y)
-(defsetf functionp-7-accessor functionp-7-accessor-fn)
+(eval-when (eval compile)
+  (ignore-errors
+    (defun (setf functionp-7-accessor) (y x) (setf (car x) y) y)))
 
 (deftest functionp.7
   (not (functionp #'(setf functionp-7-accessor)))
