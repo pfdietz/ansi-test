@@ -23,6 +23,7 @@
 (load "defparameter.lsp")
 (load "defvar.lsp")
 (load "destructuring-bind.lsp")
+(load "ecase.lsp")
 (load "equal.lsp")
 (load "equalp.lsp")
 (load "eql.lsp")

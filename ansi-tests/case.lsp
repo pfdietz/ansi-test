@@ -92,6 +92,64 @@
     ((#\z #\a #\y) 40))
   40)
 
+(deftest case.21 (case 1 (1 (values))))
 
+(deftest case.22 (case 2 (t (values))))
 
+(deftest case.23 (case 1 (1 (values 'a 'b 'c)))
+  a b c)
 
+(deftest case.24 (case 2 (t (values 'a 'b 'c)))
+  a b c)
+
+;;; Show that the key expression is evaluated only once.
+(deftest case.25
+  (let ((x 0))
+    (values
+     (case (progn (incf x) 'c)
+       (a 1)
+       (b 2)
+       (c 3)
+       (t 4))
+     x))
+  3 1)
+
+;;; Repeated keys are allowed (all but the first are ignored)
+
+(deftest case.26
+  (case 'b ((a b c) 10) (b 20))
+  10)
+
+(deftest case.27
+  (case 'b (b 20) ((a b c) 10))
+  20)
+
+(deftest case.28
+  (case 'b (b 20) (b 10) (t 0))
+  20)
+
+;;; There are implicit progns
+
+(deftest case.29
+  (let ((x nil))
+    (values
+     (case 2
+       (1 (setq x 'a) 'w)
+       (2 (setq x 'b) 'y)
+       (t (setq x 'c) 'z))
+     x))
+  y b)
+
+(deftest case.30
+  (let ((x nil))
+    (values
+     (case 10
+       (1 (setq x 'a) 'w)
+       (2 (setq x 'b) 'y)
+       (t (setq x 'c) 'z))
+     x))
+  z c)
+
+(deftest case.31
+  (case (values 'b 'c) (c 0) ((a b) 10) (t 20))
+  10)
