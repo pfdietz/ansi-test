@@ -78,6 +78,23 @@
 	always (eql (apply #'lcm (make-list i :initial-element 1)) 1))
   t)
 
+(deftest lcm.9
+  (lcm 0 0)
+  0)
+
+(deftest lcm.10
+  (lcm 1 0 0)
+  0)
+
+(deftest lcm.11
+  (lcm 0 1 0)
+  0)
+
+(deftest lcm.12
+  (lcm 0 0 1)
+  0)
+
+
 (deftest lcm.order.1
   (let ((i 0) x y)
     (values
@@ -100,3 +117,5 @@
      (lcm (progn (incf i) 0))
      i))
   0 1)
+
+
