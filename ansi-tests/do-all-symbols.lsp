@@ -82,4 +82,20 @@
      (return-from done :bad2)))
   :good)
 
+;;; Test that do-all-symbols accepts declarations
 
+(deftest do-all-symbols.9
+  (let ((x 0)
+	(y 1))
+    (do-all-symbols (z nil)
+      (declare (type (integer * 0) x))
+      (declare (type (integer 1 *) y))
+      (declare (ignore z))
+      (when (< x y) (return :good))))
+  :good)
+
+;;; Default return is NIL
+
+(deftest do-all-symbols.10
+  (do-all-symbols (s) (declare (ignore s)))
+  nil)

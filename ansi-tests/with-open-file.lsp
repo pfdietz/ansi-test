@@ -43,7 +43,8 @@
     (delete-all-versions pn)
     (with-open-file
      (s pn :direction :output)
-     (declare (ignore s))))
+     (declare (ignore s))
+     (declare (optimize))))
   nil)
 
 (deftest with-open-file.6

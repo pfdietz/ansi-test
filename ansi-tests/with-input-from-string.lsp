@@ -19,6 +19,12 @@
   (with-input-from-string (s "abc") (declare (optimize speed)))
   nil)
 
+(deftest with-input-from-string.3a
+  (with-input-from-string (s "abc")
+			  (declare (optimize speed))
+			  (declare (optimize space)))
+  nil)
+
 (deftest with-input-from-string.4
   (with-input-from-string
    (s "abc")

@@ -74,6 +74,13 @@
    (declare (optimize)))
   nil)
 
+(deftest with-hash-table-iterator.8a
+  (with-hash-table-iterator
+   (%x (make-hash-table))
+   (declare (optimize))
+   (declare (optimize)))
+  nil)
+
 (deftest with-hash-table-iterator.9
   (with-hash-table-iterator
    (%x (make-hash-table))
