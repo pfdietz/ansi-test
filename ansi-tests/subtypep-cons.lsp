@@ -110,3 +110,12 @@
      (cons (real 3 (6)) (real 3 (6))))
    '(cons (real 0 (9)) (real 0 (9))))
   nil)
+
+;;; Test suggested by C.R.
+(deftest subtypep.cons.12
+  (check-all-not-subtypep
+   '(cons (or integer symbol)
+	  (or integer symbol))
+   '(or (cons integer symbol)
+	(cons symbol integer)))
+  nil)
