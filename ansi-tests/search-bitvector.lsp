@@ -7,9 +7,9 @@
 
 (deftest search-bitvector.1
   (let ((target *searched-bitvector*)
-	(pat #(a)))
+	(pat #*0))
     (loop for i from 0 to (1- (length target))
-	  for tail on target
+	  for tail = (subseq target i)
 	  always
 	  (let ((pos (search pat tail)))
 	    (search-check pat tail pos))))
@@ -17,7 +17,7 @@
 
 (deftest search-bitvector.2
   (let ((target *searched-bitvector*)
-	(pat #(a)))
+	(pat #*0))
     (loop for i from 1 to (length target)
 	  always
 	  (let ((pos (search pat target :end2 i :from-end t)))
