@@ -9344,3 +9344,38 @@ Broken at C::WT-MAKE-CLOSURE.
 			(prog2 (if 0 (+ a a) 0) 0)))
 	200000))
   0)
+
+(deftest misc.505
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -6 5) a))
+			(declare (optimize (speed 3) (space 0) (safety 2)
+					   (compilation-speed 2) (debug 3)))
+			(dotimes (iv1 0 0) (+ a a))))
+	1))
+  0)
+
+(deftest misc.506
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -53 49) a))
+			(declare (optimize (debug 0) (compilation-speed 1) (space 2)
+					   (safety 0) (speed 0)))
+			(unwind-protect (+ a a) 0)))
+	-38))
+  -76)
+
+;;; The value 15390 is not of type FUNCTION.
+(deftest misc.507
+  (funcall
+   (compile nil '(lambda (a)
+		   (declare (type (integer 2697 13005) a))
+		   (declare (optimize (debug 0) (space 2) (speed 2)
+				      (compilation-speed 3) (safety 3)))
+		   (truncate (prog1 0 a (+ a a)))))
+   7695)
+  0 0)
