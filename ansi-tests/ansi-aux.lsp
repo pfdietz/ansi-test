@@ -94,6 +94,10 @@ Results: ~A~%" expected-number form n results))))
   "Like =, but guaranteed to return T for true."
   (apply #'values (mapcar #'notnot (multiple-value-list (apply #'=  x args)))))
 
+(defun <=t (x &rest args)
+  "Like <=, but guaranteed to return T for true."
+  (apply #'values (mapcar #'notnot (multiple-value-list (apply #'<=  x args)))))
+
 (defun make-int-list (n)
   (loop for i from 0 below n collect i))
 
