@@ -226,14 +226,14 @@
 		   (set-syntax-from-char c #\")
 		   (handler-case
 		    (read-from-string
-		     (concatenate 'string (list c c2 #\")))
+		     (concatenate 'string (list c c2 c)))
 		    (error (c) c))
 		   (handler-case
 		    (read-from-string
-		     (concatenate 'string (list c c2 #\" #\2)))
+		     (concatenate 'string (list c c2 c #\2)))
 		    (error (c) c))
 		   (handler-case
-		    (read-from-string (concatenate 'string (list c c2) "\")"))
+		    (read-from-string (concatenate 'string (list c c2 c) ")"))
 		    (error (c) c)))))
 	     (unless (equal results (list t expected expected expected))
 	       (list (list c results)))))))
