@@ -58,3 +58,78 @@
 	(let ((nt1 `(not ,t1))
 	      (nt2 `(not ,t2)))
 	  (subtypep nt2 nt1))))))
+
+(defun prune-type (tp try-fn)
+  (declare (type function try-fn))
+  (flet ((try (x) (funcall try-fn x)))
+    (cond
+     ((member tp '(nil t)))
+     ((symbolp tp)
+      (try nil)
+      (try t))
+     ((consp tp)
+      (try nil)
+      (try t)
+      (let ((op (first tp))
+	    (args (rest tp)))
+	(case op
+	  ((cons)
+	   (try 'cons)
+	   (prune-list args
+		       #'prune-type
+		       #'(lambda (args) (try `(cons ,@args)))))
+	  ((integer real float ratio single-float double-float short-float long-float)
+	   (try op))
+	  ((or and)
+	   (mapc try-fn args)
+	   (prune-list args
+		       #'prune-type
+		       #'(lambda (args) (try (cons op args)))))
+	  ((not)
+	   (let ((arg (first args)))
+	     (try arg)
+	     (when (and (consp arg)
+			(eq (car arg) 'not))
+	       (try (second arg)))
+	     (prune-type arg #'(lambda (arg) (try `(not ,arg))))))
+	  ((member)
+	   (dolist (arg (cdr tp))
+	     (try `(eql ,arg)))
+	   (when (cddr tp)
+	   (try `(member ,@(cddr tp)))))
+	  )))))
+  (values))
+
+(defun prune-type-pair (t1 t2)
+  (let (changed)
+    (loop
+     do (flet ((%try2 (new-tp)
+		      (when (test-types t1 new-tp)
+			(print "Success in first loop")
+			(print new-tp)
+			(setq t2 new-tp
+			      changed t)
+			(throw 'success nil))))
+	  (catch 'success
+	    (prune-type t2 #'%try2)))
+     do (flet ((%try1 (new-tp)
+		      (when (test-types new-tp t2)
+			(print "Success in second loop")
+			(print new-tp)
+			(setq t1 new-tp
+			      changed t)
+			(throw 'success nil))))
+	  (catch 'success
+	    (prune-type t1 #'%try1)))
+     while changed
+     do (setq changed nil)))
+  (values t1 t2))
+
+
+     
+  
+			   
+	 
+
+
+  
