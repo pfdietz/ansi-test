@@ -87,6 +87,10 @@
 (load "loop11.lsp")
 (load "loop12.lsp")
 (load "loop13.lsp")
+(load "loop14.lsp")
+(load "loop15.lsp")
+(load "loop16.lsp")
+(load "loop17.lsp")
 
 ;;; Tests of conses
 
