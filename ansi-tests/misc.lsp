@@ -3885,11 +3885,8 @@
   (funcall
    (compile
     nil
-    '(lambda (a b c)
-       (declare (type (integer 2198744686266 4396067580775) a))
-       (declare (type (integer 1709 2198581933954) b))
+    '(lambda (c)
        (declare (type (integer -1 412413109) c))
-       (declare (ignorable a b c))
        (declare (optimize (speed 1) (space 2) (safety 2) (debug 1)
 			  (compilation-speed 3)))
        (catch 'ct2
@@ -3897,7 +3894,7 @@
 		    (catch 'ct2 (throw 'ct2 0)))
 		 (complex c 0)
 		 ))))
-   216169575299 1618390099 62151)
+   62151)
   62151)
 
 ;;; Error: `T' is not of the expected type `INTEGER'
