@@ -44,6 +44,33 @@
 	  do (setf (gethash key table) val))
     table))
 
+(defparameter *loop.6.hash.6*
+  (let ((table (make-hash-table :test #'eq)))
+    (loop for (key . val) in *loop.6.alist*
+	  do (setf (gethash key table) (coerce val 'float)))
+    table))
+
+(defparameter *loop.6.hash.7*
+  (let ((table (make-hash-table :test #'equal)))
+    (loop for (val . key) in *loop.6.alist.3*
+	  do (setf (gethash (coerce key 'float) table) val))
+    table))
+
+(defparameter *loop.6.alist.8*
+  '(((1 . 2) . 1) ((3 . 4) . b) ((5 . 6) . c)))
+
+(defparameter *loop.6.hash.8*
+  (let ((table (make-hash-table :test #'equal)))
+    (loop for (key . val) in *loop.6.alist.8*
+	  do (setf (gethash key table) val))
+    table))
+
+(defparameter *loop.6.hash.9*
+  (let ((table (make-hash-table :test #'equal)))
+    (loop for (val . key) in *loop.6.alist.8*
+	  do (setf (gethash key table) val))
+    table))
+
 ;;; being {each | the} {hash-value | hash-values | hash-key | hash-keys} {in | of }
 
 (deftest loop.6.1
@@ -157,7 +184,6 @@
   (loop for v of-type fixnum being the hash-values of *loop.6.hash.1* sum v)
   6)
 
-
 (deftest loop.6.25
   (loop for k fixnum being the hash-keys of *loop.6.hash.5* sum k)
   6)
@@ -165,4 +191,96 @@
 (deftest loop.6.26
   (loop for k of-type fixnum being the hash-keys of *loop.6.hash.5* sum k)
   6)
+
+(deftest loop.6.27
+  (loop for k t being the hash-keys of *loop.6.hash.5* sum k)
+  6)
+
+(deftest loop.6.28
+  (loop for k of-type t being the hash-keys of *loop.6.hash.5* sum k)
+  6)
+
+(deftest loop.6.29
+  (loop for v t being the hash-values of *loop.6.hash.1* sum v)
+  6)
+
+(deftest loop.6.30
+  (loop for v of-type t being the hash-values of *loop.6.hash.1* sum v)
+  6)
+
+(deftest loop.6.31
+  (loop for v float being the hash-values of *loop.6.hash.6* sum v)
+  6.0)
+
+(deftest loop.6.32
+  (loop for v of-type float being the hash-values of *loop.6.hash.6* sum v)
+  6.0)
+
+(deftest loop.6.33
+  (loop for k float being the hash-keys of *loop.6.hash.7* sum k)
+  6.0)
+
+(deftest loop.6.34
+  (loop for k of-type float being the hash-keys of *loop.6.hash.7* sum k)
+  6.0)
+
+(deftest loop.6.35
+  (loop for (k1 . k2) of-type (integer . integer) being the hash-keys
+	of *loop.6.hash.8* sum (+ k1 k2))
+  21)
+
+(deftest loop.6.36
+  (loop for (v1 . v2) of-type (integer . integer) being the hash-values
+	of *loop.6.hash.9* sum (+ v1 v2))
+  21)
+
+(deftest loop.6.37
+  (loop for v being the hash-values of *loop.6.hash.8*
+	using (hash-key (k1 . k2)) sum (+ k1 k2))
+  21)
+
+(deftest loop.6.38
+  (loop for k being the hash-keys of *loop.6.hash.9*
+	using (hash-value (v1 . v2)) sum (+ v1 v2))
+  21)
+
+
+;;; Error tests
+
+(deftest loop.6.error.1
+  (classify-error
+   (loop for k from 1 to 10
+	 for k being the hash-keys of *loop.6.hash.1*
+	 count t))
+  program-error)
+
+(deftest loop.6.error.2
+  (classify-error
+   (loop for k being the hash-keys of *loop.6.hash.1*
+	 for k from 1 to 10
+	 count t))
+  program-error)
+
+(deftest loop.6.error.3
+  (classify-error
+   (loop for (k . k) being the hash-keys of *loop.6.hash.3*
+	 count t))
+  program-error)
+
+(deftest loop.6.error.4
+  (classify-error
+   (loop for k being the hash-keys of *loop.6.hash.3*
+	 using (hash-value k)
+	 count t))
+  program-error)
+
+(deftest loop.6.error.5
+  (classify-error
+   (loop for k being the hash-values of *loop.6.hash.3*
+	 using (hash-key k)
+	 count t))
+  program-error)
+
+
+
 
