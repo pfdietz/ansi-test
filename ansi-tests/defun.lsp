@@ -40,11 +40,6 @@
 (defun defun-test-fun-4 (x)
   (car x))
 
-(eval-when (load eval compile)
-  (ignore-errors
-    (defun (setf defun-test-fun-4) (newval x)
-      (return-from defun-test-fun-4 (setf (car x) newval)))))
-
 (deftest defun.4
   (let ((x (list 'a 'b)))
     (values
@@ -52,6 +47,9 @@
      x))
   c
   (c b))
+
+(defun (setf defun-test-fun-4) (newval x)
+  (return-from defun-test-fun-4 (setf (car x) newval)))
 
 
 
