@@ -37,6 +37,11 @@
   (classify-error (fill (list 'a 'b) 'c 1 2))
   program-error)
 
+(deftest fill.error.10
+  (classify-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil
+			:allow-other-keys t))
+  program-error)
+
 ;;; Fill on arrays
 
 (deftest array-fill-1
@@ -434,4 +439,37 @@
 	 (coerce (loop for i from 0 to 7 collect (aref s2 i))
 		 'bit-vector)))
   #*11110000)
+
+;;; Test of :allow-other-keys
+
+(deftest fill.allow-other-keys.1
+  (fill (list 'a 'b 'c 'd 'e) 'a :allow-other-keys t)
+  (a a a a a))
+
+(deftest fill.allow-other-keys.2
+  (fill (list 'a 'b 'c 'd 'e) 'a :allow-other-keys nil)
+  (a a a a a))
+
+(deftest fill.allow-other-keys.3
+  (fill (list 'a 'b 'c 'd 'e) 'a :allow-other-keys t :bad t)
+  (a a a a a))
+
+(deftest fill.allow-other-keys.4
+  (fill (list 'a 'b 'c 'd 'e) 'a :bad t :allow-other-keys t)
+  (a a a a a))
+
+(deftest fill.allow-other-keys.5
+  (fill (list 'a 'b 'c 'd 'e) 'a 'bad t :allow-other-keys t)
+  (a a a a a))
+
+(deftest fill.allow-other-keys.6
+  (fill (list 'a 'b 'c 'd 'e) 'a  :bad t :allow-other-keys t
+	:allow-other-keys nil)
+  (a a a a a))
+
+(deftest fill.allow-other-keys.7
+  (fill (list 'a 'b 'c 'd 'e) 'a  :allow-other-keys t :allow-other-keys nil
+	:bad t)
+  (a a a a a))
+
 

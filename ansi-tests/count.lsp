@@ -76,7 +76,7 @@
 
 (deftest count-list.16
   (count 1 '(1 1 1 3 1 2 1 1) :start 2 :end 7
-	 :test #'(lambda (x y) t))
+	 :test #'(lambda (x y) (declare (ignore x y))  t))
   5)
 
 ;;; On vectors
@@ -152,7 +152,7 @@
 
 (deftest count-vector16
   (count 1 #(1 1 1 3 1 2 1 1) :start 2 :end 7
-	 :test #'(lambda (x y) t))
+	 :test #'(lambda (x y) (declare (ignore x y)) t))
   5)
 
 ;;; Non-simple vectors
@@ -257,7 +257,7 @@
   (count 1 (make-array 8 :initial-contents '(1 1 1 3 1 2 1 1)
 		       :fill-pointer t)
 	 :start 2 :end 7
-	 :test #'(lambda (x y) t))
+	 :test #'(lambda (x y) (declare (ignore x y)) t))
   5)
 
 (deftest count-filled-vector.17
@@ -353,7 +353,7 @@
 
 (deftest count-bit-vector.16
   (count 1 #*11101101 :start 2 :end 7
-	 :test #'(lambda (x y) t))
+	 :test #'(lambda (x y) (declare (ignore x y)) t))
   5)
 
 (deftest count-bit-vector.17
@@ -456,7 +456,7 @@
 
 (deftest count-string.16
   (count #\1 "11101101" :start 2 :end 7
-	 :test #'(lambda (x y) t))
+	 :test #'(lambda (x y) (declare (ignore x y)) t))
   5)
 
 (deftest count-string.17
@@ -485,6 +485,32 @@
 			 :element-type 'character)
 	 :start 2 :end 5)
   3)
+
+;;; Allow-other-keys tests
+
+(deftest count.allow-other-keys.1
+  (count 'a '(b a d a c) :bad t :allow-other-keys t)
+  2)
+
+(deftest count.allow-other-keys.2
+  (count 'a '(b a d a c) :allow-other-keys #p"*" :also-bad t)
+  2)
+
+;;; The leftmost of two :allow-other-keys arguments is the one that  matters.
+(deftest count.allow-other-keys.3
+  (count 'a '(b a d a c)
+	 :allow-other-keys t
+	 :allow-other-keys nil
+	 :bad t)
+  2)
+
+(deftest count.allow-other-keys.4
+  (count 2 '(1 2 3 2 5) :key #'identity :key #'1+)
+  2)
+
+(deftest count.allow-other-keys.5
+  (count 'a '(a b c a) :allow-other-keys nil)
+  2)
 
 ;;; Error tests
 
@@ -524,3 +550,9 @@
   (classify-error (count nil nil 3 3))
   program-error)
 
+;;; Only leftmost :allow-other-keys argument matters
+(deftest count.error.10
+  (classify-error (count 'a nil :bad t
+			 :allow-other-keys nil
+			 :allow-other-keys t))
+  program-error)

@@ -418,6 +418,32 @@
 		   (count-if-not #'%onep a :from-end t)))))
   2 3 2 3)
 
+;;; Allow-other-keys tests
+
+(deftest count-if-not.keywords.1
+  (count-if-not #'oddp '(1 2 3 4 5) :bad t :allow-other-keys t)
+  2)
+
+(deftest count-if-not.keywords.2
+  (count-if-not #'oddp '(1 2 3 4 5) :allow-other-keys #p"*" :also-bad t)
+  2)
+
+;;; The leftmost of two :allow-other-keys arguments is the one that  matters.
+(deftest count-if-not.keywords.3
+  (count-if-not #'oddp '(1 2 3 4 5)
+	    :allow-other-keys t
+	    :allow-other-keys nil
+	    :bad t)
+  2)
+
+(deftest count-if-not.keywords.4
+  (count-if-not #'oddp '(1 2 3 4 5) :key #'identity :key #'1+)
+  2)
+
+(deftest count-if-not.allow-other-keys.5
+  (count-if-not #'null '(nil a b c nil) :allow-other-keys nil)
+  3)
+
 ;;; Error tests
 
 (deftest count-if-not.error.1
@@ -455,3 +481,11 @@
 (deftest count-if-not.error.9
   (classify-error (count-if-not #'null nil 3 3))
   program-error)
+
+;;; Only leftmost :allow-other-keys argument matters
+(deftest count-if-not.error.10
+  (classify-error (count-if-not #'null nil :bad t
+				:allow-other-keys nil
+				:allow-other-keys t))
+  program-error)
+

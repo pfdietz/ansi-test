@@ -416,6 +416,30 @@
 	    (count-if #'digit-char-p s :end 2)
 	    (count-if #'digit-char-p s :start 1 :end 2)))
   3 3 2 2 1)
+
+;;; Allow-other-keys tests
+
+(deftest count-if.allow-other-keys.1
+  (count-if #'evenp '(1 2 3 4 5) :bad t :allow-other-keys t)
+  2)
+
+(deftest count-if.allow-other-keys.2
+  (count-if #'evenp '(1 2 3 4 5) :allow-other-keys #p"*" :also-bad t)
+  2)
+
+;;; The leftmost of two :allow-other-keys arguments is the one that  matters.
+(deftest count-if.allow-other-keys.3
+  (count-if #'evenp '(1 2 3 4 5)
+	    :allow-other-keys t
+	    :allow-other-keys nil
+	    :bad t)
+  2)
+
+(deftest count-if.allow-other-keys.4
+  (count-if #'evenp '(1 2 3 4 5) :key #'identity :key #'1+)
+  2)
+
+
 	    
 ;;; Error tests
 
@@ -453,4 +477,11 @@
 
 (deftest count-if.error.9
   (classify-error (count-if #'null nil 3 3))
+  program-error)
+
+;;; Only leftmost :allow-other-keys argument matters
+(deftest count-if.error.10
+  (classify-error (count-if #'null nil :bad t
+			    :allow-other-keys nil
+			    :allow-other-keys t))
   program-error)
