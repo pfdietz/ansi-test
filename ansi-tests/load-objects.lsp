@@ -48,6 +48,8 @@
 (load "next-method-p.lsp")
 (load "call-next-method.lsp")
 (load "compute-applicable-methods.lsp")
+(load "define-method-combination.lsp")
 (load "find-method.lsp")
 (load "add-method.lsp")
 (load "unbound-slot.lsp")
+(load "class-name.lsp")
