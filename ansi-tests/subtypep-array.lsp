@@ -106,17 +106,17 @@
   (subtypep* '(vector character) 'string)
   t t)
 
-(deftest string-is-vector-of-character.3
+(deftest string-is-not-vector-of-character.3
   (subtypep* '(string *) '(vector character))
-  t t)
+  nil t)
 
 (deftest string-is-vector-of-character.4
   (subtypep* '(vector character) '(string *))
   t t)
 
-(deftest string-is-vector-of-character.5
+(deftest string-is-not-vector-of-character.5
   (subtypep* '(string 17) '(vector character 17))
-  t t)
+  nil t)
 
 (deftest string-is-vector-of-character.6
   (subtypep* '(vector character 17) '(string 17))
@@ -170,23 +170,23 @@
   (subtypep* '(simple-array base-char (17)) '(simple-base-string 17))
   t t)
 
-(deftest simple-string-is-simple-1d-array-of-character.1
+(deftest simple-string-is-not-simple-1d-array-of-character.1
   (subtypep* 'simple-string '(simple-array character (*)))
-  t t)
+  nil t)
 
 (deftest simple-string-is-simple-1d-array-of-character.2
   (subtypep* '(simple-array character (*)) 'simple-string)
   t t)
 
-(deftest simple-string-is-simple-1d-array-of-character.3
+(deftest simple-string-is-not-simple-1d-array-of-character.3
   (subtypep* '(simple-string *) '(simple-array character (*)))
-  t t)
+  nil t)
 
 (deftest simple-string-is-simple-1d-array-of-character.4
   (subtypep* '(simple-array character (*)) '(simple-string *))
   t t)
 
-(deftest simple-string-is-simple-1d-array-of-character.5
+(deftest simple-string-is-not-simple-1d-array-of-character.5
   (subtypep* '(simple-string 17) '(simple-array character (17)))
   nil t)
 
