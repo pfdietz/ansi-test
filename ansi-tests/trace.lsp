@@ -161,8 +161,25 @@
 			  (*trace-output*)
 			  (assert (null (generic-function-to-trace 'a 'b))))
 			"")))
-    (assert (equal (trace) '(generic-function-to-trace)))
-    (untrace generic-function-to-trace)
-    (trace))
-  nil)
+    (prog1
+	(trace)
+      (untrace generic-function-to-trace)
+      (assert (null (trace)))))
+  (generic-function-to-trace))
 
+(declaim (notinline generic-function-to-trace2))
+
+(deftest trace.15
+  (progn
+    (untrace)
+    (let* ((gf (defgeneric generic-function-to-trace2 (x y)))
+	   (m (defmethod generic-function-to-trace2 ((x integer)(y integer))
+		:foo)))
+      (defmethod generic-function-to-trace2 ((x symbol)(y symbol)) :bar)
+      (assert (eql (generic-function-to-trace2 1 2) :foo))
+      (assert (eql (generic-function-to-trace2 'a 'b) :bar))
+      (trace generic-function-to-trace2)
+      (assert (equal (trace) '(generic-function-to-trace2)))
+      (remove-method gf m)
+      (prog1 (trace) (untrace))))
+  (generic-function-to-trace2))
