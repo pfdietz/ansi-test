@@ -127,6 +127,12 @@
 	      (y (- (random b) b2)))
 	  (list (min x y) (max x y)))))))
 
+(defun fn-arg-name (fn-name arg-index)
+  (intern (concatenate 'string
+		       (subseq (symbol-name fn-name) 1)
+		       (format nil "-~D" arg-index))
+	  (symbol-package fn-name)))		       
+
 (defparameter *flet-names* nil)
 
 (defun make-random-integer-form (size)
@@ -137,20 +143,59 @@
       (rcase
        (10 (let ((r (ash 1 (1+ (random 32)))))
 	     (- (random r) (floor (/ r 2)))))
-       (9 (var-desc-name (random-from-seq  *vars*)))
-       (1 (if *flet-names* (list (random-from-seq *flet-names*))
-	    (var-desc-name (random-from-seq *vars*)))))
+       (9 (if *vars* (var-desc-name (random-from-seq  *vars*))
+	    (make-random-integer-form size)))
+       (1 (if *flet-names*
+	      (let* ((flet-entry (random-from-seq *flet-names*))
+		     (flet-name (car flet-entry))
+		     (flet-nargs (cadr flet-entry))
+		     (args (loop repeat flet-nargs
+				 collect (make-random-integer-form 1))))
+		`(,flet-name ,@args))
+	    (make-random-integer-form size))))
     ;; (> size 1)
     (rcase
+     ;; flet call
+     (5
+      (if *flet-names*
+	  (let* ((flet-entry (random-from-seq *flet-names*))
+		 (flet-name (car flet-entry))
+		 (flet-nargs (cadr flet-entry)))
+	    (if (> flet-nargs 0)
+		(let* ((arg-sizes (random-partition (1- size) flet-nargs))
+		       (args (mapcar #'make-random-integer-form arg-sizes)))
+		  `(,flet-name ,@args))
+	      (make-random-integer-form size)))
+	(make-random-integer-form size)))
+
      ;; Unary ops
      (40
-      (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn floor
+      (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn floor ignore-errors
+				     handler-case restart-case
 				     ceiling truncate round realpart imagpart
 				     integer-length logcount values multiple-value-prog1
-				     prog1 unwind-protect))))
+				     prog1 unwind-protect locally))))
 	`(,op ,(make-random-integer-form (1- size)))))
+     
      (2 `(isqrt (abs ,(make-random-integer-form (- size 2)))))
 
+     (2 `(the integer ,(make-random-integer-form (1- size))))
+     (1 `(handler-bind nil ,(make-random-integer-form (1- size))))
+     (1 `(macrolet () ,(make-random-integer-form (1- size))))
+
+     ;; load-time-value
+     #-gcl
+     (4
+      (let ((arg (let ((*flet-names* nil)
+		       (*vars* nil)
+		       (*random-int-form-blocks* nil))
+		   (make-random-integer-form (1- size)))))
+	(rcase
+	 (2 `(load-time-value ,arg t))
+	 (1 `(load-time-value ,arg))
+	 (1 `(load-time-value ,arg nil)))))	     
+
+     #-(or cmu allegro)
      (2
       (destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
@@ -171,20 +216,34 @@
 			,(make-random-integer-form s2))))))
 	    
      ;; Binary op
-     (60
+     (30
       (let* ((op (random-from-seq
-		  '(+ - * * logand min max min max ;; gcd lcm
-		      ;; #-:allegro
+		  '(+ - *  logand min max gcd ;; lcm
+		      #-:allegro
 		      logandc1
 		      logandc2 logeqv logior lognand lognor
-		      ;; #-:allegro
+		      #-:allegro
 		      logorc1
-		      logorc2 logxor))))
+		      logorc2
+		      #-:allegro
+		      logxor
+		      ))))
 	(destructuring-bind (leftsize rightsize)
 	    (random-partition (1- size) 2)
 	  (let ((e1 (make-random-integer-form leftsize))
 		(e2 (make-random-integer-form rightsize)))
 	    `(,op ,e1 ,e2)))))
+
+     ;; n-ary ops
+     (30
+      (let* ((op (random-from-seq #(+ - * logand min max logior
+				      #-:allegro
+				      logxor)))
+	     (nargs (1+ (random 8)))
+	     (sizes (random-partition (1- size) nargs))
+	     (args (mapcar #'make-random-integer-form sizes)))
+	`(,op ,@args)))
+     
      ;; conditionals
      (20
       (let* ((cond-size (random (max 1 (floor size 2))))
@@ -200,7 +259,7 @@
 	  ,(make-random-integer-form s1)
 	  ,(make-random-byte-spec-form s2)
 	  ,(make-random-integer-form s3))))
-     ;; #-:allegro
+     #-:allegro
      (10
       (destructuring-bind (s1 s2) (random-partition (1- size) 2)
 	  `(,(random-from-seq '(ldb mask-field))
@@ -224,18 +283,20 @@
 	     (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
 	`(block ,name ,(make-random-integer-form (1- size)))))
      (4 ;; setq
-      (let* ((vdesc (random-from-seq *vars*))
-	     (var (var-desc-name vdesc))
-	     (type (var-desc-type vdesc)))
-	(cond
-	 ((equal type '(integer * *))
-	  `(setq ,var ,(make-random-integer-form (1- size))))
-	 ((and (consp type)
-	       (eq (car type) 'integer)
-	       (integerp (second type))
-	       (integerp (third type)))
-	  `(setq ,var ,(random-from-interval (1+ (third type)) (second type))))
-	 (t (make-random-integer-form size)))))
+      (if *vars*
+	  (let* ((vdesc (random-from-seq *vars*))
+		 (var (var-desc-name vdesc))
+		 (type (var-desc-type vdesc)))
+	    (cond
+	     ((equal type '(integer * *))
+	      `(setq ,var ,(make-random-integer-form (1- size))))
+	     ((and (consp type)
+		   (eq (car type) 'integer)
+		   (integerp (second type))
+		   (integerp (third type)))
+	      `(setq ,var ,(random-from-interval (1+ (third type)) (second type))))
+	     (t (make-random-integer-form size))))
+	(make-random-integer-form size)))
 
      (3 (make-random-integer-case-form size))
      (3
@@ -291,18 +352,26 @@
    and a single binding per form."
   (let ((fname (random-from-seq #(%f1 %f2 %f3 %f4 %f5 %f6 %f7 %f8 %f9 %f10
 				  %f11 %f12 %f13 %f14 %f15 %f16 %f17 %f18))))
-    (if (member fname *flet-names* :test #'eq)
+    (if (assoc fname *flet-names*)
 	(make-random-integer-form size)
       (destructuring-bind (s1 s2) (random-partition (max 2 (1- size)) 2)
-	(let ((op (random-from-seq #(flet labels)))
-	      (form1
-	       ;; Allow return-from of the flet/labels function
-	       (let ((*random-int-form-blocks*
-		      (cons fname *random-int-form-blocks*)))
-		 (make-random-integer-form s1)))
-	      (form2 (let ((*flet-names* (cons fname *flet-names*)))
-		       (make-random-integer-form s2))))
-	  `(,op ((,fname () ,form1)) ,form2))))))
+	(let* ((op (random-from-seq #(flet labels)))
+	       (nargs (random 4))
+	       (arg-names (loop for i from 1 to nargs
+				collect (fn-arg-name fname i)))
+	       (form1
+		;; Allow return-from of the flet/labels function
+		(let ((*random-int-form-blocks*
+		       (cons fname *random-int-form-blocks*))
+		      (*vars* (nconc (loop for var in arg-names
+					   collect (make-var-desc :name var
+								  :type '(integer * *)))
+				     *vars*)))
+		  (make-random-integer-form s1)))
+	       (form2 (let ((*flet-names* (cons (list fname nargs)
+						*flet-names*)))
+			(make-random-integer-form s2))))
+	  `(,op ((,fname ,arg-names ,form1)) ,form2))))))
 
 (defun make-random-pred-form (size)
   "Make a random form whose value is to be used as a generalized boolean."
@@ -451,6 +520,10 @@
      (declare (optimize (debug 0)))
      ,form))
 
+(defvar *compile-using-defun* #-(or allegro lispworks) nil #+(or allegro lispworks) t)
+(defvar *name-to-use-in-optimized-defun* 'dummy-fn-name1)
+(defvar *name-to-use-in-unoptimized-defun* 'dummy-fn-name2)
+
 (defun test-int-form (form vars var-types vals-list)
   ;; Try to compile FORM with associated VARS, and if it compiles
   ;; check for equality of the two compiled forms.
@@ -462,7 +535,7 @@
 	  *optimized-fn-src* optimized-fn-src
 	  *unoptimized-fn-src* unoptimized-fn-src)
     (flet ((%compile
-	    (lambda-form)
+	    (lambda-form opt-defun-name)
 	    (handler-bind
 	     (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 		     (warning #'muffle-warning)
@@ -479,13 +552,21 @@
 						(*standard-output*)
 						(let ((*print-escape* t))
 						  (prin1 c)))))))))
-	     (prog1 (compile nil lambda-form)
+	     (prog1
+		 (if *compile-using-defun*
+		     (progn
+		       (eval `(defun ,opt-defun-name
+				,@(cdr lambda-form)))
+		       (compile opt-defun-name)
+		       (symbol-function opt-defun-name))
+		   (compile nil lambda-form))
 	       #+:ecl (si:gc t)
 	       ))))
-      (let ((optimized-compiled-fn   (%compile optimized-fn-src))
+      (let ((optimized-compiled-fn (%compile optimized-fn-src
+					     *name-to-use-in-optimized-defun*))
 	    (unoptimized-compiled-fn
 	     (if *compile-unoptimized-form*
-		 (%compile unoptimized-fn-src)
+		 (%compile unoptimized-fn-src *name-to-use-in-unoptimized-defun*)
 	       (eval `(function ,unoptimized-fn-src)))))
 	(declare (type function optimized-compiled-fn unoptimized-compiled-fn))
 	(dolist (vals vals-list)
@@ -582,15 +663,43 @@
 	  (try -1)
 	  (prune-fn form try-fn))
 	 
-	 ((abs 1+ 1- identity values progn prog1 multiple-value-prog1 unwind-protect)
+	 ((abs 1+ 1- identity values progn prog1 multiple-value-prog1 unwind-protect
+	       ignore-errors handler-case restart-case locally)
+	  (mapc #'try args)
+	  (prune-fn form try-fn))
+
+	 ((load-time-value)
+	  (let ((arg (first args)))
+	    (try arg)
+	    (cond
+	     ((cdr args)
+	      (try `(load-time-value ,arg))
+	      (prune arg
+		     #'(lambda (form)
+			 (try `(load-time-value ,form ,(second args))))))
+	     (t
+	      (prune arg
+		     #'(lambda (form)
+			 (try `(load-time-value ,form))))))))
+
+	 ((the macrolet handler-bind)
+	  (assert (= (length args) 2))
+	  (try (second args))
+	  (prune (second args)
+		 #'(lambda (form) (try `(the ,(first args) ,form)))))
+	 
+	 ((not eq eql equal)
+	  (when (every #'constantp args)
+	    (try (eval form)))
 	  (mapc #'try args)
 	  (prune-fn form try-fn))
 	 
 	 ((- + * min max logand logior logxor logeqv
-	     and or not eq eql equal = < > <= >= /=)
+	     and or = < > <= >= /=)
 	  (when (every #'constantp args)
 	    (try (eval form)))
 	  (mapc #'try args)
+	  (prune-nary-fn form try-fn)
 	  (prune-fn form try-fn))
 	 
 	 ((if)
@@ -792,6 +901,17 @@
 		  #'(lambda (cases)
 		      (try `(,op ,expr ,@cases)))))))
 
+(defun prune-nary-fn (form try-fn)
+  ;; Attempt to reduce the number of arguments to the fn
+  ;; Do not reduce below 1
+  (let* ((op (car form))
+	 (args (cdr form))
+	 (nargs (length args)))
+    (when (> nargs 1)
+      (loop for i from 1 to nargs
+	    do (funcall try-fn `(,op ,@(subseq args 0 (1- i))
+				     ,@(subseq args i)))))))
+
 (defun prune-fn (form try-fn)
   "Attempt to simplify a function call form.  It is considered
    acceptable to replace the call by one of its argument forms."
@@ -902,3 +1022,42 @@
 	     #'(lambda (form2)
 		 (funcall try-fn
 			  `(,@(butlast form) ,form2)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;;; Convert pruned results to test cases
+
+(defun produce-test-cases (instances &key
+				     (stream *standard-output*)
+				     (prefix "MISC.")
+				     (index 1))
+  (dolist (inst instances)
+    (let* (;; (vars (getf inst :vars))
+	   (vals (getf inst :vals))
+	   (optimized-lambda-form (getf inst :optimized-lambda-form))
+	   (unoptimized-lambda-form (getf inst :unoptimized-lambda-form))
+	   (name (intern
+		  (concatenate 'string prefix (format nil "~D" index))
+		  "CL-TEST"))
+	   (test-form
+	    `(deftest ,name
+	       (let* ((fn1 ',optimized-lambda-form)
+		      (fn2 ',unoptimized-lambda-form)
+		      (vals ',vals)
+		      (v1 (apply (compile nil fn1) vals))
+		      (v2 (apply (compile nil fn2) vals)))
+		 (if (eql v1 v2)
+		     :good
+		   (list v1 v2)))
+	       :good)))
+      (print test-form stream)
+      (terpri stream)
+      (incf index)))
+  (values))
+
+		     
+
+
+     
+		
+  
+				     
