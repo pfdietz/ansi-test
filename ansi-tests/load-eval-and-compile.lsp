@@ -9,3 +9,5 @@
 (load "define-compiler-macro.lsp")
 (load "define-symbol-macro.lsp")
 (load "defmacro.lsp")
+(load "the.lsp")
+

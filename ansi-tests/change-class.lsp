@@ -608,3 +608,33 @@
      (change-class obj new-class '(nonsense) 'a)))
   program-error)
 
+;;; According to the page for BUILT-IN-CLASS, using CHANGE-CLASS
+;;; to change the class to/from a builtin class should raise a
+;;; signal of type ERROR.
+
+(deftest change-class.error.5
+  (let ((built-in-class (find-class 'built-in-class)))
+    (loop for e in *mini-universe*
+	  for class = (class-of e)
+	  when (and (eq (class-of class) built-in-class)
+		    (handler-case
+		     (progn
+		       (change-class (make-instance 'change-class-class-01a)
+				     class)
+		       t)
+		     (error () nil)))
+	  collect e))
+  nil)
+
+(deftest change-class.error.6
+  (let ((built-in-class (find-class 'built-in-class)))
+    (loop for e in *mini-universe*
+	  for class = (class-of e)
+	  when (and (eq (class-of class) built-in-class)
+		    (handler-case
+		     (progn
+		       (change-class e (find-class 'change-class-class-01a))
+		       t)
+		     (error () nil)))
+	  collect e))
+  nil)

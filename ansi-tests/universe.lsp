@@ -377,21 +377,22 @@
 
 (defvar *mini-universe*
   (remove-duplicates
-   (mapcar #'first
-	   (list *symbols*
-		 *numbers*
-		 *characters*
-		 (mapcar #'copy-seq *strings*)
-		 *conses*
-		 *condition-objects*
-		 *package-objects*
-		 *arrays*
-		 *hash-tables*
-		 *pathnames*
-		 *streams*
-		 *readtables*
-		 *structures*
-		 *functions*
-		 *random-states*))))
-
-
+   (append
+    (mapcar #'first
+	    (list *symbols*
+		  *numbers*
+		  *characters*
+		  (list (copy-seq (first *strings*)))
+		  *conses*
+		  *condition-objects*
+		  *package-objects*
+		  *arrays*
+		  *hash-tables*
+		  *pathnames*
+		  *streams*
+		  *readtables*
+		  *structures*
+		  *functions*
+		  *random-states*))
+    '(;;; Others to fill in gaps
+      1.2s0 1.3f0 1.5d0 1.8l0 3/5 10000000000000000000000))))
