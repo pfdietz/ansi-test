@@ -8946,7 +8946,6 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;; Debugger invoked on condition of type UNDEFINED-FUNCTION:
 ;;; The function %FAILED-AVER is undefined.
 
-
 (deftest misc.475
   (let #+armedbear ((jvm::*catch-errors* nil))
        nil
@@ -8960,3 +8959,40 @@ Broken at C::WT-MAKE-CLOSURE.
 			   P6)))
 	61564048 -7457 24939545512 51 730))
   488667475944)
+
+(deftest misc.476
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (p4)
+			(declare (optimize speed (safety 1))
+				 (type (integer -115781893486) p4))
+			(- 1 -35 0 (the (integer -115778245122) p4) -2)))
+	-115778114900))
+  115778114938)
+
+(deftest misc.477
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (p4 p5)
+			(declare (optimize speed (safety 1))
+				 (type (integer -126908726190 -126906628448) p4)
+				 (type (integer * 2202) p5))
+			(* -1950 -33610502463 2 p4 p5)))
+	-126906629040 1839))
+  -30591843552678654213361992000)
+
+(deftest misc.478
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (p2)
+			(declare (optimize speed (safety 1))
+				 (type (integer * 2343679) p2))
+			(logand 12050257282405 p2 117775123 505354693 -415679150084)))
+	-6189))
+  33816832)
+
+
+
