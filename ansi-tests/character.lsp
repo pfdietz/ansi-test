@@ -392,7 +392,8 @@
 	always (eql (char-int x) (char-code x)))
   t)
 
-(deftest char-int.2
+(defun char-int.2.fn ()
+  (declare (optimize (safety 3) (speed 1) (space 1)))
   (let ((c->i (make-hash-table :test #'equal))
 	(i->c (make-hash-table :test #'eql)))
     (flet ((%insert
@@ -412,10 +413,17 @@
        (loop for i from 0 below char-code-limit
 	     always (%insert (code-char i)))
        (every #'%insert +standard-chars+)
-       (every #'%insert *universe*))))
+       (every #'%insert *universe*)
+       t))))
+
+(eval-when (load eval) (compile 'char-int.2.fn))
+
+(deftest char-int.2
+  (char-int.2.fn)
   t)
 
-(deftest char-name.1
+(defun char-name.1.fn ()
+  (declare (optimize (safety 3) (speed 1) (space 1)))
   (flet ((%check
 	  (c)
 	  (or (not (characterp c))
@@ -427,7 +435,13 @@
      (loop for i from 0 below char-code-limit
 	   always (%check (code-char i)))
      (every #'%check +standard-chars+)
-     (every #'%check *universe*)))
+     (every #'%check *universe*)
+     t)))
+
+(eval-when (load eval) (compile 'char-name.1.fn))
+
+(deftest char-name.1
+  (char-name.1.fn)
   t)
 
 (deftest char-name.2
@@ -461,14 +475,19 @@
   t)
 
 (deftest name-char.1
-  (loop for x in *universe*
-	for s = (catch-type-error (string x))
-	always
-	(or (eql s 'type-error)
-	    (let ((c (name-char x)))
-	      (or (not c)
-		  (characterp c)
-		  (string-equal (char-name c) s)))))
+  (funcall
+   (compile nil
+	    '(lambda ()
+	       (declare (safety 3) (speed 1) (space 1))
+	       (notnot
+		(loop for x in *universe*
+		      for s = (catch-type-error (string x))
+		      always
+		      (or (eql s 'type-error)
+			  (let ((c (name-char x)))
+			    (or (not c)
+				(characterp c)
+				(string-equal (char-name c) s)))))))))
   t)
 
 (deftest name-char.2
