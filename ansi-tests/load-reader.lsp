@@ -10,4 +10,5 @@
 (load "copy-readtable.lsp")
 (load "read.lsp")
 (load "read-preserving-whitespace.lsp")
-
+(load "read-delimited-list.lsp")
+(load "read-from-string.lsp")
