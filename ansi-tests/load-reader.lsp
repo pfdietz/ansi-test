@@ -7,3 +7,7 @@
 
 (load "reader-test.lsp")
 (load "with-standard-io-syntax.lsp")
+(load "copy-readtable.lsp")
+(load "read.lsp")
+(load "read-preserving-whitespace.lsp")
+
