@@ -1,11 +1,10 @@
 ();-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:04:56 1998
-;;;; Contains: Package test code, part 12
+;;;; Contains: Tests of UNINTERN
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; unintern

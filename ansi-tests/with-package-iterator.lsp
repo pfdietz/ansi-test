@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:03:36 1998
-;;;; Contains: Package test code, part 10
+;;;; Contains: Tests of WITH-PACKAGE-ITERATOR
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

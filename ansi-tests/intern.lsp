@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 07:59:10 1998
-;;;; Contains: Package test code, part 04
+;;;; Contains: Tests of INTERN
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

@@ -28,3 +28,5 @@ Things to do to the test suite (not a complete list)
 12. Make sure all string operators work on displaced character vectors.
 
 14. Finish testing DEFSETF
+
+15. All tests for DO-ALL-SYMBOLS

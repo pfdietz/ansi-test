@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:06:03 1998
-;;;; Contains: Package test code, part 13
+;;;; Contains: Tests of IN-PACKAGE
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 07:49:34 1998
-;;;; Contains: Package test code, part 01
+;;;; Contains: Tests for FIND-SYMBOL
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

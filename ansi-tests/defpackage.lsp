@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:09:18 1998
-;;;; Contains: Package test code, part 16
+;;;; Contains: Tests of DEFPACKAGE
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

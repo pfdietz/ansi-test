@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:00:28 1998
-;;;; Contains: Package test code, part 06
+;;;; Contains: Tests of RENAME-PACKAGE
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

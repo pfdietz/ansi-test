@@ -29,7 +29,7 @@
 
 ;;; Tests of packages
 
-(load "packages.lsp")
+(load "load-packages.lsp")
 
 ;;; Tests of numbers (section 12)
 (load "load-numbers.lsp")

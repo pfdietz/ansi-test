@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:02:43 1998
-;;;; Contains: Package test code, part 09
+;;;; Contains: Tests of MAKE-PACKAGE
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

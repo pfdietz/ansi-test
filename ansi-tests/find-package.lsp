@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 07:50:39 1998
-;;;; Contains: Package test code, aprt 02
+;;;; Contains: Tests for FIND-PACKAGE
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))

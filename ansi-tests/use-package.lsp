@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sat Apr 25 08:08:41 1998
-;;;; Contains: Package test code, part 15
+;;;; Contains: Tests of USE-PACKAGE
 
 (in-package :cl-test)
 (declaim (optimize (safety 3)))
@@ -208,4 +208,3 @@
     (make-package "UPE2A" :use ())
     (signals-error (use-package "UPE2" "UPE2A" nil) program-error))
   t)
-
