@@ -129,7 +129,7 @@
 		   :rval rval))
        (unless (funcall test result rval)
 	 (return *random-type-prop-result*))))
-  #+allegro (excl::gc t)
+    ;; #+allegro (excl::gc t)
   ))))
 
 (defun make-random-arguments (types-or-funs)
@@ -333,3 +333,49 @@
 		     (find-package :cl-test))
      (do-random-type-prop-tests ,@args)
      nil))
+
+;;; Function used in constructing list types for some random type prop tests
+
+(defun make-list-type (length &optional (rest-type 'null) (element-type t))
+  (let ((result rest-type))
+    (loop repeat length
+	  do (setq result `(cons ,element-type ,result)))
+    result))
+
+(defun same-set-p (set1 set2 &rest args &key key test test-not)
+  (declare (ignorable key test test-not))
+  (and (apply #'subsetp set1 set2 args)
+       (apply #'subsetp set2 set2 args)
+       t))
+
+(defun index-type-for-dim (dim)
+  "Returns a function that computes integer type for valid indices
+   of an array dimension, or NIL if there are none."
+  #'(lambda (array &rest other)
+      (declare (ignore other))
+      (let ((d (array-dimension array dim)))
+	(and (> d 0) `(integer 0 (,d))))))
+
+(defun index-type-for-v1 (v1 &rest other)
+  "Computes integer type for valid indices for the first of two vectors"
+  (declare (ignore other))
+  (let ((d (length v1))) `(integer 0 ,d)))
+
+(defun index-type-for-v2 (v1 v2 &rest other)
+  "Computes integer type for valid indices for the second of two vectors"
+  (declare (ignore v1 other))
+  (let ((d (length v2))) `(integer 0 ,d)))
+
+(defun end-type-for-v1 (v1 v2 &rest other)
+  (declare (ignore v2))
+  (let ((d (length v1))
+	(start1 (or (cadr (member :start1 other)) 0)))
+    `(integer ,start1 ,d)))
+
+(defun end-type-for-v2 (v1 v2 &rest other)
+  (declare (ignore v1))
+  (let ((d (length v2))
+	(start2 (or (cadr (member :start2 other)) 0)))
+    `(integer ,start2 ,d)))
+
+
