@@ -253,7 +253,7 @@
 	 (a2 (adjust-array a1 '(2 3) :element-type 'character)))
     (assert (if (adjustable-array-p a1)
 		(eq a1 a2)
-	      (equal (array-dimensions a1) '(2 3))))
+	      (equal (array-dimensions a2) '(2 3))))
     (assert (not (typep 0 (array-element-type a2))))
     a2)
   #2a((#\1 #\2 #\3)(#\3 #\4 #\5)))
