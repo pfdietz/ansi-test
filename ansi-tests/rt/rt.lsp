@@ -124,7 +124,7 @@
     (setq *test* (name entry))
     (setf (pend entry) t)
     (let* ((*in-test* t)
-	   (*break-on-warnings* t)
+	   ;; (*break-on-warnings* t)
 	   (aborted nil)
 	   (r (if *catch-errors*
 		  (handler-case (multiple-value-list
