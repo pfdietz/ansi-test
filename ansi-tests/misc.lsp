@@ -3297,20 +3297,24 @@
 
 ;;; gcl bug (30-11-2003)
 ;;; Different results
+;;; These tests appear to be for the same bug.
 
 (deftest misc.198
   (let* ((form '(min (catch 'ct4 (throw 'ct4 (setq c 29119897960))) c))
          (fn1 `(lambda (c)
                  (declare (type (integer -70450 39128850560) c))
-                 (declare (optimize (speed 3) (safety 1) (debug 1)))
-                 ,form))
-         (fn2 `(lambda (c)
-                 (declare (notinline min))
-                 (declare (optimize (safety 3) (speed 0) (debug 3)))
+                 (declare (optimize (speed 3) (safety 1)))
                  ,form)))
-    (let ((result1 (funcall (compile nil fn1) 3512352656))
-          (result2 (funcall (compile nil fn2) 3512352656)))
-      (if (eql result1 result2)
-          :good
-        (list result1 result2))))
-  :good)
+    (funcall (compile nil fn1) 3512352656))
+  29119897960)
+
+(deftest misc.199
+  (let* ((fn '(lambda (b)
+		(declare (type (integer 3352138624 13120037248) b))
+		(declare (optimize (speed 3) (safety 1) (space 1)))
+		(progn (catch 'ct1
+			 (progn (setq b 11159349376)
+				(throw 'ct1 0)))
+		       b))))
+    (funcall (compile nil fn) 4108962100))
+  11159349376)
