@@ -11,8 +11,9 @@
   a)
 
 (deftest ctypecase.2
-  (let ((x 1))
-    (classify-error (ctypecase x (symbol 'a))))
+  (classify-error
+   (let ((x 1))
+     (ctypecase x (symbol 'a))))
   type-error)
 
 (deftest ctypecase.3

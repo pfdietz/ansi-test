@@ -54,23 +54,27 @@
   t (x x x x x))
 
 (deftest array-fill-7
-  (let* ((a (make-array '(5))))
-    (classify-error (fill a 'x :start -1)))
+  (classify-error
+   (let* ((a (make-array '(5))))
+     (fill a 'x :start -1)))
   type-error)
 
 (deftest array-fill-8
-  (let* ((a (make-array '(5))))
-    (classify-error (fill a 'x :start 'a)))
+  (classify-error
+   (let* ((a (make-array '(5))))
+     (fill a 'x :start 'a)))
   type-error)
 
 (deftest array-fill-9
-  (let* ((a (make-array '(5))))
-    (classify-error (fill a 'x :end -1)))
+  (classify-error
+   (let* ((a (make-array '(5))))
+     (fill a 'x :end -1)))
   type-error)
 
 (deftest array-fill-10
-  (let* ((a (make-array '(5))))
-    (classify-error (fill a 'x :end 'a)))
+  (classify-error
+   (let* ((a (make-array '(5))))
+     (fill a 'x :end 'a)))
   type-error)
 
 ;;; fill on arrays of fixnums
@@ -118,23 +122,27 @@
   t (-1 -1 -1 -1 -1))
 
 (deftest array-fixnum-fill-7
-  (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (classify-error (fill a 10 :start -1)))
+  (classify-error
+   (let* ((a (make-array '(5) :element-type 'fixnum)))
+     (fill a 10 :start -1)))
   type-error)
 
 (deftest array-fixnum-fill-8
-  (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (classify-error (fill a 100 :start 'a)))
+  (classify-error
+   (let* ((a (make-array '(5) :element-type 'fixnum)))
+     (fill a 100 :start 'a)))
   type-error)
 
 (deftest array-fixnum-fill-9
-  (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (classify-error (fill a -5 :end -1)))
+  (classify-error
+   (let* ((a (make-array '(5) :element-type 'fixnum)))
+     (fill a -5 :end -1)))
   type-error)
 
 (deftest array-fixnum-fill-10
-  (let* ((a (make-array '(5) :element-type 'fixnum)))
-    (classify-error (fill a 17 :end 'a)))
+  (classify-error
+   (let* ((a (make-array '(5) :element-type 'fixnum)))
+     (fill a 17 :end 'a)))
   type-error)
 
 ;;; fill on arrays of unsigned eight bit bytes

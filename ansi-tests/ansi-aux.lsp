@@ -121,7 +121,7 @@ condition itself on other errors."
      (type-error () 'type-error)
      (error (c) c))))
 
-(defmacro classify-error (form)
+(defmacro classify-error* (form)
 "Evaluate form in safe mode, returning its value if there is no error.
 If an error does occur, return a symbol classify the error, or allow
 the condition to go uncaught if it cannot be classified."
@@ -133,6 +133,9 @@ the condition to go uncaught if it cannot be classified."
      (type-error    () 'type-error)
      (control-error () 'control-error)
   )))
+
+(defmacro classify-error (form)
+  `(classify-error* (eval ',form)))
 
 ;;;
 ;;; A scaffold is a structure that is used to remember the object

@@ -11,7 +11,7 @@
   (loop for f in '(char= char/= char< char> char<= char>=
 		   char-lessp char-greaterp char-equal
 		   char-not-lessp char-not-greaterp char-not-equal)
-	collect (classify-error (funcall f)))
+	collect (eval `(classify-error (funcall ',f))))
   (program-error program-error program-error program-error 
    program-error program-error program-error program-error
    program-error program-error program-error program-error

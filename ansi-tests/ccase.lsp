@@ -11,26 +11,29 @@
   2)
 
 (deftest ccase.2
-  (let ((x 1))
-    (classify-error (ccase x)))
+  (classify-error 
+   (let ((x 1)) (ccase x)))
   type-error)
 
 (deftest ccase.3
-  (let ((x 1))
-    (classify-error (ccase x (a 1) (b 2) (c 3))))
+  (classify-error
+   (let ((x 1))
+     (ccase x (a 1) (b 2) (c 3))))
   type-error)
 
 ;;; It is legal to use T or OTHERWISE as key designators
 ;;; in CCASE forms.  They have no special meaning here.
 
 (deftest ccase.4
-  (let ((x 1))
-    (classify-error (ccase x (t nil))))
+  (classify-error
+   (let ((x 1))
+     (ccase x (t nil))))
   type-error)
 
 (deftest ccase.5
-  (let ((x 1))
-    (classify-error (ccase x (otherwise nil))))
+  (classify-error
+   (let ((x 1))
+     (ccase x (otherwise nil))))
   type-error)
 
 (deftest ccase.6
@@ -52,8 +55,9 @@
   a)
 
 (deftest ccase.9
-  (let (x)
-    (classify-error (ccase x (nil 'a))))
+  (classify-error
+   (let (x)
+     (ccase x (nil 'a))))
   type-error)
 
 (deftest ccase.10
@@ -67,8 +71,9 @@
   1 2 3)
 
 (deftest ccase.12
-  (let ((x t))
-    (classify-error (ccase x (a 10))))
+  (classify-error
+   (let ((x t))
+     (ccase x (a 10))))
   type-error)
 
 (deftest ccase.13
@@ -82,23 +87,27 @@
   1)
 
 (deftest ccase.15
-  (let ((x 'otherwise))
-    (classify-error (ccase x ((t) 10))))
+  (classify-error
+   (let ((x 'otherwise))
+     (ccase x ((t) 10))))
   type-error)
 
 (deftest ccase.16
-  (let ((x t))
-    (classify-error (ccase x ((otherwise) 10))))
+  (classify-error
+   (let ((x t))
+     (ccase x ((otherwise) 10))))
   type-error)
 
 (deftest ccase.17
-  (let ((x 'a))
-    (classify-error (ccase x (b 0) (c 1) (otherwise 2))))
+  (classify-error
+   (let ((x 'a))
+     (ccase x (b 0) (c 1) (otherwise 2))))
   type-error)
 
 (deftest ccase.19
-  (let ((x 'a))
-    (classify-error (ccase x (b 0) (c 1) ((t) 2))))
+  (classify-error
+   (let ((x 'a))
+     (ccase x (b 0) (c 1) ((t) 2))))
   type-error)
 
 (deftest ccase.20

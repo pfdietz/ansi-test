@@ -8,7 +8,7 @@
 (declaim (optimize (safety 3)))
 
 (defun safe-elt (x n)
-  (classify-error (elt x n)))
+  (classify-error* (elt x n)))
 
 ;; elt on lists
 

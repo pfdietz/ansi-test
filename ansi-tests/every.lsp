@@ -106,17 +106,6 @@
 (deftest every.23
   (classify-error (every #'eq () 'a))
   type-error)
-
-
-
-
-
-
-
-
-
-
-
   
   
 
