@@ -32,11 +32,18 @@
   (let* ((seq (if (subtypep* type 'list)
 		  (loop for i from 1 to len collect
 			(make-random-element element-type))
-		(let ((seq (make-sequence type len)))
+		(let ((seq (if (and (subtypep type 'vector)
+				    (coin 3))
+			       (make-array
+				(list (+ len (random len)))
+				:initial-element (make-random-element element-type)
+				:fill-pointer len
+				:element-type element-type)
+			       (make-sequence type len))))
 		  (dotimes (i len)
 		    (setf (elt seq i) (make-random-element element-type)))
 		  seq)))
-	 (e (if (and (> len 0) (eql (random 2) 0))
+	 (e (if (and (> len 0) (coin))
 		(elt seq (random len))
 	      (make-random-element element-type)))
 	 )
@@ -186,6 +193,8 @@
 		     (when test-not (list :test test-not)))))))
       (values element seq arg-list))))
 
+(defparameter *remove-fail-args* nil)
+
 (defun random-test-remove (maxlen &key (tested-fn #'remove)
 				  (check-fn #'my-remove)
 				  (pure t))
@@ -195,13 +204,12 @@
 	   (seq2 (copy-seq seq))
 	   (seq1r (apply tested-fn element seq1 arg-list))
 	   (seq2r (apply check-fn element seq2 arg-list)))
+      (setq *remove-fail-args* (list* element seq1 arg-list))
       (cond
        ((and pure (not (equalp seq seq1))) :fail1)
        ((and pure (not (equalp seq seq2))) :fail2)
        ((not (equalp seq1r seq2r)) :fail3)
        (t t)))))
-
-(defparameter *remove-fail-args* nil)
 
 (defun random-test-remove-if (maxlen &optional (negate nil))
   (multiple-value-bind (element seq arg-list)
@@ -251,6 +259,7 @@
 	    (t nil))
 	(setf fn (if (coin) 'identity
 		   #'(lambda (x) (funcall test element x)))))
+      (setq *remove-fail-args* (list* seq arg-list))
       (let* ((seq1 (copy-seq seq))
 	     (seq2 (copy-seq seq))
 	     (seq1r (apply (if negate #'delete-if-not #'delete-if)

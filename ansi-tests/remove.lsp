@@ -282,6 +282,31 @@
 	 (equalpt x y)))
   t)
 
+(deftest remove-vector.1
+  (remove 'a (vector 'b 'c 'd))
+  #(b c d))
+
+(deftest remove-vector.2
+  (remove 'a (vector 'b 'c 'd) :count -1)
+  #(b c d))
+
+(deftest remove-vector.3
+  (remove 'a (vector 'a 'b 'c 'd) :count -1)
+  #(a b c d))
+
+(deftest delete-vector.1
+  (delete 'a (vector 'b 'c 'd))
+  #(b c d))
+
+(deftest delete-vector.2
+  (delete 'a (vector 'b 'c 'd) :count -1)
+  #(b c d))
+
+(deftest delete-vector.3
+  (delete 'a (vector 'a 'b 'c 'd) :count -1)
+  #(a b c d))
+
+
 ;;; Randomized tests
 
 (deftest remove-random
