@@ -386,3 +386,18 @@
   (nil t)
   foo)
 
+(deftest shared-initialize.5.3
+  (let* ((class (find-class 'shared-init-class-05))
+	 (obj (allocate-instance class))
+	 (obj2 (allocate-instance class)))
+    (slot-makunbound obj 'a)
+    (slot-makunbound obj 'b)
+    (values
+     (eqt obj (shared-initialize obj t :a 117))
+     (map-slot-boundp* obj '(a b))
+     (map-slot-value obj '(a b))
+     (map-slot-value obj2 '(a b))))
+  t
+  (t t)
+  (117 foo)
+  (117 foo))
