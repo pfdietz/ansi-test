@@ -17,4 +17,3 @@
      (unless (equal p1 p2)
        (list (list p1 s p2))))))
   nil)
-

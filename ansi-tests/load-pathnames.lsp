@@ -6,4 +6,5 @@
 (in-package :cl-test)
 
 (load "pathnames.lsp")
-
+(load "pathname.lsp")
+(load "make-pathname.lsp")

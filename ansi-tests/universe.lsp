@@ -317,19 +317,19 @@
      ))
 
 (defparameter *pathnames*
-    (list
-     (make-pathname :name "foo")
-     (make-pathname :name "bar")
-     (make-pathname :name "foo" :type "txt")
-     (make-pathname :name "bar" :type "txt")
-     (make-pathname :name nil)
-     (make-pathname :name :wild)
-     (make-pathname :name nil :type "txt")
-     (make-pathname :name :wild :type "txt")
-     (make-pathname :directory :wild)
-     (make-pathname :type :wild)
-     (make-pathname :version :wild)
-     (make-pathname :version :newest)
+    (append
+     (ignore-errors (list (make-pathname :name "foo")))
+     (ignore-errors (list (make-pathname :name "bar")))
+     (ignore-errors (list (make-pathname :name "foo" :type "txt")))
+     (ignore-errors (list (make-pathname :name "bar" :type "txt")))
+     (ignore-errors (list (make-pathname :name nil)))
+     (ignore-errors (list (make-pathname :name :wild)))
+     (ignore-errors (list (make-pathname :name nil :type "txt")))
+     (ignore-errors (list (make-pathname :name :wild :type "txt")))
+     (ignore-errors (list (make-pathname :directory :wild)))
+     (ignore-errors (list (make-pathname :type :wild)))
+     (ignore-errors (list (make-pathname :version :wild)))
+     (ignore-errors (list (make-pathname :version :newest)))
      ))
 
 (defparameter *streams*
