@@ -376,7 +376,8 @@ the condition to go uncaught if it cannot be classified."
 
 (defun compose (&rest fns)
   (let ((rfns (reverse fns)))
-    #'(lambda (x) (loop for f in rfns do (setf x (funcall f x))) x)))
+    #'(lambda (x) (loop for f of-type function
+			in rfns do (setf x (funcall f x))) x)))
 
 (defun evendigitp (c)
   (notnot (find c "02468")))
@@ -1443,7 +1444,11 @@ the condition to go uncaught if it cannot be classified."
   (not (not (typep element type))))
 
 (defun applyf (fn &rest args)
-  #'(lambda (&rest more-args) (apply fn (append args more-args))))
+  (etypecase fn
+    (symbol
+     #'(lambda (&rest more-args) (apply (the symbol fn) (append args more-args))))
+    (function
+     #'(lambda (&rest more-args) (apply (the function fn) (append args more-args))))))
 
 (defun slot-boundp* (object slot)
   (notnot (slot-boundp object slot)))

@@ -25,6 +25,11 @@
 
 (in-package :regression-test)
 
+(declaim (ftype (function (t) t) get-entry expanded-eval do-entries))
+(declaim (type list *entries*))
+(declaim (ftype (function (t &rest t) t) report-error))
+(declaim (ftype (function (t &optional t) t) do-entry))
+
 (defvar *test* nil "Current test name")
 (defvar *do-tests-when-defined* nil)
 (defvar *entries* '(nil) "Test database")
@@ -41,13 +46,15 @@
 (defvar *expected-failures* nil
   "A list of test names that are expected to fail.")
 
-(defstruct (entry (:conc-name nil)
-		  (:type list))
-  pend name form)
+(defstruct (entry (:conc-name nil))
+  pend name props form vals)
 
-(defmacro vals (entry) `(cdddr ,entry))
+;; (defmacro vals (entry) `(cdddr ,entry))
 
-(defmacro defn (entry) `(cdr ,entry))
+(defmacro defn (entry)
+  (let ((var (gensym)))
+    `(let ((,var ,entry))
+       (list* (name ,var) (form ,var) (vals ,var)))))
 
 (defun pending-tests ()
   (do ((l (cdr *entries*) (cdr l))
@@ -71,7 +78,7 @@
   (defn (get-entry name)))
 
 (defun get-entry (name)
-  (let ((entry (find name (cdr *entries*)
+  (let ((entry (find name (the list (cdr *entries*))
 		     :key #'name
 		     :test #'equal)))
     (when (null entry)
@@ -80,11 +87,24 @@
 	name))
     entry))
 
-(defmacro deftest (name form &rest values)
-  `(add-entry '(t ,name ,form .,values)))
+(defmacro deftest (name &rest body)
+  (let* ((p body)
+	 (properties
+	  (loop while (keywordp (first p))
+		unless (cadr p)
+		do (error "Poorly formed deftest: ~A~%"
+			  (list* 'deftest name body))
+		append (list (pop p) (pop p))))
+	 (form (pop p))
+	 (vals p))
+    `(add-entry (make-entry :pend t
+			    :name ',name
+			    :props ',properties
+			    :form ',form
+			    :vals ',vals))))
 
 (defun add-entry (entry)
-  (setq entry (copy-list entry))
+  (setq entry (copy-entry entry))
   (do ((l *entries* (cdr l))) (nil)
     (when (null (cdr l))
       (setf (cdr l) (list entry))
@@ -105,7 +125,8 @@
 	 (apply #'format t args)
 	 (if error? (throw '*debug* nil)))
 	(error? (apply #'error args))
-	(t (apply #'warn args))))
+	(t (apply #'warn args)))
+  nil)
 
 (defun do-test (&optional (name *test*))
   (do-entry (get-entry name)))
@@ -136,15 +157,6 @@
 	 (not (equal (array-dimensions x)
 		     (array-dimensions y))))
     nil)
-   #|
-   ((and (typep x 'array)
-	 (= (array-rank x) 2))
-    (let ((dim (array-dimensions x)))
-      (loop for i from 0 below (first dim)
-	    always (loop for j from 0 below (second dim)
-			 always (equalp-with-case (aref x i j)
-						  (aref y i j))))))
-   |#
 
    ((typep x 'array)
     (and (typep y 'array)
@@ -226,7 +238,8 @@
 	      (vars (mapcar #'car bindings))
 	      (binding-forms (mapcar #'cadr bindings)))
 	 (apply
-	  (eval `(lambda ,vars ,@(cddr form)))
+	  (the function
+	    (eval `(lambda ,vars ,@(cddr form))))
 	  (mapcar #'eval binding-forms))))
       ((and (eq op 'let*) (cadr form))
        (let* ((bindings (loop for b in (cadr form)
@@ -234,7 +247,8 @@
 	      (vars (mapcar #'car bindings))
 	      (binding-forms (mapcar #'cadr bindings)))
 	 (funcall
-	  (eval `(lambda (,(car vars) &aux ,@(cdr bindings)) ,@(cddr form)))
+	  (the function
+	    (eval `(lambda (,(car vars) &aux ,@(cdr bindings)) ,@(cddr form))))
 	  (eval (car binding-forms)))))
       ((eq op 'progn)
        (loop for e on (cdr form)
