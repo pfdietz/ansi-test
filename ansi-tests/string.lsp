@@ -89,6 +89,7 @@
   nil t)
 
 (deftest base-string.6
+  :notes (:nil-vectors-are-strings)
   (subtypep* 'string 'base-string)
   nil t)
 
@@ -123,14 +124,17 @@
   t t)
 
 (deftest simple-string.8
+  :notes (:nil-vectors-are-strings)
   (subtypep* 'simple-string '(simple-array character (*)))
   nil t)
 
 (deftest simple-string.9
+  :notes (:nil-vectors-are-strings)
   (subtypep* 'simple-string '(simple-array base-char (*)))
   nil t)
 
 (deftest simple-string.10
+  :notes (:nil-vectors-are-strings)
   (subtypep* 'simple-string 'simple-base-string)
   nil t)
 
