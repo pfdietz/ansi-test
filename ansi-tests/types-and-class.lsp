@@ -184,6 +184,21 @@
 	 append (check-subtypep t `(or (not ,type) ,type) t)))
   nil)
 
+(defclass tac-1-class () (a b c))
+(defclass tac-1a-class (tac-1-class) (d e))
+(defclass tac-1b-class (tac-1-class) (f g))
+
+(deftest user-class-disjointness
+  (loop for l in *disjoint-types-list2*
+	append
+	(loop
+	 for type in l
+	 append (classes-are-disjoint type 'tac-1-class)))
+  nil)
+
+(deftest user-class-disjointness-2
+  (check-disjointness 'tac-1a-class 'tac-1b-class)
+  nil)  
 
 (deftest integer-and-ratio-are-disjoint
   (classes-are-disjoint 'integer 'ratio)
