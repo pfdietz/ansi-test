@@ -11,3 +11,16 @@
   t)
 
 
+;;; Error tests
+
+(deftest logical-pathname.error.1
+  (loop for x in *mini-universe*
+	unless (or (stringp x)
+		   (typep x 'stream)
+		   (typep x 'logical-pathname)
+		   (eq
+		    (eval `(classify-error (logical-pathname ',x)))
+		    'type-error))
+	collect x)
+  nil)
+
