@@ -16,9 +16,9 @@
   "#0A0")
 
 (deftest print.array.2
-  (let ((a (make-array nil :initial-element '|A|))
-	(*package* (find-package "CL-TEST")))
-    (with-standard-io-syntax
+  (with-standard-io-syntax
+   (let ((a (make-array nil :initial-element '|A|))
+	 (*package* (find-package "CL-TEST")))
      (write-to-string a :readably nil :array t)))
   "#0AA")
 
