@@ -215,3 +215,18 @@
   t t t
   x y z)
 
+;;;
+
+;;; Initforms are inherited even if :allocation changes
+
+(defclass class-0208a ()
+  ((a :allocation :class :initform 'x)))
+
+(defclass class-0208b (class-0208a)
+  ((a :allocation :instance)))
+
+(deftest class-0208.1
+  (values
+   (slot-value (make-instance 'class-0208a) 'a)
+   (slot-value (make-instance 'class-0208b) 'a))
+  x x)
