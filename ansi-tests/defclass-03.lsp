@@ -218,7 +218,7 @@
 	 (typep* obj1 class2)))))
   t nil t nil)
 
-(deftest class-0309.2
+(deftest class-0310.1
   (progn
     (setf (find-class 'class-0310a) nil
 	  (find-class 'class-0310b) nil)
@@ -235,7 +235,7 @@
 	 (class-name class2)))))
   t nil t nil class-0310b class-0310a)
 
-(deftest class-0309.3
+(deftest class-0311.1
   (progn
     (setf (find-class 'class-0311) nil)
     (let* ((class1 (eval '(defclass class-0311 () ((a) (b) (c)))))
