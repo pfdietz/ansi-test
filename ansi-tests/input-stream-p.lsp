@@ -37,9 +37,7 @@
 (deftest input-stream-p.error.3
   (loop for x in *mini-universe*
 	unless (or (typep x 'stream)
-		   (not (eq (eval `(classify-error (input-stream-p ',x)))
-			    'type-error)))
+		   (eq (eval `(classify-error (input-stream-p ',x)))
+		       'type-error))
 	collect x)
   nil)
-
-
