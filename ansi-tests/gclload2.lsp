@@ -10,6 +10,8 @@
 ;;; Tests of data and control flow
 
 (load "places.lsp")
+
+(load "and.lsp")
 (load "block.lsp")
 (load "call-arguments-limit.lsp")
 (load "catch.lsp")
@@ -39,6 +41,7 @@
 (load "not-and-null.lsp")
 (load "notany.lsp")
 (load "notevery.lsp")
+(load "or.lsp")
 (load "progv.lsp")
 (load "some.lsp")
 (load "t.lsp")
