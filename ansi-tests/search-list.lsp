@@ -139,13 +139,13 @@
 (deftest search-list.15
   (let ((pat '(10))
 	(target '(1 4 6 10 15 20)))
-    (search pat target :test #'>))
+    (search pat target :test #'<))
   4)
 
 (deftest search-list.16
   (let ((pat '(10))
 	(target '(1 4 6 10 15 20)))
-    (search pat target :test-not #'<=))
+    (search pat target :test-not #'>=))
   4)
 
 (defharmless search.test-and-test-not.1
