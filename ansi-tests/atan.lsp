@@ -6,8 +6,10 @@
 (in-package :cl-test)
 
 (deftest atan.1
-  (atan 0)
-  0.0)
+  (let ((result (atan 0)))
+    (or (eqlt result 0)
+	(eqlt result 0.0)))
+  t)
 
 (deftest atan.2
   (loop for type in '(short-float single-float double-float long-float)
