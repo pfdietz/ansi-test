@@ -101,3 +101,15 @@
      10
      (return-from done 'good)))
   good)
+
+;;; Executes all forms of the implicit progn
+(deftest unwind-protect.11
+  (let ((x nil) (y nil))
+    (values
+     (block nil
+       (unwind-protect (return 'a)
+	 (setf y 'c)
+	 (setf x 'b)))
+     x y))
+  a b c)
+
