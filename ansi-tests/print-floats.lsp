@@ -7,7 +7,8 @@
 
 (deftest print.short-float.1
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'short-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'short-float))
      (loop for i from -4000 to 4000
 	   for f = (float i 0.0s0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
@@ -18,13 +19,15 @@
 
 (deftest print.short-float.2
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'short-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'short-float))
      (loop for i = (- (random 20000001) 10000000)
 	   for f = (float i 0.0s0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
 	   repeat 10000
-	   unless (or (/= i f) (equalp s1 s2)) ;; not enough bits
+	   unless (or (/= i (floor f)) ; not enough bits
+		      (equalp s1 s2))
 	   collect (list i f s1 s2))))
   nil)
 
@@ -40,7 +43,8 @@
 	  nconc
 	  (and (not (subtypep 'short-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i from -4000 to 4000
 			for f = (float i 0.0s0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
@@ -59,14 +63,15 @@
 	  nconc
 	  (and (not (subtypep 'short-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i = (- (random 20000001) 10000000)
 			for f = (float i 0.0s0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
 			for len1 = (length s1)
 			for s2 = (format nil "~A.0" i)
 			repeat 10000
-			unless (or (/= i f)  ;; not enough bits
+			unless (or (/= i (floor f))  ;; not enough bits
 				   (and (> len1 4)
 					(string-equal s1 s2 :start1 0 :end1 (- len1 2))
 					(eql (char s1 (- len1 1)) #\0)
@@ -95,7 +100,8 @@
 
 (deftest print.single-float.1
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'single-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'single-float))
      (loop for i from -4000 to 4000
 	   for f = (float i 0.0f0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
@@ -106,7 +112,8 @@
 
 (deftest print.single-float.2
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'single-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'single-float))
      (loop for i = (- (random 20000001) 10000000)
 	   for f = (float i 0.0f0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
@@ -128,7 +135,8 @@
 	  nconc
 	  (and (not (subtypep 'single-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i from -4000 to 4000
 			for f = (float i 0.0f0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
@@ -147,7 +155,8 @@
 	  nconc
 	  (and (not (subtypep 'single-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i = (- (random 20000001) 10000000)
 			for f = (float i 0.0f0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
@@ -183,7 +192,8 @@
 
 (deftest print.double-float.1
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'double-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'double-float))
      (loop for i from -4000 to 4000
 	   for f = (float i 0.0d0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
@@ -194,7 +204,8 @@
 
 (deftest print.double-float.2
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'double-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'double-float))
      (loop for i = (- (random 20000001) 10000000)
 	   for f = (float i 0.0d0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
@@ -216,7 +227,8 @@
 	  nconc
 	  (and (not (subtypep 'double-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i from -4000 to 4000
 			for f = (float i 0.0d0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
@@ -235,7 +247,8 @@
 	  nconc
 	  (and (not (subtypep 'double-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i = (- (random 20000001) 10000000)
 			for f = (float i 0.0d0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
@@ -271,7 +284,8 @@
 
 (deftest print.long-float.1
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'long-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'long-float))
      (loop for i from -4000 to 4000
 	   for f = (float i 0.0l0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
@@ -282,7 +296,8 @@
 
 (deftest print.long-float.2
   (with-standard-io-syntax
-   (let ((*read-default-float-format* 'long-float))
+   (let ((*print-readably* nil)
+	 (*read-default-float-format* 'long-float))
      (loop for i = (- (random 20000001) 10000000)
 	   for f = (float i 0.0l0)
 	   for s1 = (with-output-to-string (s) (prin1 f s))
@@ -304,7 +319,8 @@
 	  nconc
 	  (and (not (subtypep 'long-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i from -4000 to 4000
 			for f = (float i 0.0l0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
@@ -323,7 +339,8 @@
 	  nconc
 	  (and (not (subtypep 'long-float type))
 	       (with-standard-io-syntax
-		(let ((*read-default-float-format* type))
+		(let ((*print-readably* nil)
+		      (*read-default-float-format* type))
 		  (loop for i = (- (random 20000001) 10000000)
 			for f = (float i 0.0l0)
 			for s1 = (with-output-to-string (s) (prin1 f s))
