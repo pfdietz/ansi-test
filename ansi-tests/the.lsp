@@ -116,3 +116,27 @@
 (deftest the.18
   (the (values symbol integer &rest t) (values 'a 1 'foo '(x y)))
   a 1 foo (x y))
+
+(deftest the.19
+  (let () (list (the (values) (eval '(values)))))
+  (nil))
+
+;;; This is from SBCL bug 261
+(deftest the.20
+  (let () (list (the (values &optional fixnum) (eval '(values)))))
+  (nil))
+
+(deftest the.21
+  (let () (list (the (values &rest t) (eval '(values)))))
+  (nil))
+
+(deftest the.22
+  (the (values symbol integer &rest t) (eval '(values 'a 1 'foo '(x y))))
+  a 1 foo (x y))
+
+(deftest the.23
+  (multiple-value-list
+   (the (values symbol integer &optional fixnum) (eval '(values 'a 1))))
+  (a 1))
+
+
