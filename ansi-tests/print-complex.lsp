@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "printer-aux.lsp")
+
 (deftest print.complex.1
   (equalt
    (with-standard-io-syntax

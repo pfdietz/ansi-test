@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "printer-aux.lsp")
+
 ;;; Tests with *print-base*
 
 (def-print-test print.integers.1 1 "1")

@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "printer-aux.lsp")
+
 (deftest print.ratios.random
   (loop for i from 1 to 1000
 	for numbits = (1+ (random 40))
