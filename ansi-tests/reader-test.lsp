@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-(declaim (optimize (safety 3)))
-
 (deftest readtable-valid (not (readtablep *readtable*)) nil)
 (deftest readtablep.1
     (and (not (readtablep nil))
@@ -34,6 +32,23 @@
 	 (not (readtablep #'car))
 	 )
   t)
+
+(deftest readtablep.2
+  (loop for x in *universe*
+	unless (if (typep x 'readtable) (readtablep x)
+		 (not (readtablep x)))
+	collect x)
+  nil)
+
+(deftest readtablep.error.1
+  (classify-error (readtablep))
+  program-error)
+
+(deftest readtablep.error.2
+  (classify-error (readtablep nil nil))
+  program-error)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftest read-symbol.1
     (let ((*package* (find-package "CL-TEST")))
@@ -152,4 +167,6 @@
    (error (c) c))
   t)
 
-  
+(deftest read-float.1
+  (eqlt -0.0 (- 0.0))
+  t)
