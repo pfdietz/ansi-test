@@ -159,3 +159,19 @@
     (eval form))
   good)
 
+;;; Check that macros are not expanded before finding tags
+;;; Test for issue TAGBODY-TAG-EXPANSION
+(deftest tagbody.17
+  (block done
+    (tagbody
+     (macrolet ((foo () 'tag))
+       (let (tag)
+	 (tagbody
+	  (go tag)
+	  (foo)
+	  (return-from done :bad))))
+     tag
+     (return-from done :good)))
+  :good)
+
+    
