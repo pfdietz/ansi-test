@@ -71,6 +71,15 @@
 	(return 'bad))
   2)
 
+(deftest prog.11
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (prog ((y x))
+	    (declare (special x))
+	    (return y))))
+  :good)
+
 (def-macro-test prog.error.1 (prog nil))
 
 ;;; Tests of PROG*
@@ -140,5 +149,14 @@
 	done
 	(return 'bad))
   2)
+
+(deftest prog*.11
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (prog* ((y x))
+	     (declare (special x))
+	     (return y))))
+  :good)
 
 (def-macro-test prog*.error.1 (prog* nil))

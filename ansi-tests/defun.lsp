@@ -43,6 +43,36 @@
  (defun (setf defun-test-fun-4) (newval x)
    (return-from defun-test-fun-4 (setf (car x) newval))))
 
+(deftest defun.5
+  (let ((x 1))
+    (declare (special x))
+    (let ((x 2))
+      (defun defun-test-fun-5 (&aux (y x))
+	(declare (special x))
+	(values y x))
+      (defun-test-fun-5)))
+  2 1)
+
+(deftest defun.6
+  (let ((x 1))
+    (declare (special x))
+    (let ((x 2))
+      (defun defun-test-fun-5 (&optional (y x))
+	(declare (special x))
+	(values y x))
+      (defun-test-fun-5)))
+  2 1)
+
+(deftest defun.7
+  (let ((x 1))
+    (declare (special x))
+    (let ((x 2))
+      (defun defun-test-fun-5 (&key (y x))
+	(declare (special x))
+	(values y x))
+      (defun-test-fun-5)))
+  2 1)
+
 ;;; Error tests
 
 (deftest defun.error.1

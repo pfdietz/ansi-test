@@ -343,3 +343,22 @@
       (labels ((%f () (declare (special x))))
 	x)))
   :good)
+
+(deftest labels.46
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (labels ((%f (&aux (y x))
+		   (declare (special x))
+		   y))
+	(%f))))
+  :good)
+
+(deftest labels.47
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (labels ((%f () x))
+	(declare (special x))
+	(%f))))
+  :good)
