@@ -50,8 +50,15 @@
   (assert (and (integerp n) (plusp size)))
   
   (loop for i from 1 to n
-	do (princ ".") (finish-output *standard-output*)
-	nconc (test-random-integer-form size nvars)))
+	do (when (= (mod i 100) 0)
+	     (prin1 i) (princ " ") (finish-output *standard-output*))
+	nconc (let ((result (test-random-integer-form size nvars)))
+		(when result
+		  (let ((*print-readably* t))
+		    (terpri)
+		    (print (car result))
+		    (finish-output *standard-output*)))
+		result)))
 
 (defun test-random-integer-form
   (size nvars &aux (vars (subseq '(a b c d e f g h i j k l m
@@ -121,10 +128,10 @@
      ;; Binary op
      (80
       (let* ((op (random-from-seq
-		  '(+ - * logand min max min max ;; gcd lcm
+		  '(+ - * * logand min max min max ;; gcd lcm
 		      #-:allegro logandc1  ;; bug in ACL 6.2 makes this cause crashes
 		      logandc2 logeqv logior lognand lognor
-		      #-:allegro logorc1
+		      #-:allegro logorc1 ;; another bug in ACL 6.2
 		      logorc2 logxor))))
 	(destructuring-bind (leftsize rightsize)
 	    (random-partition (1- size) 2)
@@ -188,18 +195,25 @@
      )))
 
 (defun make-random-flet-form (size vars)
-  "Generate random flet forms, for now with no arguments."
+  "Generate random flet, labels forms, for now with no arguments
+   and a single binding per form."
   (let ((fname (random-from-seq #(%f1 %f2 %f3 %f4 %f5 %f6 %f7 %f8 %f9 %f10
 				  %f11 %f12 %f13 %f14 %f15 %f16 %f17 %f18))))
     (if (member fname *flet-names* :test #'eq)
 	(make-random-integer-form size vars)
       (destructuring-bind (s1 s2) (random-partition (max 2 (1- size)) 2)
-	(let ((form1 (make-random-integer-form s1 vars))
+	(let ((op (random-from-seq #(flet labels)))
+	      (form1
+	       ;; Allow return-from of the flet/labels function
+	       (let ((*random-int-form-blocks*
+		      (cons fname *random-int-form-blocks*)))
+		 (make-random-integer-form s1 vars)))
 	      (form2 (let ((*flet-names* (cons fname *flet-names*)))
 		       (make-random-integer-form s2 vars))))
-	  `(flet ((,fname () ,form1)) ,form2))))))  
+	  `(,op ((,fname () ,form1)) ,form2))))))
 
 (defun make-random-pred-form (size vars)
+  "Make a random form whose value is to be used as a generalized boolean."
   (if (<= size 1)
       (rcase
 	(1 (if (coin) t nil))
@@ -254,65 +268,82 @@
 
 ;;; Interface to the form pruner
 
+(defun make-optimized-lambda-form (form vars var-types)
+  `(lambda ,vars
+     (declare ,@(mapcar #'(lambda (tp var)
+			    `(type ,tp ,var))
+			var-types vars)
+	      (ignorable ,@vars)
+	      (optimize #+cmu (extensions:inhibit-warnings 3)
+			(speed 3) (safety 1) (debug 1)))
+     ,form))
+
+(defun make-unoptimized-lambda-form (form vars var-types)
+  (declare (ignore var-types))
+  `(lambda ,vars
+     (declare (notinline ,@(fn-symbols-in-form form))
+	      (optimize #+cmu (extensions:inhibit-warnings 3)
+			(safety 3) (speed 0) (debug 3))
+	      (ignorable ,@vars))
+     ,form))
+
 (defun test-int-form (form vars var-types vals-list)
   ;; Try to compile FORM with associated VARS, and if it compiles
   ;; check for equality of the two compiled forms.
   ;; Return a non-nil list of details if a problem is found,
   ;; NIL otherwise.
-  (let ((optimized-fn-src
-	  `(lambda ,vars
-	     (declare ,@(mapcar #'(lambda (tp var)
-				    `(type ,tp ,var))
-				var-types vars)
-		      (ignorable ,@vars)
-		      (optimize #+cmu (extensions:inhibit-warnings 3)
-				(speed 3) (safety 1) (debug 1)))
-	     ,form))
-	 (unoptimized-fn-src
-	  `(lambda ,vars
-	     (declare (notinline ,@(fn-symbols-in-form form))
-		      (optimize #+cmu (extensions:inhibit-warnings 3)
-				(safety 3) (speed 0) (debug 3))
-		      (ignorable ,@vars))
-	     ,form)))
+  (let ((optimized-fn-src (make-optimized-lambda-form form vars var-types))
+	(unoptimized-fn-src (make-unoptimized-lambda-form form vars var-types)))
     (setq *int-form-vals* nil
 	  *optimized-fn-src* optimized-fn-src
 	  *unoptimized-fn-src* unoptimized-fn-src)
-    (handler-bind
-     (#+sbcl (sb-ext::compiler-note #'muffle-warning)
-	     (warning #'muffle-warning)
-	     (error #'(lambda (c)
-			(format t "Compilation failure~%")
-			(return-from test-int-form
-			  (list (list :vars vars
-				      :form form
-				      :var-types var-types
-				      :vals (first vals-list)
-				      :compiler-condition c))))))
-     (let ((optimized-compiled-fn (compile nil optimized-fn-src))
-	   (unoptimized-compiled-fn (compile nil unoptimized-fn-src)))
-       (dolist (vals vals-list)
-	 (setq *int-form-vals* vals)
-	 (let ((unopt-result (multiple-value-list
-			    (apply unoptimized-compiled-fn vals)))
-	       (opt-result (multiple-value-list
-			      (apply optimized-compiled-fn vals))))
-	   (if (equal opt-result unopt-result)
-	       nil
-	     (progn
-	       (format t "Different results: ~A, ~A~%"
-		       opt-result unopt-result)
-	       (setq *opt-result* opt-result
-		     *unopt-result* unopt-result)
-	       (return (list (list :vars vars
-				   :vals vals
-				   :form form
-				   :var-types var-types
-				   :optimized-values opt-result
-				   :unoptimized-values unopt-result
+    (flet ((%compile
+	    (lambda-form)
+	    (handler-bind
+	     (#+sbcl (sb-ext::compiler-note #'muffle-warning)
+		     (warning #'muffle-warning)
+		     (error #'(lambda (c)
+				(format t "Compilation failure~%")
+				(return-from test-int-form
+				  (list (list :vars vars
+					      :form form
+					      :var-types var-types
+					      :vals (first vals-list)
+					      :lambda-form lambda-form
+					      :compiler-condition
+					      (with-output-to-string
+						(*standard-output*)
+						(print c))))))))
+	     (compile nil lambda-form))))
+      (let ((optimized-compiled-fn   (%compile optimized-fn-src))
+	    (unoptimized-compiled-fn (%compile unoptimized-fn-src)))
+	(declare (type function optimized-compiled-fn unoptimized-compiled-fn))
+	(dolist (vals vals-list)
+	  (setq *int-form-vals* vals)
+	  (let ((unopt-result (multiple-value-list
+			       (apply unoptimized-compiled-fn vals)))
+		(opt-result (multiple-value-list
+			     (apply optimized-compiled-fn vals))))
+	    (if (equal opt-result unopt-result)
+		nil
+	      (progn
+		(format t "Different results: ~A, ~A~%"
+			opt-result unopt-result)
+		(setq *opt-result* opt-result
+		      *unopt-result* unopt-result)
+		(return (list (list :vars vars
+				    :vals vals
+				    :form form
+				    :var-types var-types
+				    :optimized-lambda-form optimized-fn-src
+				    :unoptimized-lambda-form unoptimized-fn-src
+				    :optimized-values opt-result
+				    :unoptimized-values unopt-result
 				   )))))))))))
 
 (defun prune-int-form (form vars var-types vals-list)
+  "Conduct tests on selected simplified versions of FORM.  Return the
+   minimal form that still causes some kind of failure."
   (flet ((%try-fn (new-form)
 		  (when (test-int-form new-form vars var-types vals-list)
 		    (setf form new-form)
@@ -323,17 +354,24 @@
        (return form)))))
 
 (defun prune-results (result-list)
+  "Given a list of test results, prune their forms down to a minimal set."
   (loop for result in result-list
 	collect
-	(let ((form (getf result :form))
-	      (vars (getf result :vars))
-	      (var-types (getf result :var-types))
-	      (vals-list (list (getf result :vals)))
-	      )
-	  `(:vars ,vars
-	    :var-types ,var-types
-	    :vals ,(first vals-list)
-	    :form ,(prune-int-form form vars var-types vals-list)))))
+	(let* ((form (getf result :form))
+	       (vars (getf result :vars))
+	       (var-types (getf result :var-types))
+	       (vals-list (list (getf result :vals)))
+	       (pruned-form (prune-int-form form vars var-types vals-list))
+	       (optimized-lambda-form (make-optimized-lambda-form
+				       pruned-form vars var-types))
+	       (unoptimized-lambda-form (make-unoptimized-lambda-form
+					 pruned-form vars var-types)))
+	    `(:vars ,vars
+	      :var-types ,var-types
+	      :vals ,(first vals-list)
+	      :form ,pruned-form
+	      :optimized-lambda-form ,optimized-lambda-form
+	      :unoptimized-lambda-form ,unoptimized-lambda-form))))
 
 ;;;
 ;;; The call (PRUNE form try-fn) attempts to simplify the lisp form
@@ -427,12 +465,15 @@
 	 )))))
 
 (defun find-in-tree (value tree)
+  "Return true if VALUE is eql to a node in TREE."
   (or (eql value tree)
       (and (consp tree)
 	   (or (find-in-tree value (car tree))
 	       (find-in-tree value (cdr tree))))))
 
 (defun prune-fn (form try-fn)
+  "Attempt to simplify a function call form.  It is considered
+   acceptable to replace the call by one of its argument forms."
   (declare (function try-fn))
   (let* ((i 0)
 	 (op (first form))
@@ -451,6 +492,7 @@
 	       (incf i)))))
 
 (defun prune-let (form try-fn)
+  "Attempt to simplify a LET form."
   (declare (function try-fn))
   (let* ((op (car form))
 	 (binding-list (cadr form))
@@ -500,9 +542,12 @@
 			  `(,@(butlast form) ,form2)))))))
 
 (defun prune-flet (form try-fn)
+  "Attempt to simplify a FLET form."
   (declare (function try-fn))
+
   (let* ((op (car form))
 	 (binding-list (cadr form))
+;;	 (binding-names (mapcar #'car binding-list))
 	 (body (cddr form))
 	 (len (length binding-list)))
     
@@ -519,24 +564,37 @@
 	(declare (dynamic-extent (function try-binding)))
 	(loop for binding in binding-list
 	      while (< i len)
-	      do (when (null (cdddr binding))
+	      do (print i)
+	      do #| (when (and (null (cdddr binding))
+			    (not (loop for n in binding-names
+				       thereis
+				       (find-in-tree n (cdr binding))))) |#
 		   (prune (third binding)
 			  #'(lambda (form)
 			      (try-binding (first binding)
 					   (second binding)
-					   form))))
+					   form))) ;; )
 	      (incf i))))
 
     ;; ;; Try to simplify the body of the FLET form
     (when body
+
       ;; No bindings -- try to simplify to the last form in the body
       (unless binding-list
 	(funcall try-fn (car (last body))))
 
+      ;; One binding -- match on (flet ((<name> () <body>)) (<name>))
+      (when (and (consp binding-list)
+		 (null (rest binding-list)))
+	(let ((binding (first binding-list)))
+	  (when (and (symbolp (first binding))
+		     (not (find-in-tree (first binding) (rest binding)))
+		     (null (second binding))
+		     (equal body (list (list (first binding)))))
+	    (funcall try-fn `(,op () ,@(cddr binding))))))
+
+      ;; Try to simplify (the last form in) the body.
       (prune (car (last body))
 	     #'(lambda (form2)
 		 (funcall try-fn
 			  `(,@(butlast form) ,form2)))))))
-
-  
-
