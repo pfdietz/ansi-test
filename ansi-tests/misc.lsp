@@ -4306,6 +4306,7 @@
     nil
     '(lambda ()
        (declare (optimize (speed 1) (space 2) (safety 3) (debug 3) (compilation-speed 1)))
+       (declare (special b))
        (tagbody (flet ((%f1 (f1-1)
 			    (flet ((%f9 (&optional (f9-1 b) (f9-2 (go tag2)) (f9-3 0)) 0))
 			      (%f9 0 0 0))))
@@ -4619,8 +4620,43 @@
    :good)
   :good)
 
+;;; Lispworks 4.3 linux (personal edition)
 
+;;; Error: In - of (1 NIL) arguments should be of type NUMBER
+(deftest misc.277
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 1) (safety 0)
+			  (debug 3) (compilation-speed 0)))
+       (labels ((%f15 (&optional (f15-3
+				  (tagbody (labels ((%f6 () (go tag1))) (%f6)) tag1)))
+		      0))
+	 (%f15)))))
+  0)
 
+;;; incorrect return value
+(deftest misc.278
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (space 0) (safety 2) (debug 3)
+			  (compilation-speed 0)))
+       (catch 'ct5 (flet ((%f2 (&optional (f2-4 (throw 'ct5 0))) 1))
+		     (%f2 (%f2 0)))))))
+  1)
 
-
-    
+;;; incorrect return value
+(deftest misc.279
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (space 1) (safety 3) (debug 0) (compilation-speed 3)))
+       (flet ((%f10 ()
+		    (if (< 0 (dotimes (iv2 1 -501162)))
+			0 -14)))
+	 (%f10)))))
+  -14)
