@@ -82,13 +82,15 @@ A A A A "
   :margin 10)
 
 (deftest format._.9
-  (with-standard-io-syntax
-   (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-pretty* t)
-	 (*print-right-margin* 4)
-	 (*print-miser-width* nil))
-     (format nil "A ~_A ~_A ~_A ~_A ~_")))
+  (with-output-to-string
+    (s)
+    (with-standard-io-syntax
+     (let ((*print-readably* nil)
+	   (*print-escape* nil)
+	   (*print-pretty* t)
+	   (*print-right-margin* 4)
+	   (*print-miser-width* nil))
+       (format s "A ~_A ~_A ~_A ~_A ~_"))))
   "A A A A A ")
 
 ;;; miser
@@ -172,13 +174,15 @@ A A A A "
   :miser 8)
 
 (deftest format.@_.10
-  (with-standard-io-syntax
-   (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-pretty* t)
-	 (*print-right-margin* 4)
-	 (*print-miser-width* 4))
-     (format nil "A ~@_A ~@_A ~@_A ~@_A ~@_")))
+  (with-output-to-string
+    (s)
+    (with-standard-io-syntax
+     (let ((*print-readably* nil)
+	   (*print-escape* nil)
+	   (*print-pretty* t)
+	   (*print-right-margin* 4)
+	   (*print-miser-width* 4))
+       (format s "A ~@_A ~@_A ~@_A ~@_A ~@_"))))
   "A A A A A ")
 
 ;;; fill
@@ -241,18 +245,20 @@ A
   :margin 12)
 
 (deftest format.\:_.7
-  (with-standard-io-syntax
-   (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-right-margin* 4)
-	 (*print-pretty* t)
-	 (*print-miser-width* nil))
-     (format nil "A ~:_A ~:_A ~:_A ~:_A ~:_")))
+  (with-output-to-string
+    (s)
+    (with-standard-io-syntax
+     (let ((*print-readably* nil)
+	   (*print-escape* nil)
+	   (*print-right-margin* 4)
+	   (*print-pretty* t)
+	   (*print-miser-width* nil))
+       (format s "A ~:_A ~:_A ~:_A ~:_A ~:_"))))
   "A A A A A ")
 
 ;;; mandatory
 
-(def-ppblock-test format.\:@.1
+(def-ppblock-test format.\:@_.1
   (format t "A ~:@_A ~:@_A ~:@_A ~:@_")
   "A
 A
@@ -260,7 +266,7 @@ A
 A
 ")
 
-(def-ppblock-test format.\:@.2
+(def-ppblock-test format.\:@_.2
   (format t "A ~@:_A ~@:_A ~@:_A ~@:_")
   "A
 A
@@ -269,25 +275,25 @@ A
 "
   :margin 10)
 
-(def-ppblock-test format.\:@.3
+(def-ppblock-test format.\:@_.3
   (format t "A ~@:_A ")
   "A
 A "
   :margin 1)
 
-(def-ppblock-test format.\:@.4
+(def-ppblock-test format.\:@_.4
   (format t "A ~@:_A ~@:_A ~@:_A ~@:_")
   "A A A A "
   :pretty nil)
 
-(deftest format.\:@.5
-  (with-standard-io-syntax
-   (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-pretty* t)
-	 (*print-right-margin* 4)
-	 (*print-miser-width* nil))
-     (format nil "A ~:@_A ~:@_A ~:@_A ~:@_A ~:@_")))
+(deftest format.\:@_.5
+  (with-output-to-string
+    (s)
+    (with-standard-io-syntax
+     (let ((*print-readably* nil)
+	   (*print-escape* nil)
+	   (*print-pretty* t)
+	   (*print-right-margin* 4)
+	   (*print-miser-width* nil))
+       (format s "A ~:@_A ~:@_A ~:@_A ~:@_A ~:@_"))))
   "A A A A A ")
-
-
