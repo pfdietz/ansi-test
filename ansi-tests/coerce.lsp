@@ -130,7 +130,7 @@
   (funcall (coerce '(lambda () 10) 'function))
   10)
 
-(deftest coerce.23
+(deftest coerce.order.1
   (let ((i 0) a b)
     (values
      (coerce (progn (setf a (incf i)) 10)

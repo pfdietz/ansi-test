@@ -40,7 +40,7 @@
   (acons #\R :foo :bar)
   ((#\R . :foo) . :bar))
 
-(deftest acons.7
+(deftest acons.order.1
   (let ((i 0) x y z)
     (values
      (acons (progn (setf x (incf i)) 'a)
@@ -206,7 +206,7 @@
 
 ;;; Order of argument evaluation
 
-(deftest assoc.26
+(deftest assoc.order.1
   (let ((i 0) x y)
     (values
      (assoc (progn (setf x (incf i)) 'c)
@@ -214,7 +214,7 @@
      i x y))
   (c . 3) 2 1 2)
 
-(deftest assoc.27
+(deftest assoc.order.2
   (let ((i 0) x y z)
     (values
      (assoc (progn (setf x (incf i)) 'c)
@@ -223,7 +223,7 @@
      i x y z))
   (c . 3) 3 1 2 3)
 
-(deftest assoc.28
+(deftest assoc.order.3
   (let ((i 0) x y)
     (values
      (assoc (progn (setf x (incf i)) 'c)
@@ -232,7 +232,7 @@
      i x y))
   (c . 3) 2 1 2)
 
-(deftest assoc.29
+(deftest assoc.order.4
   (let ((i 0) x y z w)
     (values
      (assoc (progn (setf x (incf i)) 'c)
@@ -337,7 +337,7 @@
 
 ;;; Order of argument evaluation
 
-(deftest assoc-if.5
+(deftest assoc-if.order.1
   (let ((i 0) x y)
     (values
      (assoc-if (progn (setf x (incf i)) #'null)
@@ -346,7 +346,7 @@
      i x y))
   (nil . 17) 2 1 2)
 
-(deftest assoc-if.6
+(deftest assoc-if.order.2
   (let ((i 0) x y z)
     (values
      (assoc-if (progn (setf x (incf i)) #'null)
@@ -453,7 +453,7 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest assoc-if-not.5
+(deftest assoc-if-not.order.1
   (let ((i 0) x y)
     (values
      (assoc-if-not (progn (setf x (incf i)) #'identity)
@@ -462,7 +462,7 @@
      i x y))
   (nil . 17) 2 1 2)
 
-(deftest assoc-if-not.6
+(deftest assoc-if-not.order.2
   (let ((i 0) x y z)
     (values
      (assoc-if-not (progn (setf x (incf i)) #'identity)

@@ -420,7 +420,7 @@
 
 ;;; Argument order tests
 
-(deftest count-if-not-order.1
+(deftest count-if-not.order.1
   (let ((i 0) c1 c2 c3 c4 c5 c6)
     (values
      (count-if-not
@@ -434,7 +434,7 @@
      i c1 c2 c3 c4 c5 c6))
   1 6 1 2 3 4 5 6)
 
-(deftest count-if-not-order.2
+(deftest count-if-not.order.2
   (let ((i 0) c1 c2 c3 c4 c5 c6)
     (values
      (count-if-not

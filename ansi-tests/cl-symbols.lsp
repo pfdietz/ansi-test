@@ -1048,6 +1048,12 @@
 	  collect name))
   nil)
 
+(deftest special-operator-p.order.1
+  (let ((i 0))
+    (values (notnot (special-operator-p (progn (incf i) 'catch)))
+	    i))
+  t 1)
+
 (deftest special-operator-p.error.1
   (classify-error (special-operator-p 1))
   type-error)
@@ -1063,142 +1069,163 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; keywordp
 
-(deftest keywordp-1 (keywordp 'hefalump)   nil)
-(deftest keywordp-2 (keywordp 17)          nil)
-(deftest keywordp-3 (notnot-mv (keywordp :stream))         t)
-(deftest keywordp-4 (notnot-mv (keywordp ':stream))        t)
-(deftest keywordp-5 (keywordp nil)         nil)
-(deftest keywordp-6 (notnot-mv (keywordp :nil))          t)
-(deftest keywordp-7 (keywordp '(:stream))    nil)
-(deftest keywordp-8 (keywordp "rest")     nil)
-(deftest keywordp-9 (keywordp ":rest")    nil)
-(deftest keywordp-10 (keywordp '&body) nil)
+(deftest keywordp.1 (keywordp 'hefalump)   nil)
+(deftest keywordp.2 (keywordp 17)          nil)
+(deftest keywordp.3 (notnot-mv (keywordp :stream))         t)
+(deftest keywordp.4 (notnot-mv (keywordp ':stream))        t)
+(deftest keywordp.5 (keywordp nil)         nil)
+(deftest keywordp.6 (notnot-mv (keywordp :nil))          t)
+(deftest keywordp.7 (keywordp '(:stream))    nil)
+(deftest keywordp.8 (keywordp "rest")     nil)
+(deftest keywordp.9 (keywordp ":rest")    nil)
+(deftest keywordp.10 (keywordp '&body) nil)
 ;;; This next test was busted.  ::foo is not portable syntax
-;;(deftest keywordp-11 (notnot-mv (keywordp ::foo))       t)
-(deftest keywordp-12 (keywordp t)          nil)
-(deftest keywordp-13 (classify-error (keywordp)) program-error)
-(deftest keywordp-14 (classify-error (keywordp :x :x)) program-error)
+;;(deftest keywordp.11 (notnot-mv (keywordp ::foo))       t)
+(deftest keywordp.12 (keywordp t)          nil)
+
+(deftest keywordp.order.1
+  (let ((i 0))
+    (values (keywordp (progn (incf i) nil)) i))
+  nil 1)
+
+(deftest keywordp.error.1 (classify-error (keywordp)) program-error)
+(deftest keywordp.error.2 (classify-error (keywordp :x :x)) program-error)
+
+(deftest keywordp.error.3
+  (classify-error (keywordp))
+  program-error)
+
+(deftest keywordp.error.4
+  (classify-error (keywordp nil nil))
+  program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; symbol-name
 
-(deftest symbol-name-1
+(deftest symbol-name.1
   (safe-symbol-name '|ABCD|)
   "ABCD")
 
-(deftest symbol-name-2
+(deftest symbol-name.2
   (safe-symbol-name '|1234abcdABCD|)
   "1234abcdABCD")
 
-(deftest symbol-name-3
+(deftest symbol-name.3
   (safe-symbol-name 1)
   type-error)
 
-(deftest symbol-name-4
+(deftest symbol-name.4
   (safe-symbol-name '(a))
   type-error)
 
-(deftest symbol-name-5
+(deftest symbol-name.5
   (safe-symbol-name "ABCDE")
   type-error)
 
-(deftest symbol-name-6
+(deftest symbol-name.6
   (safe-symbol-name 12913.0213)
   type-error)
 
-(deftest symbol-name-7
+(deftest symbol-name.7
   (symbol-name :|abcdefg|)
   "abcdefg")
 
-(deftest symbol-name-8
+(deftest symbol-name.error.1
   (classify-error (symbol-name))
   program-error)
 
-(deftest symbol-name-9
+(deftest symbol-name.error.2
   (classify-error (symbol-name 'a 'b))
   program-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; make-symbol
 
-(deftest make-symbol-1
+(deftest make-symbol.1
   (notnot-mv (symbolp (make-symbol "FOO")))
   t)
 
-(deftest make-symbol-2
+(deftest make-symbol.2
   (symbol-package (make-symbol "BAR"))
   nil)
 
-(deftest make-symbol-3
+(deftest make-symbol.3
   (symbol-package (make-symbol "CL::FOO"))
   nil)
 
-(deftest make-symbol-4
+(deftest make-symbol.4
   (symbol-package (make-symbol "CL:FOO"))
   nil)
 
-(deftest make-symbol-5
+(deftest make-symbol.5
   (symbol-name (make-symbol "xyz"))
   "xyz")
 
-(deftest make-symbol-6
+(deftest make-symbol.6
     (eqt (make-symbol "A")
 	(make-symbol "A"))
   nil)
 
-(deftest make-symbol-7
+(deftest make-symbol.7
   (boundp (make-symbol "B"))
   nil)
 
-(deftest make-symbol-8
+(deftest make-symbol.8
   (symbol-plist (make-symbol "C"))
   nil)
 
-(deftest make-symbol-9
-  (safe-make-symbol nil)
-  type-error)
-
-(deftest make-symbol-10
-  (safe-make-symbol 'a)
-  type-error)
-
-(deftest make-symbol-11
-  (safe-make-symbol 1)
-  type-error)
-
-(deftest make-symbol-12
-  (safe-make-symbol -1)
-  type-error)
-
-(deftest make-symbol-13
-  (safe-make-symbol 1.213)
-  type-error)
-
-(deftest make-symbol-14
-  (safe-make-symbol -1312.2)
-  type-error)
-
-(deftest make-symbol-15
-  (safe-make-symbol #\w)
-  type-error)
-
-(deftest make-symbol-16
-  (safe-make-symbol '(a))
-  type-error)
-
-(deftest make-symbol-17
+(deftest make-symbol.9
   (fboundp (make-symbol "D"))
   nil)
 
-(deftest make-symbol-18
-    (symbol-name (safe-make-symbol ""))
+(deftest make-symbol.10
+  (symbol-name (safe-make-symbol ""))
   "")
 
-(deftest make-symbol-19
+(deftest make-symbol.order.1
+  (let ((i 0))
+    (values
+     (symbol-name (make-symbol (progn (incf i) "ABC")))
+     i))
+  "ABC" 1)
+
+(deftest make-symbol.error.1
+  (safe-make-symbol nil)
+  type-error)
+
+(deftest make-symbol.error.2
+  (safe-make-symbol 'a)
+  type-error)
+
+(deftest make-symbol.error.3
+  (safe-make-symbol 1)
+  type-error)
+
+(deftest make-symbol.error.4
+  (safe-make-symbol -1)
+  type-error)
+
+(deftest make-symbol.error.5
+  (safe-make-symbol 1.213)
+  type-error)
+
+(deftest make-symbol.error.6
+  (safe-make-symbol -1312.2)
+  type-error)
+
+(deftest make-symbol.error.7
+  (safe-make-symbol #\w)
+  type-error)
+
+(deftest make-symbol.error.8
+  (safe-make-symbol '(a))
+  type-error)
+
+(deftest make-symbol.error.9
   (classify-error (make-symbol))
   program-error)
 
-(deftest make-symbol-20
+(deftest make-symbol.error.10
   (classify-error (make-symbol "a" "a"))
   program-error)
 
@@ -1296,54 +1323,54 @@
 ;;; gensym
 
 ;;; Gensym returns unique symbols
-(deftest gensym-1
-    (equal (gensym) (gensym))
+(deftest gensym.1
+  (equal (gensym) (gensym))
   nil)
 
 ;;; Gensym returns symbols with distinct print names
-(deftest gensym-2
-    (string= (symbol-name (gensym))
-	     (symbol-name (gensym)))
+(deftest gensym.2
+  (string= (symbol-name (gensym))
+	   (symbol-name (gensym)))
   nil)
 
 ;;; Gensym uses the *gensym-counter* special variable,
 ;;; but does not increment it until after the symbol
 ;;; has been created.
-(deftest gensym-3
+(deftest gensym.3
   (let ((*gensym-counter* 1))
     (declare (special *gensym-counter*))
      (symbol-name (gensym)))
   "G1")
 
 ;;; Gensym uses the string argument instead of the default
-(deftest gensym-4
+(deftest gensym.4
   (let ((*gensym-counter* 1327))
     (declare (special *gensym-counter*))
     (symbol-name (gensym "FOO")))
   "FOO1327")
 
 ;;; The symbol returned by gensym should be unbound
-(deftest gensym-5
-    (boundp (gensym))
+(deftest gensym.5
+  (boundp (gensym))
   nil)
 
 ;;; The symbol returned by gensym should have no function binding
-(deftest gensym-6
-    (fboundp (gensym))
+(deftest gensym.6
+  (fboundp (gensym))
   nil)
 
 ;;; The symbol returned by gensym should have no property list
-(deftest gensym-7
-    (symbol-plist (gensym))
+(deftest gensym.7
+  (symbol-plist (gensym))
   nil)
 
 ;;; The symbol returned by gensym should be uninterned
-(deftest gensym-8
-    (symbol-package (gensym))
+(deftest gensym.8
+  (symbol-package (gensym))
   nil)
 
 ;;; *gensym-counter* is incremented by gensym
-(deftest gensym-9
+(deftest gensym.9
   (let ((*gensym-counter* 12345))
     (declare (special *gensym-counter*))
     (gensym)
@@ -1353,14 +1380,14 @@
 ;;; Gensym works when *gensym-counter* is Really Big
 ;;; (and does not increment the counter until after creating
 ;;; the symbol.)
-(deftest gensym-10
+(deftest gensym.10
   (let ((*gensym-counter* 1234567890123456789012345678901234567890))
     (declare (special *gensym-counter*))
     (symbol-name (gensym)))
   "G1234567890123456789012345678901234567890")
 
 ;;; gensym increments Really Big values of *gensym-counter*
-(deftest gensym-11
+(deftest gensym.11
   (let ((*gensym-counter* 12345678901234567890123456789012345678901234567890))
     (declare (special *gensym-counter*))
     (gensym)
@@ -1368,7 +1395,7 @@
   12345678901234567890123456789012345678901234567891)
 
 ;;; Gensym uses an integer argument instead of the counter
-(deftest gensym-12
+(deftest gensym.12
   (let ((*gensym-counter* 10))
     (declare (special *gensym-counter*))
     (symbol-name (gensym 123)))
@@ -1376,7 +1403,7 @@
 
 ;;; When given an integer argument, gensym does not increment the
 ;;; *gensym-counter*
-(deftest gensym-13
+(deftest gensym.13
   (let ((*gensym-counter* 10))
     (declare (special *gensym-counter*))
     (gensym 123)
@@ -1523,28 +1550,12 @@
   (classify-error (symbolp nil nil))
   program-error)
 
-(deftest keywordp.error.1
-  (classify-error (keywordp))
-  program-error)
-
-(deftest keywordp.error.2
-  (classify-error (keywordp nil nil))
-  program-error)
-
 (deftest symbol-function.error.1
   (classify-error (symbol-function))
   program-error)
 
 (deftest symbol-function.error.2
   (classify-error (symbol-function 'cons nil))
-  program-error)
-
-(deftest symbol-name.error.1
-  (classify-error (symbol-name))
-  program-error)
-
-(deftest symbol-name.error.2
-  (classify-error (symbol-name 'cons nil))
   program-error)
 
 (deftest symbol-package.error.1

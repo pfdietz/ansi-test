@@ -193,7 +193,7 @@
 
 ;;; Order of argument evaluation
 
-(deftest rassoc.26
+(deftest rassoc.order.1
   (let ((i 0) x y)
     (values
      (rassoc (progn (setf x (incf i)) 'c)
@@ -201,7 +201,7 @@
      i x y))
   (3 . c) 2 1 2)
 
-(deftest rassoc.27
+(deftest rassoc.order.2
   (let ((i 0) x y z)
     (values
      (rassoc (progn (setf x (incf i)) 'c)
@@ -210,7 +210,7 @@
      i x y z))
   (3 . c) 3 1 2 3)
 
-(deftest rassoc.28
+(deftest rassoc.order.3
   (let ((i 0) x y)
     (values
      (rassoc (progn (setf x (incf i)) 'c)
@@ -219,7 +219,7 @@
      i x y))
   (3 . c) 2 1 2)
 
-(deftest rassoc.29
+(deftest rassoc.order.4
   (let ((i 0) x y z w)
     (values
      (rassoc (progn (setf x (incf i)) 'c)
@@ -324,7 +324,7 @@
 
 ;;; Order of argument evaluation
 
-(deftest rassoc-if.5
+(deftest rassoc-if.order.1
   (let ((i 0) x y)
     (values
      (rassoc-if (progn (setf x (incf i)) #'null)
@@ -333,7 +333,7 @@
      i x y))
   (17) 2 1 2)
 
-(deftest rassoc-if.6
+(deftest rassoc-if.order.2
   (let ((i 0) x y z)
     (values
      (rassoc-if (progn (setf x (incf i)) #'null)
@@ -437,7 +437,7 @@
 
 ;;; Order of argument evaluation
 
-(deftest rassoc-if-not.5
+(deftest rassoc-if-not.order.1
   (let ((i 0) x y)
     (values
      (rassoc-if-not (progn (setf x (incf i)) #'identity)
@@ -446,7 +446,7 @@
      i x y))
   (17) 2 1 2)
 
-(deftest rassoc-if-not.6
+(deftest rassoc-if-not.order.2
   (let ((i 0) x y z)
     (values
      (rassoc-if-not (progn (setf x (incf i)) #'identity)

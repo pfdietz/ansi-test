@@ -31,6 +31,15 @@
   (notnot-mv (complement #'identity))
   t)
 
+(deftest complement.order.1
+  (let ((i 0))
+    (let ((fn (complement (progn (incf i) #'null))))
+      (values
+       i
+       (mapcar fn '(a b nil c 1 nil t nil))
+       i)))
+  1 (t t nil t t nil t nil) 1)
+
 (deftest complement.error.1
   (classify-error (complement))
   program-error)

@@ -149,10 +149,9 @@
   t)
 
 ;;; Order of evaluation of cons arguments
-(deftest cons-order-of-args
+(deftest cons.order.1
   (let ((i 0)) (values (cons (incf i) (incf i)) i))
-  (1 . 2)
-  2)	   
+  (1 . 2) 2)
 
 ;; Lists satisfy consp
 (deftest consp-list
@@ -193,6 +192,11 @@
   (check-type-predicate 'consp 'cons)
   0)
 
+(deftest consp.order.1
+  (let ((i 0))
+    (values (consp (incf i)) i))
+  nil 1)
+
 (deftest consp.error.1
   (classify-error (consp))
   program-error)
@@ -200,6 +204,11 @@
 (deftest consp.error.2
   (classify-error (consp 'a 'b))
   program-error)
+
+(deftest atom.order.1
+  (let ((i 0))
+    (values (atom (progn (incf i) '(a b))) i))
+  nil 1)
 
 (deftest atom.error.1
   (classify-error (atom))
@@ -210,59 +219,59 @@
   program-error)
 
 ;; Tests of car, cdr and compound forms
-(deftest cons-23
+(deftest cons.23
   (car '(a))
   a)
 
-(deftest cons-24
+(deftest cons.24
   (cdr '(a . b))
   b)
 
-(deftest cons-25
+(deftest cons.25
   (caar '((a)))
   a)
 
-(deftest cons-26
+(deftest cons.26
   (cdar '((a . b)))
   b)
 
-(deftest cons-27
+(deftest cons.27
   (cadr '(a b))
   b)
 
-(deftest cons-28
+(deftest cons.28
   (cddr '(a b . c))
   c)
 
-(deftest cons-29
+(deftest cons.29
   (caaar '(((a))))
   a)
 
-(deftest cons-30
+(deftest cons.30
   (cdaar '(((a . b))))
   b)
 
-(deftest cons-31
+(deftest cons.31
   (cadar (cons (cons 'a (cons 'b 'c)) 'd))
   b)
 
-(deftest cons-32
+(deftest cons.32
   (cddar (cons (cons 'a (cons 'b 'c)) 'd))
   c)
 
-(deftest cons-33
+(deftest cons.33
   (caadr (cons 'a (cons (cons 'b 'c) 'd)))
   b)
 
-(deftest cons-34
+(deftest cons.34
   (caddr (cons 'a (cons 'b (cons 'c 'd))))
   c)
 
-(deftest cons-36
+(deftest cons.36
   (cdadr (cons 'a (cons (cons 'b 'c) 'd)))
   c)
 
-(deftest cons-37
+(deftest cons.37
   (cdddr (cons 'a (cons 'b (cons 'c 'd))))
   d)
 
@@ -277,69 +286,69 @@
 		    (cons 'o 'p)))))
 
 
-(deftest cons-38
+(deftest cons.38
   (caaaar *cons-test-4*)
   a)
 
-(deftest cons-39
+(deftest cons.39
   (cdaaar *cons-test-4*)
   b)
 
-(deftest cons-40
+(deftest cons.40
   (cadaar *cons-test-4*)
   c)
 
-(deftest cons-41
+(deftest cons.41
   (cddaar *cons-test-4*)
   d)
 
-(deftest cons-42
+(deftest cons.42
   (caadar *cons-test-4*)
   e)
 
-(deftest cons-43
+(deftest cons.43
   (cdadar *cons-test-4*)
   f)
 
-(deftest cons-44
+(deftest cons.44
   (caddar *cons-test-4*)
   g)
 
-(deftest cons-45
+(deftest cons.45
   (cdddar *cons-test-4*)
   h)
 
 ;;;
 
-(deftest cons-46
+(deftest cons.46
   (caaadr *cons-test-4*)
   i)
 
-(deftest cons-47
+(deftest cons.47
   (cdaadr *cons-test-4*)
   j)
 
-(deftest cons-48
+(deftest cons.48
   (cadadr *cons-test-4*)
   k)
 
-(deftest cons-49
+(deftest cons.49
   (cddadr *cons-test-4*)
   l)
 
-(deftest cons-50
+(deftest cons.50
   (caaddr *cons-test-4*)
   m)
 
-(deftest cons-51
+(deftest cons.51
   (cdaddr *cons-test-4*)
   n)
 
-(deftest cons-52
+(deftest cons.52
   (cadddr *cons-test-4*)
   o)
 
-(deftest cons-53
+(deftest cons.53
   (cddddr *cons-test-4*)
   p)
 
@@ -366,7 +375,7 @@
 	   (eqt (cdr x) 'b))))
   t)
 
-(deftest rplaca.2
+(deftest rplaca.order.1
   (let ((x (cons 'a 'b))
 	(i 0) a b)
     (values
@@ -384,7 +393,7 @@
 	   (eqt (cdr x) 'd))))
   t)
 
-(deftest rplacd.2
+(deftest rplacd.order.1
   (let ((x (cons 'a 'b))
 	(i 0) a b)
     (values

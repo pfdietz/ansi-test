@@ -23,6 +23,13 @@
   (endp '(a))
   nil)
 
+(deftest endp.order.1
+  (let ((i 0))
+    (values
+     (endp (progn (incf i) '(a b c)))
+     i))
+  nil 1)
+
 (deftest endp-symbol-error
   (catch-type-error (endp 'a))
   type-error)

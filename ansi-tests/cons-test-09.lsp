@@ -50,7 +50,7 @@
   (butlast (copy-tree '(a b c . d)) 1)
   (a b))
 
-(deftest butlast.6
+(deftest butlast.order.1
   (let ((i 0) x y)
     (values
      (butlast (progn (setf x (incf i))
@@ -59,6 +59,13 @@
 		     2))
      i x y))
   (a b c) 2 1 2)
+
+(deftest butlast.order.2
+  (let ((i 0))
+    (values
+     (butlast (progn (incf i) '(a b c d)))
+     i))
+  (a b c) 1)
 
 (deftest butlast.error.1
   (classify-error (butlast (copy-tree '(a b c d)) 'a))
@@ -121,7 +128,7 @@
   (nbutlast (list 'a))
   nil)
 
-(deftest nbutlast.7
+(deftest nbutlast.order.1
   (let ((i 0) x y)
     (values
      (nbutlast (progn (setf x (incf i))
@@ -130,6 +137,13 @@
 		      2))
      i x y))
   (a b c) 2 1 2)
+
+(deftest nbutlast.order.2
+  (let ((i 0))
+    (values
+     (nbutlast (progn (incf i) (list 'a 'b 'c 'd)))
+     i))
+  (a b c) 1)
 
 (deftest nbutlast.error.1
   (classify-error (let ((x (list* 'a 'b 'c 'd))) (nbutlast x 'a)))

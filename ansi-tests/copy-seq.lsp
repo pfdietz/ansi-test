@@ -154,6 +154,11 @@
     (equal-array x y))
   t)
 
+(deftest copy-seq.order.1
+  (let ((i 0))
+    (values (copy-seq (progn (incf i) "abc")) i))
+  "abc" 1)
+
 ;;; Error tests
 
 (deftest copy-seq.error.1

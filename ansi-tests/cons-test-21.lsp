@@ -265,39 +265,39 @@
 
 ;;; Order of evaluation tests
 
-(deftest nunion.32
+(deftest nunion.order.1
   (let ((i 0) x y)
     (values
      (sort
       (nunion (progn (setf x (incf i)) (copy-list '(1 3 5)))
-	     (progn (setf y (incf i)) (copy-list '(2 5 8))))
+	      (progn (setf y (incf i)) (copy-list '(2 5 8))))
       #'<)
      i x y))
   (1 2 3 5 8)
   2 1 2)
 
-(deftest nunion.33
+(deftest nunion.order.2
   (let ((i 0) x y z w)
     (values
      (sort
       (nunion (progn (setf x (incf i)) (copy-list '(1 3 5)))
-	     (progn (setf y (incf i)) (copy-list '(2 5 8)))
-	     :test (progn (setf z (incf i)) #'eql)
-	     :key (progn (setf w (incf i)) #'identity))
+	      (progn (setf y (incf i)) (copy-list '(2 5 8)))
+	      :test (progn (setf z (incf i)) #'eql)
+	      :key (progn (setf w (incf i)) #'identity))
       #'<)
      i x y z w))
   (1 2 3 5 8)
   4 1 2 3 4)
 
 
-(deftest nunion.34
+(deftest nunion.order.3
   (let ((i 0) x y z w)
     (values
      (sort
       (nunion (progn (setf x (incf i)) (copy-list '(1 3 5)))
-	     (progn (setf y (incf i)) (copy-list '(2 5 8)))
-	     :key (progn (setf z (incf i)) #'identity)
-	     :test (progn (setf w (incf i)) #'eql))
+	      (progn (setf y (incf i)) (copy-list '(2 5 8)))
+	      :key (progn (setf z (incf i)) #'identity)
+	      :test (progn (setf w (incf i)) #'eql))
       #'<)
      i x y z w))
   (1 2 3 5 8)

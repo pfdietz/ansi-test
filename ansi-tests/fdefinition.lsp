@@ -74,3 +74,10 @@
   nil
   (b . a)
   t)
+
+(deftest fdefinition.order.1
+  (let ((i 0))
+    (fdefinition (progn (incf i) 'setq))
+    i)
+  1)
+

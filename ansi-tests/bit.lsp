@@ -111,7 +111,7 @@
 
 ;;; Order of evaluation tests
 
-(deftest bit.9
+(deftest bit.order.1
   (let ((x 0) y z
 	(b (copy-seq #*01010)))
     (values
@@ -120,7 +120,7 @@
      x y z))
   1 2 1 2)
 
-(deftest bit.10
+(deftest bit.order.2
   (let ((x 0) y z w
 	(b (copy-seq #*01010)))
     (values

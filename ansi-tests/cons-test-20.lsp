@@ -266,7 +266,7 @@
 
 ;;; Order of evaluation tests
 
-(deftest union.32
+(deftest union.order.1
   (let ((i 0) x y)
     (values
      (sort
@@ -277,7 +277,7 @@
   (1 2 3 5 8)
   2 1 2)
 
-(deftest union.33
+(deftest union.order.2
   (let ((i 0) x y z w)
     (values
      (sort
@@ -291,7 +291,7 @@
   4 1 2 3 4)
 
 
-(deftest union.34
+(deftest union.order.3
   (let ((i 0) x y z w)
     (values
      (sort

@@ -218,7 +218,7 @@
   #2a((0 0)(1 1))
   #2a((0 1)(0 0)))
 
-(deftest bit-andc2.20
+(deftest bit-andc2.order.1
   (let* ((s1 (make-array 1 :initial-element 0 :element-type 'bit))
 	 (s2 (make-array 1 :initial-element 0 :element-type 'bit))
 	 (x 0) y z)

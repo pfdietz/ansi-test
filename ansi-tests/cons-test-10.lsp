@@ -50,13 +50,18 @@
   (last (cons 'a 'b) 2)
   (a . b))
 
-(deftest last.11
+(deftest last.order.1
   (let ((i 0) x y)
     (values
      (last (progn (setf x (incf i)) (list 'a 'b 'c 'd))
 	   (setf y (incf i)))
      i x y))
   (c d) 2 1 2)
+
+(deftest last.order.2
+  (let ((i 0))
+    (values (last (progn (incf i) (list 'a 'b 'c 'd))) i))
+  (d) 1)
 
 (deftest last.error.1
   (classify-error (last (list 'a 'b 'c) -1))

@@ -75,9 +75,17 @@
   t)
 
 (deftest compile.9
+  (let ((i 0) a b)
+    (values
+     (funcall (compile (progn (setf a (incf i)) nil)
+		       (progn (setf b (incf i)) '(lambda () 'z))))
+     i a b))
+  z 2 1 2)
+
+(deftest compile.error.1
   (classify-error (compile))
   program-error)
 
-(deftest compile.10
+(deftest compile.error.2
   (classify-error (compile nil '(lambda () nil) 'garbage))
   program-error)

@@ -14,6 +14,7 @@
 (deftest cell-error-name.2
   (handler-case
    (eval '(my-undefined-function))
+   ;; (warning (c) (muffle-warning c))
    (cell-error (c) (cell-error-name c)))
   my-undefined-function)
 
@@ -28,6 +29,15 @@
 (deftest cell-error-name.5
   (cell-error-name (make-condition 'unbound-slot :name 's))
   s)
+
+(deftest cell-error-name.6
+  (let ((i 0))
+    (values
+     (cell-error-name (progn (incf i) (make-condition
+				       'unbound-slot :name 's)))
+     i))
+  s 1)
+
   
 ;;; Need test raising condition unbound-slot
 

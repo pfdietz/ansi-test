@@ -156,7 +156,7 @@
   t)
 
 ;;; Test side effects, evaluation order in assignment to NTH
-(deftest nth.3
+(deftest nth.order.1
   (let ((i 0)
 	(x (list 'a 'b 'c 'd))
 	y z)
@@ -168,7 +168,7 @@
      x))
   (a z c d))
 
-(deftest nth.4
+(deftest nth.order.2
   (let ((i 0) x y (z '(a b c d e)))
     (values
      (nth (progn (setf x (incf i)) 1)

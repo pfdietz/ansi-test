@@ -57,7 +57,7 @@
        (values indicator value tail))))
   g h (g h a c))
 
-(deftest get-properties.10
+(deftest get-properties.order.1
   (let ((i 0) x y)
     (values
      (multiple-value-list
@@ -105,7 +105,7 @@
      x))
   b 1)
 
-(deftest getf.6
+(deftest getf.order.1
   (let ((i 0) x y)
     (values
      (getf (progn (setf x (incf i)) '(a b))
@@ -113,7 +113,7 @@
      i x y))
   b 2 1 2)
 		  
-(deftest getf.7
+(deftest getf.order.2
   (let ((i 0) x y z)
     (values
      (getf (progn (setf x (incf i)) '(a b))
@@ -200,7 +200,7 @@
      foo))
   t)
 
-(deftest setf-getf.6
+(deftest setf-getf.order.1
   (let ((p (list (copy-list '(a 1 b 2))))
 	(cnt1 0) (cnt2 0) (cnt3 0))
     (setf (getf (car (progn (incf cnt1) p)) 'c (incf cnt3))
@@ -221,7 +221,7 @@
      t))
   t)
 
-(deftest setf-getf.7
+(deftest setf-getf.order.2
   (let ((p (list (copy-list '(a 1 b 2))))
 	(i 0) x y z w)
     (setf (getf (car (progn (setf x (incf i)) p))
@@ -323,7 +323,7 @@
       (not (eqt (car ptr) 'a)))))
   t 0)
 
-(deftest remf.5
+(deftest remf.order.1
   (let ((i 0) x y
 	(p (make-array 1 :initial-element (copy-list '(a b c d e f)))))
     (values

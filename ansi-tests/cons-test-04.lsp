@@ -15,18 +15,18 @@
 
 ;;; See also places.lsp
 
-(deftest push-1
+(deftest push.1
   (let ((x nil))
     (push 'a x))
   (a))
 
-(deftest push-2
+(deftest push.2
   (let ((x 'b))
     (push 'a x)
     (push 'c x))
   (c a . b))
 
-(deftest push-3
+(deftest push.3
   (let ((x (copy-tree '(a))))
     (push x x)
     (and
@@ -34,23 +34,32 @@
      x))
   ((a) a))
 
+(deftest push.order.1
+  (let ((x (list nil)) (i 0) a b)
+    (values
+     (push (progn (setf a (incf i)) 'z)
+	   (car (progn (setf b (incf i)) x)))
+     x
+     i a b))
+  (z) ((z)) 2 1 2)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; pop
 
-(deftest pop-1
+(deftest pop.1
   (let ((x (copy-tree '(a b c))))
     (let ((y (pop x)))
       (list x y)))
   ((b c) a))
 
-(deftest pop-2
+(deftest pop.2
   (let ((x nil))
     (let ((y (pop x)))
       (list x y)))
   (nil nil))
 
 ;;; Confirm argument is executed just once.
-(deftest pop-3
+(deftest pop.order.1
   (let ((i 0)
 	(a (vector (list 'a 'b 'c))))
     (pop (aref a (progn (incf i) 0)))
@@ -302,7 +311,7 @@
 	  :test-not (complement #'equal) :key nil)
   (aaa "AAA" "aaa" #\a))
 
-(deftest adjoin.19
+(deftest adjoin.order.1
   (let ((i 0) w x y z)
     (values
      (adjoin (progn (setf w (incf i)) 'a)
@@ -313,7 +322,7 @@
   (b c d a e)
   4 1 2 3 4)
 
-(deftest adjoin.20
+(deftest adjoin.order.2
   (let ((i 0) w x y z p)
     (values
      (adjoin (progn (setf w (incf i)) 'a)

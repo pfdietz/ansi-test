@@ -39,6 +39,11 @@
   (let ((g (gensym))) (fboundp (list 'setf g)))
   nil)
 
+(deftest fboundp.order.1
+  (let ((i 0))
+    (values (notnot (fboundp (progn (incf i) 'car))) i))
+  t 1)
+
 (deftest fboundp.error.1
   (classify-error (fboundp 1))
   type-error)

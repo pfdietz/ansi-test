@@ -24,6 +24,26 @@
      a))
   5 6 #(1 2 3 4 5 6))
 
+(deftest fill-pointer.order.1
+  (let ((i 0)
+	(a (make-array '(10) :fill-pointer 5)))
+    (values
+     (fill-pointer (progn (incf i) a))
+     i))
+  5 1)
+
+(deftest fill-pointer.order.2
+  (let ((i 0) x y
+	(a (make-array '(10) :fill-pointer 5
+		       :initial-contents '(1 2 3 4 5 6 7 8 9 10))))
+    (values
+     i
+     (setf (fill-pointer (progn (setf x (incf i)) a))
+	   (progn (setf y (incf i)) 6))
+     a
+     i x y))
+  0 6 #(1 2 3 4 5 6) 2 1 2)
+
 ;;; Error tests
 
 (deftest fill-pointer.error.1

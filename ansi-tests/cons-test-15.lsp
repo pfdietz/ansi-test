@@ -576,6 +576,3 @@
 (deftest mapcon.error.4
   (classify-error (locally (mapcon #'identity 1) t))
   type-error)
-
-
-

@@ -100,7 +100,7 @@
 	    count (eqt c1 c2)))))
   0)
 
-(deftest ldiff.9
+(deftest ldiff.order.1
   (let ((i 0) x y)
     (values
      (ldiff (progn (setf x (incf i))
@@ -108,7 +108,7 @@
 	    (progn (setf y (incf i))
 		   'd))
      i x y))
-  (a b c) 2 1 2)	       
+  (a b c) 2 1 2)       
 
 ;; Error checking
 
@@ -182,7 +182,6 @@
      t))
   t)
 
-
 ;; The next four tests test that tailp handles dotted lists.  See
 ;; TAILP-NIL:T in the X3J13 documentation.
 
@@ -251,7 +250,7 @@
   0)
 |#
     
-(deftest tailp.8
+(deftest tailp.order.1
   (let ((i 0) x y)
     (values
      (notnot

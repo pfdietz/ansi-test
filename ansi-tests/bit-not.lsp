@@ -119,6 +119,14 @@
   #2a((0 1)(1 0))
   #2a((1 0)(0 1)))
 
+(deftest bit-not.order.1
+  (let ((a (copy-seq #*001101))
+	(i 0) x)
+    (values
+     (bit-not (progn (setf x (incf i)) a))
+     i x))
+  #*110010 1 1)
+
 ;;; Error tests
 
 (deftest bit-not.error.1

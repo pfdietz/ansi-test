@@ -74,7 +74,7 @@
   (nthcdr 1 (cons 'a 'b))
   b)
 
-(deftest nthcdr.6
+(deftest nthcdr.order.1
   (let ((i 0) x y)
     (values
      (nthcdr (setf x (incf i))
@@ -88,6 +88,11 @@
 (deftest rest.1
   (rest (list 'a 'b 'c))
   (b c))
+
+(deftest rest.order.1
+  (let ((i 0))
+    (values (rest (progn (incf i) '(a b))) i))
+  (b) 1)
 
 (deftest rest.error.1
   (classify-error (rest))

@@ -10,19 +10,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; copy-list
 
-(deftest copy-list-1
-    (check-copy-list '(a b c d))
+(deftest copy-list.1
+  (check-copy-list '(a b c d))
   (a b c d))
 
 ;; Check that copy-list works on dotted lists
 
-(deftest copy-list-2
-    (check-copy-list '(a . b))
+(deftest copy-list.2
+  (check-copy-list '(a . b))
  (a . b))
 
-(deftest copy-list-3
-    (check-copy-list '(a b c . d))
+(deftest copy-list.3
+  (check-copy-list '(a b c . d))
   (a b c . d))
+
+(deftest copy-list.4
+  (let ((i 0))
+    (values (copy-list (progn (incf i) '(a b c)))
+	    i))
+  (a b c) 1)
 
 (deftest copy-list.error.1
   (classify-error (copy-list))
@@ -43,18 +49,18 @@
   (list)
   nil)
 
-(deftest list.3
+(deftest list.order.1
   (let ((i 0))
     (list (incf i) (incf i) (incf i) (incf i)))
   (1 2 3 4))
 
-(deftest list.4
+(deftest list.order.2
   (let ((i 0))
     (list (incf i) (incf i) (incf i) (incf i)
 	  (incf i) (incf i) (incf i) (incf i)))
   (1 2 3 4 5 6 7 8))
 
-(deftest list.5
+(deftest list.order.3
   (let ((i 0))
     (list (incf i) (incf i) (incf i) (incf i)
 	  (incf i) (incf i) (incf i) (incf i)
@@ -74,16 +80,16 @@
   (list* 'a 'b 'c (list 'd 'e 'f))
   (a b c d e f))
 
-(deftest list*-3
+(deftest list*.3
   (list* 1)
   1)
 
-(deftest list*.4
+(deftest list*.order.1
   (let ((i 0))
     (list* (incf i) (incf i) (incf i) (incf i)))
   (1 2 3 . 4))
 
-(deftest list*.5
+(deftest list*.order.2
   (let ((i 0))
     (list* (incf i) (incf i) (incf i) (incf i)
 	   (incf i) (incf i) (incf i) (incf i)
@@ -112,6 +118,11 @@
       (let ((z (list* 'a 'b 'c 'd 'e y)))
 	(list-length z))))
   nil)
+
+(deftest list-length.order.1
+  (let ((i 0))
+    (values (list-length (progn (incf i) '(a b c))) i))
+  3 1)
 
 
 ;; Check that list-length produces a type-error
@@ -174,6 +185,11 @@
   (check-type-predicate 'listp 'list)
   0)
 
+(deftest listp.order.1
+  (let ((i 0))
+    (values (listp (incf i)) i))
+  nil 1)
+
 (deftest listp.error.1
   (classify-error (listp))
   program-error)
@@ -213,11 +229,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; make-list
 
-(deftest make-list-empty-1
+(deftest make-list-empty.1
   (make-list 0)
   nil)
 
-(deftest make-list-empty-2
+(deftest make-list-empty.2
   (make-list 0 :initial-element 'a)
   nil)
 
@@ -253,7 +269,7 @@
   (make-list 5 :initial-element 'a :initial-element 'b)
   (a a a a a))
 
-(deftest make-list.order
+(deftest make-list.order.1
   (let ((i 0) x y)
     (values
      (make-list (progn (setf x (incf i)) 5)
@@ -262,6 +278,19 @@
      i x y))
   (a a a a a)
   2 1 2)
+
+(deftest make-list.order.2
+  (let ((i 0) x y z)
+    (values
+     (make-list (progn (setf x (incf i)) 5)
+		:initial-element
+		(progn (setf y (incf i)) 'a)
+		:initial-element
+		(progn (setf z (incf i)) 'b))
+     i x y z))
+  (a a a a a)
+  3 1 2 3)
+
 
 (deftest make-list.error.1
   (catch-type-error (make-list -1))

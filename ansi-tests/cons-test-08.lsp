@@ -11,7 +11,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Error checking car, cdr, list-length
 
-(deftest car-1
+(deftest car.1
   (car '(a))
   a)
 
@@ -27,13 +27,23 @@
   (classify-error (locally (car 'a) t))
   type-error)
 
-(deftest cdr-1
+(deftest car.order.1
+  (let ((i 0))
+    (values (car (progn (incf i) '(a b))) i))
+  a 1)
+
+(deftest cdr.1
   (cdr '(a b))
   (b))
 
 (deftest cdr-nil
   (cdr ())
   nil)
+
+(deftest cdr.order.1
+  (let ((i 0))
+    (values (cdr (progn (incf i) '(a b))) i))
+  (b) 1)
 
 (deftest cdr-symbol-error
   (classify-error (cdr 'a))
@@ -43,7 +53,7 @@
   (classify-error (locally (cdr 'a) t))
   type-error)
 
-(deftest list-length-4
+(deftest list-length.4
   (list-length (copy-tree '(a b c)))
   3)
 

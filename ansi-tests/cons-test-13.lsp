@@ -145,7 +145,7 @@
 
 ;;; Order of evaluation
 
-(deftest member.20
+(deftest member.order.1
   (let ((i 0) x y)
     (values
      (member (progn (setf x (incf i)) 'c)
@@ -153,7 +153,7 @@
      i x y))
   (c d) 2 1 2)
 
-(deftest member.21
+(deftest member.order.2
   (let ((i 0) x y z p)
     (values
      (member (progn (setf x (incf i)) 'c)
@@ -163,7 +163,7 @@
      i x y z p))
   (c d) 4 1 2 3 4)
 
-(deftest member.22
+(deftest member.order.3
   (let ((i 0) x y)
     (values
      (member (progn (setf x (incf i)) 'c)
@@ -172,7 +172,7 @@
      i x y))
   (c d) 2 1 2)
 
-(deftest member.23
+(deftest member.order.4
   (let ((i 0) x y z p q)
     (values
      (member (progn (setf x (incf i)) 'c)
@@ -183,7 +183,7 @@
      i x y z p q))
   (c d) 5 1 2 3 4 5)
 
-(deftest member.24
+(deftest member.order.5
   (let ((i 0) x y z q)
     (values
      (member (progn (setf x (incf i)) 'c)

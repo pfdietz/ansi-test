@@ -173,7 +173,7 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest set-exclusive-or.19
+(deftest set-exclusive-or.order.1
   (let ((i 0) x y)
     (values
      (sort
@@ -185,7 +185,7 @@
      i x y))
   (2 4 6 10) 2 1 2)
 
-(deftest set-exclusive-or.20
+(deftest set-exclusive-or.order.2
   (let ((i 0) x y z)
     (values
      (sort
@@ -199,7 +199,7 @@
      i x y z))
   (2 4 6 10) 3 1 2 3)
 
-(deftest set-exclusive-or.21
+(deftest set-exclusive-or.order.3
   (let ((i 0) x y z w)
     (values
      (sort
@@ -214,7 +214,7 @@
      i x y z w))
   (2 4 6 10) 4 1 2 3 4)
 
-(deftest set-exclusive-or.22
+(deftest set-exclusive-or.order.4
   (let ((i 0) x y z w)
     (values
      (sort
@@ -229,7 +229,7 @@
      i x y z w))
   (2 4 6 10) 4 1 2 3 4)
 
-(deftest set-exclusive-or.23
+(deftest set-exclusive-or.order.5
   (let ((i 0) x y z w)
     (values
      (sort
@@ -498,73 +498,73 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest nset-exclusive-or.19
+(deftest nset-exclusive-or.order.1
   (let ((i 0) x y)
     (values
      (sort
       (nset-exclusive-or (progn (setf x (incf i))
-			       (list 1 2 3 4))
-			(progn (setf y (incf i))
-			       (list 1 3 6 10)))
+				(list 1 2 3 4))
+			 (progn (setf y (incf i))
+				(list 1 3 6 10)))
       #'<)
      i x y))
   (2 4 6 10) 2 1 2)
 
-(deftest nset-exclusive-or.20
+(deftest nset-exclusive-or.order.2
   (let ((i 0) x y z)
     (values
      (sort
       (nset-exclusive-or (progn (setf x (incf i))
-			       (list 1 2 3 4))
-			(progn (setf y (incf i))
-			       (list 1 3 6 10))
-			:test (progn (setf z (incf i))
-				     #'eql))
+				(list 1 2 3 4))
+			 (progn (setf y (incf i))
+				(list 1 3 6 10))
+			 :test (progn (setf z (incf i))
+				      #'eql))
       #'<)
      i x y z))
   (2 4 6 10) 3 1 2 3)
 
-(deftest nset-exclusive-or.21
+(deftest nset-exclusive-or.order.3
   (let ((i 0) x y z w)
     (values
      (sort
       (nset-exclusive-or (progn (setf x (incf i))
-			       (list 1 2 3 4))
-			(progn (setf y (incf i))
-			       (list 1 3 6 10))
-			:test (progn (setf z (incf i))
-				     #'eql)
-			:key (progn (setf w (incf i)) nil))
+				(list 1 2 3 4))
+			 (progn (setf y (incf i))
+				(list 1 3 6 10))
+			 :test (progn (setf z (incf i))
+				      #'eql)
+			 :key (progn (setf w (incf i)) nil))
       #'<)
      i x y z w))
   (2 4 6 10) 4 1 2 3 4)
 
-(deftest nset-exclusive-or.22
+(deftest nset-exclusive-or.order.4
   (let ((i 0) x y z w)
     (values
      (sort
       (nset-exclusive-or (progn (setf x (incf i))
-			       (list 1 2 3 4))
-			(progn (setf y (incf i))
-			       (list 1 3 6 10))
-			:key (progn (setf z (incf i)) nil)
-			:test (progn (setf w (incf i))
-				     #'eql))
+				(list 1 2 3 4))
+			 (progn (setf y (incf i))
+				(list 1 3 6 10))
+			 :key (progn (setf z (incf i)) nil)
+			 :test (progn (setf w (incf i))
+				      #'eql))
       #'<)
      i x y z w))
   (2 4 6 10) 4 1 2 3 4)
 
-(deftest nset-exclusive-or.23
+(deftest nset-exclusive-or.order.5
   (let ((i 0) x y z w)
     (values
      (sort
       (nset-exclusive-or (progn (setf x (incf i))
-			       (list 1 2 3 4))
-			(progn (setf y (incf i))
-			       (list 1 3 6 10))
-			:key (progn (setf z (incf i)) nil)
-			:key (progn (setf w (incf i))
-				    (complement #'eql)))
+				(list 1 2 3 4))
+			 (progn (setf y (incf i))
+				(list 1 3 6 10))
+			 :key (progn (setf z (incf i)) nil)
+			 :key (progn (setf w (incf i))
+				     (complement #'eql)))
       #'<)
      i x y z w))
   (2 4 6 10) 4 1 2 3 4)

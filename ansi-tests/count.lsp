@@ -488,7 +488,7 @@
 
 ;;; Argument order tests
 
-(deftest count-order.1
+(deftest count.order.1
   (let ((i 0) c1 c2 c3 c4 c5 c6 c7)
     (values
      (count (progn (setf c1 (incf i)) nil)
@@ -502,7 +502,7 @@
      i c1 c2 c3 c4 c5 c6 c7))
   1 7 1 2 3 4 5 6 7)
 
-(deftest count-order.2
+(deftest count.order.2
   (let ((i 0) c1 c2 c3 c4 c5 c6 c7)
     (values
      (count (progn (setf c1 (incf i)) nil)

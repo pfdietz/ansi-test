@@ -31,6 +31,11 @@
   (funcall #'eval 1)
   1)
 
+(deftest eval.order.1
+  (let ((i 0))
+    (values (eval (progn (incf i) 10)) i))
+  10 1)
+
 ;;; Error cases
 
 (deftest eval.error.1
@@ -40,3 +45,8 @@
 (deftest eval.error.2
   (classify-error (eval nil nil))
   program-error)
+
+(deftest eval.error.3
+  (classify-error (eval (list (gensym))))
+  undefined-function)
+

@@ -128,7 +128,7 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest subsetp.16
+(deftest subsetp.order.1
   (let ((i 0) x y)
     (values
      (notnot (subsetp (progn (setf x (incf i))
@@ -138,7 +138,7 @@
      i x y))
   t 2 1 2)
 
-(deftest subsetp.17
+(deftest subsetp.order.2
   (let ((i 0) x y z w)
     (values
      (notnot (subsetp (progn (setf x (incf i))
@@ -150,7 +150,7 @@
      i x y z w))
   t 4 1 2 3 4)
 
-(deftest subsetp.18
+(deftest subsetp.order.3
   (let ((i 0) x y z w)
     (values
      (notnot (subsetp (progn (setf x (incf i))
@@ -161,8 +161,6 @@
 		      :test (progn (setf w (incf i)) #'eql)))
      i x y z w))
   t 4 1 2 3 4)
-
-
 
 ;;; Keyword tests
 

@@ -53,6 +53,23 @@
 	always (if p1 p2 (not p2)))
   t)
 
+(deftest bit-vector-p.order.1
+  (let ((i 0) x)
+    (values
+     (notnot (bit-vector-p (progn (setf x (incf i)) #*0010)))
+     i x))
+  t 1 1)
+
+(deftest bit-vector-p.order.2
+  (let ((i 0) x)
+    (values
+     (bit-vector-p (progn (setf x (incf i)) 'a))
+     i x))
+  nil 1 1)
+
+
+    
+
 (deftest bit-vector-p.error.1
   (classify-error (bit-vector-p))
   program-error)

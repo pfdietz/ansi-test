@@ -184,7 +184,7 @@
   #*01100
   nil)
 
-(deftest concatenate.31
+(deftest concatenate.order.1
   (let ((i 0) w x y z)
     (values
      (concatenate (progn (setf w (incf i)) 'string)
@@ -194,7 +194,7 @@
      i w x y z))
   "abcdefghi" 4 1 2 3 4)
 
-(deftest concatenate.32
+(deftest concatenate.order.2
   (let ((i 0) x y z)
     (values
      (concatenate 'string
@@ -206,28 +206,28 @@
 
 ;;; Error tests
 
-(deftest concatenate-error.1
+(deftest concatenate.error.1
   (handler-case
    (progn (proclaim '(optimize (safety 3)))
 	  (eval '(concatenate 'sequence '(a b c))))
    (error () :caught))
   :caught)
 
-(deftest concatenate-error.2
+(deftest concatenate.error.2
   (handler-case
       (progn (proclaim '(optimize (safety 3)))
 	     (concatenate 'fixnum '(a b c d e)))
       (error () :caught))
   :caught)
 
-(deftest concatenate-error.3
+(deftest concatenate.error.3
   (classify-error (concatenate '(vector * 3) '(a b c d e)))
   type-error)
 
-(deftest concatenate-error.4
+(deftest concatenate.error.4
   (classify-error (concatenate))
   program-error)
 
-(deftest concatenate-error.5
+(deftest concatenate.error.5
   (classify-error (locally (concatenate '(vector * 3) '(a b c d e)) t))
   type-error)

@@ -29,6 +29,13 @@
     (check-cons-copy x y))
   t)
 
+(deftest copy-tree.order.1
+  (let ((i 0))
+    (values
+     (copy-tree (progn (incf i) '(a b c)))
+     i))
+  (a b c) 1)
+
 (deftest copy-tree.error.1
   (classify-error (copy-tree))
   program-error)
@@ -36,6 +43,8 @@
 (deftest copy-tree.error.2
   (classify-error (copy-tree 'a 'b))
   program-error)
+
+;;;
 
 (deftest sublis.1
   (check-sublis '((a b) g (d e 10 g h) 15 . g)
@@ -96,7 +105,7 @@
   (2 2 b b))
 
 ;;; Order of argument evaluation
-(deftest sublis.9
+(deftest sublis.order.1
   (let ((i 0) w x y z)
     (values
      (sublis
@@ -110,7 +119,7 @@
   (z b c d)
   4 1 2 3 4)
 
-(deftest sublis.10
+(deftest sublis.order.2
   (let ((i 0) w x y z)
     (values
      (sublis
@@ -237,7 +246,7 @@
   (2 2 b b))
 
 ;;; Order of argument evaluation
-(deftest nsublis.10
+(deftest nsublis.order.1
   (let ((i 0) w x y z)
     (values
      (nsublis
@@ -251,7 +260,7 @@
   (z b c d)
   4 1 2 3 4)
 
-(deftest nsublis.11
+(deftest nsublis.order.2
   (let ((i 0) w x y z)
     (values
      (nsublis
@@ -376,7 +385,7 @@
   (a a c d a a))
 
 ;;; Order of argument evaluation
-(deftest subst.10
+(deftest subst.order.1
   (let ((i 0) v w x y z)
     (values
      (subst (progn (setf v (incf i)) 'b)
@@ -388,7 +397,7 @@
   ((10 b . b) b b c ((b)) z)
   5 1 2 3 4 5)
 
-(deftest subst.11
+(deftest subst.order.2
   (let ((i 0) v w x y z)
     (values
      (subst (progn (setf v (incf i)) 'b)
@@ -641,7 +650,7 @@
   (a a c d a a))
 
 ;;; Order of argument evaluation
-(deftest nsubst.10
+(deftest nsubst.order.1
   (let ((i 0) v w x y z)
     (values
      (nsubst (progn (setf v (incf i)) 'b)
@@ -653,7 +662,7 @@
   ((10 b . b) b b c ((b)) z)
   5 1 2 3 4 5)
 
-(deftest nsubst.11
+(deftest nsubst.order.2
   (let ((i 0) v w x y z)
     (values
      (nsubst (progn (setf v (incf i)) 'b)

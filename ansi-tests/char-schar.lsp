@@ -78,7 +78,7 @@
     s)
   "aaaXa")
 
-(deftest char.11
+(deftest char.order.1
   (let ((i 0) a b)
     (values
      (char (progn (setf a (incf i)) "abc")
@@ -86,7 +86,7 @@
      i a b))
   #\b 2 1 2)
 
-(deftest char.12
+(deftest char.order.2
   (let ((i 0) a b c (s (make-string 5 :initial-element #\z)))
     (values
      (setf
@@ -145,7 +145,7 @@
     s)
   "xxXxxx")
 
-(deftest schar.11
+(deftest schar.order.1
   (let ((i 0) a b)
     (values
      (schar (progn (setf a (incf i)) "abc")
@@ -153,7 +153,7 @@
      i a b))
   #\b 2 1 2)
 
-(deftest schar.12
+(deftest schar.order.2
   (let ((i 0) a b c (s (copy-seq "zzzzz")))
     (values
      (setf

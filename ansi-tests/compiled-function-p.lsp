@@ -21,6 +21,13 @@
   (notnot-mv (compiled-function-p (compile nil '(lambda (y x) (cons x y)))))
   t)
 
+(deftest compiled-function-p.order.1
+  (let ((i 0))
+    (values
+     (compiled-function-p (progn (incf i) '(lambda () nil)))
+     i))
+  nil 1)
+
 (deftest compiled-function-p.error.1
   (classify-error (compiled-function-p))
   program-error)

@@ -151,7 +151,7 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest set-difference.20
+(deftest set-difference.order.1
   (let ((i 0) x y)
     (values
      (set-difference (progn (setf x (incf i)) (list 1 2 3 4))
@@ -159,7 +159,7 @@
      i x y))
   (1) 2 1 2)
 
-(deftest set-difference.21
+(deftest set-difference.order.2
   (let ((i 0) x y z)
     (values
      (set-difference (progn (setf x (incf i)) (list 1 2 3 4))
@@ -169,7 +169,7 @@
      i x y z))
   (4) 3 1 2 3)
 
-(deftest set-difference.22
+(deftest set-difference.order.3
   (let ((i 0) x y z w)
     (values
      (set-difference (progn (setf x (incf i)) (list 1 2 3 4))
@@ -437,7 +437,7 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest nset-difference.20
+(deftest nset-difference.order.1
   (let ((i 0) x y)
     (values
      (nset-difference (progn (setf x (incf i)) (list 1 2 3 4))
@@ -445,7 +445,7 @@
      i x y))
   (1) 2 1 2)
 
-(deftest nset-difference.21
+(deftest nset-difference.order.2
   (let ((i 0) x y z)
     (values
      (nset-difference (progn (setf x (incf i)) (list 1 2 3 4))
@@ -455,7 +455,7 @@
      i x y z))
   (4) 3 1 2 3)
 
-(deftest nset-difference.22
+(deftest nset-difference.order.3
   (let ((i 0) x y z w)
     (values
      (nset-difference (progn (setf x (incf i)) (list 1 2 3 4))

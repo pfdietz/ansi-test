@@ -46,7 +46,7 @@
 
 ;;; Order of argument tests
 
-(deftest member-if.6
+(deftest member-if.order.1
   (let ((i 0) x y)
     (values
      (member-if (progn (setf x (incf i))
@@ -56,7 +56,7 @@
      i x y))
   (a b nil c d) 2 1 2)
 
-(deftest member-if.7
+(deftest member-if.order.2
   (let ((i 0) x y z w)
     (values
      (member-if (progn (setf x (incf i))
@@ -140,7 +140,7 @@
 
 ;;; Order of evaluation tests
 
-(deftest member-if-not.6
+(deftest member-if-not.order.1
   (let ((i 0) x y)
     (values
      (member-if-not (progn (setf x (incf i))
@@ -150,7 +150,7 @@
      i x y))
   (a b nil c d) 2 1 2)
 
-(deftest member-if-not.7
+(deftest member-if-not.order.2
   (let ((i 0) x y z w)
     (values
      (member-if-not (progn (setf x (incf i))

@@ -51,7 +51,7 @@
   (eqlt #c(1 -2) (- #c(-1 2)))
   t)
 
-(deftest eql.12
+(deftest eql.order.1
   (let ((i 0) x y)
     (values
      (eql (setf x (incf i)) (setf y (incf i)))

@@ -237,7 +237,7 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest intersection.19
+(deftest intersection.order.1
   (let ((i 0) x y)
     (values
      (intersection (progn (setf x (incf i)) (list 'a 'b))
@@ -245,7 +245,7 @@
      i x y))
   nil 2 1 2)
 
-(deftest intersection.20
+(deftest intersection.order.2
   (let ((i 0) x y)
     (values
      (intersection (progn (setf x (incf i)) (list 'a 'b))
@@ -254,7 +254,7 @@
      i x y))
   nil 2 1 2)
 
-(deftest intersection.21
+(deftest intersection.order.3
   (let ((i 0) x y z w)
     (values
      (intersection (progn (setf x (incf i)) (list 'a 'b))
@@ -265,7 +265,7 @@
      i x y z w))
   nil 4 1 2 3 4)
 
-(deftest intersection.22
+(deftest intersection.order.4
   (let ((i 0) x y z w)
     (values
      (intersection (progn (setf x (incf i)) (list 'a 'b))
@@ -275,7 +275,7 @@
      i x y z w))
   nil 4 1 2 3 4)
 
-(deftest intersection.23
+(deftest intersection.order.5
   (let ((i 0) x y z w)
     (values
      (intersection (progn (setf x (incf i)) (list 'a 'b))
@@ -566,7 +566,7 @@
 
 ;;; Order of argument evaluation tests
 
-(deftest nintersection.19
+(deftest nintersection.order.1
   (let ((i 0) x y)
     (values
      (nintersection (progn (setf x (incf i)) (list 'a 'b))
@@ -574,7 +574,7 @@
      i x y))
   nil 2 1 2)
 
-(deftest nintersection.20
+(deftest nintersection.order.2
   (let ((i 0) x y)
     (values
      (nintersection (progn (setf x (incf i)) (list 'a 'b))
@@ -583,7 +583,7 @@
      i x y))
   nil 2 1 2)
 
-(deftest nintersection.21
+(deftest nintersection.order.3
   (let ((i 0) x y z w)
     (values
      (nintersection (progn (setf x (incf i)) (list 'a 'b))
@@ -594,7 +594,7 @@
      i x y z w))
   nil 4 1 2 3 4)
 
-(deftest nintersection.22
+(deftest nintersection.order.4
   (let ((i 0) x y z w)
     (values
      (nintersection (progn (setf x (incf i)) (list 'a 'b))
@@ -604,7 +604,7 @@
      i x y z w))
   nil 4 1 2 3 4)
 
-(deftest nintersection.23
+(deftest nintersection.order.5
   (let ((i 0) x y z w)
     (values
      (nintersection (progn (setf x (incf i)) (list 'a 'b))

@@ -61,7 +61,7 @@
 	 'foo)
   (a c e . foo))
 
-(deftest nconc.8
+(deftest nconc.order.1
   (let ((i 0) x y z)
     (values
      (nconc (progn (setf x (incf i)) (copy-list '(a b c)))
@@ -69,7 +69,13 @@
 	    (progn (setf z (incf i)) (copy-list '(g h i))))
      i x y z))
   (a b c d e f g h i) 3 1 2 3)
-	    
+
+(deftest nconc.order.2
+  (let ((i 0))
+    (values
+     (nconc (incf i))
+     i))
+  1 1)	    
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; append
@@ -108,7 +114,7 @@
   (append-6-body)
   0)
 
-(deftest append.7
+(deftest append.order.1
   (let ((i 0) x y z)
     (values
      (append (progn (setf x (incf i)) (copy-list '(a b c)))
@@ -116,6 +122,10 @@
 	     (progn (setf z (incf i)) (copy-list '(g h i))))
      i x y z))
   (a b c d e f g h i) 3 1 2 3)
+
+(deftest append.order.2
+  (let ((i 0)) (values (append (incf i)) i))
+  1 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; revappend
@@ -146,7 +156,7 @@
     (revappend (copy-tree '(a (b c) d)) nil)
   (d (b c) a))
 
-(deftest revappend.5
+(deftest revappend.order.1
   (let ((i 0) x y)
     (values
      (revappend (progn (setf x (incf i)) (copy-list '(a b c)))
@@ -181,7 +191,7 @@
   (nreconc nil 'a)
   a)
 
-(deftest nreconc.3
+(deftest nreconc.order.1
   (let ((i 0) x y)
     (values
      (nreconc (progn (setf x (incf i)) (copy-list '(a b c)))
