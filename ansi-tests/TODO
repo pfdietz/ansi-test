@@ -105,3 +105,9 @@ Got:      0
 31. Add tests for GENTEMP
 
 32. Check that the fields of standardized error conditions are set properly
+
+33. Test SETF MACRO-FUNCTION
+
+34. (from C Rhodes) Test that CERROR allows additional arguments after a
+  condition designating itself to be used in the continue format control.
+
