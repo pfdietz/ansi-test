@@ -8,10 +8,11 @@
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (unless #| (fboundp 'class-precedence-list) |# nil
     (report-and-ignore-errors
-      (defgeneric class-precedence-list (x)
+      (defgeneric class-precedence-list-foo (x)
 	(:method-combination list)
 	.
 	#.(loop for s in *cl-types-that-are-classes-symbols*
+		when (ignore-errors (pcl::find-class-from-cell s (pcl::find-class-cell s)))
 		collect
 		`(:method list ((x ,s)) ',s))))))
 
@@ -27,7 +28,7 @@
 					"-CPL")
 			   :cl-test))
        (let* ((obj ,objform)
-	      (cpl (class-precedence-list obj)))
+	      (cpl (class-precedence-list-foo obj)))
 	 (or ,(if ordered
 		  nil
 		`(and (not (eql (class-of obj) (find-class ',(first expected-cpl))))
