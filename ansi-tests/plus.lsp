@@ -317,6 +317,36 @@
     collect (list i j x y sum)))
   nil)
 
+;;; Negative zero tests (suggested by R. Toy)
+
+(deftest plus.24
+  (funcall
+   (compile nil '(lambda (x) (declare (type short-float x) (optimize (speed 3) (safety 0) (debug 0)))
+		   (+ 0.0s0 x)))
+   -0.0s0)
+  0.0s0)
+
+(deftest plus.25
+  (funcall
+   (compile nil '(lambda (x) (declare (type single-float x) (optimize (speed 3) (safety 0) (debug 0)))
+		   (+ 0.0f0 x)))
+   -0.0f0)
+  0.0f0)
+
+(deftest plus.26
+  (funcall
+   (compile nil '(lambda (x) (declare (type double-float x) (optimize (speed 3) (safety 0) (debug 0)))
+		   (+ 0.0d0 x)))
+   -0.0d0)
+  0.0d0)
+
+(deftest plus.27
+  (funcall
+   (compile nil '(lambda (x) (declare (type long-float x) (optimize (speed 3) (safety 0) (debug 0)))
+		   (+ 0.0l0 x)))
+   -0.0l0)
+  0.0l0)
+
 ;;; Must test combinations of reals and complex arguments.
 
 
