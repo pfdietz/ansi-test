@@ -104,4 +104,33 @@
 		   (t 'good))))))))))
   good)
 
+(deftest defclass.forward-ref.4
+  (block nil
+    (let ((c1 (gensym))
+	  (c2 (gensym))
+	  (c3 (gensym))
+	  (c4 (gensym))
+	  (c5 (gensym)))
+      (unless (typep (eval `(defclass ,c4 nil nil)) 'class)
+	(return 1))
+      (unless (typep (eval `(defclass ,c5 nil nil)) 'class)
+	(return 2))
+      (unless (typep (eval `(defclass ,c1 (,c2 ,c3) nil)) 'class)
+	(return 3))
+      (unless (typep (eval `(defclass ,c2 (,c4 ,c5) nil)) 'class)
+	(return 4))
+      (let ((error-symbol
+	     (classify-error**
+	      `(progn
+		 (defclass ,c3 (,c5 ,c4) nil)
+		 (make-instance ',c1)))))
+	(and (symbolp error-symbol)
+	     (subtypep error-symbol 'error)
+	     'good))))
+  good)
+
+  
+       
+    
+
 
