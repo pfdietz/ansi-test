@@ -20,10 +20,15 @@
 	   (=t (length results) 3)
 	   (probe-file pn1)
 	   (notnot (probe-file pn2))
+	   (list (notnot (pathnamep defaulted-new-name))
+		 (notnot (pathnamep old-truename))
+		 (notnot (pathnamep new-truename))
+		 (typep old-truename 'logical-pathname)
+		 (typep new-truename 'logical-pathname))
 	   (notnot (probe-file defaulted-new-name))
 	   (probe-file old-truename)
 	   (notnot (probe-file new-truename))))))
-  t nil t t nil t)
+  t nil t (t t t nil nil) t nil t)
 
 (deftest rename-file.2
   (let ((pn1 "file-to-be-renamed.txt")
@@ -40,10 +45,15 @@
 	   (=t (length results) 3)
 	   (probe-file pn1)
 	   (notnot (probe-file pn2))
+	   (list (notnot (pathnamep defaulted-new-name))
+		 (notnot (pathnamep old-truename))
+		 (notnot (pathnamep new-truename))
+		 (typep old-truename 'logical-pathname)
+		 (typep new-truename 'logical-pathname))
 	   (notnot (probe-file defaulted-new-name))
 	   (probe-file old-truename)
 	   (notnot (probe-file new-truename))))))
-  t nil t t nil t)
+  t nil t (t t t nil nil) t nil t)
 
  (deftest rename-file.3
   (let* ((pn1 (make-pathname :name "file-to-be-renamed"
@@ -67,10 +77,15 @@
 	   (=t (length results) 3)
 	   (probe-file pn1)
 	   (notnot (probe-file pn3))
+	   (list (notnot (pathnamep defaulted-new-name))
+		 (notnot (pathnamep old-truename))
+		 (notnot (pathnamep new-truename))
+		 (typep old-truename 'logical-pathname)
+		 (typep new-truename 'logical-pathname))
 	   (notnot (probe-file defaulted-new-name))
 	   (probe-file old-truename)
 	   (notnot (probe-file new-truename))))))
-  t t nil t t nil t)
+  t t nil t (t t t nil nil) t nil t)
 
 (deftest rename-file.4
   (let ((pn1 "file-to-be-renamed.txt")
@@ -89,10 +104,15 @@
 	   (=t (length results) 3)
 	   (probe-file pn1)
 	   (notnot (probe-file pn2))
+	   (list (notnot (pathnamep defaulted-new-name))
+		 (notnot (pathnamep old-truename))
+		 (notnot (pathnamep new-truename))
+		 (typep old-truename 'logical-pathname)
+		 (typep new-truename 'logical-pathname))
 	   (notnot (probe-file defaulted-new-name))
 	   (probe-file old-truename)
 	   (notnot (probe-file new-truename)))))))
-  t nil t t nil t)
+  t nil t (t t t nil nil) t nil t)
 
 (deftest rename-file.5
   (let ((pn1 "CLTEST:file-to-be-renamed.txt")
@@ -109,10 +129,17 @@
 	   (=t (length results) 3)
 	   (probe-file pn1)
 	   (notnot (probe-file pn2))
+	   (list (notnot (pathnamep defaulted-new-name))
+		 (notnot (pathnamep old-truename))
+		 (notnot (pathnamep new-truename))
+		 (typep old-truename 'logical-pathname)
+		 (typep new-truename 'logical-pathname))
 	   (notnot (probe-file defaulted-new-name))
 	   (probe-file old-truename)
-	   (notnot (probe-file new-truename))))))
-  t nil t t nil t)
+	   (notnot (probe-file new-truename))
+	   (notnot (typep defaulted-new-name 'logical-pathname))
+	   ))))
+  t nil t (t t t nil nil) t nil t t)
 
 ;;;
 

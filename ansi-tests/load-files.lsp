@@ -12,4 +12,5 @@
 (load "file-author.lsp")
 (load "file-write-date.lsp")
 (load "rename-file.lsp")
-
+(load "delete-file.lsp")
+(load "file-error.lsp")

@@ -52,6 +52,9 @@
       author))
   nil)
 
+;;; FIXME
+;;; Add LPN test
+
 ;;; Error tests
 
 (deftest file-author.error.1

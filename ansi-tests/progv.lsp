@@ -83,3 +83,13 @@
      10
      (return 'good)))
   good)
+
+;;; Variables that are not bound don't have any type constraints
+
+(deftest progv.12
+  (progv '(x y) '(1)
+    (locally (declare  (special x y) (type nil y))
+	     (values
+	      x
+	      (boundp 'y))))
+  1 nil)

@@ -14,3 +14,12 @@
 	    (symbol-value
 	     (synonym-stream-symbol x))))))
 
+(defun explode-pathname (pn)
+  (list
+   :host   (pathname-host pn)
+   :device (pathname-device pn)
+   :directory (pathname-directory pn)
+   :name   (pathname-name pn)
+   :type   (pathname-type pn)
+   :version (pathname-version pn)))
+

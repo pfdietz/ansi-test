@@ -54,6 +54,21 @@
 	 ))))
   t nil t t)
 
+(deftest truename.5
+  (let* ((lpn "CLTEST:foo.txt")
+	 (pn (translate-logical-pathname lpn)))
+    (unless (probe-file lpn)
+      (with-open-file (s lpn :direction :output) (format s "Stuff~%")))
+    (let ((tn (truename lpn)))
+      (values
+       (notnot (pathnamep pn))
+       (if (equalt (pathname-name pn) (pathname-name tn))
+	   t (list (pathname-name pn) (pathname-name tn)))
+       (if (equalt (pathname-type pn) (pathname-type tn))
+	   t (list (pathname-type pn) (pathname-type tn)))
+       )))
+  t t t)
+
 ;;;
 
 (deftest truename.error.1

@@ -50,6 +50,9 @@
   (length (multiple-value-list (file-write-date "file-write-date.lsp")))
   1)
 
+;;; FIXME
+;;; Add LPN test
+
 ;;;
 
 (deftest file-write-date.error.1
@@ -71,5 +74,3 @@
    (file-write-date (make-pathname :name "file-write-date" :type :wild
 				   :defaults *default-pathname-defaults*)))
   file-error)
-
-

@@ -107,7 +107,8 @@
   
   (loop for i from 1 to n
 	do (when (= (mod i 100) 0)
-	     #+sbcl (sb-ext::gc :full t)
+	     ;; #+sbcl (print "Do gc...")
+	     ;; #+sbcl (sb-ext::gc :full t)
 	     (prin1 i) (princ " ") (finish-output *standard-output*))
 	nconc (let ((result (test-random-integer-form size nvars)))
 		(when result
@@ -391,7 +392,7 @@
      (1 `(/ ,(make-random-integer-form (1- size)) -1))
 
      ;; tagbody
-     (5 (make-random-tagbody size))
+     (5 (make-random-tagbody-and-progn size))
 
      ;; conditionals
      (20
@@ -467,19 +468,20 @@
 	     (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
 	`(catch ,tag ,(make-random-integer-form (1- size)))))
      
-     (4 ;; setq
+     (4 ;; setq and similar
       (if *vars*
 	  (let* ((vdesc (random-from-seq *vars*))
 		 (var (var-desc-name vdesc))
-		 (type (var-desc-type vdesc)))
+		 (type (var-desc-type vdesc))
+		 (op (random-from-seq #(setq setf))))
 	    (cond
 	     ((equal type '(integer * *))
-	      `(setq ,var ,(make-random-integer-form (1- size))))
+	      `(,op ,var ,(make-random-integer-form (1- size))))
 	     ((and (consp type)
 		   (eq (car type) 'integer)
 		   (integerp (second type))
 		   (integerp (third type)))
-	      `(setq ,var ,(random-from-interval (1+ (third type)) (second type))))
+	      `(,op ,var ,(random-from-interval (1+ (third type)) (second type))))
 	     ;; Abort -- can't assign
 	     (t (make-random-integer-form size))))
 	(make-random-integer-form size)))
@@ -589,25 +591,32 @@
   (let* ((num-forms (random 6))
 	 (tags nil))
     (loop for i below num-forms
-	  do (loop for tag = (rcase (1 (random 8))
-				    (1 (random-from-seq #(tag1 tag2 tag3 tag4 tag5 tag6 tag7 tag8))))
+	  do (loop for tag = (rcase
+			      #-acl (1 (random 8))
+			      (1 (random-from-seq #(tag1 tag2 tag3 tag4
+							 tag5 tag6 tag7 tag8))))
 		   while (member tag tags)
 		   finally (push tag tags)))
     (assert (= (length (remove-duplicates tags)) (length tags)))
     (let* ((*go-tags* (set-difference *go-tags* tags))
-	   (sizes (random-partition (1- size) (1+ num-forms)))
+	   (sizes (if (> num-forms 0) (random-partition (1- size) num-forms) nil))
 	   (forms
 	    (loop for tag-list on tags
 		  for i below num-forms
 		  for size in sizes
 		  collect (let ((*go-tags* (append tag-list *go-tags*)))
-			    (make-random-integer-form size))))
-	   (final-form (make-random-integer-form (car (last sizes)))))
-      `(progn (tagbody ,@(loop for tag in tags
-			       for form in forms
-			       when (atom form) do (setq form `(progn ,form))
-			       append `(,form ,tag)))
-	      ,final-form))))
+			    (make-random-integer-form size)))))
+      `(tagbody ,@(loop for tag in tags
+			for form in forms
+			when (atom form) do (setq form `(progn ,form))
+			append `(,form ,tag))))))
+
+(defun make-random-tagbody-and-progn (size)
+  (let* ((final-size (random (max 1 (floor size 5))))
+	 (tagbody-size (- size final-size)))
+    (let ((final-form (make-random-integer-form final-size))
+	  (tagbody-form (make-random-tagbody tagbody-size)))
+      `(progn ,tagbody-form ,final-form))))
 
 (defun make-random-pred-form (size)
   "Make a random form whose value is to be used as a generalized boolean."
@@ -1065,7 +1074,7 @@
 	      (try (eval form)))
 	    (prune-fn form try-fn)))
 
-	 ((setq)
+	 ((setq setf)
 	  (try 0)
 	  ;; Assumes only one assignment
 	  (assert (= (length form) 3))

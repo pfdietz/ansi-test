@@ -134,7 +134,8 @@
        )))
   2 t t t "")
 
-
+;; FIXME
+;; Need to add a LPN test
 
 (deftest ensure-directories-exist.error.1
   (classify-error

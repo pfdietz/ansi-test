@@ -12,16 +12,21 @@
 (deftest probe-file.2
   (let ((s (open #p"probe-file.lsp" :direction :input)))
     (prog1
-	(equalp (truename #p"probe-file.lsp")
-		(probe-file s))
+	(equalpt (truename #p"probe-file.lsp")
+		 (probe-file s))
       (close s)))
   t)
 
 (deftest probe-file.3
   (let ((s (open #p"probe-file.lsp" :direction :input)))
     (close s)
-    (equalp (truename #p"probe-file.lsp")
-	    (probe-file s)))
+    (equalpt (truename #p"probe-file.lsp")
+	     (probe-file s)))
+  t)
+
+(deftest probe-file.4
+  (equalpt (truename #p"probe-file.lsp")
+	   (probe-file "CLTEST:probe-file.lsp"))
   t)
 
 (deftest probe-file.error.1
@@ -36,6 +41,6 @@
   (classify-error (probe-file (make-pathname :name :wild)))
   file-error)
 
-
-
-  
+(deftest probe-file.error.4
+  (classify-error (probe-file "CLTEST:*.FOO"))
+  file-error)
