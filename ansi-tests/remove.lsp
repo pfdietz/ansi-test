@@ -202,6 +202,8 @@
  t)
 
 ;;; Show that it tests using EQL, not EQ
+;;; NOTE: this test was bogus, since we can't sure non-EQness is preserved
+#|
 (deftest remove-list.18
    (let* ((i (1+ most-positive-fixnum))
 	  (orig (list i 0 i 1 i 2 3))
@@ -209,6 +211,7 @@
 	  (y (remove (1+ most-positive-fixnum) x)))
      (and (equalp orig x) y))
    (0 1 2 3))
+|#
 
 (deftest remove-list.19
   (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
