@@ -5,32 +5,46 @@
 
 (in-package :cl-test)
 
-(defclass slot-missing-class-01 ()
-  (a b c))
+(defparameter *slot-missing-class-01-var* nil)
+
+(defclass slot-missing-class-01 () (a b c))
 
 (defmethod slot-missing ((class t) (obj slot-missing-class-01)
 			 (slot-name t) (operation t)
 			 &optional (new-value nil new-value-p))
-  (list slot-name operation new-value (notnot new-value-p)))
+  (setf *slot-missing-class-01-var*
+	(list slot-name operation new-value (notnot new-value-p))))
 
 (deftest slot-missing.1
   (let ((obj (make-instance 'slot-missing-class-01)))
-    (slot-value obj 'foo))
+    (values
+     (slot-value obj 'foo)
+     *slot-missing-class-01-var*))
+  (foo slot-value nil nil)
   (foo slot-value nil nil))
 
 (deftest slot-missing.2
   (let ((obj (make-instance 'slot-missing-class-01)))
-    (setf (slot-value obj 'foo) 'bar))
+    (values
+     (setf (slot-value obj 'foo) 'bar)
+     *slot-missing-class-01-var*))
+  bar
   (foo setf bar t))
 
 (deftest slot-missing.3
   (let ((obj (make-instance 'slot-missing-class-01)))
-    (slot-makunbound obj 'xyz))
+    (values
+     (eqt obj (slot-makunbound obj 'xyz))
+     *slot-missing-class-01-var*))
+  t
   (xyz slot-makunbound nil nil))
 
 (deftest slot-missing.4
   (let ((obj (make-instance 'slot-missing-class-01)))
-    (slot-boundp obj 'abc))
+    (values
+     (notnot (slot-boundp obj 'abc))
+     *slot-missing-class-01-var*))
+  t
   (abc slot-boundp nil nil))
 
 (deftest slot-missing.5
@@ -62,7 +76,3 @@
   (let* ((obj (make-instance 'slot-missing-class-01)))
     (slot-boundp obj 'not-there))
   nil)
-
-
-
-
