@@ -1960,3 +1960,26 @@
    -24 5657943)
   5520737)
 
+;;; sbcl bug (0.8.5.19)
+;;; "The value NIL is not of type SB-C::REF."
+
+(deftest misc.152
+  (funcall
+   (compile nil
+	    '(lambda (a)
+	       (block b5
+		 (let ((v1 (let ((v8 (unwind-protect 9365)))
+			     8862008)))
+		   (*
+		    (return-from b5
+		      (labels ((%f11 (f11-1) f11-1))
+			(%f11 87246015)))
+		    (return-from b5
+		      (setq v1
+			    (labels ((%f6 (f6-1 f6-2 f6-3) v1))
+			      (dpb (unwind-protect a)
+				   (byte 18 13)
+				   (labels ((%f4 () 27322826))
+				     (%f6 -2 -108626545 (%f4))))))))))))
+   -6)
+  87246015)
