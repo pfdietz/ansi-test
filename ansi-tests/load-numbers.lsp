@@ -27,6 +27,9 @@
 (load "plus.lsp")
 (load "minus.lsp")
 (load "divide.lsp")
+(load "oneplus.lsp")
+(load "oneminus.lsp")
+(load "abs.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
