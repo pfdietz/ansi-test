@@ -19,6 +19,7 @@
 (load "slot-boundp.lsp")
 (load "slot-exists-p.lsp")
 (load "slot-makunbound.lsp")
+(load "slot-missing.lsp")
 (load "slot-value.lsp")
 (load "method-qualifiers.lsp")
 (load "no-applicable-method.lsp")
