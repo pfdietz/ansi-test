@@ -9,6 +9,7 @@
 
 (deftest print.random-state.1
   (loop repeat 100
+	do (loop repeat 50 do (random 1000))
 	nconc
 	(let* ((rs1 (make-random-state *random-state*))
 	       (rs2 (with-standard-io-syntax
