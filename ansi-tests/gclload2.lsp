@@ -57,3 +57,7 @@
 ;;; Tests of system construction
 (load "features.lsp")
 (load "disassemble.lsp")
+
+;;; Miscellaneous tests, mostly tests that failed in random testing
+;;; on various implementations
+(load "misc.lsp")
