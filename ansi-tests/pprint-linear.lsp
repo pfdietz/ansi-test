@@ -38,13 +38,14 @@
 
 (defmacro def-pprint-linear-test (name args expected-value &key (margin 100) (circle nil))
   `(deftest ,name
-     (let ((*print-pretty* t)
-	   (*print-readably* nil)
-	   (*print-right-margin* ,margin)
-	   (*print-circle* ,circle))
-       (with-output-to-string
-	 (s)
-	 (assert (equal '(nil) (multiple-value-list (pprint-linear s ,@args))))))
+     (my-with-standard-io-syntax
+      (let ((*print-pretty* t)
+	    (*print-readably* nil)
+	    (*print-right-margin* ,margin)
+	    (*print-circle* ,circle))
+	(with-output-to-string
+	  (s)
+	  (pprint-linear s ,@args))))
      ,expected-value))
 
 (def-pprint-linear-test pprint-linear.3 ('(cl-user::|A|)) "(A)")
@@ -141,5 +142,3 @@
 (deftest pprint-linear.error.3
   (signals-error (pprint-linear *standard-output* nil t t t) program-error)
   t)
-
-
