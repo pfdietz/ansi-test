@@ -81,9 +81,5 @@ Got:      0
   :notes and the :notes comment is printed out.  This will help explain
   what the failures mean.
 
-24. Add tests of very large (non-floatable) rationals with floats, if they
-  are not already present. (done for bignums, non-integer rational tests
-  still required.)
-
 25. Add test that the form in an EQL parameter specializer is evaluated only
   once, at method definition time.
