@@ -21,21 +21,23 @@
 (deftest atan.3
   (loop for type in '(short-float single-float double-float long-float)
 	for zero = (coerce 0 type)
-	unless (eql (atan zero 0) zero)
+	unless (eql (atan zero 1) zero)
 	collect type)
   nil)
 
 (deftest atan.4
   (loop for type in '(short-float single-float double-float long-float)
 	for zero = (coerce 0 type)
-	unless (eql (atan 0 zero) zero)
+	for one = (coerce 1 type)
+	unless (eql (atan 0 one) zero)
 	collect type)
   nil)
 
 (deftest atan.5
   (loop for type in '(short-float single-float double-float long-float)
 	for zero = (coerce 0 type)
-	unless (eql (atan zero zero) zero)
+	for one = (coerce 1 type)
+	unless (eql (atan zero one) zero)
 	collect type)
   nil)
 
