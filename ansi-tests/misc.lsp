@@ -3294,3 +3294,23 @@
 	 (if (%f5 0 0 0) (%f5 a) 0))))
    1 2)
   1)
+
+;;; gcl bug (30-11-2003)
+;;; Different results
+
+(deftest misc.198
+  (let* ((form '(min (catch 'ct4 (throw 'ct4 (setq c 29119897960))) c))
+         (fn1 `(lambda (c)
+                 (declare (type (integer -70450 39128850560) c))
+                 (declare (optimize (speed 3) (safety 1) (debug 1)))
+                 ,form))
+         (fn2 `(lambda (c)
+                 (declare (notinline min))
+                 (declare (optimize (safety 3) (speed 0) (debug 3)))
+                 ,form)))
+    (let ((result1 (funcall (compile nil fn1) 3512352656))
+          (result2 (funcall (compile nil fn2) 3512352656)))
+      (if (eql result1 result2)
+          :good
+        (list result1 result2))))
+  :good)
