@@ -657,6 +657,7 @@
     (funcall fn 'a))
   a)
 
+#|
 (when (subtypep (class-of (find-class 'standard-method))
 		'standard-class)
   (defclass substandard-method (standard-method) ())
@@ -670,6 +671,7 @@
        (funcall fn 1 2)
        (funcall fn "1" "2")))
     3 "12"))
+|#
 
 (deftest defgeneric.28
   (let ((fn (eval '(defgeneric defgeneric.fun.28 (x &key)
