@@ -26,8 +26,9 @@
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
 	   repeat 10000
-	   unless (or (/= i (floor f)) ; not enough bits
-		      (equalp s1 s2))
+	   unless (or (/= i (rational f)) ; not enough bits
+		   ;; (> (nth-value 1 (integer-decode-float f)) 0)
+		   (equalp s1 s2))
 	   collect (list i f s1 s2))))
   nil)
 
@@ -71,11 +72,12 @@
 			for len1 = (length s1)
 			for s2 = (format nil "~A.0" i)
 			repeat 10000
-			unless (or (/= i (floor f))  ;; not enough bits
-				   (and (> len1 4)
-					(string-equal s1 s2 :start1 0 :end1 (- len1 2))
-					(eql (char s1 (- len1 1)) #\0)
-					(member (char s1 (- len1 2)) chars)))
+			unless (or (/= i (rational f))  ;; not enough bits
+				;; (> (nth-value 1 (integer-decode-float f)) 0)
+				(and (> len1 4)
+				     (string-equal s1 s2 :start1 0 :end1 (- len1 2))
+				     (eql (char s1 (- len1 1)) #\0)
+				     (member (char s1 (- len1 2)) chars)))
 			collect (list type i f s1 s2)))))))
   nil)
 
@@ -119,7 +121,9 @@
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
 	   repeat 10000
-	   unless (or (/= i f) (equalp s1 s2)) ;; not enough bits
+	   unless (or (/= i (rational f))  ;; not enough bits
+		   ;; (> (nth-value 1 (integer-decode-float f)) 0)
+		   (equalp s1 s2))
 	   collect (list i f s1 s2))))
   nil)
 
@@ -163,11 +167,12 @@
 			for len1 = (length s1)
 			for s2 = (format nil "~A.0" i)
 			repeat 10000
-			unless (or (/= i f)  ;; not enough bits
-				   (and (> len1 4)
-					(string-equal s1 s2 :start1 0 :end1 (- len1 2))
-					(eql (char s1 (- len1 1)) #\0)
-					(member (char s1 (- len1 2)) chars)))
+			unless (or (/= i (rational f))  ;; not enough bits
+				;; (> (nth-value 1 (integer-decode-float f)) 0)
+				(and (> len1 4)
+				     (string-equal s1 s2 :start1 0 :end1 (- len1 2))
+				     (eql (char s1 (- len1 1)) #\0)
+				     (member (char s1 (- len1 2)) chars)))
 			collect (list type i f s1 s2)))))))
   nil)
 
@@ -211,7 +216,9 @@
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
 	   repeat 10000
-	   unless (or (/= i f) (equalp s1 s2)) ;; not enough bits
+	   unless (or (/= i (rational f))  ;; not enough bits
+		   ;; (> (nth-value 1 (integer-decode-float f)) 0)
+		   (equalp s1 s2))
 	   collect (list i f s1 s2))))
   nil)
 
@@ -255,11 +262,12 @@
 			for len1 = (length s1)
 			for s2 = (format nil "~A.0" i)
 			repeat 10000
-			unless (or (/= i f)  ;; not enough bits
-				   (and (> len1 4)
-					(string-equal s1 s2 :start1 0 :end1 (- len1 2))
-					(eql (char s1 (- len1 1)) #\0)
-					(member (char s1 (- len1 2)) chars)))
+			unless (or (/= i (rational f))  ;; not enough bits
+				;; (> (nth-value 1 (integer-decode-float f)) 0)
+				(and (> len1 4)
+				     (string-equal s1 s2 :start1 0 :end1 (- len1 2))
+				     (eql (char s1 (- len1 1)) #\0)
+				     (member (char s1 (- len1 2)) chars)))
 			collect (list type i f s1 s2)))))))
   nil)
 
@@ -303,7 +311,9 @@
 	   for s1 = (with-output-to-string (s) (prin1 f s))
 	   for s2 = (format nil "~A.0" i)
 	   repeat 10000
-	   unless (or (/= i f) (equalp s1 s2)) ;; not enough bits
+	   unless (or (/= i (rational f)) ;; not enough bits
+		   ;; (> (nth-value 1 (integer-decode-float f)) 0)
+		   (equalp s1 s2))
 	   collect (list i f s1 s2))))
   nil)
 
@@ -347,11 +357,12 @@
 			for len1 = (length s1)
 			for s2 = (format nil "~A.0" i)
 			repeat 10000
-			unless (or (/= i f)  ;; not enough bits
-				   (and (> len1 4)
-					(string-equal s1 s2 :start1 0 :end1 (- len1 2))
-					(eql (char s1 (- len1 1)) #\0)
-					(member (char s1 (- len1 2)) chars)))
+			unless (or (/= i (rational f))  ;; not enough bits
+				;; (> (nth-value 1 (integer-decode-float f)) 0)
+				(and (> len1 4)
+				     (string-equal s1 s2 :start1 0 :end1 (- len1 2))
+				     (eql (char s1 (- len1 1)) #\0)
+				     (member (char s1 (- len1 2)) chars)))
 			collect (list type i f s1 s2)))))))
   nil)
 
