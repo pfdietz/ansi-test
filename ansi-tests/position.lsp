@@ -329,6 +329,14 @@
   (position 10 #(1 4 8 10 15 20) :test-not #'>=)
   4)
 
+(deftest position-vector.34
+  (let* ((v1 #(x x x a b c d a b c d y y y y y))
+	 (v2 (make-array '(8) :displaced-to v1
+			 :displaced-index-offset 3)))
+    (values (position 'c v2)
+	    (position 'c v2 :from-end t)))
+  2 6)			 
+
 ;;; tests on bit vectors
 
 (deftest position-bit-vector.1
@@ -669,6 +677,38 @@
 (deftest position-string.30
   (position #\m "adfmpz" :test-not #'char>=)
   4)
+
+(deftest position-string.31
+  (let* ((s1 (copy-seq "xxxabcdyyyyy"))
+	 (s2 (make-array '(4) :displaced-to s1
+			 :displaced-index-offset 3
+			 :element-type (array-element-type s1))))
+    (position #\c s2))
+  2)
+
+(deftest position-string.32
+  (let* ((s1 (copy-seq "xxxabcdabcdyyyyyyyy"))
+	 (s2 (make-array '(4) :displaced-to s1
+			 :displaced-index-offset 3
+			 :element-type (array-element-type s1))))
+    (position #\c s2 :from-end t))
+  6)
+
+(deftest position-string.33
+  (do-special-strings
+   (s "abcdabcdabcd" nil)
+   (let* ((c #\c)
+	  (pos (position c s)))
+     (assert (eql pos 2) () "First position of ~A in ~A is ~A" c s pos)))
+  nil)
+
+(deftest position-string.34
+  (do-special-strings
+   (s "abcdabcdabcd" nil)
+   (let* ((c #\c)
+	  (pos (position c s :from-end t)))
+     (assert (eql pos 2) () "Last position of ~A in ~A is ~A" c s pos)))
+  nil)
 
 (defharmless position.test-and-test-not.1
   (position 'b '(a b c d) :test #'eql :test-not #'eql))
