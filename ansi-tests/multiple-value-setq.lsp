@@ -87,7 +87,7 @@
     (values x y z))
   nil nil nil)
 
-#|
+
 (deftest multiple-value-setq.12
   (let ((n (min 100 multiple-values-limit))
 	(vars nil)
@@ -106,4 +106,4 @@
      unless (eval form)
      collect (list i form)))
   nil)
-|#
+

@@ -45,7 +45,7 @@
      x y))
   (1 0 2 10))
 
-#|
+
 (deftest multiple-value-prog1.8
   (let* ((n (min 100 multiple-values-limit)))
     (not
@@ -58,7 +58,7 @@
 					  nil)))
 	    x))))
   nil)
-|#
+
 
 (deftest multiple-value-prog1.9
   (let ((x 0) (y 0))
