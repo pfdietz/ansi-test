@@ -197,7 +197,6 @@
 		  nil))))
   nil)
 
-
 (deftest =.order.1
   (let ((i 0) x y)
     (values
@@ -1184,3 +1183,163 @@
 (deftest compare-rationals.4
   (compare-random-rationals 6000000000 3000000000 10000)
   nil)
+
+;;;; Comparison of bignums with floats
+
+(deftest bignum.float.compare.1a
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (+ r (ceiling (rational x)))))
+		(unless (< x i)
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.1b
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (- (floor (rational x)) r)))
+		(unless (< i x)
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.2a
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (+ r (ceiling (rational x)))))
+		(unless (> i x)
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.2b
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (- (floor (rational x)) r)))
+		(unless (> x i)
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.3a
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (+ r (ceiling (rational x)))))
+		(when (or (= x i) (= i x))
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.3b
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (- (floor (rational x)) r)))
+		(when (or (= x i) (= i x))
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.4a
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (+ r (ceiling (rational x)))))
+		(unless (and (/= i x) (/= x i))
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.4b
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (- (floor (rational x)) r)))
+		(unless (and (/= i x) (/= x i))
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.5a
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (+ r (ceiling (rational x)))))
+		(unless (<= x i)
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.5b
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (- (floor (rational x)) r)))
+		(unless (<= i x)
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.6a
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (+ r (ceiling (rational x)))))
+		(unless (>= i x)
+		  (list (list x i))))))
+  nil)
+
+(deftest bignum.float.compare.6b
+  (loop for x in *floats*
+	when (or (<= (abs x) 1)
+		 (< (abs (log (abs x))) 10000))
+	nconc
+	(loop for r = (1+ (random (ash 1 (random 32))))
+	      repeat 200
+	      nconc
+	      (let ((i (- (floor (rational x)) r)))
+		(unless (>= x i)
+		  (list (list x i))))))
+  nil)
+
+;;; To add ... comparisons of large rationals with floats
