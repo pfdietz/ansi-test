@@ -97,7 +97,7 @@
 
 (deftest subtypep.rational.5
   (check-equivalence
-   '(or (eql 0) (rational (0)))
+   '(or (rational 0 0) (rational (0)))
    '(rational 0))
   nil)
 
@@ -139,7 +139,7 @@
 
 (deftest subtypep.rational.12
   (check-equivalence
-   '(and (rational 0 10) (not (rational (0) (10))))
+   '(and integer (rational 0 10) (not (rational (0) (10))))
    '(member 0 10))
   nil)
 
