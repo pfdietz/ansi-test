@@ -266,4 +266,106 @@
     (and (equalp orig x) y))
   (1 2 2 6 1 2 4 1 3 2 7))
 
-;;; To do: add call to the randomized REMOVE tester
+;;; Randomized tests
+
+(deftest remove-random
+  (loop for i from 1 to 2500
+	always (random-test-remove 20))
+  t)
+
+(deftest remove-if-random
+  (loop for i from 1 to 2500
+	always (random-test-remove-if 20))
+  t)
+
+(deftest remove-if-not-random
+  (loop for i from 1 to 2500
+	always (random-test-remove-if 20 t))
+  t)
+
+(deftest delete-random
+  (loop for i from 1 to 2500
+	always (random-test-delete 20))
+  t)
+
+(deftest delete-if-random
+  (loop for i from 1 to 2500
+	always (random-test-delete-if 20))
+  t)
+
+(deftest delete-if-not-random
+  (loop for i from 1 to 2500
+	always (random-test-delete-if 20 t))
+  t)
+
+;;; Additional tests with KEY = NIL
+
+(deftest remove-if-list.1
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (remove-if #'evenp x :key nil)))
+    (and (equalp orig x) y))
+  (1 3 1 1 3 7))
+
+(deftest remove-if-list.2
+  (let* ((orig '(a b c a b d a c b a e))
+	 (x (copy-seq orig))
+	 (y (remove-if #'(lambda (y) (eq y 'a)) x :key nil)))
+    (and (equalp orig x) y))
+  (b c b d c b e))
+
+(deftest remove-if-not-list.1
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (remove-if-not #'oddp x :key nil)))
+    (and (equalp orig x) y))
+  (1 3 1 1 3 7))
+
+(deftest remove-if-not-list.2
+  (let* ((orig '(a b c a b d a c b a e))
+	 (x (copy-seq orig))
+	 (y (remove-if-not #'(lambda (y) (not (eq y 'a))) x :key nil)))
+    (and (equalp orig x) y))
+  (b c b d c b e))
+
+(deftest delete-if-list.1
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (delete-if #'evenp x :key nil)))
+    y)
+  (1 3 1 1 3 7))
+
+(deftest delete-if-list.2
+  (let* ((orig '(a b c a b d a c b a e))
+	 (x (copy-seq orig))
+	 (y (delete-if #'(lambda (y) (eq y 'a)) x :key nil)))
+    y)
+  (b c b d c b e))
+
+(deftest delete-if-not-list.1
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (delete-if-not #'oddp x :key nil)))
+    y)
+  (1 3 1 1 3 7))
+
+(deftest delete-if-not-list.2
+  (let* ((orig '(a b c a b d a c b a e))
+	 (x (copy-seq orig))
+	 (y (delete-if-not #'(lambda (y) (not (eq y 'a))) x :key nil)))
+    y)
+  (b c b d c b e))
+
+(deftest delete-list.1
+  (let* ((orig '(a b c a b d a c b a e))
+	 (x (copy-seq orig))
+	 (y (delete 'a x :key nil)))
+    y)
+  (b c b d c b e))
+
+(deftest delete-list.2
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (delete 2 x :key nil)))
+    y)
+  (1 3 6 1 4 1 3 7))
