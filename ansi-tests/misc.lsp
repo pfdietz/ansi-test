@@ -4344,4 +4344,26 @@
    215067723)
   13739018)
 
+(deftest misc.260
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+         (declare (type (integer 43369342 45325981) a))
+         (declare (optimize (speed 2) (space 0) (safety 2)
+			    (debug 0) (compilation-speed 3)))
+	 (logand 0 (* 5459177 a))))
+   44219966)
+  0)
 
+(deftest misc.261
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+         (declare (type (integer 379442022 806547932) b))
+         (declare (optimize (speed 2) (space 0) (safety 0)
+			    (debug 3) (compilation-speed 2)))
+         (logand b (* 227 b))))
+   551173513)
+  545263625)
