@@ -389,3 +389,33 @@
 	unless (eql (eval form) 17)
 	collect s)
   nil)
+
+(deftest symbol-macrolet.2
+  (symbol-macrolet ())
+  nil)
+
+(deftest symbol-macrolet.3
+  (symbol-macrolet () (declare (optimize)))
+  nil)
+
+(deftest symbol-macrolet.4
+  (symbol-macrolet ((x 1))
+    (symbol-macrolet ((x 2))
+      x))
+  2)
+
+(deftest symbol-macrolet.error.1
+  (classify-error
+   (symbol-macrolet ((x 10))
+     (declare (special x))
+     20))
+  program-error)
+
+(deftest symbol-macrolet.error.2
+  (classify-error (symbol-macrolet ((t 'a)) t))
+  program-error)
+
+(deftest symbol-macrolet.error.3
+  (classify-error (symbol-macrolet ((*pathnames* 19)) *pathnames*))
+  program-error)
+     
