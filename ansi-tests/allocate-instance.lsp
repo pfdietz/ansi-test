@@ -111,6 +111,11 @@
   (classify-error (allocate-instance))
   program-error)
 
+;;; Duane Rettig made a convincing argument that the next two
+;;; tests are bad, since the caller of allocate-instance
+;;; is supposed to have checked that the initargs are valid
+
+#|
 (deftest allocate-instance.error.2
   (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
 				     :b))
@@ -120,3 +125,4 @@
   (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
 				     '(a b c) nil))
   program-error)
+|#
