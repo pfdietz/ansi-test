@@ -118,8 +118,8 @@
 
 (deftest subtypep.and/or.1
   (check-equivalence
-   '(and (or symbol (integer 0 10))
-	 (or symbol (integer 15 25)))
+   '(and (or symbol (integer 0 15))
+	 (or symbol (integer 10 25)))
    '(or symbol (integer 10 15)))
   nil)
 
