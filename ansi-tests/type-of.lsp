@@ -69,15 +69,18 @@
   (type-of (make-instance 'type-of.example-class))
   type-of.example-class)
 
-(defparameter *type-of.example-class-2*
-  (defclass type-of.example-class-2 () ((a) (b) (c))))
-
 (deftest type-of.8
-  (progn
-    (setf (class-name *type-of.example-class-2*) nil)
-    (eqt (type-of (make-instance *type-of.example-class-2*))
-	 *type-of.example-class-2*))
+  (let ((class (eval '(defclass type-of.example-class-2 () ((a) (b) (c))))))
+    (setf (class-name class) nil)
+    (eqt (type-of (make-instance class)) class))
   t)
+
+(deftest type-of.9
+  (let ((class (eval '(defclass type-of.example-class-3 () ((a) (b) (c))))))
+    (setf (find-class 'type-of.example-class-3) nil)
+    (eqt (type-of (make-instance class)) class))
+  t)
+
 
 ;;; Error tests
 
