@@ -9,4 +9,5 @@
 (load "output-stream-p.lsp")
 (load "interactive-stream-p.lsp")
 (load "open-stream-p.lsp")
+(load "stream-element-type.lsp")
 

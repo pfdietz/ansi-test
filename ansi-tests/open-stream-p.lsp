@@ -49,7 +49,7 @@
   (classify-error (open-stream-p *standard-input* nil))
   program-error)
 
-(deftest open-stream-p.3
+(deftest open-stream-p.error.3
   (loop for x in *mini-universe*
 	unless (or (typep x 'stream)
 		   (eql (eval `(classify-error (open-stream-p ',x)))
