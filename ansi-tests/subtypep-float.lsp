@@ -226,22 +226,6 @@
 
 ;;;
 
-(deftest subtypep.float.zero.1
-  (check-equivalence '(float 0.0 *)
-		     '(or (float (0.0) *)
-			  (member -0.0 0.0)))
-  nil)
-
-(unless (eql 0.0 -0.0)
-  (deftest subtypep.float.zero.2
-    (values (subtypep '(float 0.0)
-		      '(or (float (0.0)) (member 0.0))))
-    nil)
-  (deftest subtypep.float.zero.
-    (values (subtypep '(float 0.0)
-		      '(or (float (0.0)) (member -0.0))))
-    nil))
-
 (deftest subtypep.float.zero.3
   (subtypep* '(float -0.0 *) '(float 0.0 *))
   t t)
@@ -283,11 +267,11 @@
   nil)
 
 (unless (eql 0.0f0 -0.0f0)
-  (deftest subtypep.single-float.zero.2
+  (deftest subtypep.single-float.zero.2a
     (values (subtypep '(single-float 0.0f0)
 		      '(or (single-float (0.0f0)) (member 0.0f0))))
     nil)
-  (deftest subtypep.single-float.zero.
+  (deftest subtypep.single-float.zero.2b
     (values (subtypep '(single-float 0.0f0)
 		      '(or (single-float (0.0f0)) (member -0.0f0))))
     nil))
@@ -333,11 +317,11 @@
   nil)
 
 (unless (eql 0.0l0 -0.0l0)
-  (deftest subtypep.long-float.zero.2
+  (deftest subtypep.long-float.zero.2a
     (values (subtypep '(long-float 0.0l0)
 		      '(or (long-float (0.0l0)) (member 0.0l0))))
     nil)
-  (deftest subtypep.long-float.zero.
+  (deftest subtypep.long-float.zero.2b
     (values (subtypep '(long-float 0.0l0)
 		      '(or (long-float (0.0l0)) (member -0.0l0))))
     nil))
@@ -383,11 +367,11 @@
   nil)
 
 (unless (eql 0.0d0 -0.0d0)
-  (deftest subtypep.double-float.zero.2
+  (deftest subtypep.double-float.zero.2a
     (values (subtypep '(double-float 0.0d0)
 		      '(or (double-float (0.0d0)) (member 0.0d0))))
     nil)
-  (deftest subtypep.double-float.zero.
+  (deftest subtypep.double-float.zero.2b
     (values (subtypep '(double-float 0.0d0)
 		      '(or (double-float (0.0d0)) (member -0.0d0))))
     nil))
