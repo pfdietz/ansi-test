@@ -27,3 +27,4 @@
 (load "printer-control-vars.lsp")
 (load "pprint-dispatch.lsp")
 (load "pprint-fill.lsp")
+(load "pprint-linear.lsp")
