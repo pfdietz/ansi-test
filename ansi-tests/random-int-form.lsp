@@ -372,7 +372,6 @@
 				     locally))))
 	`(,op ,(make-random-integer-form (1- size)))))
 
-     #-(or armedbear)
      (4
       (make-random-integer-unwind-protect-form size))
 
