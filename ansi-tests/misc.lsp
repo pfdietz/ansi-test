@@ -2051,6 +2051,21 @@
    17)
   17)
 
+;;; SBCL (0.8.5.24) bug:  "bogus operands to XOR"
 
-
-
+(deftest misc.158
+  (funcall
+   (compile nil
+            '(lambda (a b c)
+               (declare (type (integer 79828 2625480458) a))
+               (declare (type (integer -4363283 8171697) b))
+               (declare (type (integer -301 0) c))
+               (if (equal 6392154 (logxor a b))
+                   1706
+                 (let ((v5 (abs c)))
+                   (logand v5
+                           (logior (logandc2 c v5)
+                                   (common-lisp:handler-case
+                                    (ash a (min 36 22477)))))))))
+   100000 0 0)
+  0)
