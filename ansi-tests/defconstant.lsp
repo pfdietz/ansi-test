@@ -19,9 +19,8 @@
   (documentation 'test-constant-1 'variable)
   nil)
 
-(defconstant test-constant-2  'a
-  (if (boundp test-constant-2) test-constant-2
-    "This is the documentation."))
+(defconstant test-constant-2 'a
+  "This is the documentation.")
 
 (deftest defconstant.4
   (documentation 'test-constant-2 'variable)
