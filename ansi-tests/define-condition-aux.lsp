@@ -19,7 +19,8 @@
   (dolist (parent parents) (assert (symbolp parent)))
   
   (let ((name (symbol-name name-symbol)))
-    `(progn
+  `(eval-when (load eval compile)
+     (ignore-errors
        (define-condition ,name-symbol ,parents ,slot-specs ,@options)
        ,@(loop for parent in (adjoin 'condition parents)
 	       collect
@@ -80,6 +81,7 @@
 			       (error () nil)
 			       (,name-symbol (c2) (eqt c c2))))
 	       t)))
-       )))
+       ))))
+
 
 
