@@ -35,4 +35,9 @@
 (load "finish-output.lsp")
 (load "force-output.lsp")
 (load "clear-output.lsp")
+(load "make-synonym-stream.lsp")
+(load "synonym-stream-symbol.lsp")
+(load "make-broadcast-stream.lsp")
+(load "broadcast-stream-streams.lsp")
+
 
