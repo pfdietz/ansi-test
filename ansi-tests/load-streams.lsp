@@ -26,3 +26,4 @@
 (load "write-sequence.lsp")
 (load "file-length.lsp")
 (load "file-position.lsp")
+(load "file-string-length.lsp")
