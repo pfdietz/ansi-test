@@ -777,6 +777,19 @@
   (s1 (make-instance 'class-25 :allow-other-keys 'foo :allow-other-keys 'bar))
   foo)
 
+;;;
+
+(defclass class-26 ()
+  ((s1-26 :writer (setf s1-26))))
+
+(deftest class-26.1
+  (let ((c (make-instance 'class-26)))
+    (values
+     (slot-boundp c 's1-26)
+     (setf (s1-26 c) 'x)
+     (slot-value c 's1-26)
+     (typep* #'(setf s1-26) 'generic-function)))
+  nil x x t)
 
 
 
