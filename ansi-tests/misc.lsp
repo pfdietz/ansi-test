@@ -2963,3 +2963,24 @@
 ;;;       (values result1 result2)))
 ;;;   :good)
 
+;;; sbcl 0.8.5.42
+;;; failed AVER: "(NOT POPPING)"
+;;; Also occurs in cmucl (11/2003 snapshot)
+
+(deftest misc.183
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -368154 377964) a))
+       (declare (type (integer 5044 14959) b))
+       (declare (type (integer -184859815 -8066427) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 3)))
+       (declare (optimize (safety 1)))
+       (declare (optimize (debug 1)))
+       (block b7
+	 (flet ((%f3 (f3-1 f3-2 f3-3) 0))
+	   (apply #'%f3 0 (catch 737 (return-from b7 (%f3 0 b c))) c nil)))))
+   0 6000 -9000000)
+  0)
