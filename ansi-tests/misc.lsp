@@ -776,3 +776,25 @@
    50005747335 -363030456 17382819)
   -363030456)
 
+(deftest misc.58
+  (funcall
+   (compile nil '(lambda (a)
+		   (declare (type (integer -23 66141285) a)
+			    (optimize (speed 3)))
+		   (logorc2 (setq a 35191330) (* a 107))))
+   4099241)
+  -3764388885)
+
+(deftest misc.59
+  (funcall
+   (compile  nil '(lambda (a b c)
+			  (declare (type (integer -3966039360 -879349) a)
+				   (type (integer -62642199164 -8993827395) b)
+				   (type (integer -8065934654337 223) c)
+				   (ignorable a b c)
+				   (optimize (speed 3) (safety 1) (debug 1)))
+			  (floor (* (ceiling c) c)
+				 (max 78 (* b (* a (* a b)))))))
+   -1000000 -10000000000 0)
+  0 0)
+
