@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(eval-when (load eval compile) (compile-and-load "random-aux.lsp"))
+
 (defun my-string-compare (string1 string2 comparison
 				  &key (start1 0) end1 (start2 0) end2 case
 				  &aux
@@ -137,28 +139,6 @@
 	    (not
 	     (or (eql x y)
 		 (and x y (eqt comparison '=))))))))
-
-(defparameter *use-random-byte* t)
-
-(defun make-random-string (n)
-  (let ((s (random-case
-	    (make-string n)
-	    (make-array n :element-type 'character
-			:initial-element #\a)
-	    (make-array n :element-type 'standard-char
-			:initial-element #\a)
-	    (make-array n :element-type 'base-char
-			:initial-element #\a))))
-    (if (coin)
-	(dotimes (i n)
-	  (setf (char s i) (elt #(#\a #\b #\A #\B) (random 4))))
-      (dotimes (i n)
-	(dotimes (i n)
-	  (setf (char s i)
-		(or (and *use-random-byte* (code-char (random 256)))
-		    (elt "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-			 (random 62)))))))
-    s))
 
 (defun string-all-the-same (s)
   (let ((len (length s)))

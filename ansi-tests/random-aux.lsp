@@ -72,6 +72,7 @@
 
 (declaim (special +standard-chars+ *cl-symbols-vector*))
 
+#|
 (defun make-random-string (n)
   (make-array n
 	      :initial-contents
@@ -79,6 +80,39 @@
 		    (random-from-seq +standard-chars+))
 	      :element-type (random-from-seq
 			     #(character standard-char base-char))))
+|#
+
+(defparameter *use-random-byte* t)
+(defparameter *random-readable* nil)
+
+(defun make-random-string (n)
+  (let*
+      ((use-random-byte nil)
+       (s (random-case
+	   (progn
+	     (setf use-random-byte *use-random-byte*)
+	     (make-string n))
+	   (progn
+	     (setf use-random-byte *use-random-byte*)
+	     (make-array n :element-type  'character
+			 :initial-element #\a))
+	   (make-array n :element-type (if *random-readable* 'character
+					 'standard-char)
+		       :initial-element #\a)
+	   (make-array n :element-type (if *random-readable* 'character
+					 'base-char)
+		       :initial-element #\a))))
+    (if (coin)
+	(dotimes (i n)
+	  (setf (char s i) (elt #(#\a #\b #\A #\B) (random 4))))
+      (dotimes (i n)
+	(dotimes (i n)
+	  (setf (char s i)
+		(or (and use-random-byte (or (code-char (random (min char-code-limit (ash 1 16))))
+					     (code-char (random 256))))
+		    (elt "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+			 (random 62)))))))
+    s))
 
 (defun random-leaf ()
   (rcase

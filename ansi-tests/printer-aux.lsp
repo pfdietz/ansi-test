@@ -299,7 +299,9 @@
      (loop
       for args = (make-random-write-args)
       for package = (find-package (random-from-seq #("CL-TEST" "CL-USER" "KEYWORD")))
-      for obj = (random-thing (random 10))
+      for obj = (let ((*random-readable* t))
+		  (declare (special *random-readable*))
+		  (random-thing (random 10)))
       for s1 = (let ((*package* package))
 		 (with-output-to-string (s) (apply #'write obj :stream s ,@write-args args)))
       for s2 = (let ((*package* package))
@@ -326,7 +328,9 @@
      (loop
       for args = (make-random-write-args)
       for package = (find-package (random-from-seq #("CL-TEST" "CL-USER" "KEYWORD")))
-      for obj = (random-thing (random 10))
+      for obj = (let ((*random-readable* t))
+		  (declare (special *random-readable*))
+		  (random-thing (random 10)))
       for s1 = (let ((*package* package))
 		 (with-output-to-string (s) (apply #'write obj :stream s ,@write-args args)))
       for s2 = (let ((*package* package))

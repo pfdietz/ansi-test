@@ -32,13 +32,13 @@
   (#\a #\b #\c))
 
 (deftest loop.5.7
-  (let ((x "abcd")) (loop for e across (the base-string x) collect e))
+  (let ((x (make-array '(4) :initial-elements "abcd" :element-type 'base-char)))
+    (loop for e across (the base-string x) collect e))
   (#\a #\b #\c #\d))
 
 (deftest loop.5.8
   (let ((x "abcd")) (loop for e of-type character across x collect e))
   (#\a #\b #\c #\d))
-
 
 (deftest loop.5.10
   (let ((x #*00010110))
