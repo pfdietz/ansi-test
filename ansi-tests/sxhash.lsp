@@ -184,6 +184,73 @@
 	collect (list c1 c2 sx1 sx2))
   nil)
 
+;;; Similar pathnames have the same hash
+(deftest sxhash.20
+  (let* ((pathspec "sxhash.lsp")
+	 (sx1 (sxhash (pathname (copy-seq pathspec))))
+	 (sx2 (sxhash (pathname (copy-seq pathspec)))))
+    (if (and (typep sx1 '(and fixnum unsigned-byte))
+	     (eql sx1 sx2))
+	:good
+      (list sx1 sx2)))
+  :good)
+
+;;; Similarity for strings
+(deftest sxhash.21
+  (let* ((s1 "abc")
+	 (s2 (make-array '(3) :element-type 'character
+			 :initial-contents s1))
+	 (s3 (make-array '(3) :element-type 'base-char
+			 :initial-contents s1))
+	 (s4 (make-array '(3) :element-type 'standard-char
+			 :initial-contents s1))
+	 (s5 (make-array '(3) :element-type 'character
+			 :adjustable t
+			 :initial-contents "abc"))
+	 (s6 (make-array '(5) :element-type 'character
+			 :fill-pointer 3
+			 :initial-contents "abcde"))
+	 (s7 (make-array '(3) :element-type 'character
+			 :displaced-to s2
+			 :displaced-index-offset 0))
+	 (s8 (make-array '(3) :element-type 'character
+			 :displaced-to (make-array '(7) :element-type 'character
+						   :initial-contents "xxabcyy")
+			 :displaced-index-offset 2))
+	 (strings (list s1 s2 s3 s4 s5 s6 s7 s8))
+	 (hashes (mapcar #'sxhash strings)))
+    (if (and (every #'(lambda (h) (typep h '(and unsigned-byte fixnum))) hashes)
+	     (not (position (car hashes) hashes :test #'/=)))
+	:good
+      hashes))
+  :good)
+
+;;; Similarity for bit vectors
+(deftest sxhash.22
+  (let* ((bv1 #*010)
+	 (bv2 (make-array '(3) :element-type 'bit
+			 :initial-contents bv1))
+	 (bv5 (make-array '(3) :element-type 'bit
+			 :adjustable t
+			 :initial-contents bv1))
+	 (bv6 (make-array '(5) :element-type 'bit
+			 :fill-pointer 3
+			 :initial-contents #*01010))
+	 (bv7 (make-array '(3) :element-type 'bit
+			 :displaced-to bv2
+			 :displaced-index-offset 0))
+	 (bv8 (make-array '(3) :element-type 'bit
+			 :displaced-to (make-array '(7) :element-type 'bit
+						   :initial-contents #*1101001)
+			 :displaced-index-offset 2))
+	 (bit-vectors (list bv1 bv2 bv5 bv6 bv7 bv8))
+	 (hashes (mapcar #'sxhash bit-vectors)))
+    (if (and (every #'(lambda (h) (typep h '(and unsigned-byte fixnum))) hashes)
+	     (not (position (car hashes) hashes :test #'/=)))
+	:good
+      hashes))
+  :good)
+
 ;;; Error cases
 
 (deftest sxhash.error.1
