@@ -17,6 +17,7 @@
 (load "catch.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
+(load "cond.lsp")
 (load "defconstant.lsp")
 (load "defparameter.lsp")
 (load "defvar.lsp")
