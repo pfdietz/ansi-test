@@ -24,7 +24,7 @@
 (deftest parse-integer.error.5
   (loop for x across +standard-chars+
 	unless (or (digit-char-p x)
-		   (eq (eval `(classify-error (parse-integer ,(string c))))
+		   (eq (eval `(classify-error (parse-integer ,(string x))))
 		       'parse-error))
 	collect x)
   nil)
