@@ -110,7 +110,7 @@
 
 (deftest simple-base-string.8
   (subtypep 'simple-base-string 'simple-vector)
-  t t)
+  nil t)
 
 ;;; Tests for simple-string-p
 
