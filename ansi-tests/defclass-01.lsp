@@ -76,7 +76,8 @@
 
 ;;;;
 
-(defclass class-04 () ((s1 :reader s1-r) (s2 :writer s2-w) (s3 :accessor s3-a)))
+(defclass class-04 ()
+  ((s1 :reader s1-r) (s2 :writer s2-w) (s3 :accessor s3-a)))
 
 ;;; Readers, writers, and accessors
 (deftest class-04.1
@@ -94,6 +95,22 @@
      (slot-value c 's3)
      (s3-a c)))
   a b c a b d d c e e e)
+
+(deftest class-04.2
+  (notnot-mv (typep #'s1-r 'generic-function))
+  t)
+
+(deftest class-04.3
+  (notnot-mv (typep #'s2-w 'generic-function))
+  t)
+
+(deftest class-04.4
+  (notnot-mv (typep #'s3-a 'generic-function))
+  t)
+
+(deftest class-04.5
+  (notnot-mv (typep #'(setf s3-a) 'generic-function))
+  t)
 
 ;;;;
 
