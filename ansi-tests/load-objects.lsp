@@ -15,4 +15,5 @@
 (load "reinitialize-instance.lsp")
 (load "shared-initialize.lsp")
 (load "change-class.lsp")
+(load "update-instance-for-different-class.lsp")
 

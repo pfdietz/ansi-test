@@ -357,6 +357,18 @@
   (nil t)
   k)
 
+(deftest change-class.4.5
+  (let* ((class (find-class 'change-class-class-04b))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a c))
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a c))))
+  (nil nil)
+  t
+  (nil nil))
+     
+
 ;;; Custom methods for change-class
 
 (declaim (special *changed-class-on-class-05*))
@@ -379,6 +391,8 @@
      (eqt obj (change-class obj (find-class 'change-class-class-05)))
      *changed-class-on-class-05*))
   t t)
+
+;;; Method that invokes the standard method with call-next-method
 
 (defclass change-class-class-06 ()
   ((a :initarg :a) (b :initarg :b) (c :initarg :c)))
@@ -419,6 +433,156 @@
   (t nil nil)
   123)
 
+;;; Before method
+
+(defclass change-class-class-07 ()
+  ((a :initform 'x :initarg :a)
+   (b :initform 'y :initarg :b)
+   (c :initarg :c)))
+
+(defclass change-class-class-07b ()
+  ((a :initform 'aa :initarg :a)
+   (d :initform 'dd :initarg :d)))
+
+(defmethod change-class :before
+  ((obj change-class-class-07)
+   (new-class standard-class)
+   &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (setf (slot-value obj 'a) 'z)
+  obj)
+
+(deftest change-class.7.1
+  (let* ((class (find-class 'change-class-class-07))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b c))
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b c))
+     (slot-value obj 'a)))
+  (nil nil nil)
+  t
+  (t nil nil)
+  z)
+
+(deftest change-class.7.2
+  (let* ((class (find-class 'change-class-class-07))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b c))
+     (eqt obj (change-class obj class :a 10))
+     (map-slot-boundp* obj '(a b c))
+     (slot-value obj 'a)))
+  (nil nil nil)
+  t
+  (t nil nil)
+  10)
+
+(deftest change-class.7.3
+  (let* ((class (find-class 'change-class-class-07))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b c))
+     (eqt obj (change-class obj class :b 10))
+     (map-slot-boundp* obj '(a b c))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil nil)
+  t
+  (t t nil)
+  z 10)
+
+(deftest change-class.7.4
+  (let* ((class (find-class 'change-class-class-07))
+	 (new-class (find-class 'change-class-class-07b))
+	 (obj (allocate-instance class)))
+    (values
+     (eqt obj (change-class obj new-class))
+     (map-slot-boundp* obj '(a d))
+     (slot-value obj 'a)
+     (slot-value obj 'd)))
+  t (t t) z dd)
+
+(deftest change-class.7.5
+  (let* ((class (find-class 'change-class-class-07))
+	 (new-class (find-class 'change-class-class-07b))
+	 (obj (allocate-instance class)))
+    (values
+     (eqt obj (change-class obj new-class :allow-other-keys nil))
+     (map-slot-boundp* obj '(a d))
+     (slot-value obj 'a)
+     (slot-value obj 'd)))
+  t (t t) z dd)
+
+(deftest change-class.7.6
+  (let* ((class (find-class 'change-class-class-07))
+	 (new-class (find-class 'change-class-class-07b))
+	 (obj (allocate-instance class)))
+    (values
+     (eqt obj (change-class obj new-class :allow-other-keys t))
+     (map-slot-boundp* obj '(a d))
+     (slot-value obj 'a)
+     (slot-value obj 'd)))
+  t (t t) z dd)
+
+
+;;; After method
+
+(defclass change-class-class-08 () ((a :initarg :a) (b :initarg :b)))
+
+(defmethod change-class :after
+  ((obj standard-object)
+   (class (eql (find-class 'change-class-class-08)))
+   &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (setf (slot-value obj 'a) 'z)
+  obj)
+
+(deftest change-class.8.1
+  (let* ((class (find-class 'change-class-class-08))
+	 (obj (make-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)))
+  (nil nil)
+  t
+  (t nil)
+  z)
+       
+(deftest change-class.8.2
+  (let* ((class (find-class 'change-class-class-08))
+	 (obj (make-instance class :a 1 :b 2)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (change-class obj class))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (t t)
+  t
+  (t t)
+  z 2)
+
+(deftest change-class.8.3
+  (let* ((class (find-class 'change-class-class-08))
+	 (obj (make-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (change-class obj class :a 12 :b 17))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  z 17)
+
+;;; Put around method test here
+
+;;; Put more inheritance tests here
+  
 ;;; Error tests
 
 (deftest change-class.error.1
