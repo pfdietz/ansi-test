@@ -20,8 +20,9 @@
 (deftest coerce.3
   (loop for x in *universe*
 	for class = (class-of x)
-	count (and class (not (eql (coerce x class) x))))
-  0)
+	when (and class (not (eql (coerce x class) x)))
+	collect x)
+  nil)
 
 (deftest coerce.4
   (loop for x in '(() #() #*)
