@@ -294,6 +294,18 @@
   (remove 'a (vector 'a 'b 'c 'd) :count -1)
   #(a b c d))
 
+(deftest remove-string.1
+  (remove #\a (copy-seq "abcad"))
+  "bcd")
+
+(deftest remove-string.2
+  (remove #\a (copy-seq "abcad") :count -1)
+  "abcad")
+
+(deftest remove-string.3
+  (remove #\a (copy-seq "bcd") :count -1)
+  "bcd")
+
 (deftest delete-vector.1
   (delete 'a (vector 'b 'c 'd))
   #(b c d))
@@ -305,6 +317,42 @@
 (deftest delete-vector.3
   (delete 'a (vector 'a 'b 'c 'd) :count -1)
   #(a b c d))
+
+(deftest delete-string.1
+  (delete #\a (copy-seq "abcad"))
+  "bcd")
+
+(deftest delete-string.2
+  (delete #\a (copy-seq "abcad") :count -1)
+  "abcad")
+
+(deftest delete-string.3
+  (delete #\a (copy-seq "bcd") :count -1)
+  "bcd")
+
+(deftest remove-bit-vector.1
+  (remove 0 (copy-seq #*00011101101))
+  #*111111)
+
+(deftest remove-bit-vector.2
+  (remove 0 (copy-seq #*00011101101) :count -1)
+  #*00011101101)
+
+(deftest remove-bit-vector.3
+  (remove 0 (copy-seq #*11111) :count -1)
+  #*11111)
+
+(deftest delete-bit-vector.1
+  (delete 0 (copy-seq #*00011101101))
+  #*111111)
+
+(deftest delete-bit-vector.2
+  (delete 0 (copy-seq #*00011101101) :count -1)
+  #*00011101101)
+
+(deftest delete-bit-vector.3
+  (delete 0 (copy-seq #*11111) :count -1)
+  #*11111)
 
 
 ;;; Randomized tests
