@@ -25,7 +25,7 @@
 	  (push `(let () (eval-when (,@c ,@l ,@x)
 			   (push '(let ,@c ,@l ,@x) *eval-when.1-collector*)))
 		forms))))
-    (with-open-file (o ff :direction :output)
+    (with-open-file (o ff :direction :output :if-exists :supersede)
 		    (dolist (f forms)
 		      (prin1 f o)
 		      (terpri o)))

@@ -49,6 +49,12 @@
   *dmc-times*
   times)
 
+(deftest define-method-combination-01.4
+  (let ((doc (documentation *dmc-times* 'method-combination)))
+    (or (null doc)
+	(equalt doc "Multiplicative method combination, version 1")))
+  t)		
+
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (report-and-ignore-errors
    (defgeneric dmc-gf-02 (x) (:method-combination times))
@@ -134,3 +140,42 @@
 (deftest define-method-combination-04.3
   (dmc-gf-04 'a)
   nil)
+
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (defvar *dmc-times-5*
+     (define-method-combination times-5 :operator *))))
+
+(deftest define-method-combination-05.1
+  (let* ((doc1 (setf (documentation *dmc-times-5* 'method-combination)
+		     "foo"))
+	 (doc2 (documentation *dmc-times-5* 'method-combination)))
+    (values
+     doc1
+     (or (null doc2)
+	 (equalt doc2 "foo"))))
+  "foo" t)
+
+;; Operator name defaults to the method combination name.
+
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (defun times-7 (&rest args) (apply #'* args))
+  (report-and-ignore-errors
+   (defvar *dmc-times-7*
+     (define-method-combination times-7))
+   (defgeneric dmc-gf-07 (x) (:method-combination times))
+
+   (defmethod dmc-gf-07 times ((x integer)) 2)
+   (defmethod dmc-gf-07 times ((x rational)) 3)
+   (defmethod dmc-gf-07 times ((x real)) 5)
+   (defmethod dmc-gf-07 times ((x number)) 7)
+   (defmethod dmc-gf-07 times ((x complex)) 11)
+   ))
+
+(deftest define-method-combination-07.1
+  (values
+   (dmc-gf-07 1)
+   (dmc-gf-07 1/2)
+   (dmc-gf-07 1.0)
+   (dmc-gf-07 #c(1 2)))
+  210 105 35 77)

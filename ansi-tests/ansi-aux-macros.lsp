@@ -29,6 +29,9 @@
 
 ;;; Macro to ignore errors, but report them anyway
 
+(defparameter *report-and-ignore-errors-break* nil
+  "When true, REPORT-AND-IGNORE-ERRORS breaks instead of discarding the error condition.")
+
 (defmacro report-and-ignore-errors (&body body)
   `(eval-when (:load-toplevel :compile-toplevel :execute)
      (#+sbcl let #+sbcl () #-sbcl progn
@@ -37,6 +40,7 @@
 	(error (condition)
 	       (princ condition)
 	       (terpri)
+	       (when *report-and-ignore-errors-break* (break))
 	       (values nil condition))))))
 
 		   
