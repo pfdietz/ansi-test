@@ -58,30 +58,30 @@
      i x y))
   nil 2 1 2)
 
+;;; Error tests for EQL
+
 (deftest eql.error.1
-  (classify-error (eql))
-  program-error)
+  (signals-error (eql) program-error)
+  t)
 
 (deftest eql.error.2
-  (classify-error (eql nil))
-  program-error)
+  (signals-error (eql nil) program-error)
+  t)
 
 (deftest eql.error.3
-  (classify-error (eql nil nil nil))
-  program-error)
+  (signals-error (eql nil nil nil) program-error)
+  t)
 
 ;;; Error tests for EQ
 
 (deftest eq.error.1
-  (classify-error (eq))
-  program-error)
+  (signals-error (eq) program-error)
+  t)
 
 (deftest eq.error.2
-  (classify-error (eq nil))
-  program-error)
+  (signals-error (eq nil) program-error)
+  t)
 
 (deftest eq.error.3
-  (classify-error (eq nil nil nil))
-  program-error)
-
-  
+  (signals-error (eq nil nil nil) program-error)
+  t)

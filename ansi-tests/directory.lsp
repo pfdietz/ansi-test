@@ -57,5 +57,5 @@
   nil)
 
 (deftest directory.error.1
-  (classify-error (directory))
-  program-error)
+  (signals-error (directory) program-error)
+  t)

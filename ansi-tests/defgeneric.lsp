@@ -41,20 +41,23 @@
   nil)
 
 (deftest defgeneric.error.4
-  (classify-error (defgeneric defgeneric-error-fn.4 (x y)
-		    (:argument-precedence-order x y x)))
-  program-error)
+  (signals-error (defgeneric defgeneric-error-fn.4 (x y)
+		    (:argument-precedence-order x y x))
+		 program-error)
+  t)
 
 (deftest defgeneric.error.5
-  (classify-error (defgeneric defgeneric-error-fn.5 (x)
+  (signals-error (defgeneric defgeneric-error-fn.5 (x)
 		    (:documentation "some documentation")
-		    (:documentation "illegally repeated documentation")))
-  program-error)
+		    (:documentation "illegally repeated documentation"))
+		 program-error)
+  t)
 
 (deftest defgeneric.error.6
-  (classify-error (defgeneric defgeneric-error-fn.6 (x)
-		    (unknown-option nil)))
-  program-error)
+  (signals-error (defgeneric defgeneric-error-fn.6 (x)
+		    (unknown-option nil))
+		 program-error)
+  t)
 
 (deftest defgeneric.error.7
   (handler-case
@@ -66,9 +69,10 @@
   :good)
 
 (deftest defgeneric.error.8
-  (classify-error (defgeneric defgeneric-error-fn.8 (x y)
-		    (:argument-precedence-order x)))
-  program-error)
+  (signals-error (defgeneric defgeneric-error-fn.8 (x y)
+		    (:argument-precedence-order x))
+		 program-error)
+  t)
 
 
 ;;; Non-congruent methods cause defgeneric to signal an error
@@ -178,20 +182,22 @@
 ;;; error tests are necessary.  See sections 7.6.5 of the CLHS.
 
 (deftest defgeneric.error.20
-  (classify-error
+  (signals-error
    (let ((fn (defgeneric defgeneric-error-fn.20 (x &key)
 	       (:method ((x number) &key foo) (list x foo))
 	       (:method ((x symbol) &key bar) (list x bar)))))
-     (funcall fn 1 :bar 'a)))
-  program-error)
+     (funcall fn 1 :bar 'a))
+   program-error)
+  t)
 
 (deftest defgeneric.error.21
-  (classify-error
+  (signals-error
    (let ((fn (defgeneric defgeneric-error-fn.21 (x &key)
 	       (:method ((x number) &key foo &allow-other-keys) (list x foo))
 	       (:method ((x symbol) &key bar) (list x bar)))))
-     (funcall fn 'x :foo 'a)))
-  program-error)
+     (funcall fn 'x :foo 'a))
+   program-error)
+  t)
 
 ;;;
 
@@ -203,8 +209,6 @@
      (eval '(defgeneric defgeneric-error-fn.22 (x y)))
      (error () :good)))
   :good)
-
-
 
 
 ;;; Non error cases

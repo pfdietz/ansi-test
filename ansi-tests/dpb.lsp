@@ -5,21 +5,25 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest dpb.error.1
-  (classify-error (dpb))
-  program-error)
+  (signals-error (dpb) program-error)
+  t)
 
 (deftest dpb.error.2
-  (classify-error (dpb 1))
-  program-error)
+  (signals-error (dpb 1) program-error)
+  t)
 
 (deftest dpb.error.3
-  (classify-error (dpb 1 (byte 1 0)))
-  program-error)
+  (signals-error (dpb 1 (byte 1 0)) program-error)
+  t)
 
 (deftest dpb.error.4
-  (classify-error (dpb 1 (byte 1 0) 0 nil))
-  program-error)
+  (signals-error (dpb 1 (byte 1 0) 0 nil) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest dpb.1
   (loop for pos = (random 32)

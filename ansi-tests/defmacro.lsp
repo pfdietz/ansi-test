@@ -5,19 +5,23 @@
 
 (in-package :cl-test)
 
+;;; FIXME
 ;;; Need to add non-error tests
 
 (deftest defmacro.error.1
-  (classify-error (funcall (macro-function 'defmacro)))
-  program-error)
+  (signals-error (funcall (macro-function 'defmacro))
+		 program-error)
+  t)
 
 (deftest defmacro.error.2
-  (classify-error (funcall (macro-function 'defmacro)
-			   '(defmacro nonexistent-macro ())))
-  program-error)
+  (signals-error (funcall (macro-function 'defmacro)
+			   '(defmacro nonexistent-macro ()))
+		 program-error)
+  t)
 
 (deftest defmacro.error.3
-  (classify-error (funcall (macro-function 'defmacro)
+  (signals-error (funcall (macro-function 'defmacro)
 			   '(defmacro nonexistent-macro ())
-			   nil nil))
-  program-error)
+			   nil nil)
+		 program-error)
+  t)

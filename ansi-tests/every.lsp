@@ -98,53 +98,54 @@
 ;;; Error cases
 
 (deftest every.error.1
-  (classify-error (every 1 '(a b c)))
-  type-error)
+  (signals-error (every 1 '(a b c)) type-error)
+  t)
 
 (deftest every.error.2
-  (classify-error (every #\a '(a b c)))
-  type-error)
+  (signals-error (every #\a '(a b c)) type-error)
+  t)
 
 (deftest every.error.3
-  (classify-error (every #() '(a b c)))
-  type-error)
+  (signals-error (every #() '(a b c)) type-error)
+  t)
 
 (deftest every.error.4
-  (classify-error (every #'null 'a))
-  type-error)
+  (signals-error (every #'null 'a) type-error)
+  t)
 
 (deftest every.error.5
-  (classify-error (every #'null 100))
-  type-error)
+  (signals-error (every #'null 100) type-error)
+  t)
 
 (deftest every.error.6
-  (classify-error (every #'null 'a))
-  type-error)
+  (signals-error (every #'null 'a) type-error)
+  t)
 
 (deftest every.error.7
-  (classify-error (every #'eq () 'a))
-  type-error)
-`
+  (signals-error (every #'eq () 'a) type-error)
+  t)
+
 (deftest every.error.8
-  (classify-error (every))
-  program-error)
+  (signals-error (every) program-error)
+  t)
 
 (deftest every.error.9
-  (classify-error (every #'null))
-  program-error)
+  (signals-error (every #'null) program-error)
+  t)
 
 (deftest every.error.10
-  (classify-error (locally (every 1 '(a b c)) t))
-  type-error)
+  (signals-error (locally (every 1 '(a b c)) t) type-error)
+  t)
 
 (deftest every.error.11
-  (classify-error (every #'cons '(a b c)))
-  program-error)
+  (signals-error (every #'cons '(a b c)) program-error)
+  t)
 
 (deftest every.error.12
-  (classify-error (every #'cons '(a b c) '(1 2 3) '(4 5 6)))
-  program-error)
+  (signals-error (every #'cons '(a b c) '(1 2 3) '(4 5 6)) program-error)
+  t)
 
 (deftest every.error.13
-  (classify-error (every #'car '(a b c)))
-  type-error)
+  (signals-error (every #'car '(a b c)) type-error)
+  t)
+

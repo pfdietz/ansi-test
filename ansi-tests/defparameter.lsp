@@ -52,31 +52,35 @@
   300)
 
 ;;; (deftest defparameter.error.1
-;;;   (classify-error (defparameter))
-;;;   program-error)
+;;;   (signals-error (defparameter)  program-error)
+;;;   t)
 ;;; 
 ;;; (deftest defparameter.error.2
-;;;   (classify-error (defparameter *ignored-defparameter-name*))
-;;;   program-error)
+;;;   (signals-error (defparameter *ignored-defparameter-name*)
+;;;                  program-error)
+;;;   t)
 ;;; 
 ;;; (deftest defparameter.error.3
-;;;   (classify-error (defparameter *ignored-defparameter-name* nil
+;;;   (signals-error (defparameter *ignored-defparameter-name* nil
 ;;; 		    "documentation"
-;;; 		    "illegal extra argument"))
-;;;   program-error)
+;;; 		    "illegal extra argument")
+;;;                  program-error)
+;;;   t)
 
 (deftest defparameter.error.1
-  (classify-error (funcall (macro-function 'defparameter)))
-  program-error)
+  (signals-error (funcall (macro-function 'defparameter))
+		 program-error)
+  t)
 
 (deftest defparameter.error.2
-  (classify-error (funcall (macro-function 'defparameter)
-			   '(defparameter *nonexistent-variable* nil)))
-  program-error)
+  (signals-error (funcall (macro-function 'defparameter)
+			   '(defparameter *nonexistent-variable* nil))
+		 program-error)
+  t)
 
 (deftest defparameter.error.3
-  (classify-error (funcall (macro-function 'defparameter)
+  (signals-error (funcall (macro-function 'defparameter)
 			   '(defparameter *nonexistent-variable* nil)
-			   nil nil))
-  program-error)
-
+			   nil nil)
+		 program-error)
+  t)

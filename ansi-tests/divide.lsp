@@ -9,8 +9,8 @@
 (compile-and-load "division-aux.lsp")
 
 (deftest /.error.1
-  (classify-error (/))
-  program-error)
+  (signals-error (/) program-error)
+  t)
 
 (deftest /.error.2
   (divide-by-zero-test 0))

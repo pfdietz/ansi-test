@@ -8,17 +8,21 @@
 (compile-and-load "numbers-aux.lsp")
 (compile-and-load "exp-aux.lsp")
 
+;;; Error tests
+
 (deftest exp.error.1
-  (classify-error (exp))
-  program-error)
+  (signals-error (exp) program-error)
+  t)
 
 (deftest exp.error.2
-  (classify-error (exp 0 nil))
-  program-error)
+  (signals-error (exp 0 nil) program-error)
+  t)
 
 (deftest exp.error.3
-  (classify-error (exp 0 0 0))
-  program-error)
+  (signals-error (exp 0 0 0) program-error)
+  t)
+
+;;; Other tests
 
 (deftest exp.1
   (let ((result (exp 0)))
@@ -34,3 +38,5 @@
   (mapcar #'exp '(-0.0s0 -0.0f0 -0.0d0 -0.0l0))
   (1.0s0 1.0f0 1.0d0 1.0l0))
 
+;;; FIXME
+;;; Add more tests here for floating point accuracy

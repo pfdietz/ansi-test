@@ -6,19 +6,22 @@
 (in-package :cl-test)
 
 (deftest defun.error.1
-  (classify-error (funcall (macro-function 'defun)))
-  program-error)
+  (signals-error (funcall (macro-function 'defun))
+		 program-error)
+  t)
 
 (deftest defun.error.2
-  (classify-error (funcall (macro-function 'defun)
-			   '(defun nonexistent-function ())))
-  program-error)
+  (signals-error (funcall (macro-function 'defun)
+			   '(defun nonexistent-function ()))
+		 program-error)
+  t)
 
 (deftest defun.error.3
-  (classify-error (funcall (macro-function 'defun)
+  (signals-error (funcall (macro-function 'defun)
 			   '(defun nonexistent-function ())
-			   nil nil))
-  program-error)
+			   nil nil)
+		 program-error)
+  t)
 
 ;;; Tests for implicit blocks
 

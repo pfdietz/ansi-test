@@ -44,14 +44,16 @@
      i x y))
   nil 2 1 2)
 
+;;; Error tests
+
 (deftest equalp.error.1
-  (classify-error (equalp))
-  program-error)
+  (signals-error (equalp) program-error)
+  t)
 
 (deftest equalp.error.2
-  (classify-error (equalp nil))
-  program-error)
+  (signals-error (equalp nil) program-error)
+  t)
 
 (deftest equalp.error.3
-  (classify-error (equalp nil nil nil))
-  program-error)
+  (signals-error (equalp nil nil nil) program-error)
+  t)

@@ -119,18 +119,9 @@
 	(return 3))
       (unless (typep (eval `(defclass ,c2 (,c4 ,c5) nil)) 'class)
 	(return 4))
-      (let ((error-symbol
-	     (classify-error**
-	      `(progn
-		 (defclass ,c3 (,c5 ,c4) nil)
-		 (make-instance ',c1)))))
-	(and (symbolp error-symbol)
-	     (subtypep error-symbol 'error)
-	     'good))))
-  good)
-
-  
-       
-    
-
-
+      (handler-case
+       (eval `(progn
+		(defclass ,c3 (,c5 ,c4) nil)
+		(make-instance ',c1)))
+       (error () :good))))
+  :good)

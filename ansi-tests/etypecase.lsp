@@ -10,8 +10,8 @@
   a)
 
 (deftest etypecase.2
-  (classify-error (etypecase 1 (symbol 'a)))
-  type-error)
+  (signals-error (etypecase 1 (symbol 'a)) type-error)
+  t)
 
 (deftest etypecase.3
   (etypecase 1 (symbol 'a) (t 'b))
@@ -71,16 +71,18 @@
   good)
 
 (deftest etypecase.error.1
-  (classify-error (funcall (macro-function 'etypecase)))
-  program-error)
+  (signals-error (funcall (macro-function 'etypecase))
+		 program-error)
+  t)
 
 (deftest etypecase.error.2
-  (classify-error (funcall (macro-function 'etypecase)
-			   '(etypecase t)))
-  program-error)
+  (signals-error (funcall (macro-function 'etypecase)
+			   '(etypecase t))
+		 program-error)
+  t)
 
 (deftest etypecase.error.3
-  (classify-error (funcall (macro-function 'etypecase)
-			   '(etypecase t)
-			   nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'etypecase)
+			   '(etypecase t) nil nil)
+		 program-error)
+  t)

@@ -5,21 +5,25 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest deposit-field.error.1
-  (classify-error (deposit-field))
-  program-error)
+  (signals-error (deposit-field) program-error)
+  t)
 
 (deftest deposit-field.error.2
-  (classify-error (deposit-field 1))
-  program-error)
+  (signals-error (deposit-field 1) program-error)
+  t)
 
 (deftest deposit-field.error.3
-  (classify-error (deposit-field 1 (byte 1 0)))
-  program-error)
+  (signals-error (deposit-field 1 (byte 1 0)) program-error)
+  t)
 
 (deftest deposit-field.error.4
-  (classify-error (deposit-field 1 (byte 1 0) 0 nil))
-  program-error)
+  (signals-error (deposit-field 1 (byte 1 0) 0 nil) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest deposit-field.1
   (loop for pos = (random 32)

@@ -54,8 +54,8 @@
 ;;;
 
 (deftest delete-file.error.1
-  (classify-error (delete-file))
-  program-error)
+  (signals-error (delete-file) program-error)
+  t)
 
 (deftest delete-file.error.2
   (let ((pn "scratch.txt"))
@@ -64,18 +64,15 @@
 		      (format s "Contents~%")))
     (values
      (notnot (probe-file pn))
-     (classify-error (delete-file "scratch.txt" nil))
+     (signals-error (delete-file "scratch.txt" nil) program-error)
      (notnot (probe-file pn))
      (delete-file pn)
      (probe-file pn)))
-  t program-error t t nil)
+  t t t t nil)
 
 (deftest delete-file.error.3
   (let ((pn "nonexistent.txt"))
     (when (probe-file pn) (delete-file pn))
-    (let ((result (classify-error (delete-file "nonexistent.txt"))))
-      (if (member result '(file-error t))
-	  t
-	result)))
+    (signals-error (delete-file "nonexistent.txt") file-error))
   t)
 

@@ -116,42 +116,48 @@
 
 #|
 (deftest destructuring-bind.error.1
-  (classify-error (destructuring-bind (a b c) nil (list a b c)))
-  program-error)
+  (signals-error (destructuring-bind (a b c) nil (list a b c))
+		 program-error)
+  t)
 
 (deftest destructuring-bind.error.2
-  (classify-error (destructuring-bind ((a b c)) nil (list a b c)))
-  program-error)
+  (signals-error (destructuring-bind ((a b c)) nil (list a b c))
+		 program-error)
+  t)
 
 (deftest destructuring-bind.error.3
-  (classify-error (destructuring-bind (a b) 'x (list a b)))
-  program-error)
+  (signals-error (destructuring-bind (a b) 'x (list a b))
+		 program-error)
+  t)
 
 (deftest destructuring-bind.error.4
-  (classify-error (destructuring-bind (a . b) 'x (list a b)))
-  program-error)
+  (signals-error (destructuring-bind (a . b) 'x (list a b))
+		 program-error)
+  t)
 |#
 
 ;;; (deftest destructuring-bind.error.5
-;;;  (classify-error (destructuring-bind))
-;;;  program-error)
+;;;  (signals-error (destructuring-bind) program-error)
+;;;  t)
 ;;;
 ;;; (deftest destructuring-bind.error.6
-;;;  (classify-error (destructuring-bind x))
-;;;  program-error)
+;;;  (signals-error (destructuring-bind x) program-error)
+;;;  t)
 
 (deftest destructuring-bind.error.7
-  (classify-error (funcall (macro-function 'destructuring-bind)))
-  program-error)
+  (signals-error (funcall (macro-function 'destructuring-bind))
+		 program-error)
+  t)
 
 (deftest destructuring-bind.error.8
-  (classify-error (funcall (macro-function 'destructuring-bind)
-			   '(destructuring-bind (a . b) '(1 2) nil)))
-  program-error)
+  (signals-error (funcall (macro-function 'destructuring-bind)
+			   '(destructuring-bind (a . b) '(1 2) nil))
+		 program-error)
+  t)
 
 (deftest destructuring-bind.error.9
-  (classify-error (funcall (macro-function 'destructuring-bind)
+  (signals-error (funcall (macro-function 'destructuring-bind)
 			   '(destructuring-bind (a . b) '(1 2) nil)
-			   nil nil))
-  program-error)
-
+			   nil nil)
+		 program-error)
+  t)

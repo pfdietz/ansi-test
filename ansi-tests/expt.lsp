@@ -5,17 +5,21 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest expt.error.1
-  (classify-error (expt))
-  program-error)
+  (signals-error (expt) program-error)
+  t)
 
 (deftest expt.error.2
-  (classify-error (expt 1 1 1))
-  program-error)
+  (signals-error (expt 1 1 1) program-error)
+  t)
 
 (deftest expt.error.3
-  (classify-error (expt 1 1 nil nil))
-  program-error)
+  (signals-error (expt 1 1 nil nil) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest expt.1
   (expt 0 0)
@@ -180,6 +184,7 @@
   nil)
 
 #|
+;;; FIXME
 ;;; I need to think more about how to do approximate float
 ;;; equality in a principled way.
 

@@ -39,14 +39,13 @@
 ;;; Error cases
 
 (deftest eval.error.1
-  (classify-error (eval))
-  program-error)
+  (signals-error (eval) program-error)
+  t)
 
 (deftest eval.error.2
-  (classify-error (eval nil nil))
-  program-error)
+  (signals-error (eval nil nil) program-error)
+  t)
 
 (deftest eval.error.3
-  (classify-error (eval (list (gensym))))
-  undefined-function)
-
+  (signals-error (eval (list (gensym))) undefined-function)
+  t)

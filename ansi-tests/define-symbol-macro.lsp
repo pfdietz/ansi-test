@@ -6,18 +6,21 @@
 (in-package :cl-test)
 
 (deftest define-symbol-macro.error.1
-  (classify-error (funcall (macro-function 'define-symbol-macro)))
-  program-error)
+  (signals-error (funcall (macro-function 'define-symbol-macro))
+		 program-error)
+  t)
 
 (deftest define-symbol-macro.error.2
-  (classify-error (funcall (macro-function 'define-symbol-macro)
+  (signals-error (funcall (macro-function 'define-symbol-macro)
 			   '(define-symbol-macro
-			      nonexistent-symbol-macro nil)))
-  program-error)
+			      nonexistent-symbol-macro nil))
+		 program-error)
+  t)
 
 (deftest define-symbol-macro.error.3
-  (classify-error (funcall (macro-function 'define-symbol-macro)
+  (signals-error (funcall (macro-function 'define-symbol-macro)
 			   '(define-symbol-macro
 			      nonexistent-symbol-macro nil)
-			   nil nil))
-  program-error)
+			   nil nil)
+		 program-error)
+  t)

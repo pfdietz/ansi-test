@@ -10,23 +10,23 @@
   2)
 
 (deftest ecase.2
-  (classify-error (ecase 1))
-  type-error)
+  (signals-error (ecase 1) type-error)
+  t)
 
 (deftest ecase.3
-  (classify-error (ecase 1 (a 1) (b 2) (c 3)))
-  type-error)
+  (signals-error (ecase 1 (a 1) (b 2) (c 3)) type-error)
+  t)
 
 ;;; It is legal to use T or OTHERWISE as key designators
 ;;; in ECASE forms.  They have no special meaning here.
 
 (deftest ecase.4
-  (classify-error (ecase 1 (t nil)))
-  type-error)
+  (signals-error (ecase 1 (t nil)) type-error)
+  t)
 
 (deftest ecase.5
-  (classify-error (ecase 1 (otherwise nil)))
-  type-error)
+  (signals-error (ecase 1 (otherwise nil)) type-error)
+  t)
 
 (deftest ecase.6
   (ecase 'b ((a z) 1) ((y b w) 2) ((b c) 3))
@@ -45,8 +45,8 @@
   a)
 
 (deftest ecase.9
-  (classify-error (ecase nil (nil 'a)))
-  type-error)
+  (signals-error (ecase nil (nil 'a)) type-error)
+  t)
 
 (deftest ecase.10
   (ecase nil ((nil) 'a))
@@ -57,8 +57,8 @@
   1 2 3)
 
 (deftest ecase.12
-  (classify-error (ecase t (a 10)))
-  type-error)
+  (signals-error (ecase t (a 10)) type-error)
+  t)
 
 (deftest ecase.13
   (ecase t ((t) 10) (t 20))
@@ -70,24 +70,26 @@
   1)
 
 (deftest ecase.15
-  (classify-error (ecase 'otherwise ((t) 10)))
-  type-error)
+  (signals-error (ecase 'otherwise ((t) 10)) type-error)
+  t)
 
 (deftest ecase.16
-  (classify-error (ecase t ((otherwise) 10)))
-  type-error)
+  (signals-error (ecase t ((otherwise) 10)) type-error)
+  t)
 
 (deftest ecase.17
-  (classify-error (ecase 'a (b 0) (c 1) (otherwise 2)))
-  type-error)
+  (signals-error (ecase 'a (b 0) (c 1) (otherwise 2))
+		 type-error)
+  t)
 
 (deftest ecase.18
-  (classify-error (ecase 'a (b 0) (c 1) ((otherwise) 2)))
-  type-error)
+  (signals-error (ecase 'a (b 0) (c 1) ((otherwise) 2))
+		 type-error)
+  t)
 
 (deftest ecase.19
-  (classify-error (ecase 'a (b 0) (c 1) ((t) 2)))
-  type-error)
+  (signals-error (ecase 'a (b 0) (c 1) ((t) 2)) type-error)
+  t)
 
 (deftest ecase.20
   (ecase #\a
@@ -160,16 +162,15 @@
   good)
 
 (deftest ecase.error.1
-  (classify-error (funcall (macro-function 'ecase)))
-  program-error)
+  (signals-error (funcall (macro-function 'ecase)) program-error)
+  t)
 
 (deftest ecase.error.2
-  (classify-error (funcall (macro-function 'ecase)
-			   '(ecase t)))
-  program-error)
+  (signals-error (funcall (macro-function 'ecase) '(ecase t))
+		 program-error)
+  t)
 
 (deftest ecase.error.3
-  (classify-error (funcall (macro-function 'ecase)
-			   '(ecase t)
-			   nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'ecase) '(ecase t) nil nil)
+		 program-error)
+  t)

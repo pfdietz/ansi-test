@@ -8,12 +8,12 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest evenp.error.1
-  (classify-error (evenp))
-  program-error)
+  (signals-error (evenp) program-error)
+  t)
 
 (deftest evenp.error.2
-  (classify-error (evenp 0 nil))
-  program-error)
+  (signals-error (evenp 0 nil) program-error)
+  t)
 
 (deftest evenp.1
   (loop for x in *numbers*
@@ -24,7 +24,7 @@
 (deftest evenp.2
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eq (classify-error** `(evenp (quote ,x))) 'type-error))
+		   (eval `(signals-error (evenp ',x) type-error)))
 	collect x)
   nil)
 

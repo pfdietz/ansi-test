@@ -82,14 +82,16 @@
      i x y))
   nil 2 1 2)
 
+;;; Error tests
+
 (deftest equal.error.1
-  (classify-error (equal))
-  program-error)
+  (signals-error (equal) program-error)
+  t)
 
 (deftest equal.error.2
-  (classify-error (equal nil))
-  program-error)
+  (signals-error (equal nil) program-error)
+  t)
 
 (deftest equal.error.3
-  (classify-error (equal nil nil nil))
-  program-error)
+  (signals-error (equal nil nil nil) program-error)
+  t)

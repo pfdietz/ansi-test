@@ -40,13 +40,14 @@
   type-error)
 
 (deftest endp.error.4
-  (classify-error (endp))
-  program-error)
+  (signals-error (endp) program-error)
+  t)
 
 (deftest endp.error.5
-  (classify-error (endp nil nil))
-  program-error)
+  (signals-error (endp nil nil) program-error)
+  t)
 
 (deftest endp.error.6
-  (catch-type-error (locally (endp 1)))
-  type-error)
+  (signals-error (locally (endp 1)) type-error)
+  t)
+

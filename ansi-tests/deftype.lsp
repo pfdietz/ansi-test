@@ -5,17 +5,24 @@
 
 (in-package :cl-test)
 
+;;; FIXME
+;;; Need to add non-error tests
+
 (deftest deftype.error.1
-  (classify-error (funcall (macro-function 'deftype)))
-  program-error)
+  (signals-error (funcall (macro-function 'deftype))
+		 program-error)
+  t)
 
 (deftest deftype.error.2
-  (classify-error (funcall (macro-function 'deftype)
-			   '(deftype nonexistent-type () nil)))
-  program-error)
+  (signals-error (funcall (macro-function 'deftype)
+			   '(deftype nonexistent-type () nil))
+		 program-error)
+  t)
 
 (deftest deftype.error.3
-  (classify-error (funcall (macro-function 'deftype)
+  (signals-error (funcall (macro-function 'deftype)
 			   '(deftype nonexistent-type () nil)
-			   nil nil))
-  program-error)
+			   nil nil)
+		 program-error)
+  t)
+
