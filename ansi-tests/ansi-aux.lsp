@@ -1391,12 +1391,3 @@ the condition to go uncaught if it cannot be classified."
 
 (defun with-package-iterator-all (packages)
   (test-with-package-iterator packages :internal :external :inherited))
-
-#-allegro (deftype otherwise () nil) ;; used in testing TYPECASE
-#+allegro
-(eval-when (load compile)
-  (handler-bind
-   ((error #'(lambda (c) (continue))))
-   (deftype otherwise () nil)))
-
-  
