@@ -258,7 +258,7 @@
      s3
      (length s3)
      (equalpt "23" s3)
-     (multiple-value-list (parse-integer s2))))
+     (multiple-value-list (parse-integer s3))))
   "23" 2 t (23 2))
 
 (deftest parse-integer.34
