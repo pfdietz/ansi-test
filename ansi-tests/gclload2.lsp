@@ -25,10 +25,7 @@
 (load "load-arrays.lsp")
 
 ;;; Tests of hash tables
-
-(load "hash-table.lsp")
-(load "make-hash-table.lsp")
-  ; More to come
+(load "load-hash-tables.lsp")
 
 ;;; Tests of packages
 
