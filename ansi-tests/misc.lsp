@@ -6388,6 +6388,24 @@ Broken at C::WT-C-INLINE-LOC.
     -1957 523078358699 -634832888815))
   0)
 
+(deftest misc.345a
+  (let
+   #+armedbear ((jvm::*catch-errors* nil))
+   nil
+   (funcall
+    (compile
+     nil
+     '(lambda (c)
+	(declare (type (integer -3011346550 1630587670) c))
+	(declare (optimize (speed 1) (space 1) (safety 0) (debug 3)
+			   (compilation-speed 1)))
+	(progn (tagbody (dotimes (iv2 0 (- 0 (go 7))) (progn 0))
+			7
+			(progn (mask-field (byte 0 0) 0) c))
+	       0)))
+    1))
+  0)
+
 ;;; wrong return value
 (deftest misc.346
   (funcall
@@ -6431,3 +6449,15 @@ Broken at C::WT-C-INLINE-LOC.
        (max (conjugate (setq a -4178265097)) (if (> c 0) 0 a))))
    -2408319173 -4307532101272)
   -4178265097)
+
+(deftest misc.349
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 1) (safety 1) (debug 1)
+			  (compilation-speed 2)))
+       (mod (let ((*s7* (block b7 (logandc2 (+ (return-from b7 0)) 0))))
+	      -10)
+	    (max 26 0)))))
+  16)
