@@ -628,7 +628,7 @@
     (nintersection list1 list2 :allow-other-keys :foo :also-bad t))
   (4))
 
-(deftest nintersectionallow-other-keys.3
+(deftest nintersection.allow-other-keys.3
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (nintersection list1 list2 :allow-other-keys :foo :also-bad t
