@@ -228,26 +228,30 @@
 ;;;      (cond-11/r c)))
 ;;;   117 117)
 
-(define-condition-with-tests cond-12 nil
-  (((slot1) :initarg :slot1 :reader cond-12/slot-1)
-   ((slot2) :initarg :slot2 :reader cond-12/slot-2)))
+;;; The cond-12 and cond-13 tests have been removed.  Duane Rettig
+;;; convincingly argued that the feature being tested (non-symbol
+;;; slot names) remains in the standard only because of editing errors.
 
-(deftest cond-12-slots.1
-  (let ((c (make-condition 'cond-12 :slot1 'a :slot2 'b)))
-    (and (typep c 'cond-12)
-	 (eqt (cond-12/slot-1 c) 'a)
-	 (eqt (cond-12/slot-2 c) 'b)))
-  t)
-
-(define-condition-with-tests cond-13 nil
-  (((slot1 10) :initarg :slot1 :reader cond-13/slot-1)))
-
-(deftest cond-13-slots.1
-  (let ((c (make-condition 'cond-13)))
-    (and (typep c 'cond-13)
-	 (cond-13/slot-1 c)))
-  10)
-
+;;; (define-condition-with-tests cond-12 nil
+;;;   (((slot1) :initarg :slot1 :reader cond-12/slot-1)
+;;;    ((slot2) :initarg :slot2 :reader cond-12/slot-2)))
+;;; 
+;;; (deftest cond-12-slots.1
+;;;   (let ((c (make-condition 'cond-12 :slot1 'a :slot2 'b)))
+;;;     (and (typep c 'cond-12)
+;;; 	 (eqt (cond-12/slot-1 c) 'a)
+;;; 	 (eqt (cond-12/slot-2 c) 'b)))
+;;;   t)
+;;; 
+;;; (define-condition-with-tests cond-13 nil
+;;;   (((slot1 10) :initarg :slot1 :reader cond-13/slot-1)))
+;;; 
+;;; (deftest cond-13-slots.1
+;;;   (let ((c (make-condition 'cond-13)))
+;;;     (and (typep c 'cond-13)
+;;; 	 (cond-13/slot-1 c)))
+;;;   10)
+ 
 (define-condition-with-tests cond-14 nil
   ((s1 :initarg :i1 :type fixnum :reader cond-14/s1)
    (s2 :initarg :i2 :type t :reader cond-14/s2)))
@@ -458,8 +462,8 @@
   (let ((c (make-condition 'cond-23 :slot1 'a :slot2 'b)))
     (and (typep c 'cond-5)
 	 (typep c 'cond-23)
-	 (eqt (cond-4/slot-1 c) 'a)
-	 (eqt (cond-4/slot-2 c) 'b)
+	 (eqt (cond-5/slot-1 c) 'a)
+	 (eqt (cond-5/slot-2 c) 'b)
 	 ))
   t)
 
@@ -467,8 +471,8 @@
   (let ((c (make-condition 'cond-23 :slot1 'a)))
     (and (typep c 'cond-5)
 	 (typep c 'cond-23)
-	 (eqt (cond-4/slot-1 c) 'a)
-	 (eqt (cond-4/slot-2 c) 'y)
+	 (eqt (cond-5/slot-1 c) 'a)
+	 (eqt (cond-5/slot-2 c) 'y)
 	 ))
   t)
 
@@ -476,8 +480,8 @@
   (let ((c (make-condition 'cond-23 :slot2 'b)))
     (and (typep c 'cond-5)
 	 (typep c 'cond-23)
-	 (eqt (cond-4/slot-1 c) 'x)
-	 (eqt (cond-4/slot-2 c) 'b)
+	 (eqt (cond-5/slot-1 c) 'x)
+	 (eqt (cond-5/slot-2 c) 'b)
 	 ))
   t)
 
@@ -485,11 +489,7 @@
   (let ((c (make-condition 'cond-23)))
     (and (typep c 'cond-5)
 	 (typep c 'cond-23)
-	 (eqt (cond-4/slot-1 c) 'x)
-	 (eqt (cond-4/slot-2 c) 'y)
+	 (eqt (cond-5/slot-1 c) 'x)
+	 (eqt (cond-5/slot-2 c) 'y)
 	 ))
   t)
-
-
-
-
