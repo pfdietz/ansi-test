@@ -404,6 +404,26 @@
       x))
   2)
 
+(deftest symbol-macrolet.5
+  (let ((x 10))
+     (symbol-macrolet ((y x))
+       (list x
+	     y
+	     (let ((x 20)) x)
+	     (let ((y 30)) x)
+	     (let ((y 50)) y)
+	     x
+	     y)))
+  (10 10 20 10 50 10 10))
+
+(deftest symbol-macrolet.6
+  (symbol-macrolet () (values)))
+		       
+(deftest symbol-macrolet.7
+  (symbol-macrolet () (values 'a 'b 'c 'd 'e))
+  a b c d e)
+		       
+
 (deftest symbol-macrolet.error.1
   (classify-error
    (symbol-macrolet ((x 10))
