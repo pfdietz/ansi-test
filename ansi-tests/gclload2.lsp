@@ -54,6 +54,9 @@
 (load "character.lsp")
 (load "char-compare.lsp")
 
+;;; Tests of pathnames
+(load "load-pathnames.lsp")
+
 ;;; Tests of system construction
 (load "features.lsp")
 (load "disassemble.lsp")

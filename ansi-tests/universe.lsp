@@ -7,7 +7,7 @@
 
 (in-package :cl-test)
 
-(defvar *condition-types*
+(defparameter *condition-types*
     '(arithmetic-error
       cell-error
       condition
@@ -39,21 +39,21 @@
       undefined-function
       warning))
 
-(defvar *condition-objects*
+(defparameter *condition-objects*
   (loop for tp in *condition-types* append
 	(handler-case (list (make-condition tp))
 		      (error () nil))))
 
-(defvar *standard-package-names*
+(defparameter *standard-package-names*
   '("COMMON-LISP" "COMMON-LISP-USER" "KEYWORD"))
 
-(defvar *package-objects*
+(defparameter *package-objects*
   (loop for pname in *standard-package-names* append
 	(handler-case (let ((pkg (find-package pname)))
 			(and pkg (list pkg)))
 		      (error () nil))))
 
-(defvar *integers*
+(defparameter *integers*
     (remove-duplicates
      `(
        0
@@ -70,7 +70,7 @@
        ;; Some arbitrarily chosen integers
        12387131 1272314 231 -131 -561823 23713 -1234611312123 444121 991)))
 
-(defvar *floats*
+(defparameter *floats*
     (append
      (loop for sym in '(pi
 			most-positive-short-float
@@ -114,11 +114,11 @@
       1.31273s3 12361.12S-7
       6124.124l0 13123.1L-23)))
 
-(defvar *ratios*
+(defparameter *ratios*
     '(1/3 1/1000 1/1000000000000000 -10/3 -1000/7 -987129387912381/13612986912361
       189729874978126783786123/1234678123487612347896123467851234671234))
 
-(defvar *complexes*
+(defparameter *complexes*
     '(#C(0.0 0.0)
       #C(1.0 0.0)
       #C(0.0 1.0)
@@ -128,15 +128,15 @@
       #C(1.0D100 1.0D100)
       #C(-1.0D-100 -1.0D-100)))
 
-(defvar *numbers*
+(defparameter *numbers*
     (append *integers*
 	    *floats*
 	    *ratios*
 	    *complexes*))
 
-(defvar *reals* (append *integers* *floats* *ratios*))
+(defparameter *reals* (append *integers* *floats* *ratios*))
 
-(defvar *rationals* (append *integers* *ratios*))
+(defparameter *rationals* (append *integers* *ratios*))
 
 (defun try-to-read-chars (&rest namelist)
   (loop
@@ -146,7 +146,7 @@
 		   (concatenate 'string "\#\\" name)))
 	  (error () nil))))
 
-(defvar *characters*
+(defparameter *characters*
     (remove-duplicates
      `(#\Newline
        #\Space
@@ -161,7 +161,7 @@
        )))
 
 
-(defvar *strings*
+(defparameter *strings*
     (append
      (and (code-char 0)
 	  (list
@@ -180,13 +180,13 @@
 	s)
       )))
 
-(defvar *conses*
+(defparameter *conses*
     (list
      (list 'a 'b)
      (list nil)
      (list 1 2 3 4 5 6)))
 
-(defvar *circular-conses*
+(defparameter *circular-conses*
     (list
      (let ((s (copy-list '(a b c d))))
        (nconc s s)
@@ -198,11 +198,11 @@
        (setf (car s) s)
        (setf (cdr s) s))))
 
-(defvar *booleans* '(nil t))
-(defvar *keywords* '(:a :b :|| :|a| :|1234|))
-(defvar *uninterned-symbols*
+(defparameter *booleans* '(nil t))
+(defparameter *keywords* '(:a :b :|| :|a| :|1234|))
+(defparameter *uninterned-symbols*
   (list '#:nil '#:t '#:foo '#:||))
-(defvar *cl-test-symbols*
+(defparameter *cl-test-symbols*
     `(,(intern "a" :cl-test)
       ,(intern "" :cl-test)
       ,@(and (code-char 0)
@@ -220,24 +220,24 @@
 		     (intern s3 :cl-test))))
       ))
 
-(defvar *cl-user-symbols*
+(defparameter *cl-user-symbols*
     '(cl-user::foo cl-user::x
       cl-user::cons cl-user::lambda
       cl-user::*print-readably* cl-user::push))
 	  
-(defvar *symbols*
+(defparameter *symbols*
     (append *booleans* *keywords* *uninterned-symbols*
 	    *cl-test-symbols*
 	    *cl-user-symbols*))
 
-(defvar *array-dimensions*
+(defparameter *array-dimensions*
     (loop
 	for i from 0 to 8 collect
 	  (loop for j from 1 to i collect 2)))
 
-(defvar *default-array-target* (make-array '(300)))
+(defparameter *default-array-target* (make-array '(300)))
 
-(defvar *arrays*
+(defparameter *arrays*
     (append
      (list (make-array '10))
      (mapcar #'make-array *array-dimensions*)
@@ -307,7 +307,7 @@
      ;; more kinds of arrays here later
      ))
 
-(defvar *hash-tables*
+(defparameter *hash-tables*
     (list
      (make-hash-table)
      (make-hash-table :test #'eq)
@@ -316,17 +316,23 @@
      #-(or GCL CMU ECL) (make-hash-table :test #'equalp)
      ))
 
-(defvar *pathnames*
+(defparameter *pathnames*
     (list
      (make-pathname :name "foo")
      (make-pathname :name "bar")
      (make-pathname :name "foo" :type "txt")
      (make-pathname :name "bar" :type "txt")
+     (make-pathname :name nil)
      (make-pathname :name :wild)
+     (make-pathname :name nil :type "txt")
      (make-pathname :name :wild :type "txt")
+     (make-pathname :directory :wild)
+     (make-pathname :type :wild)
+     (make-pathname :version :wild)
+     (make-pathname :version :newest)
      ))
 
-(defvar *streams*
+(defparameter *streams*
     (remove-duplicates
      (remove-if
       #'null
@@ -339,7 +345,7 @@
        *terminal-io*
        *trace-output*))))
 
-(defvar *readtables*
+(defparameter *readtables*
     (list *readtable*
 	  (copy-readtable)))
 
@@ -349,7 +355,7 @@
 (defstruct bar-structure
   x y z)
 
-(defvar *structures*
+(defparameter *structures*
     (list
      (make-foo-structure :x 1 :y 'a :z nil)
      (make-foo-structure :x 1 :y 'a :z nil)
@@ -367,23 +373,23 @@
   (compile 'meaningless-user-generic-function-for-universe)
   )
 
-(defvar *functions*
+(defparameter *functions*
   (list #'cons #'car #'append #'values
 	(macro-function 'cond)
 	#'meaningless-user-function-for-universe
 	#'meaningless-user-generic-function-for-universe
 	#'(lambda (x) x)))
 
-(defvar *methods*
+(defparameter *methods*
   (list
    ;; Add methods here
    ))
    
 
-(defvar *random-states*
+(defparameter *random-states*
   (list (make-random-state)))
 
-(defvar *universe*
+(defparameter *universe*
     (remove-duplicates
      (append
       *symbols*
@@ -404,7 +410,7 @@
       *methods*
       nil)))
 
-(defvar *mini-universe*
+(defparameter *mini-universe*
   (remove-duplicates
    (append
     (mapcar #'first
