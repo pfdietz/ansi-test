@@ -157,7 +157,9 @@
   nil)
 
 (defun do-test (&optional (name *test*))
-  (do-entry (get-entry name)))
+  #-sbcl (do-entry (get-entry name))
+  #+sbcl (handler-bind ((sb-ext:code-deletion-note #'muffle-warning))
+		       (do-entry (get-entry name))))
 
 (defun my-aref (a &rest args)
   (apply #'aref a args))
@@ -312,6 +314,11 @@
 	(do-entries stream))))
 
 (defun do-entries (s)
+  #-sbcl (do-entries* s)
+  #+sbcl (handler-bind ((sb-ext:code-deletion-note #'muffle-warning))
+		       (do-entries* s)))
+
+(defun do-entries* (s)
   (format s "~&Doing ~A pending test~:P ~
              of ~A tests total.~%"
           (count t (the list (cdr *entries*)) :key #'pend)
