@@ -47,3 +47,7 @@
 ;;; 22.3.8
 (load "format-paren.lsp")
 (load "format-p.lsp")
+
+;;; 22.3.9
+(load "format-circumflex.lsp")
+

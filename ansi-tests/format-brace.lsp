@@ -56,27 +56,8 @@
   (format nil "~#{~A~}" '(1 2 3 4 5 6 7) nil nil nil)
   "1234")
 
-;;; Tests of ~^ inside ~{ ... ~}
-
-(deftest format.{.10
-  (format nil "~{X ~A~^ Y ~A~^ ~}" '(1 2 3 4 5))
-  "X 1 Y 2 X 3 Y 4 X 5")
-
-(deftest format.{.11
-  (format nil "~{X ~A~^ Y ~A~^ ~}" '(1 2 3 4))
-  "X 1 Y 2 X 3 Y 4")
-
-(deftest format.{.12
-  (format nil "~1{~A~^~A~}" '(1))
-  "1")
-
-(deftest format.{.13
-  (format nil "~0{~A~^~A~}" '(1))
-  "")
-
-(deftest format.{.14
-  (format nil "~1{~A~^~A~}" '(1 2 3))
-  "12")
+;;; (missing tests involved ~^ and have been moved to format-circumflex.lsp
+;;;  and renamed.)
 
 (deftest format.{.15
   (format nil "~0{~}" "~A" '(1 2 3))
@@ -229,9 +210,6 @@
 (deftest format.\:{.17
   (format nil "~v:{ABC~:}" nil '(nil))
   "ABC")
-
-;;; ~^ in ~:{ ... ~:}
-
 
 
 ;;; Tests of ~@{ ... ~}
