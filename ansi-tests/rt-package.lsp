@@ -22,6 +22,7 @@
      #:rem-test
      #:defnote
      #:my-aref
+     #:*catch-errors*
      )))
 
 (in-package :regression-test)
