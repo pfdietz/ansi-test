@@ -178,3 +178,15 @@
 	collect (a-slot obj))
   (nil x y x x x x y))
 
+;;; A class redefinition test that came up in cmucl
+
+(deftest class-0307.1
+  (progn
+    (setf (find-class 'class-0307a) nil
+	  (find-class 'class-0307b) nil)
+    (eval '(defclass class-0307a () ()))
+    (eval '(defclass class-0307b (class-0307a) (a)))
+    (eval '(defclass class-0307a () ((a :initform nil))))
+    (eval '(defclass class-0307b (class-0307a) ((a :initform 'x))))
+    (slot-value (make-instance 'class-0307b) 'a))
+  x)
