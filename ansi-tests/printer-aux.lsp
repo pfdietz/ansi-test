@@ -159,5 +159,13 @@
       (cons (make-random-cons-tree s1)
 	    (make-random-cons-tree (- size s1))))))
 
-       
-       
+(defun make-random-vector (size)
+  (if (> size 1)
+      (let* ((nelems (min (1- size) (1+ (random (max 2 (floor size 4))))))
+	     (sizes (mapcar #'1+ (random-partition (- size nelems 1) nelems))))
+	(make-array nelems :initial-contents (mapcar #'make-random-vector sizes)))
+    (rcase
+     (1 (random-from-seq #(a b c d e f g)))
+     (1 (- (random 2001) 1000))
+     (1 (random 1000.0))
+     )))

@@ -279,6 +279,12 @@
 						:can-fail t)))
   nil)
 
+(deftest print.vector.random.4
+  (loop for v = (make-random-vector (1+ (random 100)))
+	repeat 1000
+	nconc (randomly-check-readability v :test #'equalp))
+  nil)
+
 ;;; *print-length* checks
 
 (deftest print.vector.length.1
@@ -406,6 +412,4 @@
   (with-standard-io-syntax
    (write-to-string '#(#(a)) :level 1 :readably nil :pretty nil))
   "#(#)")
-
-
 
