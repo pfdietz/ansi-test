@@ -94,3 +94,19 @@
 		      (equal str (concatenate 'string "#\\" (string c))))
 	   collect (list c str))))
   nil)
+
+(deftest print.char.11
+  (with-standard-io-syntax
+   (let ((*print-readably* nil))
+     (let ((names '("Newline" "Tab" "Rubout" "Linefeed" "Page"
+		    "Backspace" "Return")))
+       (loop for name in names
+	     for c = (name-char name)
+	     for str = (with-output-to-string (s) (prin1 c s))
+	     unless (or (null str)
+			(and (>= (length str) 3)
+			     (equal (subseq str 0 2) "#\\")
+			     (member (subseq str 2) names
+				     :test #'equal)))
+	     collect (list c str)))))
+  nil)
