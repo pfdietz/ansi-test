@@ -161,5 +161,12 @@
      i x y a))
   11 2 1 2 #(11 2 3 4))
 
-
+(deftest incf.order.4
+  (let ((x 0))
+    (progn
+      "See CLtS 5.1.3"
+      (values
+       (incf x (setf x 1))
+       x)))
+  2 2)
 

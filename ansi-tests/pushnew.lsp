@@ -215,6 +215,13 @@
   #(a b c d e)
   4)
 
+(deftest pushnew.order.3
+  (let ((x '(a b c)))
+    (values
+     (pushnew (progn (setq x '(d e)) 'z) x)
+     x))
+  (z d e) (z d e))
+
 (deftest pushnew.error.1
   (signals-error
    (let ((x '(a b)))

@@ -52,4 +52,13 @@
      pa))
   nil #((:a 1) nil (:c 3) (:d 4)))
 
+(deftest remf.order.3
+  (let ((x (list 'a 'b 'c 'd)))
+    (progn
+      "See CLtS 5.1.3"
+      (values
+       (remf x (progn (setq x (list 'e 'f)) 'a))
+       x)))
+  nil (e f))
+
 (def-macro-test remf.error.1 (remf x 'a))

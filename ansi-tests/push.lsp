@@ -47,6 +47,13 @@
   #(a b c d)
   3)
 
+(deftest push.order.3
+  (let ((x '(a b c)))
+    (values
+     (push (progn (setq x '(d e)) 'z) x)
+     x))
+  (z d e) (z d e))
+
 (def-macro-test push.error.1 (push x y))
 
 ;;; Need to add push vs. various accessors

@@ -160,3 +160,12 @@
 		 (progn (setf y (incf i)) 0)))
      i x y a))
   9 2 1 2 #(9 2 3 4))
+
+(deftest decf.order.4
+  (let ((x 0))
+    (progn
+      "See CLtS 5.1.3"
+      (values
+       (decf x (setf x 1))
+       x)))
+  0 0)
