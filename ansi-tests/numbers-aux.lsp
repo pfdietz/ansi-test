@@ -49,7 +49,8 @@
 		 (setq lo mid)
 	       (if (= mid hi)
 		   (return lo)
-		 (setq hi mid))))))
+		 (setq hi mid))))
+	finally (return lo)))
 
 (defun find-largest-exactly-floatable-integer (upper-bound)
   (integer-binary-search
