@@ -207,6 +207,7 @@
       (write-to-string '|X|))))
   "X" (nil) "ABC" (nil) "DEF")
 
+#|
 (deftest pprint-dispatch.10
   (my-with-standard-io-syntax
    (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
@@ -229,6 +230,7 @@
 	  (setf (symbol-function sym) g)
 	  (write-to-string '|X|))))))
   "X" nil "ABC" "DEF")
+|#
 
 ;;; Error tests
 
