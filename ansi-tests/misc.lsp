@@ -10361,3 +10361,52 @@ Broken at C::WT-MAKE-CLOSURE.
     -4)
    (scale-float -15193.341216130497d0 -4))
   t)
+
+;;; ACL 7.0 (x86 linux)
+;;; Found by random type prop tests
+
+;;; Error: Attempt to divide 13026.059 by zero.
+(deftest misc.568
+  (values
+   (funcall
+   (compile nil '(lambda (p2)
+		  (declare (optimize (speed 1) (safety 3) (debug 3) (space 1))
+		   (type (rational * 5325/3112) p2))
+		  (floor 13026.059 (the (member 5325/3112 0 -2316/167 -449/460) p2))))
+   5325/3112))
+  7612)
+
+;;; Error: Attempt to take the car of #2\%b which is not listp.
+(deftest misc.569
+  (funcall
+   (compile
+    nil
+    '(lambda (p2)
+      (declare (optimize (speed 3) (safety 2) (debug 1) (space 2))
+       (type t p2))
+      (ash -2609443 (the (integer -3 0) p2))))
+   -1)
+  -1304722)
+
+;;; Incorrect return value
+(deftest misc.570
+  (funcall (compile nil '(lambda ()
+			  (declare (optimize (speed 3) (safety 1)))
+			  (char-equal #\: #\: #\;))))
+  nil)
+
+;;; CODE-CHAR returns incorrect result
+;;; (ACL7.0, 8 bit character image)
+
+(deftest misc.571
+  (and (< 1000 char-code-limit)
+       (let ((c1 (code-char 1000))
+	     (c2
+	      (funcall (compile nil '(lambda (x)
+				      (declare (optimize speed (safety 1)))
+				      (code-char x)))
+		       1000)))
+	 (if (not (eql c1 c2))
+	     (list c1 c2)
+	     nil)))
+  nil)
