@@ -175,6 +175,8 @@
 (load "bit-orc2.lsp")
 (load "bit-xor.lsp")
 (load "bit-not.lsp")
+(load "bit-vector-p.lsp")
+(load "simple-bit-vector-p.lsp")
 
 ;;; Tests of packages
 
