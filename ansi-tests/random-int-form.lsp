@@ -37,6 +37,14 @@
 
 (defvar *random-int-form-blocks* nil)
 
+(defvar *maximum-random-int-bits* 45)
+
+(declaim (special *vars*))
+
+(defstruct var-desc
+  (name nil :type symbol)
+  (type t))
+
 (defun test-random-integer-forms
   (size nvars n &optional (*random-state* (make-random-state t)))
 
@@ -63,14 +71,18 @@
 (defun test-random-integer-form
   (size nvars &aux (vars (subseq '(a b c d e f g h i j k l m
 				     n o p q r s t u v w x y z) 0 nvars)))
-  (let* ((form (make-random-integer-form size vars))
-	 (var-ranges (mapcar #'make-random-integer-range vars))
+  (let* ((var-ranges (mapcar #'make-random-integer-range vars))
 	 (var-types (mapcar #'(lambda (range)
 				(let ((lo (car range))
 				      (hi (cadr range)))
 				  (assert (>= hi lo))
 				  `(integer ,lo ,hi)))
 			    var-ranges))
+	 (form (let ((*vars* (loop for v in vars
+				   for tp in var-types
+				   collect (make-var-desc :name v
+							  :type tp))))
+		 (make-random-integer-form size)))
 	 (vals-list
 	  (loop repeat 20
 		collect
@@ -99,7 +111,7 @@
   "Generate a list (LO HI) of integers, LO <= HI.  This is used
    for generating integer types."
   (declare (ignore var))
-  (flet ((%r () (let ((r (ash 1 (1+ (random 35)))))
+  (flet ((%r () (let ((r (ash 1 (1+ (random *maximum-random-int-bits*)))))
 		  (- (random r) (floor (/ r 2))))))
     (let ((x (%r))
 	  (y (%r)))
@@ -107,17 +119,17 @@
 
 (defparameter *flet-names* nil)
 
-(defun make-random-integer-form (size vars)
-  "Generate a random legal lisp form of size SIZE (roughly).  VARS
-   is a list of variable symbols that contain integers."
+(defun make-random-integer-form (size)
+  "Generate a random legal lisp form of size SIZE (roughly)."
+  
   (if (<= size 1)
       ;; Leaf node -- generate a variable, constant, or flet function call
       (rcase
        (10 (let ((r (ash 1 (1+ (random 32)))))
 	     (- (random r) (floor (/ r 2)))))
-       (9 (random-from-seq vars))
+       (9 (var-desc-name (random-from-seq  *vars*)))
        (1 (if *flet-names* (list (random-from-seq *flet-names*))
-	    (random-from-seq vars))))
+	    (var-desc-name (random-from-seq *vars*)))))
     ;; (> size 1)
     (rcase
      ;; Unary ops
@@ -125,14 +137,14 @@
       (let ((op (random-from-seq '(- abs signum 1+ 1- identity progn floor
 				     ceiling truncate round realpart imagpart
 				     integer-length logcount values))))
-	`(,op ,(make-random-integer-form (1- size) vars))))
-     (2 `(isqrt (abs ,(make-random-integer-form (- size 2) vars))))
-     (3
+	`(,op ,(make-random-integer-form (1- size)))))
+     (2 `(isqrt (abs ,(make-random-integer-form (- size 2)))))
+#|     (3
       (destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
-	`(ash ,(make-random-integer-form s1 vars)
+	`(ash ,(make-random-integer-form s1)
 	      (min ,(random 100)
-		   ,(make-random-integer-form s2 vars)))))
+		   ,(make-random-integer-form s2))))) |#
      
      ;; binary floor, ceiling, truncate, round
      (4
@@ -140,11 +152,11 @@
 	    (op2 (random-from-seq #(max min))))
 	(destructuring-bind (s1 s2)
 	  (random-partition (- size 2) 2)
-	  `(,op  ,(make-random-integer-form s1 vars)
+	  `(,op  ,(make-random-integer-form s1)
 		 (,op2  ,(if (eq op2 'max)
 			     (1+ (random 100))
 			   (- (1+ (random 100))))
-			,(make-random-integer-form s2 vars))))))
+			,(make-random-integer-form s2))))))
 	    
      ;; Binary op
      (80
@@ -158,73 +170,90 @@
 		      logorc2 logxor))))
 	(destructuring-bind (leftsize rightsize)
 	    (random-partition (1- size) 2)
-	  (let ((e1 (make-random-integer-form leftsize vars))
-		(e2 (make-random-integer-form rightsize vars)))
+	  (let ((e1 (make-random-integer-form leftsize))
+		(e2 (make-random-integer-form rightsize)))
 	    `(,op ,e1 ,e2)))))
      ;; conditionals
      (20
       (let* ((cond-size (random (max 1 (floor size 2))))
 	     (then-size (random (- size cond-size)))
 	     (else-size (- size 1 cond-size then-size))
-	     (pred (make-random-pred-form cond-size vars))
-	     (then-part (make-random-integer-form then-size vars))
-	     (else-part (make-random-integer-form else-size vars)))
+	     (pred (make-random-pred-form cond-size))
+	     (then-part (make-random-integer-form then-size))
+	     (else-part (make-random-integer-form else-size)))
 	`(if ,pred ,then-part ,else-part)))
      (10
       (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
 	`(,(random-from-seq '(deposit-field dpb))
-	  ,(make-random-integer-form s1 vars)
-	  ,(make-random-byte-spec-form s2 vars)
-	  ,(make-random-integer-form s3 vars))))
+	  ,(make-random-integer-form s1)
+	  ,(make-random-byte-spec-form s2)
+	  ,(make-random-integer-form s3))))
      ;; #-:allegro
      (10
       (destructuring-bind (s1 s2) (random-partition (1- size) 2)
 	  `(,(random-from-seq '(ldb mask-field))
-	    ,(make-random-byte-spec-form s1 vars)
-	    ,(make-random-integer-form s2 vars))))
+	    ,(make-random-byte-spec-form s1)
+	    ,(make-random-integer-form s2))))
      (20
       (destructuring-bind (s1 s2) (random-partition (1- size) 2)
 	(let* ((var (random-from-seq #(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10)))
-	       (e1 (make-random-integer-form s1 vars))
-	       (e2 (make-random-integer-form s2 (cons var vars))))
+	       (e1 (make-random-integer-form s1))
+	       (e2 (let ((*vars* (cons (make-var-desc :name var
+						      :type '(integer * *))
+				       *vars*)))
+		     (make-random-integer-form s2))))
 	  ;; for now, avoid shadowing
-	  (if (member var vars)
-	      (make-random-integer-form size vars)
+	  (if (member var *vars* :key #'var-desc-name)
+	      (make-random-integer-form size)
 	    `(let ((,var ,e1)) ,e2)))))
-     (4 `(let () ,(make-random-integer-form (1- size) vars)))
+     (4 `(let () ,(make-random-integer-form (1- size))))
      (10
       (let* ((name (random-from-seq #(b1 b2 b3 b4 b5 b6 b7 b8)))
 	     (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
-	`(block ,name ,(make-random-integer-form (1- size) vars))))
-     (3 (make-random-integer-case-form size vars))
+	`(block ,name ,(make-random-integer-form (1- size)))))
+     (4 ;; setq
+      (let* ((vdesc (random-from-seq *vars*))
+	     (var (var-desc-name vdesc))
+	     (type (var-desc-type vdesc)))
+	(cond
+	 ((equal type '(integer * *))
+	  `(setq ,var ,(make-random-integer-form (1- size))))
+	 ((and (consp type)
+	       (eq (car type) 'integer)
+	       (integerp (second type))
+	       (integerp (third type)))
+	  `(setq ,var ,(random-from-interval (1+ (third type)) (second type))))
+	 (t (make-random-integer-form size)))))
+
+     (3 (make-random-integer-case-form size))
      (3
       (if *random-int-form-blocks*
 	  (let ((name (random-from-seq *random-int-form-blocks*))
-		(form (make-random-integer-form (1- size) vars)))
+		(form (make-random-integer-form (1- size))))
 	    `(return-from ,name ,form))
 	;; No blocks -- try again
-	(make-random-integer-form size vars)))
+	(make-random-integer-form size)))
 
      (5
       (if *random-int-form-blocks*
 	  (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
 	    (let ((name (random-from-seq *random-int-form-blocks*))
-		  (pred (make-random-pred-form s1 vars))
-		  (then (make-random-integer-form s2 vars))
-		  (else (make-random-integer-form s3 vars)))
+		  (pred (make-random-pred-form s1))
+		  (then (make-random-integer-form s2))
+		  (else (make-random-integer-form s3)))
 	      `(if ,pred (return-from ,name ,then) ,else)))
 	;; No blocks -- try again
-	(make-random-integer-form size vars)))
+	(make-random-integer-form size)))
 
-     (5 (make-random-flet-form size vars))
+     (5 (make-random-flet-form size))
 		
      )))
 
-(defun make-random-integer-case-form (size vars)
+(defun make-random-integer-case-form (size)
   (let ((ncases (1+ (random 10))))
     (if (< (+ size size) (+ ncases 2))
 	;; Too small, give up
-	(make-random-integer-form size vars)
+	(make-random-integer-form size)
       (let* ((sizes (random-partition (1- size) (+ ncases 2)))
 	     (bound (ash 1 (+ 2 (random 16))))
 	     (lower-bound (if (coin 3) 0 (- bound)))
@@ -237,72 +266,72 @@
 	       for vals = (loop repeat (1+ (min (random 10) (random 10)))
 				collect (random-from-interval
 					 upper-bound lower-bound))
-	       for result = (make-random-integer-form case-size vars)
+	       for result = (make-random-integer-form case-size)
 	       repeat ncases
 	       collect `(,vals ,result)))
-	     (expr (make-random-integer-form (first sizes) vars)))
+	     (expr (make-random-integer-form (first sizes))))
 	`(case ,expr
 	   ,@cases
-	   (t ,(make-random-integer-form (second sizes) vars)))))))
+	   (t ,(make-random-integer-form (second sizes))))))))
 
-(defun make-random-flet-form (size vars)
+(defun make-random-flet-form (size)
   "Generate random flet, labels forms, for now with no arguments
    and a single binding per form."
   (let ((fname (random-from-seq #(%f1 %f2 %f3 %f4 %f5 %f6 %f7 %f8 %f9 %f10
 				  %f11 %f12 %f13 %f14 %f15 %f16 %f17 %f18))))
     (if (member fname *flet-names* :test #'eq)
-	(make-random-integer-form size vars)
+	(make-random-integer-form size)
       (destructuring-bind (s1 s2) (random-partition (max 2 (1- size)) 2)
 	(let ((op (random-from-seq #(flet labels)))
 	      (form1
 	       ;; Allow return-from of the flet/labels function
 	       (let ((*random-int-form-blocks*
 		      (cons fname *random-int-form-blocks*)))
-		 (make-random-integer-form s1 vars)))
+		 (make-random-integer-form s1)))
 	      (form2 (let ((*flet-names* (cons fname *flet-names*)))
-		       (make-random-integer-form s2 vars))))
+		       (make-random-integer-form s2))))
 	  `(,op ((,fname () ,form1)) ,form2))))))
 
-(defun make-random-pred-form (size vars)
+(defun make-random-pred-form (size)
   "Make a random form whose value is to be used as a generalized boolean."
   (if (<= size 1)
       (rcase
 	(1 (if (coin) t nil))
 	(2
 	 `(,(random-from-seq '(< <= = > >= /= eql equal))
-	   ,(make-random-integer-form size vars)
-	   ,(make-random-integer-form size vars))))
+	   ,(make-random-integer-form size)
+	   ,(make-random-integer-form size))))
     (rcase
       (1 (if (coin) t nil))
-      (1 `(not ,(make-random-pred-form (1- size) vars)))
+      (1 `(not ,(make-random-pred-form (1- size))))
       (2 (destructuring-bind (leftsize rightsize)
 	     (random-partition (1- size) 2)
 	   `(,(random-from-seq '(and or))
-	     ,(make-random-pred-form leftsize vars)
-	     ,(make-random-pred-form rightsize vars))))
+	     ,(make-random-pred-form leftsize)
+	     ,(make-random-pred-form rightsize))))
       (1 (destructuring-bind (leftsize rightsize)
 	     (random-partition (1- size) 2)
 	   `(,(random-from-seq '(< <= > >= = /= eql equal))
-	     ,(make-random-integer-form leftsize vars)
-	     ,(make-random-integer-form rightsize vars))))
+	     ,(make-random-integer-form leftsize)
+	     ,(make-random-integer-form rightsize))))
       (1 (let* ((cond-size (random (max 1 (floor size 2))))
 		(then-size (random (- size cond-size)))
 		(else-size (- size 1 cond-size then-size))
-		(pred (make-random-pred-form cond-size vars))
-		(then-part (make-random-pred-form then-size vars))
-		(else-part (make-random-pred-form else-size vars)))
+		(pred (make-random-pred-form cond-size))
+		(then-part (make-random-pred-form then-size))
+		(else-part (make-random-pred-form else-size)))
 	   `(if ,pred ,then-part ,else-part)))
       (1 (destructuring-bind (s1 s2)
 	     (random-partition (1- size) 2)
-	   `(ldb-test ,(make-random-byte-spec-form s1 vars)
-		      ,(make-random-integer-form s2 vars))))
-      (1 (let ((index (random (1+ (random 35))))
-	       (form (make-random-integer-form (1- size) vars)))
+	   `(ldb-test ,(make-random-byte-spec-form s1)
+		      ,(make-random-integer-form s2))))
+      (1 (let ((index (random (1+ (random *maximum-random-int-bits*))))
+	       (form (make-random-integer-form (1- size))))
 	   `(logbitp ,index ,form)))
       )))
 
-(defun make-random-byte-spec-form (size vars)
-  (declare (ignore size vars))
+(defun make-random-byte-spec-form (size)
+  (declare (ignore size))
   (let* ((pform (random 33))
 	 (sform (1+ (random 33))))
     `(byte ,sform ,pform)))
@@ -326,13 +355,13 @@
 		      (t hi)))))
 	 (if (eq lo '*)
 	     (if (eq hi '*)
-		 (let ((x (ash 1 (random 35))))
+		 (let ((x (ash 1 (random *maximum-random-int-bits*))))
 		   (random-from-interval x (- x)))
 	       (random-from-interval (1+ hi)
-				     (- hi (random (ash 1 35)))))
+				     (- hi (random (ash 1 *maximum-random-int-bits*)))))
 
 	   (if (eq hi '*)
-	       (random-from-interval (+ lo (random (ash 1 35)) 1)
+	       (random-from-interval (+ lo (random (ash 1 *maximum-random-int-bits*)) 1)
 				     lo)
 	     ;; May generalize the next case to increase odds
 	     ;; of certain integers (near 0, near endpoints, near
@@ -351,15 +380,17 @@
 		 (make-random-element-of-type '(integer 0 *))
 	       (progn
 		 (assert (and (integerp bits) (>= bits 1)))
-		 (make-random-element-of-type `(integer 0 ,(1- (ash 1 bits)))))))))
+		 (make-random-element-of-type
+		  `(integer 0 ,(1- (ash 1 bits)))))))))
 	)))
    (t
     (ecase type
       (bit (random 2))
       (boolean (random-from-seq #(nil t)))
       (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| cl:car)))
-      (unsigned-byte (random-from-interval (1+ (ash 1 (random 35))) 0))
-      (integer (let ((x (ash 1 (random 35))))
+      (unsigned-byte (random-from-interval
+		      (1+ (ash 1 (random *maximum-random-int-bits*))) 0))
+      (integer (let ((x (ash 1 (random *maximum-random-int-bits*))))
 		 (random-from-interval (1+ x) (- x))))
       ))))
 	
@@ -515,11 +546,10 @@
 		  realpart imagpart)
 	  (mapc #'try args)
 	  (try 0)
-	  (try 1)
 	  (try -1)
 	  (prune-fn form try-fn))
 	 
-	 ((abs 1+ 1- identity values)
+	 ((abs 1+ 1- identity values progn realpart imagpart)
 	  (mapc #'try args)
 	  (prune-fn form try-fn))
 	 
@@ -536,14 +566,33 @@
 		(else (third args)))
 	    (try then)
 	    (try else)
+	    (when (every #'constantp args)
+	      (try (eval form)))
 	    (prune-fn form try-fn)))
+
+	 ((setq)
+	  ;; Assumes only one assignment
+	  (assert (= (length form) 3))
+	  (try (second args))
+	  (prune (second args)
+		 #'(lambda (form)
+		     (try `(,op ,(first args) ,form)))))
 
 	 ((byte)
 	  (prune-fn form try-fn))
 
 	 ((deposit-field dpb)
-	  (try (first args))
-	  (try (third args))
+	  (destructuring-bind (a1 a2 a3)
+	      args
+	    (try a1)
+	    (try a3)
+	    (when (and (integerp a1)
+		       (integerp a3)
+		       (and (consp a2)
+			    (eq (first a2) 'byte)
+			    (integerp (second a2))
+			    (integerp (third a2))))
+	      (try (eval form))))
 	  (prune-fn form try-fn))
 
 	 ((ldb mask-field)
