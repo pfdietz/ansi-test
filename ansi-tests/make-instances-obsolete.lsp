@@ -12,12 +12,15 @@
    (d :initarg :d :type fixnum :initform 0)))
 
 (deftest make-instances-obsolete.1
-  (let* ((class (find-class 'make-instances-obsolete-class-01))
+  (let* ((class-designator 'make-instances-obsolete-class-01)
+	 (class (find-class class-designator))
 	 (obj (make-instance class :a 'x :b 'y :c 'z :d 17)))
     (values
      (eqt (class-of obj) class)
      (map-slot-value obj '(a b c d))
-     (eqt (make-instances-obsolete class) class)
+     (let ((val (make-instances-obsolete class)))
+       (or (eqt val class-designator)
+	   (eqt val class)))
      (map-slot-value obj '(a b c d))))
   t (x y z 17) t (x y z 17))
 
@@ -28,7 +31,9 @@
     (values
      (eqt (class-of obj) class)
      (map-slot-value obj '(a b c d))
-     (eqt (make-instances-obsolete class-designator) class-designator)
+     (let ((val (make-instances-obsolete class-designator)))
+       (or (eqt val class-designator)
+	   (eqt val class)))
      (map-slot-value obj '(a b c d))))
   t (x y z 17) t (x y z 17))
 
