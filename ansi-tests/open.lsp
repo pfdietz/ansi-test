@@ -645,9 +645,11 @@
 		  (unwind-protect
 		      (write-line "abcdef" s2)
 		    (close s2))
-		  (setq s2 (open s1 :direction :input))
-		   (equalt (read-line s2 nil) "abcdef")
-		   )
+		  (unwind-protect
+		      (progn
+			(setq s2 (open s1 :direction :input))
+			(equalt (read-line s2 nil) "abcdef"))
+		    (close s2)))
 	      (close s1)
 	      (delete-all-versions pn)
 	      )))))
@@ -965,9 +967,11 @@
 		  (unwind-protect
 		      (write-line "abcdef" s2)
 		    (close s2))
-		  (setq s2 (open s1 :direction :input))
-		   (equalt (read-line s2 nil) "abcdef")
-		   )
+		  (unwind-protect
+		      (progn
+			(setq s2 (open s1 :direction :input))
+			(equalt (read-line s2 nil) "abcdef"))
+		    (close s2)))
 	      (close s1)
 	      (delete-all-versions pn)
 	      )))))
