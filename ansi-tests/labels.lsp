@@ -222,3 +222,42 @@
      10
      (return-from done 'good)))
   good)
+
+;;; Check that nil keyword arguments do not enable the default values
+
+(deftest labels.28
+  (labels ((%f (&key (a 'wrong)) a)) (%f :a nil))
+  nil)
+
+(deftest labels.29
+  (labels ((%f (&key (a 'wrong a-p)) (list a (not a-p)))) (%f :a nil))
+  (nil nil))
+
+(deftest labels.30
+  (labels ((%f (&key ((:a b) 'wrong)) b)) (%f :a nil))
+  nil)
+
+(deftest labels.31
+  (labels ((%f (&key ((:a b) 'wrong present?)) (list b (not present?))))
+    (%f :a nil))
+  (nil nil))
+
+(deftest labels.32
+  (labels ((%f (&key) 'good))
+    (%f :allow-other-keys nil))
+  good)
+
+(deftest labels.33
+  (labels ((%f (&key) 'good))
+    (%f :allow-other-keys t))
+  good)
+
+(deftest labels.34
+  (labels ((%f (&key) 'good))
+    (%f :allow-other-keys t :a 1 :b 2))
+  good)
+
+(deftest labels.35
+  (labels ((%f (&key &allow-other-keys) 'good))
+    (%f :a 1 :b 2))
+  good)

@@ -437,3 +437,41 @@
      10
      (return-from done 'good)))
   good)
+
+;;; Check that nil keyword arguments do not enable the default values
+
+(deftest flet.53
+  (flet ((%f (&key (a 'wrong)) a)) (%f :a nil))
+  nil)
+
+(deftest flet.54
+  (flet ((%f (&key (a 'wrong a-p)) (list a (not a-p)))) (%f :a nil))
+  (nil nil))
+
+(deftest flet.55
+  (flet ((%f (&key ((:a b) 'wrong)) b)) (%f :a nil))
+  nil)
+
+(deftest flet.56
+  (flet ((%f (&key ((:a b) 'wrong present?)) (list b (not present?)))) (%f :a nil))
+  (nil nil))
+
+(deftest flet.57
+  (flet ((%f (&key) 'good))
+    (%f :allow-other-keys nil))
+  good)
+
+(deftest flet.58
+  (flet ((%f (&key) 'good))
+    (%f :allow-other-keys t))
+  good)
+
+(deftest flet.59
+  (flet ((%f (&key) 'good))
+    (%f :allow-other-keys t :a 1 :b 2))
+  good)
+
+(deftest flet.60
+  (flet ((%f (&key &allow-other-keys) 'good))
+    (%f :a 1 :b 2))
+  good)
