@@ -198,7 +198,23 @@
 
 (deftest user-class-disjointness-2
   (check-disjointness 'tac-1a-class 'tac-1b-class)
-  nil)  
+  nil)
+
+(defstruct tac-2-struct a b c)
+(defstruct (tac-2a-struct (:include tac-2-struct)) d e)
+(defstruct (tac-2b-struct (:include tac-2-struct)) f g)
+
+(deftest user-struct-disjointness
+  (loop for l in *disjoint-types-list2*
+	append
+	(loop
+	 for type in l
+	 append (check-disjointness type 'tac-2-struct)))
+  nil)
+
+(deftest user-struct-disjointness-2
+  (check-disjointness 'tac-2a-struct 'tac-2b-struct)
+  nil)
 
 (deftest integer-and-ratio-are-disjoint
   (classes-are-disjoint 'integer 'ratio)

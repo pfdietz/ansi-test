@@ -114,6 +114,113 @@
     (values t t))
   t t)
 
+(deftest subtypep.fixnum-or-bignum
+  (check-equivalence '(or fixnum bignum) 'integer)
+  nil)
+
+(deftest subtypep.integer.1
+  (subtypep* '(integer 0 10) '(integer 0 20))
+  t t)
+
+(deftest subtypep.integer.2
+  (subtypep* '(integer 0 10) '(integer 0 (10)))
+  nil t)
+
+(deftest subtypep.float.1
+  (loop for tp in +float-types+
+	append (check-subtypep tp 'float t t))
+  nil)
+
+(deftest subtypep.float.2
+  (if (subtypep 'short-float 'long-float)
+      (loop for tp in +float-types+
+	    append
+	    (loop for tp2 in +float-types+
+		  append (check-subtypep tp tp2 t t)))
+    nil)
+  nil)
+
+(deftest subtypep.float.3
+  (if (and (not (subtypep 'short-float 'single-float))
+	   (subtypep 'single-float 'long-float))
+      (append
+       (check-equivalence 'single-float 'double-float)
+       (check-equivalence 'single-float 'long-float)
+       (check-equivalence 'double-float 'long-float)
+       (check-disjointness 'short-float 'single-float)
+       (check-disjointness 'short-float 'double-float)
+       (check-disjointness 'short-float 'long-float))
+    nil)
+  nil)
+
+(deftest subtypep.float.4
+  (if (and (subtypep 'single-float 'short-float)
+	   (subtypep 'double-float 'long-float)
+	   (not (subtypep 'short-float 'double-float)))
+      (append
+       (check-equivalence 'short-float 'single-float)
+       (check-equivalence 'double-float 'long-float)
+       (loop for tp in '(short-float single-float)
+	     append
+	     (loop for tp2 in '(double-float long-float)
+		   append (check-disjointness tp tp2))))
+    nil)
+  nil)
+
+(deftest subtypep.float.5
+  (if (and (not (subtypep 'single-float 'short-float))
+	   (not (subtypep 'single-float 'double-float))
+	   (subtypep 'double-float 'long-float))
+      (append
+       (check-disjointness 'short-float 'single-float)
+       (check-disjointness 'short-float 'double-float)
+       (check-disjointness 'short-float 'long-float)
+       (check-disjointness 'single-float 'double-float)
+       (check-disjointness 'single-float 'long-float)
+       (check-equivalence 'double-float 'long-float))
+    nil)
+  nil)
+
+(deftest subtypep.float.6
+  (if (and (subtypep 'single-float 'short-float)
+	   (not (subtypep 'single-float 'double-float))
+	   (not (subtypep 'double-float 'long-float)))
+      (append
+       (check-equivalence 'short-float 'single-float)
+       (check-disjointness 'single-float 'double-float)
+       (check-disjointness 'single-float 'long-float)
+       (check-disjointness 'double-float 'long-float))
+    nil)
+  nil)
+
+(deftest subtypep.float.7
+  (if (and (not (subtypep 'single-float 'short-float))
+	   (not (subtypep 'single-float 'double-float))
+	   (not (subtypep 'double-float 'long-float)))
+      (loop for tp in +float-types+
+	    append
+	    (loop for tp2 in +float-types+
+		  unless (eq tp tp2)
+		  append (check-disjointness tp tp2)))
+    nil)
+  nil)
+
+(deftest subtypep.float.8
+  (subtypep* '(short-float 0.0s0 10.0s0) '(short-float 0.0s0 11.0s0))
+  t t)
+
+(deftest subtypep.float.9
+  (subtypep* '(single-float 0.0f0 10.0f0) '(single-float 0.0f0 11.0f0))
+  t t)
+
+(deftest subtypep.float.10
+  (subtypep* '(double-float 0.0d0 10.0d0) '(double-float 0.0d0 11.0d0))
+  t t)
+
+(deftest subtypep.float.11
+  (subtypep* '(long-float 0.0l0 10.0l0) '(long-float 0.0l0 11.0l0))
+  t t)
+
 ;;; SUBTYPEP on CONS types
 
 (defvar *cons-types*
