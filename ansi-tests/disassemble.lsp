@@ -27,7 +27,7 @@
   t nil)
 
 (deftest disassemble.4
-  (disassemble-it (eval '(function (lambda (x y) (cons y z)))))
+  (disassemble-it (eval '(function (lambda (x y) (cons x y)))))
   t nil)
 
 (deftest disassemble.5
