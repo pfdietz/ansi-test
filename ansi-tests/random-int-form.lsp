@@ -84,7 +84,7 @@
 		(mapcar #'(lambda (range)
 			    (let ((lo (car range))
 				  (hi (cadr range)))
-			      (random-from-interval lo (1+ hi))))
+			      (random-from-interval (1+ hi) lo)))
 			var-ranges)))
 	   (setq *int-form-vals* vals)
 	   (let ((opt-result (apply unoptimized-compiled-fn vals))
@@ -130,7 +130,7 @@
 	    (- (random r) (floor (/ r 2))))
 	(random-from-seq vars))
     ;; (> size 1)
-    (ecase (random 7)
+    (ecase (random 9)
      ;; Unary ops
      ((0 1)
       (let ((op (random-from-seq '(- abs signum 1+ 1- identity
@@ -141,10 +141,11 @@
       (let* ((op (random-from-seq
 		  '(+ - * logand min max ;; gcd lcm
 		      logandc1 logandc2 logeqv logior lognand lognor logorc1
-		      logorc2 logxor)))
-	     (leftsize (random size)))
-	`(,op ,(make-random-integer-form leftsize vars)
-	      ,(make-random-integer-form (- size 1 leftsize) vars))))
+		      logorc2 logxor))))
+	(destructuring-bind (leftsize rightsize)
+	    (random-partition (1- size) 2)
+	  `(,op ,(make-random-integer-form leftsize vars)
+		,(make-random-integer-form rightsize vars)))))
      ;; conditionals
      (6
       (let* ((cond-size (random (max 1 (floor size 2))))
@@ -154,6 +155,17 @@
 	     (then-part (make-random-integer-form then-size vars))
 	     (else-part (make-random-integer-form else-size vars)))
 	`(if ,pred ,then-part ,else-part)))
+     (7
+      (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
+	`(,(random-from-seq '(deposit-field dpb))
+	  ,(make-random-integer-form s1 vars)
+	  ,(make-random-byte-spec-form s2 vars)
+	  ,(make-random-integer-form s3 vars))))
+     (8
+      (destructuring-bind (s1 s2) (random-partition (1- size) 2)
+	  `(,(random-from-seq '(ldb mask-field))
+	    ,(make-random-byte-spec-form s1 vars)
+	    ,(make-random-integer-form s2 vars))))
      )))
 
 (defun make-random-pred-form (size vars)
@@ -161,20 +173,20 @@
       (ecase (random 3)
 	(0 (if (coin) t nil))
 	((1 2)
-	 `(,(random-from-seq '(< <= = > >= /=))
+	 `(,(random-from-seq '(< <= = > >= /= eql equal))
 	   ,(make-random-integer-form size vars)
 	   ,(make-random-integer-form size vars))))
-    (ecase (random 5)
+    (ecase (random 6)
       (0 (if (coin) t nil))
       (1 `(not ,(make-random-pred-form (1- size) vars)))
-      (2 (let* ((leftsize (random size))
-		(rightsize (- size 1 leftsize)))
+      (2 (destructuring-bind (leftsize rightsize)
+	     (random-partition (1- size) 2)
 	   `(,(random-from-seq '(and or))
 	     ,(make-random-pred-form leftsize vars)
 	     ,(make-random-pred-form rightsize vars))))
-      (3 (let* ((leftsize (random size))
-		(rightsize (- size 1 leftsize)))
-	   `(,(random-from-seq '(< <= > >= = /=))
+      (3 (destructuring-bind (leftsize rightsize)
+	     (random-partition (1- size) 2)
+	   `(,(random-from-seq '(< <= > >= = /= eql equal))
 	     ,(make-random-integer-form leftsize vars)
 	     ,(make-random-integer-form rightsize vars))))
       (4 (let* ((cond-size (random (max 1 (floor size 2))))
@@ -184,8 +196,25 @@
 		(then-part (make-random-pred-form then-size vars))
 		(else-part (make-random-pred-form else-size vars)))
 	   `(if ,pred ,then-part ,else-part)))
+      (5 (destructuring-bind (s1 s2)
+	     (random-partition (1- size) 2)
+	   `(ldb-test ,(make-random-byte-spec-form s1 vars)
+		      ,(make-random-integer-form s2 vars))))
+
       )))
 
-    
+(defun make-random-byte-spec-form (size vars)
+  (declare (ignore size vars))
+  (let* ((pform (random 33))
+	 (sform (random 33)))
+    `(byte ,sform ,pform)))
 	
-	    
+(defun random-partition (n p)
+  "Partition n into p numbers, each >= 1.  Return list of numbers."
+  (assert (<= 1 p))
+  (cond
+   ((= p 1) (list n))
+   ((< n p) (make-list p :initial-element 1))
+   (t
+    (let ((n1 (1+ (random (floor n p)))))
+      (cons n1 (random-partition (- n n1) (1- p)))))))

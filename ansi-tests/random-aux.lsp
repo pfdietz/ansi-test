@@ -18,10 +18,33 @@
        ,@(loop for i from 0 for e in cases collect `(,i ,e))
        (t (error "Can't happen?! (in random-case)~%")))))
 
-(defun random-from-interval (lo hi)
-  "Generate random value from interval [lo,hi)"
-  (assert (> hi lo))
-  (+ (random (- hi lo)) lo))
+(defun random-nonnegative-real ()
+  (if (coin 3)
+      (random-case
+       (/ (random 10000) (1+ (random 1000)))
+       (/ (random 1000000) (1+ (random 100000)))
+       (/ (random 100000000) (1+ (random 10000000)))
+       (/ (random 1000000000000) (1+ (random 10000000))))
+    (random (random-case
+	     1000
+	     100000
+	     10000000
+	     1000000000
+	     (expt 2.0s0 (random 15))
+	     (expt 2.0f0 (random 32))
+	     (expt 2.0d0 (random 32))
+	     (expt 2.0l0 (random 32))))))
+
+(defun random-real ()
+  (if (coin) (random-nonnegative-real)
+    (- (random-nonnegative-real))))
+
+(defun random-fixnum ()
+  (+ (random (1+ (- most-positive-fixnum most-negative-fixnum)))
+     most-negative-fixnum))
+
+(defun random-from-interval (upper &optional (lower (- upper)))
+  (+ (random (- upper lower)) lower))
 
 (defun coin (&optional (n 2))
   "Flip an n-sided coin."
