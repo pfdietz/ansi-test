@@ -136,8 +136,10 @@
 		   (if start (+ start (random (- len start)))
 		     (random (1+ len)))))
 	 (from-end (coin))
-	 (count (and (coin)
-		     (random (1+ len))))
+	 (count (case (random 5)
+		  ((0 1) nil)
+		  ((2 3) (random (1+ len)))
+		  (t (if (coin) -1 -10000000000000))))
 	 (seq (multiple-value-bind (x y z) (make-random-remove-input len type element-type)
 		y))
 	 (key (and (coin)
@@ -199,6 +201,8 @@
        ((not (equalp seq1r seq2r)) :fail3)
        (t t)))))
 
+(defparameter *remove-fail-args* nil)
+
 (defun random-test-remove-if (maxlen &optional (negate nil))
   (multiple-value-bind (element seq arg-list)
       (random-test-remove-args maxlen)
@@ -221,6 +225,7 @@
 			   fn seq1 arg-list))
 	     (seq2r (apply (if negate #'my-remove-if-not #'my-remove-if)
 			   fn seq2 arg-list)))
+	(setq *remove-fail-args* (cons seq1 arg-list))
 	(cond
 	 ((not (equalp seq seq1)) :fail1)
 	 ((not (equalp seq seq2)) :fail2)

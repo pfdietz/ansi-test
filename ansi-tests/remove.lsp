@@ -266,36 +266,58 @@
     (and (equalp orig x) y))
   (1 2 2 6 1 2 4 1 3 2 7))
 
+(deftest remove-list.27
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (remove 3 x :count -1)))
+    (and (equalp orig x)
+	 (equalpt x y)))
+  t)
+
+(deftest remove-list.28
+  (let* ((orig '(1 2 3 2 6 1 2 4 1 3 2 7))
+	 (x (copy-seq orig))
+	 (y (remove 3 x :count -1000000000000)))
+    (and (equalp orig x)
+	 (equalpt x y)))
+  t)
+
 ;;; Randomized tests
 
 (deftest remove-random
   (loop for i from 1 to 2500
-	always (random-test-remove 20))
+	unless (eq (random-test-remove 20) t)
+	do (return *remove-fail-args*))
   t)
 
 (deftest remove-if-random
   (loop for i from 1 to 2500
-	always (random-test-remove-if 20))
+	unless (eq (random-test-remove-if 20) t)
+	do (return *remove-fail-args*))
   t)
 
 (deftest remove-if-not-random
   (loop for i from 1 to 2500
-	always (random-test-remove-if 20 t))
+	unless (eq (random-test-remove-if 20 t) t)
+	do (return *remove-fail-args*))
   t)
 
 (deftest delete-random
   (loop for i from 1 to 2500
-	always (random-test-delete 20))
+	unless (eq (random-test-delete 20) t)
+	do (return *remove-fail-args*))
   t)
-
+1
 (deftest delete-if-random
   (loop for i from 1 to 2500
-	always (random-test-delete-if 20))
+	unless (eq (random-test-delete-if 20) t)
+	do (return *remove-fail-args*))
   t)
 
 (deftest delete-if-not-random
   (loop for i from 1 to 2500
-	always (random-test-delete-if 20 t))
+	unless (eq (random-test-delete-if 20 t) t)
+	do (return *remove-fail-args*))
   t)
 
 ;;; Additional tests with KEY = NIL
