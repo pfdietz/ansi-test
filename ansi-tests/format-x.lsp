@@ -319,7 +319,7 @@
    (loop for i from 0 to 10
 	 for args = (make-list i)
 	 for s = (apply #'format nil "~#x" #x1b3fe args)
-	 collect s))
+	 collect (string-upcase s)))
   "1B3FE"
   "1B3FE"
   "1B3FE"
