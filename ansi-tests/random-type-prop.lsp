@@ -309,7 +309,14 @@
   (rcase
    (1 'complex)
    (1 'number)
-   #-gcl (1 `(complex ,(upgraded-complex-part-type (type-of (realpart val)))))
+   #-gcl (1 
+	  (let ((t1 (type-of (realpart val)))
+		(t2 (type-of (imagpart val))))
+	    (cond
+	     ((subtypep t1 t2) `(complex ,(upgraded-complex-part-type t2)))
+	     ((subtypep t2 t1) `(complex ,(upgraded-complex-part-type t1)))
+	     (t
+	      `(complex ,(upgraded-complex-part-type `(or ,t1 ,t2)))))))
    (1 `(eql ,val))))
 
 (defmethod make-random-type-containing ((val generic-function))
