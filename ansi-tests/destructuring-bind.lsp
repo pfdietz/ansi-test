@@ -101,12 +101,16 @@
   1 2 3)
 
 (deftest destructuring-bind.22
-  (destructuring-bind (x y &key) '(:a 2) (values x y))
-  :a 2)
+  (destructuring-bind (x y &key) '(1 2) (values x y))
+  1 2)
 
 (deftest destructuring-bind.23
   (destructuring-bind (&rest x &key) '(:allow-other-keys 1) x)
   (:allow-other-keys 1))
+
+(deftest destructuring-bind.24
+  (destructuring-bind (&rest x &key) nil x)
+  nil)
 
 ;;; Error cases
 
