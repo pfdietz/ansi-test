@@ -803,7 +803,8 @@
 		 (not (rest binding-list))
 		 (not (rest body)))
 	(let ((binding (first binding-list)))
-	  (unless (consp (second binding))
+	  (unless (or (consp (second binding))
+		      (has-assignment-to-var (first binding) body))
 	    (funcall try-fn `(let ()
 			       ,@(subst (second binding)
 					(first binding) body))))))
@@ -811,6 +812,13 @@
 	     #'(lambda (form2)
 		 (funcall try-fn
 			  `(,@(butlast form) ,form2)))))))
+
+(defun has-assignment-to-var (var form)
+  (when (consp form)
+    (or (and (member (car form) '(setq setf))
+	     (eq (cadr form) var))
+	(loop for subform in form
+	      thereis (has-assignment-to-var var subform)))))       
 
 (defun prune-flet (form try-fn)
   "Attempt to simplify a FLET form."
