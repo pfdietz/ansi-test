@@ -40,16 +40,17 @@
   nil)
 
 (deftest fboundp.8
-  (catch-type-error (fboundp 1))
+  (classify-error (fboundp 1))
   type-error)
 
 (deftest fboundp.9
-  (catch-type-error (fboundp #\a))
+  (classify-error (fboundp #\a))
   type-error)
 
 (deftest fboundp.10
-  (catch-type-error (fboundp '(foo)))
+  (classify-error (fboundp '(foo)))
   type-error)
+
 
 
 

@@ -14,6 +14,8 @@
   (typep nil 'function)
   nil)
 
+;;; The next test demonstrates an incompatibility between CLtL1 and ANSI CL.
+;;; In ANSI CL, symbols are no longer of type FUNCTION.
 (deftest function.2
   (typep 'identity 'function)
   nil)
@@ -39,6 +41,8 @@
   (typep '(setf car) 'function)
   nil)
 
+;;; The next test demonstrates an incompatibility between CLtL1 and ANSI CL.
+;;; In ANSI CL, lambda forms are no longer of type FUNCTION.
 (deftest function.6
   (typep '(lambda (x) x) 'function)
   nil)
@@ -59,10 +63,13 @@
   (not (typep (compile nil '(lambda (x) x)) 'function))
   nil)
 
+;;; The next test demonstrates an incompatibility between CLtL1 and ANSI CL.
+;;; In ANSI CL, symbols and cons can no longer also be of type FUNCTION.
 (deftest function.10
   (loop for x in *universe*
 	never
-	(and (or (numberp x) (characterp x) (symbolp x) (consp x)
+	(and (or (numberp x) (characterp x)
+		 (symbolp x) (consp x)
 		 (typep x 'array))
 	     (typep x 'function)))
   t)

@@ -15,6 +15,7 @@
   (functionp nil)
   nil)
 
+;;; In ANSI CL, symbols can no longer be functions
 (deftest functionp.2
   (functionp 'identity)
   nil)
@@ -39,6 +40,7 @@
   (functionp '(setf car))
   nil)
 
+;;; In ANSI CL, lambda forms are no longer functions
 (deftest functionp.6
   (functionp '(lambda (x) x))
   nil)
@@ -59,10 +61,12 @@
   (not (functionp (compile nil '(lambda (x) x))))
   nil)
 
+;;; In ANSI CL, symbols and cons can no longer be functions
 (deftest functionp.10
   (loop for x in *universe*
 	never
-	(and (or (numberp x) (characterp x) (symbolp x) (consp x)
+	(and (or (numberp x) (characterp x)
+		 (symbolp x) (consp x)
 		 (typep x 'array))
 	     (functionp x)))
   t)
