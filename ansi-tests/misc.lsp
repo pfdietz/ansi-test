@@ -2069,3 +2069,18 @@
                                     (ash a (min 36 22477)))))))))
    100000 0 0)
   0)
+
+;;; sbcl (0.8.5.24) "The value NIL is not of type SB-C::CTRAN."
+
+(deftest misc.159
+  (funcall
+   (compile nil
+            '(lambda ()
+               (let ((v8 70696))
+                 (if (equal v8 -536145083)
+                     (let ((v2 (setq v8 v8)))
+                       (flet ((%f9 (f9-1 f9-2)
+                                   309257))
+                         (multiple-value-call #'%f9 (values v2 v2))))
+                   100)))))
+  100)
