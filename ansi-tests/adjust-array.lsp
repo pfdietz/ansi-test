@@ -217,6 +217,58 @@
     (values a0 a1))
   #0ax #0ax)
 
+(deftest adjust-array.20
+  (let* ((a0 (make-array nil :initial-element 'x))
+	 (a1 (make-array nil :displaced-to a0))
+	 (a2 (adjust-array a1 nil)))
+    a2)
+  #0ax)
+
+;; 2-d arrays
+
+(deftest adjust-array.21
+  (let* ((a1 (make-array '(4 5) :initial-contents '((1 2 3 4 5)
+						    (3 4 5 6 7)
+						    (5 6 7 8 9)
+						    (7 8 9 1 2))))
+	 (a2 (adjust-array a1 '(2 3))))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(2 3))))
+    a2)
+  #2a((1 2 3)(3 4 5)))
+
+(deftest adjust-array.22
+  (let* ((a1 (make-array '(4 5) :initial-contents '((1 2 3 4 5)
+						    (3 4 5 6 7)
+						    (5 6 7 8 9)
+						    (7 8 9 1 2))))
+	 (a2 (adjust-array a1 '(6 8) :initial-element 0)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(6 8))))
+    a2)
+  #2a((1 2 3 4 5 0 0 0)
+      (3 4 5 6 7 0 0 0)
+      (5 6 7 8 9 0 0 0)
+      (7 8 9 1 2 0 0 0)
+      (0 0 0 0 0 0 0 0)
+      (0 0 0 0 0 0 0 0)))
+
+(deftest adjust-array.23
+  (let* ((a1 (make-array '(4 5) :initial-contents '((#\1 #\2 #\3 #\4 #\5)
+						    (#\3 #\4 #\5 #\6 #\7)
+						    (#\5 #\6 #\7 #\8 #\9)
+						    (#\7 #\8 #\9 #\1 #\2))
+			 :element-type 'character))
+	 (a2 (adjust-array a1 '(2 3) :element-type 'character)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(2 3))))
+    (assert (not (typep 0 (array-element-type a2))))
+    a2)
+  #2a((#\1 #\2 #\3)(#\3 #\4 #\5)))
+
 ;;; Adjust an adjustable array
 
 (deftest adjust-array.adjustable.1
@@ -362,3 +414,47 @@
   #(c d e y))
 
 
+;;; FIXME.  Tests for:
+;;;  strings/character arrays
+;;;  bit vectors/arrays
+;;;  specialized integer arrays
+;;;  float arrays
+
+;;; Error cases
+
+(deftest adjust-array.error.1
+  (signals-error (adjust-array) program-error)
+  t)
+
+(deftest adjust-array.error.2
+  (signals-error (adjust-array (make-array 10 :initial-element nil))
+		 program-error)
+  t)
+
+(deftest adjust-array.error.3
+  (signals-error (adjust-array (make-array 10 :initial-element nil)
+			       8 :bad t)
+		 program-error)
+  t)
+
+(deftest adjust-array.error.4
+  (signals-error (adjust-array (make-array 10 :initial-element nil)
+			       8 :initial-element)
+		 program-error)
+  t)
+
+(deftest adjust-array.error.5
+  (signals-error (adjust-array (make-array 10 :initial-element nil)
+			       8
+			       :allow-other-keys nil
+			       :allow-other-keys t
+			       :bad t)
+		 program-error)
+  t)
+
+(deftest adjust-array.error.6
+  (signals-error
+   (let ((a (make-array 5 :initial-element 'x)))
+     (adjust-array a :fill-pointer 4))
+   error)
+  t)
