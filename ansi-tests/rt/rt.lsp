@@ -154,12 +154,20 @@
     (let* ((*in-test* t)
 	   ;; (*break-on-warnings* t)
 	   (aborted nil)
-	   (r (if *catch-errors*
-		  (handler-case (multiple-value-list
-				 (eval (form entry)))
-				(error (c) (setf aborted t) (list c)))
-		(eval (form entry)))))
-      (declare (special *break-on-warnings*))
+	   r)
+      ;; (declare (special *break-on-warnings*))
+
+      (block aborted
+	(if *catch-errors*
+	    (handler-bind ((style-warning #'muffle-warning)
+			   (error #'(lambda (c)
+				      (setf aborted t)
+				      (setf r (list c))
+				      (return-from aborted nil))))
+			  (setf r (multiple-value-list
+				   (eval (form entry)))))
+	  (setf r (eval (form entry)))))
+      
       (setf (pend entry)
 	    (or aborted
 		(not (equalp-with-case r (vals entry)))))

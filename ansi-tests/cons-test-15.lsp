@@ -10,11 +10,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapc
 
-(deftest mapc-1
+(deftest mapc.1
   (mapc #'list nil)
   nil)
 
-(deftest mapc-2
+(deftest mapc.2
   (let ((x 0))
     (let ((result
 	   (mapc #'(lambda (y) (incf x y))
@@ -22,7 +22,7 @@
       (list result x)))
   ((1 2 3 4) 10))
 
-(deftest mapc-3
+(deftest mapc.3
   (let ((x 0))
     (list
      (mapc #'(lambda (y z) (declare (ignore y z)) (incf x))
@@ -31,7 +31,7 @@
      x))
   ((a a a a a) 5))
 
-(deftest mapc-4
+(deftest mapc.4
   (let ((x 0))
     (list
      (mapc #'(lambda (y z) (declare (ignore y z)) (incf x))
@@ -40,7 +40,7 @@
      x))
   ((a a a a a) 5))
 
-(deftest mapc-5
+(deftest mapc.5
   (let ((x 0))
     (list
      (mapc #'(lambda (y z) (declare (ignore y z)) (incf x))
@@ -49,20 +49,32 @@
      x))
   ((a a a a a) 3))
 
-(defvar *mapc-6-var* nil)
-(defun mapc-6-fun (x)
-  (push x *mapc-6-var*)
+(defvar *mapc.6-var* nil)
+(defun mapc.6-fun (x)
+  (push x *mapc.6-var*)
   x)
 
-(deftest mapc-6
+(deftest mapc.6
   (let* ((x (copy-list '(a b c d e f g h)))
 	 (xcopy (make-scaffold-copy x)))
-    (setf *mapc-6-var* nil)
-    (let ((result (mapc 'mapc-6-fun x)))
+    (setf *mapc.6-var* nil)
+    (let ((result (mapc 'mapc.6-fun x)))
       (and (check-scaffold-copy x xcopy)
 	   (eqt result x)
-	   *mapc-6-var*)))
+	   *mapc.6-var*)))
   (h g f e d c b a))
+
+(deftest mapc.7
+  (let ((i 0) x y z)
+    (values
+     (mapc (progn (setf x (incf i))
+		  #'list)
+	   (progn (setf y (incf i))
+		  '(a b c))
+	   (progn (setf z (incf i))
+		  '(1 2 3)))
+     i x y z))
+  (a b c) 3 1 2 3)
 
 (deftest mapc.error.1
   (classify-error (mapc #'identity 1))
@@ -83,11 +95,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcar
 
-(deftest mapcar-1
+(deftest mapcar.1
   (mapcar #'1+ nil)
   nil)
 
-(deftest mapcar-2
+(deftest mapcar.2
   (let* ((x (copy-list '(1 2 3 4)))
 	 (xcopy (make-scaffold-copy x)))
     (let ((result (mapcar #'1+ x)))
@@ -95,7 +107,7 @@
 	   result)))
   (2 3 4 5))
 
-(deftest mapcar-3
+(deftest mapcar.3
   (let* ((n 0)
 	 (x (copy-list '(a b c d)))
 	 (xcopy (make-scaffold-copy x)))
@@ -106,7 +118,7 @@
 	   result)))
   (1 2 3 4))
 
-(deftest mapcar-4
+(deftest mapcar.4
   (let* ((n 0)
 	 (x (copy-list '(a b c d)))
 	 (xcopy (make-scaffold-copy x))
@@ -120,7 +132,7 @@
 	 (list result n)))
   ((1 2 3 4) 4))
   
-(deftest mapcar-5
+(deftest mapcar.5
   (let* ((n 0)
 	 (x (copy-list '(a b c d)))
 	 (xcopy (make-scaffold-copy x))
@@ -134,14 +146,27 @@
 	 (list result n)))
   ((1 2 3 4) 4))
 
-(deftest mapcar-6
+(deftest mapcar.6
  (let* ((x (copy-list '(a b c d e f g h)))
 	 (xcopy (make-scaffold-copy x)))
-    (setf *mapc-6-var* nil)
-    (let ((result (mapcar 'mapc-6-fun x)))
+    (setf *mapc.6-var* nil)
+    (let ((result (mapcar 'mapc.6-fun x)))
       (and (check-scaffold-copy x xcopy)
-	   (list *mapc-6-var* result))))
+	   (list *mapc.6-var* result))))
  ((h g f e d c b a) (a b c d e f g h)))
+
+(deftest mapcar.7
+  (let ((i 0) x y z)
+    (values
+     (mapcar (progn (setf x (incf i))
+		    #'list)
+	     (progn (setf y (incf i))
+		    '(a b c))
+	     (progn (setf z (incf i))
+		    '(1 2 3)))
+     i x y z))
+  ((a 1) (b 2) (c 3))
+  3 1 2 3)
 
 (deftest mapcar.error.1
   (classify-error (mapcar #'identity 1))
@@ -207,25 +232,38 @@
   (a b a c b a d c b a))
 
 (deftest mapcan.7
+  (let ((i 0) x y z)
+    (values
+     (mapcan (progn (setf x (incf i))
+		    #'list)
+	     (progn (setf y (incf i))
+		    '(a b c))
+	     (progn (setf z (incf i))
+		    '(1 2 3)))
+     i x y z))
+  (a 1 b 2 c 3)
+  3 1 2 3)
+
+(deftest mapcan.8
   (mapcan #'(lambda (x y) (make-list y :initial-element x))
 	  (copy-list '(a b c d))
 	  (copy-list '(1 2 3 4 5 6)))
   (a b b c c c d d d d))
 
-(deftest mapcan.8
+(deftest mapcan.9
   (mapcan #'(lambda (x y) (make-list y :initial-element x))
 	  (copy-list '(a b c d e f))
 	  (copy-list '(1 2 3 4)))
   (a b b c c c d d d d))
 
-(deftest mapcan.9
+(deftest mapcan.10
   (mapcan #'list
 	  (copy-list '(a b c d))
 	  (copy-list '(1 2 3 4))
 	  nil)
   nil)
 
-(deftest mapcan.10
+(deftest mapcan.11
   (mapcan (constantly 1) (list 'a))
   1)
 
@@ -248,11 +286,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapl
 
-(deftest mapl-1
+(deftest mapl.1
   (mapl #'list nil)
   nil)
 
-(deftest mapl-2
+(deftest mapl.2
   (let* ((a nil)
 	 (x (copy-list '(a b c)))
 	 (xcopy (make-scaffold-copy x))
@@ -265,7 +303,7 @@
      a))
   ((c) (b c) (a b c)))
 
-(deftest mapl-3
+(deftest mapl.3
   (let* ((a nil)
 	 (x (copy-list '(a b c d)))
 	 (y (copy-list '(1 2 3 4)))
@@ -285,7 +323,7 @@
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
    (a 1) (b 2) (c 3) (d 4)))
 
-(deftest mapl-4
+(deftest mapl.4
   (let* ((a nil)
 	 (x (copy-list '(a b c d)))
 	 (y (copy-list '(1 2 3 4 5 6 7 8)))
@@ -305,7 +343,7 @@
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
    (a 1) (b 2) (c 3) (d 4)))
 
-(deftest mapl-5
+(deftest mapl.5
   (let* ((a nil)
 	 (x (copy-list '(a b c d e f g)))
 	 (y (copy-list '(1 2 3 4)))
@@ -324,6 +362,21 @@
      a))
   ((d 4) (c 3) (d 4) (b 2) (c 3) (d 4)
    (a 1) (b 2) (c 3) (d 4)))
+
+(deftest mapl.6
+  (let ((i 0) x y z)
+    (values
+     (mapl (progn
+	     (setf x (incf i))
+	     (constantly nil))
+	   (progn
+	     (setf y (incf i))
+	     '(a b c))
+	   (progn
+	     (setf z (incf i))
+	     '(1 2 3)))
+     i x y z))
+  (a b c) 3 1 2 3)
 
 (deftest mapl.error.1
   (classify-error (mapl #'identity 1))
@@ -344,11 +397,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; maplist
 
-(deftest maplist-1
+(deftest maplist.1
   (maplist #'list nil)
   nil)
 
-(deftest maplist-2
+(deftest maplist.2
   (let* ((x (copy-list '(a b c)))
 	 (xcopy (make-scaffold-copy x))
 	 (result (maplist #'identity x)))
@@ -356,7 +409,7 @@
 	 result))
   ((a b c) (b c) (c)))
 
-(deftest maplist-3
+(deftest maplist.3
   (let* ((x (copy-list '(a b c d)))
 	 (y (copy-list '(1 2 3 4)))
 	 (xcopy (make-scaffold-copy x))
@@ -372,7 +425,7 @@
    (c d 3 4)
    (d 4)))
 
-(deftest maplist-4
+(deftest maplist.4
   (let* ((x (copy-list '(a b c d)))
 	 (y (copy-list '(1 2 3 4 5)))
 	 (xcopy (make-scaffold-copy x))
@@ -388,7 +441,7 @@
    (c d 3 4 5)
    (d 4 5)))
 
-(deftest maplist-5
+(deftest maplist.5
   (let* ((x (copy-list '(a b c d e)))
 	 (y (copy-list '(1 2 3 4)))
 	 (xcopy (make-scaffold-copy x))
@@ -404,16 +457,32 @@
    (c d e 3 4)
    (d e 4)))
 
-(deftest maplist-6
+(deftest maplist.6
   (maplist 'append '(a b c) '(1 2 3))
   ((a b c 1 2 3) (b c 2 3) (c 3)))
 
-(deftest maplist-7
+(deftest maplist.7
   (maplist #'(lambda (x y) (nth (car x) y))
 	   '(0 1 0 1 0 1 0)
 	   '(a b c d e f g)
 	   )
   (a c c e e g g))
+
+(deftest maplist.8
+  (let ((i 0) x y z)
+    (values
+     (maplist
+      (progn
+	(setf x (incf i))
+	#'(lambda (x y) (declare (ignore x)) (car y)))
+      (progn
+	(setf y (incf i))
+	'(a b c))
+      (progn
+	(setf z (incf i))
+	     '(1 2 3)))
+     i x y z))
+  (1 2 3) 3 1 2 3)
 
 (deftest maplist.error.1
   (classify-error (maplist #'identity 'a))
@@ -444,7 +513,7 @@
   type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; mapcan
+;;; mapcon
 
 (deftest mapcon.1
   (mapcon #'(lambda (x) (append '(a) x nil)) nil)
@@ -478,6 +547,19 @@
 (deftest mapcon.4
   (mapcon (constantly 1) (list 'a))
   1)
+
+(deftest mapcon.5
+  (let ((i 0) x y z)
+    (values
+     (mapcon (progn (setf x (incf i))
+		    #'(lambda (x y) (list (car x) (car y))))
+	     (progn (setf y (incf i))
+		    '(a b c))
+	     (progn (setf z (incf i))
+		    '(1 2 3)))
+     i x y z))
+  (a 1 b 2 c 3)
+  3 1 2 3)
 
 (deftest mapcon.error.1
   (classify-error (mapcon #'identity 1))

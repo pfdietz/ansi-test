@@ -10,35 +10,45 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; acons
 
-(deftest acons-1
-    (let* ((x (copy-tree '((c . d) (e . f))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (acons 'a 'b x)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (eqt (cdr result) x)
-       result))
+(deftest acons.1
+  (let* ((x (copy-tree '((c . d) (e . f))))
+	 (xcopy (make-scaffold-copy x))
+	 (result (acons 'a 'b x)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (eqt (cdr result) x)
+     result))
   ((a . b) (c . d) (e . f)))
 
-(deftest acons-2
-    (acons 'a 'b nil)
+(deftest acons.2
+  (acons 'a 'b nil)
   ((a . b)))
 
-(deftest acons-3
-    (acons 'a 'b 'c)
+(deftest acons.3
+  (acons 'a 'b 'c)
   ((a . b) . c))
 
-(deftest acons-4
-    (acons '((a b)) '(((c d) e) f) '((1 . 2)))
+(deftest acons.4
+  (acons '((a b)) '(((c d) e) f) '((1 . 2)))
   (( ((a b)) . (((c d) e) f)) (1 . 2)))
 
-(deftest acons-5
-    (acons "ancd" 1.143 nil)
+(deftest acons.5
+  (acons "ancd" 1.143 nil)
   (("ancd" . 1.143)))
 
-(deftest acons-6
-    (acons #\R :foo :bar)
+(deftest acons.6
+  (acons #\R :foo :bar)
   ((#\R . :foo) . :bar))
+
+(deftest acons.7
+  (let ((i 0) x y z)
+    (values
+     (acons (progn (setf x (incf i)) 'a)
+	    (progn (setf y (incf i)) 'b)
+	    (progn (setf z (incf i)) '((c . d))))
+     i x y z))
+  ((a . b)(c . d))
+  3 1 2 3)
 
 (deftest acons.error.1
   (classify-error (acons))
@@ -59,31 +69,31 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc
 
-(deftest assoc-1
+(deftest assoc.1
     (assoc nil nil)
   nil)
 
-(deftest assoc-2
+(deftest assoc.2
     (assoc nil '(nil))
   nil)
 
-(deftest assoc-3
+(deftest assoc.3
     (assoc nil '(nil (nil . 2) (a . b)))
   (nil . 2))
 
-(deftest assoc-4
+(deftest assoc.4
     (assoc nil '((a . b) (c . d)))
   nil)
 
-(deftest assoc-5
+(deftest assoc.5
     (assoc 'a '((a . b)))
   (a . b))
 
-(deftest assoc-6
+(deftest assoc.6
     (assoc 'a '((:a . b) (#:a . c) (a . d) (a . e) (z . f)))
   (a . d))
 
-(deftest assoc-7
+(deftest assoc.7
     (let* ((x (copy-tree '((a . b) (b . c) (c . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (assoc 'b x)))
@@ -92,85 +102,85 @@
        (check-scaffold-copy x xcopy)))
   t)
 
-(deftest assoc-8
+(deftest assoc.8
     (assoc 1 '((0 . a) (1 . b) (2 . c)))
   (1 . b))
 
-(deftest assoc-9
+(deftest assoc.9
     (assoc (copy-seq "abc")
 	   '((abc . 1) ("abc" . 2) ("abc" . 3)))
   nil)
 
-(deftest assoc-10
+(deftest assoc.10
     (assoc (copy-list '(a)) (copy-tree '(((a) b) ((a) (c)))))
   nil)
 
-(deftest assoc-11
+(deftest assoc.11
     (let ((x (list 'a 'b)))
       (assoc x `(((a b) c) (,x . d) (,x . e) ((a b) 1))))
   ((a b) . d))
 
 
-(deftest assoc-12
+(deftest assoc.12
     (assoc #\e '(("abefd" . 1) ("aevgd" . 2) ("edada" . 3))
 	   :key #'(lambda (x) (char x 1)))
   ("aevgd" . 2))
 
-(deftest assoc-13
+(deftest assoc.13
     (assoc nil '(((a) . b) ( nil . c ) ((nil) . d))
 	   :key #'car)
   (nil . c))
 
-(deftest assoc-14
+(deftest assoc.14
     (assoc (copy-seq "abc")
 	   '((abc . 1) ("abc" . 2) ("abc" . 3))
 	   :test #'equal)
   ("abc" . 2))
 
-(deftest assoc-15
+(deftest assoc.15
     (assoc (copy-seq "abc")
 	   '((abc . 1) ("abc" . 2) ("abc" . 3))
 	   :test #'equalp)
   ("abc" . 2))
 
-(deftest assoc-16
+(deftest assoc.16
     (assoc (copy-list '(a)) (copy-tree '(((a) b) ((a) (c))))
 	   :test #'equal)
   ((a) b))
 
-(deftest assoc-17
+(deftest assoc.17
     (assoc (copy-seq "abc")
 	   '((abc . 1) (a . a) (b . b) ("abc" . 2) ("abc" . 3))
 	   :test-not (complement #'equalp))
   ("abc" . 2))
 
-(deftest assoc-18
+(deftest assoc.18
     (assoc 'a '((a . d)(b . c)) :test-not #'eq)
   (b . c))
      
-(deftest assoc-19
+(deftest assoc.19
     (assoc 'a '((a . d)(b . c)) :test (complement #'eq))
   (b . c))
 
-(deftest assoc-20
+(deftest assoc.20
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
 	   :key #'(lambda (x) (and (stringp x) (string-downcase x)))
 	   :test #'equal)
   ("A" . 6))
 
-(deftest assoc-21
+(deftest assoc.21
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
 	   :key #'(lambda (x) (and (stringp x) x))
 	   :test #'equal)
   ("a" . 3))
 
-(deftest assoc-22
+(deftest assoc.22
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
 	   :key #'(lambda (x) (and (stringp x) (string-downcase x)))
 	   :test-not (complement #'equal))
   ("A" . 6))
 
-(deftest assoc-23
+(deftest assoc.23
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
 	   :key #'(lambda (x) (and (stringp x) x))
 	   :test-not (complement #'equal))
@@ -179,20 +189,58 @@
 ;; Check that it works when test returns a true value
 ;; other than T
 
-(deftest assoc-24
+(deftest assoc.24
     (assoc 'a '((b . 1) (a . 2) (c . 3))
 	   :test #'(lambda (x y) (and (eqt x y) 'matched)))
   (a . 2))
 
 ;; Check that the order of the arguments to test is correct
 
-(deftest assoc-25
+(deftest assoc.25
     (block fail
       (assoc 'a '((b . 1) (c . 2) (a . 3))
 	     :test #'(lambda (x y)
 		       (unless (eqt x 'a) (return-from fail 'fail))
 		       (eqt x y))))
   (A . 3))
+
+;;; Order of argument evaluation
+
+(deftest assoc.26
+  (let ((i 0) x y)
+    (values
+     (assoc (progn (setf x (incf i)) 'c)
+	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4))))
+     i x y))
+  (c . 3) 2 1 2)
+
+(deftest assoc.27
+  (let ((i 0) x y z)
+    (values
+     (assoc (progn (setf x (incf i)) 'c)
+	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
+	    :test (progn (setf z (incf i)) #'eq))
+     i x y z))
+  (c . 3) 3 1 2 3)
+
+(deftest assoc.28
+  (let ((i 0) x y)
+    (values
+     (assoc (progn (setf x (incf i)) 'c)
+	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
+	    :test #'eq)
+     i x y))
+  (c . 3) 2 1 2)
+
+(deftest assoc.29
+  (let ((i 0) x y z w)
+    (values
+     (assoc (progn (setf x (incf i)) 'c)
+	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
+	    :key (progn (setf z (incf i)) #'identity)
+	    :key (progn (setf w (incf i)) #'not))
+     i x y z w))
+  (c . 3) 4 1 2 3 4)
 
 ;;; Keyword tests
 
@@ -253,7 +301,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if
 
-(deftest assoc-if-1
+(deftest assoc-if.1
     (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (assoc-if #'evenp x)))
@@ -263,7 +311,7 @@
        result))
   (6 . c))
 
-(deftest assoc-if-2
+(deftest assoc-if.2
   (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	 (xcopy (make-scaffold-copy x))
 	 (result (assoc-if #'oddp x :key #'1+)))
@@ -273,7 +321,7 @@
      result))
   (6 . c))
 
-(deftest assoc-if-3
+(deftest assoc-if.3
     (let* ((x (copy-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (assoc-if #'evenp x)))
@@ -283,9 +331,30 @@
        result))
   (6 . c))
 
-(deftest assoc-if-4
+(deftest assoc-if.4
     (assoc-if #'null '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
+
+;;; Order of argument evaluation
+
+(deftest assoc-if.5
+  (let ((i 0) x y)
+    (values
+     (assoc-if (progn (setf x (incf i)) #'null)
+	       (progn (setf y (incf i))
+		      '((a . 1) (b . 2) (nil . 17) (d . 4))))
+     i x y))
+  (nil . 17) 2 1 2)
+
+(deftest assoc-if.6
+  (let ((i 0) x y z)
+    (values
+     (assoc-if (progn (setf x (incf i)) #'null)
+	       (progn (setf y (incf i))
+		      '((a . 1) (b . 2) (nil . 17) (d . 4)))
+	       :key (progn (setf z (incf i)) #'null))
+     i x y z))
+  (a . 1) 3 1 2 3)
 
 ;;; Keyword tests
 
@@ -348,7 +417,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; assoc-if-not
 
-(deftest assoc-if-not-1
+(deftest assoc-if-not.1
     (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (assoc-if-not #'oddp x)))
@@ -358,7 +427,7 @@
        result))
   (6 . c))
 
-(deftest assoc-if-not-2
+(deftest assoc-if-not.2
   (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	 (xcopy (make-scaffold-copy x))
 	 (result (assoc-if-not #'evenp x :key #'1+)))
@@ -368,7 +437,7 @@
      result))
   (6 . c))
 
-(deftest assoc-if-not-3
+(deftest assoc-if-not.3
     (let* ((x (copy-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (assoc-if-not #'oddp x)))
@@ -378,9 +447,30 @@
        result))
   (6 . c))
 
-(deftest assoc-if-not-4
+(deftest assoc-if-not.4
     (assoc-if-not #'identity '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
+
+;;; Order of argument evaluation tests
+
+(deftest assoc-if-not.5
+  (let ((i 0) x y)
+    (values
+     (assoc-if-not (progn (setf x (incf i)) #'identity)
+		   (progn (setf y (incf i))
+			  '((a . 1) (b . 2) (nil . 17) (d . 4))))
+     i x y))
+  (nil . 17) 2 1 2)
+
+(deftest assoc-if-not.6
+  (let ((i 0) x y z)
+    (values
+     (assoc-if-not (progn (setf x (incf i)) #'identity)
+		   (progn (setf y (incf i))
+			  '((a . 1) (b . 2) (nil . 17) (d . 4)))
+		   :key (progn (setf z (incf i)) #'null))
+     i x y z))
+  (a . 1) 3 1 2 3)
 
 ;;; Keyword tests
 

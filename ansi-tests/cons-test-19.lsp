@@ -10,90 +10,90 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; intersection
 
-(deftest intersection-1
-    (intersection nil nil)
+(deftest intersection.1
+  (intersection nil nil)
   nil)
 
-(deftest intersection-2
-    (intersection (loop for i from 1 to 100 collect i) nil)
+(deftest intersection.2
+  (intersection (loop for i from 1 to 100 collect i) nil)
   nil)
 
-(deftest intersection-3
-    (intersection nil (loop for i from 1 to 100 collect i))
+(deftest intersection.3
+  (intersection nil (loop for i from 1 to 100 collect i))
   nil)
 
-(deftest intersection-4
-    (let* ((x (copy-list '(a 1 c 7 b 4 3 z)))
-	   (xcopy (make-scaffold-copy x))
-	   (y (copy-list '(3 y c q z a 18)))
-	   (ycopy (make-scaffold-copy y))
-	   (result (intersection x y)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       (+
-	(loop
-	    for e in x count
-	      (and (member e y)
-		   (not (member e result))))
-	(loop
-	    for e in result count
-	      (or (not (member e x))
-		  (not (member e y))))
-	(loop
-	    for hd on result count
-	      (and (consp hd)
-		   (member (car hd) (cdr hd)))))))
+(deftest intersection.4
+  (let* ((x (copy-list '(a 1 c 7 b 4 3 z)))
+	 (xcopy (make-scaffold-copy x))
+	 (y (copy-list '(3 y c q z a 18)))
+	 (ycopy (make-scaffold-copy y))
+	 (result (intersection x y)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     (+
+      (loop
+       for e in x count
+       (and (member e y)
+	    (not (member e result))))
+      (loop
+       for e in result count
+       (or (not (member e x))
+	   (not (member e y))))
+      (loop
+       for hd on result count
+       (and (consp hd)
+	    (member (car hd) (cdr hd)))))))
   0)
 
-(deftest intersection-5
-    (let* ((x (copy-list '(a a a)))
-	   (xcopy (make-scaffold-copy x))
-	   (y (copy-list '(a a a b b b)))
-	   (ycopy (make-scaffold-copy y))
-	   (result (intersection x y)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (check-scaffold-copy y ycopy)
-       (member 'a result)
-       (not (member 'b result))))
+(deftest intersection.5
+  (let* ((x (copy-list '(a a a)))
+	 (xcopy (make-scaffold-copy x))
+	 (y (copy-list '(a a a b b b)))
+	 (ycopy (make-scaffold-copy y))
+	 (result (intersection x y)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (check-scaffold-copy y ycopy)
+     (member 'a result)
+     (not (member 'b result))))
   t)
 
-(deftest intersection-6
-    (intersection (list 1000000000000 'a 'b 'c)
-		  (list (1+ 999999999999) 'd 'e 'f))
+(deftest intersection.6
+  (intersection (list 1000000000000 'a 'b 'c)
+		(list (1+ 999999999999) 'd 'e 'f))
   (1000000000000))
 
-(deftest intersection-7
-    (intersection (list 'a 10 'b 17)
-		  (list 'c 'd 4 'e 'f 10 1 13 'z))
+(deftest intersection.7
+  (intersection (list 'a 10 'b 17)
+		(list 'c 'd 4 'e 'f 10 1 13 'z))
   (10))
 
-(deftest intersection-8
-    (intersection (list 'a (copy-seq "aaa") 'b)
-		  (list 'd (copy-seq "aaa") 'e))
+(deftest intersection.8
+  (intersection (list 'a (copy-seq "aaa") 'b)
+		(list 'd (copy-seq "aaa") 'e))
   nil)
 
-(deftest intersection-9
-    (intersection (list 'a (copy-seq "aaa") 'b)
-		  (list 'd (copy-seq "aaa") 'e)
-		  :test #'equal)
+(deftest intersection.9
+  (intersection (list 'a (copy-seq "aaa") 'b)
+		(list 'd (copy-seq "aaa") 'e)
+		:test #'equal)
   ("aaa"))
 
 ;; Same as 9, but with a symbol function designator for :test
-(deftest intersection-9-a
-    (intersection (list 'a (copy-seq "aaa") 'b)
-		  (list 'd (copy-seq "aaa") 'e)
-		  :test 'equal)
+(deftest intersection.9-a
+  (intersection (list 'a (copy-seq "aaa") 'b)
+		(list 'd (copy-seq "aaa") 'e)
+		:test 'equal)
   ("aaa"))
 
-(deftest intersection-9-b
-    (intersection (list 'a (copy-seq "aaa") 'b)
-		  (list 'd (copy-seq "aaa") 'e)
-		  :test-not #'(lambda (p q) (not (equal p q))))
+(deftest intersection.9-b
+  (intersection (list 'a (copy-seq "aaa") 'b)
+		(list 'd (copy-seq "aaa") 'e)
+		:test-not #'(lambda (p q) (not (equal p q))))
   ("aaa"))
 
-(deftest intersection-10
+(deftest intersection.10
   (equalt
    (sort
     (intersection (loop
@@ -106,7 +106,7 @@
    (loop for i from 0 to 1000 by 21 collect i))
   t)
 
-(deftest intersection-11
+(deftest intersection.11
   (equalt
    (sort
     (intersection (loop
@@ -122,7 +122,7 @@
    (loop for i from 0 to 999 by (* 3 5 7) collect i))
   t)
 
-(deftest intersection-11-a
+(deftest intersection.11-a
   (equalt
    (sort
     (intersection (loop
@@ -143,8 +143,8 @@
 ;; Do large numbers of random intersection tests
 ;;
 
-(deftest intersection-12
-    (intersection-12-body 100 100)
+(deftest intersection.12
+  (intersection-12-body 100 100)
   nil)
 
 
@@ -152,7 +152,7 @@
 ;; :key argument
 ;;
 
-(deftest intersection-13
+(deftest intersection.13
   (let ((x (copy-list '(0 5 8 13 31 42)))
 	(y (copy-list '(3 5 42 0 7 100 312 33))))
     (equalt
@@ -161,7 +161,7 @@
   t)
 
 ;; Same as 13, but with a symbol function designator for :key
-(deftest intersection-13-a
+(deftest intersection.13-a
   (let ((x (copy-list '(0 5 8 13 31 42)))
 	(y (copy-list '(3 5 42 0 7 100 312 33))))
     (equalt
@@ -171,7 +171,7 @@
 
 ;; Test that a nil key argument is ignored
 
-(deftest intersection-14
+(deftest intersection.14
   (let
       ((result (intersection (copy-list '(a b c d))
 			     (copy-list '(e c f b g))
@@ -185,7 +185,7 @@
 
 ;; Test that intersection preserves the order of arguments to :test, :test-not
 
-(deftest intersection-15
+(deftest intersection.15
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -197,7 +197,7 @@
 	   (eql x y)))))
   (4))
 
-(deftest intersection-16
+(deftest intersection.16
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -210,7 +210,7 @@
 	   (eql x y)))))
   (4))
 
-(deftest intersection-17
+(deftest intersection.17
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -222,7 +222,7 @@
 	   (not (eql x y))))))
   (4))
 
-(deftest intersection-18
+(deftest intersection.18
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -234,6 +234,57 @@
 	   (when (< y x) (return-from fail 'fail))
 	   (not (eql x y))))))
   (4))
+
+;;; Order of argument evaluation tests
+
+(deftest intersection.19
+  (let ((i 0) x y)
+    (values
+     (intersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd)))
+     i x y))
+  nil 2 1 2)
+
+(deftest intersection.20
+  (let ((i 0) x y)
+    (values
+     (intersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :test #'eq)
+     i x y))
+  nil 2 1 2)
+
+(deftest intersection.21
+  (let ((i 0) x y z w)
+    (values
+     (intersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :test (progn (setf z (incf i)) #'eq)
+		   :test (progn (setf w (incf i))
+				(complement #'eq)))
+     i x y z w))
+  nil 4 1 2 3 4)
+
+(deftest intersection.22
+  (let ((i 0) x y z w)
+    (values
+     (intersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :test (progn (setf z (incf i)) #'eq)
+		   :key (progn (setf w (incf i)) #'identity))
+     i x y z w))
+  nil 4 1 2 3 4)
+
+(deftest intersection.23
+  (let ((i 0) x y z w)
+    (values
+     (intersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :key (progn (setf z (incf i)) #'identity)
+		   :test (progn (setf w (incf i)) #'eq))
+     i x y z w))
+  nil 4 1 2 3 4)
+
 
 ;;; Keyword tests
 
@@ -324,19 +375,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nintersection
 
-(deftest nintersection-1
+(deftest nintersection.1
   (nintersection nil nil)
   nil)
 
-(deftest nintersection-2
+(deftest nintersection.2
   (nintersection (loop for i from 1 to 100 collect i) nil)
   nil)
 
-(deftest nintersection-3
+(deftest nintersection.3
   (nintersection-with-check nil (loop for i from 1 to 100 collect i))
   nil)
 
-(deftest nintersection-4
+(deftest nintersection.4
   (let* ((x (copy-list '(a 1 c 7 b 4 3 z)))
 	 (xc (copy-list x))
 	 (y (copy-list '(3 y c q z a 18)))
@@ -354,7 +405,7 @@
 		 (member (car hd) (cdr hd)))))))
   0)
 
-(deftest nintersection-5
+(deftest nintersection.5
   (let* ((x (copy-list '(a a a)))
 	 (y (copy-list '(a a a b b b)))
 	 (result (nintersection-with-check x y)))
@@ -364,45 +415,45 @@
      (not (member 'b result))))
   t)
 
-(deftest nintersection-6
+(deftest nintersection.6
   (nintersection-with-check
    (list 1000000000000 'a 'b 'c)
    (list (1+ 999999999999) 'd 'e 'f))
   (1000000000000))
 
-(deftest nintersection-7
+(deftest nintersection.7
   (nintersection-with-check (list 'a 10 'b 17)
 			    (list 'c 'd 4 'e 'f 10 1 13 'z))
   (10))
 
-(deftest nintersection-8
+(deftest nintersection.8
   (nintersection-with-check
    (list 'a (copy-seq "aaa") 'b)
    (list 'd (copy-seq "aaa") 'e))
   nil)
 
-(deftest nintersection-9
+(deftest nintersection.9
   (nintersection-with-check
    (list 'a (copy-seq "aaa") 'b)
    (list 'd (copy-seq "aaa") 'e)
    :test #'equal)
   ("aaa"))
 
-(deftest nintersection-9-a
+(deftest nintersection.9-a
   (nintersection-with-check
    (list 'a (copy-seq "aaa") 'b)
    (list 'd (copy-seq "aaa") 'e)
    :test 'equal)
   ("aaa"))
 
-(deftest nintersection-9-b
+(deftest nintersection.9-b
   (nintersection
    (list 'a (copy-seq "aaa") 'b)
    (list 'd (copy-seq "aaa") 'e)
    :test-not #'(lambda (p q) (not (equal p q))))
   ("aaa"))
 
-(deftest nintersection-10
+(deftest nintersection.10
   (equalt
    (sort
     (let ((result
@@ -414,7 +465,7 @@
    (loop for i from 0 to 1000 by 21 collect i))
   t)
 
-(deftest nintersection-11
+(deftest nintersection.11
   (equalt
    (sort
     (let ((result
@@ -430,13 +481,13 @@
     for i from 0 to 999 by (* 3 5 7) collect i))
   t)
 
-(deftest nintersection-12
+(deftest nintersection.12
   (nintersection-12-body 100 100)
   nil)
 
 ;; Key argument
 
-(deftest nintersection-13
+(deftest nintersection.13
   (let ((x '(0 5 8 13 31 42))
 	(y (copy-list '(3 5 42 0 7 100 312 33))))
     (equalt
@@ -448,7 +499,7 @@
 
 ;; Check that a nil key argument is ignored
 
-(deftest nintersection-14
+(deftest nintersection.14
   (let
       ((result (nintersection
 		(copy-list '(a b c d))
@@ -463,7 +514,7 @@
 
 ;; Test that nintersection preserves the order of arguments to :test, :test-not
 
-(deftest nintersection-15
+(deftest nintersection.15
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -475,7 +526,7 @@
 	   (eql x y)))))
   (4))
 
-(deftest nintersection-16
+(deftest nintersection.16
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -488,7 +539,7 @@
 	   (eql x y)))))
   (4))
 
-(deftest nintersection-17
+(deftest nintersection.17
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -500,7 +551,7 @@
 	   (not (eql x y))))))
   (4))
 
-(deftest nintersection-18
+(deftest nintersection.18
   (let ((list1 (list 1 2 3 4))
 	(list2 (list 4 5 6 7)))
     (block fail
@@ -512,6 +563,56 @@
 	   (when (< y x) (return-from fail 'fail))
 	   (not (eql x y))))))
   (4))
+
+;;; Order of argument evaluation tests
+
+(deftest nintersection.19
+  (let ((i 0) x y)
+    (values
+     (nintersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd)))
+     i x y))
+  nil 2 1 2)
+
+(deftest nintersection.20
+  (let ((i 0) x y)
+    (values
+     (nintersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :test #'eq)
+     i x y))
+  nil 2 1 2)
+
+(deftest nintersection.21
+  (let ((i 0) x y z w)
+    (values
+     (nintersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :test (progn (setf z (incf i)) #'eq)
+		   :test (progn (setf w (incf i))
+				(complement #'eq)))
+     i x y z w))
+  nil 4 1 2 3 4)
+
+(deftest nintersection.22
+  (let ((i 0) x y z w)
+    (values
+     (nintersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :test (progn (setf z (incf i)) #'eq)
+		   :key (progn (setf w (incf i)) #'identity))
+     i x y z w))
+  nil 4 1 2 3 4)
+
+(deftest nintersection.23
+  (let ((i 0) x y z w)
+    (values
+     (nintersection (progn (setf x (incf i)) (list 'a 'b))
+		   (progn (setf y (incf i)) (list 'c 'd))
+		   :key (progn (setf z (incf i)) #'identity)
+		   :test (progn (setf w (incf i)) #'eq))
+     i x y z w))
+  nil 4 1 2 3 4)
 
 ;;; Keyword tests
 

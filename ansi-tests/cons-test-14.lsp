@@ -10,19 +10,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; member-if
 
-(deftest member-if-1
+(deftest member-if.1
   (member-if #'listp nil)
   nil)
 
-(deftest member-if-2
+(deftest member-if.2
   (member-if #'(lambda (x) (eqt x 'a)) '(1 2 a 3 4))
   (a 3 4))
 
-(deftest member-if-3
+(deftest member-if.3
   (member-if #'(lambda (x) (eql x 12)) '(4 12 11 73 11) :key #'1+)
   (11 73 11))
 
-(deftest member-if-4
+(deftest member-if.4
   (let ((test-inputs
 	 `(1 a 11.3121 11.31s3 1.123f5 -1 0
 	     13.13122d34 581.131e-10
@@ -40,9 +40,35 @@
       test-inputs)))
   t)
 
-(deftest member-if-5
+(deftest member-if.5
   (member-if #'identity '(1 2 3 4 5) :key #'evenp)
   (2 3 4 5))
+
+;;; Order of argument tests
+
+(deftest member-if.6
+  (let ((i 0) x y)
+    (values
+     (member-if (progn (setf x (incf i))
+		       #'identity)
+		(progn (setf y (incf i))
+		       '(nil nil a b nil c d)))
+     i x y))
+  (a b nil c d) 2 1 2)
+
+(deftest member-if.7
+  (let ((i 0) x y z w)
+    (values
+     (member-if (progn (setf x (incf i))
+		       #'identity)
+		(progn (setf y (incf i))
+		       '(nil nil a b nil c d))
+		:key (progn (setf z (incf i)) #'identity)
+		:key (progn (setf w (incf i)) #'not))
+			    
+     i x y z w))
+  (a b nil c d) 4 1 2 3 4)
+
 
 ;;; Keyword tests
 
@@ -79,19 +105,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; member-if-not
 
-(deftest member-if-not-1
+(deftest member-if-not.1
   (member-if-not #'listp nil)
   nil)
 
-(deftest member-if-not-2
+(deftest member-if-not.2
   (member-if-not #'(lambda (x) (eqt x 'a)) '(a 1 2 a 3 4))
   (1 2 a 3 4))
 
-(deftest member-if-not-3
+(deftest member-if-not.3
   (member-if-not #'(lambda (x) (not (eql x 12))) '(4 12 11 73 11) :key #'1+)
   (11 73 11))
 
-(deftest member-if-not-4
+(deftest member-if-not.4
   (let ((test-inputs
 	 `(1 a 11.3121 11.31s3 1.123f5 -1 0
 	     13.13122d34 581.131e-10
@@ -108,9 +134,34 @@
 	  test-inputs)))
   nil)
 
-(deftest member-if-not-5
+(deftest member-if-not.5
   (member-if-not #'not '(1 2 3 4 5) :key #'evenp)
   (2 3 4 5))
+
+;;; Order of evaluation tests
+
+(deftest member-if-not.6
+  (let ((i 0) x y)
+    (values
+     (member-if-not (progn (setf x (incf i))
+			   #'not)
+		    (progn (setf y (incf i))
+			   '(nil nil a b nil c d)))
+     i x y))
+  (a b nil c d) 2 1 2)
+
+(deftest member-if-not.7
+  (let ((i 0) x y z w)
+    (values
+     (member-if-not (progn (setf x (incf i))
+			   #'not)
+		    (progn (setf y (incf i))
+			   '(nil nil a b nil c d))
+		    :key (progn (setf z (incf i)) #'identity)
+		    :key (progn (setf w (incf i)) #'not))
+			    
+     i x y z w))
+  (a b nil c d) 4 1 2 3 4)
 
 ;;; Keyword tests
 

@@ -18,178 +18,216 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc
 
-(deftest rassoc-1
-    (rassoc nil nil)
+(deftest rassoc.1
+  (rassoc nil nil)
   nil)
 
-(deftest rassoc-2
-    (rassoc nil '(nil))
+(deftest rassoc.2
+  (rassoc nil '(nil))
   nil)
 
-(deftest rassoc-3
-    (rassoc nil (rev-assoc-list '(nil (nil . 2) (a . b))))
+(deftest rassoc.3
+  (rassoc nil (rev-assoc-list '(nil (nil . 2) (a . b))))
   (2 . nil))
 
-(deftest rassoc-4
-    (rassoc nil '((a . b) (c . d)))
+(deftest rassoc.4
+  (rassoc nil '((a . b) (c . d)))
   nil)
 
-(deftest rassoc-5
-    (rassoc 'a '((b . a)))
+(deftest rassoc.5
+  (rassoc 'a '((b . a)))
   (b . a))
 
-(deftest rassoc-6
-    (rassoc 'a (rev-assoc-list '((:a . b) (#:a . c) (a . d) (a . e) (z . f))))
+(deftest rassoc.6
+  (rassoc 'a (rev-assoc-list '((:a . b) (#:a . c) (a . d) (a . e) (z . f))))
   (d . a))
 
-(deftest rassoc-7
-    (let* ((x (copy-tree (rev-assoc-list '((a . b) (b . c) (c . d)))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (rassoc 'b x)))
-      (and
-       (eqt result (second x))
-       (check-scaffold-copy x xcopy)))
+(deftest rassoc.7
+  (let* ((x (copy-tree (rev-assoc-list '((a . b) (b . c) (c . d)))))
+	 (xcopy (make-scaffold-copy x))
+	 (result (rassoc 'b x)))
+    (and
+     (eqt result (second x))
+     (check-scaffold-copy x xcopy)))
   t)
 
-(deftest rassoc-8
-    (rassoc 1 (rev-assoc-list '((0 . a) (1 . b) (2 . c))))
+(deftest rassoc.8
+  (rassoc 1 (rev-assoc-list '((0 . a) (1 . b) (2 . c))))
   (b . 1))
 
-(deftest rassoc-9
-    (rassoc (copy-seq "abc")
-	   (rev-assoc-list '((abc . 1) ("abc" . 2) ("abc" . 3))))
+(deftest rassoc.9
+  (rassoc (copy-seq "abc")
+	  (rev-assoc-list '((abc . 1) ("abc" . 2) ("abc" . 3))))
   nil)
 
-(deftest rassoc-10
-    (rassoc (copy-list '(a))
-	    (copy-tree (rev-assoc-list '(((a) b) ((a) (c))))))
+(deftest rassoc.10
+  (rassoc (copy-list '(a))
+	  (copy-tree (rev-assoc-list '(((a) b) ((a) (c))))))
   nil)
 
-(deftest rassoc-11
-    (let ((x (list 'a 'b)))
-      (rassoc x
-	       (rev-assoc-list `(((a b) c) (,x . d) (,x . e) ((a b) 1)))))
+(deftest rassoc.11
+  (let ((x (list 'a 'b)))
+    (rassoc x
+	    (rev-assoc-list `(((a b) c) (,x . d) (,x . e) ((a b) 1)))))
   (d a b))
 
 
-(deftest rassoc-12
-    (rassoc #\e
-	    (copy-tree
-	     (rev-assoc-list '(("abefd" . 1) ("aevgd" . 2) ("edada" . 3))))
-	   :key #'(lambda (x) (char x 1)))
+(deftest rassoc.12
+  (rassoc #\e
+	  (copy-tree
+	   (rev-assoc-list '(("abefd" . 1) ("aevgd" . 2) ("edada" . 3))))
+	  :key #'(lambda (x) (char x 1)))
   (2 . "aevgd"))
 
-(deftest rassoc-13
-    (rassoc nil
-	    (copy-tree
-	     (rev-assoc-list
-	      '(((a) . b) ( nil . c ) ((nil) . d))))
-	   :key #'car)
+(deftest rassoc.13
+  (rassoc nil
+	  (copy-tree
+	   (rev-assoc-list
+	    '(((a) . b) ( nil . c ) ((nil) . d))))
+	  :key #'car)
   (c))
 
-(deftest rassoc-14
-    (rassoc (copy-seq "abc")
-	    (copy-tree
-	     (rev-assoc-list
-	      '((abc . 1) ("abc" . 2) ("abc" . 3))))
-	   :test #'equal)
+(deftest rassoc.14
+  (rassoc (copy-seq "abc")
+	  (copy-tree
+	   (rev-assoc-list
+	    '((abc . 1) ("abc" . 2) ("abc" . 3))))
+	  :test #'equal)
   (2 . "abc"))
 
-(deftest rassoc-15
-    (rassoc (copy-seq "abc")
-	    (copy-tree
-	     (rev-assoc-list
-	      '((abc . 1) ("abc" . 2) ("abc" . 3))))
-	   :test #'equalp)
+(deftest rassoc.15
+  (rassoc (copy-seq "abc")
+	  (copy-tree
+	   (rev-assoc-list
+	    '((abc . 1) ("abc" . 2) ("abc" . 3))))
+	  :test #'equalp)
   (2 . "abc"))
 
-(deftest rassoc-16
-    (rassoc (copy-list '(a))
-	    (copy-tree
-	     (rev-assoc-list '(((a) b) ((a) (c)))))
-	   :test #'equal)
+(deftest rassoc.16
+  (rassoc (copy-list '(a))
+	  (copy-tree
+	   (rev-assoc-list '(((a) b) ((a) (c)))))
+	  :test #'equal)
   ((b) a))
 
-(deftest rassoc-17
-    (rassoc (copy-seq "abc")
-	    (copy-tree
-	     (rev-assoc-list
-	      '((abc . 1) (a . a) (b . b) ("abc" . 2) ("abc" . 3))))
-	   :test-not (complement #'equalp))
+(deftest rassoc.17
+  (rassoc (copy-seq "abc")
+	  (copy-tree
+	   (rev-assoc-list
+	    '((abc . 1) (a . a) (b . b) ("abc" . 2) ("abc" . 3))))
+	  :test-not (complement #'equalp))
   (2 . "abc"))
 
-(deftest rassoc-18
-    (rassoc 'a 
-	    (copy-tree
-	     (rev-assoc-list
-	      '((a . d)(b . c))))
-	    :test-not #'eq)
-  (c . b))
-     
-(deftest rassoc-19
-    (rassoc 'a
-	    (copy-tree
-	     (rev-assoc-list
-	      '((a . d)(b . c))))
-	    :test (complement #'eq))
+(deftest rassoc.18
+  (rassoc 'a 
+	  (copy-tree
+	   (rev-assoc-list
+	    '((a . d)(b . c))))
+	  :test-not #'eq)
   (c . b))
 
-(deftest rassoc-20
-    (rassoc "a"
-	    (copy-tree
-	     (rev-assoc-list
-	      '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
-	   :key #'(lambda (x) (and (stringp x) (string-downcase x)))
-	   :test #'equal)
+(deftest rassoc.19
+  (rassoc 'a
+	  (copy-tree
+	   (rev-assoc-list
+	    '((a . d)(b . c))))
+	  :test (complement #'eq))
+  (c . b))
+
+(deftest rassoc.20
+  (rassoc "a"
+	  (copy-tree
+	   (rev-assoc-list
+	    '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
+	  :key #'(lambda (x) (and (stringp x) (string-downcase x)))
+	  :test #'equal)
   (6 . "A"))
 
-(deftest rassoc-21
-    (rassoc "a"
-	    (copy-tree
-	     (rev-assoc-list
-	      '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
-	   :key #'(lambda (x) (and (stringp x) x))
-	   :test #'equal)
+(deftest rassoc.21
+  (rassoc "a"
+	  (copy-tree
+	   (rev-assoc-list
+	    '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
+	  :key #'(lambda (x) (and (stringp x) x))
+	  :test #'equal)
   (3 . "a"))
 
-(deftest rassoc-22
-    (rassoc "a"
-	    (copy-tree
-	     (rev-assoc-list
-	      '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
-	   :key #'(lambda (x) (and (stringp x) (string-downcase x)))
-	   :test-not (complement #'equal))
+(deftest rassoc.22
+  (rassoc "a"
+	  (copy-tree
+	   (rev-assoc-list
+	    '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
+	  :key #'(lambda (x) (and (stringp x) (string-downcase x)))
+	  :test-not (complement #'equal))
   (6 . "A"))
 
-(deftest rassoc-23
-    (rassoc "a"
-	    (copy-tree
-	     (rev-assoc-list
-	      '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
-	   :key #'(lambda (x) (and (stringp x) x))
-	   :test-not (complement #'equal))
+(deftest rassoc.23
+  (rassoc "a"
+	  (copy-tree
+	   (rev-assoc-list
+	    '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))))
+	  :key #'(lambda (x) (and (stringp x) x))
+	  :test-not (complement #'equal))
   (3 . "a"))
 
 ;; Check that it works when test returns a true value
 ;; other than T
 
-(deftest rassoc-24
-    (rassoc 'a
-	    (copy-tree
-	     (rev-assoc-list
-	      '((b . 1) (a . 2) (c . 3))))
-	   :test #'(lambda (x y) (and (eqt x y) 'matched)))
+(deftest rassoc.24
+  (rassoc 'a
+	  (copy-tree
+	   (rev-assoc-list
+	    '((b . 1) (a . 2) (c . 3))))
+	  :test #'(lambda (x y) (and (eqt x y) 'matched)))
   (2 . a))
 
 ;; Check that the order of the arguments to :test is correct
 
-(deftest rassoc-25
-    (block fail
-      (rassoc 'a '((1 . b) (2 . c) (3 . a))
-	     :test #'(lambda (x y)
-		       (unless (eqt x 'a) (return-from fail 'fail))
-		       (eqt x y))))
+(deftest rassoc.25
+  (block fail
+    (rassoc 'a '((1 . b) (2 . c) (3 . a))
+	    :test #'(lambda (x y)
+		      (unless (eqt x 'a) (return-from fail 'fail))
+		      (eqt x y))))
   (3 . A))
+
+;;; Order of argument evaluation
+
+(deftest rassoc.26
+  (let ((i 0) x y)
+    (values
+     (rassoc (progn (setf x (incf i)) 'c)
+	     (progn (setf y (incf i)) '((1 . a) (2 . b) (3 . c) (4 . c))))
+     i x y))
+  (3 . c) 2 1 2)
+
+(deftest rassoc.27
+  (let ((i 0) x y z)
+    (values
+     (rassoc (progn (setf x (incf i)) 'c)
+	     (progn (setf y (incf i)) '((1 . a) (2 . b) (3 . c) (4 . c)))
+	     :test (progn (setf z (incf i)) #'eq))
+     i x y z))
+  (3 . c) 3 1 2 3)
+
+(deftest rassoc.28
+  (let ((i 0) x y)
+    (values
+     (rassoc (progn (setf x (incf i)) 'c)
+	    (progn (setf y (incf i)) '((1 . a) (2 . b) (3 . c) (4 . c)))
+	    :test #'eq)
+     i x y))
+  (3 . c) 2 1 2)
+
+(deftest rassoc.29
+  (let ((i 0) x y z w)
+    (values
+     (rassoc (progn (setf x (incf i)) 'c)
+	    (progn (setf y (incf i)) '((1 . a) (2 . b) (3 . c) (4 . c)))
+	    :key (progn (setf z (incf i)) #'identity)
+	    :key (progn (setf w (incf i)) #'not))
+     i x y z w))
+  (3 . c) 4 1 2 3 4)
 
 ;;; Keyword tests
 
@@ -249,7 +287,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc-if
 
-(deftest rassoc-if-1
+(deftest rassoc-if.1
     (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (rassoc-if #'evenp x)))
@@ -259,7 +297,7 @@
        result))
   (c . 6))
 
-(deftest rassoc-if-2
+(deftest rassoc-if.2
   (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	 (xcopy (make-scaffold-copy x))
 	 (result (rassoc-if #'oddp x :key #'1+)))
@@ -269,7 +307,7 @@
      result))
   (c . 6))
 
-(deftest rassoc-if-3
+(deftest rassoc-if.3
     (let* ((x (rev-assoc-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (rassoc-if #'evenp x)))
@@ -279,10 +317,32 @@
        result))
   (c . 6))
 
-(deftest rassoc-if-4
+(deftest rassoc-if.4
     (rassoc-if #'null
 	       (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
+
+;;; Order of argument evaluation
+
+(deftest rassoc-if.5
+  (let ((i 0) x y)
+    (values
+     (rassoc-if (progn (setf x (incf i)) #'null)
+		(progn (setf y (incf i))
+		       '((1 . a) (2 . b) (17) (4 . d))))
+     i x y))
+  (17) 2 1 2)
+
+(deftest rassoc-if.6
+  (let ((i 0) x y z)
+    (values
+     (rassoc-if (progn (setf x (incf i)) #'null)
+		(progn (setf y (incf i))
+		       '((1 . a) (2 . b) (17) (4 . d)))
+		:key (progn (setf z (incf i)) #'null))
+     i x y z))
+  (1 . a) 3 1 2 3)
+
 
 ;;; Keyword tests
 
@@ -340,7 +400,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rassoc-if-not
 
-(deftest rassoc-if-not-1
+(deftest rassoc-if-not.1
     (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (rassoc-if-not #'oddp x)))
@@ -350,7 +410,7 @@
        result))
   (c . 6))
 
-(deftest rassoc-if-not-2
+(deftest rassoc-if-not.2
   (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
 	 (xcopy (make-scaffold-copy x))
 	 (result (rassoc-if-not #'evenp x :key #'1+)))
@@ -360,7 +420,7 @@
      result))
   (c . 6))
 
-(deftest rassoc-if-not-3
+(deftest rassoc-if-not.3
     (let* ((x (rev-assoc-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
 	   (xcopy (make-scaffold-copy x))
 	   (result (rassoc-if-not #'oddp x)))
@@ -370,10 +430,31 @@
        result))
   (c . 6))
 
-(deftest rassoc-if-not-4
+(deftest rassoc-if-not.4
     (rassoc-if-not #'identity 
 		   (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
+
+;;; Order of argument evaluation
+
+(deftest rassoc-if-not.5
+  (let ((i 0) x y)
+    (values
+     (rassoc-if-not (progn (setf x (incf i)) #'identity)
+		    (progn (setf y (incf i))
+			   '((1 . a) (2 . b) (17) (4 . d))))
+     i x y))
+  (17) 2 1 2)
+
+(deftest rassoc-if-not.6
+  (let ((i 0) x y z)
+    (values
+     (rassoc-if-not (progn (setf x (incf i)) #'identity)
+		    (progn (setf y (incf i))
+			   '((1 . a) (2 . b) (17) (4 . d)))
+		    :key (progn (setf z (incf i)) #'null))
+     i x y z))
+  (1 . a) 3 1 2 3)
 
 ;;; Keyword tests
 
