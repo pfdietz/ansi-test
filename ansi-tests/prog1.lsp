@@ -25,6 +25,3 @@
   (let ((x 0))
     (values (prog1 x (incf x)) x))
   0 1)
-
-
-

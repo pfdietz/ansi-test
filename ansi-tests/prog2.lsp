@@ -34,9 +34,3 @@
      (prog2 (incf x (1+ x)) (incf x (+ 2 x)) (incf x 100))
      x))
   8 108)
-
-
-
-
-
-
