@@ -249,6 +249,56 @@
   (make-sequence '(vector * *) 10 :initial-element nil)
   #(nil nil nil nil nil nil nil nil nil nil))
 
+;;; Bit vectors
+
+(deftest make-sequence.37
+  (make-sequence 'bit-vector 5 :initial-element 0)
+  #*00000)
+
+(deftest make-sequence.38
+  (make-sequence 'bit-vector 7 :initial-element 1)
+  #*1111111)
+
+(deftest make-sequence.39
+  (make-sequence 'bit-vector 0)
+  #*)
+
+(deftest make-sequence.40
+  (make-sequence '(bit-vector) 4 :initial-element 1)
+  #*1111)
+
+(deftest make-sequence.41
+  (make-sequence '(bit-vector *) 10 :initial-element 0)
+  #*0000000000)
+
+(deftest make-sequence.42
+  (make-sequence '(bit-vector 5) 5 :initial-element 0)
+  #*00000)
+
+(deftest make-sequence.43
+  (make-sequence 'simple-bit-vector 5 :initial-element 0)
+  #*00000)
+
+(deftest make-sequence.44
+  (make-sequence 'simple-bit-vector 7 :initial-element 1)
+  #*1111111)
+
+(deftest make-sequence.45
+  (make-sequence 'simple-bit-vector 0)
+  #*)
+
+(deftest make-sequence.46
+  (make-sequence '(simple-bit-vector) 4 :initial-element 1)
+  #*1111)
+
+(deftest make-sequence.47
+  (make-sequence '(simple-bit-vector *) 10 :initial-element 0)
+  #*0000000000)
+
+(deftest make-sequence.48
+  (make-sequence '(simple-bit-vector 5) 5 :initial-element 0)
+  #*00000)
+
 ;;; Keyword tests
 
 (deftest make-sequence.allow-other-keys.1
