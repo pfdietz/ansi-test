@@ -5103,50 +5103,50 @@ Broken at C::WT-C-INLINE-LOC.
    794801 211700 -1246335)
   7)
 
-
+;;; Tests added by Camm for gcl
 
 (deftest misc.296
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -2016726144 234357120) A))
-          (DECLARE (TYPE (INTEGER -10569521299456 -1307998945280) B))
-          (DECLARE (TYPE (INTEGER -45429002240 -17228484608) C))
-          (DECLARE (TYPE (INTEGER 228451840 1454976512) D))
-          (DECLARE (TYPE (INTEGER -4797 -2609) E))
-          (DECLARE (TYPE (INTEGER -21 36300536) F))
-          (DECLARE (TYPE (INTEGER -15983530 31646604) G))
-          (DECLARE (TYPE (INTEGER -208720272 -357) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 0)
-                       (COMPILATION-SPEED 3)))
-          (EXPT (LABELS ((%F14 (F14-1 F14-2)
-                               (PROGN
-                                 (TAGBODY
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -2016726144 234357120) a))
+          (declare (type (integer -10569521299456 -1307998945280) b))
+          (declare (type (integer -45429002240 -17228484608) c))
+          (declare (type (integer 228451840 1454976512) d))
+          (declare (type (integer -4797 -2609) e))
+          (declare (type (integer -21 36300536) f))
+          (declare (type (integer -15983530 31646604) g))
+          (declare (type (integer -208720272 -357) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 3) (debug 0)
+                       (compilation-speed 3)))
+          (expt (labels ((%f14 (f14-1 f14-2)
+                               (progn
+                                 (tagbody
                                    (+
-                                    (UNWIND-PROTECT
-                                      (LABELS ((%F1 (F1-1) (GO TAG1)))
-                                        (LET ((*S6* (%F1 D))) 0))))
-                                   TAG1
+                                    (unwind-protect
+                                      (labels ((%f1 (f1-1) (go tag1)))
+                                        (let ((*s6* (%f1 d))) 0))))
+                                   tag1
                                    (+
-                                    (CONDITIONS:HANDLER-BIND ()
-                                      (IF (<= -11215713 -819)
-                                       (INTEGER-LENGTH
-                                        (FLOOR (CONJUGATE F14-1)
-                                         (MAX 12
-                                          (CEILING
-                                           (BLOCK B2
-                                             (CATCH 'CT2
-                                               (IGNORE-ERRORS
-                                                (FLET
-                                                 ((%F13 (F13-1)
-                                                   (LOGIOR 87 F14-2)))
-                                                  F14-1))))))))
-                                       (PROGV '(*S8*) (LIST 472865632)
-                                         *S8*)))))
+                                    (handler-bind ()
+                                      (if (<= -11215713 -819)
+                                       (integer-length
+                                        (floor (conjugate f14-1)
+                                         (max 12
+                                          (ceiling
+                                           (block b2
+                                             (catch 'ct2
+                                               (ignore-errors
+                                                (flet
+                                                 ((%f13 (f13-1)
+                                                   (logior 87 f14-2)))
+                                                  f14-1))))))))
+                                       (progv '(*s8*) (list 472865632)
+                                         *s8*)))))
                                  0)))
-                  (%F14 0 0))
+                  (%f14 0 0))
                 0)))
    -28594854 -3859203606860 -40757449218 894599577 -4163 11621230
    29558853 -92216802)
@@ -5157,33 +5157,33 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -4354712743936 666241234) A))
-          (DECLARE (TYPE (INTEGER -23496787232 13342697120) B))
-          (DECLARE (TYPE (INTEGER -6834570 6274788) C))
-          (DECLARE (TYPE (INTEGER -1988742 -250650) D))
-          (DECLARE (TYPE (INTEGER 10523345 10868247) E))
-          (DECLARE (TYPE (INTEGER -489185 -46267) F))
-          (DECLARE (TYPE (INTEGER -627627253760 226529) G))
-          (DECLARE (TYPE (INTEGER -1039260485 -22498) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 2) (DEBUG 2)
-                       (COMPILATION-SPEED 0)))
-          (LABELS ((%F7 (F7-1 F7-2 F7-3 &OPTIONAL (F7-4 0) (F7-5 0)
-                              (F7-6 (LABELS
-                                     ((%F6 (F6-1)
-                                       (LABELS ((%F9 (F9-1) 0))
-                                         (PROGN
-                                           (TAGBODY
-                                             (UNWIND-PROTECT
-                                               (IF (%F9 (GO TAG4)) 0 0))
-                                             TAG4
-                                             (CONDITIONS:HANDLER-CASE
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -4354712743936 666241234) a))
+          (declare (type (integer -23496787232 13342697120) b))
+          (declare (type (integer -6834570 6274788) c))
+          (declare (type (integer -1988742 -250650) d))
+          (declare (type (integer 10523345 10868247) e))
+          (declare (type (integer -489185 -46267) f))
+          (declare (type (integer -627627253760 226529) g))
+          (declare (type (integer -1039260485 -22498) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 2) (debug 2)
+                       (compilation-speed 0)))
+          (labels ((%f7 (f7-1 f7-2 f7-3 &optional (f7-4 0) (f7-5 0)
+                              (f7-6 (labels
+                                     ((%f6 (f6-1)
+                                       (labels ((%f9 (f9-1) 0))
+                                         (progn
+                                           (tagbody
+                                             (unwind-protect
+                                               (if (%f9 (go tag4)) 0 0))
+                                             tag4
+                                             (handler-case
                                               0))
-                                           H))))
-                                      (APPLY #'%F6 0 NIL))))
+                                           h))))
+                                      (apply #'%f6 0 nil))))
                         0))
-            (%F7 0 D 0 F D))))
+            (%f7 0 d 0 f d))))
     -4319330882538 -3195059121 -2799927 -1466395 10630639 -224479
     -502579707077 -985908422)
    0)
@@ -5192,23 +5192,23 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER 1296736620544 1680954654720) A))
-          (DECLARE (TYPE (INTEGER -2 -2) B))
-          (DECLARE (TYPE (INTEGER 1 42303) C))
-          (DECLARE (TYPE (INTEGER -38881008000 1333202563072) D))
-          (DECLARE (TYPE (INTEGER -435684 1289298) E))
-          (DECLARE (TYPE (INTEGER -164302654464 -10150328832) F))
-          (DECLARE (TYPE (INTEGER 30759259904 38429537792) G))
-          (DECLARE (TYPE (INTEGER -1628949299200 -47724342) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 1) (SAFETY 0) (DEBUG 0)
-                       (COMPILATION-SPEED 1)))
-          (PROGN
-            (TAGBODY
-              (LET ((V9 (UNWIND-PROTECT (GO 0)))) 0)
+    '(lambda (a b c d e f g h)
+          (declare (type (integer 1296736620544 1680954654720) a))
+          (declare (type (integer -2 -2) b))
+          (declare (type (integer 1 42303) c))
+          (declare (type (integer -38881008000 1333202563072) d))
+          (declare (type (integer -435684 1289298) e))
+          (declare (type (integer -164302654464 -10150328832) f))
+          (declare (type (integer 30759259904 38429537792) g))
+          (declare (type (integer -1628949299200 -47724342) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 3) (space 1) (safety 0) (debug 0)
+                       (compilation-speed 1)))
+          (progn
+            (tagbody
+              (let ((v9 (unwind-protect (go 0)))) 0)
               0
-              (NUMERATOR (FUNCALL (CONSTANTLY 0) (LOGORC2 0 0) 0)))
+              (numerator (funcall (constantly 0) (logorc2 0 0) 0)))
             0)))
    1451922002679 -2 285 1067997670626 1115209 -37445463114
          36530345360 -80501559891)
@@ -5218,42 +5218,42 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -1814 3348) A))
-          (DECLARE (TYPE (INTEGER -32239015 12) B))
-          (DECLARE (TYPE (INTEGER 128412 101411593) C))
-          (DECLARE (TYPE (INTEGER -329076792320 -22) D))
-          (DECLARE (TYPE (INTEGER 77651198 86069496) E))
-          (DECLARE (TYPE (INTEGER -4616 3453771) F))
-          (DECLARE (TYPE (INTEGER -14889981824 53610580608) G))
-          (DECLARE (TYPE (INTEGER -1049733788 46605484288) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 3) (DEBUG 2)
-                       (COMPILATION-SPEED 2)))
-          (CONJUGATE
-              (PROGN
-                (TAGBODY
-                  (FLET ((%F3 NIL 0))
-                    (UNWIND-PROTECT
-                      (FLET ((%F10 (F10-1) (LET ((*S6* (%F3))) (GO 6))))
-                        (FUNCALL #'%F10 F))))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -1814 3348) a))
+          (declare (type (integer -32239015 12) b))
+          (declare (type (integer 128412 101411593) c))
+          (declare (type (integer -329076792320 -22) d))
+          (declare (type (integer 77651198 86069496) e))
+          (declare (type (integer -4616 3453771) f))
+          (declare (type (integer -14889981824 53610580608) g))
+          (declare (type (integer -1049733788 46605484288) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 2) (space 1) (safety 3) (debug 2)
+                       (compilation-speed 2)))
+          (conjugate
+              (progn
+                (tagbody
+                  (flet ((%f3 nil 0))
+                    (unwind-protect
+                      (flet ((%f10 (f10-1) (let ((*s6* (%f3))) (go 6))))
+                        (funcall #'%f10 f))))
                   6
-                  (LET ((*S1* (RESTART-BIND ()
-                                (LABELS ((%F1 (F1-1) 3136))
-                                  (LET ()
-                                    (PROGV '(*S5* *S1*)
-                                     (LIST
-                                      (LABELS
-                                       ((%F2 NIL (CATCH 'CT8 -11)))
+                  (let ((*s1* (restart-bind ()
+                                (labels ((%f1 (f1-1) 3136))
+                                  (let ()
+                                    (progv '(*s5* *s1*)
+                                     (list
+                                      (labels
+                                       ((%f2 nil (catch 'ct8 -11)))
                                         -70941710)
-                                      (IF NIL (%F1 -1) 87))
-                                      (PROGN
-                                        (TAGBODY
-                                          (%F1 *S1*)
+                                      (if nil (%f1 -1) 87))
+                                      (progn
+                                        (tagbody
+                                          (%f1 *s1*)
                                           3
-                                          (BLOCK B2 (PROGN A))
-                                          TAG3)
-                                        H)))))))
+                                          (block b2 (progn a))
+                                          tag3)
+                                        h)))))))
                     0))
                 0))))
    1555 -22062210 85224215 -161218251003 78463284 730073
@@ -5264,39 +5264,39 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -29429 -3320) A))
-          (DECLARE (TYPE (INTEGER -407874593 279639852) B))
-          (DECLARE (TYPE (INTEGER -542849760256 3344389718016) C))
-          (DECLARE (TYPE (INTEGER -2 12012755) D))
-          (DECLARE (TYPE (INTEGER -248 -228) E))
-          (DECLARE (TYPE (INTEGER 5 15636824592) F))
-          (DECLARE (TYPE (INTEGER 21039 21595) G))
-          (DECLARE (TYPE (INTEGER -1867743555584 -1621183025152) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 1) (DEBUG 2)
-                       (COMPILATION-SPEED 3)))
-          (LABELS ((%F12 (F12-1 F12-2 F12-3) 0))
-            (LABELS ((%F17 (F17-1)
-                           (PROGN
-                             (TAGBODY
-                               (MAX (APPLY (CONSTANTLY 0)
-                                     (LIST
-                                      (%F12 (UNWIND-PROTECT (GO TAG1))
-                                       0 D)
-                                      0 F)))
-                               TAG1
-                               (DPB (REALPART
-                                     (EXPT
-                                      (ROUND
-                                       (RETURN-FROM %F17
-                                         (RESTART-BIND ()
-                                           (COMPLEX E 0)))
-                                       (MAX 40 0))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -29429 -3320) a))
+          (declare (type (integer -407874593 279639852) b))
+          (declare (type (integer -542849760256 3344389718016) c))
+          (declare (type (integer -2 12012755) d))
+          (declare (type (integer -248 -228) e))
+          (declare (type (integer 5 15636824592) f))
+          (declare (type (integer 21039 21595) g))
+          (declare (type (integer -1867743555584 -1621183025152) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 1) (debug 2)
+                       (compilation-speed 3)))
+          (labels ((%f12 (f12-1 f12-2 f12-3) 0))
+            (labels ((%f17 (f17-1)
+                           (progn
+                             (tagbody
+                               (max (apply (constantly 0)
+                                     (list
+                                      (%f12 (unwind-protect (go tag1))
+                                       0 d)
+                                      0 f)))
+                               tag1
+                               (dpb (realpart
+                                     (expt
+                                      (round
+                                       (return-from %f17
+                                         (restart-bind ()
+                                           (complex e 0)))
+                                       (max 40 0))
                                       0))
-                                    (BYTE 0 0) 0))
+                                    (byte 0 0) 0))
                              0)))
-              (%F12 0 (%F17 0) 0)))))
+              (%f12 0 (%f17 0) 0)))))
    -6416 -274982013 2946309248013 1724720 -228 5782683458 21484
    -1681168611256)
   0)
@@ -5306,42 +5306,42 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -1814 3348) A))
-          (DECLARE (TYPE (INTEGER -32239015 12) B))
-          (DECLARE (TYPE (INTEGER 128412 101411593) C))
-          (DECLARE (TYPE (INTEGER -329076792320 -22) D))
-          (DECLARE (TYPE (INTEGER 77651198 86069496) E))
-          (DECLARE (TYPE (INTEGER -4616 3453771) F))
-          (DECLARE (TYPE (INTEGER -14889981824 53610580608) G))
-          (DECLARE (TYPE (INTEGER -1049733788 46605484288) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 3) (DEBUG 2)
-                       (COMPILATION-SPEED 2)))
-          (CONJUGATE
-              (PROGN
-                (TAGBODY
-                  (FLET ((%F3 NIL 0))
-                    (UNWIND-PROTECT
-                      (FLET ((%F10 (F10-1) (LET ((*S6* (%F3))) (GO 6))))
-                        (FUNCALL #'%F10 F))))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -1814 3348) a))
+          (declare (type (integer -32239015 12) b))
+          (declare (type (integer 128412 101411593) c))
+          (declare (type (integer -329076792320 -22) d))
+          (declare (type (integer 77651198 86069496) e))
+          (declare (type (integer -4616 3453771) f))
+          (declare (type (integer -14889981824 53610580608) g))
+          (declare (type (integer -1049733788 46605484288) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 2) (space 1) (safety 3) (debug 2)
+                       (compilation-speed 2)))
+          (conjugate
+              (progn
+                (tagbody
+                  (flet ((%f3 nil 0))
+                    (unwind-protect
+                      (flet ((%f10 (f10-1) (let ((*s6* (%f3))) (go 6))))
+                        (funcall #'%f10 f))))
                   6
-                  (LET ((*S1* (RESTART-BIND ()
-                                (LABELS ((%F1 (F1-1) 3136))
-                                  (LET ()
-                                    (PROGV '(*S5* *S1*)
-                                     (LIST
-                                      (LABELS
-                                       ((%F2 NIL (CATCH 'CT8 -11)))
+                  (let ((*s1* (restart-bind ()
+                                (labels ((%f1 (f1-1) 3136))
+                                  (let ()
+                                    (progv '(*s5* *s1*)
+                                     (list
+                                      (labels
+                                       ((%f2 nil (catch 'ct8 -11)))
                                         -70941710)
-                                      (IF NIL (%F1 -1) 87))
-                                      (PROGN
-                                        (TAGBODY
-                                          (%F1 *S1*)
+                                      (if nil (%f1 -1) 87))
+                                      (progn
+                                        (tagbody
+                                          (%f1 *s1*)
                                           3
-                                          (BLOCK B2 (PROGN A))
-                                          TAG3)
-                                        H)))))))
+                                          (block b2 (progn a))
+                                          tag3)
+                                        h)))))))
                     0))
                 0))))
    1555 -22062210 85224215 -161218251003 78463284 730073
@@ -5352,27 +5352,27 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -206837809920 -126404559104) A))
-          (DECLARE (TYPE (INTEGER -277874608640 -63724432) B))
-          (DECLARE (TYPE (INTEGER -2 0) C))
-          (DECLARE (TYPE (INTEGER -5992710 9946878) D))
-          (DECLARE (TYPE (INTEGER -4345390743552 -76504514048) E))
-          (DECLARE (TYPE (INTEGER -330 3826137) F))
-          (DECLARE (TYPE (INTEGER -517792898560 -1193868) G))
-          (DECLARE (TYPE (INTEGER 2018 98092396) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 2) (SAFETY 2) (DEBUG 1)
-                       (COMPILATION-SPEED 1)))
-          (FLET ((%F12 (F12-1 F12-2 &OPTIONAL (F12-3 0)
-                              (F12-4 (PROGN
-                                       (TAGBODY
-                                         (UNWIND-PROTECT (GO TAG6))
-                                         TAG6)
-                                       (FLET ((%F1 (F1-1 F1-2) 0))
-                                         (APPLY #'%F1 0 0 (LIST))))))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -206837809920 -126404559104) a))
+          (declare (type (integer -277874608640 -63724432) b))
+          (declare (type (integer -2 0) c))
+          (declare (type (integer -5992710 9946878) d))
+          (declare (type (integer -4345390743552 -76504514048) e))
+          (declare (type (integer -330 3826137) f))
+          (declare (type (integer -517792898560 -1193868) g))
+          (declare (type (integer 2018 98092396) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 2) (space 2) (safety 2) (debug 1)
+                       (compilation-speed 1)))
+          (flet ((%f12 (f12-1 f12-2 &optional (f12-3 0)
+                              (f12-4 (progn
+                                       (tagbody
+                                         (unwind-protect (go tag6))
+                                         tag6)
+                                       (flet ((%f1 (f1-1 f1-2) 0))
+                                         (apply #'%f1 0 0 (list))))))
                        0))
-            (%F12 0 E))))
+            (%f12 0 e))))
    -195379170409 -30212852077 -1 -2082141 -1686846623470 360505
    -324299330279 37218064)
   0)
@@ -5381,28 +5381,28 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -55724018 0) A))
-          (DECLARE (TYPE (INTEGER -4929718 2777256) B))
-          (DECLARE (TYPE (INTEGER 18939493568 24064422528) C))
-          (DECLARE (TYPE (INTEGER -13157393 112210531) D))
-          (DECLARE (TYPE (INTEGER -75775 -4883) E))
-          (DECLARE (TYPE (INTEGER 5071 1584913674240) F))
-          (DECLARE (TYPE (INTEGER -1 -1) G))
-          (DECLARE (TYPE (INTEGER -100 7017454141440) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 1)
-                       (COMPILATION-SPEED 1)))
-          (LABELS ((%F7 (F7-1 &OPTIONAL (F7-2 0) (F7-3 0) (F7-4 0)) 0))
-            (PROGN
-              (DENOMINATOR
-                  (PROGN
-                    (LET ((*S6* (PROGN
-                                  (TAGBODY
-                                    (UNWIND-PROTECT
-                                      (%F7 0 0 (GO TAG6) D))
-                                    TAG6
-                                    (RESTART-CASE 0))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -55724018 0) a))
+          (declare (type (integer -4929718 2777256) b))
+          (declare (type (integer 18939493568 24064422528) c))
+          (declare (type (integer -13157393 112210531) d))
+          (declare (type (integer -75775 -4883) e))
+          (declare (type (integer 5071 1584913674240) f))
+          (declare (type (integer -1 -1) g))
+          (declare (type (integer -100 7017454141440) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 3) (debug 1)
+                       (compilation-speed 1)))
+          (labels ((%f7 (f7-1 &optional (f7-2 0) (f7-3 0) (f7-4 0)) 0))
+            (progn
+              (denominator
+                  (progn
+                    (let ((*s6* (progn
+                                  (tagbody
+                                    (unwind-protect
+                                      (%f7 0 0 (go tag6) d))
+                                    tag6
+                                    (restart-case 0))
                                   0)))
                       0)
                     0))
@@ -5415,27 +5415,27 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -11679 1672) A))
-          (DECLARE (TYPE (INTEGER -359757 -216048) B))
-          (DECLARE (TYPE (INTEGER -46345706880 -1824) C))
-          (DECLARE (TYPE (INTEGER -18 18) D))
-          (DECLARE (TYPE (INTEGER -70852138 427028370944) E))
-          (DECLARE (TYPE (INTEGER -428904547840 535369082368) F))
-          (DECLARE (TYPE (INTEGER -4372225 83) G))
-          (DECLARE (TYPE (INTEGER -2 0) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 3) (DEBUG 0)
-                       (COMPILATION-SPEED 1)))
-          (LABELS ((%F1 (F1-1 F1-2 F1-3) 0))
-            (RATIONALIZE
-                (%F1 (PROGN
-                       (TAGBODY
-                         (LET ((V3 (%F1 (UNWIND-PROTECT (GO TAG2)) B 0)))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -11679 1672) a))
+          (declare (type (integer -359757 -216048) b))
+          (declare (type (integer -46345706880 -1824) c))
+          (declare (type (integer -18 18) d))
+          (declare (type (integer -70852138 427028370944) e))
+          (declare (type (integer -428904547840 535369082368) f))
+          (declare (type (integer -4372225 83) g))
+          (declare (type (integer -2 0) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 2) (space 1) (safety 3) (debug 0)
+                       (compilation-speed 1)))
+          (labels ((%f1 (f1-1 f1-2 f1-3) 0))
+            (rationalize
+                (%f1 (progn
+                       (tagbody
+                         (let ((v3 (%f1 (unwind-protect (go tag2)) b 0)))
                            0)
-                         TAG2)
+                         tag2)
                        0)
-                     H (CONDITIONS:HANDLER-CASE 0))))))
+                     h (handler-case 0))))))
    -7209 -223767 -42093806027 -9 132172281069 138363461574
    -3751010 0)
   0)
@@ -5444,33 +5444,33 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -438 247) A))
-          (DECLARE (TYPE (INTEGER -93662232 112841) B))
-          (DECLARE (TYPE (INTEGER 8769 2766606) C))
-          (DECLARE (TYPE (INTEGER -33007133760 32531429568) D))
-          (DECLARE (TYPE (INTEGER 419 3712) E))
-          (DECLARE (TYPE (INTEGER 1628 20513914304) F))
-          (DECLARE (TYPE (INTEGER -1347290 47) G))
-          (DECLARE (TYPE (INTEGER -12 3030073088) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 3) (SAFETY 0) (DEBUG 3)
-                       (COMPILATION-SPEED 0)))
-          (FLET ((%F5 (F5-1 F5-2 &OPTIONAL (F5-3 0) (F5-4 0) (F5-5 0))
-                      (PROGN
-                        (TAGBODY (UNWIND-PROTECT (GO TAG1)) TAG1)
-                        (COERCE (LET* ((*S4*
-                                        (FLET
-                                         ((%F1 NIL
-                                           (LET*
-                                            ((V7 (DPB 0 (BYTE 0 0) C)))
-                                             A)))
-                                          (PROGV '(*S6* *S7*)
-                                           (LIST (%F1) 0)
-                                            G))))
-                                  C)
-                                'INTEGER))))
-            (IF (%F5 D 0 E 0 0) H 0))))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -438 247) a))
+          (declare (type (integer -93662232 112841) b))
+          (declare (type (integer 8769 2766606) c))
+          (declare (type (integer -33007133760 32531429568) d))
+          (declare (type (integer 419 3712) e))
+          (declare (type (integer 1628 20513914304) f))
+          (declare (type (integer -1347290 47) g))
+          (declare (type (integer -12 3030073088) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 3) (space 3) (safety 0) (debug 3)
+                       (compilation-speed 0)))
+          (flet ((%f5 (f5-1 f5-2 &optional (f5-3 0) (f5-4 0) (f5-5 0))
+                      (progn
+                        (tagbody (unwind-protect (go tag1)) tag1)
+                        (coerce (let* ((*s4*
+                                        (flet
+                                         ((%f1 nil
+                                           (let*
+                                            ((v7 (dpb 0 (byte 0 0) c)))
+                                             a)))
+                                          (progv '(*s6* *s7*)
+                                           (list (%f1) 0)
+                                            g))))
+                                  c)
+                                'integer))))
+            (if (%f5 d 0 e 0 0) h 0))))
    -58 -22237190 2055343 -8144832891 1213 19038103159 -1009345
    929619162)
   929619162)
@@ -5479,25 +5479,25 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER 261 234565) A))
-          (DECLARE (TYPE (INTEGER -1454263719936 -3279802168) B))
-          (DECLARE (TYPE (INTEGER -1251120498 -49518770) C))
-          (DECLARE (TYPE (INTEGER 0 369) D))
-          (DECLARE (TYPE (INTEGER -12465203856 -45) E))
-          (DECLARE (TYPE (INTEGER -94321486 -91941853) F))
-          (DECLARE (TYPE (INTEGER -16528338864 11322249648) G))
-          (DECLARE (TYPE (INTEGER -1230549 -1143976) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 0) (DEBUG 0)
-                       (COMPILATION-SPEED 0)))
-          (DENOMINATOR
-              (PROGN
-                (TAGBODY (UNWIND-PROTECT (GO TAG7)) TAG7)
-                (LOGXOR F
-                        (MULTIPLE-VALUE-BIND (*S4*)
-                            (LOGXOR 0 (EXPT -2 1))
-                          (TRUNCATE 0)))))))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer 261 234565) a))
+          (declare (type (integer -1454263719936 -3279802168) b))
+          (declare (type (integer -1251120498 -49518770) c))
+          (declare (type (integer 0 369) d))
+          (declare (type (integer -12465203856 -45) e))
+          (declare (type (integer -94321486 -91941853) f))
+          (declare (type (integer -16528338864 11322249648) g))
+          (declare (type (integer -1230549 -1143976) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 2) (space 1) (safety 0) (debug 0)
+                       (compilation-speed 0)))
+          (denominator
+              (progn
+                (tagbody (unwind-protect (go tag7)) tag7)
+                (logxor f
+                        (multiple-value-bind (*s4*)
+                            (logxor 0 (expt -2 1))
+                          (truncate 0)))))))
    130724 -736795298357 -1221747467 326 -9775240900 -94105708
    -2273680158 -1156846)
   1)
@@ -5506,29 +5506,29 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -2903632 1282236) A))
-          (DECLARE (TYPE (INTEGER 7 10741) B))
-          (DECLARE (TYPE (INTEGER -249635 214804) C))
-          (DECLARE (TYPE (INTEGER -50422 10469) D))
-          (DECLARE (TYPE (INTEGER -52337314 10771161) E))
-          (DECLARE (TYPE (INTEGER 0 5333060) F))
-          (DECLARE (TYPE (INTEGER -1 0) G))
-          (DECLARE (TYPE (INTEGER 1595835 4577573) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 3)
-                       (COMPILATION-SPEED 1)))
-          (FLET ((%F11 (F11-1 F11-2) 0))
-            (%F11 0
-                  (UNWIND-PROTECT
-                    E
-                    (PROGN
-                      (TAGBODY
-                        (LET* ((V4 (PROGN (UNWIND-PROTECT (GO 0)) 0)))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -2903632 1282236) a))
+          (declare (type (integer 7 10741) b))
+          (declare (type (integer -249635 214804) c))
+          (declare (type (integer -50422 10469) d))
+          (declare (type (integer -52337314 10771161) e))
+          (declare (type (integer 0 5333060) f))
+          (declare (type (integer -1 0) g))
+          (declare (type (integer 1595835 4577573) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 3) (debug 3)
+                       (compilation-speed 1)))
+          (flet ((%f11 (f11-1 f11-2) 0))
+            (%f11 0
+                  (unwind-protect
+                    e
+                    (progn
+                      (tagbody
+                        (let* ((v4 (progn (unwind-protect (go 0)) 0)))
                           0)
                         0)
-                      (LOGAND (CONDITIONS:HANDLER-BIND ()
-                                (LOGAND -15 -2 32578787 10349 E
+                      (logand (handler-bind ()
+                                (logand -15 -2 32578787 10349 e
                                         -24781944 -8)))))))))
    60336 1625 124302 -33193 -8095855 4995857 0 4572381)
   0)
@@ -5537,23 +5537,23 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -2806612475904 8750665416704) A))
-          (DECLARE (TYPE (INTEGER -3 10) B))
-          (DECLARE (TYPE (INTEGER -94336824 116591592) C))
-          (DECLARE (TYPE (INTEGER 456813135872 903636350976) D))
-          (DECLARE (TYPE (INTEGER -2364199833600 -172353318912) E))
-          (DECLARE (TYPE (INTEGER 717 1760915) F))
-          (DECLARE (TYPE (INTEGER -21 105) G))
-          (DECLARE (TYPE (INTEGER -3579048169472 -346272903168) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 2) (SPACE 1) (SAFETY 0) (DEBUG 0)
-                       (COMPILATION-SPEED 0)))
-          (LABELS ((%F7 (F7-1)
-                        (MULTIPLE-VALUE-PROG1 0
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -2806612475904 8750665416704) a))
+          (declare (type (integer -3 10) b))
+          (declare (type (integer -94336824 116591592) c))
+          (declare (type (integer 456813135872 903636350976) d))
+          (declare (type (integer -2364199833600 -172353318912) e))
+          (declare (type (integer 717 1760915) f))
+          (declare (type (integer -21 105) g))
+          (declare (type (integer -3579048169472 -346272903168) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 2) (space 1) (safety 0) (debug 0)
+                       (compilation-speed 0)))
+          (labels ((%f7 (f7-1)
+                        (multiple-value-prog1 0
                           0
-                          (RETURN-FROM %F7 (MASK-FIELD (BYTE 0 0) 0)))))
-            (UNWIND-PROTECT (%F7 0)))))
+                          (return-from %f7 (mask-field (byte 0 0) 0)))))
+            (unwind-protect (%f7 0)))))
    1951007924893 10 -49879990 614214833752 -1808568999586 1282634
    99 -2783010573143)
   0)
@@ -5562,27 +5562,27 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -521338 12) A))
-          (DECLARE (TYPE (INTEGER -1787856009216 1182078822400) B))
-          (DECLARE (TYPE (INTEGER -3313 28535137344) C))
-          (DECLARE (TYPE (INTEGER -38914612 -25121536) D))
-          (DECLARE (TYPE (INTEGER 403073126400 2632230309888) E))
-          (DECLARE (TYPE (INTEGER -39663606528 -1238304) F))
-          (DECLARE (TYPE (INTEGER -103560 -70383) G))
-          (DECLARE (TYPE (INTEGER -894 -227) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 1) (SAFETY 1) (DEBUG 3)
-                       (COMPILATION-SPEED 2)))
-          (BLOCK B8
-            (MULTIPLE-VALUE-PROG1
-                (LOGAND (LOGIOR 0
-                                (IF (LOGBITP 0 0) 0
-                                    (MULTIPLE-VALUE-BIND (V2) 0 0))))
-              (GCD (LET* ((*S4* 0))
-                     (LOGIOR 0
-                             (RETURN-FROM B8
-                               (LET ((*S8* 0)) (ROUND 0))))))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -521338 12) a))
+          (declare (type (integer -1787856009216 1182078822400) b))
+          (declare (type (integer -3313 28535137344) c))
+          (declare (type (integer -38914612 -25121536) d))
+          (declare (type (integer 403073126400 2632230309888) e))
+          (declare (type (integer -39663606528 -1238304) f))
+          (declare (type (integer -103560 -70383) g))
+          (declare (type (integer -894 -227) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 3) (space 1) (safety 1) (debug 3)
+                       (compilation-speed 2)))
+          (block b8
+            (multiple-value-prog1
+                (logand (logior 0
+                                (if (logbitp 0 0) 0
+                                    (multiple-value-bind (v2) 0 0))))
+              (gcd (let* ((*s4* 0))
+                     (logior 0
+                             (return-from b8
+                               (let ((*s8* 0)) (round 0))))))
               0
               0))))
    -275760 -565946697213 9650536069 -37585973 1536165173011
@@ -5594,44 +5594,44 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -2016726144 234357120) A))
-          (DECLARE (TYPE (INTEGER -10569521299456 -1307998945280) B))
-          (DECLARE (TYPE (INTEGER -45429002240 -17228484608) C))
-          (DECLARE (TYPE (INTEGER 228451840 1454976512) D))
-          (DECLARE (TYPE (INTEGER -4797 -2609) E))
-          (DECLARE (TYPE (INTEGER -21 36300536) F))
-          (DECLARE (TYPE (INTEGER -15983530 31646604) G))
-          (DECLARE (TYPE (INTEGER -208720272 -357) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 3) (DEBUG 0)
-                       (COMPILATION-SPEED 3)))
-          (EXPT (LABELS ((%F14 (F14-1 F14-2)
-                               (PROGN
-                                 (TAGBODY
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -2016726144 234357120) a))
+          (declare (type (integer -10569521299456 -1307998945280) b))
+          (declare (type (integer -45429002240 -17228484608) c))
+          (declare (type (integer 228451840 1454976512) d))
+          (declare (type (integer -4797 -2609) e))
+          (declare (type (integer -21 36300536) f))
+          (declare (type (integer -15983530 31646604) g))
+          (declare (type (integer -208720272 -357) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 3) (debug 0)
+                       (compilation-speed 3)))
+          (expt (labels ((%f14 (f14-1 f14-2)
+                               (progn
+                                 (tagbody
                                    (+
-                                    (UNWIND-PROTECT
-                                      (LABELS ((%F1 (F1-1) (GO TAG1)))
-                                        (LET ((*S6* (%F1 D))) 0))))
-                                   TAG1
+                                    (unwind-protect
+                                      (labels ((%f1 (f1-1) (go tag1)))
+                                        (let ((*s6* (%f1 d))) 0))))
+                                   tag1
                                    (+
-                                    (CONDITIONS:HANDLER-BIND ()
-                                      (IF (<= -11215713 -819)
-                                       (INTEGER-LENGTH
-                                        (FLOOR (CONJUGATE F14-1)
-                                         (MAX 12
-                                          (CEILING
-                                           (BLOCK B2
-                                             (CATCH 'CT2
-                                               (IGNORE-ERRORS
-                                                (FLET
-                                                 ((%F13 (F13-1)
-                                                   (LOGIOR 87 F14-2)))
-                                                  F14-1))))))))
-                                       (PROGV '(*S8*) (LIST 472865632)
-                                         *S8*)))))
+                                    (handler-bind ()
+                                      (if (<= -11215713 -819)
+                                       (integer-length
+                                        (floor (conjugate f14-1)
+                                         (max 12
+                                          (ceiling
+                                           (block b2
+                                             (catch 'ct2
+                                               (ignore-errors
+                                                (flet
+                                                 ((%f13 (f13-1)
+                                                   (logior 87 f14-2)))
+                                                  f14-1))))))))
+                                       (progv '(*s8*) (list 472865632)
+                                         *s8*)))))
                                  0)))
-                  (%F14 0 0))
+                  (%f14 0 0))
                 0)))
    -28594854 -3859203606860 -40757449218 894599577 -4163 11621230
    29558853 -92216802)
@@ -5641,45 +5641,45 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -1203392327680 -3017953) A))
-          (DECLARE (TYPE (INTEGER -34222 -1) B))
-          (DECLARE (TYPE (INTEGER -871294987 19) C))
-          (DECLARE (TYPE (INTEGER 717979131904 3341735845888) D))
-          (DECLARE (TYPE (INTEGER -7521858 3) E))
-          (DECLARE (TYPE (INTEGER -52 49) F))
-          (DECLARE (TYPE (INTEGER 18 43) G))
-          (DECLARE (TYPE (INTEGER -503567246 -46) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 1) (DEBUG 2)
-                       (COMPILATION-SPEED 2)))
-          (LABELS ((%F2 (F2-1 F2-2 F2-3 &OPTIONAL
-                              (F2-4 (LET
-                                     ((*S6*
-                                       (PROGN
-                                         (TAGBODY
-                                           (FLET
-                                            ((%F17 (F17-1 F17-2 F17-3)
-                                              (GO 6)))
-                                             (%F17 0 B 0))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -1203392327680 -3017953) a))
+          (declare (type (integer -34222 -1) b))
+          (declare (type (integer -871294987 19) c))
+          (declare (type (integer 717979131904 3341735845888) d))
+          (declare (type (integer -7521858 3) e))
+          (declare (type (integer -52 49) f))
+          (declare (type (integer 18 43) g))
+          (declare (type (integer -503567246 -46) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 1) (debug 2)
+                       (compilation-speed 2)))
+          (labels ((%f2 (f2-1 f2-2 f2-3 &optional
+                              (f2-4 (let
+                                     ((*s6*
+                                       (progn
+                                         (tagbody
+                                           (flet
+                                            ((%f17 (f17-1 f17-2 f17-3)
+                                              (go 6)))
+                                             (%f17 0 b 0))
                                            6)
                                          0)))
-                                      (COMPLEX
-                                       (PROGN
-                                         (TAGBODY
-                                           (LABELS
-                                            ((%F18
-                                              (F18-1 F18-2 &OPTIONAL
-                                               (F18-3 0) (F18-4 F))
+                                      (complex
+                                       (progn
+                                         (tagbody
+                                           (labels
+                                            ((%f18
+                                              (f18-1 f18-2 &optional
+                                               (f18-3 0) (f18-4 f))
                                               0))
-                                             (APPLY #'%F18 G 0 0
-                                              (LIST)))
+                                             (apply #'%f18 g 0 0
+                                              (list)))
                                            0)
                                          0)
                                        0)))
-                              (F2-5 0) (F2-6 0))
+                              (f2-5 0) (f2-6 0))
                         0))
-            (%F2 0 0 F))))
+            (%f2 0 0 f))))
    -738307241633 -25016 -846570136 2181696281793 -983259 24 36
    -185316211)
   0)
@@ -5689,27 +5689,27 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -18334222 14354736) A))
-          (DECLARE (TYPE (INTEGER 11163582 6421184978944) B))
-          (DECLARE (TYPE (INTEGER -13690431913984 -64765792960) C))
-          (DECLARE (TYPE (INTEGER -12750925 31112834) D))
-          (DECLARE (TYPE (INTEGER -5188669232 2246825616) E))
-          (DECLARE (TYPE (INTEGER -31235593088 -134) F))
-          (DECLARE (TYPE (INTEGER -1 -1) G))
-          (DECLARE (TYPE (INTEGER -647589424 12392126736) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 3) (SPACE 2) (SAFETY 1) (DEBUG 1)
-                       (COMPILATION-SPEED 1)))
-          (LET ((*S4* (IF (PROGN
-                            (TAGBODY (UNWIND-PROTECT (GO 2)) 2)
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -18334222 14354736) a))
+          (declare (type (integer 11163582 6421184978944) b))
+          (declare (type (integer -13690431913984 -64765792960) c))
+          (declare (type (integer -12750925 31112834) d))
+          (declare (type (integer -5188669232 2246825616) e))
+          (declare (type (integer -31235593088 -134) f))
+          (declare (type (integer -1 -1) g))
+          (declare (type (integer -647589424 12392126736) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 3) (space 2) (safety 1) (debug 1)
+                       (compilation-speed 1)))
+          (let ((*s4* (if (progn
+                            (tagbody (unwind-protect (go 2)) 2)
                             0)
-                          (NUMERATOR
-                              (LET* ((V1
-                                      (LET ((*S6* 0))
-                                        (LOGAND B
-                                         (RATIONALIZE
-                                          (COERCE 0 'INTEGER))))))
+                          (numerator
+                              (let* ((v1
+                                      (let ((*s6* 0))
+                                        (logand b
+                                         (rationalize
+                                          (coerce 0 'integer))))))
                                 0))
                           0)))
             0)))
@@ -5721,47 +5721,47 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER 55474 401001) A))
-          (DECLARE (TYPE (INTEGER -8359558987776 8684176949248) B))
-          (DECLARE (TYPE (INTEGER -54332 116292) C))
-          (DECLARE (TYPE (INTEGER 0 0) D))
-          (DECLARE (TYPE (INTEGER -609311104000 959776553984) E))
-          (DECLARE (TYPE (INTEGER -2031580 3834807) F))
-          (DECLARE (TYPE (INTEGER -10955 2549) G))
-          (DECLARE (TYPE (INTEGER -8362590032 -210369) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 3) (SAFETY 1) (DEBUG 0)
-                       (COMPILATION-SPEED 1)))
-          (DOTIMES (IV1 3 0)
-            (LABELS ((%F6 (F6-1 F6-2 F6-3 &OPTIONAL
-                                (F6-4 (FLET
-                                       ((%F3
-                                         (F3-1 F3-2 F3-3 &OPTIONAL
-                                          (F3-4 0))
-                                         (FLET ((%F11 NIL 0))
-                                           (ASH
-                                            (PROGN
-                                              (TAGBODY
-                                                (LABELS
-                                                 ((%F3
-                                                   (F3-1 &OPTIONAL
-                                                    (F3-2 (GO TAG4)))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer 55474 401001) a))
+          (declare (type (integer -8359558987776 8684176949248) b))
+          (declare (type (integer -54332 116292) c))
+          (declare (type (integer 0 0) d))
+          (declare (type (integer -609311104000 959776553984) e))
+          (declare (type (integer -2031580 3834807) f))
+          (declare (type (integer -10955 2549) g))
+          (declare (type (integer -8362590032 -210369) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 3) (safety 1) (debug 0)
+                       (compilation-speed 1)))
+          (dotimes (iv1 3 0)
+            (labels ((%f6 (f6-1 f6-2 f6-3 &optional
+                                (f6-4 (flet
+                                       ((%f3
+                                         (f3-1 f3-2 f3-3 &optional
+                                          (f3-4 0))
+                                         (flet ((%f11 nil 0))
+                                           (ash
+                                            (progn
+                                              (tagbody
+                                                (labels
+                                                 ((%f3
+                                                   (f3-1 &optional
+                                                    (f3-2 (go tag4)))
                                                    0))
-                                                  (%F3 0))
-                                                TAG4)
+                                                  (%f3 0))
+                                                tag4)
                                               0)
-                                            (MIN 42
-                                             (CONJUGATE
-                                              (COERCE
-                                               (CONJUGATE
-                                                (LET ((V9 (%F11)))
-                                                  F3-1))
-                                               'INTEGER)))))))
-                                        (%F3 C 0 A)))
-                                (F6-5 0))
+                                            (min 42
+                                             (conjugate
+                                              (coerce
+                                               (conjugate
+                                                (let ((v9 (%f11)))
+                                                  f3-1))
+                                               'integer)))))))
+                                        (%f3 c 0 a)))
+                                (f6-5 0))
                           0))
-              (APPLY #'%F6 0 0 H NIL)))))
+              (apply #'%f6 0 0 h nil)))))
    93287 3146418586486 -51786 0 -63479145888 1935918 -10058 -2033798238)
   0)
 
@@ -5769,26 +5769,26 @@ Broken at C::WT-C-INLINE-LOC.
   (funcall
    (compile
     nil
-    '(LAMBDA (A B C D E F G H)
-          (DECLARE (TYPE (INTEGER -176150296 698) A))
-          (DECLARE (TYPE (INTEGER -62799871488 -56234210816) B))
-          (DECLARE (TYPE (INTEGER -1 1) C))
-          (DECLARE (TYPE (INTEGER 31 215808) D))
-          (DECLARE (TYPE (INTEGER -3 -1) E))
-          (DECLARE (TYPE (INTEGER -3 3387651) F))
-          (DECLARE (TYPE (INTEGER -14370846720 -56648624) G))
-          (DECLARE (TYPE (INTEGER -8316238784 -6221617344) H))
-          (DECLARE (IGNORABLE A B C D E F G H))
-          (DECLARE (OPTIMIZE (SPEED 1) (SPACE 1) (SAFETY 1) (DEBUG 2)
-                       (COMPILATION-SPEED 2)))
-          (PROGN
-            (TAGBODY
-              (UNWIND-PROTECT
-                (LET ((V10 (LET* ((V7 (IF (GO TAG6) 0 0))) 0))) 0))
-              TAG6
-              (LET ((V7 (FLET ((%F11 NIL 0))
-                          (FLET ((%F13 (F13-1 F13-2 F13-3) F13-2))
-                            (FUNCALL #'%F13 0 A (%F11))))))
+    '(lambda (a b c d e f g h)
+          (declare (type (integer -176150296 698) a))
+          (declare (type (integer -62799871488 -56234210816) b))
+          (declare (type (integer -1 1) c))
+          (declare (type (integer 31 215808) d))
+          (declare (type (integer -3 -1) e))
+          (declare (type (integer -3 3387651) f))
+          (declare (type (integer -14370846720 -56648624) g))
+          (declare (type (integer -8316238784 -6221617344) h))
+          (declare (ignorable a b c d e f g h))
+          (declare (optimize (speed 1) (space 1) (safety 1) (debug 2)
+                       (compilation-speed 2)))
+          (progn
+            (tagbody
+              (unwind-protect
+                (let ((v10 (let* ((v7 (if (go tag6) 0 0))) 0))) 0))
+              tag6
+              (let ((v7 (flet ((%f11 nil 0))
+                          (flet ((%f13 (f13-1 f13-2 f13-3) f13-2))
+                            (funcall #'%f13 0 a (%f11))))))
                 0))
             0)))
    -90583503 -61289371485 -1 175888 -3 3257970 -3264725617  -6816839328)
