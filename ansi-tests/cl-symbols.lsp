@@ -1041,7 +1041,40 @@
 		       (constantp s))
 	    (push (list s sym 'not-constant) result)))))))
   nil)
-		       
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; special-operator-p
+
+
+;;; See section 3.1.2.1.2.1
+(defconstant +special-operators+
+  '(block let* return-from catch load-time-value setq eval-when
+	  locally symbol-macrolet flet macrolet tagbody function
+	  multiple-value-call the go multiple-value-prog1 throw if
+	  progn unwind-protect labels progv let quote))
+
+
+;;; All the symbols in +special-operators+ are special operators
+(deftest special-operator-p.1
+  (loop for s in +special-operators+
+	unless (special-operator-p s)
+	collect s)
+  nil)
+
+;;; None of the standard symbols except those in +special-operators+
+;;; are special operators
+(deftest special-operator-p.2
+  (let ((p (find-package "CL")))
+    (loop for name in *cl-symbol-names*
+	  unless (or (member name +special-operators+ :test #'string=)
+		     (not (special-operator-p (find-symbol name p))))
+	  collect name))
+  nil)
+
+(deftest special-operator-p.3
+  (classify-error (special-operator-p 1))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; keywordp
