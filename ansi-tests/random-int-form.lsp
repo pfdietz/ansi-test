@@ -381,6 +381,8 @@
      ;; loop
      (5 (make-random-loop-form (1- size)))
 
+     (5 (make-random-count-form size))
+
      #-(or gcl ecl armedbear)
      ;; load-time-value
      (2
@@ -594,6 +596,27 @@
 	(t nil))))
    (make-random-integer-form size)))
 
+(defun make-random-count-form (size)
+  (destructuring-bind (s1 s2)
+      (random-partition (1- size) 2)
+    (let ((arg1 (make-random-integer-form s1))
+	  (arg2-args (loop repeat s2 collect (make-random-integer))))
+      (let ((op 'count)
+	    (test (random-from-seq #(eql = /= < > <= >=)))
+	    (arg2 (rcase
+		   (1 (make-array (list s2) :initial-contents arg2-args))
+		   (1
+		    (let* ((mask (1- (ash 1 (1+ (random 32))))))
+		      (make-array (list s2)
+				  :initial-contents
+				  (mapcar #'(lambda (x) (logand x mask)) arg2-args)
+				  :element-type `(integer 0 ,mask))))
+		   (1 `(quote ,arg2-args)))))
+	`(,op ,arg1 ,arg2 ,@(rcase
+				    (2 nil)
+				    (1 (list :test `(quote ,test)))
+				    (1 (list :test-not `(quote ,test)))))))))
+
 (defun make-random-integer-flet-call-form (size)
   (if *flet-names*
       (let* ((flet-entry (random-from-seq *flet-names*))
@@ -776,22 +799,30 @@
       (let* ((vdesc (random-from-seq *vars*))
 	     (var (var-desc-name vdesc))
 	     (type (var-desc-type vdesc))
-	     (op (random-from-seq #(setq setf #-(or armedbear)shiftf))))
+	     (op (random-from-seq #(setq setf shiftf))))
 	(cond
 	 ((subtypep '(integer * *) type)
 	  (assert (not (member var '(lv1 lv2 lv3 lv4 lv5 lv6 lv7 lv8))))
-	  (when (coin 4)
-	    (setq op 'multiple-value-setq)
-	    (setq var (list var)))
+	  (rcase
+	   (1 (when (member var '(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
+		(setq op (random-from-seq #(setf shiftf))
+		      var `(symbol-value ',var))))
+	   (1 (setq op 'multiple-value-setq)
+	      (setq var (list var)))
+	   (5 nil))
 	  `(,op ,var ,(make-random-integer-form (1- size))))
 	 ((and (consp type)
 	       (eq (car type) 'integer)
 	       (integerp (second type))
 	       (integerp (third type)))
 	  (assert (not (member var '(lv1 lv2 lv3 lv4 lv5 lv6 lv7 lv8))))
-	  (when (coin 4)
-	    (setq op 'multiple-value-setq)
-	    (setq var (list var)))
+	  (rcase
+	   (1 (when (member var '(*s1* *s2* *s3* *s4* *s5* *s6* *s7* *s8* *s9*))
+		(setq op (random-from-seq #(setf shiftf))
+		      var `(symbol-value ',var))))
+	   (1 (setq op 'multiple-value-setq)
+	      (setq var (list var)))
+	   (5 nil))
 	  `(,op ,var ,(random-from-interval (1+ (third type)) (second type))))
 	 ((and type (is-zero-rank-integer-array-type type)) ; (subtypep type '(array integer nil))
 	  (assert (not (member var '(lv1 lv2 lv3 lv4 lv5 lv6 lv7 lv8))))
@@ -977,6 +1008,27 @@
 	     (random-partition (1- size) 2)
 	   `(ldb-test ,(make-random-byte-spec-form s1)
 		      ,(make-random-integer-form s2))))
+
+      (2 (destructuring-bind (s1 s2)
+	     (random-partition (1- size) 2)
+	   (let ((arg1 (make-random-integer-form s1))
+		 (arg2-args (loop repeat s2 collect (make-random-integer))))
+	     (let ((op (random-from-seq #(find position)))
+		   (test (random-from-seq #(eql = /= < > <= >=)))
+		   (arg2 (rcase
+			  (1 (make-array (list s2) :initial-contents arg2-args))
+			  (1
+			   (let* ((mask (1- (ash 1 (1+ (random 32))))))
+			     (make-array (list s2)
+					 :initial-contents
+					 (mapcar #'(lambda (x) (logand x mask)) arg2-args)
+					:element-type `(integer 0 ,mask))))
+			  (1 `(quote ,arg2-args)))))
+	       `(,op ,arg1 ,arg2 ,@(rcase
+				    (2 nil)
+				    (1 (list :test `(quote ,test)))
+				    (1 (list :test-not `(quote ,test)))))))))
+      
       (1 (let ((index (random (1+ (random *maximum-random-int-bits*))))
 	       (form (make-random-integer-form (1- size))))
 	   `(logbitp ,index ,form)))
