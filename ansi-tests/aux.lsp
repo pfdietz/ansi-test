@@ -178,3 +178,11 @@ condition itself on other errors."
 	       (rotatef (elt seq r) (elt seq (1- i))))))
   seq)
 
+(defconstant +standard-chars+
+  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+|\\=-`{}[]:\";'<>?,./ 
+")
+
+(defconstant +alpha-chars+ (subseq +standard-chars+ 0 52))
+(defconstant +alphanumeric-chars+ (subseq +standard-chars+ 0 62))
+(defconstant +digit-chars+ "0123456789")
+(defconstant +extended-digit-chars+ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
