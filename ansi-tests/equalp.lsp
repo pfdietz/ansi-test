@@ -124,7 +124,7 @@
   t nil nil)
 
 (deftest equalp.17
-  (loop for i = (random 1000000)
+  (loop for i below 8192
 	for f = (float i 1.0s0)
 	repeat 1000
 	unless (equalp i f)
