@@ -88,30 +88,40 @@
 (defun make-random-string (n)
   (let*
       ((use-random-byte nil)
+       (etype 'character)
        (s (random-case
 	   (progn
 	     (setf use-random-byte *use-random-byte*)
 	     (make-string n))
 	   (progn
 	     (setf use-random-byte *use-random-byte*)
-	     (make-array n :element-type  'character
+	     (make-array n :element-type 'character
 			 :initial-element #\a))
-	   (make-array n :element-type (if *random-readable* 'character
-					 'standard-char)
+	   (make-array n :element-type (setf etype (if *random-readable* 'character 'standard-char))
+		       :adjustable (and (not *random-readable*) (rcase (3 nil) (1 t)))
+		       :fill-pointer (and (not *random-readable*) (rcase (3 nil) (1 (random (1+ n)))))
 		       :initial-element #\a)
-	   (make-array n :element-type (if *random-readable* 'character
-					 'base-char)
+	   (make-array n :element-type (setf etype (if *random-readable* 'character 'base-char))
+		       :adjustable (and (not *random-readable*) (rcase (3 nil) (1 t)))
+		       :fill-pointer (and (not *random-readable*) (rcase (3 nil) (1 (random (1+ n)))))
 		       :initial-element #\a))))
     (if (coin)
 	(dotimes (i n)
 	  (setf (char s i) (elt #(#\a #\b #\A #\B) (random 4))))
       (dotimes (i n)
-	(dotimes (i n)
-	  (setf (char s i)
-		(or (and use-random-byte (or (code-char (random (min char-code-limit (ash 1 16))))
-					     (code-char (random 256))))
-		    (elt "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-			 (random 62)))))))
+	(setf (char s i)
+	      (or (and use-random-byte (or (code-char (random (min char-code-limit (ash 1 16))))
+					   (code-char (random 256))))
+		  (elt "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+		       (random 62))))))
+    (when (and (not *random-readable*) (coin 5))
+      (let* ((len (length s))
+	     (len2 (random (1+ len))))
+	(setf s (make-array len2
+			    :element-type etype
+			    :displaced-to s
+			    :displaced-index-offset (random (1+ (- len len2)))))))
+      
     s))
 
 (defun random-leaf ()

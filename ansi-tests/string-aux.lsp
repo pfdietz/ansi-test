@@ -69,9 +69,14 @@
 
 (defun make-random-string-compare-test (n)
   (let* ((len (random n))
-	 ;; Lengths of the two strings
+	 ;; Maximum lengths of the two strings
 	 (len1 (if (or (coin) (= len 0)) len (+ len (random len))))
 	 (len2 (if (or (coin) (= len 0)) len (+ len (random len))))
+	 (s1 (make-random-string len1))
+	 (s2 (make-random-string len2))
+	 ;; Actual lengths of the strings
+	 (len1 (length s1))
+	 (len2 (length s2))
 	 ;; Lengths of the parts of the strings to be matched
 	 (sublen1 (if (or (coin) (= len1 0)) (min len1 len2) (random len1)))
 	 (sublen2 (if (or (coin) (= len2 0)) (min len2 sublen1) (random len2)))
@@ -83,9 +88,7 @@
 	 (start2 (if (coin 3) 0
 		   (max 0 (min (1- len2) (random (- len2 sublen2 -1))))))
 	 (end2 (+ start2 sublen2))
-	 ;; generate the strings
-	 (s1 (make-random-string len1))
-	 (s2 (make-random-string len2)))
+	 )
     #|
     (format t "len = ~A, len1 = ~A, len2 = ~A, sublen1 = ~A, sublen2 = ~A~%"
 	    len len1 len2 sublen1 sublen2)
