@@ -7,9 +7,10 @@
 (declaim (optimize (safety 3)))
 
 (deftest do-symbols-1
-  (equal
-   (sort-symbols (let ((all nil))
-		   (do-symbols (x "B" all) (push x all))))
+  (equalt
+   (remove-duplicates
+    (sort-symbols (let ((all nil))
+		    (do-symbols (x "B" all) (push x all)))))
    (list (find-symbol "BAR" "B")
 	 (find-symbol "FOO" "A")))
   t)
@@ -19,14 +20,16 @@
 ;;
 
 (defun collect-symbols (pkg)
-  (sort-symbols
-   (let ((all nil))
-     (do-symbols (x pkg all) (push x all)))))
+  (remove-duplicates
+   (sort-symbols
+    (let ((all nil))
+      (do-symbols (x pkg all) (push x all))))))
 
 (defun collect-external-symbols (pkg)
-  (sort-symbols
-   (let ((all nil))
-     (do-external-symbols (x pkg all) (push x all)))))
+  (remove-duplicates
+   (sort-symbols
+    (let ((all nil))
+      (do-external-symbols (x pkg all) (push x all))))))
 
 (deftest do-symbols-2
     (collect-symbols "DS1")
@@ -66,9 +69,9 @@
   ())
 
 (deftest do-external-symbols-5
-    (not (equal (collect-external-symbols "KEYWORD")
-		(collect-symbols "KEYWORD")))
-  nil)
+    (equalt (collect-external-symbols "KEYWORD")
+	    (collect-symbols "KEYWORD"))
+  t)
 
 ;; Test that do-symbols, do-external-symbols work without
 ;; a return value (and that the default return value is nil)
@@ -111,7 +114,7 @@
      (list
       (do-symbols
        (s "DS1")
-       (when (equal (symbol-name s) "C") (go bar))
+       (when (equalt (symbol-name s) "C") (go bar))
        (push s x)
        (go foo)
        bar
@@ -127,7 +130,7 @@
      (list
       (do-external-symbols
        (s "DS1")
-       (when (equal (symbol-name s) "A") (go bar))
+       (when (equalt (symbol-name s) "A") (go bar))
        (push s x)
        (go foo)
        bar

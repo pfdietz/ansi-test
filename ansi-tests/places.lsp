@@ -181,6 +181,9 @@
     (values a i x y z))
   #(foo bar) 3 1 2 3)
 
+(deftest setf-values.6
+  (setf (values) (values)))
+
 ;;; Section 5.1.2.4
 (deftest setf-the.1
   (let ((x 1))
