@@ -25,8 +25,6 @@ Things to do to the test suite (not a complete list)
 
 12. Make sure all string operators work on displaced character vectors.
 
-14. Finish testing DEFSETF
-
 17. Tests that have an argument that provides a return value for special
   conditions (like eof) that happens to be the same as a normal value the
   functions would return (suggested by CR).
@@ -104,3 +102,25 @@ Got:      0
 34. (from C Rhodes) Test that CERROR allows additional arguments after a
   condition designating itself to be used in the continue format control.
 
+
+35. Add test to verify that a user-defined function, when called on the
+  wrong number of arguments in safe code, emits a program-error.
+
+36. Add tests for bad default-initargs in object constructors.
+
+37. Add tests that  methods on initialize-instance and
+   shared-initialize receive defaulted initargs from compiled
+   make-instance
+
+38, Floating point tests must be expanded.
+  -- Add tests for the floating point inspection functions (decode-float, etc.)
+  -- Add tests of -0.0 vs. 0.0 consistency (a bug here affected abcl)
+  -- transcendantal functions
+
+39. There are various constraints that things defined at the top level become
+  available at compile time.  Test these constraints.
+
+
+40, Check that OPEN, etc. do pathname merging.
+
+41. Add tests for MOD, REM
