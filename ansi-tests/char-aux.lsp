@@ -93,7 +93,13 @@
 	always (or (not (characterp x))
 		   (if (or (digit-char-p x) (alpha-char-p x))
 		       (alphanumericp x)
-		     (not (alphanumericp x))))))
+		     ;; The hyperspec has an example that claims alphanumeric ==
+		     ;;  digit-char-p or alpha-char-p, but the text seems to suggest
+		     ;;  that there can be numeric characters for which digit-char-p
+		     ;;  returns NIL.  Therefore, I've weakened the next line
+		     ;; (not (alphanumericp x))
+		     t
+		     ))))
 
 (defun alphanumericp.5.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
@@ -101,7 +107,13 @@
 	always (or (not (characterp x))
 		   (if (or (digit-char-p x) (alpha-char-p x))
 		       (alphanumericp x)
-		     (not (alphanumericp x))))))
+		     ;; The hyperspec has an example that claims alphanumeric ==
+		     ;;  digit-char-p or alpha-char-p, but the text seems to suggest
+		     ;;  that there can be numeric characters for which digit-char-p
+		     ;;  returns NIL.  Therefore, I've weakened the next line
+		     ;; (not (alphanumericp x))
+		     t		     
+		     ))))
 
 (defun digit-char.1.body ()
   (loop
