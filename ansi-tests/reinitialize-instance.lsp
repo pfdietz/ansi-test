@@ -105,6 +105,22 @@
      (map-slot-value obj2 '(a b))))
   t (3 20))
 
+;;; Order of evaluation tests
+
+(deftest reinitialize-instance.order.1
+  (let* ((obj (make-instance 'reinit-class-01))
+	 (i 0) x y z w
+	 (obj2 (reinitialize-instance
+		(progn (setf x (incf i)) obj)
+		:b (setf y (incf i))
+		:a (setf z (incf i))
+		:b (setf w (incf i)))))
+    (values
+     (eqt obj obj2)
+     (map-slot-value obj2 '(a b))
+     i x y z w))
+  t (3 2) 4 1 2 3 4)
+
 ;;; Error cases
 
 (deftest reinitialize-instance.error.1
@@ -116,10 +132,3 @@
 (deftest reinitialize-instance.error.2
   (classify-error (reinitialize-instance))
   program-error)
-
-
-
-
-
-
-

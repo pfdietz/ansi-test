@@ -89,6 +89,24 @@
   t t t
   x 1234567890 #\Z foo)
 
+;;; Order of evaluation tests
+
+(deftest allocate-instance.order.1
+  (let* ((class (find-class 'allocate-instance-class-01))
+	 (i 0) x y z w
+	 (obj (allocate-instance (progn (setf x (incf i)) class)
+				 :e (setf y (incf i))
+				 :b (setf z (incf i))
+				 :e (setf w (incf i)))))
+    (values
+     (eqt (class-of obj) class)
+     (typep* obj 'allocate-instance-class-01)
+     (typep* obj class)
+     i x y z w))
+  t t t 4 1 2 3 4)
+
+;;; Error tests
+
 (deftest allocate-instance.error.1
   (classify-error (allocate-instance))
   program-error)

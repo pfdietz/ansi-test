@@ -654,6 +654,24 @@
   (nil t)
   y)
 
+;;; Order of evaluation tests
+
+(deftest shared-initialize.order.1
+  (let ((obj (allocate-instance (find-class 'shared-init-class-01)))
+	(i 0) x r y z w q)
+    (values
+     (eqt obj
+	  (shared-initialize (progn (setf x (incf i)) obj)
+			     (progn (setf r (incf i)) nil)
+			     :b (setf y (incf i))
+			     :a (setf z (incf i))
+			     :b (setf w (incf i))
+			     :c (setf q (incf i))))
+     (map-slot-value obj '(a b c))
+     i x r y z w q))
+  t (4 3 6)
+  6 1 2 3 4 5 6)
+
 ;;; Error tests
 
 (deftest shared-initialize.error.1
@@ -677,8 +695,3 @@
 			      (find-class 'shared-init-class-01))))
 		    (shared-initialize obj nil '(a b c) nil)))
   program-error)
-
-
-
-
-
