@@ -148,7 +148,9 @@
   (let* ((a0 (make-array 7 :initial-contents '(1 2 3 4 5 6 7)))
 	 (a1 (make-array 5 :initial-contents '(a b c d e)))
 	 (a2 (adjust-array a1 4 :displaced-to a0)))
-    (assert (not (eq a1 a2)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
     (assert (equal (multiple-value-list (array-displacement a2))
 		   (list a0 0)))
     a2)
@@ -159,13 +161,61 @@
 	 (a1 (make-array 5 :initial-contents '(a b c d e)))
 	 (a2 (adjust-array a1 4 :displaced-to a0
 			   :displaced-index-offset 2)))
-    (assert (not (eq a1 a2)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
     (assert (equal (multiple-value-list (array-displacement a2))
 		   (list a0 2)))
     a2)
   #(3 4 5 6))
 
+(deftest adjust-array.14
+  (let* ((a0 (make-array 7 :initial-contents '(1 2 3 4 5 6 7)))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1))
+	 (a2 (adjust-array a1 4 :displaced-to a0)))
+    (assert (if (adjustable-array-p a1)
+		(eq a1 a2)
+	      (equal (array-dimensions a1) '(5))))
+    (assert (equal (multiple-value-list (array-displacement a2))
+		   (list a0 0)))
+    a2)
+  #(1 2 3 4))
 
+(deftest adjust-array.15
+  (let* ((a0 (make-array 7 :initial-contents '(1 2 3 4 5 6 7)))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1))
+	 (a2 (make-array 4 :displaced-to a1 :displaced-index-offset 1))
+	 (a3 (adjust-array a2 4 :displaced-to a1)))
+    a3)
+  #(2 3 4 5))
+
+(deftest adjust-array.16
+  (let* ((a0 (make-array 7 :initial-contents '(1 2 3 4 5 6 7)))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1))
+	 (a2 (adjust-array a1 5 :displaced-to a0)))
+    a2)
+  #(1 2 3 4 5))
+
+(deftest adjust-array.17
+  (let* ((a0 (make-array nil :initial-element 'x))
+	 (a1 (adjust-array a0 nil)))
+    (values a0 a1))
+  #0ax #0ax)
+
+(deftest adjust-array.18
+  (let* ((a0 (make-array nil :initial-element 'x))
+	 (a1 (adjust-array a0 nil :initial-contents 'y)))
+    (assert (if (adjustable-array-p a0)
+		(eq a0 a1)
+	      (eq (aref a0) 'x)))
+    a1)
+  #0ay)
+
+(deftest adjust-array.19
+  (let* ((a0 (make-array nil :initial-element 'x))
+	 (a1 (adjust-array a0 nil :initial-element 'y)))
+    (values a0 a1))
+  #0ax #0ax)
 
 ;;; Adjust an adjustable array
 
@@ -292,8 +342,23 @@
     a2)
   #(a b c d))
 
+(deftest adjust-array.adjustable.12
+  (let* ((a0 (make-array 7 :initial-contents '(x a b c d e y)))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :adjustable t))
+	 (a2 (adjust-array a1 4 :displaced-to a0)))
+    (assert (eq a1 a2))
+    a2)
+  #(x a b c))
 
-
-
+(deftest adjust-array.adjustable.13
+  (let* ((a0 (make-array 7 :initial-contents '(x a b c d e y)))
+	 (a1 (make-array 5 :displaced-to a0 :displaced-index-offset 1
+			 :adjustable t))
+	 (a2 (make-array 4 :displaced-to a1 :displaced-index-offset 1)))
+    (assert (eq a1 (adjust-array a1 5 :displaced-to a0
+				 :displaced-index-offset 2)))
+    a2)
+  #(c d e y))
 
 
