@@ -6762,3 +6762,43 @@ Broken at C::WT-C-INLINE-LOC.
    1 2 3)
   0)
 
+;;; sbcl (0.8.10.15)
+;;; Wrong return value: SB-KERNEL:*HANDLER-CLUSTERS*
+(deftest misc.362
+  (funcall
+   (compile
+    nil
+    '(lambda (b g h)
+       (declare (optimize (speed 3) (space 3) (safety 2)
+			  (debug 2) (compilation-speed 3)))
+       (catch 'ct5
+	 (unwind-protect
+	     (labels ((%f15 (f15-1 f15-2 f15-3)
+                            (rational (throw 'ct5 0))))
+	       (%f15 0
+		     (apply #'%f15
+			    0
+			    h
+			    (progn
+			      (progv '(*s2* *s5*) (list 0 (%f15 0 g 0)) b)
+			      0)
+			    nil)
+		     0))
+	   (common-lisp:handler-case 0)))))
+   1 2 3)
+  0)
+
+;;; Wrong value: NIL
+(deftest misc.363
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -17286401550789 15753784105886) a))
+       (declare (optimize (speed 2) (space 2) (safety 2)
+			  (debug 0) (compilation-speed 3)))
+       (if (not (>= 0 (shiftf a 110236462073)))
+	   0
+	 (elt '(30 101 13 2 10 52 89 57) (min 7 (max 0 a))))))
+   -3647332298473)
+  57)
