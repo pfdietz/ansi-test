@@ -276,3 +276,70 @@
 (deftest elt-displaced-array-3
   (elt (make-displaced-array '(5) 100) 4)
   104)
+
+;;; Arrays with fill points
+
+(deftest elt-fill-pointer-1
+  (let ((a (make-array '(5) :initial-contents '(a b c d e)
+		       :fill-pointer 3)))
+    (values (elt a 0) (elt a 1) (elt a 2)))
+  a b c)
+
+(deftest elt-fill-pointer-2
+  (let ((a (make-array '(5)
+		       :initial-contents '(0 0 1 0 0)
+		       :element-type 'bit
+		       :fill-pointer 3)))
+    (values (elt a 0) (elt a 1) (elt a 2)))
+  0 0 1)
+
+(deftest elt-fill-pointer-3
+  (classify-error
+   (let ((a (make-array '(5)
+			:initial-contents '(0 0 1 0 0)
+			:fill-pointer 3)))
+     (elt a 4)))
+  type-error)
+
+(deftest elt-fill-pointer-4
+  (classify-error
+   (let ((a (make-array '(5)
+			:initial-contents '(0 0 1 0 0)
+			:element-type 'bit
+			:fill-pointer 3)))
+     (elt a 4)))
+  type-error)
+
+(deftest elt-fill-pointer-5
+   (let ((a (make-array '(5)
+			:initial-contents '(#\a #\b #\c #\d #\e)
+			:element-type 'character
+			:fill-pointer 3)))
+     (values (elt a 0) (elt a 1) (elt a 2)))
+   #\a #\b #\c)
+
+(deftest elt-fill-pointer-6
+  (classify-error
+   (let ((a (make-array '(5)
+			:initial-contents '(#\a #\b #\c #\d #\e)
+			:element-type 'character
+			:fill-pointer 3)))
+     (elt a 4)))
+  type-error)
+
+(deftest elt-fill-pointer-7
+   (let ((a (make-array '(5)
+			:initial-contents '(#\a #\b #\c #\d #\e)
+			:element-type 'base-char
+			:fill-pointer 3)))
+     (values (elt a 0) (elt a 1) (elt a 2)))
+   #\a #\b #\c)
+
+(deftest elt-fill-pointer-8
+  (classify-error
+   (let ((a (make-array '(5)
+			:initial-contents '(#\a #\b #\c #\d #\e)
+			:element-type 'base-char
+			:fill-pointer 3)))
+     (elt a 4)))
+  type-error)

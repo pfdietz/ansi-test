@@ -194,4 +194,53 @@
   (classify-error (array-unsigned-byte-fill-test-fn 8 17 :end 'a))
   type-error)
 
+;;; Tests on arrays with fill pointers
 
+(deftest array-fill-pointer-fill.1
+  (let ((s1 (make-array '(10) :fill-pointer 5 :initial-element nil)))
+    (fill s1 'a)
+    (loop for i from 0 to 9 collect (aref s1 i)))
+  (a a a a a nil nil nil nil nil))
+
+(deftest array-fill-pointer-fill.2
+  (let ((s1 (make-array '(10) :fill-pointer 5 :initial-element nil)))
+    (fill s1 'a :end nil)
+    (loop for i from 0 to 9 collect (aref s1 i)))
+  (a a a a a nil nil nil nil nil))
+
+;;; Tests on strings
+
+(deftest fill.string.1
+  (let* ((s1 (copy-seq "abcde"))
+	 (s2 (fill s1 #\z)))
+    (values (eqt s1 s2) s2))
+  t
+  "zzzzz")
+
+(deftest fill.string.2
+  (let* ((s1 (copy-seq "abcde"))
+	 (s2 (fill s1 #\z :start 0 :end 1)))
+    (values (eqt s1 s2) s2))
+  t
+  "zbcde")
+
+(deftest fill.string.3
+  (let* ((s1 (copy-seq "abcde"))
+	 (s2 (fill s1 #\z :end 2)))
+    (values (eqt s1 s2) s2))
+  t
+  "zzcde")
+
+(deftest fill.string.4
+  (let* ((s1 (copy-seq "abcde"))
+	 (s2 (fill s1 #\z :end nil)))
+    (values (eqt s1 s2) s2))
+  t
+  "zzzzz")
+
+
+
+
+
+	
+  

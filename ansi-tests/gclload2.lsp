@@ -78,6 +78,7 @@
 (load "loop2.lsp")
 (load "loop3.lsp")
 (load "loop4.lsp")
+(load "loop5.lsp")
 
 ;;; Tests of conses
 
@@ -113,7 +114,7 @@
 
 ;;; Tests of sequences
 
-;;; (load "copy-seq.lsp")
+(load "copy-seq.lsp")
 (load "elt.lsp")
 (load "fill.lsp")
 (load "fill-strings.lsp")
