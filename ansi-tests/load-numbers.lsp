@@ -14,3 +14,7 @@
 (load "zerop.lsp")
 (load "floor.lsp")
 (load "ffloor.lsp")
+(load "ceiling.lsp")
+(load "fceiling.lsp")
+(load "truncate.lsp")
+(load "ftruncate.lsp")
