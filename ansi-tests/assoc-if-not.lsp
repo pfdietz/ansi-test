@@ -141,7 +141,7 @@
   type-error)
 
 (deftest assoc-if-not.error.12
-  (classify-error (assoc-if-not #'identity ((a . b) :bad (c . d))))
+  (classify-error (assoc-if-not #'identity '((a . b) :bad (c . d))))
   type-error)
 
 (deftest assoc-if-not.error.13
