@@ -13,6 +13,4 @@
 (compile-and-load "define-condition-aux.lsp")
 (load "define-condition.lsp")
 (load "restart-bind.lsp")
-
-
-
+(load "restart-case.lsp")
