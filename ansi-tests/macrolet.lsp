@@ -144,11 +144,194 @@
   a)
 
 (deftest macrolet.16
-   (loop for s in *cl-non-function-macro-special-operator-symbols*
+  (loop for s in *cl-non-function-macro-special-operator-symbols*
 	for form = `(classify-error (macrolet ((,s () ''a)) (,s)))
 	unless (eq (eval form) 'a)
 	collect s)
   nil)
+
+(deftest macrolet.17
+  (macrolet ((%m (&key (a t)) `(quote ,a)))
+    (%m :a nil))
+  nil)
+
+(deftest macrolet.18
+  (macrolet ((%m (&key (a t a-p)) `(quote (,a ,(notnot a-p)))))
+    (%m :a nil))
+  (nil t))
+
+(deftest macrolet.19
+  (macrolet ((%m (x &optional y) `(quote (,x ,y))))
+    (values (%m 1) (%m 2 3)))
+  (1 nil)
+  (2 3))
+
+(deftest macrolet.20
+  (macrolet ((%m (x &optional (y 'a)) `(quote (,x ,y))))
+    (values (%m 1) (%m 2 3)))
+  (1 a)
+  (2 3))
+
+;;; Note -- the supplied-p parameter in a macrolet &optional
+;;; is required to be T (not just true) if the parameter is present.
+;;; See section 3.4.4.1.2
+(deftest macrolet.21
+  (macrolet ((%m (x &optional (y 'a y-p)) `(quote (,x ,y ,y-p))))
+    (values (%m 1) (%m 2 3)))
+  (1 a nil)
+  (2 3 t))
+
+(deftest macrolet.22
+  (macrolet ((%m (x &optional ((y z) '(2 3))) `(quote (,x ,y ,z))))
+    (values
+     (%m a)
+     (%m a (b c))))
+  (a 2 3)
+  (a b c))
+
+(deftest macrolet.22
+  (macrolet ((%m (x &optional ((y z) '(2 3) y-z-p))
+		 `(quote (,x ,y ,z ,y-z-p))))
+    (values
+     (%m a)
+     (%m a (b c))))
+  (a 2 3 nil)
+  (a b c t))
+
+(deftest macrolet.23
+  (macrolet ((%m (&rest y) `(quote ,y)))
+    (%m 1 2 3))
+  (1 2 3))
+
+;;; According to 3.4.4.1.2, the entity following &rest is
+;;; 'a destructuring pattern that matches the rest of the list.'
+
+(deftest macrolet.24
+  (macrolet ((%m (&rest (x y z)) `(quote (,x ,y ,z))))
+    (%m 1 2 3))
+  (1 2 3))
+
+(deftest macrolet.25
+  (macrolet ((%m (&body (x y z)) `(quote (,x ,y ,z))))
+    (%m 1 2 3))
+  (1 2 3))
+
+;;; More key parameters
+
+(deftest macrolet.26
+  (macrolet ((%m (&key ((:a b))) `(quote ,b)))
+    (values (%m)
+	    (%m :a x)))
+  nil
+  x)
+
+(deftest macrolet.27
+  (macrolet ((%m (&key ((:a (b c)))) `(quote (,c ,b))))
+    (%m :a (1 2)))
+  (2 1))
+
+(deftest macrolet.28
+  (macrolet ((%m (&key ((:a (b c)) '(3 4))) `(quote (,c ,b))))
+    (values (%m :a (1 2))
+	    (%m :a (1 2) :a (10 11))
+	    (%m)))
+  (2 1)
+  (2 1)
+  (4 3))
+
+(deftest macrolet.29
+  (macrolet ((%m (&key a (b a)) `(quote (,a ,b))))
+    (values (%m)
+	    (%m :a 1)
+	    (%m :b 2)
+	    (%m :a 3 :b 4)
+	    (%m :b 5 :a 6)
+	    (%m :a 7 :a 8)
+	    (%m :a 9 :b nil)
+	    (%m :a 10 :b nil :b 11)))
+  (nil nil)
+  (1 1)
+  (nil 2)
+  (3 4)
+  (6 5)
+  (7 7)
+  (9 nil)
+  (10 nil))
+
+(deftest macrolet.30
+  (macrolet ((%m ((&key a) &key (b a)) `(quote (,a ,b))))
+    (values (%m ())
+	    (%m (:a 1))
+	    (%m () :b 2)
+	    (%m (:a 3) :b 4)
+	    (%m (:a 7 :a 8))
+	    (%m (:a 9) :b nil)
+	    (%m (:a 10) :b nil :b 11)))
+  (nil nil)
+  (1 1)
+  (nil 2)
+  (3 4)
+  (7 7)
+  (9 nil)
+  (10 nil))
+
+(deftest macrolet.31
+  (macrolet ((%m (&key ((:a (b c)) '(3 4) a-p))
+		 `(quote (,(notnot a-p) ,c ,b))))
+    (values (%m :a (1 2))
+	    (%m :a (1 2) :a (10 11))
+	    (%m)))
+  (t 2 1)
+  (t 2 1)
+  (nil 4 3))
+
+;;; Allow-other-keys tests
+
+(deftest macrolet.32
+  (macrolet ((%m (&key a b c) `(quote (,a ,b ,c))))
+    (values
+     (%m :allow-other-keys nil)
+     (%m :a 1 :allow-other-keys nil)
+     (%m :allow-other-keys t)
+     (%m :allow-other-keys t :allow-other-keys nil :foo t)
+     (%m :allow-other-keys t :c 1 :b 2 :a 3)
+     (%m :allow-other-keys nil :c 1 :b 2 :a 3)))
+  (nil nil nil)
+  (1 nil nil)
+  (nil nil nil)
+  (nil nil nil)
+  (3 2 1)
+  (3 2 1))
+
+(deftest macrolet.33
+  (macrolet ((%m (&key allow-other-keys) `(quote ,allow-other-keys)))
+    (values
+     (%m)
+     (%m :allow-other-keys nil)
+     (%m :allow-other-keys t :foo t)))
+  nil
+  nil
+  t)
+
+(deftest macrolet.34
+  (macrolet ((%m (&key &allow-other-keys) :good))
+    (values
+     (%m)
+     (%m :foo t)
+     (%m :allow-other-keys nil :foo t)))
+  :good
+  :good
+  :good)
+
+(deftest macrolet.35
+  (macrolet ((%m (&key a b &allow-other-keys) `(quote (,a ,b))))
+    (values
+     (%m :a 1)
+     (%m :foo t :b 2)
+     (%m :allow-other-keys nil :a 1 :foo t :b 2)))
+  (1 nil)
+  (nil 2)
+  (1 2))
 
 ;;; Symbol-macrolet tests
 
