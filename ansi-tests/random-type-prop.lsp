@@ -57,6 +57,7 @@
 ;;; (compile-and-load "random-type-prop.lsp")
 ;;; (in-package :cl-test)
 ;;; #+sbcl (setq *default-arg-the* nil)   ;; This reduces the rate at which the sbcl IR2 type check bug occurs
+;;; (load "random-type-prop-tests.lsp")
 ;;; (let (*catch-errors*) (do-test '<testname>))
 ;;; or (let (*catch-errors*) (do-tests))
 ;;;
