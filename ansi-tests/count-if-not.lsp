@@ -418,6 +418,36 @@
 		   (count-if-not #'%onep a :from-end t)))))
   2 3 2 3)
 
+;;; Argument order tests
+
+(deftest count-if-not-order.1
+  (let ((i 0) c1 c2 c3 c4 c5 c6)
+    (values
+     (count-if-not
+      (progn (setf c1 (incf i)) #'null)
+      (progn (setf c2 (incf i)) '(a nil b c nil d e))
+      :start (progn (setf c3 (incf i)) 0)
+      :end (progn (setf c4 (incf i)) 3)
+      :key (progn (setf c5 (incf i)) #'not)
+      :from-end (progn (setf c6 (incf i)) nil)
+      )
+     i c1 c2 c3 c4 c5 c6))
+  1 6 1 2 3 4 5 6)
+
+(deftest count-if-not-order.2
+  (let ((i 0) c1 c2 c3 c4 c5 c6)
+    (values
+     (count-if-not
+      (progn (setf c1 (incf i)) #'null)
+      (progn (setf c2 (incf i)) '(a nil b c nil d e))
+      :from-end (progn (setf c3 (incf i)) nil)
+      :key (progn (setf c4 (incf i)) #'not)
+      :end (progn (setf c5 (incf i)) 3)
+      :start (progn (setf c6 (incf i)) 0)
+      )
+     i c1 c2 c3 c4 c5 c6))
+  1 6 1 2 3 4 5 6)
+
 ;;; Keyword tests
 
 (deftest count-if-not.keywords.1

@@ -10,156 +10,156 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; union
 
-(deftest union-1
-    (union nil nil)
+(deftest union.1
+  (union nil nil)
   nil)
 
-(deftest union-2
-    (union-with-check (list 'a) nil)
+(deftest union.2
+  (union-with-check (list 'a) nil)
   (a))
 
-(deftest union-3
-    (union-with-check (list 'a) (list 'a))
+(deftest union.3
+  (union-with-check (list 'a) (list 'a))
   (a))
 
 (deftest union-4
-    (union-with-check (list 1) (list 1))
+  (union-with-check (list 1) (list 1))
   (1))
 
-(deftest union-5
-    (let ((x (list 'a 'b)))
-      (union-with-check (list x) (list x)))
+(deftest union.5
+  (let ((x (list 'a 'b)))
+    (union-with-check (list x) (list x)))
   ((a b)))
 
-(deftest union-6
-    (let ((x (copy-list '(a b c d e f)))
-	  (y (copy-list '(z c y a v b))))
-      (let ((result (union-with-check x y)))
-	(check-union x y result)))
+(deftest union.6
+  (let ((x (copy-list '(a b c d e f)))
+	(y (copy-list '(z c y a v b))))
+    (let ((result (union-with-check x y)))
+      (check-union x y result)))
   t)
 
-(deftest union-6-a
-    (let ((x (copy-list '(a b c d e f)))
-	  (y (copy-list '(z c y a v b))))
-      (let ((result (union-with-check x y :test #'eq)))
-	(check-union x y result)))
+(deftest union.6-a
+  (let ((x (copy-list '(a b c d e f)))
+	(y (copy-list '(z c y a v b))))
+    (let ((result (union-with-check x y :test #'eq)))
+      (check-union x y result)))
   t)
 
-(deftest union-7
-    (let ((x (copy-list '(a b c d e f)))
-	  (y (copy-list '(z c y a v b))))
-      (let ((result (union-with-check x y :test #'eql)))
-	(check-union x y result)))
+(deftest union.7
+  (let ((x (copy-list '(a b c d e f)))
+	(y (copy-list '(z c y a v b))))
+    (let ((result (union-with-check x y :test #'eql)))
+      (check-union x y result)))
   t)
 
-(deftest union-8
-    (let ((x (copy-list '(a b c d e f)))
-	  (y (copy-list '(z c y a v b))))
-      (let ((result (union-with-check x y :test #'equal)))
-	(check-union x y result)))
+(deftest union.8
+  (let ((x (copy-list '(a b c d e f)))
+	(y (copy-list '(z c y a v b))))
+    (let ((result (union-with-check x y :test #'equal)))
+      (check-union x y result)))
   t)
 
-(deftest union-9
-    (let ((x (copy-list '(a b c d e f)))
-	  (y (copy-list '(z c y a v b))))
-      (let ((result (union-with-check x y :test-not (complement #'eql))))
-	(check-union x y result)))
+(deftest union.9
+  (let ((x (copy-list '(a b c d e f)))
+	(y (copy-list '(z c y a v b))))
+    (let ((result (union-with-check x y :test-not (complement #'eql))))
+      (check-union x y result)))
   t)
 
-(deftest union-10
-    (let ((x (copy-list '(a b c d e f)))
-	  (y (copy-list '(z c y a v b))))
-      (let ((result (union-with-check x y :test-not (complement #'equal))))
-	(check-union x y result)))
+(deftest union.10
+  (let ((x (copy-list '(a b c d e f)))
+	(y (copy-list '(z c y a v b))))
+    (let ((result (union-with-check x y :test-not (complement #'equal))))
+      (check-union x y result)))
   t)
 
-(deftest union-11
-    (let ((x (copy-list '(a b c d e f)))
-	  (y (copy-list '(z c y a v b))))
-      (let ((result (union-with-check x y :test-not (complement #'eq))))
-	(check-union x y result)))
+(deftest union.11
+  (let ((x (copy-list '(a b c d e f)))
+	(y (copy-list '(z c y a v b))))
+    (let ((result (union-with-check x y :test-not (complement #'eq))))
+      (check-union x y result)))
   t)
 
-(deftest union-12
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check x y)))
-	(check-union x y result)))
+(deftest union.12
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check x y)))
+      (check-union x y result)))
   t)
 
-(deftest union-13
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check x y :test #'equal)))
-	(check-union x y result)))
+(deftest union.13
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check x y :test #'equal)))
+      (check-union x y result)))
   t)
 
-(deftest union-14
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check x y :test #'eql)))
-	(check-union x y result)))
+(deftest union.14
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check x y :test #'eql)))
+      (check-union x y result)))
   t)
 
-(deftest union-15
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check x y :test-not (complement #'equal))))
-	(check-union x y result)))
+(deftest union.15
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check x y :test-not (complement #'equal))))
+      (check-union x y result)))
   t)
 
-(deftest union-16
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check x y :test-not (complement  #'eql))))
-	(check-union x y result)))
+(deftest union.16
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check x y :test-not (complement  #'eql))))
+      (check-union x y result)))
   t)
 
-(deftest union-17
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check-and-key x y #'1+)))
-	(check-union x y result)))
+(deftest union.17
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check-and-key x y #'1+)))
+      (check-union x y result)))
   t)
 
-(deftest union-18
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check-and-key x y #'1+ :test #'equal)))
-	(check-union x y result)))
+(deftest union.18
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check-and-key x y #'1+ :test #'equal)))
+      (check-union x y result)))
   t)
 
-(deftest union-19
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check-and-key x y #'1+ :test #'eql)))
-	(check-union x y result)))
+(deftest union.19
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check-and-key x y #'1+ :test #'eql)))
+      (check-union x y result)))
   t)
 
-(deftest union-20
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check-and-key x y #'1+
-					      :test-not (complement #'equal))))
-	(check-union x y result)))
+(deftest union.20
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check-and-key x y #'1+
+					    :test-not (complement #'equal))))
+      (check-union x y result)))
   t)
 
-(deftest union-21
-    (let ((x (copy-list '(1 2 3 4 5 6 7)))
-	  (y (copy-list '(10 19 5 3 17 1001 2))))
-      (let ((result (union-with-check-and-key x y #'1+
-					      :test-not (complement #'equal))))
-	(check-union x y result)))
+(deftest union.21
+  (let ((x (copy-list '(1 2 3 4 5 6 7)))
+	(y (copy-list '(10 19 5 3 17 1001 2))))
+    (let ((result (union-with-check-and-key x y #'1+
+					    :test-not (complement #'equal))))
+      (check-union x y result)))
   t)
 
-(deftest union-22
+(deftest union.22
   (let ((x (copy-list '(1 2 3 4 5 6 7)))
 	(y (copy-list '(10 19 5 3 17 1001 2))))
     (let ((result (union-with-check-and-key x y nil)))
       (check-union x y result)))
   t)
 
-(deftest union-23
+(deftest union.23
   (let ((x (copy-list '(1 2 3 4 5 6 7)))
 	(y (copy-list '(10 19 5 3 17 1001 2))))
     (let ((result (union-with-check-and-key x y '1+)))
@@ -168,11 +168,11 @@
 
 ;; Do large numbers of random units
 
-(deftest union-24
+(deftest union.24
   (do-random-unions 100 100 200)
   nil)
 
-(deftest union-25
+(deftest union.25
   (let ((x (shuffle '(1 4 6 10 45 101)))
 	(y (copy-list '(102 5 2 11 44 6))))
     (let ((result (union-with-check x y
@@ -189,7 +189,7 @@
 
 ;;; Check that union uses eql, not equal or eq
 
-(deftest union-26
+(deftest union.26
   (let ((x 1000)
 	(y 1000))
     (loop
@@ -206,63 +206,103 @@
 	   1))))
   t)
 
-(deftest union-27
+(deftest union.27
   (union-with-check (list (copy-seq "aa"))
 		    (list (copy-seq "aa")))
   ("aa" "aa"))
 
 ;; Check that union does not reverse the arguments to :test, :test-not
 
-(deftest union-28
-    (block fail
-      (sort
-       (union-with-check
-	(list 1 2 3)
-	(list 4 5 6)
-	:test #'(lambda (x y)
-		  (when (< y x) (return-from fail 'fail))
-		  (eql x y)))
-       #'<))
+(deftest union.28
+  (block fail
+    (sort
+     (union-with-check
+      (list 1 2 3)
+      (list 4 5 6)
+      :test #'(lambda (x y)
+		(when (< y x) (return-from fail 'fail))
+		(eql x y)))
+     #'<))
   (1 2 3 4 5 6))
 
-(deftest union-29
-    (block fail
-      (sort
-       (union-with-check-and-key
-	(list 1 2 3)
-	(list 4 5 6)
-	#'identity
-	:test #'(lambda (x y)
-		  (when (< y x) (return-from fail 'fail))
-		  (eql x y)))
-       #'<))
+(deftest union.29
+  (block fail
+    (sort
+     (union-with-check-and-key
+      (list 1 2 3)
+      (list 4 5 6)
+      #'identity
+      :test #'(lambda (x y)
+		(when (< y x) (return-from fail 'fail))
+		(eql x y)))
+     #'<))
   (1 2 3 4 5 6))
 
-(deftest union-30
-    (block fail
-      (sort
-       (union-with-check
-	(list 1 2 3)
-	(list 4 5 6)
-	:test-not
-	#'(lambda (x y)
-	    (when (< y x) (return-from fail 'fail))
-	    (not (eql x y))))
-       #'<))
+(deftest union.30
+  (block fail
+    (sort
+     (union-with-check
+      (list 1 2 3)
+      (list 4 5 6)
+      :test-not
+      #'(lambda (x y)
+	  (when (< y x) (return-from fail 'fail))
+	  (not (eql x y))))
+     #'<))
   (1 2 3 4 5 6))
 
-(deftest union-31
-    (block fail
-      (sort
-       (union-with-check-and-key
-	(list 1 2 3)
-	(list 4 5 6)
-	#'identity
-	:test-not #'(lambda (x y)
-		      (when (< y x) (return-from fail 'fail))
-		      (not (eql x y))))
-       #'<))
+(deftest union.31
+  (block fail
+    (sort
+     (union-with-check-and-key
+      (list 1 2 3)
+      (list 4 5 6)
+      #'identity
+      :test-not #'(lambda (x y)
+		    (when (< y x) (return-from fail 'fail))
+		    (not (eql x y))))
+     #'<))
   (1 2 3 4 5 6))
+
+;;; Order of evaluation tests
+
+(deftest union.32
+  (let ((i 0) x y)
+    (values
+     (sort
+      (union (progn (setf x (incf i)) (copy-list '(1 3 5)))
+	     (progn (setf y (incf i)) (copy-list '(2 5 8))))
+      #'<)
+     i x y))
+  (1 2 3 5 8)
+  2 1 2)
+
+(deftest union.33
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (union (progn (setf x (incf i)) (copy-list '(1 3 5)))
+	     (progn (setf y (incf i)) (copy-list '(2 5 8)))
+	     :test (progn (setf z (incf i)) #'eql)
+	     :key (progn (setf w (incf i)) #'identity))
+      #'<)
+     i x y z w))
+  (1 2 3 5 8)
+  4 1 2 3 4)
+
+
+(deftest union.34
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (union (progn (setf x (incf i)) (copy-list '(1 3 5)))
+	     (progn (setf y (incf i)) (copy-list '(2 5 8)))
+	     :key (progn (setf z (incf i)) #'identity)
+	     :test (progn (setf w (incf i)) #'eql))
+      #'<)
+     i x y z w))
+  (1 2 3 5 8)
+  4 1 2 3 4)
 
 ;;; Keyword tests
 

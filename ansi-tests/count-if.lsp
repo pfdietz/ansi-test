@@ -417,6 +417,35 @@
 	    (count-if #'digit-char-p s :start 1 :end 2)))
   3 3 2 2 1)
 
+;;; Argument order tests
+
+(deftest count-if-order.1
+  (let ((i 0) c1 c2 c3 c4 c5 c6)
+    (values
+     (count-if (progn (setf c1 (incf i)) #'null)
+	       (progn (setf c2 (incf i)) '(a nil b c nil d e))
+	       :start (progn (setf c3 (incf i)) 0)
+	       :end (progn (setf c4 (incf i)) 3)
+	       :key (progn (setf c5 (incf i)) #'identity)
+	       :from-end (progn (setf c6 (incf i)) nil)
+	       )
+     i c1 c2 c3 c4 c5 c6))
+  1 6 1 2 3 4 5 6)
+
+(deftest count-if-order.2
+  (let ((i 0) c1 c2 c3 c4 c5 c6)
+    (values
+     (count-if (progn (setf c1 (incf i)) #'null)
+	       (progn (setf c2 (incf i)) '(a nil b c nil d e))
+	       :from-end (progn (setf c3 (incf i)) nil)
+	       :key (progn (setf c4 (incf i)) #'identity)
+	       :end (progn (setf c5 (incf i)) 3)
+	       :start (progn (setf c6 (incf i)) 0)
+	       )
+     i c1 c2 c3 c4 c5 c6))
+  1 6 1 2 3 4 5 6)
+
+
 ;;; Keyword tests
 
 (deftest count-if.allow-other-keys.1

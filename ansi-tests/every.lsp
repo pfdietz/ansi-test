@@ -78,6 +78,14 @@
   (notnot-mv (every 'null '(nil nil nil nil)))
   t)
 
+(deftest every.17
+  (let ((i 0) x y)
+    (values
+     (every (progn (setf x (incf i)) #'null)
+	    (progn (setf y (incf i)) '(nil nil a nil)))
+     i x y))
+  nil 2 1 2)
+
 ;;; Error cases
 
 (deftest every.error.1

@@ -486,6 +486,37 @@
 	 :start 2 :end 5)
   3)
 
+;;; Argument order tests
+
+(deftest count-order.1
+  (let ((i 0) c1 c2 c3 c4 c5 c6 c7)
+    (values
+     (count (progn (setf c1 (incf i)) nil)
+	    (progn (setf c2 (incf i)) '(a nil b c nil d e))
+	    :start (progn (setf c3 (incf i)) 0)
+	    :end (progn (setf c4 (incf i)) 3)
+	    :key (progn (setf c5 (incf i)) #'identity)
+	    :from-end (progn (setf c6 (incf i)) nil)
+	    :test (progn (setf c7 (incf i)) #'eql)
+	    )
+     i c1 c2 c3 c4 c5 c6 c7))
+  1 7 1 2 3 4 5 6 7)
+
+(deftest count-order.2
+  (let ((i 0) c1 c2 c3 c4 c5 c6 c7)
+    (values
+     (count (progn (setf c1 (incf i)) nil)
+	    (progn (setf c2 (incf i)) '(a nil b c nil d e))
+	    :test (progn (setf c3 (incf i)) #'eql)
+	    :from-end (progn (setf c4 (incf i)) nil)
+	    :key (progn (setf c5 (incf i)) #'identity)
+	    :end (progn (setf c6 (incf i)) 3)
+	    :start (progn (setf c7 (incf i)) 0)
+	    )
+     i c1 c2 c3 c4 c5 c6 c7))
+  1 7 1 2 3 4 5 6 7)
+
+
 ;;; Keyword tests
 
 (deftest count.allow-other-keys.1

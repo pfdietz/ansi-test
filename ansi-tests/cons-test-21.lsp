@@ -10,133 +10,133 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nunion
 
-(deftest nunion-1
+(deftest nunion.1
     (nunion nil nil)
   nil)
 
-(deftest nunion-2
+(deftest nunion.2
     (nunion-with-copy (list 'a) nil)
   (a))
 
-(deftest nunion-3
+(deftest nunion.3
     (nunion-with-copy (list 'a) (list 'a))
   (a))
 
-(deftest nunion-4
+(deftest nunion.4
     (nunion-with-copy (list 1) (list 1))
   (1))
 
-(deftest nunion-5
+(deftest nunion.5
     (let ((x (list 'a 'b)))
       (nunion-with-copy (list x) (list x)))
   ((a b)))
 
-(deftest nunion-6
+(deftest nunion.6
     (let ((x '(a b c d e f))
 	  (y '(z c y a v b)))
       (let ((result (nunion-with-copy x y)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-6-a
+(deftest nunion.6-a
     (let ((x '(a b c d e f))
 	  (y '(z c y a v b)))
       (let ((result (nunion-with-copy x y :test #'eq)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-7
+(deftest nunion.7
     (let ((x '(a b c d e f))
 	  (y '(z c y a v b)))
       (let ((result (nunion-with-copy x y :test #'eql)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-8
+(deftest nunion.8
     (let ((x '(a b c d e f))
 	  (y '(z c y a v b)))
       (let ((result (nunion-with-copy x y :test #'equal)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-9
+(deftest nunion.9
     (let ((x  '(a b c d e f))
 	  (y  '(z c y a v b)))
       (let ((result (nunion-with-copy x y :test-not (complement #'eql))))
 	(check-union x y result)))
   t)
 
-(deftest nunion-10
+(deftest nunion.10
     (let ((x '(a b c d e f))
 	  (y '(z c y a v b)))
       (let ((result (nunion-with-copy x y :test-not (complement #'equal))))
 	(check-union x y result)))
   t)
 
-(deftest nunion-11
+(deftest nunion.11
     (let ((x '(a b c d e f))
 	  (y '(z c y a v b)))
       (let ((result (nunion-with-copy x y :test-not (complement #'eq))))
 	(check-union x y result)))
   t)
 
-(deftest nunion-12
+(deftest nunion.12
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy x y)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-13
+(deftest nunion.13
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy x y :test #'equal)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-14
+(deftest nunion.14
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy x y :test #'eql)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-15
+(deftest nunion.15
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy x y :test-not (complement #'equal))))
 	(check-union x y result)))
   t)
 
-(deftest nunion-16
+(deftest nunion.16
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy x y :test-not (complement  #'eql))))
 	(check-union x y result)))
   t)
 
-(deftest nunion-17
+(deftest nunion.17
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy-and-key x y #'1+)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-18
+(deftest nunion.18
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy-and-key x y #'1+ :test #'equal)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-19
+(deftest nunion.19
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy-and-key x y #'1+ :test #'eql)))
 	(check-union x y result)))
   t)
 
-(deftest nunion-20
+(deftest nunion.20
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy-and-key x y #'1+
@@ -144,7 +144,7 @@
 	(check-union x y result)))
   t)
 
-(deftest nunion-21
+(deftest nunion.21
     (let ((x '(1 2 3 4 5 6 7))
 	  (y '(10 19 5 3 17 1001 2)))
       (let ((result (nunion-with-copy-and-key x y #'1+
@@ -152,14 +152,14 @@
 	(check-union x y result)))
   t)
 
-(deftest nunion-22
+(deftest nunion.22
   (let ((x '(1 2 3 4 5 6 7))
 	(y '(10 19 5 3 17 1001 2)))
     (let ((result (nunion-with-copy-and-key x y nil)))
       (check-union x y result)))
   t)
 
-(deftest nunion-23
+(deftest nunion.23
   (let ((x '(1 2 3 4 5 6 7))
 	(y '(10 19 5 3 17 1001 2)))
     (let ((result (nunion-with-copy-and-key x y '1+)))
@@ -168,11 +168,11 @@
 
 ;; Do large numbers of random nunions
 
-(deftest nunion-24
+(deftest nunion.24
   (do-random-nunions 100 100 200)
   nil)
 
-(deftest nunion-25
+(deftest nunion.25
   (let ((x (shuffle '(1 4 6 10 45 101)))
 	(y '(102 5 2 11 44 6)))
     (let ((result (nunion-with-copy x y
@@ -187,7 +187,7 @@
 
 ;; Check that nunion uses eql, not equal or eq
 
-(deftest nunion-26
+(deftest nunion.26
   (let ((x 1000)
 	(y 1000))
     (loop
@@ -203,7 +203,7 @@
 	   1))))
   t)
 
-(deftest nunion-27
+(deftest nunion.27
   (nunion-with-copy (list (copy-seq "aa"))
 		    (list (copy-seq "aa")))
   ("aa" "aa"))
@@ -212,7 +212,7 @@
 
 ;; Check that nunion does not reverse the arguments to :test, :test-not
 
-(deftest nunion-28
+(deftest nunion.28
     (block fail
       (sort
        (nunion-with-copy
@@ -224,7 +224,7 @@
        #'<))
   (1 2 3 4 5 6))
 
-(deftest nunion-29
+(deftest nunion.29
     (block fail
       (sort
        (nunion-with-copy-and-key
@@ -237,7 +237,7 @@
        #'<))
   (1 2 3 4 5 6))
 
-(deftest nunion-30
+(deftest nunion.30
     (block fail
       (sort
        (nunion-with-copy
@@ -250,7 +250,7 @@
        #'<))
   (1 2 3 4 5 6))
 
-(deftest nunion-31
+(deftest nunion.31
     (block fail
       (sort
        (nunion-with-copy-and-key
@@ -262,6 +262,46 @@
 		      (not (eql x y))))
        #'<))
   (1 2 3 4 5 6))
+
+;;; Order of evaluation tests
+
+(deftest nunion.32
+  (let ((i 0) x y)
+    (values
+     (sort
+      (nunion (progn (setf x (incf i)) (copy-list '(1 3 5)))
+	     (progn (setf y (incf i)) (copy-list '(2 5 8))))
+      #'<)
+     i x y))
+  (1 2 3 5 8)
+  2 1 2)
+
+(deftest nunion.33
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (nunion (progn (setf x (incf i)) (copy-list '(1 3 5)))
+	     (progn (setf y (incf i)) (copy-list '(2 5 8)))
+	     :test (progn (setf z (incf i)) #'eql)
+	     :key (progn (setf w (incf i)) #'identity))
+      #'<)
+     i x y z w))
+  (1 2 3 5 8)
+  4 1 2 3 4)
+
+
+(deftest nunion.34
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (nunion (progn (setf x (incf i)) (copy-list '(1 3 5)))
+	     (progn (setf y (incf i)) (copy-list '(2 5 8)))
+	     :key (progn (setf z (incf i)) #'identity)
+	     :test (progn (setf w (incf i)) #'eql))
+      #'<)
+     i x y z w))
+  (1 2 3 5 8)
+  4 1 2 3 4)
 
 ;;; Keyword tests
 

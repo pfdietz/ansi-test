@@ -10,23 +10,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; set-exclusive-or
 
-(deftest set-exclusive-or-1
+(deftest set-exclusive-or.1
     (set-exclusive-or nil nil)
   nil)
 
-(deftest set-exclusive-or-2
+(deftest set-exclusive-or.2
     (let ((result
 	   (set-exclusive-or-with-check '(a b c) nil)))
       (check-set-exclusive-or '(a b c) nil result))
   t)
 
-(deftest set-exclusive-or-3
+(deftest set-exclusive-or.3
     (let ((result
 	   (set-exclusive-or-with-check '(a b c d e f) '(f b d))))
       (check-set-exclusive-or '(a b c d e f) '(f b d) result))
   t)
 
-(deftest set-exclusive-or-4
+(deftest set-exclusive-or.4
     (sort
      (copy-list
       (set-exclusive-or-with-check (shuffle '(1 2 3 4 5 6 7 8))
@@ -34,75 +34,75 @@
      #'<)
   (1 3 5 6 8 10 74 101 1391 17831))
 
-(deftest set-exclusive-or-5
+(deftest set-exclusive-or.5
     (check-set-exclusive-or
      nil
      '(a b c d e f g h)
      (set-exclusive-or-with-check nil '(a b c d e f g h)))
   t)
 
-(deftest set-exclusive-or-6
+(deftest set-exclusive-or.6
   (set-exclusive-or-with-check '(a b c d e) '(d a b e)
 			       :key nil)
   (c))
 
-(deftest set-exclusive-or-7
+(deftest set-exclusive-or.7
     (set-exclusive-or-with-check '(a b c d e) '(d a b e) :test #'eq)
   (c))
 
-(deftest set-exclusive-or-7-a
+(deftest set-exclusive-or.7-a
     (set-exclusive-or-with-check '(d a b e) '(a b c d e) :test #'eq)
   (c))
 
-(deftest set-exclusive-or-8
+(deftest set-exclusive-or.8
     (set-exclusive-or-with-check '(a b c d e) '(d a b e) :test #'eql)
   (c))
 
-(deftest set-exclusive-or-8-a
+(deftest set-exclusive-or.8-a
     (set-exclusive-or-with-check '(e d b a) '(a b c d e) :test #'eql)
   (c))
 
-(deftest set-exclusive-or-8-b
+(deftest set-exclusive-or.8-b
     (set-exclusive-or-with-check '(a b c d e) '(d a b e)
 				 :test-not (complement #'eql))
   (c))
 
-(deftest set-exclusive-or-9
+(deftest set-exclusive-or.9
     (set-exclusive-or-with-check '(a b c d e) '(d a b e) :test #'equal)
   (c))
 
-(deftest set-exclusive-or-10
+(deftest set-exclusive-or.10
     (set-exclusive-or-with-check '(a b c d e) '(d a b e)
 			       :test 'eq)
   (c))
 
-(deftest set-exclusive-or-11
+(deftest set-exclusive-or.11
     (set-exclusive-or-with-check '(a b c d e) '(d a b e)
 			       :test 'eql)
   (c))
 
-(deftest set-exclusive-or-12
+(deftest set-exclusive-or.12
     (set-exclusive-or-with-check '(a b c d e) '(d a b e)
 			       :test 'equal)
   (c))
 
-(deftest set-exclusive-or-13
+(deftest set-exclusive-or.13
     (do-random-set-exclusive-ors 100 100)
   nil)
 
-(deftest set-exclusive-or-14
+(deftest set-exclusive-or.14
     (set-exclusive-or-with-check '((a . 1) (b . 2) (c . 3012))
 			       '((a . 10) (c . 3))
 			       :key 'car)
   ((b . 2)))
 
-(deftest set-exclusive-or-15
+(deftest set-exclusive-or.15
     (set-exclusive-or-with-check '((a . xx) (b . 2) (c . 3))
 			       '((a . 1) (c . 3313))
 			       :key #'car)
   ((b . 2)))
 
-(deftest set-exclusive-or-16
+(deftest set-exclusive-or.16
     (set-exclusive-or-with-check '((a . xx) (b . 2) (c . 3))
 			       '((a . 1) (c . 3313))
 			       :key #'car
@@ -113,7 +113,7 @@
 ;; Check that set-exclusive-or does not invert
 ;; the order of the arguments to the test function
 ;;
-(deftest set-exclusive-or-17
+(deftest set-exclusive-or.17
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -126,7 +126,7 @@
 		    (return-from fail 'failed)))))))
   t)
 
-(deftest set-exclusive-or-17-a
+(deftest set-exclusive-or.17-a
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -140,7 +140,7 @@
 		    (return-from fail 'failed)))))))
   t)
 
-(deftest set-exclusive-or-18
+(deftest set-exclusive-or.18
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -155,7 +155,7 @@
 	    t)))))
   t)
 
-(deftest set-exclusive-or-18-a
+(deftest set-exclusive-or.18-a
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -170,6 +170,80 @@
 	      (return-from fail 'failed))
 	    t)))))
   t)
+
+;;; Order of argument evaluation tests
+
+(deftest set-exclusive-or.19
+  (let ((i 0) x y)
+    (values
+     (sort
+      (set-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10)))
+      #'<)
+     i x y))
+  (2 4 6 10) 2 1 2)
+
+(deftest set-exclusive-or.20
+  (let ((i 0) x y z)
+    (values
+     (sort
+      (set-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:test (progn (setf z (incf i))
+				     #'eql))
+      #'<)
+     i x y z))
+  (2 4 6 10) 3 1 2 3)
+
+(deftest set-exclusive-or.21
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (set-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:test (progn (setf z (incf i))
+				     #'eql)
+			:key (progn (setf w (incf i)) nil))
+      #'<)
+     i x y z w))
+  (2 4 6 10) 4 1 2 3 4)
+
+(deftest set-exclusive-or.22
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (set-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:key (progn (setf z (incf i)) nil)
+			:test (progn (setf w (incf i))
+				     #'eql))
+      #'<)
+     i x y z w))
+  (2 4 6 10) 4 1 2 3 4)
+
+(deftest set-exclusive-or.23
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (set-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:key (progn (setf z (incf i)) nil)
+			:key (progn (setf w (incf i))
+				    (complement #'eql)))
+      #'<)
+     i x y z w))
+  (2 4 6 10) 4 1 2 3 4)
+
 
 ;;; Keyword tests
 
@@ -261,23 +335,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-exclusive-or
 
-(deftest nset-exclusive-or-1
+(deftest nset-exclusive-or.1
     (nset-exclusive-or nil nil)
   nil)
 
-(deftest nset-exclusive-or-2
+(deftest nset-exclusive-or.2
     (let ((result
 	   (nset-exclusive-or-with-check '(a b c) nil)))
       (check-set-exclusive-or '(a b c) nil result))
   t)
 
-(deftest nset-exclusive-or-3
+(deftest nset-exclusive-or.3
     (let ((result
 	   (nset-exclusive-or-with-check '(a b c d e f) '(f b d))))
       (check-set-exclusive-or '(a b c d e f) '(f b d) result))
   t)
 
-(deftest nset-exclusive-or-4
+(deftest nset-exclusive-or.4
     (sort
      (copy-list
       (nset-exclusive-or-with-check (shuffle '(1 2 3 4 5 6 7 8))
@@ -285,75 +359,75 @@
      #'<)
   (1 3 5 6 8 10 74 101 1391 17831))
 
-(deftest nset-exclusive-or-5
+(deftest nset-exclusive-or.5
     (check-set-exclusive-or
      nil
      '(a b c d e f g h)
      (nset-exclusive-or-with-check nil '(a b c d e f g h)))
   t)
 
-(deftest nset-exclusive-or-6
+(deftest nset-exclusive-or.6
   (nset-exclusive-or-with-check '(a b c d e) '(d a b e)
 				:key nil)
   (c))
 
-(deftest nset-exclusive-or-7
+(deftest nset-exclusive-or.7
     (nset-exclusive-or-with-check '(a b c d e) '(d a b e) :test #'eq)
   (c))
 
-(deftest nset-exclusive-or-7-a
+(deftest nset-exclusive-or.7-a
     (nset-exclusive-or-with-check '(d a b e) '(a b c d e) :test #'eq)
   (c))
 
-(deftest nset-exclusive-or-8
+(deftest nset-exclusive-or.8
     (nset-exclusive-or-with-check '(a b c d e) '(d a b e) :test #'eql)
   (c))
 
-(deftest nset-exclusive-or-8-a
+(deftest nset-exclusive-or.8-a
     (nset-exclusive-or-with-check '(e d b a) '(a b c d e) :test #'eql)
   (c))
 
-(deftest nset-exclusive-or-8-b
+(deftest nset-exclusive-or.8-b
     (nset-exclusive-or-with-check '(a b c d e) '(d a b e)
 				  :test-not (complement #'eql))
   (c))
 
-(deftest nset-exclusive-or-9
+(deftest nset-exclusive-or.9
     (nset-exclusive-or-with-check '(a b c d e) '(d a b e) :test #'equal)
   (c))
 
-(deftest nset-exclusive-or-10
+(deftest nset-exclusive-or.10
     (nset-exclusive-or-with-check '(a b c d e) '(d a b e)
 			       :test 'eq)
   (c))
 
-(deftest nset-exclusive-or-11
+(deftest nset-exclusive-or.11
     (nset-exclusive-or-with-check '(a b c d e) '(d a b e)
 			       :test 'eql)
   (c))
 
-(deftest nset-exclusive-or-12
+(deftest nset-exclusive-or.12
     (nset-exclusive-or-with-check '(a b c d e) '(d a b e)
 			       :test 'equal)
   (c))
 
-(deftest nset-exclusive-or-13
+(deftest nset-exclusive-or.13
     (do-random-nset-exclusive-ors 100 100)
   nil)
 
-(deftest nset-exclusive-or-14
+(deftest nset-exclusive-or.14
     (nset-exclusive-or-with-check '((a . 1) (b . 2) (c . 3012))
 			       '((a . 10) (c . 3))
 			       :key 'car)
   ((b . 2)))
 
-(deftest nset-exclusive-or-15
+(deftest nset-exclusive-or.15
     (nset-exclusive-or-with-check '((a . xx) (b . 2) (c . 3))
 			       '((a . 1) (c . 3313))
 			       :key #'car)
   ((b . 2)))
 
-(deftest nset-exclusive-or-16
+(deftest nset-exclusive-or.16
     (nset-exclusive-or-with-check '((a . xx) (b . 2) (c . 3))
 			       '((a . 1) (c . 3313))
 			       :key #'car
@@ -364,7 +438,7 @@
 ;; Check that nset-exclusive-or does not invert
 ;; the order of the arguments to the test function
 ;;
-(deftest nset-exclusive-or-17
+(deftest nset-exclusive-or.17
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -377,7 +451,7 @@
 		    (return-from fail 'failed)))))))
   t)
 
-(deftest nset-exclusive-or-17-a
+(deftest nset-exclusive-or.17-a
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -391,7 +465,7 @@
 		    (return-from fail 'failed)))))))
   t)
 
-(deftest nset-exclusive-or-18
+(deftest nset-exclusive-or.18
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -406,7 +480,7 @@
 	    t)))))
   t)
 
-(deftest nset-exclusive-or-18-a
+(deftest nset-exclusive-or.18-a
   (let ((list1 '(a b c d))
 	(list2 '(e f g h)))
     (block fail
@@ -421,6 +495,80 @@
 	      (return-from fail 'failed))
 	    t)))))
   t)
+
+;;; Order of argument evaluation tests
+
+(deftest nset-exclusive-or.19
+  (let ((i 0) x y)
+    (values
+     (sort
+      (nset-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10)))
+      #'<)
+     i x y))
+  (2 4 6 10) 2 1 2)
+
+(deftest nset-exclusive-or.20
+  (let ((i 0) x y z)
+    (values
+     (sort
+      (nset-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:test (progn (setf z (incf i))
+				     #'eql))
+      #'<)
+     i x y z))
+  (2 4 6 10) 3 1 2 3)
+
+(deftest nset-exclusive-or.21
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (nset-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:test (progn (setf z (incf i))
+				     #'eql)
+			:key (progn (setf w (incf i)) nil))
+      #'<)
+     i x y z w))
+  (2 4 6 10) 4 1 2 3 4)
+
+(deftest nset-exclusive-or.22
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (nset-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:key (progn (setf z (incf i)) nil)
+			:test (progn (setf w (incf i))
+				     #'eql))
+      #'<)
+     i x y z w))
+  (2 4 6 10) 4 1 2 3 4)
+
+(deftest nset-exclusive-or.23
+  (let ((i 0) x y z w)
+    (values
+     (sort
+      (nset-exclusive-or (progn (setf x (incf i))
+			       (list 1 2 3 4))
+			(progn (setf y (incf i))
+			       (list 1 3 6 10))
+			:key (progn (setf z (incf i)) nil)
+			:key (progn (setf w (incf i))
+				    (complement #'eql)))
+      #'<)
+     i x y z w))
+  (2 4 6 10) 4 1 2 3 4)
+
 
 ;;; Keyword tests
 

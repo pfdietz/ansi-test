@@ -61,6 +61,13 @@
   (equalt (copy-seq #*000110) (copy-seq #*000111))
   nil)
 
+(deftest equal.13
+  (let ((i 0) x y)
+    (values
+     (equal (setf x (incf i)) (setf y (incf i)))
+     i x y))
+  nil 2 1 2)
+
 (deftest equal.error.1
   (classify-error (equal))
   program-error)

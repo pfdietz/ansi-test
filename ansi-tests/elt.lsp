@@ -123,6 +123,25 @@
      (elt x #\w)))
   type-error)
 
+(deftest elt.20
+  (let ((i 0) x y)
+    (values
+     (elt (progn (setf x (incf i)) '(a b c d e))
+	  (progn (setf y (incf i)) 3))
+     i x y))
+  d 2 1 2)
+
+(deftest elt.21
+  (let ((i 0) x y z)
+    (let ((a (make-array 1 :initial-element (list 'a 'b 'c 'd 'e))))
+      (values
+       (setf (elt (aref a (progn (setf x (incf i)) 0))
+		  (progn (setf y (incf i)) 3))
+	     (progn (setf z (incf i)) 'k))
+       (aref a 0)
+       i x y z)))
+  k (a b c k e) 3 1 2 3)
+
 (deftest elt-v-1
   (classify-error
    (elt (make-array '(0)) 0))
@@ -347,5 +366,3 @@
 (deftest elt.error.3
   (classify-error (elt nil 0 nil))
   program-error)
-
-

@@ -27,6 +27,13 @@
   (equalpt "abc" "abd")
   nil)
 
+(deftest equalp.5
+  (let ((i 0) x y)
+    (values
+     (equalp (setf x (incf i)) (setf y (incf i)))
+     i x y))
+  nil 2 1 2)
+
 (deftest equalp.error.1
   (classify-error (equalp))
   program-error)
