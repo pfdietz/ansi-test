@@ -33,6 +33,15 @@
     (notnot (eql rt rt2)))
   t)
 
+;;; NIL as a readtable designator indicating the standard readtable
+(deftest copy-readtable.7
+  (let ((rt (copy-readtable nil)))
+    (values
+     (notnot rt)
+     (notnot (readtablep rt))
+     (not (eql rt *readtable*))))
+  t t t)
+
 ;;; Error tests
 
 (deftest copy-readtable.error.1
