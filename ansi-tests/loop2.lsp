@@ -76,12 +76,12 @@
   (classify-error
    (loop for x in '(a b c)
 	 for x in '(d e f) collect x))
-  programm-error)
+  program-error)
 
 (deftest loop.2.15
   (classify-error
    (loop for (x . x) in '((a b) (c d)) collect x))
-  programm-error)
+  program-error)
 
 (deftest loop.2.16
   (loop for nil in nil do (return t))
