@@ -432,8 +432,11 @@
    program-error)
   t)
 
+(defconstant constant-for-symbol-macrolet.error.2 nil)
+
 (deftest symbol-macrolet.error.2
-  (signals-error (symbol-macrolet ((t 'a)) t)
+  (signals-error (symbol-macrolet ((constant-for-symbol-macrolet.error.2 'a))
+		   constant-for-symbol-macrolet.error.2)
 		 program-error)
   t)
 
