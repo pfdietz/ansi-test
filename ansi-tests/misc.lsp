@@ -9943,3 +9943,19 @@ Broken at C::WT-MAKE-CLOSURE.
        (eql p1 (the complex p2))))
    #c(11963908204 1/6) #c(2343315619 5252231066))
   nil)
+
+;;; Comparison of bit vectors in compiled code
+(deftest misc.537
+  (let ((p1 (make-array '(0) :element-type 'bit
+			:adjustable t)))
+    (notnot
+     (funcall
+      (compile
+       nil
+       `(lambda (p2)
+	  (declare (optimize speed (safety 1))
+		   (type (simple-array t nil) r)
+		   (type (simple-bit-vector 0) p2))
+	  (equal ,p1 (the (bit-vector 0) p2))))
+      #*)))
+  t)
