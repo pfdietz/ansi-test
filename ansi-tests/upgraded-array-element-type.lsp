@@ -28,6 +28,9 @@
     base-char
     character
     t
+    ,@(loop for i from 0 to 32 collect `(eql ,(ash 1 i)))
+    ,@(loop for i from 0 to 32 collect `(eql ,(1- (ash 1 i))))
+    (eql -1)
     ,@(loop for i from 0 to 32
 	    collect `(integer 0 (,(ash 1 i))))
     symbol
@@ -87,6 +90,22 @@
 		collect (list type type2))))
   nil)
 
+;;; Tests that if Tx is a subtype of Ty, then UAET(Tx) is a subtype
+;;;  of UAET(Ty)  (see section 15.1.2.1, paragraph 3)
+
+(deftest upgraded-array-element-type.8
+  (let ((upgraded-types (mapcar #'upgraded-array-element-type
+				*upgraded-array-types-to-check*)))
+    (loop for type1 in *upgraded-array-types-to-check*
+	  for uaet1 in upgraded-types
+	  append
+	  (loop for type2 in *upgraded-array-types-to-check*
+		for uaet2 in upgraded-types
+		when (and (subtypep type1 type2)
+			(not (empirical-subtypep uaet1 uaet2)))
+		collect (list type1 type2))))
+  nil)
+
 ;;; Tests of upgrading NIL (it should be type equivalent to NIL)
 
 (deftest upgraded-array-element-type.nil.1
@@ -95,7 +114,6 @@
 	  when (typep e uaet-nil)
 	  collect e))
   nil)
-		   
     
 ;;; Error tests
 
