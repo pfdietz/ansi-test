@@ -56,6 +56,14 @@
     a)
   (1 1 1 1 1 1))
 
+(deftest map-into-list.8
+  (let ((a (copy-seq '(a b c d e f)))
+	(s2 (make-array '(6) :initial-element 'x
+			:fill-pointer 4)))
+    (map-into a #'identity s2)
+    a)
+  (x x x x e f))
+
 (deftest map-into-array.1
   (let ((a (copy-seq #(a b c d e f)))
 	b)
@@ -135,6 +143,14 @@
 	 a))
   #(y y y y y y))
 
+(deftest map-into-array.11
+  (let ((a (copy-seq #(a b c d e f)))
+	(s2 (make-array '(6) :initial-element 'x
+			:fill-pointer 4)))
+    (map-into a #'identity s2)
+    a)
+  #(x x x x e f))
+
 ;;; mapping into strings
 
 (deftest map-into-string.1
@@ -158,7 +174,7 @@
   t
   "1234")
 
-(deftest map-into-string.4
+`w(deftest map-into-string.4
   (let ((a (make-array 6 :initial-element #\x
 		       :element-type 'character
 		       :fill-pointer 3)))
@@ -217,6 +233,117 @@
     a)
   "yyyyyy")
 
+(deftest map-into-string.10
+  (let ((a (copy-seq "abcdef"))
+	(s2 (make-array '(6) :initial-element #\x
+			:fill-pointer 4)))
+    (map-into a #'identity s2)
+    a)
+  "xxxxef")
+
+(deftest map-into-string.11
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'character
+		       :fill-pointer 3)))
+    (map-into a #'identity "abcd")
+    (values
+     (fill-pointer a)
+     (aref a 4)
+     (aref a 5)
+     a))
+  4
+  #\x
+  #\x
+  "abcd")
+
+(deftest map-into-string.12
+  (let ((a (make-array 6 :initial-element #\x
+		       :element-type 'character
+		       :fill-pointer 3)))
+    (map-into a #'identity "abcdefgh")
+    (values
+     (fill-pointer a)
+     a))
+  6
+  "abcdef")
+
+;;; Tests on bit vectors
+
+(deftest map-into.bit-vector.1
+  (let ((v #*0100110))
+    (map-into v #'(lambda (x) (- 1 x)) v)
+    (and (bit-vector-p v)
+	 v))
+  #*1011001)
+
+(deftest map-into.bit-vector.2
+  (let ((v #*0100110))
+    (map-into v #'(lambda () 0))
+    (and (bit-vector-p v)
+	 v))
+  #*0000000)
+
+(deftest map-into.bit-vector.3
+  (let ((v #*0100110))
+    (map-into v #'identity '(0 1 1 1 0 0 1))
+    (and (bit-vector-p v)
+	 v))
+  #*0111001)
+
+(deftest map-into.bit-vector.4
+  (let ((v #*0100110))
+    (map-into v #'identity '(0 1 1 1))
+    (and (bit-vector-p v)
+	 v))
+  #*0111110)
+
+(deftest map-into.bit-vector.5
+  (let ((v #*0100110))
+    (map-into v #'identity '(0 1 1 1 0 0 1 4 5 6 7))
+    (and (bit-vector-p v)
+	 v))
+  #*0111001)
+
+(deftest map-into.bit-vector.6
+  (let ((v (make-array '(8) :initial-contents '(0 1 0 0 1 1 0 1)
+		       :fill-pointer 4
+		       :element-type 'bit)))
+    (map-into v #'(lambda () 1))
+    (and (bit-vector-p v)
+	 v))
+  #*11111111)
+
+(deftest map-into.bit-vector.7
+  (let ((v (make-array '(8) :initial-contents '(0 1 0 0 1 1 0 1)
+		       :fill-pointer 4
+		       :element-type 'bit)))
+    (map-into v  #'identity v)
+    (and (bit-vector-p v)
+	 v))
+  #*0100)
+
+(deftest map-into.bit-vector.8
+  (let ((v (make-array '(8) :initial-contents '(0 1 0 0 1 1 0 1)
+		       :fill-pointer 4
+		       :element-type 'bit)))
+    (map-into v #'identity '(1 1 1 1 1 1))
+    (and (bit-vector-p v)
+	 (values (fill-pointer v)
+		 v)))
+  6
+  #*111111)
+
+(deftest map-into.bit-vector.9
+  (let ((v (make-array '(8) :initial-contents '(0 1 0 0 1 1 0 1)
+		       :fill-pointer 4
+		       :element-type 'bit)))
+    (map-into v #'identity '(1 1 1 1 1 1 0 0 1 1 1))
+    (and (bit-vector-p v)
+	 (values (fill-pointer v)
+		 v)))
+  8
+  #*11111100)
+
 (deftest map-into-error.1
   (classify-error (map-into 'a #'(lambda () nil)))
   type-error)
@@ -228,4 +355,3 @@
 (deftest map-into-error.3
   (classify-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100))
   type-error)
-
