@@ -260,6 +260,30 @@
 	 :test #'(lambda (x y) t))
   5)
 
+(deftest count-filled-vector.17
+  (count 1 (make-array 8 :initial-contents '(1 1 1 1 1 1 1 1)
+		       :fill-pointer 6))
+  6)
+
+(deftest count-filled-vector.18
+  (count 1 (make-array 8 :initial-contents '(1 1 1 1 1 1 1 1)
+		       :fill-pointer 6)
+	 :start 2)
+  4)
+(deftest count-filled-vector.19
+  (count 1 (make-array 8 :initial-contents '(1 1 1 1 1 1 1 1)
+		       :fill-pointer 6)
+	 :from-end 'foo)
+  6)
+
+(deftest count-filled-vector.20
+  (count 1 (make-array 8 :initial-contents '(1 1 1 1 1 1 1 1)
+		       :fill-pointer 6)
+	 :start 2 :from-end 'yes)
+  4)
+
+
+
 ;;; Tests on bit vectors
 
 (deftest count-bit-vector.1
@@ -331,6 +355,35 @@
   (count 1 #*11101101 :start 2 :end 7
 	 :test #'(lambda (x y) t))
   5)
+
+(deftest count-bit-vector.17
+  (count 1 (make-array 8 :initial-contents '(1 0 1 1 1 1 1 1)
+		       :element-type 'bit
+		       :fill-pointer 5))
+  4)
+
+(deftest count-bit-vector.18
+  (count 1 (make-array 8 :initial-contents '(1 0 1 1 1 1 1 1)
+		       :element-type 'bit
+		       :fill-pointer 5)
+	 :start 1)
+  3)
+
+(deftest count-bit-vector.19
+  (count 1 (make-array 8 :initial-contents '(1 0 1 1 1 1 1 1)
+		       :element-type 'bit
+		       :fill-pointer 5)
+	 :end nil)
+  4)
+
+
+(deftest count-bit-vector.20
+  (count 1 (make-array 8 :initial-contents '(1 0 1 1 1 1 1 1)
+		       :element-type 'bit
+		       :fill-pointer 6)
+	 :end 4)
+  3)
+
 
 ;;; Tests on strings
 
@@ -405,6 +458,33 @@
   (count #\1 "11101101" :start 2 :end 7
 	 :test #'(lambda (x y) t))
   5)
+
+(deftest count-string.17
+  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+			 :fill-pointer 7
+			 :element-type 'character))
+  5)
+
+(deftest count-string.18
+  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+			 :fill-pointer 7
+			 :element-type 'character)
+	 :start 1)
+  4)
+
+(deftest count-string.19
+  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+			 :fill-pointer 7
+			 :element-type 'character)
+	 :end nil)
+  5)
+
+(deftest count-string.20
+  (count #\a (make-array 10 :initial-contents (coerce "abaaacaaaa" 'list)
+			 :fill-pointer 7
+			 :element-type 'character)
+	 :start 2 :end 5)
+  3)
 
 ;;; Error tests
 

@@ -129,6 +129,43 @@
   (reduce #'+ #(1 2 3) :start 0 :end 0)
   0)
 
+(deftest reduce-array.14
+  (let ((a (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8)
+		       :fill-pointer 4)))
+    (reduce #'+ a))
+  10)
+
+(deftest reduce-array.15
+  (let ((a (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8)
+		       :fill-pointer 4)))
+    (reduce #'+ a :end nil))
+  10)
+
+(deftest reduce-array.16
+  (let ((a (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8)
+		       :fill-pointer 4)))
+    (reduce #'+ a :from-end t))
+  10)
+
+(deftest reduce-array.17
+  (let ((a (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8)
+		       :fill-pointer 4)))
+    (reduce #'+ a :initial-value 1))
+  11)
+
+(deftest reduce-array.18
+  (let ((a (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8)
+		       :fill-pointer 4)))
+    (reduce #'+ a :initial-value 1 :start 2))
+  8)
+
+(deftest reduce-array.19
+  (let ((a (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8)
+		       :fill-pointer 4)))
+    (reduce #'+ a :end 3))
+  6)
+
+
 ;;;;;;;;
 
 (deftest reduce-error.1
@@ -190,6 +227,41 @@
   (reduce #'+ "abc" :start 0 :end 0)
   0)
 
+(deftest reduce-string.14
+  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+		       :fill-pointer 6
+		       :element-type 'character)))
+    (coerce (reduce #'(lambda (x y) (cons y x)) s :initial-value nil)
+	    'string))
+  "fedcba")
+
+(deftest reduce-string.15
+  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+		       :fill-pointer 6
+		       :element-type 'character)))
+    (coerce (reduce #'(lambda (x y) (cons y x)) s :initial-value nil
+		    :start 1)
+	    'string))
+  "fedcb")
+
+(deftest reduce-string.16
+  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+		       :fill-pointer 6
+		       :element-type 'character)))
+    (coerce (reduce #'(lambda (x y) (cons y x)) s :end nil 
+		    :initial-value nil)
+	    'string))
+  "fedcba")
+
+(deftest reduce-string.17
+  (let ((s (make-array '(8) :initial-contents (coerce "abcdefgh" 'list)
+		       :fill-pointer 6
+		       :element-type 'character)))
+    (coerce (reduce #'(lambda (x y) (cons y x)) s :end 4 
+		    :initial-value nil)
+	    'string))
+  "dcba")
+
 ;;;;;;;;
 
 (deftest reduce-bitstring.1
@@ -244,3 +316,38 @@
 (deftest reduce-bitstring.13
   (reduce #'+ #(1 1 1) :start 0 :end 0)
   0)
+
+(deftest reduce-bitstring.14
+  (let ((s (make-array '(8) :initial-contents '(0 0 1 0 1 1 0 1)
+		       :fill-pointer 6
+		       :element-type 'bit)))
+    (reduce #'+ s))
+  3)
+
+(deftest reduce-bitstring.15
+  (let ((s (make-array '(8) :initial-contents '(0 0 1 0 1 1 0 1)
+		       :fill-pointer 6
+		       :element-type 'bit)))
+    (reduce #'+ s :start 3))
+  2)
+
+(deftest reduce-bitstring.16
+  (let ((s (make-array '(8) :initial-contents '(0 0 1 0 1 1 0 1)
+		       :fill-pointer 6
+		       :element-type 'bit)))
+    (reduce #'+ s :start 3 :initial-value 10))
+  12)
+
+(deftest reduce-bitstring.17
+  (let ((s (make-array '(8) :initial-contents '(0 0 1 0 1 1 0 1)
+		       :fill-pointer 6
+		       :element-type 'bit)))
+    (reduce #'+ s :end nil))
+  3)
+
+(deftest reduce-bitstring.18
+  (let ((s (make-array '(8) :initial-contents '(1 1 1 1 1 1 1 1)
+		       :fill-pointer 6
+		       :element-type 'bit)))
+    (reduce #'+ s :start 2 :end 4))
+  2)

@@ -259,68 +259,91 @@
 	    :end 7 :start 2 :from-end t)
   1)
 
-;;; tests on bitstrings
+(deftest count-if-nonsimple-vector.17
+  (flet ((%f (x) (eqt x 'a)))
+    (let ((s (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
+			 :fill-pointer 6)))
+      (values (count-if #'%f s)
+	      (count-if #'%f s :end nil)
+	      (count-if #'%f s :end 4)
+	      (count-if #'%f s :start 1)
+	      (count-if #'%f s :start 1 :end 4)
+	      (count-if #'%f s :start 1 :end 4 :from-end t))))
+  2 2 1 1 0 0)
 
-(deftest count-if-bitstring.1
+;;; tests on bit-vectors
+
+(deftest count-if-bit-vector.1
   (count-if #'evenp #*001011101101)
   5)
 
-(deftest count-if-bitstring.2
+(deftest count-if-bit-vector.2
   (count-if #'identity #*001011101101)
   12)
 
-(deftest count-if-bitstring.3
+(deftest count-if-bit-vector.3
   (count-if #'(lambda (x) (break)) #*)
   0)
 
-(deftest count-if-bitstring.4
+(deftest count-if-bit-vector.4
   (count-if #'identity #*001011101101 :key #'zerop)
   5)
 
-(deftest count-if-bitstring.5
+(deftest count-if-bit-vector.5
   (count-if 'identity #*001011101101 :key #'zerop)
   5)
 
-(deftest count-if-bitstring.6
+(deftest count-if-bit-vector.6
   (count-if #'identity #*001011101101 :key 'zerop)
   5)
 
-(deftest count-if-bitstring.8
+(deftest count-if-bit-vector.8
   (count-if #'identity #*001011101101 :key 'oddp)
   7)
 
-(deftest count-if-bitstring.10
+(deftest count-if-bit-vector.10
   (count-if #'evenp #*001011101101 :key #'1+)
   7)
 
-(deftest count-if-bitstring.11
+(deftest count-if-bit-vector.11
   (let ((c 0))
     (count-if #'evenp #*001011101101
 	      :key #'(lambda (x) (+ x (incf c)))))
   7)
 
-(deftest count-if-bitstring.12
+(deftest count-if-bit-vector.12
   (let ((c 0))
     (count-if #'evenp #*001011101101
 	      :from-end t
 	      :key #'(lambda (x) (+ x (incf c)))))
   5)
 
-(deftest count-if-bitstring.13
+(deftest count-if-bit-vector.13
   (count-if #'zerop #*0111011011100 :start 2)
   4)
 
-(deftest count-if-bitstring.14
+(deftest count-if-bit-vector.14
   (count-if #'zerop #*0111011011100 :end 7)
   2)
   
-(deftest count-if-bitstring.15
+(deftest count-if-bit-vector.15
   (count-if #'zerop #*0111011011100 :end 7 :start 2)
   1)
   
-(deftest count-if-bitstring.16
+(deftest count-if-bit-vector.16
   (count-if #'zerop #*0111011011100 :end 7 :start 2 :from-end t)
   1)
+
+(deftest count-if-bit-vector.17
+  (let ((s (make-array '(10) :initial-contents '(0 0 1 0 1 0 0 1 1 0)
+		       :element-type 'bit
+		       :fill-pointer 6)))
+    (values (count-if #'zerop s)
+	    (count-if #'zerop s :end nil)
+	    (count-if #'zerop s :end 4)
+	    (count-if #'zerop s :start 5)
+	    (count-if #'zerop s :start 1 :end 4)))
+  4 4 3 1 2)
 
 ;;; tests on strings
 
@@ -382,6 +405,18 @@
 	    "0111011011100" :end 7 :start 2 :from-end t)
   1)
 
+(deftest count-if-string.17
+  (let ((s (make-array '(10)
+		       :initial-contents (coerce "00a0aa0a0a" 'list)
+		       :element-type 'character
+		       :fill-pointer 6)))
+    (values (count-if #'digit-char-p s)
+	    (count-if #'digit-char-p s :end nil)
+	    (count-if #'digit-char-p s :start 1)
+	    (count-if #'digit-char-p s :end 2)
+	    (count-if #'digit-char-p s :start 1 :end 2)))
+  3 3 2 2 1)
+	    
 ;;; Error tests
 
 (deftest count-if-error.1

@@ -271,6 +271,17 @@
    (6 6)
    (nil)))
 
+(deftest find-if-vector.19
+  (let ((a (make-array '(10) :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+		       :fill-pointer 5)))
+    (values
+     (find-if #'evenp a)
+     (find-if #'evenp a :from-end t)
+     (find-if #'oddp a)
+     (find-if #'oddp a :from-end t)
+     ))
+  2 4 1 5)
+
 ;;; Tests for bit vectors
 
 (deftest find-if-bit-vector.1
@@ -483,6 +494,18 @@
    (#\8 #\8 #\6)
    (nil #\6)
    (#\6)))
+
+(deftest find-if-string.19
+  (let ((a (make-array '(10) :initial-contents (coerce "123456789a" 'list)
+		       :fill-pointer 5
+		       :element-type 'character)))
+    (values
+     (find-if #'evendigitp a)
+     (find-if #'evendigitp a :from-end t)
+     (find-if #'odddigitp a)
+     (find-if #'odddigitp a :from-end t)
+     ))
+  #\2 #\4 #\1 #\5)
 
 ;;; Error tests
 

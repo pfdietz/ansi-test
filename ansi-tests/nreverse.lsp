@@ -32,18 +32,34 @@
   (let* ((x (make-array 5 :initial-contents '(1 2 3 4 5)
 			:fill-pointer t :adjustable t))
 	 (y (nreverse x)))
-    (values y (equal (type-of x) (type-of y))))
+    (values y (equalt (type-of x) (type-of y))))
   #(5 4 3 2 1)
   t)
 
-(deftest nreverse-bitstring.1
+(deftest nreverse-nonsimple-vector.3
+  (let* ((x (make-array 10 :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+			:fill-pointer 5))
+	 (y (nreverse x)))
+    (values y (equalt (type-of x) (type-of y))))
+  #(5 4 3 2 1)
+  t)
+
+(deftest nreverse-bit-vector.1
   (nreverse #*)
   #*)
 
-(deftest nreverse-bitstring.2
+(deftest nreverse-bit-vector.2
   (let ((x (copy-seq #*000110110110)))
     (nreverse x))
   #*011011011000)
+
+(deftest nreverse-bit-vector.3
+  (let* ((x (make-array 10 :initial-contents '(0 0 0 1 1 0 1 0 1 0)
+			:fill-pointer 5
+			:element-type 'bit))
+	 (y (nreverse x)))
+    y)
+  #*11000)
 
 (deftest nreverse-string.1
   (nreverse "")
@@ -53,6 +69,22 @@
   (let ((x (copy-seq "000110110110")))
     (nreverse x))
   "011011011000")
+
+(deftest nreverse-string.3
+  (let* ((x (make-array 10 :initial-contents (coerce "abcdefghij" 'list)
+			:fill-pointer 5
+			:element-type 'character))
+	 (y (nreverse x)))
+    y)
+  "edcba")
+
+(deftest nreverse-string.4
+  (let* ((x (make-array 10 :initial-contents (coerce "abcdefghij" 'list)
+			:fill-pointer 5
+			:element-type 'base-char))
+	 (y (nreverse x)))
+    y)
+  "edcba")
 
 (deftest nreverse-error.1
   (catch-type-error (nreverse 'a))

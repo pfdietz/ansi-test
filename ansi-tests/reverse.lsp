@@ -38,15 +38,30 @@
   #(5 4 3 2 1)
   #(1 2 3 4 5))
 
-(deftest reverse-bitstring.1
+(deftest reverse-nonsimple-vector.3
+  (let* ((x (make-array 10 :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+			:fill-pointer 5))
+	 (y (reverse x)))
+    y)
+  #(5 4 3 2 1))
+
+(deftest reverse-bit-vector.1
   (reverse #*)
   #*)
 
-(deftest reverse-bitstring.2
+(deftest reverse-bit-vector.2
   (let ((x #*000110110110))
     (values (reverse x) x))
   #*011011011000
   #*000110110110)
+
+(deftest reverse-bit-vector.3
+  (let* ((x (make-array 10 :initial-contents '(0 0 0 1 1 0 1 0 1 0)
+			:fill-pointer 5
+			:element-type 'bit))
+	 (y (reverse x)))
+    y)
+  #*11000)
 
 (deftest reverse-string.1
   (reverse "")
@@ -57,6 +72,22 @@
     (values (reverse x) x))
   "011011011000"
   "000110110110")
+
+(deftest reverse-string.3
+  (let* ((x (make-array 10 :initial-contents (coerce "abcdefghij" 'list)
+			:fill-pointer 5
+			:element-type 'character))
+	 (y (reverse x)))
+    y)
+  "edcba")
+
+(deftest reverse-string.4
+  (let* ((x (make-array 10 :initial-contents (coerce "abcdefghij" 'list)
+			:fill-pointer 5
+			:element-type 'base-char))
+	 (y (reverse x)))
+    y)
+  "edcba")
 
 (deftest reverse-error.1
   (catch-type-error (reverse 'a))

@@ -47,6 +47,12 @@
     (stable-sort a #'<))
   #(1 2 3 4 5))
 
+(deftest stable-sort-vector.4
+  (let ((a (make-array 10 :initial-contents '(10 40 20 50 30 15 45 25 55 35)
+		       :fill-pointer 5)))
+    (stable-sort a #'<))
+  #(10 20 30 40 50))
+
 (deftest stable-sort-bit-vector.1
   (let ((a (copy-seq #*10011101)))
     (stable-sort a #'<))
@@ -58,6 +64,13 @@
   #*11111000
   #*11111000)
 
+(deftest stable-sort-bit-vector.3
+  (let ((a (make-array 10 :initial-contents '(1 0 0 1 1 1 1 0 1 1)
+		       :element-type 'bit
+		       :fill-pointer 5)))
+    (stable-sort a #'<))
+  #*00111)
+
 (deftest stable-sort-string.1
   (let ((a (copy-seq "10011101")))
     (values (stable-sort a #'char<) a))
@@ -66,9 +79,17 @@
 
 (deftest stable-sort-string.2
   (let ((a (copy-seq "10011101")))
-    (values (stable-sort a #'char< :key #'(lambda (c) (if (eql c #\0) #\1 #\0))) a))
+    (values (stable-sort a #'char<
+			 :key #'(lambda (c) (if (eql c #\0) #\1 #\0))) a))
   "11111000"
   "11111000")
+
+(deftest stable-sort-string.3
+  (let ((a (make-array 10 :initial-contents (coerce "1001111011" 'list)
+		       :element-type 'character
+		       :fill-pointer 5)))
+    (stable-sort a #'char<))
+  "00111")
 
 
 

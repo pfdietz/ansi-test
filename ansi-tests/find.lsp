@@ -305,6 +305,21 @@
 	    :start 2 :from-end t)
   (a b))
 
+(deftest find-vector.29
+  (let ((a (make-array '(10)
+		       :initial-contents '(1 2 3 4 5 6 7 8 9 10)
+		       :fill-pointer 5)))
+    (loop for i from 1 to 10 collect (find i a)))
+  (1 2 3 4 5 nil nil nil nil nil))
+
+(deftest find-vector.30
+  (let ((a (make-array '(10)
+		       :initial-contents (loop for i from 1 for e in '(1 2 3 4 5 5 4 3 2 1)
+					       collect (list e i))
+		       :fill-pointer 5)))
+    (loop for i from 1 to 5 collect (find i a :from-end t :key #'car)))
+  ((1 1) (2 2) (3 3) (4 4) (5 5)))
+
 ;;; tests on bit vectors
 
 (deftest find-bit-vector.1
@@ -562,6 +577,22 @@
 	    :start 2 :from-end t)
   nil)
 
+(deftest find-bit-vector.29
+  (let ((a
+	 (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
+		     :element-type 'bit
+		     :fill-pointer 5)))
+    (values (find 0 a)
+	    (find 0 a :from-end t)))
+  nil nil)
+
+(deftest find-bit-vector.30
+  (let ((a (make-array '(10) :initial-contents '(1 1 1 1 0 0 0 0 0 0)
+		       :element-type 'bit
+		       :fill-pointer 5)))
+    (values (find 0 a) (find 0 a :from-end t)))
+  0 0)
+
 ;;; strings
 
 (deftest find-string.1
@@ -697,6 +728,18 @@
   (find #\a "aabacedafa" :test-not #'char-equal
 	:start 0 :end 5 :from-end t)
   #\c)
+
+(deftest find-string.25
+  (let ((s (make-array '(10) :initial-contents (coerce "abcdefghij" 'list)
+		       :element-type 'character
+		       :fill-pointer 5)))
+    (values
+     (loop for e across "abcdefghij"
+	   collect (find e s))
+     (loop for e across "abcdefghij"
+	   collect (find e s :from-end t))))
+  (#\a #\b #\c #\d #\e nil nil nil nil nil)
+  (#\a #\b #\c #\d #\e nil nil nil nil nil))
 
 ;;; Error tests
 
