@@ -200,3 +200,28 @@
     (handler-case (funcall fn '(b))
 		  (error () :error)))
   :error)
+
+(deftest defgeneric-method-combination.append.13
+  (progn
+    (eval '(defgeneric dg-mc.append.13 (x)
+	     (:method-combination append)
+	     (:method append ((x dgmc-class-01)) (list 'foo))
+	     (:method append ((x dgmc-class-02)) (list 'bar))
+	     (:method nonsense ((x dgmc-class-03)) (list 'bad))))
+    (values
+     (dg-mc.append.13 (make-instance 'dgmc-class-01))
+     (dg-mc.append.13 (make-instance 'dgmc-class-02))
+     (handler-case
+      (dg-mc.append.13 (make-instance 'dgmc-class-03))
+      (error () :caught))
+     (handler-case
+      (dg-mc.append.13 (make-instance 'dgmc-class-04))
+      (error () :caught))
+          (handler-case
+      (dg-mc.append.13 (make-instance 'dgmc-class-07))
+      (error () :caught))))
+  (foo)
+  (bar foo)
+  :caught
+  :caught
+  :caught)
