@@ -563,7 +563,7 @@
     (open pn :direction :output :if-does-not-exist nil))
   nil)
 
-(def-open-output-test open.output.28 (:external-format :default)
+(def-open-output-test open.output.28a (:external-format :default)
   (progn (close s)
 	 (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
   ("abcdefghij"))
