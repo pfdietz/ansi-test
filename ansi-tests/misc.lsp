@@ -3202,8 +3202,8 @@
   2)
 
 (deftest misc.193
-  (let* ((form '(IF (IF (<= A (TRUNCATE C (MIN -43 B)))
-			(LOGBITP 0 0) (LOGBITP 0 -1))
+  (let* ((form '(if (if (<= a (truncate c (min -43 b)))
+			(logbitp 0 0) (logbitp 0 -1))
 		    0 -36223))
 	 (fn1 `(lambda (a b c)
 		 (declare (type (integer -3 15350342) a))
@@ -3226,3 +3226,71 @@
 	:good
       (values result1 result2)))
   :good)
+
+;;; cmucl (4 Nov 2003 snapshot)
+;;;  The assertion (EQ (C::TN-ENVIRONMENT C:TN) C::TN-ENV) failed.
+
+(deftest misc.194
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline funcall))
+       (declare (optimize (safety 3) (speed 0) (debug 3)))
+       (flet ((%f14
+	       (f14-1 f14-2
+		      &optional (f14-3 0) (f14-4 (catch 'ct8 0))
+		      (f14-5 (unwind-protect c)))
+	       0))
+	 (funcall #'%f14 0 0))))
+   1 2 3)
+  0)
+
+;;; incorrect value (in cmucl)
+(deftest misc.195
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -5906488825 254936878485) a))
+       (declare (type (integer -350857549 -11423) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 3) (safety 1) (debug 1)))
+       (block b8
+	 (labels ((%f6 (f6-1 &optional (f6-2 0) (f6-3 0) (f6-4 0))
+		       0))
+	   (multiple-value-call #'%f6 (values 0))))))
+   100 -100000)
+  0)
+
+;;; NIL is not of type C::ENVIRONMENT
+(deftest misc.196
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 1 46794484349) a))
+       (declare (type (integer -627 -2) b))
+       (declare (ignorable a b))
+       (declare (optimize (speed 3) (safety 1) (debug 1)))
+       (if (not (logbitp 0 0))
+	   0
+	 (labels ((%f9 (f9-1 f9-2 f9-3)
+		       0))
+	   (%f9 (catch 'ct6 a) (catch 'ct4 0) 0)))))
+   1 -200)
+  0)
+
+;;; The assertion (EQ (C::TN-ENVIRONMENT C:TN) C::TN-ENV) failed.
+(deftest misc.197
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (notinline logcount))
+       (declare (optimize (safety 3) (speed 0) (debug 3)))
+       (labels ((%f5 (&optional (f5-1 b) (f5-2 0) (f5-3 (catch (quote ct2) 0)))
+		     (prog1 (logcount (block b1 f5-1)))))
+	 (if (%f5 0 0 0) (%f5 a) 0))))
+   1 2)
+  1)
