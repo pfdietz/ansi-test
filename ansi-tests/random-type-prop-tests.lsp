@@ -181,6 +181,8 @@
 
 ;;; trig, hyperbolic functions here
 
+;;; WARNING -- these tests may cause floating point overflow/underflow
+;;; Ignore those failures
 (def-type-prop-test *.1 '* '(integer integer) 2)
 (def-type-prop-test *.2 '* nil 1 :rest-type 'integer :maxargs 4)
 (def-type-prop-test *.3 '* nil 2 :rest-type 'integer :maxargs 10)
@@ -200,11 +202,12 @@
 (def-type-prop-test \-.5 '- '(number number) 2 :test #'approx=)
 (def-type-prop-test \-.6 '- '(number) 1)
 
+;;; WARNING -- these tests may cause floating point overflow/underflow
+;;; Ignore those failures
 (def-type-prop-test /.1 '/ '((and integer (not (satisfies zerop)))) 1)
 (def-type-prop-test /.2 '/ '((and rational (not (satisfies zerop)))) 1)
 (def-type-prop-test /.3 '/ '((and real (not (satisfies zerop)))) 1)
 (def-type-prop-test /.4 '/ '((and complex (not (satisfies zerop)))) 1)
-
 (def-type-prop-test /.5 '/ '(integer) 2 :maxargs 6 :rest-type '(and integer (not (satisfies zerop))))
 (def-type-prop-test /.6 '/ '(rational) 2 :maxargs 6 :rest-type '(and rational (not (satisfies zerop))))
 (def-type-prop-test /.7 '/ '(real) 2 :maxargs 6 :rest-type '(and real (not (satisfies zerop)))
