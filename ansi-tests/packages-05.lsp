@@ -10,48 +10,48 @@
 ;;; export
 
 (deftest export-1
-    (let ((return-value nil))
-      (ignore-errors (delete-package "TEST1"))
-      (let ((p (make-package "TEST1")))
-	(let ((sym (intern "FOO" p)))
-	  (setf return-value (export sym p))
-	  (multiple-value-bind (sym2 status)
-	      (find-symbol "FOO" p)
-	    (prog1
-		(and sym2
-		     (eqt (symbol-package sym2) p)
-		     (string= (symbol-name sym2) "FOO")
-		     (eqt sym sym2)
-		     (eqt status :external))
-	      (delete-package p)))))
-      return-value)
+  (let ((return-value nil))
+    (ignore-errors (delete-package "TEST1"))
+    (let ((p (make-package "TEST1")))
+      (let ((sym (intern "FOO" p)))
+	(setf return-value (export sym p))
+	(multiple-value-bind (sym2 status)
+	    (find-symbol "FOO" p)
+	  (prog1
+	      (and sym2
+		   (eqt (symbol-package sym2) p)
+		   (string= (symbol-name sym2) "FOO")
+		   (eqt sym sym2)
+		   (eqt status :external))
+	    (delete-package p)))))
+    return-value)
   t)
 
 (deftest export-2
-    (progn (ignore-errors (delete-package "TEST1"))
-	   (let ((p (make-package "TEST1")))
-	     (let ((sym (intern "FOO" p)))
-	       (export (list sym) p)
-	       (multiple-value-bind (sym2 status)
-		   (find-symbol "FOO" p)
-		 (prog1
-		     (and sym2
-			  (eqt (symbol-package sym2) p)
-			  (string= (symbol-name sym2) "FOO")
-			  (eqt sym sym2)
-			  (eqt status :external))
-		   (delete-package p))))))
+  (progn (ignore-errors (delete-package "TEST1"))
+	 (let ((p (make-package "TEST1")))
+	   (let ((sym (intern "FOO" p)))
+	     (export (list sym) p)
+	     (multiple-value-bind (sym2 status)
+		 (find-symbol "FOO" p)
+	       (prog1
+		   (and sym2
+			(eqt (symbol-package sym2) p)
+			(string= (symbol-name sym2) "FOO")
+			(eqt sym sym2)
+			(eqt status :external))
+		 (delete-package p))))))
   t)
 
 (deftest export-3
-    (handler-case
-	(progn
-	  (make-package "F")
-	  (let ((sym (intern "FOO" "F")))
-	    (export sym #\F)
-	    (delete-package "F")
-	    t))
-      (error (c) (delete-package "F") c))
+  (handler-case
+   (progn
+     (make-package "F")
+     (let ((sym (intern "FOO" "F")))
+       (export sym #\F)
+       (delete-package "F")
+       t))
+   (error (c) (delete-package "F") c))
   t)
 
 ;;
@@ -60,10 +60,10 @@
 ;; user whether the symbol should be imported.
 ;;
 (deftest export-4
-    (handler-case
-	(export 'b::bar "A")
-      (package-error () 'package-error)
-      (error (c) c))
+  (handler-case
+   (export 'b::bar "A")
+   (package-error () 'package-error)
+   (error (c) c))
   package-error)
 
 ;;
@@ -72,19 +72,19 @@
 ;; is exporting a symbol with the same name.
 ;;
 (deftest export-5
-    (progn
-      (make-package "TEST1")
-      (make-package "TEST2" :use '("TEST1"))
-      (export (intern "X" "TEST2") "TEST2")
-      (prog1
-	  (handler-case
-	      (let ((sym (intern "X" "TEST1")))
-		(handler-case
-		    (export sym "TEST1")
-		  (error (c)
-		    (format t "Caught error in EXPORT-5: ~A~%" c)
-		    'caught)))
-	    (error (c) c))
-	(delete-package "TEST2")
-	(delete-package "TEST1")))
+  (progn
+    (make-package "TEST1")
+    (make-package "TEST2" :use '("TEST1"))
+    (export (intern "X" "TEST2") "TEST2")
+    (prog1
+	(handler-case
+	 (let ((sym (intern "X" "TEST1")))
+	   (handler-case
+	    (export sym "TEST1")
+	    (error (c)
+		   (format t "Caught error in EXPORT-5: ~A~%" c)
+		   'caught)))
+	 (error (c) c))
+      (delete-package "TEST2")
+      (delete-package "TEST1")))
   caught)

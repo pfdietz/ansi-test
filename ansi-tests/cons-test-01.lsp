@@ -177,10 +177,10 @@
 ;; For everything in *universe*, it is either an atom, or satisfies
 ;; consp, but not both
 (deftest consp-xor-atom-universe
-    (not (not
-	  (every #'(lambda (x) (or (and (consp x) (not (atom x)))
-				   (and (not (consp x)) (atom x))))
-		 *universe*)))
+  (notnot
+   (every #'(lambda (x) (or (and (consp x) (not (atom x)))
+			    (and (not (consp x)) (atom x))))
+	  *universe*))
   t)
 
 ;; Everything in type cons satisfies consp, and vice versa
@@ -190,171 +190,169 @@
 
 ;; Tests of car, cdr and compound forms
 (deftest cons-23
-    (car '(a))
+  (car '(a))
   a)
 
 (deftest cons-24
-    (cdr '(a . b))
+  (cdr '(a . b))
   b)
 
 (deftest cons-25
-    (caar '((a)))
+  (caar '((a)))
   a)
 
 (deftest cons-26
-    (cdar '((a . b)))
+  (cdar '((a . b)))
   b)
 
 (deftest cons-27
-    (cadr '(a b))
+  (cadr '(a b))
   b)
 
 (deftest cons-28
-    (cddr '(a b . c))
+  (cddr '(a b . c))
   c)
 
 (deftest cons-29
-    (caaar '(((a))))
+  (caaar '(((a))))
   a)
 
 (deftest cons-30
-    (cdaar '(((a . b))))
+  (cdaar '(((a . b))))
   b)
 
 (deftest cons-31
-    (cadar (cons (cons 'a (cons 'b 'c)) 'd))
+  (cadar (cons (cons 'a (cons 'b 'c)) 'd))
   b)
 
 (deftest cons-32
-    (cddar (cons (cons 'a (cons 'b 'c)) 'd))
+  (cddar (cons (cons 'a (cons 'b 'c)) 'd))
   c)
 
 (deftest cons-33
-    (caadr (cons 'a (cons (cons 'b 'c) 'd)))
+  (caadr (cons 'a (cons (cons 'b 'c) 'd)))
   b)
 
 (deftest cons-34
-    (caddr (cons 'a (cons 'b (cons 'c 'd))))
+  (caddr (cons 'a (cons 'b (cons 'c 'd))))
   c)
 
 (deftest cons-36
-    (cdadr (cons 'a (cons (cons 'b 'c) 'd)))
+  (cdadr (cons 'a (cons (cons 'b 'c) 'd)))
   c)
 
 (deftest cons-37
-    (cdddr (cons 'a (cons 'b (cons 'c 'd))))
+  (cdddr (cons 'a (cons 'b (cons 'c 'd))))
   d)
 
 (defvar *cons-test-4*
-    (cons (cons (cons (cons 'a 'b)
-		      (cons 'c 'd))
-		(cons (cons 'e 'f)
-		      (cons 'g 'h)))
-	  (cons (cons (cons 'i 'j)
-		      (cons 'k 'l))
-		(cons (cons 'm 'n)
-		      (cons 'o 'p)))))
-		
+  (cons (cons (cons (cons 'a 'b)
+		    (cons 'c 'd))
+	      (cons (cons 'e 'f)
+		    (cons 'g 'h)))
+	(cons (cons (cons 'i 'j)
+		    (cons 'k 'l))
+	      (cons (cons 'm 'n)
+		    (cons 'o 'p)))))
+
 
 (deftest cons-38
-    (caaaar *cons-test-4*)
+  (caaaar *cons-test-4*)
   a)
 
 (deftest cons-39
-    (cdaaar *cons-test-4*)
+  (cdaaar *cons-test-4*)
   b)
 
 (deftest cons-40
-    (cadaar *cons-test-4*)
+  (cadaar *cons-test-4*)
   c)
 
 (deftest cons-41
-    (cddaar *cons-test-4*)
+  (cddaar *cons-test-4*)
   d)
 
 (deftest cons-42
-    (caadar *cons-test-4*)
+  (caadar *cons-test-4*)
   e)
 
 (deftest cons-43
-    (cdadar *cons-test-4*)
+  (cdadar *cons-test-4*)
   f)
 
 (deftest cons-44
-    (caddar *cons-test-4*)
+  (caddar *cons-test-4*)
   g)
 
 (deftest cons-45
-    (cdddar *cons-test-4*)
+  (cdddar *cons-test-4*)
   h)
 
 ;;;
 
 (deftest cons-46
-    (caaadr *cons-test-4*)
+  (caaadr *cons-test-4*)
   i)
 
 (deftest cons-47
-    (cdaadr *cons-test-4*)
+  (cdaadr *cons-test-4*)
   j)
 
 (deftest cons-48
-    (cadadr *cons-test-4*)
+  (cadadr *cons-test-4*)
   k)
 
 (deftest cons-49
-    (cddadr *cons-test-4*)
+  (cddadr *cons-test-4*)
   l)
 
 (deftest cons-50
-    (caaddr *cons-test-4*)
+  (caaddr *cons-test-4*)
   m)
 
 (deftest cons-51
-    (cdaddr *cons-test-4*)
+  (cdaddr *cons-test-4*)
   n)
 
 (deftest cons-52
-    (cadddr *cons-test-4*)
+  (cadddr *cons-test-4*)
   o)
 
 (deftest cons-53
-    (cddddr *cons-test-4*)
+  (cddddr *cons-test-4*)
   p)
 
 
 ;; Test rplaca, rplacd
 
 (deftest rplaca-1
-    (let ((x (cons 'a 'b)))
-      (let ((y x))
-	(and (eqt (rplaca x 'c) y)
-	     (eqt x y)
-	     (eqt (car x) 'c)
-	     (eqt (cdr x) 'b)
-	     t)))
+  (let ((x (cons 'a 'b)))
+    (let ((y x))
+      (and (eqt (rplaca x 'c) y)
+	   (eqt x y)
+	   (eqt (car x) 'c)
+	   (eqt (cdr x) 'b))))
   t)
 
 (deftest rplacd-1
-    (let ((x (cons 'a 'b)))
-      (let ((y x))
-	(and (eqt (rplacd x 'd) y)
-	     (eqt x y)
-	     (eqt (car x) 'a)
-	     (eqt (cdr x) 'd)
-	     t)))
+  (let ((x (cons 'a 'b)))
+    (let ((y x))
+      (and (eqt (rplacd x 'd) y)
+	   (eqt x y)
+	   (eqt (car x) 'a)
+	   (eqt (cdr x) 'd))))
   t)
 
 ;; rplaca on a fixnum is a type error
 (deftest rplaca-error-1
-    (let ((x 12340131))
-      (catch-type-error (rplaca x 1)))
-  type-error)
+  (loop for x in *universe*
+	thereis (and (not (consp x))
+		     (not (eq (catch-type-error (rplaca x 1)) 'type-error))))
+  nil)
 
 ;; rplacd on a fixnum is a type error
 (deftest rplacd-error-1
-    (let ((x 12340132))
-      (catch-type-error (rplacd x 1)))
-  type-error)
-
-;; To do: add tests for other invalid arguments
+  (loop for x in *universe*
+	thereis (and (not (consp x))
+		     (not (eq (catch-type-error (rplacd x 1)) 'type-error))))
+  nil)

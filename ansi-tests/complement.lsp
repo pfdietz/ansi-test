@@ -6,8 +6,8 @@
 (in-package :cl-test)
 
 (deftest complement.1
-  (funcall (cl::complement #'identity) nil)
-  t)
+  (not (funcall (cl::complement #'identity) nil))
+  nil)
 
 (deftest complement.2
   (funcall (cl::complement #'identity) t)

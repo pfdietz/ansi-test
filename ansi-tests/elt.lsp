@@ -24,11 +24,11 @@
 (deftest elt-5a (safe-elt '(a b c d e) -4) type-error)
 (deftest elt-6
   (let ((x (make-int-list 1000)))
-    (not (not
-	  (every
-	   #'(lambda (i)
-	       (eql i (safe-elt x i)))
-	   x))))
+    (notnot
+     (every
+      #'(lambda (i)
+	  (eql i (safe-elt x i)))
+      x)))
   t)
 
 (deftest elt-7
@@ -61,11 +61,10 @@
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((y (loop for c on x collect c)))
       (setf (elt x 2) 'f)
-      (not
-       (not
-	(every #'eq
-	       y
-	       (loop for c on x collect c))))))
+      (notnot
+       (every #'eq
+	      y
+	      (loop for c on x collect c)))))
   t)
 
 (deftest elt-12

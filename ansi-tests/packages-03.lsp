@@ -29,7 +29,7 @@
 
 ;; The list returned has only packages in it
 (deftest list-all-packages-3
-    (not (not (every #'packagep (list-all-packages))))
+    (notnot (every #'packagep (list-all-packages)))
   t)
 
 ;; It returns a list of the same packages each time it is called
@@ -155,10 +155,11 @@
   t)
 
 (deftest package-nicknames-8
-    (ignore-errors
-      (subsetp '("CL-USER")
-	    (package-nicknames "COMMON-LISP-USER")
-	    :test #'string=))
+  (ignore-errors
+    (notnot
+     (subsetp '("CL-USER")
+	      (package-nicknames "COMMON-LISP-USER")
+	      :test #'string=)))
   t)
 
 (deftest package-nicknames-9

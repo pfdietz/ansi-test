@@ -211,7 +211,8 @@
    (every #'(lambda (e) (member e x :key key :test test)) z)
    (every #'(lambda (e) (or (member e y :key key :test test)
 			    (member e z :key key :test test))) x)
-   (every #'(lambda (e) (not (member e z :key key :test test))) y)))
+   (every #'(lambda (e) (not (member e z :key key :test test))) y)
+   t))
 
 (deftest nset-difference-1
     (nset-difference nil nil)
@@ -323,45 +324,45 @@
   (1 2 3 4))
 
 (deftest nset-difference-17
-    (block fail
-      (sort
-	    (copy-list
-	     (nset-difference-with-check
-	      '(1 2 3 4) '(e f g h)
-	      :key #'identity
-	      :test #'(lambda (x y)
-			(when (or (member x '(e f g h))
-				  (member y '(1 2 3 4)))
-			  (return-from fail 'fail))
-			(eqt x y))))
-	    #'<))
+  (block fail
+    (sort
+     (copy-list
+      (nset-difference-with-check
+       '(1 2 3 4) '(e f g h)
+       :key #'identity
+       :test #'(lambda (x y)
+		 (when (or (member x '(e f g h))
+			   (member y '(1 2 3 4)))
+		   (return-from fail 'fail))
+		 (eqt x y))))
+     #'<))
   (1 2 3 4))
 
 (deftest nset-difference-18
-    (block fail
-      (sort
-	    (copy-list
-	     (nset-difference-with-check
-	      '(1 2 3 4) '(e f g h)
-	      :test-not
-	      #'(lambda (x y)
-			(when (or (member x '(e f g h))
-				  (member y '(1 2 3 4)))
-			  (return-from fail 'fail))
-			(not (eqt x y)))))
-	    #'<))
+  (block fail
+    (sort
+     (copy-list
+      (nset-difference-with-check
+       '(1 2 3 4) '(e f g h)
+       :test-not
+       #'(lambda (x y)
+	   (when (or (member x '(e f g h))
+		     (member y '(1 2 3 4)))
+	     (return-from fail 'fail))
+	   (not (eqt x y)))))
+     #'<))
   (1 2 3 4))
 
 (deftest nset-difference-19
-    (block fail
-      (sort (copy-list
-	     (nset-difference-with-check
-	      '(1 2 3 4) '(e f g h)
-	      :test-not
-	      #'(lambda (x y)
-			(when (or (member x '(e f g h))
-				  (member y '(1 2 3 4)))
-			  (return-from fail 'fail))
-			(not (eqt x y)))))
-	    #'<))
+  (block fail
+    (sort (copy-list
+	   (nset-difference-with-check
+	    '(1 2 3 4) '(e f g h)
+	    :test-not
+	    #'(lambda (x y)
+		(when (or (member x '(e f g h))
+			  (member y '(1 2 3 4)))
+		  (return-from fail 'fail))
+		(not (eqt x y)))))
+	  #'<))
   (1 2 3 4))

@@ -19,17 +19,17 @@
 
 (deftest string.4
   (let ((s (string #\a)))
-    (values (stringp s) s))
+    (values (notnot (stringp s)) s))
   t "a")
 
 (deftest string.5
   (let ((s (string "")))
-    (values (stringp s) s))
+    (values (notnot (stringp s)) s))
   t "")
 
 (deftest string.6
   (let ((s (string '|FOO|)))
-    (values (stringp s) s))
+    (values (notnot (stringp s)) s))
   t "FOO")
 
 (deftest string.7
@@ -122,7 +122,7 @@
   t)
 
 (deftest simple-string-p.2
-  (not (not (simple-string-p "ancd")))
+  (notnot (simple-string-p "ancd"))
   t)
 
 (deftest simple-string-p.3
@@ -136,15 +136,15 @@
   nil)
 
 (deftest simple-string-p.5
-  (not (not (simple-string-p (make-array
-			      4 :element-type 'base-char
-			      :initial-contents '(#\a #\a #\a #\b)))))
+  (notnot (simple-string-p (make-array
+			    4 :element-type 'base-char
+			    :initial-contents '(#\a #\a #\a #\b))))
   t)
 
 (deftest simple-string-p.6
-  (not (not (simple-string-p (make-array
-			      4 :element-type 'standard-char
-			      :initial-contents '(#\a #\a #\a #\b)))))
+  (notnot (simple-string-p (make-array
+			    4 :element-type 'standard-char
+			    :initial-contents '(#\a #\a #\a #\b))))
   t)
 
 (deftest simple-string-p.7
@@ -166,22 +166,22 @@
   t)
 
 (deftest stringp.2
-  (not (not (stringp "abcd")))
+  (notnot (stringp "abcd"))
   t)
 
 (deftest stringp.3
-  (not (not (stringp (make-array 4 :element-type 'character
-				 :initial-contents '(#\a #\b #\c #\d)))))
+  (notnot (stringp (make-array 4 :element-type 'character
+			       :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.4
-  (not (not (stringp (make-array 4 :element-type 'base-char
-				 :initial-contents '(#\a #\b #\c #\d)))))
+  (notnot (stringp (make-array 4 :element-type 'base-char
+			       :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.5
-  (not (not (stringp (make-array 4 :element-type 'standard-char
-				 :initial-contents '(#\a #\b #\c #\d)))))
+  (notnot (stringp (make-array 4 :element-type 'standard-char
+			       :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.6
@@ -198,5 +198,5 @@
 	 (s2 (make-array 4 :element-type 'character
 			 :displaced-to s
 			 :displaced-index-offset 2)))
-    (not (not (stringp s2))))
+    (notnot (stringp s2)))
   t)
