@@ -65,7 +65,7 @@
    (error (c) c)))
 |#
 
-;; Use the next macro in place of SAFE
+;;; Use the next macro in place of SAFE
 
 (defmacro catch-type-error (form)
 "Evaluate form in safe mode, returning its value if there is no error.
@@ -76,12 +76,21 @@ condition itself on other errors."
      (type-error () 'type-error)
      (error (c) c))))
 
-;;
-;; A scaffold is a structure that is used to remember the object
-;; identities of the cons cells in a (noncircular) data structure.
-;; This lets us check if the data structure has been changed by
-;; an operation.
-;;
+(defmacro classify-error (form)
+"Evaluate form in safe mode, returning its value if there is no error.
+If an error does occur, return a symbol classify the error, or allow
+the condition to go uncaught if it cannot be classified."
+`(locally (declare (optimize (safety 3)))
+  (handler-case ,form
+     (program-error () 'program-error)
+     (type-error    () 'type-error))))
+
+;;;
+;;; A scaffold is a structure that is used to remember the object
+;;; identities of the cons cells in a (noncircular) data structure.
+;;; This lets us check if the data structure has been changed by
+;;; an operation.
+;;;
 
 (defstruct scaffold
   node
@@ -112,11 +121,11 @@ condition itself on other errors."
 	 (check-scaffold-copy (cdr x) (scaffold-cdr xcopy))))))
 
 
-;;
-;; The function SUBTYPEP returns two generalized booleans.
-;; This auxiliary function returns two booleans instead
-;; (which makes it easier to write tests).
-;;
+;;;
+;;; The function SUBTYPEP returns two generalized booleans.
+;;; This auxiliary function returns two booleans instead
+;;; (which makes it easier to write tests).
+;;;
 (defun subtypep* (obj type)
   (multiple-value-bind (result good)
       (subtypep obj type)
@@ -169,7 +178,7 @@ condition itself on other errors."
   "Flip an n-sided coin."
   (eql (random n) 0))
 
-;; Randomly permute a sequence
+;;; Randomly permute a sequence
 (defun random-permute (seq)
   (setq seq (copy-seq seq))
   (let ((len (length seq)))

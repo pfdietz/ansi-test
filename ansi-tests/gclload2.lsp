@@ -9,6 +9,7 @@
 (load "constantly.lsp")
 (load "complement.lsp")
 (load "fboundp.lsp")
+(load "flet.lsp")
 (load "fmakunbound.lsp")
 (load "function.lsp")
 (load "functionp.lsp")
