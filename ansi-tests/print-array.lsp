@@ -48,6 +48,19 @@
      (write-to-string a :readably nil :array t)))
   "#0A0")
 
+(deftest print.array.0.7
+  (let ((a (make-array nil :initial-element 123123)))
+    (loop repeat 10 nconc (randomly-check-readability a :test #'is-similar)))
+  nil)
+
+(deftest print.array.0.8
+  (loop for i from 1 to 64
+	for type = `(unsigned-byte ,i)
+	nconc
+	(let ((a (make-array nil :initial-element 1 :element-type type)))
+	  (loop repeat 5 nconc (randomly-check-readability a :test #'is-similar))))
+  nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Two-d arrays
 (deftest print.array.2.1
@@ -264,4 +277,3 @@
 	 unless (string= result expected-result)
 	 collect (list d result expected-result)))
   nil)
-

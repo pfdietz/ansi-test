@@ -352,7 +352,16 @@ the condition to go uncaught if it cannot be classified."
 					  (declare (optimize safety))
 					  ,form)))
 	       (eval ',form))))
-     (,error-name (c) t))))
+     (,error-name (c) (printable-p c)))))
+
+(defun printable-p (obj)
+  "Returns T iff obj can be printed to a string."
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil))
+     (declare (optimize safety))
+     (handler-case (and (stringp (write-to-string obj)) t)
+		   (condition (c) (declare (ignore c)) nil)))))
 
 ;;;
 ;;; A scaffold is a structure that is used to remember the object
@@ -1656,3 +1665,98 @@ the condition to go uncaught if it cannot be classified."
 	    (append (random-partition n2 r)
 		    (list n1)
 		    (random-partition n3 (- p 1 r))))))))))
+
+(declaim (special *similarity-list*))
+
+(defun is-similar (x y)
+  (let ((*similarity-list* nil))
+    (is-similar* x y)))
+
+(defgeneric is-similar* (x y))
+
+(defmethod is-similar* ((x number) (y number))
+  (and (eq (class-of x) (class-of y))
+       (= x y)
+       t))
+
+(defmethod is-similar* ((x character) (y character))
+  (and (char= x y) t))
+
+(defmethod is-similar* ((x symbol) (y symbol))
+  (if (null (symbol-package x))
+      (and (null (symbol-package y))
+	   (is-similar* (symbol-name x) (symbol-name y)))
+    ;; I think the requirements for interned symbols in
+    ;; 3.2.4.2.2 boils down to EQ after the symbols are in the lisp
+    (eq x y))
+  t)
+
+(defmethod is-similar* ((x random-state) (y random-state))
+  (let ((copy-of-x (make-random-state x))
+	(copy-of-y (make-random-state y))
+	(bound (1- (ash 1 24))))
+    (and
+     ;; Try 50 values, and assume the random state are the same
+     ;; if all the values are the same.  Assuming the RNG is not
+     ;; very pathological, this should be acceptable.
+     (loop repeat 50
+	   always (eql (random bound copy-of-x)
+		       (random bound copy-of-y)))
+     t)))
+
+(defmethod is-similar* ((x cons) (y cons))
+  (or (and (eq x y) t)
+      (and (loop for (x2 . y2) in *similarity-list*
+		 thereis (and (eq x x2) (eq y y2)))
+	   t)
+      (let ((*similarity-list*
+	     (cons (cons x y) *similarity-list*)))
+	(and (is-similar* (car x) (car y))
+	     ;; If this causes stack problems,
+	     ;; convert to a loop
+	     (is-similar* (car x) (car y))))))
+
+(defmethod is-similar* ((x vector) (y vector))
+  (or (and (eq x y) t)
+      (and
+       (or (not (typep x 'simple-array))
+	   (typep x 'simple-array))
+       (= (length x) (length y))
+       (is-similar* (array-element-type x)
+		    (array-element-type y))
+       (loop for i below (length x)
+	     always (is-similar* (aref x i) (aref y i)))
+       t)))
+
+(defmethod is-similar* ((x array) (y array))
+  (or (and (eq x y) t)
+      (and
+       (or (not (typep x 'simple-array))
+	   (typep x 'simple-array))
+       (= (array-rank x) (array-rank y))
+       (equal (array-dimensions x) (array-dimensions y))
+       (is-similar* (array-element-type x)
+		    (array-element-type y))
+       (let ((*similarity-list*
+	      (cons (cons x y) *similarity-list*)))
+	 (loop for i below (array-total-size x)
+	       always (is-similar* (row-major-aref x i)
+				   (row-major-aref y i))))
+       t)))
+
+(defmethod is-similar* ((x hash-table) (y hash-table))
+  ;; FIXME  Add similarity check for hash tables
+  (error "Sorry, we're not computing this yet."))
+
+(defmethod is-similar* ((x pathname) (y pathname))
+  (and
+   (is-similar* (pathname-host x) (pathname-host y))
+   (is-similar* (pathname-device x) (pathname-device y))
+   (is-similar* (pathname-directory x) (pathname-directory y))
+   (is-similar* (pathname-name x) (pathname-name y))
+   (is-similar* (pathname-type x) (pathname-type y))
+   (is-similar* (pathname-version x) (pathname-version y))
+   t))
+
+(defmethod is-similar* ((x t) (y t))
+  (and (eql x y) t))
