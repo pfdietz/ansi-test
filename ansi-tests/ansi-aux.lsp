@@ -235,6 +235,15 @@ the condition to go uncaught if it cannot be classified."
 	       (rotatef (elt seq r) (elt seq (1- i))))))
   seq)
 
+(defun make-list-expr (args)
+  "Build an expression for computing (LIST . args), but that evades
+   CALL-ARGUMENTS-LIMIT."
+  (if (cddddr args)
+      (list 'list*
+	    (first args) (second args) (third args) (fourth args)
+	    (make-list-expr (cddddr args)))
+    (cons 'list args)))  
+
 (defparameter +standard-chars+
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+|\\=-`{}[]:\";'<>?,./ 
 ")

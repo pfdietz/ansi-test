@@ -101,7 +101,8 @@
        `(let ,vars
 	  (and (eql (multiple-value-setq ,vars (values-list (quote ,result)))
 		    ,(car result))
-	       (equal (list ,@vars) (quote ,result)))))
+	       (equal ,(make-list-expr vars)
+		      (quote ,result)))))
      unless (eval form)
      collect (list i form)))
   nil)
