@@ -63,7 +63,7 @@
 
 (deftest string-trim.8
   (let* ((s (copy-seq "abcdaba"))
-	 (s2 (string-trim (make-array 2 :initial-contents '(#\a #\b #\c #\d)
+	 (s2 (string-trim (make-array 4 :initial-contents '(#\a #\b #\c #\d)
 				      :element-type 'character
 				      :fill-pointer 2)
 			  s)))
