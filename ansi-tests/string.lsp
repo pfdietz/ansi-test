@@ -58,6 +58,7 @@
   t)
 
 (deftest string.12
+  :note (:nil-vectors-are-strings)
   (typep* (make-array '(17) :element-type nil) 'string)
   t)
 
