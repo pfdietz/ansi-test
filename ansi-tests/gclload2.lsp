@@ -60,6 +60,9 @@
 ;;; Tests of file operations
 (load "load-files.lsp")
 
+;;; Tests of streams
+(load "load-streams.lsp")
+
 ;;; Tests of system construction
 (load "features.lsp")
 (load "disassemble.lsp")
