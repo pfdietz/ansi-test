@@ -6,4 +6,4 @@
 (in-package :cl-test)
 
 (load "directory.lsp")
-
+(load "ensure-directories-exist.lsp")
