@@ -86,11 +86,39 @@
        (write "B" :stream t)))))
   "A         B")
 
-			    
+;;; Now test actual tabbing behavior
 
-		       
-			    
-  
+;;; NOTE
+;;; I am assuming that when colnum <= current column,
+;;; and the current column == colnum + k * colinc for some positive integer k,
+;;; then pprint-tab :line will tab at least 1 space.
 
-
+(def-pprint-test pprint-tab.line.1
+  (loop
+   for offset = (random 100)
+   for colnum = (random 100)
+   for colinc = (min (random 50) (random 50))
+   for s = (with-output-to-string
+	     (*standard-output*)
+	     (pprint-logical-block
+	      (*standard-output* nil)
+	      (dotimes (i offset) (write #\Space))
+	      (pprint-tab :line colnum colinc)
+	      (write #\A)))
+   for expected-col = (cond ((< offset colnum) colnum)
+			    ((= colinc 0) offset)
+			    ((= offset colnum) (+ offset colinc))
+			    (t (let ((k (mod (- colnum offset) colinc)))
+				 (if (= k 0)
+				     (+ offset colinc)
+				   (+ offset k)))))
+   repeat 200
+   nconc
+   (unless (string= s (concatenate
+			 'string
+			 (make-string expected-col :initial-element #\Space)
+			 "A"))
+       (list (list offset colnum colinc expected-col (count #\Space s) s))))
+  nil
+  :margin 1000)
 
