@@ -18,6 +18,7 @@
 (deftest simple-base-string-is-sequence
     (subtypep* 'simple-base-string 'sequence)
   t t)
+
 (deftest subtype.env.1
   (mapcar #'notnot
 	  (multiple-value-list (subtypep 'bit 'integer nil)))
@@ -128,4 +129,18 @@
    '(and (or (not symbol) (integer 0 10))
 	 (or symbol (integer 11 25)))
    '(integer 11 25))
+  nil)
+
+(deftest subtypep.and.1
+  (loop
+   for typelist in *disjoint-types-list2*
+   append (loop for type in typelist
+		append (check-equivalence `(and ,type ,type) type)))
+  nil)
+
+(deftest subtypep.or.1
+  (loop
+   for typelist in *disjoint-types-list2*
+   append (loop for type in typelist
+		append (check-equivalence `(or ,type ,type) type)))
   nil)
