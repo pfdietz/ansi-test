@@ -18,5 +18,7 @@
 (load "fceiling.lsp")
 (load "truncate.lsp")
 (load "ftruncate.lsp")
+(load "round.lsp")
+(load "fround.lsp")
 
 (load "epsilons.lsp")
