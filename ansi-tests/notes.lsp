@@ -14,4 +14,5 @@
 (defnote :nil-vectors-are-strings
   "Assume that (VECTOR NIL) objects are strings.")
 
-
+(defnote :standardized-package-nicknames
+  "The standardized package nicknames specified in section 11 of ANSI CL are exclusive (disputed).")

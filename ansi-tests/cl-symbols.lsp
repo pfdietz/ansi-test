@@ -994,14 +994,17 @@
 ;;; Standardized packages have the right names, nicknames
 
 (deftest keyword-package-nicknames
+  :notes :standardized-package-nicknames
   (package-nicknames (find-package "KEYWORD"))
   nil)
 
 (deftest common-lisp-package-nicknames
+  :notes :standardized-package-nicknames
   (package-nicknames (find-package "COMMON-LISP"))
   ("CL"))
 
 (deftest common-lisp-user-package-nicknames
+  :notes :standardized-package-nicknames
   (package-nicknames (find-package "COMMON-LISP-USER"))
   ("CL-USER"))
 

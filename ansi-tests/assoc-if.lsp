@@ -138,3 +138,11 @@
 (deftest assoc-if.error.11
   (classify-error (assoc-if #'null '((a . b) . c)))
   type-error)
+
+(deftest assoc-if.error.12
+  (classify-error (assoc-if #'null ((a . b) :bad (c . d))))
+  type-error)
+
+(deftest assoc-if.error.13
+  (classify-error (assoc-if #'null 'y))
+  type-error)

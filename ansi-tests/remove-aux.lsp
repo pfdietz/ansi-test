@@ -216,7 +216,7 @@
 	   (seq2 (copy-seq seq))
 	   (seq1r (apply (the function tested-fn) element seq1 arg-list))
 	   (seq2r (apply (the function check-fn) element seq2 arg-list)))
-      (setq *remove-fail-args* (list* element seq1 arg-list))
+      (setq *remove-fail-args* (list* element seq arg-list))
       (cond
        ((and pure (not (equalp seq seq1))) :fail1)
        ((and pure (not (equalp seq seq2))) :fail2)

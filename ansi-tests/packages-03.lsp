@@ -21,7 +21,7 @@
 	 (find-package "CL-USER")
 	 (find-package "KEYWORD")
 	 (find-package "A")
-	 (find-package "RT")
+	 (find-package "REGRESSION-TEST")
 	 (find-package "CL-TEST")
 	 (find-package "B"))
    (list-all-packages))

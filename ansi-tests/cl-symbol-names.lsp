@@ -1174,7 +1174,9 @@
     file-length
     file-namestring
     file-position
+    file-string-length
     file-write-date
+    fill
     find
     find-all-symbols
     find-if
@@ -1387,6 +1389,7 @@
     probe-file
     proclaim
     provide
+    random
     random-state-p
     rassoc
     rassoc-if

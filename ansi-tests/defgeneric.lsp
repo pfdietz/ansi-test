@@ -763,9 +763,12 @@
   nil a nil a a)
 
 ;;; I'm not sure this one is proper
+;;; Added :metaclass at prompting of Martin Simmons
 (when (subtypep (class-of (find-class 'standard-generic-function))
 		'standard-class)
-  (defclass substandard-generic-function (standard-generic-function) ())
+  (defclass substandard-generic-function (standard-generic-function) ()
+    (:metaclass #.(class-name (class-of
+			       (find-class 'standard-generic-function)))))
   (deftest defgeneric.30
     (let ((fn
 	   (eval '(defgeneric defgeneric.fun.29 (x)

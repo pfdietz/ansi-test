@@ -140,3 +140,10 @@
   (classify-error (assoc-if-not #'identity '((a . b) . c)))
   type-error)
 
+(deftest assoc-if-not.error.12
+  (classify-error (assoc-if-not #'identity ((a . b) :bad (c . d))))
+  type-error)
+
+(deftest assoc-if-not.error.13
+  (classify-error (assoc-if-not #'identity 'y))
+  type-error)

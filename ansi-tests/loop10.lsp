@@ -448,3 +448,47 @@
 (deftest loop.10.93
   (loop for i from 1 to 4 summing (return 100))
   100)
+
+(deftest loop.10.94
+  (loop for i in nil sum i of-type integer)
+  0)
+
+(deftest loop.10.95
+  (loop for i in nil sum i of-type fixnum)
+  0)
+
+(deftest loop.10.96
+  (loop for i in nil sum i of-type bit)
+  0)
+
+(deftest loop.10.97
+  (loop for i in nil sum i of-type (integer 0 100))
+  0)
+
+(deftest loop.10.98
+  (loop for i in nil sum i of-type (integer -100 0))
+  0)
+
+(deftest loop.10.99
+  (loop for i in nil sum i of-type (integer -100 100))
+  0)
+
+(deftest loop.10.100
+  (loop for i in nil sum i of-type (and integer (real -100.0 100.0)))
+  0)
+
+(deftest loop.10.101
+  (loop for i in nil sum i of-type short-float)
+  0.0s0)
+
+(deftest loop.10.102
+  (loop for i in nil sum i of-type single-float)
+  0.0f0)
+
+(deftest loop.10.103
+  (loop for i in nil sum i of-type double-float)
+  0.0d0)
+
+(deftest loop.10.104
+  (loop for i in nil sum i of-type long-float)
+  0.0l0)

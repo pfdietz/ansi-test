@@ -53,9 +53,13 @@
   (loop repeat 3 for i in '(a b c d e) collect i)
   (a b c))
 
-(deftest loop.11.9
-  (loop for i in '(a b c d e) collect i repeat 3)
-  (a b c))
+;;; Enough implementors have complained about this test that
+;;; I'm removing it.  The standard is self-contradictory
+;;; on whether REPEAT can occur later in a LOOP form.
+
+;;; (deftest loop.11.9
+;;;  (loop for i in '(a b c d e) collect i repeat 3)
+;;;  (a b c))
 
 
 ;;; Tests of WHILE

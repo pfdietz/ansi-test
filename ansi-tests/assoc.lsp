@@ -268,3 +268,10 @@
   (classify-error (assoc 'z '((a . b) . c)))
   type-error)
 
+(deftest assoc.error.11
+  (classify-error (assoc 'z '((a . b) :bad (c . d))))
+  type-error)
+
+(deftest assoc.error.12
+  (classify-error (assoc 'x 'y))
+  type-error)
