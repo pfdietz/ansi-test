@@ -228,6 +228,25 @@
   (check-equivalence '(integer * (11)) '(integer * 10))
   nil)
 
+(deftest subtypep.integer.25
+  (check-equivalence
+   '(and (or (integer 0 10) (integer 20 30))
+	 (or (integer 5 15) (integer 25 35)))
+   '(or (integer 5 10) (integer 25 30)))
+  nil)
+
+(deftest subtypep.integer.26
+  (check-equivalence
+   '(and (integer 0 10) (integer 5 15))
+   '(integer 5 10))
+  nil)
+
+(deftest subtypep.integer.27
+  (check-equivalence
+   '(or (integer 0 10) (integer 5 15))
+   '(integer 0 15))
+  nil)
+
 ;;;;;;;
 
 (deftest subtypep.float.1
@@ -325,6 +344,55 @@
   (subtypep* '(long-float 0.0l0 10.0l0) '(long-float 0.0l0 11.0l0))
   t t)
 
+(deftest subtypep.float.12
+  (subtypep* '(short-float 0.0s0 11.0s0) '(short-float 0.0s0 10.0s0))
+  nil t)
+
+(deftest subtypep.float.13
+  (subtypep* '(single-float 0.0f0 11.0f0) '(single-float 0.0f0 10.0f0))
+  nil t)
+
+(deftest subtypep.float.14
+  (subtypep* '(double-float 0.0d0 11.0d0) '(double-float 0.0d0 10.0d0))
+  nil t)
+
+(deftest subtypep.float.15
+  (subtypep* '(long-float 0.0l0 11.0l0) '(long-float 0.0l0 10.0l0))
+  nil t)
+
+(deftest subtypep.float.16
+  (subtypep* '(short-float 0.0s0 (10.0s0)) '(short-float 0.0s0 10.0s0))
+  t t)
+
+(deftest subtypep.float.17
+  (subtypep* '(single-float 0.0f0 (10.0f0)) '(single-float 0.0f0 10.0f0))
+  t t)
+
+(deftest subtypep.float.18
+  (subtypep* '(double-float 0.0d0 (10.0d0)) '(double-float 0.0d0 10.0d0))
+  t t)
+
+(deftest subtypep.float.19
+  (subtypep* '(long-float 0.0l0 (10.0l0)) '(long-float 0.0l0 10.0l0))
+  t t)
+
+(deftest subtypep.float.20
+  (subtypep* '(short-float 0.0s0 10.0s0) '(short-float 0.0s0 (10.0s0)))
+  nil t)
+
+(deftest subtypep.float.21
+  (subtypep* '(single-float 0.0f0 10.0f0) '(single-float 0.0f0 (10.0f0)))
+  nil t)
+
+(deftest subtypep.float.22
+  (subtypep* '(double-float 0.0d0 10.0d0) '(double-float 0.0d0 (10.0d0)))
+  nil t)
+
+(deftest subtypep.float.23
+  (subtypep* '(long-float 0.0l0 10.0l0) '(long-float 0.0l0 (10.0l0)))
+  nil t)
+
+
 ;;; SUBTYPEP on CONS types
 
 (defvar *cons-types*
@@ -358,6 +426,13 @@
 			   (cons (integer 5 15) (integer 10 20))
 			   (cons * (integer 15 25)))
 		     '(cons (integer 5 10) (integer 15 20)))
+  nil)
+
+(deftest subtypep.cons.5
+  (check-equivalence
+   '(and cons (not (cons symbol symbol)))
+   '(or (cons (not symbol) *)
+	(cons * (not symbol))))
   nil)
 
 ;;; SUBTYPEP on MEMBER types
