@@ -64,19 +64,3 @@
 (deftest typecase.14
   (typecase 1 (symbol 'a) (otherwise))
   nil)
-
-(deftest typecase.15
-  (typecase 'foo (t :wrong) (symbol :right) (t :also-wrong))
-  :right)
-
-(deftest typecase.16
-  (typecase 'foo (t :wrong) (symbol :right))
-  :right)
-
-
-
-
-
-    
-
-
