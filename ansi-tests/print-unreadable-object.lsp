@@ -77,7 +77,7 @@
 (def-pprint-test print-unreadable-object.4
   (loop
    for x in *mini-universe*
-   for return-vals1 = nil
+   for return-vals = nil
    for s = (with-output-to-string
 	     (s)
 	     (setq return-vals
