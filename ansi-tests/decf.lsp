@@ -139,7 +139,7 @@
 
 (deftest decf.21
   (let ((x 1))
-    (values (decf x #c(0.0d0 -2.0l0)) x))
+    (values (decf x #c(0.0l0 -2.0l0)) x))
   #c(1.0l0 2.0l0) #c(1.0l0 2.0l0))
 
 (deftest decf.order.2

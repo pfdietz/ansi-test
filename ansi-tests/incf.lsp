@@ -139,7 +139,7 @@
 
 (deftest incf.21
   (let ((x 1))
-    (values (incf x #c(0.0d0 -2.0l0)) x))
+    (values (incf x #c(0.0l0 -2.0l0)) x))
   #c(1.0l0 -2.0l0) #c(1.0l0 -2.0l0))
 
 (deftest incf.order.2
