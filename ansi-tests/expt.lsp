@@ -120,7 +120,8 @@
    for zero in '(0.0s0 0.0f0 0.0d0 0.0l0)
    always
    (loop for i from -1000 to 1000
-	 always (eql (expt i zero) (float 1 zero))))
+	 always (or (zerop i)
+		    (eql (expt i zero) (float 1 zero)))))
   t)
 
 (deftest expt.19
@@ -128,7 +129,8 @@
    for zero in '(0.0s0 0.0f0 0.0d0 0.0l0)
    always
    (loop for i from -1000 to 1000
-	 always (eql (expt (float i 0.0s0) zero) (float 1 zero))))
+	 always (or (zerop i)
+		    (eql (expt (float i 0.0s0) zero) (float 1 zero)))))
   t)
 
 (deftest expt.20
@@ -136,7 +138,8 @@
    for zero in '(0.0f0 0.0d0 0.0l0)
    always
    (loop for i from -1000 to 1000
-	 always (eql (expt (float i 0.0f0) zero) (float 1 zero))))
+	 always (or (zerop i)
+		    (eql (expt (float i 0.0f0) zero) (float 1 zero)))))
   t)
 
 (deftest expt.21
@@ -144,7 +147,8 @@
    for zero in '(0.0d0 0.0l0)
    always
    (loop for i from -1000 to 1000
-	 always (eql (expt (float i 0.0d0) zero) (float 1 zero))))
+	 always (or (zerop i)
+		    (eql (expt (float i 0.0d0) zero) (float 1 zero)))))
   t)
 
 (deftest expt.22
@@ -171,10 +175,41 @@
   (expt 2.0l0 0.0d0)
   1.0l0)
 
+(deftest expt.28
+  (<= (realpart (expt -8 1/3)) 0.0)
+  nil)
 
+#|
+;;; I need to think more about how to do approximate float
+;;; equality in a principled way.
 
+(deftest expt.29
+  (loop for bound in '(1.0s4 1.0f6 1.0d8 1.0l8)
+	for ebound in (list short-float-epsilon single-float-epsilon
+			    double-float-epsilon long-float-epsilon)
+	for ebound2 = (max (* 2 ebound) (/ bound))
+	nconc
+	(loop for x = (1+ (random 1.0f6))
+	      for s1 = (sqrt x)
+	      for s2 = (expt x 1/2)
+	      for error = (/ (abs (- s2 s2)) x)
+	      repeat 1000
+	      unless (< error ebound2)
+	      collect (list x s1 s2)))
+  nil)
 
-
-	
-
-
+(deftest expt.30
+  (loop for bound in '(1.0s4 1.0f6 1.0d8 1.0l8)
+	for ebound in (list short-float-epsilon single-float-epsilon
+			    double-float-epsilon long-float-epsilon)
+	for ebound2 = (max (* 2 ebound) (/ bound))
+	nconc
+	(loop for x = (- (1+ (random 1.0f6)))
+	      for s1 = (sqrt x)
+	      for s2 = (expt x 1/2)
+	      for error = (/ (abs (- s2 s2)) x)
+	      repeat 1000
+	      unless (< error ebound2)
+	      collect (list x s1 s2)))
+  nil)
+|#
