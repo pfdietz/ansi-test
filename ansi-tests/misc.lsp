@@ -10599,3 +10599,57 @@ Broken at C::WT-MAKE-CLOSURE.
 		:start1 2 :start2 p6 :end1 8)))
    4)
   2)
+
+;;; sbcl 0.8.20.27
+;;; Control stack exhausted
+
+(deftest misc.587
+  (let ((result (funcall
+		 (compile
+		  nil
+		  '(lambda (p2)
+		     (declare (optimize (speed 0) (safety 3) (debug 1) (space 0))
+			      (type (eql 33558541) p2))
+		     (- 92215.266 p2)))
+		 33558541)))
+    (notnot (typep result 'single-float)))
+  t)
+
+;;; Lispworks 4.3 Personal Edition
+;;; Incorrect return value (T instead of NIL)
+
+(deftest misc.588
+  (funcall (compile nil '(lambda nil (declare (optimize (speed 2) (safety 1) (debug 1) (space 1)))
+			   (functionp 3502843))))
+  nil)
+
+;;;  (ARRAY NIL) is an illegal type specifier.
+
+(deftest misc.589
+  (typep 1 '(array nil))
+  nil)
+
+;;; Segmentation violation
+
+(deftest misc.590
+  (funcall (compile nil '(lambda nil (declare (optimize debug)) (symbolp -86755))))
+  nil)
+
+;;; parse-integer fails on displaced base strings
+
+(deftest misc.591
+  (let* ((s1 (coerce "708553218828630100500" 'base-string))
+	 (s2 (make-array '(13) :element-type 'base-char
+			 :displaced-to s1
+			 :displaced-index-offset 5)))
+    (parse-integer s2))
+  3218828630100
+  13)
+
+;;; abcl, 19 Mar 2005
+;;; Stack overflow
+
+(deftest misc.592
+  (equalp #*0 "0")
+  nil)
+
