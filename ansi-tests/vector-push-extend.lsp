@@ -337,13 +337,18 @@
   program-error)
 
 (deftest vector-push-extend.error.17
-  (let ((a (make-array '5 :fill-pointer t :adjustable nil
-		       :initial-element nil)))
-    (declare (optimize (safety 3)))
-    (or (notnot (adjustable-array-p a))  ;; It's actually adjustable, or...
-	(handler-case (vector-push-extend a 'x) ;;; ... this fails
-		      (error () t))))
+  (handler-case
+   (eval
+    `(locally
+      (declare (optimize (safety 3)))
+      (let ((a (make-array '5 :fill-pointer t :adjustable nil
+			   :initial-element nil)))
+	(or (notnot (adjustable-array-p a))  ; It's actually adjustable, or...
+	    (vector-push-extend a 'x)        ; ... this fails
+	    ))))
+   (error () t))
   t)
+
 
 
 
