@@ -162,68 +162,72 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
 
-(deftest mapcan-1
-    (mapcan #'list nil)
+(deftest mapcan.1
+  (mapcan #'list nil)
   nil)
 
-(deftest mapcan-2
-    (mapcan #'list (copy-list '(a b c d e f)))
+(deftest mapcan.2
+  (mapcan #'list (copy-list '(a b c d e f)))
   (a b c d e f))
 
-(deftest mapcan-3
-    (let* ((x (list 'a 'b 'c 'd))
-	   (xcopy (make-scaffold-copy x))
-	   (result (mapcan #'list x)))
-      (and
-       (= (length x) (length result))
-       (check-scaffold-copy x xcopy)
-       (loop
-	 for e1 on x
-	 and e2 on result
-	    count (or (eqt e1 e2) (not (eql (car e1) (car e2)))))))
+(deftest mapcan.3
+  (let* ((x (list 'a 'b 'c 'd))
+	 (xcopy (make-scaffold-copy x))
+	 (result (mapcan #'list x)))
+    (and
+     (= (length x) (length result))
+     (check-scaffold-copy x xcopy)
+     (loop
+      for e1 on x
+      and e2 on result
+      count (or (eqt e1 e2) (not (eql (car e1) (car e2)))))))
   0)
 
-(deftest mapcan-4
-    (mapcan #'list
-	    (copy-list '(1 2 3 4))
-	    (copy-list '(a b c d)))
+(deftest mapcan.4
+  (mapcan #'list
+	  (copy-list '(1 2 3 4))
+	  (copy-list '(a b c d)))
   (1 a 2 b 3 c 4 d))
 
-(deftest mapcan-5
-    (mapcan #'(lambda (x y) (make-list y :initial-element x))
-	    (copy-list '(a b c d))
-	    (copy-list '(1 2 3 4)))
+(deftest mapcan.5
+  (mapcan #'(lambda (x y) (make-list y :initial-element x))
+	  (copy-list '(a b c d))
+	  (copy-list '(1 2 3 4)))
   (a b b c c c d d d d))
 
-(defvar *mapcan-6-var* nil)
-(defun mapcan-6-fun (x)
-  (push x *mapcan-6-var*)
-  (copy-list *mapcan-6-var*))
+(defvar *mapcan.6-var* nil)
+(defun mapcan.6-fun (x)
+  (push x *mapcan.6-var*)
+  (copy-list *mapcan.6-var*))
 
-(deftest mapcan-6
-    (progn
-      (setf *mapcan-6-var* nil)
-      (mapcan 'mapcan-6-fun (copy-list '(a b c d))))
+(deftest mapcan.6
+  (progn
+    (setf *mapcan.6-var* nil)
+    (mapcan 'mapcan.6-fun (copy-list '(a b c d))))
   (a b a c b a d c b a))
 
-(deftest mapcan-7
-    (mapcan #'(lambda (x y) (make-list y :initial-element x))
-	    (copy-list '(a b c d))
-	    (copy-list '(1 2 3 4 5 6)))
+(deftest mapcan.7
+  (mapcan #'(lambda (x y) (make-list y :initial-element x))
+	  (copy-list '(a b c d))
+	  (copy-list '(1 2 3 4 5 6)))
   (a b b c c c d d d d))
 
-(deftest mapcan-8
-    (mapcan #'(lambda (x y) (make-list y :initial-element x))
-	    (copy-list '(a b c d e f))
-	    (copy-list '(1 2 3 4)))
+(deftest mapcan.8
+  (mapcan #'(lambda (x y) (make-list y :initial-element x))
+	  (copy-list '(a b c d e f))
+	  (copy-list '(1 2 3 4)))
   (a b b c c c d d d d))
 
-(deftest mapcan-9
-    (mapcan #'list
-	    (copy-list '(a b c d))
-	    (copy-list '(1 2 3 4))
-	    nil)
+(deftest mapcan.9
+  (mapcan #'list
+	  (copy-list '(a b c d))
+	  (copy-list '(1 2 3 4))
+	  nil)
   nil)
+
+(deftest mapcan.10
+  (mapcan (constantly 1) (list 'a))
+  1)
 
 (deftest mapcan.error.1
   (classify-error (mapcan #'identity 1))
@@ -442,11 +446,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
 
-(deftest mapcon-1
+(deftest mapcon.1
   (mapcon #'(lambda (x) (append '(a) x nil)) nil)
   nil)
 
-(deftest mapcon-2
+(deftest mapcon.2
   (let* ((x (copy-list '(1 2 3 4)))
 	 (xcopy (make-scaffold-copy x))
 	 (result
@@ -456,7 +460,7 @@
      result))
   (a 1 2 3 4 a 2 3 4 a 3 4 a 4))
 
-(deftest mapcon-3
+(deftest mapcon.3
   (let* ((x (copy-list '(4 2 3 2 2)))
 	 (y (copy-list '(a b c d e f g h i j k l)))
 	 (xcopy (make-scaffold-copy x))
@@ -470,6 +474,10 @@
      (check-scaffold-copy y ycopy)
      result))
   (a b c d b c c d e d e e f))
+
+(deftest mapcon.4
+  (mapcon (constantly 1) (list 'a))
+  1)
 
 (deftest mapcon.error.1
   (classify-error (mapcon #'identity 1))
