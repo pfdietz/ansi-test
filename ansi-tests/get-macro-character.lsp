@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "reader-aux.lsp")
+
 (def-syntax-test get-macro-character.1
   (loop for c across "()';\"`,#"
 	collect
