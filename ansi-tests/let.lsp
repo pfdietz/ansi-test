@@ -63,7 +63,7 @@
 (deftest let.11
   (let ((x 1))
     (list x
-	  (let (x x x)
+	  (let (x)
 	    (declare (special x))
 	    x)
 	  x))
