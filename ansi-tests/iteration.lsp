@@ -391,14 +391,16 @@
   nil)
 
 (deftest dotimes.6
-  (let ((x nil))
-    (dotimes (i -1 x) (push i x)))
-  nil)
+  (block done
+    (dotimes (i -1 'good)
+      (return-from done 'bad)))
+  good)
 
 (deftest dotimes.7
-  (let ((x nil))
-    (dotimes (i (1- most-negative-fixnum) x) (push i x)))
-  nil)
+  (block done
+    (dotimes (i (1- most-negative-fixnum) 'good)
+      (return-from done 'bad)))
+  good)
 
 ;;; Implicit nil block has the right scope
 (deftest dotimes.8

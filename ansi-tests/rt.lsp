@@ -165,31 +165,34 @@ them.")
 	   r)
       ;; (declare (special *break-on-warnings*))
 
-      (flet ((%do
-	      ()
-	      (setf r
-		    (multiple-value-list
-		     (if *compile-tests*
-			 (funcall (compile
-				   nil
-				   `(lambda ()
-				      (declare
-				       (optimize ,@*optimization-settings*))
-				      ,(form entry))))
-		       (eval (form entry)))))))
-	(block aborted
-	  (if *catch-errors*
-	      (handler-bind (#-ecl (style-warning #'muffle-warning)
-				   (error #'(lambda (c)
-					      (setf aborted t)
-					      (setf r (list c))
-					      (return-from aborted nil))))
-			    (%do))
-	    (%do))))
-      
+      (block aborted
+	(setf r
+	      (flet ((%do
+		      ()
+		      (if *compile-tests*
+			  (multiple-value-list
+			   (funcall (compile
+				     nil
+				     `(lambda ()
+					(declare
+					 (optimize ,@*optimization-settings*))
+					,(form entry)))))
+			(multiple-value-list
+			 (eval (form entry))))))
+		(if *catch-errors*
+		    (handler-bind
+		     (#-ecl (style-warning #'muffle-warning)
+			    (error #'(lambda (c)
+				       (setf aborted t)
+				       (setf r (list c))
+				       (return-from aborted nil))))
+		     (%do))
+		  (%do)))))
+
       (setf (pend entry)
 	    (or aborted
 		(not (equalp-with-case r (vals entry)))))
+      
       (when (pend entry)
 	(let ((*print-circle* *print-circle-on-failure*))
 	  (format s "~&Test ~:@(~S~) failed~
