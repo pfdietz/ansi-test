@@ -143,9 +143,22 @@
    '(member 0 10))
   nil)
 
+(deftest subtypep.rational.13
+  (check-equivalence '(and integer (rational -1/2 1/2))
+		     '(integer 0 0))
+  nil)
 
+(deftest subtypep.rational.14
+  (check-equivalence '(and integer (rational -1/2 1/2))
+		     '(eql 0))
+  nil)
 
+(deftest subtypep.rational.15
+  (check-equivalence '(and integer (rational (-1/2) 1/2))
+		     '(integer 0 0))
+  nil)
 
-
-
-
+(deftest subtypep.rational.16
+  (check-equivalence '(and integer (rational (-1/2) (1/2)))
+		     '(integer 0 0))
+  nil)
