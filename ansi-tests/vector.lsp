@@ -177,6 +177,23 @@
     (typep s '(vector t *)))
   nil)
 
+(deftest vector.type.41
+  (notnot-mv (typep (make-array '10 :element-type 'short-float) 'vector))
+  t)
+  
+(deftest vector.type.42
+  (notnot-mv (typep (make-array '10 :element-type 'single-float) 'vector))
+  t)
+  
+(deftest vector.type.43
+  (notnot-mv (typep (make-array '10 :element-type 'double-float) 'vector))
+  t)
+  
+(deftest vector.type.44
+  (notnot-mv (typep (make-array '10 :element-type 'long-float) 'vector))
+  t)
+  
+
 ;;;; Tests of the function VECTOR
 
 (deftest vector.1
@@ -227,3 +244,8 @@
 (deftest vector.9
   (typep (vector #\a #\b #\c) 'string)
   nil)
+
+(deftest vector.10
+  (notnot-mv (typep (vector 1 2 3) '(simple-vector *)))
+  t)
+
