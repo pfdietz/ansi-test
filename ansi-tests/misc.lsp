@@ -10279,5 +10279,41 @@ Broken at C::WT-MAKE-CLOSURE.
     20851.398f0))
   1.0f0)
 
+;;; LOG
+;;; The value #C(-215549 39/40) is not of type (COMPLEX RATIONAL).
 
+(deftest misc.562
+  (let ((fn '(lambda (p1)
+	       (declare (optimize (speed 0) (safety 0) (debug 0) (space 2))
+			(type (complex rational) p1))
+	       (log p1))))
+    (notnot (complexp (funcall (compile nil fn) #C(-215549 39/40)))))
+  t)
 
+;;; CONJUGATE
+;;; Wrong result (#c(1 2))
+
+(deftest misc.563
+  (funcall (compile nil '(lambda (x)
+			   (declare (optimize (speed 1) (safety 0) (debug 3) (space 1))
+				    (type (complex rational) x))
+			   (conjugate (the (eql #c(1 2)) x))))
+	   #c(1 2))
+  #c(1 -2))
+
+;;; PHASE
+;;; The function SB-KERNEL:%ATAN2 is undefined.
+
+(deftest misc.564
+  (notnot
+   (typep
+    (funcall
+     (compile
+      nil
+      '(lambda (p1)
+	 (declare (optimize (speed 3) (safety 2) (debug 3) (space 0))
+		  (type complex p1))
+	 (phase (the (eql #c(1.0d0 2.0d0)) p1))))
+     #c(1.0d0 2.0d0))
+    'double-float))
+  t)
