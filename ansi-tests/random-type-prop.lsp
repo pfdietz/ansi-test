@@ -15,30 +15,39 @@
   (:documentation
    "Given a value, generate a random type that contains that value."))
 
-(defun do-random-type-prop-tests (&key operator
-				       (minargs 2)
-				       (maxargs minargs)
-				       (arg-types nil)
-				       (rest-type 'integer)
-				       (reps 1000)
-				       (enclosing-the nil))
+(declaim (special *param-types* *params* *is-var?* *form*))
+
+(defun do-random-type-prop-tests
+  (operator &key
+	    (minargs 2)
+	    (maxargs minargs)
+	    (arg-types nil)
+	    (rest-type 'integer)
+	    (reps 1000)
+	    (enclosing-the nil)
+	    (test #'regression-test::equalp-with-case))
   (assert (<= 1 minargs maxargs 20))
-  (loop
-   repeat reps
-   do
-   (let* ((param-names
+  (dotimes (i reps)
+    again
+    (let* ((param-names
 	   '(p1 p2 p3 p4 p5 p6 p7 p8 p9 p10
 	     p11 p12 p13 p14 p15 p16 p17 p18 p19 p20))
 	  (nargs (+ minargs (random (- maxargs minargs -1))))
-	  (types (append arg-types
-			 (make-list (- nargs (length arg-types))
-				    :initial-element rest-type)))
-	  (vals (mapcar #'make-random-element-of-type types))
+	  (types (subseq 
+		  (append arg-types
+			  (make-list (max 0 (- nargs (length arg-types)))
+				     :initial-element rest-type))
+		  0 nargs))
+	  ; (vals (mapcar #'make-random-element-of-type types))
+	  (vals (setq *params*
+		      (or (make-random-arguments types) (go again))))
 	  (is-var? (loop repeat (length vals) collect (coin)))
+	  (*is-var?* is-var?)
 	  (params (loop for x in is-var?
 			for p in param-names
 			when x collect p))
 	  (param-types (mapcar #'make-random-type-containing vals))
+	  (*param-types* param-types)
 	  (type-decls (loop for x in is-var?
 			    for p in param-names
 			    for tp in param-types
@@ -47,7 +56,9 @@
 	  (rval (cl:handler-bind
 		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			 (warning #'muffle-warning))
-		 (eval (cons operator vals))))
+		 (let ((eval-form (cons operator (loop for v in vals collect `(quote ,v)))))
+		   ;; (dotimes (i 100) (eval eval-form))
+		   (eval eval-form))))
 	  (result-type (if (and enclosing-the (integerp rval))
 			   (make-random-type-containing rval)
 			 t))
@@ -60,7 +71,11 @@
 						 (1 (let ((tp (make-random-type-containing v)))
 						      `(the ,tp ,p)))
 						 (1 p))
-					      v))))
+					      (if (or (consp v)
+						      (and (symbolp v) (not (or (keywordp v)
+										(member v '(nil t))))))
+						  `(quote ,v)
+						  v)))))
 	  (form
 	   `(lambda (r ,@params)
 	      (declare (optimize speed (safety 1))
@@ -68,7 +83,8 @@
 		       ,@ type-decls)
 	      (setf (aref r)
 		    ,(if enclosing-the `(the ,result-type ,expr) expr))
-	      (values))))
+	      (values)))
+	  (*form* form))
      (when *print-random-type-prop-input*
        (let ((*print-pretty* t)
 	     (*print-case* :downcase))
@@ -82,15 +98,32 @@
 			 (warning #'muffle-warning))
 		 (compile nil form)))
 	    (r (make-array nil :element-type upgraded-result-type))
-	    (result (progn (apply fn r param-vals) (aref r))))
+	    (result (progn
+		      ;; (dotimes (i 100) (apply fn r param-vals))
+		      (apply fn r param-vals)
+		      (aref r))))
        (setq *random-type-prop-result*
 	     (list :upgraded-result-type upgraded-result-type
 		   :form form
 		   :vals vals
 		   :result result
 		   :rval rval))
-       (unless (rt::equalp-with-case result rval)
+       (unless (funcall test result rval)
 	 (return *random-type-prop-result*))))))
+
+(defun make-random-arguments (types-or-funs)
+  (let ((vals nil))
+    (loop for type-or-fun in types-or-funs
+	  for type = (or (typecase type-or-fun
+			   ((and function (not symbol))
+			    (apply type-or-fun vals))
+			   (t type-or-fun))
+			 (return-from make-random-arguments nil) ;; null type
+			 )
+	  for val = (make-random-element-of-type type)
+	  do (setf vals (nconc vals (list val))))
+    ;; (dolist (v vals) (describe v))
+    vals))
 
 (defmethod make-random-type-containing ((val integer))
   (rcase
@@ -145,23 +178,13 @@
 	`(member ,@l1 ,val ,@l2)))
    (1 (random-from-seq #(t atom)))))
 
-(defun make-random-character ()
-  (rcase
-   (2 (random-from-seq +standard-chars+))
-   (2 (or (code-char (random (min 256 char-code-limit)))
-	  (make-random-character)))
-   (1 (or (code-char (random (min (ash 1 16) char-code-limit)))
-	  (make-random-character)))
-   (1 (or (code-char (random (min (ash 1 24) char-code-limit)))
-	  (make-random-character)))))
-
 (defmethod make-random-type-containing ((val rational))
   (rcase
    (1 `(eql ,val))
    (1 (let* ((n1 (random 4))
 	     (n2 (random 4))
 	     (l1 (loop repeat n1 collect (make-random-element-of-type 'rational)))
-	     (l2 (loop repeat n1 collect (make-random-element-of-type 'rational))))
+	     (l2 (loop repeat n2 collect (make-random-element-of-type 'rational))))
 	`(member ,@l1 ,val ,@l2)))
    (1 `(rational ,val))
    (1 `(rational * ,val))
@@ -171,4 +194,98 @@
 	  `(rational ,val ,v))))
    ))
 
-	  
+(defmethod make-random-type-containing ((val float))
+  (let ((names (loop for tp in '(short-float single-float double-float long-float)
+		     when (typep val tp)
+		     collect tp)))
+    (rcase
+     (1 `(eql ,val))
+     (1 `(member ,val))
+     (1 (random-from-seq names))
+     (1 (if (>= val 0)
+	    `(,(random-from-seq names) ,(float 0 val) ,val)
+	  `(,(random-from-seq names) ,val ,(float 0 val)))))))
+
+(defun make-random-array-dimension-spec (array dim-index)
+  (assert (<= 0 dim-index))
+  (assert (< dim-index (array-rank array)))
+  (let ((dim (array-dimension array dim-index)))
+    (rcase (1 '*) (1 dim))))
+
+(defmethod make-random-type-containing ((val bit-vector))
+  (rcase
+   (1 (let ((root (if (and (coin)
+			   (typep val 'simple-bit-vector))
+		      'simple-bit-vector
+		    'bit-vector)))
+	(rcase (1 root)
+	       (1 `(,root))
+	       (3 `(,root ,(make-random-array-dimension-spec val 0))))))
+   (2 (call-next-method))))
+
+(defmethod make-random-type-containing ((val vector))
+  (rcase
+   (2 (let ((root 'vector)
+	    (alt-root (if (and (coin) (simple-vector-p val)) 'simple-vector 'vector))
+	    (etype (rcase (1 '*)
+			  (1 (array-element-type val))
+			  ;; Add rule for creating new element types?
+			  )))
+	(rcase (1 alt-root)
+	       (1 `(,alt-root))
+	       (1 `(,root ,etype))
+	       (2 (if (and (simple-vector-p val) (coin))
+		      `(simple-vector ,(make-random-array-dimension-spec val 0))
+		    `(,root ,etype ,(make-random-array-dimension-spec val 0)))))))
+   (3 (call-next-method))))
+
+(defmethod make-random-type-containing ((val array))
+  (let ((root (if (and (coin) (typep val 'simple-array)) 'simple-array 'array))
+	(etype (rcase (1 (array-element-type val)) (1 '*)))
+	(rank (array-rank val)))
+    (rcase
+     (1 root)
+     (1 `(,root))
+     (1 `(,root ,etype))
+     (1 `(,root ,etype ,(loop for i below rank collect (make-random-array-dimension-spec val i))))
+     (1 `(,root ,etype ,(loop for i below rank collect (array-dimension val i))))
+     (1 `(,root ,etype ,rank)))))
+
+(defmethod make-random-type-containing ((val string))
+  (rcase
+   (1 (let ((root (if (and (coin)
+			   (typep val 'simple-string))
+		      'simple-string
+		    'string)))
+	(rcase (1 root)
+	       (1 `(,root))
+	       (3 `(,root ,(make-random-array-dimension-spec val 0))))))
+   (2 (call-next-method))))
+
+(defmethod make-random-type-containing ((val cons))
+  (rcase
+   (3 'cons)
+   (2 'list)
+   (1 `(cons ,(make-random-type-containing (car val))))
+   (1 `(cons t ,(make-random-type-containing (cdr val))))
+   (1 t)))
+
+(defmethod make-random-type-containing ((val complex))
+  (rcase
+   (1 'complex)
+   (1 'number)
+   #-gcl (1 `(complex ,(upgraded-complex-part-type (type-of (realpart val)))))
+   (1 `(eql ,val))))
+
+(defmethod make-random-type-containing ((val generic-function))
+  (rcase
+   (1 'generic-function)
+   (1 (call-next-method))))
+
+(defmethod make-random-type-containing ((val function))
+  (rcase
+   (1 'function)
+   (1 (if (typep val 'compiled-function)
+	  'compiled-function
+	'function))
+   (1 t)))
