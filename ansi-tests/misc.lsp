@@ -4545,6 +4545,21 @@
 	    (complex (throw 'ct4 (dotimes (iv4 0 0) (throw 'ct1 0))) 0)))))))
   0)
 
+(deftest misc.274a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+         (declare (optimize (speed 3) (space 1) (safety 3)
+			    (debug 1) (compilation-speed 3)))
+         (dotimes (iv4 3 0)
+           (apply (constantly 0)
+                  0
+                  (catch 'ct2 (throw 'ct2 (rem 0 (max 46 0))))
+                  nil)))))
+  0)
+
+
 ;;;  failed AVER: "SUCC"
 
 (deftest misc.275
@@ -4569,3 +4584,18 @@
 	 (funcall #'%f12 0))))
    -33)
   0)
+
+(deftest misc.275a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 0) (safety 2)
+			  (debug 1) (compilation-speed 1)))
+       (block b4
+	 (coerce
+	  (logcount
+	   (if t 0 (multiple-value-prog1 (identity 0) (return-from b4 0))))
+	  'integer)))))
+  0)
+
