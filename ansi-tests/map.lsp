@@ -130,7 +130,7 @@
   "abcde")
 
 (deftest map-string.32
-  (map '(simple-array character * 5) #'identity "abcde")
+  (map '(simple-array character 5) #'identity "abcde")
   "abcde")
 
 (deftest map-nil.33
