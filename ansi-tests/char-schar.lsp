@@ -109,7 +109,7 @@
   "xxXxxx")
 
 (deftest schar.5
-  (let ((s (make-string 6 :initial-element #\x :element-type 'string-char)))
+  (let ((s (make-string 6 :initial-element #\x :element-type 'standard-char)))
     (setf (schar s 2) #\X)
     s)
   "xxXxxx")
