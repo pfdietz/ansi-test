@@ -379,7 +379,7 @@
   (macrolet ((%x () t))
     (declare (optimize))
     (%x))
-  nil)
+  t)
 
 ;;; Symbol-macrolet tests
 
