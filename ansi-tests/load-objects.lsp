@@ -5,4 +5,6 @@
 
 (compile-and-load "defclass-aux.lsp")
 (load "defclass.lsp")
+(load "ensure-generic-function.lsp")
+
 

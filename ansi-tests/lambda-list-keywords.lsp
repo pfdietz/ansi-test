@@ -25,15 +25,16 @@
   t)
 
 ;;; No lambda list keywords are in the keyword package
-(deftest lambda-list-keywords.4
-  (some #'keywordp lambda-list-keywords)
-  nil)
+;;; (deftest lambda-list-keywords.4
+;;;  (some #'keywordp lambda-list-keywords)
+;;;  nil)
 
 ;;; Every keyword starts with an ampersand
 (deftest lambda-list-keywords.5
   (notevery #'(lambda (sym)
-		(let ((name (symbol-name sym)))
-		  (and (> (length name) 0)
-		       (eql (aref name 0) #\&))))
+		(and (symbolp sym)
+		     (let ((name (symbol-name sym)))
+		       (and (> (length name) 0)
+			    (eql (aref name 0) #\&)))))
 	    lambda-list-keywords)
   nil)

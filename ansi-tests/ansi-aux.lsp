@@ -1430,3 +1430,9 @@ the condition to go uncaught if it cannot be classified."
       (unsigned-byte 32) float short-float
       single-float double-float long-float
       nil character base-char symbol boolean null))
+
+(defun collect-properties (plist prop)
+  "Collect all the properties in plist for a property prop."
+  (loop for e on plist by #'cddr
+	when (eql (car e) prop)
+	collect (cadr e)))

@@ -65,8 +65,15 @@
   program-error)
 
 
+;;; Now non-error tests
+
+(defclass-with-tests defclass-1 nil nil)
+(defclass-with-tests defclass-2 nil (slot1 slot2 slot3))
 
 
+;;; At end, generate slot tests
+
+(generate-slot-tests) ;; a macro
 
 
 
