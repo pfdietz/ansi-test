@@ -298,10 +298,13 @@
    (nil () :report (lambda (s) (format s "Anonymous restart"))  10))
   (foo bar foo nil))
 
-
-
-
-
-
-
-
+(deftest restart-case.36
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (restart-case
+       (invoke-restart 'foo)
+       (foo (&aux (y x))
+	    (declare (special x))
+	    y))))
+  :good)

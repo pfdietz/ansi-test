@@ -146,8 +146,13 @@
 		    )))))
   100 t)
 
+;;; Free declaration scope
 
-
-
-	  
-	
+(deftest with-hash-table-iterator.12
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-hash-table-iterator (m (return-from done x))
+				  (declare (special x))))))
+  :good)

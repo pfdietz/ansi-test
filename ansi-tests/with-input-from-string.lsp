@@ -176,5 +176,44 @@
      (return-from done :good)))
   :good)
 
+;;; Free declaration scope
+
+(deftest with-input-from-string.19
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-input-from-string (s (return-from done x))
+				(declare (special x))))))
+  :good)
+
+(deftest with-input-from-string.20
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-input-from-string (s "abc" :start (return-from done x))
+				(declare (special x))))))
+  :good)
+
+(deftest with-input-from-string.21
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-input-from-string (s "abc" :end (return-from done x))
+				(declare (special x))))))
+  :good)
+
+;;; index is not updated if the form exits abnormally
+
+(deftest with-input-from-string.22
+  (let ((i nil))
+    (values
+     (block done
+       (with-input-from-string (s "abcde" :index i) (return-from done (read-char s))))
+     i))
+  #\a nil)
+
 ;;; FIXME: Add more tests on specialized strings.
 

@@ -161,3 +161,14 @@
     (make-array 5 :element-type etype
 		:displaced-to name0
 		:displaced-index-offset 1)))
+
+;;; Free declaration scope
+
+(deftest with-package-iterator.22
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-package-iterator (s (return-from done x) :internal)
+			       (declare (special x))))))
+  :good)

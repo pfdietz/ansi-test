@@ -65,4 +65,13 @@
      (open-stream-p s)))
   nil t nil)
 
+;;; Free declaration scope
 
+(deftest with-open-stream.10
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-open-stream (s (return-from done x))
+			  (declare (special x))))))
+  :good)

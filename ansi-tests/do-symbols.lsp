@@ -132,8 +132,24 @@
     (make-array 1 :element-type etype
 		:displaced-to name0 :displaced-index-offset 1)))
 
+;;; Free declaration scope tests
 
+(deftest do-symbols.16
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(do-symbols (s (return-from done x))
+	  (declare (special x))))))
+  :good)
+
+(deftest do-symbols.17
+  (let ((x :good))
+    (declare (special x))
+    (let ((x :bad))
+      (do-symbols (s "CL-TEST" x)
+	(declare (special x)))))
+  :good)
 
 (def-macro-test do-symbols.error.1
   (do-symbols (x "CL")))
-

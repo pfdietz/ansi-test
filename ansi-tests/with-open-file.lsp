@@ -55,3 +55,32 @@
      (format s "foo!~%"))
     (with-open-file (s pn) (read-line s)))
   "foo!" nil)
+
+;;; Free declaration scope tests
+
+(deftest with-open-file.7
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-open-file (s (return-from done x))
+			(declare (special x))))))
+  :good)
+
+(deftest with-open-file.8
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-open-file (s "with-open-file.lsp" (return-from done x) :input)
+			(declare (special x))))))
+  :good)
+
+(deftest with-open-file.9
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-open-file (s "with-open-file.lsp" :direction (return-from done x))
+			(declare (special x))))))
+  :good)

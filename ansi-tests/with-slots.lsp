@@ -167,3 +167,14 @@
 		(declare (special *x*))
 		(values a b c)))
   x y z)
+
+;;; Free declaration scope test
+
+(deftest with-slots.21
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(with-slots nil (return-from done x)
+		    (declare (special x))))))
+  :good)

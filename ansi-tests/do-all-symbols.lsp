@@ -94,8 +94,19 @@
       (when (< x y) (return :good))))
   :good)
 
+
 ;;; Default return is NIL
 
 (deftest do-all-symbols.10
   (do-all-symbols (s) (declare (ignore s)))
   nil)
+
+;;; Free declaration scope tests
+
+(deftest do-all-symbols.11
+  (let ((x :good))
+    (declare (special x))
+    (let ((x :bad))
+      (do-all-symbols (s x)
+	(declare (special x)))))
+  :good)

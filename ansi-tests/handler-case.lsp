@@ -199,3 +199,15 @@
 (deftest handler-case.28
   (handler-case (error "foo") (error () (declare (optimize speed))))
   nil)
+
+;;; Free declaration scope
+
+(deftest handler-case.29
+  (let ((x :bad))
+    (declare (special x))
+    (let ((x :good))
+      (handler-case nil
+		    (:no-error (z &aux (y x))
+			       (declare (special x) (ignore z))
+			       y))))
+  :good)
