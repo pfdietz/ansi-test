@@ -136,6 +136,8 @@
 
 (defvar *reals* (append *integers* *floats* *ratios*))
 
+(defvar *rationals* (append *integers* *ratios*))
+
 (defun try-to-read-chars (&rest namelist)
   (loop
     for name in namelist append
