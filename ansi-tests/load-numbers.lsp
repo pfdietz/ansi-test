@@ -24,6 +24,9 @@
 (load "fround.lsp")
 
 ;;; transcendental functions go here
+(load "sin.lsp")
+(load "cos.lsp")
+(load "tan.lsp")
 
 (load "times.lsp")
 (load "plus.lsp")
