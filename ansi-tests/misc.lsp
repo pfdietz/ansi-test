@@ -7339,4 +7339,20 @@ Broken at C::WT-C-INLINE-LOC.
 	   (catch 'ct8 (throw 'ct8 (catch 'ct7 0)))))))
   0)
 
+(deftest misc.385
+  (let
+      #+armedbear ((jvm::*catch-errors* nil))
+      nil
+      (funcall
+       (compile nil '(lambda () (values 1 (catch 'ct2 2))))))
+  1 2)
+
+(deftest misc.386
+  (let
+      #+armedbear ((jvm::*catch-errors* nil))
+      nil
+      (funcall
+       (compile nil '(lambda () (values (rationalize (catch 'ct1 1)) 2)))))
+  1 2)
+
 
