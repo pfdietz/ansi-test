@@ -159,6 +159,8 @@ Results: ~A~%" expected-number form n results))))
 	   (check-subtypep type1 `(or (not ,type2) ,type1) t)
 	   (check-subtypep type2 `(or ,type2 (not ,type1)) t)
 	   (check-subtypep type2 `(or (not ,type1) ,type2) t)
+	   (check-subtypep t `(or (not ,type1) (not ,type2)) t)
+	   (check-subtypep t `(or (not ,type2) (not ,type1)) t)
 	    )))
 
 (defun check-subtypep (type1 type2 is-sub &optional should-be-valid)
