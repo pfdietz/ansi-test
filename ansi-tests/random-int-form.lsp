@@ -1134,6 +1134,10 @@
 	       when (typep x (cons 'and (cddr type)))
 	       return x
 	       finally (error "Cannot generate random element of ~A" type)))
+	(not
+	 (assert (cdr type))
+	 (assert (not (cddr type)))
+	 (make-random-element-of-type `(and t ,type)))
 	(integer
 	 (let ((lo (let ((lo (cadr type)))
 		     (cond
