@@ -52,6 +52,7 @@
 (load "not-and-null.lsp")
 (load "notany.lsp")
 (load "notevery.lsp")
+(load "nth-value.lsp")
 (load "or.lsp")
 (load "progv.lsp")
 (load "some.lsp")
@@ -60,6 +61,7 @@
 (load "typecase.lsp")
 (load "unless.lsp")
 (load "unwind-protect.lsp")
+(load "values.lsp")
 (load "when.lsp")
 
 
