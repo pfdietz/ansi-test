@@ -119,3 +119,84 @@
    '(or (cons integer symbol)
 	(cons symbol integer)))
   nil)
+
+(deftest subtypep.cons.13
+  (check-all-not-subtypep '(not list) 'cons)
+  nil)
+
+
+;;; a -> b, a ==> b
+(deftest subtypep.cons.14
+  (check-all-subtypep
+   '(and (or (cons (not symbol)) (cons * integer))
+	 (cons symbol))
+   '(cons * integer))
+  nil)
+
+;;; a -> b, not b ==> not a
+(deftest subtypep.cons.15
+  (check-all-subtypep
+   '(and (or (cons (not symbol)) (cons * integer))
+	 (cons * (not integer)))
+   '(cons (not symbol)))
+  nil)
+
+;;; (and (or a b) (or (not b) c)) ==> (or a c)
+(deftest subtypep.cons.16
+  (check-all-subtypep
+   '(and (or (cons symbol (cons * *))
+	     (cons * (cons integer *)))
+	 (or (cons * (cons (not integer) *))
+	     (cons * (cons * float))))
+   '(or (cons symbol (cons * *))
+	(cons * (cons * float))))
+  nil)
+
+(deftest subtypep.cons.17
+  (check-all-subtypep
+   '(and (or (cons symbol (cons * *))
+	     (cons * (cons integer *)))
+	 (or (cons * (cons (not integer)))
+	     (cons * (cons * float)))
+	 (or (cons * (cons * (not float)))
+	     (cons symbol (cons * *))))
+   '(cons symbol))
+  nil)
+
+(deftest subtypep.cons.18
+  (check-all-subtypep
+   '(cons symbol)
+   '(or (cons symbol (not integer))
+	(cons * integer)))
+  nil)
+
+(deftest subtypep.cons.19
+  (check-equivalence
+   '(or
+     (cons (eql a) (eql x))
+     (cons (eql b) (eql y))
+     (cons (eql c) (eql z))
+     (cons (eql a) (eql y))
+     (cons (eql b) (eql z))
+     (cons (eql c) (eql x))
+     (cons (eql a) (eql z))
+     (cons (eql b) (eql x))
+     (cons (eql c) (eql y)))
+   '(cons (member a b c) (member x y z)))
+  nil)
+
+(deftest subtypep.cons.20
+  (check-equivalence
+   '(or
+     (cons (eql a) (eql x))
+     (cons (eql b) (eql y))
+     (cons (eql a) (eql y))
+     (cons (eql b) (eql z))
+     (cons (eql c) (eql x))
+     (cons (eql a) (eql z))
+     (cons (eql b) (eql x))
+     (cons (eql c) (eql y)))
+   '(and (cons (member a b c) (member x y z))
+	 (not (cons (eql c) (eql z)))))
+  nil)
+

@@ -177,3 +177,53 @@
 (deftest subtypep.member.36
   (check-disjointness '(eql a) '(or (member b c d) (eql e)))
   nil)
+
+(deftest subtypep.member.37
+  (check-equivalence
+   '(and (member a b c d) (not (eql c)))
+   '(member a b d))
+  nil)
+
+(deftest subtypep.member.38
+  (check-equivalence
+   '(and (member a b c d e f g)
+	 (not (member b f)))
+   '(member a c d e g))
+  nil)
+
+(deftest subtypep.member.39
+  (check-equivalence
+   '(and (not (member b d e f g))
+	 (not (member x y b z d)))
+   '(not (member b d e f g x y z)))
+  nil)
+
+(deftest subtypep.member.40
+  (check-equivalence
+   '(and (not (eql a)) (not (eql b)))
+   '(not (member a b)))
+  nil)
+
+(deftest subtypep.member.41
+  (check-equivalence
+   '(and (not (eql a)) (not (eql b)) (not (eql c)))
+   '(not (member c b a)))
+  nil)
+
+(deftest subtypep.member.42
+  (check-equivalence
+   '(and (not (member a b)) (not (member b c)))
+   '(not (member c b a)))
+  nil)
+
+(deftest subtypep.member.43
+  (check-equivalence
+   '(and (not (member a g b k e)) (not (member b h k c f)))
+   '(not (member c b k a e f g h)))
+  nil)
+
+(deftest subtypep.member.44
+  (check-equivalence
+   '(and (integer 0 30) (not (member 3 4 5 9 10 11 17 18 19)))
+   '(or (integer 0 2) (integer 6 8) (integer 12 16) (integer 20 30)))
+  nil)

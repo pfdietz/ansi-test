@@ -368,3 +368,55 @@
 (deftest typep.6
   (typep 'a '(or (eql b)))
   nil)
+
+(deftest typep.7
+  (notnot-mv (typep 'a '(satisfies symbolp)))
+  t)
+
+(deftest typep.8
+  (typep 10 '(satisfies symbolp))
+  nil)
+
+(deftest typep.9
+  (let ((class (find-class 'symbol)))
+    (notnot-mv (typep 'a class)))
+  t)
+
+(deftest typep.10
+  (let ((class (find-class 'symbol)))
+    (notnot-mv (typep 'a `(and ,class))))
+  t)
+
+(deftest typep.11
+  (let ((class (find-class 'symbol)))
+    (typep 10 class))
+  nil)
+
+(deftest typep.12
+  (let ((class (find-class 'symbol)))
+    (typep 10 `(and ,class)))
+  nil)
+
+(deftest typep.13
+  (typep 'a '(and symbol integer))
+  nil)
+
+(deftest typep.14
+  (notnot-mv (typep 'a '(or symbol integer)))
+  t)
+
+(deftest typep.15
+  (notnot-mv (typep 'a '(or integer symbol)))
+  t)
+
+(deftest typep.16
+  (let ((c1 (find-class 'number))
+	(c2 (find-class 'symbol)))
+    (notnot-mv (typep 'a `(or ,c1 ,c2))))
+  t)
+
+(deftest typep.17
+  (let ((c1 (find-class 'number))
+	(c2 (find-class 'symbol)))
+    (notnot-mv (typep 'a `(or ,c2 ,c1))))
+  t)
