@@ -59,6 +59,9 @@
 ;;
 ;; The next test had the same problem.
 
+;;; PFD 10/14/02 -- These tests are broken again.  I suspect
+;;;   some sort of interaction with the test harness.
+
 (deftest delete-package-5
     (prog (P1 S1 P2 S2 P3)
       (ignore-errors (delete-package "P3"))
@@ -123,6 +126,9 @@
 ;; deletion of a nonexistent package should cause a continuable
 ;; package-error  (same comments for delete-package-5 apply
 ;; here as well)
+
+;;; PFD 10/14/02 -- These tests are broken again.  I suspect
+;;;   some sort of interaction with the test harness.
 
 (deftest delete-package-6
     (progn
