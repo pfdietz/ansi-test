@@ -28,124 +28,7 @@
 ;; These should get removed when I get a more up to date
 ;; image for that platform -- pfd
 
-(defparameter *subtype-table*
-(let ((table
-       '(
-	 (null symbol)
-	 (symbol t)
-	 #-(and cmu (not sparc)) (boolean symbol)
-	 (standard-object t)
-	 (function t)
-	 (compiled-function function)
-	 (generic-function function)
-	 (standard-generic-function generic-function)
-	 (class standard-object)
-	 (built-in-class class)
-	 (structure-class class)
-	 (standard-class class)
-	 (method standard-object)
-	 (standard-method method)
-	 (structure-object t)
-	 (method-combination t)
-	 (condition t)
-	 (serious-condition condition)
-	 (error serious-condition)
-	 (type-error error)
-	 (simple-type-error type-error)
-	 (simple-condition condition)
-	 (simple-type-error simple-condition)
-	 (parse-error error)
-	 (hash-table t)
-	 (cell-error error)
-	 (unbound-slot cell-error)
-	 (warning condition)
-	 (style-warning warning)
-	 (storage-condition serious-condition)
-	 (simple-warning warning)
-	 (simple-warning simple-condition)
-	 (keyword symbol)
-	 (unbound-variable cell-error)
-	 (control-error error)
-	 (program-error error)
-	 (undefined-function cell-error)
-	 (package t)
-	 (package-error error)
-	 (random-state t)
-	 (number t)
-	 (real number)
-	 (complex number)
-	 (float real)
-	 (short-float float)
-	 (single-float float)
-	 (double-float float)
-	 (long-float float)
-	 (rational real)
-	 (integer rational)
-	 (ratio rational)
-	 (signed-byte integer)
-	 (integer signed-byte)
-	 (unsigned-byte signed-byte)
-	 (bit unsigned-byte)
-	 (fixnum integer)
-	 (bignum integer)
-	 (bit fixnum)
-	 (arithmetic-error error)
-	 (division-by-zero arithmetic-error)
-	 (floating-point-invalid-operation arithmetic-error)
-	 (floating-point-inexact arithmetic-error)
-	 (floating-point-overflow arithmetic-error)
-	 (floating-point-underflow arithmetic-error)
-	 (character t)
-	 (base-char character)
-	 (standard-char base-char)
-	 (extended-char character)
-	 (sequence t)
-	 (list sequence)
-	 (null list)
-	 #-(and cmu (not sparc)) (null boolean)
-	 (cons list)
-	 (array t)
-	 (simple-array array)
-	 (vector sequence)
-	 (vector array)
-	 (string vector)
-	 (bit-vector vector)
-	 (simple-vector vector)
-	 (simple-vector simple-array)
-	 (simple-bit-vector bit-vector)
-	 (simple-bit-vector simple-array)
-	 (base-string string)
-	 (simple-string string)
-	 (simple-string simple-array)
-	 (simple-base-string base-string)
-	 (simple-base-string simple-string)
-	 (pathname t)
-	 (logical-pathname pathname)
-	 (file-error error)
-	 (stream t)
-	 (broadcast-stream stream)
-	 (concatenated-stream stream)
-	 (echo-stream stream)
-	 (file-stream stream)
-	 (string-stream stream)
-	 (synonym-stream stream)
-	 (two-way-stream stream)
-	 (stream-error error)
-	 (end-of-file stream-error)
-	 (print-not-readable error)
-	 (readtable t)
-	 (reader-error parse-error)
-	 (reader-error stream-error)
-	 )))
-  (when (subtypep* 'character 'base-char)
-    (setq table
-	  (append
-	   '((character base-char)
-	     (string base-string)
-	     (simple-string simple-base-string))
-	   table)))
-  
-  table))
+
 
 (deftest types-3
     (count-if
@@ -160,9 +43,7 @@
      *subtype-table*)
   0)
 
-(defparameter +float-types+
-  '(long-float double-float short-float single-float))
-
+(declaim (special +float-types+ *subtype-table*))
 
 ;;; This next test is all screwed up.  Basically, it assumes
 ;;; incorrectly that certain subtype relationships that are
@@ -218,22 +99,44 @@
 
 (declaim (special *disjoint-types-list*))
 
+;;; Check that the disjoint types really are disjoint
+
 (deftest types-7
-    (loop
-	for tp in *disjoint-types-list* sum
-	  (loop for tp2 in *disjoint-types-list* count
-		(and (not (eqt tp tp2))
-		     (subtypep* tp tp2))))
+  (loop
+   for tp in *disjoint-types-list* sum
+   (loop for tp2 in *disjoint-types-list* count
+	 (and (not (eqt tp tp2))
+	      (subtypep* tp tp2))))
   0)
 
+(deftest types-7a
+  (loop
+   for tp in *disjoint-types-list* sum
+   (loop for tp2 in *disjoint-types-list* count
+	 (and (not (eqt tp tp2))
+	      (multiple-value-bind (sub valid)
+		  (subtypep `(not ,tp) `(not ,tp2))
+		(and sub valid)))))
+  0)
+
+(deftest types-7b
+  (loop for e on *disjoint-types-list*
+	for tp1 = (first e)
+	append
+	(loop for tp2 in (rest e)
+	      for result = (check-disjointness tp1 tp2)
+	      append result))
+  nil)
+	
+
 (deftest types-8
-    (loop
-	for tp in *disjoint-types-list* count
-	  (cond
-	   ((and (not (eqt tp 'cons))
-		 (not (subtypep* tp 'atom)))
-	    (format t "~%Should be atomic, but isn't: ~S" tp)
-	    t)))
+  (loop
+   for tp in *disjoint-types-list* count
+   (cond
+    ((and (not (eqt tp 'cons))
+	  (not (subtypep* tp 'atom)))
+     (format t "~%Should be atomic, but isn't: ~S" tp)
+     t)))
   0)
 
 (declaim (special *type-list*
@@ -247,7 +150,7 @@
 ;;;
 
 (deftest types-9
-    (types-9-body)
+  (types-9-body)
   nil)
 
 ;;;
@@ -263,7 +166,7 @@
 ;;;
 
 (deftest types-9a
-    (types-9a-body)
+  (types-9a-body)
   0)
 
 ;;;
@@ -276,6 +179,22 @@
 				   *disjoint-types-list*)
 	when (> (length types) 1)
 	collect (list e types))
+  nil)
+
+(deftest integer-and-ratio-are-disjoint
+  (check-disjointness 'integer 'ratio)
+  nil)
+
+(deftest integer-and-float-are-disjoint
+  (check-disjointness 'integer 'float)
+  nil)
+
+(deftest ratio-and-float-are-disjoint
+  (check-disjointness 'ratio 'float)
+  nil)
+
+(deftest complex-and-float-are-disjoint
+  (check-disjointness 'complex 'float)
   nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

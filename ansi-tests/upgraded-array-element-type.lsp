@@ -36,6 +36,7 @@
     (integer -10000000000000000000000000000000000
 	     10000000000000000000000000000000000)
     float
+    short-float
     single-float
     double-float
     complex
@@ -71,6 +72,20 @@
 	      (upgraded-array-element-type 'bit env))))
     (%foo))
   t)
+
+(deftest upgraded-array-element-type.7
+  (let ((upgraded-types (mapcar #'upgraded-array-element-type
+				*upgraded-array-types-to-check*)))
+    (loop for type in *upgraded-array-types-to-check*
+	  for upgraded-type in upgraded-types
+	  append
+	  (loop for type2 in *upgraded-array-types-to-check*
+		for upgraded-type2 in upgraded-types
+		when (and (subtypep type type2)
+			  (equal (subtypep* upgraded-type upgraded-type)
+				 '(nil t)))
+		collect (list type type2))))
+  nil)
 
 ;;; Tests of upgrading NIL (it should be type equivalent to NIL)
 
