@@ -9,7 +9,7 @@
   (loop for s in (list *debug-io* *error-output* *query-io*
 		       *standard-input* *standard-output*
 		       *trace-output* *terminal-io*)
-	for results = (multiple-value-list (open-stream-p s))
+	for results = (multiple-value-list (stream-element-type s))
 	unless (and (eql (length results) 1)
 		    (car results))
 	collect s)
@@ -69,7 +69,8 @@
 	(unwind-protect
 	    (equalt (multiple-value-list (subtypep* 'character etype))
 		    '(nil t))
-	  (close s)))))
+	  (close s)))))(def-read-sequence-bv-test read-sequence.bv.3 #*00000000000000 (:end 14)
+  14 #*01100110101110)
   nil)
 
 (deftest stream-element-type.error.1
