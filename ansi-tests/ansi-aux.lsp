@@ -217,7 +217,7 @@ Results: ~A~%" expected-number form n results))))
     (if (or (and valid sub (not is-sub))
 	    (and valid (not sub) is-sub)
 	    (and (not valid) should-be-valid))
-	`(((SUBTYPEP ,type1 ,type2) cl-user::==> ,sub ,valid))
+	`(((SUBTYPEP ,type1 ,type2) :==> ,sub ,valid))
       nil)))
 
 (defun subtypep-and-contrapositive-are-consistent (t1 t2)
