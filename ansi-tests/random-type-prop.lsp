@@ -19,7 +19,81 @@
 
 (defparameter *default-reps* 1000)
 (defparameter *default-cell* nil)
+(defparameter *default-ignore* 'arithmetic-error)
+(defparameter *default-arg-the* t)
 
+;;;
+;;; The random type prop tester takes three required arguments:
+;;;
+;;;  operator  A lisp operator (either a symbol or a lambda form)
+;;;  arg-types A list consisting either of certain kinds of lisp types
+;;;            (that make-random-element-of-type understands) and/or
+;;;            functions that yield types.
+;;;  minargs   Minimum number of arguments to be given to the operator.
+;;;            Must be a positive integer <= maxargs.
+;;;
+;;; There are also keyword arguments, some with defaults given by special
+;;; variables.
+;;;
+;;; The random type prop tester generates between minargs and maxargs
+;;; (maxargs defaults to minargs) random arguments.  The type of each
+;;; argument is given by the corresponding type in arg-types (or by rest-type,
+;;; if there aren't enough elements of arg-types).  If the element of arg-types
+;;; is a function, the type for the parameter is produced by calling the function
+;;; with the previously generated actual parameters as its arguments.
+;;;
+;;; The list of parameters is stored into the special variable *params*.
+;;;
+;;; The tester evaluates (operator . arguments), and also builds a lambda
+;;; form to be compiled and called on (a subset of) the parameters.  The lambda
+;;; form is stored in the special variable *form*.
+;;;
+;;; The macro def-type-prop-test wraps a call to do-random-type-prop-tests
+;;; in a deftest form.  See random-type-prop-tests.lsp (and subfiles) for examples
+;;; of its use testing CL builtin operators.  To use it:
+;;;
+;;; (load "gclload1.lsp")
+;;; (compile-and-load "random-int-form.lsp") ;; do this on lisps not supporting recursive compiles
+;;; (compile-and-load "random-type-prop.lsp")
+;;; (in-package :cl-test)
+;;; #+sbcl (setq *default-arg-the* nil)   ;; This reduces the rate at which the sbcl IR2 type check bug occurs
+;;; (let (*catch-errors*) (do-test '<testname>))
+;;; or (let (*catch-errors*) (do-tests))
+;;;
+;;; Running all the tests may take a while, particularly on lisps with slow compilers.
+;;;
+;;;
+;;; Keyword arguments to do-random-type-prop-tests:
+;;;
+;;;  Argument    Default         Meaning
+;;;
+;;;  maxargs     minargs         Maximum number of actual parameters to generate (max 20).
+;;;  rest-type   t               Type of arguments beyond those specified in arg-types
+;;;  reps        *default-reps*  Number of repetitions to try before stopping.
+;;;                              The default is controlled by a special variable that
+;;;                              is initially 1000.
+;;;  enclosing-the nil           If true, with prob 1/2 randomly generate an enclosing
+;;;                              (THE ...) form around the form invoking the operator.
+;;;  arg-the     *default-arg-the*   If true (which is the initial value of the default
+;;;                              special variable), with probability 1/2 randomly generate
+;;;                              a (THE ...) form around each actual parameter.
+;;;  cell        *default-cell*  If true (default is NIL), store the result into a rank-0
+;;;                              array of specialized type.  This enables one to test
+;;;                              forms where the result will be unboxed.  Otherwise, just
+;;;                              return the values.
+;;;  ignore      nil             Ignore conditions that are elements of IGNORE.  For example,
+;;;                              one might bind this to ARITHMETIC-ERROR if you want to
+;;;                              ignore possible floating errors (say).
+;;;  test        rt::equalp-with-case   The test function used to compare outputs.  It's
+;;;                              also handy to use #'approx= to handle approximate equality
+;;;                              when testing floating point computations, where compiled code
+;;;                              may have different roundoff errors.
+;;;  replicate   nil             Cause arguments to be copied (preserving sharing in conses
+;;;                              and arrays) before applying the operator.  This is used to test
+;;;                              destructive operators.
+;;;
+;;;
+                             
 (defun do-random-type-prop-tests
   (operator arg-types minargs
 	    &key
@@ -27,9 +101,11 @@
 	    (rest-type t)
 	    (reps *default-reps*)
 	    (enclosing-the nil)
+	    (arg-the *default-arg-the*)
 	    (cell *default-cell*)
-	    (ignore nil)
-	    (test #'regression-test::equalp-with-case))
+	    (ignore *default-ignore*)
+	    (test #'regression-test::equalp-with-case)
+	    (replicate nil))
   (assert (<= 1 minargs maxargs 20))
 (prog1
   (dotimes (i reps)
@@ -49,6 +125,7 @@
 	  ; (vals (mapcar #'make-random-element-of-type types))
 	  (vals (setq *params*
 		      (or (make-random-arguments types) (go again))))
+	  (vals (if replicate (mapcar #'replicate vals) vals))
 	  (is-var? (loop repeat (length vals) collect (coin)))
 	  (*is-var?* is-var?)
 	  (params (loop for x in is-var?
@@ -64,7 +141,9 @@
 	  (rval (cl:handler-bind
 		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			 (warning #'muffle-warning))
-		 (let ((eval-form (cons operator (loop for v in vals collect `(quote ,v)))))
+		 (let* ((vals (if replicate (mapcar #'replicate vals) vals))
+			(eval-form (cons operator (loop for v in vals
+							collect `(quote ,v)))))
 		   ;; (print eval-form) (terpri)
 		   ;; (dotimes (i 100) (eval eval-form))
 		   (eval eval-form))))
@@ -75,10 +154,10 @@
 				    for v in vals
 				    for p in param-names
 				    collect (if x
-						(rcase
-						 (1 (let ((tp (make-random-type-containing v)))
-						      `(the ,tp ,p)))
-						 (1 p))
+						(if (and arg-the (coin))
+						    (let ((tp (make-random-type-containing v)))
+						      `(the ,tp ,p))
+						  p)
 					      (if (or (consp v)
 						      (and (symbolp v) (not (or (keywordp v)
 										(member v '(nil t))))))
@@ -93,16 +172,17 @@
 	  (upgraded-result-type (and store-into-cell?
 				     (upgraded-array-element-type `(eql ,rval))))
 	  (form
-	   `(lambda (,@(when store-into-cell? '(r)) ,@params)
-	      (declare (optimize (speed ,speed) (safety ,safety) (debug ,debug) (space ,space))
-		       ,@(when store-into-cell? `((type (simple-array ,upgraded-result-type nil) r)))
-		       ,@ type-decls)
-	      ,(let ((result-form
-		      (if enclosing-the `(the ,result-type ,expr) expr)))
-		 (if store-into-cell?
-		     `(setf (aref r) ,result-form)
-		   result-form))))
-	  (*form* form))
+	   (setq *form*
+		 `(lambda (,@(when store-into-cell? '(r)) ,@params)
+		    (declare (optimize (speed ,speed) (safety ,safety) (debug ,debug) (space ,space))
+			     ,@(when store-into-cell? `((type (simple-array ,upgraded-result-type nil) r)))
+			     ,@ type-decls)
+		    ,(let ((result-form
+			    (if enclosing-the `(the ,result-type ,expr) expr)))
+		       (if store-into-cell?
+			   `(setf (aref r) ,result-form)
+			 result-form)))))
+	  )
      (when *print-random-type-prop-input*
        (let ((*print-pretty* t)
 	     (*print-case* :downcase))
@@ -315,6 +395,9 @@
 	    (cond
 	     ((subtypep t1 t2) `(complex ,(upgraded-complex-part-type t2)))
 	     ((subtypep t2 t1) `(complex ,(upgraded-complex-part-type t1)))
+	     ((and (subtypep t1 'rational)
+		   (subtypep t2 'rational))
+	      `(complex rational))
 	     (t
 	      `(complex ,(upgraded-complex-part-type `(or ,t1 ,t2)))))))
    (1 `(eql ,val))))
@@ -386,3 +469,72 @@
     `(integer ,start2 ,d)))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric replicate (obj)
+  (:documentation "Copies the structure of a lisp object recursively, preserving sharing."))
+
+(declaim (special *replicate-table*))
+
+(defmethod replicate :around ((obj t))
+  "Wrapper to create a hash table for structure sharing, if none exists."
+  (if (boundp '*replicate-table*)
+      (call-next-method obj)
+    (let ((*replicate-table* (make-hash-table)))
+      (call-next-method obj))))
+
+(defmethod replicate ((obj cons))
+  (or (gethash obj *replicate-table*)
+      (let ((x (cons nil nil)))
+	(setf (gethash obj *replicate-table*) x)
+	(setf (car x) (replicate (car obj)))
+	(setf (cdr x) (replicate (cdr obj)))
+	x)))
+
+;;; Default method for objects without internal structure
+(defmethod replicate ((obj t)) obj)
+
+(defmethod replicate ((obj array))
+  (multiple-value-bind
+      (new-obj old-leaf new-leaf)
+      (replicate-displaced-array obj)
+    (when new-leaf
+      (loop for i below (array-total-size new-leaf)
+	    do (setf (row-major-aref new-leaf i)
+		     (row-major-aref old-leaf i))))
+    new-obj))
+
+(defun replicate-displaced-array (obj)
+  "Replicate the non-terminal (and not already replicated) arrays
+   in a displaced array chain.  Return the new root array, the
+   old leaf array, and the new (but empty) leaf array.  The latter
+   two are NIL if the leaf did not have to be copied again."
+  (or (gethash obj *replicate-table*)
+      (multiple-value-bind
+	  (displaced-to displaced-index-offset)
+	  (array-displacement obj)
+	(let ((dims (array-dimensions obj))
+	      (element-type (array-element-type obj))
+	      (fill-pointer (and (array-has-fill-pointer-p obj)
+				 (fill-pointer obj)))
+	      (adj (adjustable-array-p obj)))
+	  (if displaced-to
+	      ;; The array is displaced
+	      ;; Copy recursively
+	      (multiple-value-bind
+		  (new-displaced-to old-leaf new-leaf)
+		  (replicate-displaced-array displaced-to)
+		(let ((new-obj (make-array dims :element-type element-type
+					   :fill-pointer fill-pointer
+					   :adjustable adj
+					   :displaced-to new-displaced-to
+					   :displaced-index-offset displaced-index-offset)))
+		  (setf (gethash obj *replicate-table*) new-obj)
+		  (values new-obj old-leaf new-leaf)))
+	    ;; The array is not displaced
+	    ;; This is the leaf array
+	    (let ((new-obj (make-array dims :element-type element-type
+				       :fill-pointer fill-pointer
+				       :adjustable adj)))
+	      (setf (gethash obj *replicate-table*) new-obj)
+	      (values new-obj obj new-obj)))))))
