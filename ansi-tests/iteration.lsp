@@ -500,8 +500,20 @@
     y)
   (3 2 1 0))
 
+(deftest dotimes.19
+  (dotimes (i 100 i))
+  100)
+
+(deftest dotimes.20
+  (dotimes (i -100 i))
+  0)
+
+(deftest dotimes.21
+  (let ((x 0))
+    (dotimes (i (1- most-negative-fixnum) (values i x))
+      (declare (type fixnum i))
+      (incf x)))
+  0 0)
+
 (def-macro-test dotimes.error.1
   (dotimes (i 10)))
-
-
-
