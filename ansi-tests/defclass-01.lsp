@@ -233,6 +233,14 @@
      (s2 c)))
   t t b a)
 
+(deftest class-07.9
+  (let ((c (make-instance 'class-07 :s1b 'x :s1a 'y)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (slot-boundp c 's2)
+     (s1 c)))
+  t nil x)
+
 ;;;;
 
 (declaim (special *class-08-s2-initvar*))
