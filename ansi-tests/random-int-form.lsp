@@ -477,10 +477,11 @@
 	    `(boole ,op ,e1 ,e2)))))	    
 
      ;; n-ary ops
-     (30
-      (let* ((op (random-from-seq #(+ - * logand min max logior
-				      values lcm gcd logxor)))
-	     (nargs (1+ (min (random 10) (random 10) (random 10))))
+     (40
+      (let* ((op (random-from-seq #(+ - * logand min max
+				      logior values lcm gcd logxor)))
+	     (nmax (case op ((* lcm gcd) 10) (t 20)))
+	     (nargs (1+ (min (random nmax) (random nmax) (random nmax))))
 	     (sizes (random-partition (1- size) nargs))
 	     (args (mapcar #'make-random-integer-form sizes)))
 	`(,op ,@args)))
@@ -544,7 +545,7 @@
 	     (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
 	`(catch ,tag ,(make-random-integer-form (1- size)))))
      
-     (4 ;; setq and similar
+     (20 ;; setq and similar
       (make-random-integer-setq-form size))
 
      (10 (make-random-integer-case-form size))
@@ -1585,13 +1586,13 @@
 	  (try 0)
 	  (assert (member (length form) '(2 3)))
 	  (try (first args))
-	  (try (second args))
-	  (when (second args)
-	    (try `(,op ,(first args))))
-	  (unless (integerp (second args))
-	    (prune (second args)
-		   #'(lambda (form)
-		       (try `(,op ,(first args) ,form))))))
+	  (when (> (length args) 1)
+	    (try (second args))
+	    (try `(,op ,(first args)))
+	    (unless (integerp (second args))
+	      (prune (second args)
+		     #'(lambda (form)
+			 (try `(,op ,(first args) ,form)))))))
 
 	 ((setq setf shiftf)
 	  (try 0)
