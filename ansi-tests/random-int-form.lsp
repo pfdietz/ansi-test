@@ -363,7 +363,7 @@
       
      (1 `(cl:handler-bind nil ,(make-random-integer-form (1- size))))
      (1 `(restart-bind nil ,(make-random-integer-form (1- size))))
-     (1 `(macrolet () ,(make-random-integer-form (1- size))))
+     #-armedbear (1 `(macrolet () ,(make-random-integer-form (1- size))))
 
      ;; dotimes
      #-allegro
@@ -452,7 +452,7 @@
      ;; n-ary ops
      (30
       (let* ((op (random-from-seq #(+ - * logand min max logior
-				      lcm gcd logxor)))
+				      values lcm gcd logxor)))
 	     (nargs (1+ (min (random 10) (random 10) (random 10))))
 	     (sizes (random-partition (1- size) nargs))
 	     (args (mapcar #'make-random-integer-form sizes)))
@@ -1314,7 +1314,7 @@
 	  (mapc try-fn args)
 	  (prune-fn form try-fn))
 
-	 ((identity values ignore-errors cl:handler-case restart-case locally)
+	 ((identity  ignore-errors cl:handler-case restart-case locally)
 	  (unless (and (consp args)
 		       (consp (car args))
 		       (eql (caar args) 'tagbody))
@@ -1414,7 +1414,7 @@
 	  (prune-nary-fn form try-fn)
 	  (prune-fn form try-fn))
 	 
-	 ((- + * min max logand logior logxor logeqv gcd lcm)
+	 ((- + * min max logand logior logxor logeqv gcd lcm values)
 	  (when (every #'constantp args)
 	    (try (eval form)))
 	  (try 0)
