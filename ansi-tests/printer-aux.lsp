@@ -15,6 +15,31 @@
       ,result)
      t))
 
+(defmacro def-pprint-test
+  (name form expected-value
+	&key
+	(margin 100)
+	(miser nil)
+	(circle nil)
+	(len nil)
+	(pretty t)
+	(escape nil)
+	(readably nil)
+	(package (find-package "CL-TEST")))
+  `(deftest ,name
+     (with-standard-io-syntax
+      (let ((*print-pretty* ,pretty)
+	    (*print-escape* ,escape)
+	    (*print-readably* ,readably)
+	    (*print-right-margin* ,margin)
+	    (*package* ,package)
+	    (*print-length* ,len)
+	    (*print-miser-width* ,miser)
+	    (*print-circle* ,circle))
+	,form))
+     ,expected-value))
+
+
 ;;; Function to test readable of printed forms, under random settings
 ;;; of various printer control variables.
 ;;;
