@@ -4423,6 +4423,7 @@
 
 ;;; ecl (10 jan 2004)
 ;;; A bug was found in the compiler.  Contact worm@arrakis.es.
+;;; Broken at C::C2GO.
 
 (deftest misc.266
   (funcall
@@ -4445,6 +4446,18 @@
        (progn (tagbody (unwind-protect 0 (go 3)) 3) b)))
    -30000)
   -30000)
+
+;;; Broken at C::C2VAR.
+(deftest misc.266b
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (speed 2) (space 3) (safety 2) (debug 0)
+			  (compilation-speed 0)))
+       (unwind-protect 0 (catch 'ct7 (prog1 b 0)))))
+   1)
+  0)
 
 ;;; Incorrect return value
 
@@ -4733,4 +4746,42 @@
          (funcall (constantly 0)
                   (apply (constantly 0) (signum c) nil)))))
    3)
+  0)
+
+;;; ecl 29 Feb 2004
+;;; Incorrect constant propagation
+(deftest misc.285
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 2) (space 0) (safety 0) (debug 2)
+			  (compilation-speed 3)))
+       (block b7 (let* ((v1 (* (return-from b7 0) a))) -4359852))))
+   1)
+  0)
+
+(deftest misc.286
+  (let ((v4 (dotimes (iv4 0 18494910) (progn 0)))) v4)
+  18494910)
+
+;;; gcl (found by Camm)
+;;; Error in COMPILER::CMP-ANON [or a callee]: The function NIL is undefined.
+(deftest misc.286
+  (funcall
+   (compile
+    nil
+    '(lambda (e)
+       (declare (optimize (speed 1) (space 3) (safety 3) (debug 3)
+                          (compilation-speed 1)))
+       (flet ((%f11 (f11-2) 0))
+         (%f11 (unwind-protect
+                   e
+                   (tagbody
+                   ;; (let* ((v4
+                            (unwind-protect (go 0))))
+                      0 ;;)
+                    0)
+                   (logand (handler-bind () 0)))))))
+   10)
   0)
