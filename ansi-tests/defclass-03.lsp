@@ -240,7 +240,7 @@
     (setf (find-class 'class-0311) nil)
     (let* ((class1 (eval '(defclass class-0311 () ((a) (b) (c)))))
 	   (obj1 (make-instance 'class-0311)))
-      (setf (find-class (class-name class1)) nil)
+      (setf (find-class 'class-0311) nil)
       (let ((class2 (eval '(defclass class-0311 () ((a) (b) (c))))))
 	(values
 	 (eqt (class-of obj1) class1)
