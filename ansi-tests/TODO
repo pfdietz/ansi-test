@@ -81,9 +81,6 @@ Got:      0
   :notes and the :notes comment is printed out.  This will help explain
   what the failures mean.
 
-24. Add float/rational comparison tests where the rational is (exact rational for the
-  float) +- a very small rational.  This will check if the rule in the second paragraph
-  of 12.1.4.1 is being followed, or if the implementation is incorrectly floating
-  the rational then comparing.  Also add tests of very large (non-floatable) rationals
-  with floats, if they are not already present.
+24. Add tests of very large (non-floatable) rationals with floats, if they
+  are not already present.
 
