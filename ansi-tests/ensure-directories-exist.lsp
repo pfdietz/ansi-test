@@ -113,12 +113,12 @@
 ;; test is run
 (deftest ensure-directories-exist.8
   (let* ((subdir (make-pathname :directory '(:relative "scratch")
-				:defaults *default-pathname-defaults*)))
-    (assert (not (probe-file subdir)) ()
-	    "Delete subdirectory scratch!")
-    (let* ((pn (make-pathname :name "foo" :type "txt"
-			      :defaults subdir))
-	   (results nil)
+				:defaults *default-pathname-defaults*))
+	 (pn (make-pathname :name "foo" :type "txt"
+			    :defaults subdir)))
+    (assert (not (probe-file pn)) ()
+	    "Delete subdirectory scratch and its contents!")
+    (let* ((results nil)
 	   (verbosity
 	    (with-output-to-string
 	      (*standard-output*)
