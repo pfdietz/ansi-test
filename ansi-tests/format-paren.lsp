@@ -7,9 +7,8 @@
 
 (compile-and-load "printer-aux.lsp")
 
-(deftest format.paren.1
-  (format nil "~(XXyy~AuuVV~)" "ABc dEF ghI")
-  "xxyyabc def ghiuuvv")
+(def-format-test format.paren.1
+  "~(XXyy~AuuVV~)" ("ABc dEF ghI") "xxyyabc def ghiuuvv")
 
 ;;; Conversion of simple characters to downcase
 (deftest format.paren.2
@@ -29,6 +28,26 @@
 		      nil)))
 	collect it)
   nil)
+
+(deftest formatter.paren.2
+  (let ((fn (formatter "~(~c~)")))
+    (loop for i from 0 below (min char-code-limit (ash 1 16))
+	  for c = (code-char i)
+	  when (and c
+		    (eql (char-code c) (char-int c))
+		    (upper-case-p c)
+		    (let ((s1 (formatter-call-to-string fn c))
+			  (s2 (string (char-downcase c))))
+		      (if
+			  (or (not (eql (length s1) 1))
+			      (not (eql (length s2) 1))
+			      (not (eql (elt s1 0)
+					(elt s2 0))))
+			  (list i c s1 s2)
+			nil)))
+	  collect it))
+  nil)
+
 
 (def-format-test format.paren.3
   "~@(this is a TEST.~)" nil "This is a test.")
@@ -61,6 +80,25 @@
 			(list i c s1 s2)
 		      nil)))
 	collect it)
+  nil)
+
+(deftest formatter.paren.8
+  (let ((fn (formatter "~@:(~c~)")))
+    (loop for i from 0 below (min char-code-limit (ash 1 16))
+	  for c = (code-char i)
+	  when (and c
+		    (eql (char-code c) (char-int c))
+		    (lower-case-p c)
+		    (let ((s1 (formatter-call-to-string fn c))
+			  (s2 (string (char-upcase c))))
+		      (if
+			  (or (not (eql (length s1) 1))
+			      (not (eql (length s2) 1))
+			      (not (eql (elt s1 0)
+					(elt s2 0))))
+			  (list i c s1 s2)
+			nil)))
+	  collect it))
   nil)
 
 ;;; Nested conversion

@@ -26,6 +26,14 @@
 	collect (list x s))
   nil)
 
+(deftest formatter.p.5
+  (let ((fn (formatter "~p")))
+    (loop for x in *universe*
+	  for s = (formatter-call-to-string fn x)
+	  unless (or (eql x 1) (string= s "s"))
+	  collect (list x s)))
+  nil)
+
 ;;; :p
 
 (def-format-test format.p.6
@@ -73,4 +81,12 @@
 	for s = (format nil "~@p" x)
 	unless (or (eql x 1) (string= s "ies"))
 	collect (list x s))
+  nil)
+
+(deftest formatter.p.18
+  (let ((fn (formatter "~@P")))
+    (loop for x in *universe*
+	  for s = (formatter-call-to-string fn x)
+	  unless (or (eql x 1) (string= s "ies"))
+	  collect (list x s)))
   nil)
