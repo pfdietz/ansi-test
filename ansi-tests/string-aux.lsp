@@ -94,7 +94,9 @@
     (format t "s1 = ~S, s2 = ~S~%" s1 s2)
     |#
     ;; Sometimes we want them to have a common prefix
-    (when (coin)
+    (when (and (coin)
+	       (equal (array-element-type s1)
+		      (array-element-type s2)))
       (if (<= sublen1 sublen2)
 	  (setf (subseq s2 start2 (+ start2 sublen1))
 		(subseq s1 start1 (+ start1 sublen1)))
