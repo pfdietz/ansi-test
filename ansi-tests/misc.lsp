@@ -8820,5 +8820,16 @@ Broken at C::WT-MAKE-CLOSURE.
    0 34670845086)
   0)
 
-    
+;;; gcl 21 Dec 2004
+;;; Compiler error on ash, rem
 
+(deftest misc.464
+  (funcall
+   (compile nil '(lambda ()
+		   (declare (optimize (debug 1) (safety 2) (compilation-speed 0)
+				      (space 1) (speed 1)))
+		   (count (ash (the integer
+				 (macrolet () (rem -197 (min -72 215))))
+			       (min 98 442719))
+			  #(0 96) :test '=))))
+  0)
