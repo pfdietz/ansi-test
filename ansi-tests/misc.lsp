@@ -9572,3 +9572,42 @@ Broken at C::WT-MAKE-CLOSURE.
 		     (if (evenp (%f10 0 0)) 0 2140390)))))
   2140390)
 
+;;; Error in APPLY [or a callee]: fixnum or bignum expected
+;;; Broken at COMPILER::CMP-ANON.
+
+(deftest misc.519
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (compilation-speed 0) (speed 1) (debug 1)
+			  (space 1) (safety 3)))
+       (let ((*s3*
+	      (* (the integer
+		   (expt (rationalize
+			  (multiple-value-bind (*s3*)
+			      (make-array nil :initial-element 0)
+			    (shiftf (aref *s3*) 0)))
+			 2)))))
+	 1))))
+  1)
+
+;;; sbcl 0.8.18 (sparc solaris)
+;;;  identity ASH not transformed away
+
+(deftest misc.520
+  (funcall
+   (compile
+    nil
+    '(lambda (a c e)
+      (declare (type (integer -44330 64753) c))
+      (declare (type (integer -301534047 4291509) e))
+      (declare (optimize (safety 3) (debug 2) (speed 3)
+		(space 2) (compilation-speed 2)))
+      (if (oddp
+	   (ash (logorc2 c e)
+		(min 2 (mask-field (byte 0 0) (mod 0 (max 69 0))))))
+       a
+       0)))
+   1 -8156 -229264929)
+  0)
