@@ -21,19 +21,6 @@
     (elt "abcdefgh" (random 8)))
    (t (error "Can't get random element of type ~A~%." type))))
 
-(defun random-from-seq (seq)
-  "Generate a random member of a sequence."
-  (let ((len (length seq)))
-    (assert (> len 0))
-    (elt seq (random len))))
-
-(defmacro random-case (&body cases)
-  (let ((len (length cases)))
-    (assert (> len 0))
-    `(case (random ,len)
-       ,@(loop for i from 0 for e in cases collect `(,i ,e))
-       (t (error "Can't happen?! (in random-case~%")))))
-
 (defun make-random-remove-input (len type element-type)
 
   "Randomly generate a test case for REMOVE.  Given a length
@@ -123,17 +110,6 @@
 
 (defun my-remove-if-not (pred &rest args)
   (apply #'my-remove-if (complement pred) args))
-
-(defun coin (&optional (n 2)) (eql (random n) 0))
-
-;; Randomly permute a sequence
-(defun random-permute (seq)
-  (setq seq (copy-seq seq))
-  (let ((len (length seq)))
-    (loop for i from len downto 2
-	  do (let ((r (random i)))
-	       (rotatef (elt seq r) (elt seq (1- i))))))
-  seq)
 
 (defun make-random-rd-params (maxlen)
   "Generate random paramaters for remove/delete/etc. functions."
