@@ -223,6 +223,29 @@
 	  collect (list etype type vec)))
   nil)
 
+;;; Other type specifiers
+
+(deftest make-sequence.31
+  (make-sequence '(simple-string) 10 :initial-element #\X)
+  "XXXXXXXXXX")
+
+(deftest make-sequence.32
+  (make-sequence '(simple-string 10) 10 :initial-element #\X)
+  "XXXXXXXXXX")
+
+(deftest make-sequence.33
+  (make-sequence '(string) 10 :initial-element #\X)
+  "XXXXXXXXXX")
+
+(deftest make-sequence.34
+  (make-sequence '(vector) 10 :initial-element nil)
+  #(nil nil nil nil nil nil nil nil nil nil))
+
+(deftest make-sequence.35
+  (make-sequence '(simple-vector) 10 :initial-element nil)
+  #(nil nil nil nil nil nil nil nil nil nil))
+
+
 ;;; Keyword tests
 
 (deftest make-sequence.allow-other-keys.1
