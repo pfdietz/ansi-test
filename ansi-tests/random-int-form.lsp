@@ -1211,7 +1211,10 @@
 		     (eq (cadr args) ':initial-element)
 		     ; (null (cdddr args))
 		     )
-	    (prune (caddr args) #'(lambda (form) (try `(make-array nil :initial-element ,form . ,(cdddr args)))))))
+	    (prune (caddr args) #'(lambda (form) (try `(make-array nil :initial-element ,form . ,(cdddr args)))))
+	    (when (cdddr args)
+	      (try `(make-array nil :initial-element ,(caddr args))))
+	    ))
 
 	 ((cons)
 	  (prune-fn form try-fn))
