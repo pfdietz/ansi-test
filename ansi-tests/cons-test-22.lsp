@@ -310,6 +310,14 @@
   (classify-error (set-difference (list 1 2) (list 3 4) :key #'car))
   type-error)
 
+(deftest set-difference.error.11
+  (classify-error (set-difference (list 1 2 3) (list* 4 5 6)))
+  type-error)
+
+(deftest set-difference.error.12
+  (classify-error (set-difference (list* 1 2 3) (list 4 5 6)))
+  type-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nset-difference
@@ -610,4 +618,12 @@
 
 (deftest nset-difference.error.10
   (classify-error (nset-difference (list 1 2) (list 3 4) :key #'car))
+  type-error)
+
+(deftest nset-difference.error.11
+  (classify-error (nset-difference (list 1 2 3) (list* 4 5 6)))
+  type-error)
+
+(deftest nset-difference.error.12
+  (classify-error (nset-difference (list* 1 2 3) (list 4 5 6)))
   type-error)

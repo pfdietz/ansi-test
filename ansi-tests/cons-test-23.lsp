@@ -347,6 +347,14 @@
   (classify-error (set-exclusive-or (list 1 2) (list 3 4) :key #'car))
   type-error)
 
+(deftest set-exclusive-or.error.11
+  (classify-error (set-exclusive-or (list 1 2 3) (list* 4 5 6)))
+  type-error)
+
+(deftest set-exclusive-or.error.12
+  (classify-error (set-exclusive-or (list* 1 2 3) (list 4 5 6)))
+  type-error)
+
 
 ;;; Randomized test
 
@@ -702,3 +710,10 @@
   (classify-error (nset-exclusive-or (list 1 2) (list 3 4) :key #'car))
   type-error)
 
+(deftest nset-exclusive-or.error.11
+  (classify-error (nset-exclusive-or (list 1 2 3) (list* 4 5 6)))
+  type-error)
+
+(deftest nset-exclusive-or.error.12
+  (classify-error (nset-exclusive-or (list* 1 2 3) (list 4 5 6)))
+  type-error)

@@ -401,4 +401,15 @@
   (classify-error (union (list 1 2) (list 3 4) :key #'car))
   type-error)
 
+(deftest union.error.11
+  (classify-error (union (list 1 2 3) (list* 4 5 6)))
+  type-error)
+
+(deftest union.error.12
+  (classify-error (union (list* 1 2 3) (list 4 5 6)))
+  type-error)
+
+
+
+
 

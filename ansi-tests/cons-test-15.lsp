@@ -104,6 +104,10 @@
   (classify-error (mapc #'car '(a b c)))
   type-error)
 
+(deftest mapc.error.8
+  (classify-error (mapc #'identity (list* 1 2 3 4)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcar
 
@@ -208,6 +212,9 @@
   (classify-error (mapcar #'cons '(a b c) '(1 2 3) '(4 5 6)))
   program-error)
 
+(deftest mapcar.error.8
+  (classify-error (mapcar #'identity (list* 1 2 3 4)))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
@@ -319,6 +326,10 @@
 (deftest mapcan.error.7
   (classify-error (mapcan #'cons '(a b c) '(1 2 3) '(4 5 6)))
   program-error)
+
+(deftest mapcan.error.8
+  (classify-error (mapcan #'identity (list* (list 1) (list 2) 3)))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapl
@@ -443,6 +454,9 @@
   (classify-error (mapl #'caar '(a b c)))
   type-error)
 
+(deftest mapl.error.8
+  (classify-error (mapl #'identity (list* (list 1) (list 2) 3)))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; maplist
@@ -574,6 +588,10 @@
   (classify-error (maplist #'cons '(a b c) '(1 2 3) '(4 5 6)))
   program-error)
 
+(deftest maplist.error.11
+  (classify-error (maplist #'identity (list* (list 1) (list 2) 3)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcon
 
@@ -650,3 +668,8 @@
 (deftest mapcon.error.7
   (classify-error (mapcon #'cons '(a b c) '(1 2 3) '(4 5 6)))
   program-error)
+
+(deftest mapcon.error.8
+  (classify-error (mapcon #'copy-tree (cons 1 2)))
+  type-error)
+

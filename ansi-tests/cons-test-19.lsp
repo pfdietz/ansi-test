@@ -388,6 +388,14 @@
   (classify-error (intersection '(a b c) '(d e f) :key #'car))
   type-error)
 
+(deftest intersection.error.11
+  (classify-error (intersection '(a b c) '(d e f . g)))
+  type-error)
+
+(deftest intersection.error.12
+  (classify-error (intersection '(a b . c) '(d e f)))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nintersection
 
@@ -735,4 +743,12 @@
 
 (deftest nintersection.error.10
   (classify-error (nintersection (list 1 2 3) (list 4 5 6) :key #'car))
+  type-error)
+
+(deftest nintersection.error.11
+  (classify-error (nintersection (list 1 2 3) (list* 4 5 6 7)))
+  type-error)
+
+(deftest nintersection.error.12
+  (classify-error (nintersection (list* 1 2 3) (list 4 5 6)))
   type-error)

@@ -248,3 +248,11 @@
 (deftest subsetp.error.10
   (classify-error (subsetp (list 1 2) (list 3 4) :key #'car))
   type-error)
+
+(deftest subsetp.error.11
+  (classify-error (subsetp (list 1 2 3) (list* 4 5 6)))
+  type-error)
+
+(deftest subsetp.error.12
+  (classify-error (subsetp (list* 1 2 3) (list 4 5 6)))
+  type-error)

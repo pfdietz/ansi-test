@@ -78,6 +78,18 @@
   (classify-error (get-properties nil nil nil))
   program-error)
 
+(deftest get-properties.error.4
+  (classify-error (get-properties '(a 1 b 2 c 3) '(a . b)))
+  type-error)
+
+(deftest get-properties.error.5
+  (classify-error (get-properties '(a 1 b 2 c 3 . d) '(a z)))
+  type-error)
+
+(deftest get-properties.error.6
+  (classify-error (get-properties '(a 1 b 2 c . d) '(a z)))
+  type-error)
+
 	   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; getf
@@ -295,6 +307,14 @@
 (deftest getf.error.3
   (classify-error (getf nil nil nil nil))
   program-error)
+
+(deftest getf.error.4
+  (classify-error (getf '(a . b) 'c))
+  type-error)
+
+(deftest getf.error.5
+  (classify-error (getf '(a 10 . b) 'c))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; remf

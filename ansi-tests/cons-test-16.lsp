@@ -693,9 +693,13 @@
   program-error)
 
 (deftest pairlist.error.4
-  (classify-error (pairlis 'a '(1) '(a b c)))
+  (classify-error (pairlis 'a '(1)))
   type-error)
 
 (deftest pairlist.error.5
-  (classify-error (pairlis '(a) 'b '(a b c)))
+  (classify-error (pairlis '(a) 'b))
+  type-error)
+
+(deftest pairlist.error.6
+  (classify-error (pairlis '(a . b) '(c . d)))
   type-error)
