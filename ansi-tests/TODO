@@ -2,8 +2,6 @@ Things to do to the test suite (not a complete list)
 
 1. subtypep and typep on complex types
 
-2. upgraded-complex-part-type
-
 3. More type tests on array types
 
 4. Extend random subtypep tester to complex and array types.
@@ -28,11 +26,6 @@ Things to do to the test suite (not a complete list)
 12. Make sure all string operators work on displaced character vectors.
 
 14. Finish testing DEFSETF
-
-15. All tests for DO-ALL-SYMBOLS
-
-16. Test VECTOR-PUSH-EXTEND on displaced vectors, etc. (just like adjust-array;
-   see 6.)
 
 17. Tests that have an argument that provides a return value for special
   conditions (like eof) that happens to be the same as a normal value the
