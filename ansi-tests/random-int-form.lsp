@@ -121,7 +121,7 @@
 
 (defun test-random-integer-form
   (size nvars &aux (vars (subseq '(a b c d e f g h i j k l m
-				     n o p q r s t u v w x y z) 0 nvars)))
+				     n o p q r s u v w x y z) 0 nvars)))
   (let* ((var-ranges (mapcar #'make-random-integer-range vars))
 	 (var-types (mapcar #'(lambda (range)
 				(let ((lo (car range))
