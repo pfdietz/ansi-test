@@ -1638,17 +1638,9 @@ the condition to go uncaught if it cannot be classified."
 	(* significand (expt radix limit) sign))
        (t (rational x))))))
 
-(defun random-partition (n p)
-  "Partition n into p numbers, each >= 1.  Return list of numbers."
+(defun random-partition* (n p)
+  "Partition n into p numbers, each >= 0.  Return list of numbers."
   (assert (<= 1 p))
-  #|
-  (cond
-   ((= p 1) (list n))
-   ((< n p) (make-list p :initial-element 1))
-   (t
-    (let ((n1 (1+ (random (floor n p)))))
-      (cons n1 (random-partition (- n n1) (1- p)))))))
-  |#
   (cond
    ((= p 1) (list n))
    ((= n 0) (make-list p :initial-element 0))
@@ -1656,15 +1648,22 @@ the condition to go uncaught if it cannot be classified."
 	     (n1 (random (1+ n))))
 	(cond
 	 ((= r 0)
-	  (cons n1 (random-partition (- n n1) (1- p))))
+	  (cons n1 (random-partition* (- n n1) (1- p))))
 	 ((= r (1- p))
-	  (append (random-partition (- n n1) (1- p)) (list n1)))
+	  (append (random-partition* (- n n1) (1- p)) (list n1)))
 	 (t
 	  (let* ((n2 (random (1+ (- n n1))))
 		 (n3 (- n n1 n2)))
-	    (append (random-partition n2 r)
+	    (append (random-partition* n2 r)
 		    (list n1)
-		    (random-partition n3 (- p 1 r))))))))))
+		    (random-partition* n3 (- p 1 r))))))))))
+
+(defun random-partition (n p)
+  "Partition n into p numbers, each >= 1 (if possible.)"
+  (cond
+   ((<= n p)
+    (make-list p :initial-element 1))
+   (t (mapcar #'1+ (random-partition* (- n p) p)))))
 
 (declaim (special *similarity-list*))
 
@@ -1760,3 +1759,34 @@ the condition to go uncaught if it cannot be classified."
 
 (defmethod is-similar* ((x t) (y t))
   (and (eql x y) t))
+
+(defparameter *initial-print-pprint-dispatch* (if (boundp '*print-pprint-dispatch*)
+						  *print-pprint-dispatch*
+						nil))
+
+(defmacro my-with-standard-io-syntax (&body body)
+  `(let ((*package* (find-package "COMMON-LISP-USER"))
+	 (*print-array* t)
+	 (*print-base* 10)
+	 (*print-case* :upcase)
+	 (*print-circle* nil)
+	 (*print-escape* t)
+	 (*print-gensym* t)
+	 (*print-length* nil)
+	 (*print-level* nil)
+	 (*print-lines* nil)
+	 (*print-miser-width* nil)
+	 (*print-pprint-dispatch* *initial-print-pprint-dispatch*)
+	 (*print-pretty* nil)
+	 (*print-radix* nil)
+	 (*print-readably* t)
+	 (*print-right-margin* nil)
+	 (*read-base* 10)
+	 (*read-default-float-format* 'single-float)
+	 (*read-eval* t)
+	 (*read-suppress* nil)
+	 (*readtable* (copy-readtable nil)))
+     ,@body))
+
+	 
+	 
