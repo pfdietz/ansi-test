@@ -9285,3 +9285,30 @@ Broken at C::WT-MAKE-CLOSURE.
 				      (speed 1) (safety 3)))
 		   (the integer (integer-length (dotimes (iv4 2 15790955)))))))
   24)
+
+;;; Inconsistent stack height 1 != 0
+
+(deftest misc.501
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (a)
+			(declare (type (integer -437165353 179983908) a))
+			(declare (optimize (compilation-speed 0) (debug 1) (space 1)
+					   (safety 2) (speed 1)))
+			(dotimes (iv1 0 0) (1+ a))))
+	1))
+  0)
+
+;;; Ordering problems
+
+(deftest misc.502
+  (funcall
+   (compile nil '(lambda (a)
+		   (declare (type (integer -7 84717795) a))
+		   (declare (ignorable a))
+		   (declare (optimize (speed 1) (space 1) (debug 1) (safety 2)
+				      (compilation-speed 0)))
+		   (+ a (setq a 35035201))))
+   29207264)
+  64242465)
