@@ -67,9 +67,10 @@
 ;;; Tests of the reader
 (load "load-reader.lsp")
 
-;;; Tests of system construction
+;;; Tests of system construction, environment
 (load "features.lsp")
 (load "disassemble.lsp")
+(load "environment-functions.lsp")
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
