@@ -33,7 +33,7 @@
 		 (not (eql (min n n) n))
 		 (not (eql (min n n n) n))
 		 (not (eql (apply #'min (make-list
-					 (min 256 call-arguments-limit)
+					 (min 256 (1- call-arguments-limit))
 					 :initial-element n))
 			   n)))
 	collect n)
@@ -174,7 +174,7 @@
   1.0l0)
 
 (deftest min.27
-  (loop for i from 1 to (min 256 call-arguments-limit)
+  (loop for i from 1 to (min 256 (1- call-arguments-limit))
 	for x = (make-list i :initial-element 1)
 	do (setf (elt x (random i)) 0)
 	unless (eql (apply #'min x) 0)

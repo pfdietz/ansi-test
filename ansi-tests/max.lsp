@@ -25,7 +25,7 @@
 		 (not (eql (max n n) n))
 		 (not (eql (max n n n) n))
 		 (not (eql (apply #'max (make-list
-					 (min 256 call-arguments-limit)
+					 (min 256 (1- call-arguments-limit))
 					 :initial-element n))
 			   n)))
 	collect n)
@@ -166,7 +166,7 @@
   1.0l0)
 
 (deftest max.27
-  (loop for i from 1 to (min 256 call-arguments-limit)
+  (loop for i from 1 to (min 256 (1- call-arguments-limit))
 	for x = (make-list i :initial-element 0)
 	do (setf (elt x (random i)) 1)
 	unless (eql (apply #'max x) 1)

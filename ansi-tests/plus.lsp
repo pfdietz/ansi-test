@@ -103,7 +103,7 @@
 
 (deftest plus.8
   (let (args)
-    (loop for i from 0 to (min 256 call-arguments-limit)
+    (loop for i from 0 to (min 256 (1- call-arguments-limit))
 	  unless (eql (apply #'+ args) (/ (* i (1+ i)) 2))
 	  collect i
 	  do (push (1+ i) args)))

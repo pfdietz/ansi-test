@@ -33,6 +33,8 @@
 ;;(load "exp.lsp")
 (load "expt.lsp")
 (load "gcd.lsp")
+(load "incf.lsp")
+(load "decf.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")

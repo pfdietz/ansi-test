@@ -76,13 +76,13 @@
 			 
 (deftest =.7
   (let ((args nil))
-    (loop for i from 1 to (min 256 call-arguments-limit)
+    (loop for i from 1 to (min 256 (1- call-arguments-limit))
 	  do (push 17 args)
 	  always (apply #'= args)))
   t)
 
 (deftest =.8
-  (loop for i from 2 to (min 256 call-arguments-limit)
+  (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	for args = (append (make-list (1- i) :initial-element 7)
 			   (list 23))
 	when (apply #'= args)
@@ -235,7 +235,7 @@
 (deftest /=.7
   (let ((args (list 17))
 	(args2 nil))
-    (loop for i from 2 to (min 256 call-arguments-limit)
+    (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	  do (push 17 args)
 	  do (push i args2)
 	  always (and (not (apply #'/= args))
@@ -243,7 +243,7 @@
   t)
 
 (deftest /=.8
-  (loop for i from 2 to (min 256 call-arguments-limit)
+  (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	for args = (append (make-list (1- i) :initial-element 7)
 			   (list 7))
 	when (apply #'/= args)
@@ -462,7 +462,7 @@
 (deftest <.6
   (let ((args (list 17))
 	(args2 nil))
-    (loop for i from 2 to (min 256 call-arguments-limit)
+    (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	  do (push 17 args)
 	  do (push (- i) args2)
 	  unless (and (not (apply #'< args))
@@ -471,7 +471,7 @@
   nil)
 
 (deftest <.7
-  (let* ((len (min 256 call-arguments-limit))
+  (let* ((len (min 256 (1- call-arguments-limit)))
 	 (args-proto (loop for i from 1 to len collect i)))
     (loop for i from 1 below len
 	  for args = (copy-list args-proto)
@@ -661,7 +661,7 @@
   (let ((args (list 17))
 	(args2 nil)
 	(args3 (list 0)))
-    (loop for i from 2 to (min 256 call-arguments-limit)
+    (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	  do (push 17 args)
 	  do (push (- i) args2)
 	  do (push i args3)
@@ -672,7 +672,7 @@
   nil)
 
 (deftest <=.7
-  (let* ((len (min 256 call-arguments-limit))
+  (let* ((len (min 256 (1- call-arguments-limit)))
 	 (args-proto (loop for i from 1 to len collect i)))
     (loop for i from 1 below len
 	  for args = (copy-list args-proto)
@@ -758,7 +758,7 @@
 (deftest >.6
   (let ((args (list 17))
 	(args2 nil))
-    (loop for i from 2 to (min 256 call-arguments-limit)
+    (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	  do (push 17 args)
 	  do (push i args2)
 	  unless (and (not (apply #'> args))
@@ -767,7 +767,7 @@
   nil)
 
 (deftest >.7
-  (let* ((len (min 256 call-arguments-limit))
+  (let* ((len (min 256 (1- call-arguments-limit)))
 	 (args-proto (loop for i from 1 to len collect i)))
     (loop for i from 1 below len
 	  for args = (copy-list args-proto)
@@ -848,7 +848,7 @@
   (let ((args (list 17))
 	(args2 (list 0))
 	(args3 nil))
-    (loop for i from 2 to (min 256 call-arguments-limit)
+    (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	  do (push 17 args)
 	  do (push (- i) args2)
 	  do (push i args3)
@@ -859,7 +859,7 @@
   nil)
 
 (deftest >=.7
-  (let* ((len (min 256 call-arguments-limit))
+  (let* ((len (min 256 (1- call-arguments-limit)))
 	 (args-proto (loop for i from 1 to len collect i)))
     (loop for i from 1 below len
 	  for args = (copy-list args-proto)

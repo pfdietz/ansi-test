@@ -132,7 +132,7 @@
 
 (deftest *.11
   (let ((prod 1) (args nil))
-    (loop for i from 1 to (min 256 call-arguments-limit)
+    (loop for i from 1 to (min 256 (1- call-arguments-limit))
 	  do (push i args)
 	  do (setq prod (* prod i))
 	  always (eql (apply #'* args) prod)))
