@@ -17,15 +17,17 @@
 
 (declaim (special *param-types* *params* *is-var?* *form*))
 
+(defparameter *default-reps* 1000)
+(defparameter *default-cell* nil)
+
 (defun do-random-type-prop-tests
-  (operator &key
-	    (minargs 2)
+  (operator arg-types minargs
+	    &key
 	    (maxargs minargs)
-	    (arg-types nil)
-	    (rest-type 'integer)
-	    (reps 1000)
+	    (rest-type t)
+	    (reps *default-reps*)
 	    (enclosing-the nil)
-	    (cell t)
+	    (cell *default-cell*)
 	    (test #'regression-test::equalp-with-case))
   (assert (<= 1 minargs maxargs 20))
   (dotimes (i reps)
@@ -58,12 +60,12 @@
 		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			 (warning #'muffle-warning))
 		 (let ((eval-form (cons operator (loop for v in vals collect `(quote ,v)))))
+		   ;; (print eval-form) (terpri)
 		   ;; (dotimes (i 100) (eval eval-form))
 		   (eval eval-form))))
 	  (result-type (if (and enclosing-the (integerp rval))
 			   (make-random-type-containing rval)
 			 t))
-	  (upgraded-result-type (upgraded-array-element-type `(eql ,rval)))
 	  (expr `(,operator ,@(loop for x in is-var?
 				    for v in vals
 				    for p in param-names
@@ -83,6 +85,8 @@
 		  #+allegro (1+ (random 3)))
 	  (debug (random 4))
 	  (store-into-cell? (and cell (coin)))
+	  (upgraded-result-type (and store-into-cell?
+				     (upgraded-array-element-type `(eql ,rval))))
 	  (form
 	   `(lambda (,@(when store-into-cell? '(r)) ,@params)
 	      (declare (optimize (speed ,speed) (safety ,safety) (debug ,debug) (space ,space))
@@ -133,6 +137,15 @@
 	  do (setf vals (nconc vals (list val))))
     ;; (dolist (v vals) (describe v))
     vals))
+
+;; Default method
+(defmethod make-random-type-containing ((val t)) t)
+
+(defmethod make-random-type-containing ((val standard-class))
+  (random-from-seq #(standard-class class t)))
+
+(defmethod make-random-type-containing ((val structure-class))
+  (random-from-seq #(structure-class class t)))
 
 (defmethod make-random-type-containing ((val integer))
   (rcase
@@ -273,10 +286,15 @@
 
 (defmethod make-random-type-containing ((val cons))
   (rcase
-   (3 'cons)
+   (2 'cons)
    (2 'list)
    (1 `(cons ,(make-random-type-containing (car val))))
-   (1 `(cons t ,(make-random-type-containing (cdr val))))
+   (1 `(cons ,(make-random-type-containing (car val))
+	     ,(random-from-seq #(t *))))
+   (2 `(cons ,(random-from-seq #(t *)) 
+	     ,(make-random-type-containing (cdr val))))
+   (2 `(cons ,(make-random-type-containing (car val))
+	     ,(make-random-type-containing (cdr val))))
    (1 t)))
 
 (defmethod make-random-type-containing ((val complex))

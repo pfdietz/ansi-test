@@ -1056,3 +1056,14 @@ the condition to go uncaught if it cannot be classified."
   (handler-case
    (progn (string x) t)
    (error nil)))
+
+;;; Approximate comparison of numbers
+(defun approx= (x y)
+  (let ((eps 1.0d-4))
+    (<= (abs (- x y))
+       (* eps (max (abs x) (abs y))))))
+
+
+
+    
+    

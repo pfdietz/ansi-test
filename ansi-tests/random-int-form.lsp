@@ -1129,8 +1129,8 @@
 	 (make-random-element-of-type (random-from-seq (cdr type))))
 	(and
 	 (assert (cdr type))
-	 (loop repeat 100
-	       for x = (make-random-element-of-type (cadr type))
+	 (loop for x = (make-random-element-of-type (cadr type))
+	       repeat 100
 	       when (typep x (cons 'and (cddr type)))
 	       return x
 	       finally (error "Cannot generate random element of ~A" type)))
@@ -1159,7 +1159,7 @@
 	     ;; of certain integers (near 0, near endpoints, near
 	     ;; powers of 2...)
 	     (random-from-interval (1+ hi) lo)))))
-	
+
 	((single-float double-float long-float short-float)
 	 (let ((lo (cadr type))
 	       (hi (caddr type))
