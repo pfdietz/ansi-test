@@ -184,7 +184,7 @@
   nil)
 
 (deftest sqrt.17
-  (let ((b1 (find-largest-exactly-floatable-integer (* most-positive-fixnum most-positive-fixnum))))
+  (let ((b1 (find-largest-exactly-floatable-integer most-positive-fixnum)))
     (loop for i = (random-from-interval (* b1 b1) 0)
 	  repeat 1000
 	  unless (>= (sqrt i) (isqrt i))
