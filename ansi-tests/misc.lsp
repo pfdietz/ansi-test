@@ -4660,3 +4660,41 @@
 			0 -14)))
 	 (%f10)))))
   -14)
+
+;;; incorrect return value (may be same bug as misc.278)
+(deftest misc.280
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 1) (space 3) (safety 1) (debug 3) (compilation-speed 2)))
+       (catch 'ct6
+	 (labels ((%f12 ()
+			(labels ((%f14 (&optional (f14-3 (return-from %f12 5))) 4))
+			  (funcall (constantly 3)
+				   (let ((v2 (%f14))) 2)
+				   (throw 'ct6 1)
+				   ))))
+	   (%f12)
+	   a))))
+   :good)
+  :good)
+
+;;; incorrect return value
+(deftest misc.281
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (optimize (speed 3) (space 3) (safety 3) (debug 2) (compilation-speed 3)))
+       (ldb (byte 24 0) c)))
+   -227016367797)
+  12919115)
+
+;;; gcl: Error in COMPILER::CMP-ANON [or a callee]: The function COMPILER::LDB1 is undefined.
+(deftest misc.282
+  (funcall (compile nil '(lambda () (declare (optimize safety))
+			   (ldb (byte 13 13) 43710))))
+  5)
+
+  
