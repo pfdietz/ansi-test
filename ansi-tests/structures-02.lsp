@@ -202,10 +202,27 @@
 ;;; List and vector structures
 
 (defstruct-with-tests (struct-test-37 (:type list)) a37 b37 c37)
+
+(deftest structure-37-1
+  (equalt (make-struct-test-37 :a37 1 :b37 2 :c37 4)
+	  '(1 2 4))
+  t)
+
 (defstruct-with-tests (struct-test-38 (:type list) :named) a38 b38 c38)
+
+(deftest structure-38-1
+  (equalt (make-struct-test-38 :a38 11 :b38 12 :c38 4)
+	  '(struct-test-38 11 12 4))
+  t)
+
 (defstruct-with-tests (struct-test-39 (:predicate nil)
 				      (:type list) :named)
   a39 b39 c39)
+
+(deftest structure-39-1
+  (equalt (make-struct-test-39 :a39 11 :b39 12 :c39 4)
+	  '(struct-test-39 11 12 4))
+  t)
 
 (defstruct-with-tests (struct-test-40 (:type vector)) a40 b40)
 (defstruct-with-tests (struct-test-41 (:type vector) :named) a41 b41)
@@ -215,3 +232,95 @@
 (defstruct-with-tests (struct-test-44 (:type list))
   (a44 0 :type integer)
   (b44 'a :type symbol))
+
+;;; Confirm that the defined structure types are all disjoint
+(deftest structs-are-disjoint
+  (loop for s1 in *defstruct-with-tests-names*
+	sum (loop for s2 in *defstruct-with-tests-names*
+		  unless (eq s1 s2)
+		  count (not (equalt (multiple-value-list
+				      (subtypep* s1 s2))
+				     '(nil t)))))
+  0)
+
+(defstruct-with-tests (struct-test-45 (:type list) (:initial-offset 2))
+  a45 b45)
+
+(deftest structure-45-1
+  (make-struct-test-45 :a45 1 :b45 2)
+  (nil nil 1 2))
+
+(defstruct-with-tests (struct-test-46 (:type list)
+				      (:include struct-test-45))
+  c46 d46)
+
+(deftest structure-46-1
+  (make-struct-test-46 :a45 1 :b45 2 :c46 3 :d46 4)
+  (nil nil 1 2 3 4))
+
+(defstruct-with-tests (struct-test-47 (:type list)
+				      (:initial-offset 3)
+				      (:include struct-test-45))
+  c47 d47)
+
+(deftest structure-47-1
+  (make-struct-test-47 :a45 1 :b45 2 :c47 3 :d47 4)
+  (nil nil 1 2 nil nil nil 3 4))
+
+(defstruct-with-tests (struct-test-48 (:type list)
+				      (:initial-offset 0)
+				      (:include struct-test-45))
+  c48 d48)
+
+(deftest structure-48-1
+  (make-struct-test-48 :a45 1 :b45 2 :c48 3 :d48 4)
+  (nil nil 1 2 3 4))
+
+(defstruct-with-tests (struct-test-49 (:type (vector bit)))
+  (a49 0 :type bit)
+  (b49 0 :type bit))
+
+(defstruct-with-tests (struct-test-50 (:type (vector character)))
+  (a50 #\g :type character)
+  (b50 #\k :type character))
+
+(defstruct-with-tests (struct-test-51 (:type (vector (integer 0 255))))
+  (a51 17 :type (integer 0 255))
+  (b51 25 :type (integer 0 255)))
+
+(defstruct-with-tests (struct-test-52 (:type vector)
+				      (:initial-offset 0))
+  a52 b52)
+
+(defstruct-with-tests (struct-test-53 (:type vector)
+				      (:initial-offset 5))
+  a53 b53)
+
+(deftest structure-53-1
+  (equal-array (make-struct-test-53 :a53 10 :b53 'a)
+	       #(nil nil nil nil nil 10 a))
+  t)
+
+(defstruct-with-tests (struct-test-54 (:type vector)
+				      (:initial-offset 2)
+				      (:include struct-test-53))
+  a54 b54)
+
+(deftest structure-54-1
+  (equal-array (make-struct-test-54 :a53 8 :b53 'g :a54 10 :b54 'a)
+	       #(nil nil nil nil nil 8 g nil nil 10 a))
+  t)
+
+(defstruct-with-tests (struct-test-55 (:type list)
+				      (:initial-offset 2)
+				      :named)
+  a55 b55 c55)
+
+(deftest structure-55-1
+  (make-struct-test-55 :a55 'p :c55 'q)
+  (nil nil struct-test-55 p nil q))
+
+
+
+
+
