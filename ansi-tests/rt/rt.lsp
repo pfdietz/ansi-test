@@ -101,6 +101,23 @@
 (defun do-test (&optional (name *test*))
   (do-entry (get-entry name)))
 
+(defun equalp-with-case (x y)
+  (cond
+   ((consp x)
+    (and (consp y)
+	 (equalp-with-case (car x) (car y))
+	 (equalp-with-case (cdr x) (cdr y))))
+   ((typep x 'vector)
+    (and (typep y 'vector)
+	 (let ((x-len (length x))
+	       (y-len (length y)))
+	   (and (eql x-len y-len)
+		(loop
+		 for e1 across x
+		 for e2 across y
+		 always (equalp-with-case e1 e2))))))
+   (t (eql x y))))
+
 (defun do-entry (entry &optional
 		       (s *standard-output*))
   (catch '*in-test*
@@ -117,7 +134,7 @@
       (declare (special *break-on-warnings*))
       (setf (pend entry)
 	    (or aborted
-		(not (equalp r (vals entry)))))
+		(not (equalp-with-case r (vals entry)))))
       (when (pend entry)
 	(format s "~&Test ~:@(~S~) failed~
                    ~%Form: ~S~
