@@ -49,19 +49,19 @@
 ;;; package-name
 
 (deftest package-name.1
-  (ignore-errors (package-name "A"))
+  (let () (ignore-errors (package-name "A")))
   "A")
 
 (deftest package-name.2
-  (ignore-errors (package-name #\A))
+  (let () (ignore-errors (package-name #\A)))
   "A")
 
 (deftest package-name.3
-  (ignore-errors (package-name "Q"))
+  (let () (ignore-errors (package-name "Q")))
   "A")
 
 (deftest package-name.4
-  (ignore-errors (package-name #\Q))
+  (let () (ignore-errors (package-name #\Q)))
   "A")
 
 (deftest package-name.5
@@ -143,42 +143,44 @@
 ;;; package-nicknames
 
 (deftest package-nicknames.1
-  (ignore-errors (package-nicknames "A"))
+  (let () (ignore-errors (package-nicknames "A")))
   ("Q"))
 
 (deftest package-nicknames.2
-  (ignore-errors (package-nicknames #\A))
+  (let () (ignore-errors (package-nicknames #\A)))
   ("Q"))
 
 (deftest package-nicknames.3
-  (ignore-errors (package-nicknames ':|A|))
+  (let () (ignore-errors (package-nicknames ':|A|)))
   ("Q"))
 
 (deftest package-nicknames.4
-  (ignore-errors (package-nicknames "B"))
+  (let () (ignore-errors (package-nicknames "B")))
   nil)
 
 (deftest package-nicknames.5
-  (ignore-errors (package-nicknames #\B))
+  (let () (ignore-errors (package-nicknames #\B)))
   nil)
 
 (deftest package-nicknames.6
-  (ignore-errors (package-nicknames '#:|B|))
+  (let () (ignore-errors (package-nicknames '#:|B|)))
   nil)
 
 (deftest package-nicknames.7
-  (ignore-errors
-    (subsetp '(#.(string '#:cl))
-	     (package-nicknames "COMMON-LISP")
-	     :test #'string=))
+  (let ()
+    (ignore-errors
+      (subsetp '(#.(string '#:cl))
+	       (package-nicknames "COMMON-LISP")
+	       :test #'string=)))
   t)
 
 (deftest package-nicknames.8
-  (ignore-errors
-    (notnot
-     (subsetp '(#.(string '#:cl-user))
-	      (package-nicknames "COMMON-LISP-USER")
-	      :test #'string=)))
+  (let ()
+    (ignore-errors
+      (notnot
+       (subsetp '(#.(string '#:cl-user))
+		(package-nicknames "COMMON-LISP-USER")
+		:test #'string=))))
   t)
 
 (deftest package-nicknames.9
@@ -190,7 +192,7 @@
   type-error)
 
 (deftest package-nicknames.10
-  (ignore-errors (package-nicknames (find-package "A")))
+  (let () (ignore-errors (package-nicknames (find-package "A"))))
   ("Q"))
 
 (deftest package-nicknames.11

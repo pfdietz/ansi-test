@@ -5,13 +5,15 @@
 
 (in-package :cl-test)
 
-(unless #| (fboundp 'class-precedence-list) |# nil
-  (defgeneric class-precedence-list (x)
-    (:method-combination list)
-    .
-    #.(loop for s in *cl-types-that-are-classes-symbols*
-	    collect
-	    `(:method list ((x ,s)) ',s))))
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (unless #| (fboundp 'class-precedence-list) |# nil
+    (report-and-ignore-errors
+      (defgeneric class-precedence-list (x)
+	(:method-combination list)
+	.
+	#.(loop for s in *cl-types-that-are-classes-symbols*
+		collect
+		`(:method list ((x ,s)) ',s))))))
 
 (defmacro def-cpl-test (objform expected-cpl &optional name)
   (let* ((ordered (loop for e = expected-cpl then (cdr e)

@@ -6,30 +6,30 @@
 (in-package :cl-test)
 (declaim (optimize (safety 3)))
 
-(ignore-errors
+(report-and-ignore-errors
   (defpackage "A"
     (:use)
     (:nicknames "Q")
     (:export "FOO")))
 
-(ignore-errors
+(report-and-ignore-errors
   (defpackage "B"
     (:use "A")
     (:export "BAR")))
 
-(ignore-errors
+(report-and-ignore-errors
   (defpackage "DS1"
     (:use)
     (:intern "C" "D")
     (:export "A" "B")))
 
-(ignore-errors
+(report-and-ignore-errors
   (defpackage "DS2"
     (:use)
     (:intern "E" "F")
     (:export "G" "H" "A")))
 
-(ignore-errors
+(report-and-ignore-errors
   (defpackage "DS3"
     (:shadow "B")
     (:shadowing-import-from "DS1" "A")
@@ -37,7 +37,7 @@
     (:export "A" "B" "G" "I" "J" "K")
     (:intern "L" "M")))
 
-(ignore-errors
+(report-and-ignore-errors
   (defpackage "DS4"
     (:shadowing-import-from "DS1" "B")
     (:use "DS1" "DS3")

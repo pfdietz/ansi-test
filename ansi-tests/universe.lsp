@@ -358,7 +358,7 @@
 (defgeneric meaningless-user-generic-function-for-universe (x y z)
   (:method ((x integer) (y integer) (z integer)) (+ x y z)))
 
-(eval-when #+gcl (load) #-gcl (:load-toplevel)
+(eval-when (:load-toplevel)
   (compile 'meaningless-user-function-for-universe)
   (compile 'meaningless-user-generic-function-for-universe)
   )

@@ -167,9 +167,8 @@
     `(progn
        (declaim (special ,class-var-name))
        
-       (eval-when #+gcl (load eval compile)
-		  #-gcl (:load-toplevel :compile-toplevel :execute)
-	 (ignore-errors (setq ,class-var-name (defclass ,@(cdr args)))))
+       (report-and-ignore-errors (setq ,class-var-name
+				       (defclass ,@(cdr args))))
 
        (deftest ,(make-defclass-test-name class-name "-DEFCLASS-RETURNS-CLASS")
 	 (eqt (find-class ',class-name) ,class-var-name)

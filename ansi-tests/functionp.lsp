@@ -46,10 +46,8 @@
   (functionp '(lambda (x) x))
   nil)
 
-(eval-when #+gcl (eval compile)
-	   #-gcl (:load-toplevel :compile-toplevel :execute)
-  (ignore-errors
-    (defun (setf functionp-7-accessor) (y x) (setf (car x) y) y)))
+(report-and-ignore-errors
+ (defun (setf functionp-7-accessor) (y x) (setf (car x) y) y))
 
 (deftest functionp.7
   (not-mv (functionp #'(setf functionp-7-accessor)))

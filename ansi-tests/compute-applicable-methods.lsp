@@ -49,23 +49,25 @@
   (compute-applicable-methods #'cam-gf-02 '(1))
   nil)
 
-(defgeneric cam-gf-03 (x)
-  (:method-combination + :most-specific-first))
-
-(defparameter *cam-gf-03-method1*
-  (defmethod cam-gf-03 + ((x integer)) 1))
-
-(defparameter *cam-gf-03-method2*
-  (defmethod cam-gf-03 + ((x rational)) 2))
-
-(defparameter *cam-gf-03-method3*
-  (defmethod cam-gf-03 + ((x real)) 4))
-
-(defparameter *cam-gf-03-method4*
-  (defmethod cam-gf-03 + ((x number)) 8))
-
-(defparameter *cam-gf-03-method5*
-  (defmethod cam-gf-03 + ((x t)) 16))
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (defgeneric cam-gf-03 (x)
+     (:method-combination + :most-specific-first))
+   
+   (defparameter *cam-gf-03-method1*
+     (defmethod cam-gf-03 + ((x integer)) 1))
+   
+   (defparameter *cam-gf-03-method2*
+     (defmethod cam-gf-03 + ((x rational)) 2))
+   
+   (defparameter *cam-gf-03-method3*
+     (defmethod cam-gf-03 + ((x real)) 4))
+   
+   (defparameter *cam-gf-03-method4*
+     (defmethod cam-gf-03 + ((x number)) 8))
+   
+   (defparameter *cam-gf-03-method5*
+     (defmethod cam-gf-03 + ((x t)) 16))))
 
 (deftest compute-applicable-methods.6
   (equalt (compute-applicable-methods #'cam-gf-03 (list 0))
@@ -73,24 +75,27 @@
 		*cam-gf-03-method4* *cam-gf-03-method5*))
   t)
 
-(defgeneric cam-gf-04 (x)
-  (:method-combination + :most-specific-last))
-
-(defparameter *cam-gf-04-method1*
-  (defmethod cam-gf-04 + ((x integer)) 1))
-
-(defparameter *cam-gf-04-method2*
-  (defmethod cam-gf-04 + ((x rational)) 2))
-
-(defparameter *cam-gf-04-method3*
-  (defmethod cam-gf-04 + ((x real)) 4))
-
-(defparameter *cam-gf-04-method4*
-  (defmethod cam-gf-04 + ((x number)) 8))
-
-(defparameter *cam-gf-04-method5*
-  (defmethod cam-gf-04 + ((x t)) 16))
-
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (defgeneric cam-gf-04 (x)
+     (:method-combination + :most-specific-last))
+   
+   (defparameter *cam-gf-04-method1*
+     (defmethod cam-gf-04 + ((x integer)) 1))
+   
+   (defparameter *cam-gf-04-method2*
+     (defmethod cam-gf-04 + ((x rational)) 2))
+   
+   (defparameter *cam-gf-04-method3*
+     (defmethod cam-gf-04 + ((x real)) 4))
+   
+   (defparameter *cam-gf-04-method4*
+     (defmethod cam-gf-04 + ((x number)) 8))
+   
+   (defparameter *cam-gf-04-method5*
+     (defmethod cam-gf-04 + ((x t)) 16))
+   ))
+      
 (deftest compute-applicable-methods.7
   (equalt (compute-applicable-methods #'cam-gf-04 (list 0))
 	  (list *cam-gf-04-method1* *cam-gf-04-method2* *cam-gf-04-method3*

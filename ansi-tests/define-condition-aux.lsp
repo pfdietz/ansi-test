@@ -19,10 +19,9 @@
   (dolist (parent parents) (assert (symbolp parent)))
   
   (let ((name (symbol-name name-symbol)))
-  `(eval-when #+gcl (load eval compile)
-	      #-gcl (:load-toplevel :compile-toplevel :execute)
-     (ignore-errors (eval '(define-condition ,name-symbol ,parents
-			    ,slot-specs ,@options)))
+  `(eval-when (:load-toplevel :compile-toplevel :execute)
+     (report-and-ignore-errors (eval '(define-condition ,name-symbol ,parents
+				     ,slot-specs ,@options)))
      ,@(loop for parent in (adjoin 'condition parents)
 	     collect
 	     `(deftest ,(make-def-cond-name name "IS-SUBTYPE-OF/" parent)

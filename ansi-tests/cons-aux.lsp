@@ -15,10 +15,18 @@
 	     (setq test (complement test-not)))
    ((not test) (setq test #'eql)))
 
-  (when (symbolp test) (setq test (symbol-function test)))	  
+  ;;; (when (symbolp test) (setq test (symbol-function test)))
+  (etypecase test
+    (symbol (setq test (symbol-function test)))
+    (function nil))
 
-  (let* ((keys1 (if key (mapcar key set1) set1))
-	 (keys2 (if key (mapcar key set2) set2))
+  (etypecase key
+    (null nil)
+    (symbol (setq key (symbol-function key)))
+    (function nil))
+
+  (let* ((keys1 (if key (mapcar (the function key) set1) set1))
+	 (keys2 (if key (mapcar (the function key) set2) set2))
 	 (mask1 (make-array (length set1) :element-type 'bit
 			    :initial-element 0))
 	 (mask2 (make-array (length set2) :element-type 'bit
@@ -28,7 +36,7 @@
 	  do
 	  (loop for i2 from 0
 		for k2 in keys2
-		when (funcall test k1 k2)
+		when (funcall (the function test) k1 k2)
 		do (setf (sbit mask1 i1) 1
 			 (sbit mask2 i2) 1)))
     (nconc
@@ -64,24 +72,28 @@
 			    (list test-args test-not-args key-args))))))
 
 (defun random-set-exclusive-or-test (n reps &optional (fn 'set-exclusive-or))
-  (loop for i below reps
-	for args = (make-random-set-exclusive-or-input n)
-	for set1 = (car args)
-	for set2 = (cadr args)
-	for result1 = (apply #'remove-duplicates
-			     (sort (copy-list (apply #'my-set-exclusive-or args))
-				   #'<)
-			     (cddr args))
-	for result2 = (apply #'remove-duplicates
-			     (sort (copy-list (apply fn
-						     (copy-list set1)
-						     (copy-list set2)
-						     (cddr args)))
-				   #'<)
-			     (cddr args))
-	unless (equal result1 result2)
-	return (list (list 'remove-duplicates (list 'sort (cons fn args) '<) "...")
-		     "actual: " result2 "should be: " result1)))
+  (let ((actual-fn (etypecase fn
+		     (symbol (symbol-function fn))
+		     (function fn))))
+    (declare (type function actual-fn))
+    (loop for i below reps
+	  for args = (make-random-set-exclusive-or-input n)
+	  for set1 = (car args)
+	  for set2 = (cadr args)
+	  for result1 = (apply #'remove-duplicates
+			       (sort (copy-list (apply #'my-set-exclusive-or args))
+				     #'<)
+			       (cddr args))
+	  for result2 = (apply #'remove-duplicates
+			       (sort (copy-list (apply actual-fn
+						       (copy-list set1)
+						       (copy-list set2)
+						       (cddr args)))
+				     #'<)
+			       (cddr args))
+	  unless (equal result1 result2)
+	  return (list (list 'remove-duplicates (list 'sort (cons fn args) '<) "...")
+		       "actual: " result2 "should be: " result1))))
 
 (defun rev-assoc-list (x)
   (cond

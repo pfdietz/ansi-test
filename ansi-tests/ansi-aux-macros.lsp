@@ -27,5 +27,16 @@
 				     '(should-never-be-called)))
   `(if *should-always-be-true* ,form ,default-form))
 
+;;; Macro to ignore errors, but report them anyway
 
+(defmacro report-and-ignore-errors (&body body)
+  `(eval-when (:load-toplevel :compile-toplevel :execute)
+     (#+sbcl let #+sbcl () #-sbcl progn
+       (handler-case
+	(progn ,@body)
+	(error (condition)
+	       (princ condition)
+	       (terpri)
+	       (values nil condition))))))
 
+		   

@@ -5,15 +5,22 @@
 
 (in-package :cl-test)
 
-(defgeneric find-method-gf-01 (x))
-(defparameter *find-method-gf-01-method1*
-  (defmethod find-method-gf-01 ((x integer)) 'a))
-(defparameter *find-method-gf-01-method2*
-  (defmethod find-method-gf-01 ((x rational)) 'b))
-(defparameter *find-method-gf-01-method3*
-  (defmethod find-method-gf-01 ((x real)) 'c))
-(defparameter *find-method-gf-01-method4*
-  (defmethod find-method-gf-01 ((x t)) 'd))
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (defgeneric find-method-gf-01 (x)))
+  (report-and-ignore-errors
+   (defparameter *find-method-gf-01-method1*
+     (defmethod find-method-gf-01 ((x integer)) 'a)))
+  (report-and-ignore-errors
+   (defparameter *find-method-gf-01-method2*
+     (defmethod find-method-gf-01 ((x rational)) 'b)))
+  (report-and-ignore-errors
+   (defparameter *find-method-gf-01-method3*
+     (defmethod find-method-gf-01 ((x real)) 'c)))
+  (report-and-ignore-errors
+   (defparameter *find-method-gf-01-method4*
+     (defmethod find-method-gf-01 ((x t)) 'd)))
+  )
 
 (deftest find-method.1
   (eqt (find-method #'find-method-gf-01 nil (list (find-class 'integer)))

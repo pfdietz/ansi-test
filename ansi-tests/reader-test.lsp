@@ -47,7 +47,7 @@
 
 (deftest read-symbol.3
   (multiple-value-bind (s n)
-      (ignore-errors (read-from-string "#:abc"))
+      (let () (ignore-errors (read-from-string "#:abc")))
     (not
      (and (symbolp s)
 	  (eql n 5)
@@ -57,7 +57,7 @@
 
 (deftest read-symbol.4
   (multiple-value-bind (s n)
-      (ignore-errors (read-from-string "#:|abc|"))
+      (let () (ignore-errors (read-from-string "#:|abc|")))
     (not
      (and (symbolp s)
 	  (eql n 7)
@@ -67,7 +67,7 @@
 
 (deftest read-symbol.5
   (multiple-value-bind (s n)
-      (ignore-errors (read-from-string "#:||"))
+      (let () (ignore-errors (read-from-string "#:||")))
     (if (not (symbolp s))
 	s
       (not (not
@@ -91,7 +91,7 @@
 
 (deftest read-symbol.7
   (multiple-value-bind (s n)
-      (ignore-errors (read-from-string ":ABCD"))
+      (let () (ignore-errors (read-from-string ":ABCD")))
     (if (not (symbolp s))
 	s
       (not (not

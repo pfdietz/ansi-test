@@ -263,15 +263,14 @@ do the defstruct."
 		     (cons slot-name (defstruct-maketemp name "SLOTTEMP" i)))))
 	 )
     ;; Build the tests in an eval-when form
-    `(eval-when #+gcl (compile load eval)
-		#-gcl (:load-toplevel :compile-toplevel :execute)
+    `(eval-when (:load-toplevel :compile-toplevel :execute)
 
-       (ignore-errors
-	 (eval '(defstruct ,name-and-options
-		  ,@slot-descriptions-and-documentation))
-	 ,(unless (or type-option include-option)
-	    `(pushnew ',name *defstruct-with-tests-names*))
-	 nil)
+       (report-and-ignore-errors
+	(eval '(defstruct ,name-and-options
+		 ,@slot-descriptions-and-documentation))
+	,(unless (or type-option include-option)
+	   `(pushnew ',name *defstruct-with-tests-names*))
+	nil)
 
        ;; Test that structure is of the correct type
        (deftest ,(make-struct-test-name name 1)

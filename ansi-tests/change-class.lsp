@@ -376,14 +376,14 @@
 (defclass change-class-class-05 ()
   (a b c))
 
-(ignore-errors
-  (defmethod change-class
-    ((obj change-class-class-05)
-     (new-class (eql (find-class 'change-class-class-05)))
-     &rest initargs &key &allow-other-keys)
-    (declare (ignore initargs new-class))
-    (setq *changed-class-on-class-05* t)
-    obj))
+(report-and-ignore-errors
+ (defmethod change-class
+   ((obj change-class-class-05)
+    (new-class (eql (find-class 'change-class-class-05)))
+    &rest initargs &key &allow-other-keys)
+   (declare (ignore initargs new-class))
+   (setq *changed-class-on-class-05* t)
+   obj))
 
 (deftest change-class.5
   (let ((*changed-class-on-class-05* nil)
@@ -398,14 +398,14 @@
 (defclass change-class-class-06 ()
   ((a :initarg :a) (b :initarg :b) (c :initarg :c)))
 
-(ignore-errors
-  (defmethod change-class
-    ((obj change-class-class-06)
-     (new-class standard-class)
-     &rest initargs &key &allow-other-keys)
-    (declare (ignore initargs))
-    (setf (slot-value obj 'a) 123)
-    (call-next-method)))
+(report-and-ignore-errors
+ (defmethod change-class
+   ((obj change-class-class-06)
+    (new-class standard-class)
+    &rest initargs &key &allow-other-keys)
+   (declare (ignore initargs))
+   (setf (slot-value obj 'a) 123)
+   (call-next-method)))
 
 (deftest change-class.6.1
   (let* ((class (find-class 'change-class-class-06))
@@ -446,14 +446,14 @@
   ((a :initform 'aa :initarg :a)
    (d :initform 'dd :initarg :d)))
 
-(ignore-errors
-  (defmethod change-class :before
-    ((obj change-class-class-07)
-     (new-class standard-class)
-     &rest initargs &key &allow-other-keys)
-    (declare (ignore initargs))
-    (setf (slot-value obj 'a) 'z)
-    obj))
+(report-and-ignore-errors
+ (defmethod change-class :before
+   ((obj change-class-class-07)
+    (new-class standard-class)
+    &rest initargs &key &allow-other-keys)
+   (declare (ignore initargs))
+   (setf (slot-value obj 'a) 'z)
+   obj))
   
 (deftest change-class.7.1
   (let* ((class (find-class 'change-class-class-07))
@@ -531,17 +531,18 @@
 
 ;;; After method
 
-(ignore-errors
-  (defclass change-class-class-08 () ((a :initarg :a) (b :initarg :b))))
+(report-and-ignore-errors
+ (defclass change-class-class-08 ()
+   ((a :initarg :a) (b :initarg :b))))
 
-(ignore-errors
-  (defmethod change-class :after
-    ((obj change-class-class-08)
-     (class (eql (find-class 'change-class-class-08)))
-     &rest initargs &key &allow-other-keys)
-    (declare (ignore initargs))
-    (setf (slot-value obj 'a) 'z)
-    obj))
+(report-and-ignore-errors
+ (defmethod change-class :after
+   ((obj change-class-class-08)
+    (class (eql (find-class 'change-class-class-08)))
+    &rest initargs &key &allow-other-keys)
+   (declare (ignore initargs))
+   (setf (slot-value obj 'a) 'z)
+   obj))
 
 (deftest change-class.8.1
   (let* ((class (find-class 'change-class-class-08))

@@ -4,8 +4,7 @@
 ;;;; Contains: Package definition for RT
 
 (eval-when
- #-gcl (:execute :compile-toplevel :load-toplevel)
- #+gcl (load eval compile)
+ (:execute :compile-toplevel :load-toplevel)
  (defpackage :regression-test
     (:use :cl)
     (:nicknames :rtest #-lispworks :rt)

@@ -6,8 +6,7 @@
   (when (eq excl:*current-case-mode* :case-sensitive-lower)
     (push :lower-case *features*)))
 
-(eval-when #+gcl (load eval compile)
-	   #-gcl (:load-toplevel :compile-toplevel :execute)
+(eval-when (:load-toplevel :compile-toplevel :execute)
   (intern "==>" "CL-USER")
   (unless (fboundp 'compile-file-pathname)
     (defun compile-file-pathname (pathname)

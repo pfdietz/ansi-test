@@ -31,6 +31,13 @@
 	   (not (first results))
 	   (rest results))))
 
+(declaim (ftype (function (t) function) to-function))
+
+(defun to-function (fn)
+  (etypecase fn
+    (function fn)
+    (symbol (symbol-function fn))
+    ((cons (eql setf) symbol) (fdefinition fn))))    
 
 ;;; Macro to check that a function is returning a specified number of values
 ;;; (defaults to 1)
@@ -107,7 +114,7 @@ Results: ~A~%" expected-number form n results))))
        (typep a2 'array)
        (= (array-rank a1) (array-rank a2))
        (if (= (array-rank a1) 0)
-	   (equal (aref a1) (aref a2))
+	   (equal (rt::my-aref a1) (rt::my-aref a2))
 	 (let ((ad (array-dimensions a1)))
 	   (and (equal ad (array-dimensions a2))
 		(locally
@@ -116,13 +123,13 @@ Results: ~A~%" expected-number form n results))))
 		     (let ((as (first ad)))
 		       (loop
 			for i from 0 below as
-			always (equal (aref a1 i) (aref a2 i))))
+			always (equal (rt::my-aref a1 i) (rt::my-aref a2 i))))
 		   (let ((as (array-total-size a1)))
 		     (and (= as (array-total-size a2))
 			  (loop
 			   for i from 0 below as
-			   always (equal (row-major-aref a1 i)
-					 (row-major-aref a2 i))))))))))))
+			   always (equal (rt::my-row-major-aref a1 i)
+					 (rt::my-row-major-aref a2 i))))))))))))
 
 ;;; *universe* is defined elsewhere -- it is a list of various
 ;;; lisp objects used when stimulating things in various tests.
@@ -1281,8 +1288,7 @@ the condition to go uncaught if it cannot be classified."
   (classify-error* (elt x n)))
 
 (defmacro defstruct* (&body args)
-  `(eval-when #+gcl (load eval compile)
-	      #-gcl (:load-toplevel :compile-toplevel :execute)
+  `(eval-when (:load-toplevel :compile-toplevel :execute)
      (handler-case (eval '(defstruct ,@args))
 		      (serious-condition () nil))))
 

@@ -124,21 +124,21 @@
 ;;; (section 6.1.2.1.7), this should cause a pacakge-error.
 
 (deftest loop.7.18
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
     (classify-error
      (loop for x being each symbol of "LOOP.MISSING.PACKAGE" collect x)))
   package-error)
 
 (deftest loop.7.19
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
     (classify-error
      (loop for x being each present-symbol of "LOOP.MISSING.PACKAGE" collect x)))
   package-error)
 
 (deftest loop.7.20
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.MISSING.PACKAGE"))
     (classify-error
      (loop for x being each external-symbol of "LOOP.MISSING.PACKAGE" collect x)))

@@ -201,42 +201,42 @@
   0)
 
 (deftest loop.16.70
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.16.PACKAGE"))
     (let ((p (make-package "LOOP.16.PACKAGE" :use nil)))
       (loop #:for x #:being #:the #:symbols #:of p #:count t)))
   0)
 
 (deftest loop.16.71
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.16.PACKAGE"))
     (let ((p (make-package "LOOP.16.PACKAGE" :use nil)))
       (loop #:for x #:being #:each #:symbol #:of p #:count t)))
   0)
 
 (deftest loop.16.72
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.16.PACKAGE"))
     (let ((p (make-package "LOOP.16.PACKAGE" :use nil)))
       (loop #:for x #:being #:the #:external-symbols #:of p #:count t)))
   0)
 
 (deftest loop.16.73
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.16.PACKAGE"))
     (let ((p (make-package "LOOP.16.PACKAGE" :use nil)))
       (loop #:for x #:being #:each #:external-symbol #:of p #:count t)))
   0)
 
 (deftest loop.16.74
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.16.PACKAGE"))
     (let ((p (make-package "LOOP.16.PACKAGE" :use nil)))
       (loop #:for x #:being #:the #:present-symbols #:of p #:count t)))
   0)
 
 (deftest loop.16.75
-  (progn
+  (let ()
     (ignore-errors (delete-package "LOOP.16.PACKAGE"))
     (let ((p (make-package "LOOP.16.PACKAGE" :use nil)))
       (loop #:for x #:being #:each #:present-symbol #:of p #:count t)))

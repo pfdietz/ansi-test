@@ -55,7 +55,7 @@
   (multiple-value-bind (element-type type len start end from-end
 				     count seq key test test-not)
       (make-random-rd-params maxlen)
-    (declare (ignore count element-type))
+    (declare (ignore count element-type len type))
     (let ((arg-list
 	   (reduce #'nconc
 		   (random-permute

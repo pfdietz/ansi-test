@@ -14,18 +14,21 @@
 (defclass dmc-class-01g (dmc-class-01a) ())
 (defclass dmc-class-01h (dmc-class-01f dmc-class-01g) ())
 
-(defvar *dmc-times*
-  (define-method-combination times
-    :documentation "Multiplicative method combination, version 1"
-    :operator *))
-
-(defgeneric dmc-gf-01 (x) (:method-combination times))
-
-(defmethod dmc-gf-01 times ((x integer)) 2)
-(defmethod dmc-gf-01 times ((x rational)) 3)
-(defmethod dmc-gf-01 times ((x real)) 5)
-(defmethod dmc-gf-01 times ((x number)) 7)
-(defmethod dmc-gf-01 times ((x complex)) 11)
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (defvar *dmc-times*
+     (define-method-combination times
+       :documentation "Multiplicative method combination, version 1"
+       :operator *))
+   
+   (defgeneric dmc-gf-01 (x) (:method-combination times))
+   
+   (defmethod dmc-gf-01 times ((x integer)) 2)
+   (defmethod dmc-gf-01 times ((x rational)) 3)
+   (defmethod dmc-gf-01 times ((x real)) 5)
+   (defmethod dmc-gf-01 times ((x number)) 7)
+   (defmethod dmc-gf-01 times ((x complex)) 11)
+   ))
 
 (deftest define-method-combination-01.1
   (values
@@ -46,13 +49,16 @@
   *dmc-times*
   times)
 
-(defgeneric dmc-gf-02 (x) (:method-combination times))
-
-(defmethod dmc-gf-02 times ((x integer)) 2)
-(defmethod dmc-gf-02 :around ((x rational)) (1- (call-next-method)))
-(defmethod dmc-gf-02 times ((x real)) 3)
-(defmethod dmc-gf-02 times ((x number)) 5)
-(defmethod dmc-gf-02 :around ((x (eql 1.0s0))) 1)
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (defgeneric dmc-gf-02 (x) (:method-combination times))
+   
+   (defmethod dmc-gf-02 times ((x integer)) 2)
+   (defmethod dmc-gf-02 :around ((x rational)) (1- (call-next-method)))
+   (defmethod dmc-gf-02 times ((x real)) 3)
+   (defmethod dmc-gf-02 times ((x number)) 5)
+   (defmethod dmc-gf-02 :around ((x (eql 1.0s0))) 1)
+   ))
 
 (deftest define-method-combination-02.1
   (values
@@ -63,7 +69,9 @@
    (dmc-gf-02 #c(1 2)))
   29 14 1 15 5)
 
-(defgeneric dmc-gf-03 (x) (:method-combination times))
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (defgeneric dmc-gf-03 (x) (:method-combination times))))
 
 (deftest define-method-combination-03.1
   (prog1
@@ -101,16 +109,19 @@
       (remove-method #'dmc-gf-03 meth)))
   :good)
 
-(define-method-combination times2
-  :operator *
-  :identity-with-one-argument t)
-
-(defgeneric dmc-gf-04 (x) (:method-combination times2))
-
-(defmethod dmc-gf-04 times2 ((x dmc-class-01b)) 2)
-(defmethod dmc-gf-04 times2 ((x dmc-class-01c)) 3)
-(defmethod dmc-gf-04 times2 ((x dmc-class-01d)) 5)
-(defmethod dmc-gf-04 times2 ((x symbol)) nil)
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (report-and-ignore-errors
+   (define-method-combination times2
+     :operator *
+     :identity-with-one-argument t)
+   
+   (defgeneric dmc-gf-04 (x) (:method-combination times2))
+   
+   (defmethod dmc-gf-04 times2 ((x dmc-class-01b)) 2)
+   (defmethod dmc-gf-04 times2 ((x dmc-class-01c)) 3)
+   (defmethod dmc-gf-04 times2 ((x dmc-class-01d)) 5)
+   (defmethod dmc-gf-04 times2 ((x symbol)) nil)
+   ))
 
 (deftest define-method-combination-04.1
   (dmc-gf-04 (make-instance 'dmc-class-01h))
