@@ -90,7 +90,7 @@
 
 (deftest subtypep.real.5
   (check-equivalence
-   '(or (eql 0) (real (0)))
+   '(or (real 0 0) (real (0)))
    '(real 0))
   nil)
 
@@ -132,7 +132,7 @@
 
 (deftest subtypep.real.12
   (check-equivalence
-   '(and (real 0 10) (not (real (0) (10))))
+   '(and integer (real 0 10) (not (real (0) (10))))
    '(member 0 10))
   nil)
 
