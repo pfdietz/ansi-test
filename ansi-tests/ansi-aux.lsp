@@ -1407,4 +1407,6 @@ the condition to go uncaught if it cannot be classified."
   (and (typep c 'simple-error)
        (apply #'frob-simple-condition c expected-fmt expected-args)))
 
-  
+(defun frob-simple-warning (c expected-fmt &rest expected-args)
+  (and (typep c 'simple-warning)
+       (apply #'frob-simple-condition c expected-fmt expected-args)))
