@@ -791,9 +791,40 @@
      (typep* #'(setf s1-26) 'generic-function)))
   nil x x t)
 
+;;;
 
+(defclass class-27 ()
+  (a (b :initform 10) (c :initarg :c) (d :initarg :d))
+  (:metaclass standard-class)
+  (:default-initargs :d 17))
 
+(deftest class-27.1
+  (let ((class (find-class 'class-27)))
+    (values
+     (subtypep* 'class-27 'standard-object)
+     (subtypep* 'class-27 t)
+     (subtypep* 'class-27 (find-class 'standard-object))
+     (subtypep* 'class-27 (find-class t))
+     (subtypep* class 'standard-object)
+     (subtypep* class t)
+     (subtypep* class (find-class 'standard-object))
+     (subtypep* class (find-class t))))
+  t t t t t t t t)
 
+(deftest class-27.2
+  (let ((c (make-instance 'class-27)))
+    (values
+     (slot-boundp* c 'a)
+     (slot-value c 'b)
+     (slot-boundp* c 'c)
+     (slot-value c 'd)))
+  nil 10 nil 17)
 
-
-  
+(deftest class-27.3
+  (let ((c (make-instance 'class-27 :c 26 :d 43)))
+    (values
+     (slot-boundp* c 'a)
+     (slot-value c 'b)
+     (slot-value c 'c)
+     (slot-value c 'd)))
+  nil 10 26 43)
