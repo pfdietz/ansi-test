@@ -23,3 +23,4 @@
 (load "method-qualifiers.lsp")
 (load "no-applicable-method.lsp")
 (load "no-next-method.lsp")
+(load "remove-method.lsp")
