@@ -29,7 +29,7 @@
 	collect x)
   nil)
 
-(deftest parse-integer.error.5
+(deftest parse-integer.error.5a
   (classify-error (parse-integer ""))
   parse-error)
 
