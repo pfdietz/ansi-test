@@ -8172,3 +8172,22 @@ Broken at C::WT-MAKE-CLOSURE.
        (dotimes (iv3 1 0) (logxor iv3 1285775)))))
   0)
 
+;;; sbcl 0.8.15.13
+;;; NIL is not of type REAL
+;;; (This appears to be related to DYNAMIC-EXTENT)
+
+(deftest misc.427
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (notinline list reduce logior))
+       (declare (optimize (safety 2) (compilation-speed 1)
+			  ; #+sbcl (sb-c:insert-step-conditions 0)
+			  (speed 3) (space 2) (debug 2)))
+       (logior
+	(let* ((v5 (reduce #'+ (list 0 a))))
+	  (declare (dynamic-extent v5))
+	  v5))))
+   17)
+  17)
