@@ -25,6 +25,7 @@
 	    (rest-type 'integer)
 	    (reps 1000)
 	    (enclosing-the nil)
+	    (cell t)
 	    (test #'regression-test::equalp-with-case))
   (assert (<= 1 minargs maxargs 20))
   (dotimes (i reps)
@@ -76,14 +77,22 @@
 										(member v '(nil t))))))
 						  `(quote ,v)
 						  v)))))
+	  (speed (random 4))
+	  (space (random 4))
+	  (safety #-allegro (random 4)
+		  #+allegro (1+ (random 3)))
+	  (debug (random 4))
+	  (store-into-cell? (and cell (coin)))
 	  (form
-	   `(lambda (r ,@params)
-	      (declare (optimize speed (safety 1))
-		       (type (simple-array ,upgraded-result-type nil) r)
+	   `(lambda (,@(when store-into-cell? '(r)) ,@params)
+	      (declare (optimize (speed ,speed) (safety ,safety) (debug ,debug) (space ,space))
+		       ,@(when store-into-cell? `((type (simple-array ,upgraded-result-type nil) r)))
 		       ,@ type-decls)
-	      (setf (aref r)
-		    ,(if enclosing-the `(the ,result-type ,expr) expr))
-	      (values)))
+	      ,(let ((result-form
+		      (if enclosing-the `(the ,result-type ,expr) expr)))
+		 (if store-into-cell?
+		     `(setf (aref r) ,result-form)
+		   result-form))))
 	  (*form* form))
      (when *print-random-type-prop-input*
        (let ((*print-pretty* t)
@@ -97,11 +106,11 @@
 		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			 (warning #'muffle-warning))
 		 (compile nil form)))
-	    (r (make-array nil :element-type upgraded-result-type))
-	    (result (progn
-		      ;; (dotimes (i 100) (apply fn r param-vals))
-		      (apply fn r param-vals)
-		      (aref r))))
+	    (result (if store-into-cell?
+			(let ((r (make-array nil :element-type upgraded-result-type)))
+			  (apply fn r param-vals)
+			  (aref r))
+		      (apply fn param-vals))))
        (setq *random-type-prop-result*
 	     (list :upgraded-result-type upgraded-result-type
 		   :form form
