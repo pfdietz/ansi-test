@@ -10346,3 +10346,18 @@ Broken at C::WT-MAKE-CLOSURE.
    477)
   0)
 
+;;; sbcl
+;;; The value -4 is not of type (INTEGER -26794287907 505600792).
+
+(deftest misc.567
+  (eqlt
+   (funcall
+    (compile
+     nil
+     '(lambda (p2)
+	(declare (optimize (speed 3) (safety 1) (debug 0) (space 1))
+		 (type (integer -26794287907 505600792) p2))
+	(scale-float -15193.341216130497d0 (the (integer * 25) p2))))
+    -4)
+   (scale-float -15193.341216130497d0 -4))
+  t)
