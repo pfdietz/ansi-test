@@ -8244,3 +8244,40 @@ Broken at C::WT-MAKE-CLOSURE.
   (let ((a 1)) (if (not (/= a 0)) a 0))
   0)
 
+;;; sbcl 0.8.16.13
+;;;   #<SB-C:TN t1> is not valid as the first argument to VOP:
+;;;   SB-VM::FAST-ASH-LEFT-MOD32/UNSIGNED=>UNSIGNED
+;;; Primitive type: T
+;;; SC restrictions:
+;;;   (SB-VM::UNSIGNED-REG)
+;;; The primitive type disallows these loadable SCs:
+;;;   (SB-VM::UNSIGNED-REG)
+
+(deftest misc.434
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -8431780939320 1571817471932) a))
+       (declare (type (integer -4085 0) b))
+       (declare (ignorable a b))
+       (declare
+	(optimize (space 2)
+		  (compilation-speed 0)
+		  #+sbcl (sb-c:insert-step-conditions 0)
+		  (debug 2)
+		  (safety 0)
+		  (speed 3)))
+       (let ((*s5* 0))
+	 (dotimes (iv1 2 0)
+	   (let ((*s5*
+		  (elt '(1954479092053)
+		       (min 0
+			    (max 0
+				 (if (< iv1 iv1)
+				     (lognand iv1 (ash iv1 (min 53 iv1)))
+				   iv1))))))
+	     0)))))
+   -7639589303599 -1368)
+  0)
+
