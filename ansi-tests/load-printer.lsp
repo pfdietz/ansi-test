@@ -31,3 +31,4 @@
 (load "pprint-tabular.lsp")
 (load "pprint-indent.lsp")
 (load "pprint-logical-block.lsp")
+(load "pprint-exit-if-list-exhausted.lsp")
