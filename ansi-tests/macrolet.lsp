@@ -362,6 +362,25 @@
   (macrolet ((%m (()) :good)) (%m ()))
   :good)
 
+;;; Test that macrolets accept declarations
+
+(deftest macrolet.40
+  (macrolet ((%x () t))
+    (declare (optimize)))
+  nil)
+
+(deftest macrolet.41
+  (macrolet ((%x () t))
+    (declare (optimize))
+    (declare (notinline identity)))
+  nil)
+
+(deftest macrolet.42
+  (macrolet ((%x () t))
+    (declare (optimize))
+    (%x))
+  nil)
+
 ;;; Symbol-macrolet tests
 
 (deftest symbol-macrolet.1
