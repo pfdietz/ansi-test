@@ -19,7 +19,7 @@
 		    (integerp r)
 		    (<= (- (/ d 2)) r (/ d 2))
 		    (or (/= (abs r) (/ d 2))
-			(evenp (coerce q 'integer))))
+			(evenp (floor q))))
 	collect (list n d q r n2)))
 
 
