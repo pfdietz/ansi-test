@@ -147,5 +147,24 @@
       (incf x)))
   0 0)
 
+;;; Scope of free declarations
+
+(deftest dotimes.22
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(dotimes (i (return-from done x))
+	  (declare (special x))))))
+  :good)
+
+(deftest dotimes.23
+  (let ((x :good))
+    (declare (special x))
+    (let ((x :bad))
+      (dotimes (i 10 x)
+	(declare (special x)))))
+  :good)
+
 (def-macro-test dotimes.error.1
   (dotimes (i 10)))

@@ -112,6 +112,25 @@
       (when (eq e 'c) (return x))))
   (c b a))
 
+;;; Scope of free declarations
+
+(deftest dolist.16
+  (block done
+    (let ((x :bad))
+      (declare (special x))
+      (let ((x :good))
+	(dolist (e (return-from done x))
+	  (declare (special x))))))
+  :good)
+
+(deftest dolist.17
+  (let ((x :good))
+    (declare (special x))
+    (let ((x :bad))
+      (dolist (e nil x)
+	(declare (special x)))))
+  :good)
+
 (def-macro-test dolist.error.1
   (dolist (x nil)))
 
