@@ -102,3 +102,32 @@
      (funcall gf2 0)))
   a b t t b b a)
 
+;;; An existing method is replaced.
+
+(deftest add-method.2
+  (let* ((specializers (list (find-class 'integer)))
+	 (gf (eval '(defgeneric add-method-gf-15 (x)
+		      (:method ((x integer)) 'a)
+		      (:method ((x t)) 'b))))
+	 (method (find-method gf nil specializers))
+	 (gf2 (eval '(defgeneric add-method-gf-16 (x)
+		       (:method ((x integer)) 'c)
+		       (:method ((x t)) 'd))))
+	 (method2 (find-method gf2 nil specializers)))
+    (values
+     (funcall gf 0)
+     (funcall gf 'x)
+     (funcall gf2 0)
+     (funcall gf2 'x)
+     (eqt gf (remove-method gf method))
+     (eqt gf2 (add-method gf2 method))
+     (eqt method (find-method gf2 nil specializers))
+     (eqt method2 (find-method gf2 nil specializers))
+     (funcall gf 0)
+     (funcall gf 'x)
+     (funcall gf2 0)
+     (funcall gf2 'x)))
+  a b c d t t t nil b b a d)
+
+;;; Must add tests for: :around methods, :before methods, :after methods,
+;;; nonstandard method combinations
