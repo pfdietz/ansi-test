@@ -46,28 +46,34 @@
 	  (pprint-tabular s ,@args))))
      ,expected-value))
 
+;;;
+;;; Note
+;;; The prefix and suffix "(" and ")" are not considered part of the
+;;; logical block they enclose (see the spec page for pprint-logical-block.
+;;;
+
 (def-pprint-tabular-test pprint-tabular.3 ('(|M|)) "(M)")
 (def-pprint-tabular-test pprint-tabular.4 ('(|M|) t) "(M)")
 (def-pprint-tabular-test pprint-tabular.5 ('(|M|) nil) "M")
 
-(def-pprint-tabular-test pprint-tabular.6 ('(|M| |M|)) "(M              M)")
+(def-pprint-tabular-test pprint-tabular.6 ('(|M| |M|)) "(M               M)")
 (def-pprint-tabular-test pprint-tabular.7 ('(|M| |M|) t nil 1) "(M M)")
-(def-pprint-tabular-test pprint-tabular.8 ('(|M| |M|) t t 3) "(M M)")
-(def-pprint-tabular-test pprint-tabular.9 ('(|M| |M|) t nil 4) "(M  M)")
-(def-pprint-tabular-test pprint-tabular.10 ('(|MM| |MM|) t nil 4) "(MM MM)")
-(def-pprint-tabular-test pprint-tabular.11 ('(|MM| |MM|) t nil 5) "(MM  MM)")
-(def-pprint-tabular-test pprint-tabular.12 ('(|M| |MM|) t nil 5)  "(M   MM)")
+(def-pprint-tabular-test pprint-tabular.8 ('(|M| |M|) t t 3) "(M  M)")
+(def-pprint-tabular-test pprint-tabular.9 ('(|M| |M|) t nil 4) "(M   M)")
+(def-pprint-tabular-test pprint-tabular.10 ('(|MM| |MM|) t nil 4) "(MM  MM)")
+(def-pprint-tabular-test pprint-tabular.11 ('(|MM| |MM|) t nil 5) "(MM   MM)")
+(def-pprint-tabular-test pprint-tabular.12 ('(|M| |MM|) t nil 5)  "(M    MM)")
 
 (def-pprint-tabular-test pprint-tabular.13 ((let ((x (list '|A|))) (list x x)) t nil 1)
   "(#1=(A) #1#)" :circle t)
 
-(def-pprint-tabular-test pprint-tabular.14 ('(|M| |M|) t t 4) "(M  M)")
+(def-pprint-tabular-test pprint-tabular.14 ('(|M| |M|) t t 4) "(M   M)")
 
 (def-pprint-tabular-test pprint-tabular.15 ('(1 2 3 4) t t 1) "(1 2 3 4)")
 (def-pprint-tabular-test pprint-tabular.16 ('(10 20 30 40) t t 1) "(10 20 30 40)")
 (def-pprint-tabular-test pprint-tabular.17 ('(10 200 3000 40000) t t 1) "(10 200 3000 40000)")
-(def-pprint-tabular-test pprint-tabular.18 ('(10 20 30 40) t t 2) "(10 20  30  40)")
-(def-pprint-tabular-test pprint-tabular.19 ('(10 200 3000 40000) t t 2) "(10 200 3000  40000)")
+(def-pprint-tabular-test pprint-tabular.18 ('(10 20 30 40) t t 2) "(10  20  30  40)")
+(def-pprint-tabular-test pprint-tabular.19 ('(10 200 3000 40000) t t 2) "(10  200 3000  40000)")
 
 (def-pprint-tabular-test pprint-tabular.20 ('(1 2 3) t nil 1)
   "     (1 2 3)"
@@ -103,5 +109,3 @@
      (with-open-stream (s (make-broadcast-stream))
 		       (pprint-tabular s 10 nil nil 100))))
   nil)
-
-
