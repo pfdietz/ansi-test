@@ -29,70 +29,58 @@
 	      collect (list x y))))
 
 (defun <.8-fn ()
-  (loop for x in *numbers*
-	when (realp x)
+  (loop for x in *reals*
 	nconc
-	(loop for y in *numbers*
-	      when (and (realp y) (and (< x y) (> x y)))
+	(loop for y in *reals*
+	      when (and (< x y) (> x y))
 	      collect (list x y))))
 
 (defun <.9-fn ()
-  (loop for x in *numbers*
-	when (realp x)
+  (loop for x in *reals*
 	nconc
-	(loop for y in *numbers*
-	      when (and (realp y) (if (< x y)
-				      (not (> y x))
-				    (> y x)))
+	(loop for y in *reals*
+	      when (if (< x y) (not (> y x))
+		     (> y x))
 	      collect (list x y))))
 
 (defun <.10-fn ()
-  (loop for x in *numbers*
-	when (realp x)
+  (loop for x in *reals*
 	nconc
-	(loop for y in *numbers*
-	      when (and (realp y) (if (< x y)
-				      (>= x y)
-				    (not (>= x y))))
+	(loop for y in *reals*
+	      when (if (< x y) (>= x y)
+		     (not (>= x y)))
 	      collect (list x y))))
 
 (defun <=.8-fn ()
-  (loop for x in *numbers*
-	when (realp x)
+  (loop for x in *reals*
 	nconc
-	(loop for y in *numbers*
-	      when (and (realp y) (if (<= x y) (not (>= y x))
-				    (>= y x)))
+	(loop for y in *reals*
+	      when (if (<= x y) (not (>= y x))
+		     (>= y x))
 	      collect (list x y))))
  
 (defun <=.9-fn ()
-  (loop for x in *numbers*
-	when (realp x)
+  (loop for x in *reals*
 	nconc
-	(loop for y in *numbers*
-	      when (and (realp y)
-			(if (<= x y) (not (or (= x y) (< x y)))
-			  (or (= x y) (< x y))))
+	(loop for y in *reals*
+	      when (if (<= x y) (not (or (= x y) (< x y)))
+		     (or (= x y) (< x y)))
 	      collect (list x y))))
 
 (defun >.8-fn ()
-  (loop for x in *numbers*
-	when (realp x)
+  (loop for x in *reals*
 	nconc
-	(loop for y in *numbers*
-	      when (and (realp y) (if (> x y)
-				      (<= x y)
-				    (not (<= x y))))
+	(loop for y in *reals*
+	      when (if (> x y) (<= x y)
+		     (not (<= x y)))
 	      collect (list x y))))
 
 (defun >=.8-fn ()
-  (loop for x in *numbers*
-	when (realp x)
+  (loop for x in *reals*
 	nconc
-	(loop for y in *numbers*
-	      when (and (realp y)
-			(if (>= x y) (not (or (= x y) (> x y)))
-			  (or (= x y) (> x y))))
+	(loop for y in *reals*
+	      when (if (>= x y) (not (or (= x y) (> x y)))
+		     (or (= x y) (> x y)))
 	      collect (list x y))))
 
 ;;; Comparison of rationsls
@@ -121,5 +109,11 @@
 		   (if (/= q1 q2) (not (/= ad bc)) (/= ad bc)))))
 	collect (list a b c d)))
 
-		   
-	
+(defun max.2-fn ()
+  (loop for x in *reals*
+	nconc
+	(loop for y in *reals*
+	      for m = (max x y)
+	      unless (and (>= m x) (>= m y)
+			  (or (= m x) (= m y)))
+	      collect (list x y m))))

@@ -157,6 +157,36 @@
 	  collect (list a b c d)))
   nil)
 
+(deftest =.order.1
+  (let ((i 0) x y)
+    (values
+     (= (progn (setf x (incf i)) 1)
+	(progn (setf y (incf i)) 2))
+     i x y))
+  nil 2 1 2)
+
+(deftest =.order.2
+  (let ((i 0) x y z)
+    (values
+     (= (progn (setf x (incf i)) 1)
+	(progn (setf y (incf i)) 2)
+	(progn (setf z (incf i)) 3))
+     i x y z))
+  nil 3 1 2 3)
+
+(deftest =.order.3
+  (let ((i 0) u v w x y z)
+    (values
+     (=
+      (progn (setf u (incf i)) 1)
+      (progn (setf v (incf i)) 2)
+      (progn (setf w (incf i)) 3)
+      (progn (setf x (incf i)) 4)
+      (progn (setf y (incf i)) 5)
+      (progn (setf z (incf i)) 6))
+     i u v w x y z))
+  nil 6 1 2 3 4 5 6)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftest /=.1
@@ -269,6 +299,37 @@
 		when (/= x y)
 		collect (list x y))))
   nil)
+
+(deftest /=.order.1
+  (let ((i 0) x y)
+    (values
+     (notnot (/= (progn (setf x (incf i)) 1)
+		 (progn (setf y (incf i)) 2)))
+     i x y))
+  t 2 1 2)
+
+(deftest /=.order.2
+  (let ((i 0) x y z)
+    (values
+     (notnot (/= (progn (setf x (incf i)) 1)
+		 (progn (setf y (incf i)) 2)
+		 (progn (setf z (incf i)) 3)))
+     i x y z))
+  t 3 1 2 3)
+
+(deftest /=.order.3
+  (let ((i 0) u v w x y z)
+    (values
+     (notnot
+      (/=
+       (progn (setf u (incf i)) 1)
+       (progn (setf v (incf i)) 2)
+       (progn (setf w (incf i)) 3)
+       (progn (setf x (incf i)) 4)
+       (progn (setf y (incf i)) 5)
+       (progn (setf z (incf i)) 6)))
+     i u v w x y z))
+  t 6 1 2 3 4 5 6)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -409,6 +470,37 @@
   (<.10-fn)
   nil)
 
+(deftest <.order.1
+  (let ((i 0) x y)
+    (values
+     (notnot (< (progn (setf x (incf i)) 1)
+		 (progn (setf y (incf i)) 2)))
+     i x y))
+  t 2 1 2)
+
+(deftest <.order.2
+  (let ((i 0) x y z)
+    (values
+     (notnot (< (progn (setf x (incf i)) 1)
+		 (progn (setf y (incf i)) 2)
+		 (progn (setf z (incf i)) 3)))
+     i x y z))
+  t 3 1 2 3)
+
+(deftest <.order.3
+  (let ((i 0) u v w x y z)
+    (values
+     (notnot
+      (<
+       (progn (setf u (incf i)) 1)
+       (progn (setf v (incf i)) 2)
+       (progn (setf w (incf i)) 3)
+       (progn (setf x (incf i)) 4)
+       (progn (setf y (incf i)) 5)
+       (progn (setf z (incf i)) 6)))
+     i u v w x y z))
+  t 6 1 2 3 4 5 6)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftest <=.1
@@ -545,6 +637,38 @@
   (<=.9-fn)
   nil)
 
+(deftest <=.order.1
+  (let ((i 0) x y)
+    (values
+     (notnot (<= (progn (setf x (incf i)) 1)
+		 (progn (setf y (incf i)) 2)))
+     i x y))
+  t 2 1 2)
+
+(deftest <=.order.2
+  (let ((i 0) x y z)
+    (values
+     (notnot (<= (progn (setf x (incf i)) 1)
+		 (progn (setf y (incf i)) 2)
+		 (progn (setf z (incf i)) 3)))
+     i x y z))
+  t 3 1 2 3)
+
+(deftest <=.order.3
+  (let ((i 0) u v w x y z)
+    (values
+     (notnot
+      (<=
+       (progn (setf u (incf i)) 1)
+       (progn (setf v (incf i)) 2)
+       (progn (setf w (incf i)) 3)
+       (progn (setf x (incf i)) 4)
+       (progn (setf y (incf i)) 5)
+       (progn (setf z (incf i)) 6)))
+     i u v w x y z))
+  t 6 1 2 3 4 5 6)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftest >.1
@@ -596,6 +720,37 @@
 (deftest >.8
   (>.8-fn)
   nil)
+
+(deftest >.order.1
+  (let ((i 0) x y)
+    (values
+     (notnot (> (progn (setf x (incf i)) 2)
+		(progn (setf y (incf i)) 1)))
+     i x y))
+  t 2 1 2)
+
+(deftest >.order.2
+  (let ((i 0) x y z)
+    (values
+     (notnot (> (progn (setf x (incf i)) 3)
+		 (progn (setf y (incf i)) 2)
+		 (progn (setf z (incf i)) 1)))
+     i x y z))
+  t 3 1 2 3)
+
+(deftest >.order.3
+  (let ((i 0) u v w x y z)
+    (values
+     (notnot
+      (>
+       (progn (setf u (incf i)) 6)
+       (progn (setf v (incf i)) 5)
+       (progn (setf w (incf i)) 4)
+       (progn (setf x (incf i)) 3)
+       (progn (setf y (incf i)) 2)
+       (progn (setf z (incf i)) 1)))
+     i u v w x y z))
+  t 6 1 2 3 4 5 6)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -651,6 +806,37 @@
 (deftest >=.8
   (>=.8-fn)
   nil)
+
+(deftest >=.order.1
+  (let ((i 0) x y)
+    (values
+     (notnot (>= (progn (setf x (incf i)) 2)
+		(progn (setf y (incf i)) 1)))
+     i x y))
+  t 2 1 2)
+
+(deftest >=.order.2
+  (let ((i 0) x y z)
+    (values
+     (notnot (>= (progn (setf x (incf i)) 3)
+		 (progn (setf y (incf i)) 2)
+		 (progn (setf z (incf i)) 1)))
+     i x y z))
+  t 3 1 2 3)
+
+(deftest >=.order.3
+  (let ((i 0) u v w x y z)
+    (values
+     (notnot
+      (>=
+       (progn (setf u (incf i)) 6)
+       (progn (setf v (incf i)) 5)
+       (progn (setf w (incf i)) 4)
+       (progn (setf x (incf i)) 3)
+       (progn (setf y (incf i)) 2)
+       (progn (setf z (incf i)) 1)))
+     i u v w x y z))
+  t 6 1 2 3 4 5 6)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
