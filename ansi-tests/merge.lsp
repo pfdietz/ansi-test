@@ -197,6 +197,34 @@
   t
   #(2 5 8 9 11))
 
+(deftest merge-vector.18
+  (merge '(vector) (list 1 3 10) (list 2 4 6) #'<)
+  #(1 2 3 4 6 10))
+
+(deftest merge-vector.19
+  (merge '(vector *) (list 1 3 10) (list 2 4 6) #'<)
+  #(1 2 3 4 6 10))
+
+(deftest merge-vector.20
+  (merge '(vector t) (list 1 3 10) (list 2 4 6) #'<)
+  #(1 2 3 4 6 10))
+
+(deftest merge-vector.21
+  (merge '(vector * 6) (list 1 3 10) (list 2 4 6) #'<)
+  #(1 2 3 4 6 10))
+
+(deftest merge-vector.22
+  (merge '(simple-vector) (list 2 4 6) (list 1 3 5) #'<)
+  #(1 2 3 4 5 6))
+
+(deftest merge-vector.23
+  (merge '(simple-vector *) (list 2 4 6) (list 1 3 5) #'<)
+  #(1 2 3 4 5 6))
+
+(deftest merge-vector.24
+  (merge '(simple-vector 6) (list 2 4 6) (list 1 3 5) #'<)
+  #(1 2 3 4 5 6))
+
 ;;; Tests on strings
 
 (deftest merge-string.1
@@ -348,6 +376,55 @@
    (s "ace" nil)
    (assert (string= (merge '(vector character) s (copy-seq "bdf") #'char<) "abcdef")))
   nil)
+
+(deftest merge-string.24
+  (merge '(string) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.25
+  (merge '(string *) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.26
+  (merge '(string 6) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.27
+  (merge '(simple-string) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.28
+  (merge '(simple-string *) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.29
+  (merge '(simple-string 6) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.30
+  (merge '(base-string) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.31
+  (merge '(base-string *) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.32
+  (merge '(base-string 6) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.33
+  (merge '(simple-base-string) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.34
+  (merge '(simple-base-string *) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
+(deftest merge-string.35
+  (merge '(simple-base-string 6) (copy-seq "ace") (copy-seq "bdf") #'char<)
+  "abcdef")
+
 
 ;;; Tests for bit vectors
 
