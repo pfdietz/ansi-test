@@ -109,16 +109,17 @@
 (defvar *defstruct-with-tests-names* nil
   "Names of structure types defined with DEFSRUCT-WITH-TESTS.")
 
+#|
 (defvar *subtypep-works-with-classes* t
   "Becomes NIL if SUBTYPEP doesn't work with classes.  We test this first to avoid
    repeated test failures that cause GCL to bomb.")
 
 (deftest subtypep-works-with-classes
   (let ((c1 (find-class 'vector)))
-    (setq *subtypep-works-with-classes* nil)
+    ;; (setq *subtypep-works-with-classes* nil)
     (subtypep c1 'vector)
     (subtypep 'vector c1)
-    (setq *subtypep-works-with-classes* t))
+    ;; (setq *subtypep-works-with-classes* t))
   t)
 
 (defvar *typep-works-with-classes* t
@@ -127,10 +128,11 @@
 
 (deftest typep-works-with-classes
   (let ((c1 (find-class 'vector)))
-    (setq *typep-works-with-classes* nil)
+    ;; (setq *typep-works-with-classes* nil)
     (typep #(0 0) c1)
-    (setq *typep-works-with-classes* t))
+    ;; (setq *typep-works-with-classes* t))
   t)
+|#
 
 ;;
 ;; There are a number of standardized tests for
@@ -421,11 +423,7 @@ do the defstruct."
        ,@(unless type-option
 	   `(
 	     (deftest ,(make-struct-test-name name 13)
-	       ;; Add a guard to prevent too many exceptions from occuring
-	       ;; if TYPEP doesn't work with classes.
-	       (if (not *typep-works-with-classes*)
-		   :typep-busted
-		 (notnot (typep (,make-fn) (find-class (quote ,name)))))
+	       (notnot (typep (,make-fn) (find-class (quote ,name))))
 	       t)
 	     (deftest ,(make-struct-test-name name 14)
 	       (let ((class (find-class (quote ,name))))
@@ -446,23 +444,32 @@ do the defstruct."
 		     collect type)
 	       nil)
 	     (deftest ,(make-struct-test-name name 17)
-	       ;; Add a guard to prevent too many exceptions from occuring
-	       ;; if SUBTYPEP doesn't work with classes.
-	       (if (not *subtypep-works-with-classes*)
-		   :subtypep-busted
-		   (let ((class (find-class (quote ,name))))
-		     (loop for type in *disjoint-types-list*
-			   unless (and
-				   (equalt (multiple-value-list
-					    (subtypep* type class))
-					   '(nil t))
-				   (equalt (multiple-value-list
-					    (subtypep* class type))
-					   '(nil t)))
-			   collect type)))
+	       (let ((class (find-class (quote ,name))))
+		 (loop for type in *disjoint-types-list*
+		       unless (and
+			       (equalt (multiple-value-list
+					(subtypep* type class))
+				       '(nil t))
+			       (equalt (multiple-value-list
+					(subtypep* class type))
+				       '(nil t)))
+		       collect type))
 	       nil)
 	     ))
 
+       ;;; Documentation tests
+
+       ,(when doc-string
+	  `(deftest ,(make-struct-test-name name 18)
+	     (let ((doc (documentation ',name 'structure)))
+	       (or (null doc) (equalt doc ',doc-string)))
+	     t))
+
+       ,(when (and doc-string (not type-option))
+	  `(deftest ,(make-struct-test-name name 19)
+	     (let ((doc (documentation ',name 'type)))
+	       (or (null doc) (equalt doc ',doc-string)))
+	     t))
        nil
        )))
 
