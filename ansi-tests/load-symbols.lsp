@@ -13,4 +13,6 @@
 (load "special-operator-p.lsp")
 (load "set.lsp")
 (load "remprop.lsp")
+(load "get.lsp")
+
 
