@@ -93,7 +93,7 @@
 
 (deftest vector.type.23
   (notnot-mv (typep #(a b c) '(vector t *)))
-  nil)
+  t)
 
 (deftest vector.type.23a
   (notnot-mv (typep "abcde" '(vector * 5)))
