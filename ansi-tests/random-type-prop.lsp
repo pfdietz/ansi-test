@@ -44,7 +44,10 @@
 			    for tp in param-types
 			    when x
 			    collect `(type ,tp ,p)))
-	  (rval (apply operator vals))
+	  (rval (cl:handler-bind
+		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
+			 (warning #'muffle-warning))
+		 (eval (cons operator vals))))
 	  (result-type (if (and enclosing-the (integerp rval))
 			   (make-random-type-containing rval)
 			 t))
@@ -86,7 +89,7 @@
 		   :vals vals
 		   :result result
 		   :rval rval))
-       (unless (equal result rval)
+       (unless (rt::equalp-with-case result rval)
 	 (return *random-type-prop-result*))))))
 
 (defmethod make-random-type-containing ((val integer))
@@ -94,7 +97,7 @@
    (2 (let ((tp (random-from-seq '(t number real rational))))
 	(if #-allegro (coin) #+allegro nil
 	    (find-class tp) tp)))
-   (1 (random-from-seq '(integer signed-byte)))
+   (1 (random-from-seq '(integer signed-byte atom)))
    #- allegro (1 (find-class 'integer))
    (2 `(eql ,val))
    (2 (let* ((n1 (random 4))
@@ -114,10 +117,58 @@
    (2 (if (>= val 0) `unsigned-byte
 	(make-random-type-containing val)))))
 
+(defmethod make-random-type-containing ((val character))
+  (rcase
+   (1 `(eql ,val))
+   (1 'character)
+   (1 (if (typep val 'base-char) 'base-char (make-random-type-containing val)))
+   (1 (if (typep val 'standard-char) 'standard-char (make-random-type-containing val)))
+   (1 (if (typep val 'extended-char) 'extended-char (make-random-type-containing val)))
+   (1 (let* ((n1 (random 4))
+	     (n2 (random 4))
+	     (l1 (loop repeat n1 collect (make-random-character)))
+	     (l2 (loop repeat n2 collect (make-random-character))))
+	`(member ,@l1 ,val ,@l2)))
+   (1 (random-from-seq #(t atom)))))
+
+(defmethod make-random-type-containing ((val symbol))
+  (rcase
+   (1 `(eql ,val))
+   (3 'symbol)
+   (1 (if (null val) 'null (make-random-type-containing val)))
+   (1 (if (member val '(t nil)) 'boolean (make-random-type-containing val)))
+   (1 (if (keywordp val) 'keyword (make-random-type-containing val)))
+   (1 (let* ((n1 (random 4))
+	     (n2 (random 4))
+	     (l1 (loop repeat n1 collect (make-random-symbol)))
+	     (l2 (loop repeat n2 collect (make-random-symbol))))
+	`(member ,@l1 ,val ,@l2)))
+   (1 (random-from-seq #(t atom)))))
+
+(defun make-random-character ()
+  (rcase
+   (2 (random-from-seq +standard-chars+))
+   (2 (or (code-char (random (min 256 char-code-limit)))
+	  (make-random-character)))
+   (1 (or (code-char (random (min (ash 1 16) char-code-limit)))
+	  (make-random-character)))
+   (1 (or (code-char (random (min (ash 1 24) char-code-limit)))
+	  (make-random-character)))))
+
+(defmethod make-random-type-containing ((val rational))
+  (rcase
+   (1 `(eql ,val))
+   (1 (let* ((n1 (random 4))
+	     (n2 (random 4))
+	     (l1 (loop repeat n1 collect (make-random-element-of-type 'rational)))
+	     (l2 (loop repeat n1 collect (make-random-element-of-type 'rational))))
+	`(member ,@l1 ,val ,@l2)))
+   (1 `(rational ,val))
+   (1 `(rational * ,val))
+   (1 (let ((v (make-random-element-of-type 'rational)))
+	(if (<= v val)
+	    `(rational ,v ,val)
+	  `(rational ,val ,v))))
+   ))
 
 	  
-	
-	  
-	  
-	  
-		 
