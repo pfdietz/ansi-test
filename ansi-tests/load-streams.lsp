@@ -29,3 +29,5 @@
 (load "file-string-length.lsp")
 (load "open.lsp")
 (load "stream-external-format.lsp")
+(load "with-open-file.lsp")
+(load "listen.lsp")
