@@ -85,9 +85,9 @@
 	  for s0 = (and c (string c))
 	  for s = (and c (concatenate 'string "\\" s0))
 	  for sym = (and c (read-from-string s))
-	  unless (and c
-		      (symbolp sym)
-		      (string= (symbol-name sym) s0))
+	  unless (or (not c)
+		     (and (symbolp sym)
+			  (string= (symbol-name sym) s0)))
 	  collect (progn
 		    (when (> (incf count) 100) (loop-finish))
 		    (list i c s0 s sym))))
@@ -100,9 +100,9 @@
 	for s = (and c (concatenate 'string "\\" s0))
 	for sym = (and c (read-from-string s))
 	repeat 1000
-	unless (and c
-		    (symbolp sym)
-		    (string= (symbol-name sym) s0))
+	unless (or (not c)
+		   (and (symbolp sym)
+			(string= (symbol-name sym) s0)))
 	collect (list i c s0 s sym))
   nil)
 
@@ -122,10 +122,10 @@
   (let ((count 0))
     (loop for i from 0 below (min 65536 char-code-limit)
 	  for c = (code-char i)
-	  for bad = (find c "\\|")
-	  for s0 = (string c)
-	  for s = (concatenate 'string "|" s0 "|")
-	  for sym = (and (not bad) (read-from-string s))
+	  for bad = (or (not c) (find c "\\|"))
+	  for s0 = (and c (string c))
+	  for s = (and c (concatenate 'string "|" s0 "|"))
+	  for sym = (and c (not bad) (read-from-string s))
 	  unless (or bad
 		     (and (symbolp sym)
 			  (string= (symbol-name sym) s0)))
@@ -137,9 +137,9 @@
 (def-syntax-test syntax.escaped.6
   (loop for i = (random (min char-code-limit (ash 1 24)))
 	for c = (code-char i)
-	for bad = (find c "\\|")
-	for s0 = (string c)
-	for s = (concatenate 'string "|" s0 "|")
+	for bad = (or (not c) (find c "\\|"))
+	for s0 = (and c (string c))
+	for s = (and c (concatenate 'string "|" s0 "|"))
 	for sym = (and (not bad) (read-from-string s))
 	repeat 1000
 	unless (or bad
