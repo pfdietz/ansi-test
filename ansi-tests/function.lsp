@@ -39,9 +39,12 @@
   (typep '(lambda (x) x) 'function)
   nil)
 
-;;; (deftest function.7
-;;;  (not (typep #'(setf car) 'function))
-;;;  nil)
+(defun function-7-accessor-fn (x y) (setf (car x) y) y)
+(defsetf function-7-accessor function-7-accessor-fn)
+
+(deftest function.7
+  (not (typep #'(setf function-7-accessor) 'function))
+  nil)
 
 (deftest function.8
   (not (typep #'(lambda (x) x) 'function))

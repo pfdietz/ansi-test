@@ -39,9 +39,12 @@
   (functionp '(lambda (x) x))
   nil)
 
-;;; (deftest functionp.7
-;;;  (not (functionp #'(setf car)))
-;;;   nil)
+(defun functionp-7-accessor-fn (x y) (setf (car x) y) y)
+(defsetf functionp-7-accessor functionp-7-accessor-fn)
+
+(deftest functionp.7
+  (not (functionp #'(setf functionp-7-accessor)))
+  nil)
 
 (deftest functionp.8
   (not (functionp #'(lambda (x) x)))
