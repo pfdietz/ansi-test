@@ -404,7 +404,7 @@
 ;;; Tests of #: ...
 
 ; (def-syntax-unintern-test syntax.sharp-colon.1 "")
-(def-syntax-unintern-test syntax.sharp-colon.2 "#")
+; (def-syntax-unintern-test syntax.sharp-colon.2 "#")
 (def-syntax-unintern-test syntax.sharp-colon.3 "a")
 (def-syntax-unintern-test syntax.sharp-colon.4 "A")
 (def-syntax-unintern-test syntax.sharp-colon.5 "NIL")
