@@ -235,6 +235,28 @@
   "(1 2 3)"
   :margin 2)
 
+(def-pprint-test format.logical-block.27
+  (format nil "~@<**~@;~@{~A~^       ~}~:@>" 1 2 3)
+  "**1
+**2
+**3"
+  :margin 3)
+
+(def-pprint-test format.logical-block.28
+  (format nil "~@<**~@;~@{~A~^       ~}~;XX~:@>" 1 2 3)
+  "**1
+**2
+**3XX"
+  :margin 3)
+
+(def-pprint-test format.logical-block.29
+  (format nil "~:@<**~@;~@{~A~^       ~}~:@>" 1 2 3)
+  "**1
+**2
+**3)"
+  :margin 3)
+
+
 ;;; Circularity detection
 
 (def-pprint-test format.logical-block.circle.1
