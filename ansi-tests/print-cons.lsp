@@ -59,6 +59,13 @@
    10)
   nil)
 
+(deftest print.backquote.random.1
+  (let ((x '`(a ,b ,@c (d . ,e) ,.f #(1 2 ,p ,@q ,.r s) g)))
+    (loop
+     repeat 20
+     nconc (randomly-check-readability x)))
+  nil)
+
 ;; random circular cons graphs
 (deftest print.cons.random.2
   (loop repeat 50
@@ -153,5 +160,4 @@
 		    :case :downcase :level 1
 		    :readably nil :pretty nil))
   "(# #*1101 \"abc\")")
-
 
