@@ -252,6 +252,13 @@
     (values (s1 c) (s2 c)))
   a b)
 
+(deftest class-07.12
+  (let ((c (make-instance 'class-07 :s1a 'd :s2 'c :garbage 'z
+			  :allow-other-keys t
+			  :allow-other-keys nil)))
+    (values (s1 c) (s2 c)))
+  d c)
+
 
 ;;;;
 
