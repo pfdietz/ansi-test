@@ -43,7 +43,10 @@
 	 (*read-default-float-format* (rcase (1 'short-float) (1 'single-float)
 					     (1 'double-float) (1 'long-float)
 					     (1 *read-default-float-format*)))
+	 (*readtable* (copy-readtable))
+	 (readcase (random-from-seq #(:upcase :downcase :preserve :invert)))
 	 )
+     (setf (readtable-case *readtable*) readcase)
      (let* ((str (with-output-to-string (s) (write obj :stream s)))
 	    (obj2 (let ((*read-base* *print-base*))
 		    (handler-case
@@ -66,4 +69,5 @@
 		(list '*print-pretty* *print-pretty*)
 		(list '*print-right-margin* *print-right-margin*)
 		(list '*read-default-float-format* *read-default-float-format*)
+		(list 'readtable-case readcase)
 		)))))))
