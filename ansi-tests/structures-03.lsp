@@ -5,6 +5,12 @@
 
 (in-package :cl-test)
 
+(defun sbt-slots (sname s &rest slots)
+  (loop for slotname in slots collect
+	(let ((fun (intern (concatenate 'string (string sname) "-" (string slotname))
+			   :cl-test)))
+	  (funcall (symbol-function fun) s))))
+
 ;;; See the DEFSTRUCT page, and section 3.4.6 (Boa Lambda Lists)
 
 (defstruct (sbt-01 (:constructor sbt-01-con (b a c)))
@@ -121,6 +127,8 @@
   x y z)
 
 
+;;; Test presence flag in optional parameters
+
 (defstruct (sbt-07 (:constructor sbt-07-con
 				 (&optional (a 'p a-p) (b 'q b-p) (c 'r c-p)
 					    &aux (d (list (notnot a-p)
@@ -129,23 +137,76 @@
   a b c d)
 
 (deftest structure-boa-test-07/1
-  (let ((s (sbt-07-con)))
-    (values (sbt-07-a s) (sbt-07-b s) (sbt-07-c s) (sbt-07-d s)))
-  p q r (nil nil nil))
+  (sbt-slots 'sbt-07 (sbt-07-con) :a :b :c :d)
+  (p q r (nil nil nil)))
 
 (deftest structure-boa-test-07/2
-  (let ((s (sbt-07-con 'x)))
-    (values (sbt-07-a s) (sbt-07-b s) (sbt-07-c s) (sbt-07-d s)))
-  x q r (t nil nil))
+  (sbt-slots 'sbt-07 (sbt-07-con 'x) :a :b :c :d)
+  (x q r (t nil nil)))
 
 (deftest structure-boa-test-07/3
-  (let ((s (sbt-07-con 'x 'y)))
-    (values (sbt-07-a s) (sbt-07-b s) (sbt-07-c s) (sbt-07-d s)))
-  x y r (t t nil))
+  (sbt-slots 'sbt-07 (sbt-07-con 'x 'y) :a :b :c :d)
+  (x y r (t t nil)))
 
 (deftest structure-boa-test-07/4
-  (let ((s (sbt-07-con 'x 'y 'z)))
-    (values (sbt-07-a s) (sbt-07-b s) (sbt-07-c s) (sbt-07-d s)))
-  x y z (t t t))
+  (sbt-slots 'sbt-07 (sbt-07-con 'x 'y 'z) :a :b :c :d)
+  (x y z (t t t)))
+
+
+;;; Keyword arguments
+
+(eval-when (compile load eval)
+  (ignore-errors
+    (defstruct (sbt-08 (:constructor sbt-08-con
+				     (&key ((foo a)))))
+      a)))
+
+(deftest structure-boa-test-08/1
+  (sbt-slots 'sbt-08 (sbt-08-con :foo 10) :a)
+  (10))
+
+(eval-when (compile load eval)
+  (ignore-errors
+    (defstruct (sbt-09 (:constructor sbt-09-con
+				     (&key (a 'p a-p)
+					   ((x b) 'q)
+					   (c 'r)
+					   d
+					   ((y e))
+					   ((z f) 's z-p)
+					   &aux (g (list (notnot a-p)
+							 (notnot z-p))))))
+      a b c d e f g)))
+
+(deftest structure-boa-test-09/1
+  (sbt-slots 'sbt-09 (sbt-09-con) :a :b :c :f :g)
+  (p q r s (nil nil)))
+
+(deftest structure-boa-test-09/2
+  (sbt-slots 'sbt-09 (sbt-09-con :d 1) :a :b :c :d :f :g)
+  (p q r 1 s (nil nil)))
+
+(deftest structure-boa-test-09/3
+  (sbt-slots 'sbt-09 (sbt-09-con :a 1) :a :b :c :f :g)
+  (1 q r s (t nil)))
+
+(deftest structure-boa-test-09/4
+  (sbt-slots 'sbt-09 (sbt-09-con :x 1) :a :b :c :f :g)
+  (p 1 r s (nil nil)))
+
+(deftest structure-boa-test-09/5
+  (sbt-slots 'sbt-09 (sbt-09-con :c 1) :a :b :c :f :g)
+  (p q 1 s (nil nil)))
+
+(deftest structure-boa-test-09/6
+  (sbt-slots 'sbt-09 (sbt-09-con :y 1) :a :b :c :e :f :g)
+  (p q r 1 s (nil nil)))
+
+(deftest structure-boa-test-09/7
+  (sbt-slots 'sbt-09 (sbt-09-con :z 1) :a :b :c :f :g)
+  (p q r 1 (nil t)))
+
+
+
 
 

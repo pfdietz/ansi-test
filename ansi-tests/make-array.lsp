@@ -218,8 +218,9 @@
   #2a((x x x) (x x x)))
 
 (deftest make-array.16
-  (make-array-with-checks '(0 0))
-  #2a())
+  (equalpt (make-array-with-checks '(0 0))
+	   (read-from-string "#2a()"))
+  t)
 
 (deftest make-array.17
   (make-array-with-checks '(2 3) :initial-contents '((a b c) (d e f)))
