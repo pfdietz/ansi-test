@@ -1,7 +1,7 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Mon Oct  7 07:34:29 2002
-;;;; Contains: Tests for type FUNCTION
+;;;; Contains: Tests for type FUNCTION and the special form FUNCTION
 
 (in-package :cl-test)
 
@@ -25,7 +25,9 @@
 (deftest function.4
   (loop for x in *cl-symbol-names*
 	for s = (find-symbol x "CL")
-	for f = (and (fboundp s) (symbol-function s))
+	for f = (and (fboundp s) (symbol-function s)
+		     (not (special-operator-p s))
+		     (not (macro-function s)))
 	always (or (null f)
 		   (typep f 'function)
 		   ))
@@ -70,3 +72,15 @@
 (deftest function.12
   (flet ((%f () nil)) (not (typep #'%f 'function)))
   nil)
+
+(deftest function.13
+  (labels ((%f () nil)) (not (typep #'%f 'function)))
+  nil)
+
+;;; "If name is a function name, the functional definition of that
+;;; name is that established by the innermost lexically enclosing flet,
+;;; labels, or macrolet form, if there is one." (page for FUNCTION, sec. 5.3)
+;;;            ^^^^^^^^
+;;;(deftest function.14
+;;;  (macrolet ((%f () nil)) (not (typep #'%f 'function)))
+;;;  nil)
