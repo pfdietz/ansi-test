@@ -251,9 +251,12 @@
       ))
 
 (defparameter *cl-user-symbols*
-    '(cl-user::foo cl-user::x
-      cl-user::cons cl-user::lambda
-      cl-user::*print-readably* cl-user::push))
+  '(cl-user::foo
+    cl-user::x
+    cl-user::cons
+    cl-user::lambda
+    cl-user::*print-readably*
+    cl-user::push))
 	  
 (defparameter *symbols*
     (append *booleans* *keywords* *uninterned-symbols*
