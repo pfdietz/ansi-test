@@ -5,9 +5,9 @@
 
 ;;; Tests of data and control flow
 
+(load "places.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
-(load "setf-apply.lsp")
 (load "function.lsp")
 (load "functionp.lsp")
 
