@@ -24,5 +24,6 @@
 ;;; trancdental functions go here
 
 (load "times.lsp")
+(load "plus.lsp")
 
 (load "epsilons.lsp")

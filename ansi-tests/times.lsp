@@ -361,7 +361,6 @@
 	 collect (list i j x y (* cx cy))))
   nil)
 
-
 (deftest times.order.1
   (let ((i 0) x y)
     (values
@@ -378,4 +377,3 @@
 	(progn (setf z (incf i)) 5))
      i x y z))
   30 3 1 2 3)
-
