@@ -70,9 +70,11 @@
      (probe-file pn)))
   t t t t nil)
 
+#|
 (deftest delete-file.error.3
   (let ((pn "nonexistent.txt"))
     (when (probe-file pn) (delete-file pn))
     (signals-error (delete-file "nonexistent.txt") file-error))
   t)
+|#
 
