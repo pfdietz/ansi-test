@@ -1596,3 +1596,40 @@
   :good)
 
 
+;;; clisp optional argument bug: "SYMBOL-VALUE: 1 is not a SYMBOL"
+
+(deftest misc.126
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (special *should-always-be-true*))
+       (labels ((%f10 (f10-1 &optional
+                             (f10-2 (cl:handler-bind nil
+						     (if *should-always-be-true*
+							 (progn 878)
+						       (should-never-be-called)
+						       )))
+                             (f10-3 (cl:handler-case 10)))
+                      -15))
+         (%f10 -144)))))
+  -15)
+
+(deftest misc.127
+  (funcall
+   (compile
+    nil
+    '(lambda (a c)
+       (flet ((%f10 (f10-1 f10-2) 10))
+	 (flet ((%f4
+		 (&optional
+		  (f4-1 (ldb (byte 10 6)
+			     (* 828
+				(+ 30 (dpb c (byte 9 30) (%f10 1918433 34107)))
+				)))
+		  (f4-2 (setq a 0)))
+		 2))
+	   (%f4 -5)))))
+   0 0)
+  2)
+
