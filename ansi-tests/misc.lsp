@@ -2166,3 +2166,129 @@
        )))
    0)
   2829254)
+
+;;; sbcl failures
+
+;;; The value NIL is not of type SB-C::NODE.
+(deftest misc.165
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (block b3
+	 (flet ((%f15
+		 (f15-1 f15-2 f15-3
+			&optional
+			(f15-4
+			 (flet ((%f17
+				 (f17-1 f17-2 f17-3
+					&optional (f17-4 185155520) (f17-5 c)
+					(f17-6 37))
+                                 c))
+			   (%f17 -1046 a 1115306 (%f17 b -146330 422) -337817)))
+			(f15-5 a) (f15-6 -40))
+		 (return-from b3 -16)))
+	   (multiple-value-call #'%f15 (values -519354 a 121 c -1905))))))
+   0 0 -5)
+  -16)
+
+;;; failed AVER:
+;;;      "(NOT
+;;; (AND (NULL (BLOCK-SUCC B))
+;;;      (NOT (BLOCK-DELETE-P B))
+;;;      (NOT (EQ B (COMPONENT-HEAD #)))))"
+
+(deftest misc.166
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (labels ((%f4
+		 (f4-1 f4-2 &optional (f4-3 b) (f4-4 c) (f4-5 -170))
+		 (let ((v2
+			(flet ((%f3
+				(f3-1
+				 &optional (f3-2 28476586) (f3-3 c)
+				 (f3-4 -9240))
+				(return-from %f4 1)))
+			  (multiple-value-call
+			   #'%f3
+			   (values -479909 19843799 f4-5 -463858)))))
+		       b)))
+	 c)))
+   0 0 -223721124)
+  -223721124)
+
+(deftest misc.167
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (flet ((%f5 (f5-1 f5-2)
+		   (return-from %f5 604245664)))
+	 (flet ((%f12
+		 (f12-1 f12-2
+			&optional (f12-3 c) (f12-4 -579456)
+			(f12-5
+			 (labels ((%f9
+				   (f9-1
+				    &optional
+				    (f9-2
+				     (%f5 1
+					  (let ((v4 (%f5 30732606 a)))
+					    b)))
+				    (f9-3 -29)
+				    (f9-4
+				     (block b4
+				       (labels ((%f14 ()
+						      (labels ((%f18
+								(&optional
+								 (f18-1
+								  (locally
+								   592928))
+								 (f18-2 -3)
+								 (f18-3
+								  (return-from
+								      b4 a)))
+								f18-1))
+							(%f18 74214190 a))))
+					 (%f14)))))
+                                   -1))
+			   (flet ((%f17
+				   (f17-1 f17-2 &optional (f17-3 -136045032))
+                                   -38655))
+			     (%f17 43873 -138030706 -1372492)))))
+		 (return-from %f12 -15216677)))
+	   (%f12 (%f5 b 2329383) a)))))
+   1 2 3)
+  -15216677)
+
+(deftest misc.168
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (block b3
+	 (flet ((%f11
+		 (f11-1 f11-2
+			&optional
+			(f11-3
+			 (block b6
+			   (labels ((%f11
+				     (f11-1
+				      &optional (f11-2 c)
+				      (f11-3 (return-from b6 -1806)))
+                                     (return-from b3 -28432)))
+			     (apply #'%f11 (list -114))))))
+		 (return-from %f11 f11-2)))
+	   (%f11 b
+		 c
+		 (labels ((%f10
+			   (f10-1 f10-2
+				  &optional (f10-3 a) (f10-4 (%f11 -3931 170)))
+			   -1704759))
+		   c))))))
+   1 2 3)
+  3)
+
+
