@@ -75,6 +75,39 @@
    (equalt "" (make-array '(0) :element-type nil)))
   t)
 
+(deftest equal.15
+  (equalt (make-array '(0) :element-type 'character)
+	  (make-array '(0) :element-type 'base-char))
+  t)
+
+(deftest equal.16
+  (equalt "abc" (make-array '(3) :element-type 'base-char
+			    :initial-contents '(#\a #\b #\c)))
+  t)
+
+(deftest equal.17
+  (let ((s (make-array '(10) :element-type 'character
+		       :initial-contents "0123456789"
+		       :fill-pointer 3)))
+    (values (equalt s "012") (equalt "012" s)))
+  t t)
+
+(deftest equal.18
+  (let ((b (make-array '(10) :element-type 'bit
+		       :initial-contents #*0110001110
+		       :fill-pointer 5)))
+    (values (equalt #*01100 b) (equalt #*01100 b)))
+  t t)
+
+(deftest equal.19
+  (let ((s (make-array '(10) :element-type 'base-char
+		       :initial-contents "0123456789"
+		       :fill-pointer 3)))
+    (values (equalt s "012") (equalt "012" s)))
+  t t)
+
+;;; Should add more pathname equality tests
+
 (deftest equal.order.1
   (let ((i 0) x y)
     (values
