@@ -9825,3 +9825,64 @@ Broken at C::WT-MAKE-CLOSURE.
       (unless (eql expected actual)
 	(list expected actual))))
   nil)
+
+;;; cmucl (Jan 2005 snapshot)
+
+;;; Segmentation fault
+
+(deftest misc.530
+  (let* ((v (make-array
+	     '(11) :element-type 'double-float
+	     :initial-contents
+	     '(56826.586316245484d0 -57680.53641925701d0 68651.27735979737d0
+	       30934.627728043164d0 47252.736017400945d0 35129.46986219467d0
+	       -57804.412938803005d0 13000.374416975968d0 50263.681826551256d0
+	       89386.08276072948d0 -89508.77479231959d0)))
+	 (form
+	  `(lambda (r)
+	     (declare (optimize speed (safety 1))
+		      (type (simple-array t nil) r))
+	     (setf (aref r)
+		   (array-has-fill-pointer-p ,v))))
+	 (r (make-array nil)))
+    (funcall (compile nil form) r)
+    (eqlt (aref r) (array-has-fill-pointer-p v)))
+  t)
+
+;;; gcl
+;;; Problem with 0-dim char arrays
+;;; Produces wrong return value (#\\320).
+
+(deftest misc.532
+  (let ((r (make-array nil :element-type 'base-char)))
+    (funcall
+     (compile
+      nil
+      '(lambda (r c)
+         (declare (optimize speed (safety 1))
+                  (type (simple-array base-char nil) r)
+                  (type base-char c))
+         (setf (aref r) c)
+         (values)))
+     r #\Z)
+    (aref r))
+  #\Z)
+
+;;; sbcl 0.8.19.32
+;;; Bound is not *, a INTEGER or a list of a INTEGER: -51494/29889
+
+(deftest misc.533
+  (let* ((r (make-array nil))
+	 (c #c(208 -51494/29889))
+	 (form `(lambda (r p1)
+		  (declare (optimize speed (safety 1))
+			   (type (simple-array t nil) r)
+			   (type number p1))
+		  (setf (aref r) (+ (the (eql ,c) p1) -319284))
+		  (values)))
+	 (fn (compile nil form)))
+    (funcall fn r c)
+    (eqlt (aref r) (+ -319284 c)))
+  t)
+
+
