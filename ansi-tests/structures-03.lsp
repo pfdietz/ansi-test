@@ -24,23 +24,23 @@
 
 (deftest structure-boa-test-02/1
   (let ((s (sbt-02-con 1 2 3)))
-    (values (sbt-01-a s)
-	    (sbt-01-b s)
-	    (sbt-01-c s)))
+    (values (sbt-02-a s)
+	    (sbt-02-b s)
+	    (sbt-02-c s)))
   1 2 3)
 
 (deftest structure-boa-test-02/2
   (let ((s (sbt-02-con-2 'p 'q)))
-    (values (sbt-01-a s)
-	    (sbt-01-b s)
-	    (sbt-01-c s)))
+    (values (sbt-02-a s)
+	    (sbt-02-b s)
+	    (sbt-02-c s)))
   p q z)
 
 (deftest structure-boa-test-02/3
   (let ((s (sbt-02-con-3)))
-    (values (sbt-01-a s)
-	    (sbt-01-b s)
-	    (sbt-01-c s)))
+    (values (sbt-02-a s)
+	    (sbt-02-b s)
+	    (sbt-02-c s)))
   x y z)
 
 ;;; &optional in BOA LL
