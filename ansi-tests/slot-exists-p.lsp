@@ -132,3 +132,24 @@
     (map-slot-exists-p* obj (list 'a 'b 'c 'd 'e (gensym))))
   (t t t t t nil))
 
+
+;;; Errors tests
+
+(deftest slot-exists-p.error.1
+  (classify-error (slot-exists-p))
+  program-error)
+
+(deftest slot-exists-p.error.2
+  (classify-error (slot-exists-p 'a))
+  program-error)
+
+(deftest slot-exists-p.error.3
+  (classify-error (slot-exists-p (make-instance 'slot-exists-p-class-01)))
+  program-error)
+
+(deftest slot-exists-p.error.4
+  (classify-error (slot-exists-p (make-instance 'slot-exists-p-class-01)
+				 'a nil))
+  program-error)
+
+
