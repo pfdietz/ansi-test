@@ -56,6 +56,7 @@
        (unless (funcall test obj obj2)
 	 (list
 	  (list obj str obj2
+		;; Note: (*print-readably* t) always holds
 		(list '*print-array* *print-array*)
 		(list '*print-base* *print-base*)
 		(list '*print-radix* *print-radix*)
