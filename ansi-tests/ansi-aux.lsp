@@ -9,19 +9,33 @@
 (declaim (optimize (safety 3)))
 
 (defun eqt (x y)
-  "Function like EQ, but guaranteed to return T for true."
+  "Like EQ, but guaranteed to return T for true."
   (if (eq x y) t nil))
+
+(defun eqlt (x y)
+  "Like EQL, but guaranteed to return T for true."
+  (if (eql x y) t nil))
+
+(defun equalt (x y)
+  "Like EQUAL, but guaranteed to return T for true."
+  (if (equal x y) t nil))
+
+(defun equalpt (x y)
+  "Like EQUALP, but guaranteed to return T for true."
+  (if (equalp x y) t nil))
+
+(defun =t (x &rest args)
+  "Like =, but guaranteed to return T for true."
+  (if (apply #'= x args) t nil))
 
 (defun notnot (x) (not (not x)))
 
 (defun make-int-list (n)
-  (loop for i from 0 to (1- n) collect i))
+  (loop for i from 0 below n collect i))
 
 (defun make-int-array (n &optional (fn #'make-array))
   (let ((a (funcall fn n)))
-    (loop
-	for i from 0 to (1- n) do
-	  (setf (aref a i) i))
+    (loop for i from 0 below n do (setf (aref a i) i))
     a))
 
 (defun equal-array (a1 a2)
@@ -33,12 +47,12 @@
 	      (if (= (array-rank a1) 1)
 		  (let ((as (first ad)))
 		    (loop
-		     for i from 0 to (1- as)
+		     for i from 0 below as
 		     always (equal (aref a1 i) (aref a2 i))))
 		(let ((as (array-total-size a1)))
 		  (and (= as (array-total-size a2))
 		       (loop
-			for i from 0 to (1- as)
+			for i from 0 below as
 			always (equal (row-major-aref a1 i)
 				      (row-major-aref a2 i))))))))))
 
