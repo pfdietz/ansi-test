@@ -1983,3 +1983,24 @@
 				     (%f6 -2 -108626545 (%f4))))))))))))
    -6)
   87246015)
+
+(deftest misc.153
+  (funcall
+   (compile nil
+	    '(lambda (a)
+	       (if (logbitp 3
+			    (case -2
+			      ((-96879 -1035 -57680 -106404 -94516 -125088)
+			       (unwind-protect 90309179))
+			      ((-20811 -86901 -9368 -98520 -71594)
+			       (let ((v9 (unwind-protect 136707)))
+				 (block b3
+				   (setq v9
+					 (let ((v4 (return-from b3 v9)))
+					   (- (ignore-errors (return-from b3 v4))))))))
+			      (t -50)))
+		   -20343
+		 a)))
+   0)
+  -20343)
+
