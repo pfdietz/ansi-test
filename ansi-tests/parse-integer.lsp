@@ -240,10 +240,49 @@
   (1234567890 10)
   (123 3))
 
-	
+(deftest parse-integer.31
+  (parse-integer "1234" :start 1)
+  234 4)
 
+(deftest parse-integer.32
+  (parse-integer "1234" :start 1 :end nil)
+  234 4)
 
+(deftest parse-integer.33
+  (let* ((s (make-array 5 :initial-contents "a123b" :element-type 'base-char))
+	 (s2 (make-array 3 :displaced-to s :displaced-index-offset 1
+			 :element-type 'base-char))
+	 (s3 (make-array 2 :displaced-to s2 :displaced-index-offset 1
+			 :element-type 'base-char)))
+    (values
+     s3
+     (length s3)
+     (equalpt "23" s3)
+     (multiple-value-list (parse-integer s2))))
+  "23" 2 t (23 2))
 
+(deftest parse-integer.34
+  (parse-integer "1234" :end 3)
+  123 3)
 
+(deftest parse-integer.35
+  (parse-integer "1234" :end 3 :end 1)
+  123 3)
 
-	
+(deftest parse-integer.36
+  (parse-integer "1234" :end nil :end 3)
+  1234 4)
+
+;;; Order of evaluation tests
+
+(deftest parse-integer.order.1
+  (let ((i 0) a b c d e)
+    (values
+     (multiple-value-list
+      (parse-integer (progn (setf a (incf i)) "10001")
+		     :radix (progn (setf b (incf i)) 2)
+		     :start (progn (setf c (incf i)) 0)
+		     :end (progn (setf d (incf i)) 5)
+		     :junk-allowed (progn (setf e (incf i)) nil)))
+     i a b c d e))
+  (17 5) 5 1 2 3 4 5)
