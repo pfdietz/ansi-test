@@ -164,8 +164,180 @@
 
 ;;;;
 
+(defclass class-07 () ((s1 :initarg :s1a :initarg :s1b :reader s1)
+		       (s2 :initarg :s2 :reader s2)))
 
-     
+(deftest class-07.1
+  (let ((c (make-instance 'class-07)))
+    (values
+     (slot-boundp c 's1)
+     (slot-boundp c 's2)))
+  nil nil)
+
+(deftest class-07.2
+  (let ((c (make-instance 'class-07 :s1a 'x)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (s1 c)
+     (slot-boundp c 's2)))
+  t x nil)
+
+(deftest class-07.3
+  (let ((c (make-instance 'class-07 :s1b 'x)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (s1 c)
+     (slot-boundp c 's2)))
+  t x nil)
+
+(deftest class-07.4
+  (let ((c (make-instance 'class-07 :s1a 'y :s1b 'x)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (s1 c)
+     (slot-boundp c 's2)))
+  t y nil)
+
+
+(deftest class-07.5
+  (let ((c (make-instance 'class-07 :s1b 'y :s1a 'x)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (s1 c)
+     (slot-boundp c 's2)))
+  t y nil)
+
+(deftest class-07.6
+  (let ((c (make-instance 'class-07 :s1a 'y :s1a 'x)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (s1 c)
+     (slot-boundp c 's2)))
+  t y nil)
+
+(deftest class-07.7
+  (let ((c (make-instance 'class-07 :s2 'a :s1a 'b)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (notnot (slot-boundp c 's2))
+     (s1 c)
+     (s2 c)))
+  t t b a)
+
+(deftest class-07.8
+  (let ((c (make-instance 'class-07 :s2 'a :s1a 'b :s2 'x :s1a 'y :s1b 'z)))
+    (values
+     (notnot (slot-boundp c 's1))
+     (notnot (slot-boundp c 's2))
+     (s1 c)
+     (s2 c)))
+  t t b a)
+
+;;;;
+
+(declaim (special *class-08-s2-initvar*))
+
+(defclass class-08 ()
+  ((s1 :initform 0) (s2 :initform *class-08-s2-initvar*)))
+
+(deftest class-08.1
+  (let* ((*class-08-s2-initvar* 'x)
+	 (c (make-instance 'class-08)))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)))
+  0 x)
+
+;;;;
+
+(declaim (special *class-09-s2-initvar*))
+
+(defclass class-09 ()
+  ((s1 :initform 0 :initarg :s1)
+   (s2 :initform *class-09-s2-initvar* :initarg :s2)))
+
+(deftest class-09.1
+  (let* ((*class-09-s2-initvar* 'x)
+	 (c (make-instance 'class-09)))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)))
+  0 x)
+
+(deftest class-09.2
+  (let* ((*class-09-s2-initvar* 'x)
+	 (c (make-instance 'class-09 :s1 1)))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)))
+  1 x)
+
+(deftest class-09.3
+  (let* ((c (make-instance 'class-09 :s2 'a)))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)))
+  0 a)
+
+(deftest class-09.4
+  (let* ((c (make-instance 'class-09 :s2 'a :s1 10 :s1 'bad :s2 'bad)))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)))
+  10 a)
+
+;;;;
+
+(declaim (special *class-10-s1-initvar*))
+
+(defclass class-10 ()
+  ((s1 :initform (incf *class-10-s1-initvar*) :initarg :s1)))
+
+(deftest class-10.1
+  (let* ((*class-10-s1-initvar* 0)
+	 (c (make-instance 'class-10)))
+    (values
+     *class-10-s1-initvar*
+     (slot-value c 's1)))
+  1 1)
+
+(deftest class-10.2
+  (let* ((*class-10-s1-initvar* 0)
+	 (c (make-instance 'class-10 :s1 10)))
+    (values
+     *class-10-s1-initvar*
+     (slot-value c 's1)))
+  0 10)
+
+;;;;
+
+(let ((x 7))
+  (defclass class-11 ()
+    ((s1 :initform x :initarg :s1))))
+
+(deftest class-11.1
+  (slot-value (make-instance 'class-11) 's1)
+  7)
+
+(deftest class-11.2
+  (slot-value (make-instance 'class-11 :s1 100) 's1)
+  100)
+
+;;;
+
+(flet ((%f () 'x))
+  (defclass class-12 ()
+    ((s1 :initform (%f) :initarg :s1))))
+
+(deftest class-12.1
+  (slot-value (make-instance 'class-12) 's1)
+  x)
+
+(deftest class-12.2
+  (slot-value (make-instance 'class-12 :s1 'y) 's1)
+  y)
 
 
 
+    
+    
