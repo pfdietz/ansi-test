@@ -105,16 +105,15 @@
 
 (defun equalp-with-case (x y)
   "Like EQUALP, but doesn't do case conversion of characters.
-   Currently doesn't work on arrays of dimension > 1."
+   Currently doesn't work on arrays of dimension > 2."
   (cond
    ((consp x)
     (and (consp y)
 	 (equalp-with-case (car x) (car y))
 	 (equalp-with-case (cdr x) (cdr y))))
    ((and (typep x 'array)
-	 (typep y 'array)
-	 (not (eql (array-rank x) (array-rank y))))
-    nil)
+	 (= (array-rank x) 0))
+    (equalp-with-case (aref x) (aref y)))
    ((typep x 'vector)
     (and (typep y 'vector)
 	 (let ((x-len (length x))
@@ -125,8 +124,19 @@
 		 for e2 across y
 		 always (equalp-with-case e1 e2))))))
    ((and (typep x 'array)
-	 (= (array-rank x) 0))
-    (equalp-with-case (aref x) (aref y)))
+	 (typep y 'array)
+	 (not (equal (array-dimensions x)
+		     (array-dimensions y))))
+    nil)
+   ;; I should use ROW-MAJOR-AREF to do this, but that's broken
+   ;; in GCL right now.
+   ((and (typep x 'array)
+	 (= (array-rank x) 2))
+    (let ((dim (array-dimensions x)))
+      (loop for i from 0 below (first dim)
+	    always (loop for j from 0 below (second dim)
+			 always (equalp-with-case (aref x i j)
+						  (aref y i j))))))
    (t (eql x y))))
 
 (defun do-entry (entry &optional
