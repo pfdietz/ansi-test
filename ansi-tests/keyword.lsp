@@ -38,6 +38,57 @@
        (notnot (constantp s)))))
   t t :external t t t)
 
+(deftest keyword.5
+  (let* ((name "SYMBOL-NAME-FOR-KEYWORD.5")
+	 (pkg-name "PACKAGE-FOR-KEYWORD.5")
+	 (kwp (find-package "KEYWORD")))
+    (safely-delete-package pkg-name)
+    (let* ((pkg (make-package pkg-name :use nil))
+	   (s (find-symbol name kwp)))
+      (when s (unintern s kwp))
+      ;; Now, create a symbol with this name
+      ;; and import it into the keyword package
+      (setq s (intern name pkg))
+      (import s kwp)
+      ;; Check that it's a keyword
+      (values
+       (eqlt (symbol-package s) pkg)
+       (eqlt (find-symbol name kwp) s)
+       (nth-value 1 (find-symbol name kwp))
+       (notnot (typep s 'keyword))
+       (if (boundp s) (eqlt s (symbol-value s)) :not-bound)
+       (notnot (constantp s)))))
+  t t :external t t t)
+
+(deftest keyword.6
+  (let* ((name "SYMBOL-NAME-FOR-KEYWORD.6")
+	 (pkg-name "PACKAGE-FOR-KEYWORD.6")
+	 (kwp (find-package "KEYWORD")))
+    (safely-delete-package pkg-name)
+    (let* ((pkg (make-package pkg-name :use nil))
+	   (s (find-symbol name kwp))
+	   s2)
+      (when s (unintern s kwp))
+      ;; Recreate a symbol with this name in the keyword package
+      ;; shadowing-import will displace this symbol
+      (setq s2 (intern name kwp))
+      ;; Now, create a symbol with this name
+      ;; and shadowing-import it into the keyword package
+      (setq s (intern name pkg))
+      (shadowing-import s kwp)
+      ;; Check that it's a keyword
+      (values
+       (eqt s s2)
+       (symbol-package s2)
+       (eqlt (symbol-package s) pkg)
+       (eqlt (find-symbol name kwp) s)
+       (nth-value 1 (find-symbol name kwp))
+       (notnot (typep s 'keyword))
+       (if (boundp s) (eqlt s (symbol-value s)) :not-bound)
+       (notnot (constantp s)))))
+  nil nil t t :external t t t)
+
+
 ;;; Note that the case of a symbol inherited into KEYWORD cannot arise
 ;;; standardly from user actions, since USE-PACKAGE disallows KEYWORD
 ;;; as the package designated by its second argument.
