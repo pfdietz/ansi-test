@@ -8941,10 +8941,22 @@ Broken at C::WT-MAKE-CLOSURE.
 		   (logand (the signed-byte p1) -540165229)))
    -6750156304)
   -7289140848)
-  
-    
 
-		   
-		   
+;;; abcl 25 Dec 2005
+;;; Debugger invoked on condition of type UNDEFINED-FUNCTION:
+;;; The function %FAILED-AVER is undefined.
 
-	    
+
+(deftest misc.475
+  (let #+armedbear ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda (p1 p2 p3 p4 p6)
+			(declare (optimize speed (safety 1))
+				 (type (integer -785238 -80) p1)
+				 (type (integer * 65861934352) p2))
+			(+ P1 (THE (INTEGER -485480 -7019) P2) P3 P4
+			   463666373060
+			   P6)))
+	61564048 -7457 24939545512 51 730))
+  488667475944)
