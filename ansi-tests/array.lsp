@@ -245,3 +245,57 @@
 (deftest array.8.14
   (typep "abc" '(array * (4)))
   nil)
+
+;;; Two dimensional array type tests
+
+(deftest array.9.1
+  (typep #() '(array * (* *)))
+  nil)
+
+(deftest array.9.2
+  (typep "abc" '(array * (* *)))
+  nil)
+
+(deftest array.9.3
+  (typep #(a b c) '(array * (3 *)))
+  nil)
+
+(deftest array.9.4
+  (typep #(a b c) '(array * (* 3)))
+  nil)
+
+(deftest array.9.5
+  (typep "abc" '(array * (3 *)))
+  nil)
+
+(deftest array.9.6
+  (typep "abc" '(array * (* 3)))
+  nil)
+
+(deftest array.9.7
+  (notnot-mv (typep #2a((a b)(c d)(e f)) '(array * (* *))))
+  t)
+
+(deftest array.9.8
+  (notnot-mv (typep #2a((a b)(c d)(e f)) '(array * (3 *))))
+  t)
+
+(deftest array.9.9
+  (typep #2a((a b)(c d)(e f)) '(array * (2 *)))
+  nil)
+
+(deftest array.9.10
+  (notnot-mv (typep #2a((a b)(c d)(e f)) '(array * (* 2))))
+  t)
+
+(deftest array.9.11
+  (typep #2a((a b)(c d)(e f)) '(array * (* 3)))
+  nil)
+
+(deftest array.9.12
+  (notnot-mv (typep #2a((a b)(c d)(e f)) '(array * (3 2))))
+  t)
+
+(deftest array.9.13
+  (typep #2a((a b)(c d)(e f)) '(array * (2 3)))
+  nil)
