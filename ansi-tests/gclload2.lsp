@@ -5,10 +5,12 @@
 (load "cl-symbols.lsp")
 
 ;;; Tests of evaluation and compilation
+(load "eval-and-compile.lsp")
 (load "compile.lsp")
 
 ;;; Tests of data and control flow
 
+(load "data-and-control-flow.lsp")
 (load "places.lsp")
 
 (load "and.lsp")
@@ -22,6 +24,7 @@
 (load "cond.lsp")
 (load "ctypecase.lsp")
 (load "defconstant.lsp")
+(load "define-modify-macro.lsp")
 (load "defparameter.lsp")
 (load "defvar.lsp")
 (load "destructuring-bind.lsp")
@@ -68,7 +71,8 @@
 (load "values.lsp")
 (load "when.lsp")
 
-
+;;; Tests of iteration forms
+(load "iteration.lsp")
 
 ;;; Tests of conses
 

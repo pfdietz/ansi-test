@@ -377,3 +377,14 @@
 
 ;; This should be greatly expanded
 
+
+(defparameter *type-and-class-fns*
+  '(coerce subtypep type-of typep type-error-datum type-error-expected-type))
+
+(deftest type-and-class-fns
+  (remove-if #'fboundp *type-and-class-fns*)
+  nil)
+
+(defparameter type-and-class-macros
+  (not (macro-function 'deftype))
+  nil)
