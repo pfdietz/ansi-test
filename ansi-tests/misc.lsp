@@ -6218,3 +6218,11 @@ Broken at C::WT-C-INLINE-LOC.
 				 0)
 			c)))
   1)
+
+(deftest misc.336
+  (PROG2 (PROGN (TAGBODY (- (COMMON-LISP:HANDLER-CASE (GO TAG2)))
+			 TAG2)
+		0)
+	 0)
+  0)
+
