@@ -41,10 +41,43 @@
      (eqt obj (change-class obj new-class))
      (typep* obj new-class)
      (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
      (slot-value obj 'b)))
   (t nil)
   t t
+  (t t)
+  1 1)
+
+(deftest update-instance-for-different-class.3
+  (let ((obj (make-instance 'uifdc-class-01a :b 1))
+	(new-class (find-class 'uifdc-class-01b)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (change-class obj new-class))
+     (typep* obj new-class)
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
   (nil t)
-  1)
+  t t
+  (t t)
+  1 1)
+
+(deftest update-instance-for-different-class.4
+  (let ((obj (make-instance 'uifdc-class-01a :a 1 :b 2))
+	(new-class (find-class 'uifdc-class-01b)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (change-class obj new-class))
+     (typep* obj new-class)
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (t t)
+  t t
+  (t t)
+  2 1)
+
+
 
 
