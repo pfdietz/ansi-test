@@ -164,16 +164,27 @@
 	   (isym (intern name pkg))
 	   (outer-restarts (compute-restarts)))
       (block done
-	(handler-bind
-	 ((package-error
-	   #'(lambda (c)
-	       ;; There should be at least one restart
-	       ;; associated with this condition that was
-	       ;; not a preexisting restart
-	       (assert (set-difference (compute-restarts c)
-				       outer-restarts))
-	       (return-from done :good))))
-	 (import sym pkg)))))
+	(and
+	 (handler-bind
+	  ((package-error
+	    #'(lambda (c)
+		;; There should be at least one restart
+		;; associated with this condition that was
+		;; not a preexisting restart
+		(let ((my-restarts
+		       (remove 'abort
+			       (set-difference (compute-restarts c)
+					       outer-restarts)
+			       :key #'restart-name)))
+		  (assert my-restarts)
+		(unintern isym)
+		(when (find 'continue my-restarts :key #'restart-name)
+		    (continue c))
+		(return-from done :good)))))
+	  (import sym pkg))
+	 (eqlt (find-symbol name pkg) sym)
+	 (eqlt (symbol-package sym) (find-package "CL-TEST"))
+	 :good))))
   :good)
 
 
@@ -186,14 +197,25 @@
 	   (isym (shadow name pkg))  ;; shadow instead of intern
 	   (outer-restarts (compute-restarts)))
       (block done
-	(handler-bind
-	 ((package-error
-	   #'(lambda (c)
-	       ;; There should be at least one restart
-	       ;; associated with this condition that was
-	       ;; not a preexisting restart
-	       (assert (set-difference (compute-restarts c)
-				       outer-restarts))
-	       (return-from done :good))))
-	 (import sym pkg)))))
+	(and
+	 (handler-bind
+	  ((package-error
+	    #'(lambda (c)
+		;; There should be at least one restart
+		;; associated with this condition that was
+		;; not a preexisting restart
+		(let ((my-restarts
+		       (remove 'abort
+			       (set-difference (compute-restarts c)
+					       outer-restarts)
+			       :key #'restart-name)))
+		  (assert my-restarts)
+		  (unintern isym)
+		  (when (find 'continue my-restarts :key #'restart-name)
+		    (continue c))
+		  (return-from done :good)))))
+	  (import sym pkg))
+	 (eqlt (find-symbol name pkg) sym)
+	 (eqlt (symbol-package sym) (find-package "CL-TEST"))
+	 :good))))
   :good)

@@ -79,13 +79,18 @@
 	  (handler-bind ((package-error
 			  #'(lambda (c)
 			      ;; (let ((r (find-restart 'continue c))) (and r (invoke-restart r)))
-			      (assert (set-difference (compute-restarts c)
-						      outer-restarts))
-			      (return t)
-			      )))
+			      (let ((my-restarts
+				     (remove 'abort
+					     (set-difference (compute-restarts c)
+							     outer-restarts)
+					     :key #'restart-name)))
+				(assert my-restarts)
+				(when (find 'continue my-restarts :key #'restart-name)
+				  (continue c))
+				(return t)
+				))))
 		      (delete-package p2)))
 	
-	#|
 	(unless (and (equal (package-name P1) "P1")
 		     (null  (package-name P2))
 		     (equal (package-name P3) "P3"))
@@ -119,7 +124,6 @@
 	(safely-delete-package P3)
 	(safely-delete-package P1)
 	(return t)
-	|#
 	)
   t)
 
