@@ -56,3 +56,21 @@
   (no-app-meth-gf-04 'a 'b 'c 'd)
   (a b c d))
 
+(defparameter *no-app-meth-gf-05*
+  (defgeneric no-app-meth-gf-05 (x &key)
+    (:method ((x symbol) &key) x)))
+
+(defmethod no-applicable-method ((x (eql *no-app-meth-gf-05*)) &rest args)
+  (and (eql x *no-app-meth-gf-05*)
+       (copy-list args)))
+
+(deftest no-applicable-method.8
+  (no-app-meth-gf-05 'a)
+  a)
+
+;;; From section 7.6.6: 'Calling no-applicable-method takes precedence
+;;;   over checking for acceptable keyword arguments'
+
+(deftest no-applicable-method.9
+  (no-app-meth-gf-05 10 :nonsense t)
+  (10 :nonsense t))
