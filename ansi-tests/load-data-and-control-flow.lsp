@@ -7,6 +7,7 @@
 (load "shiftf.lsp")
 (load "rotatef.lsp")
 (load "return.lsp")
+(load "return-from.lsp")
 (load "defsetf.lsp")
 (load "define-setf-expander.lsp")
 

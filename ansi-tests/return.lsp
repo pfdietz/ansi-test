@@ -21,3 +21,14 @@
 			  '(return nil) nil nil)
 		 program-error)
   t)
+
+;;;
+
+(deftest return.1
+  (block nil (return) :bad)
+  nil)
+
+(deftest return.2
+  (block nil (return :good) :bad)
+  :good)
+
