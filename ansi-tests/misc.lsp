@@ -6832,3 +6832,62 @@ Broken at C::WT-C-INLINE-LOC.
 	 (v2 (apply (compile nil fn2) vals)))
     (if (eql v1 v2) :good (list v1 v2)))
   :good)
+
+;;; sbcl 0.8.10.24
+;;;  Argument X is not a REAL: #<FUNCTION "CLOSURE" {947C46D}>
+
+(deftest misc.366
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d e f g h i)
+       (declare (type (integer 10 65866342) a))
+       (declare (type (integer 151 702748905609) b))
+       (declare (type (integer -60442925 167939283) c))
+       (declare (type (integer 7706 10562) d))
+       (declare (type (integer -97180326158 17496) e))
+       (declare (type (integer -73249 -51989) f))
+       (declare (type (integer -12 2718) g))
+       (declare (type (integer -37832 591244) h))
+       (declare (type (integer -2579781276 2108461452) i))
+       (declare (ignorable a b c d e f g h i))
+       (declare
+	(optimize (speed 3)
+		  (space 0)
+		  (safety 0)
+		  (debug 2)
+		  (compilation-speed 2)))
+       (elt '(11751 8554 7393 1924 3418)
+	    (min 4
+		 (max 0
+		      (block b4
+			(numerator
+			 (flet ((%f5
+				 (f5-1 f5-2 f5-3
+				       &optional
+				       (f5-4 (prog1 0 (return-from b4 0) 0))
+				       (f5-5 d) (f5-6 0))
+				 0))
+			   (numerator
+			    (apply (constantly 0)
+				   0
+				   0
+				   (rationalize
+				    (unwind-protect
+					(%f5 0
+					     c
+					     (%f5 0
+						  c
+						  (%f5 0
+						       0
+						       0
+						       h
+						       (%f5 0 0 0)
+						       i)
+						  a))
+				      (ignore-errors 0)))
+				   0
+				   nil))))))))))
+   21956127 524275646496 101890987 8762 -88607922426 -55959 2177 147174
+   38469170)
+  11751)
