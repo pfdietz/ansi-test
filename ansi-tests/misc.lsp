@@ -4599,3 +4599,28 @@
 	  'integer)))))
   0)
 
+;;; clisp (28 Jan 2004)
+;;; Different return values
+
+(deftest misc.276
+  (funcall
+   (compile
+    nil
+    `(lambda (b)
+       (declare (optimize (speed 2) (space 0) (safety 0)
+			  (debug 3) (compilation-speed 3)))
+       (labels
+	   ((%f2 ()
+		 (let ((v10 (progn (dotimes (iv2 0 0) iv2)
+				   b)))
+		   (unwind-protect b (labels ((%f6 ())) (%f6))
+				   ))))
+	 (%f2))))
+   :good)
+  :good)
+
+
+
+
+
+    
