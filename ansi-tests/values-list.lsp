@@ -13,6 +13,14 @@
   (classify-error (values-list nil nil))
   program-error)
 
+(deftest values-list.error.3
+  (classify-error (values-list 'a))
+  type-error)
+
+(deftest values-list.error.4
+  (classify-error (values-list '(a b c . d)))
+  type-error)
+
 (deftest values-list.1
   (values-list nil))
 
