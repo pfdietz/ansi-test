@@ -82,6 +82,9 @@
 (load "ldb.lsp")
 (load "mask-field.lsp")
 
+(load "float.lsp")
+(load "floatp.lsp")
+
 (load "rational.lsp")
 (load "rationalize.lsp")
 
