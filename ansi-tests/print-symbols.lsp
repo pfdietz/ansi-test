@@ -38,7 +38,7 @@
 	 (*readtable* (copy-readtable nil)))
      (flet ((%p (sym case *print-case* expected)
 		(setf (readtable-case *readtable*) case)
-			(let ((str
+		(let ((str
 		       (with-output-to-string (s) (princ sym s))))
 		  (or (equalt str expected)
 		      (list str expected)))))
