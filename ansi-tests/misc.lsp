@@ -2130,3 +2130,20 @@
 		  (funcall #'%f17 15128425 a)))))
     (funcall (compile nil fn) 1 3))
   15128425)
+
+;;; gcl (12 Nov 2003)
+;;; C compiler failure during compilation (duplicate case value)
+
+(deftest misc.163
+  (funcall
+   (compile nil
+	    '(lambda (b)
+	       (declare (type (integer -15716 3947) b))
+	       (case b
+		 ((-7 -6 -6) :good)
+		 ((-5 -6) :bad)
+		 )))
+
+   -6)
+  :good)
+
