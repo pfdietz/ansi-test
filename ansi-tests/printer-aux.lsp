@@ -8,7 +8,7 @@
 (defmacro def-print-test (name form result &rest bindings)
   `(deftest ,name
      (equalpt
-      (with-standard-io-syntax
+      (my-with-standard-io-syntax
 	(let ((*print-readably* nil))
 	  (let ,bindings
 	    (with-output-to-string (*standard-output*) (prin1 ,form)))))
@@ -37,7 +37,7 @@
 				       (debug *random-read-check-debug*))
   (declare (type function test))
   ;; Generate random printer-control values
-  (with-standard-io-syntax
+  (my-with-standard-io-syntax
    (let ((*print-array* (coin))
 	 (*print-base* (+ 2 (random 34)))
 	 (*print-radix* (coin))
