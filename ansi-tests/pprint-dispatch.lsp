@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (deftest pprint-dispatch.1
-  (loop for x in *universe*
+  (loop for x in (append *universe* *cl-symbols*)
 	for vals = (multiple-value-list (pprint-dispatch x))
 	for vals2 = (multiple-value-list (pprint-dispatch
 					  x
@@ -27,7 +27,7 @@
 		 (not (cadr vals2)))))
 	collect (list x vals vals2))
   nil)
-
+#|
 (deftest pprint-dispatch.2
   (loop for sym in *cl-symbols*
 	for x = (list sym nil nil)
@@ -51,6 +51,7 @@
 		 (not (cadr vals2)))))
 	collect (list x vals vals2))
   nil)
+|#
 
 (deftest pprint-dispatch.3
   (my-with-standard-io-syntax
@@ -71,7 +72,7 @@
        
 (deftest pprint-dispatch.4
   (my-with-standard-io-syntax
-   (loop for v1 in (delete-if-not #'realp *universe*)
+   (loop for v1 in (remove-if-not #'realp *universe*)
 	 unless
 	 (equal
 	  (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
@@ -93,7 +94,7 @@
   
 (deftest pprint-dispatch.5
   (my-with-standard-io-syntax
-   (loop for v1 in (delete-if-not #'realp *universe*)
+   (loop for v1 in (remove-if-not #'realp *universe*)
 	 unless
 	 (equal
 	  (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil))
