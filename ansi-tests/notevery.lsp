@@ -90,53 +90,53 @@
 ;;; Error cases
 
 (deftest notevery.error.1
-  (classify-error (notevery 1 '(a b c)))
-  type-error)
+  (signals-error (notevery 1 '(a b c)) type-error)
+  t)
 
 (deftest notevery.error.2
-  (classify-error (notevery #\a '(a b c)))
-  type-error)
+  (signals-error (notevery #\a '(a b c)) type-error)
+  t)
 
 (deftest notevery.error.3
-  (classify-error (notevery #() '(a b c)))
-  type-error)
+  (signals-error (notevery #() '(a b c)) type-error)
+  t)
 
 (deftest notevery.error.4
-  (classify-error (notevery #'null 'a))
-  type-error)
+  (signals-error (notevery #'null 'a) type-error)
+  t)
 
 (deftest notevery.error.5
-  (classify-error (notevery #'null 100))
-  type-error)
+  (signals-error (notevery #'null 100) type-error)
+  t)
 
 (deftest notevery.error.6
-  (classify-error (notevery #'null 'a))
-  type-error)
+  (signals-error (notevery #'null 'a) type-error)
+  t)
 
 (deftest notevery.error.7
-  (classify-error (notevery #'eq () 'a))
-  type-error)
+  (signals-error (notevery #'eq () 'a) type-error)
+  t)
 
 (deftest notevery.error.8
-  (classify-error (notevery))
-  program-error)
+  (signals-error (notevery) program-error)
+  t)
 
 (deftest notevery.error.9
-  (classify-error (notevery #'null))
-  program-error)
+  (signals-error (notevery #'null) program-error)
+  t)
 
 (deftest notevery.error.10
-  (classify-error (locally (notevery 1 '(a b c)) t))
-  type-error)
+  (signals-error (locally (notevery 1 '(a b c)) t) type-error)
+  t)
 
 (deftest notevery.error.11
-  (classify-error (notevery #'cons '(a b c)))
-  program-error)
+  (signals-error (notevery #'cons '(a b c)) program-error)
+  t)
 
 (deftest notevery.error.12
-  (classify-error (notevery #'cons '(a b c) '(1 2 4) '(g h j)))
-  program-error)
+  (signals-error (notevery #'cons '(a b c) '(1 2 4) '(g h j)) program-error)
+  t)
 
 (deftest notevery.error.13
-  (classify-error (notevery #'car '(a b c)))
-  type-error)
+  (signals-error (notevery #'car '(a b c)) type-error)
+  t)

@@ -8,15 +8,16 @@
 ;;; MAKE-INSTANCE is used in many other tests as well
 
 (deftest make-instance.error.1
-  (classify-error (make-instance))
-  program-error)
+  (signals-error (make-instance) program-error)
+  t)
 
 (defclass make-instance-class-01 ()
   ((a :initarg :a) (b :initarg :b)))
 
 (deftest make-instance.error.2
-  (classify-error (make-instance 'make-instance-class-01 :a))
-  program-error)
+  (signals-error (make-instance 'make-instance-class-01 :a)
+		 program-error)
+  t)
 
 (deftest make-instance.error.3
   (handler-case (progn (eval '(make-instance 'make-instance-class-01 :z 1))
@@ -33,8 +34,9 @@
   :good)
 
 (deftest make-instance.error.5
-  (classify-error (let () (make-instance) nil))
-  program-error)
+  (signals-error (let () (make-instance) nil)
+		 program-error)
+  t)
 
 ;; Definitions of methods
 

@@ -5,49 +5,53 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest nthcdr.error.1
-  (classify-error (nthcdr nil (copy-tree '(a b c d))))
-  type-error)
+  (signals-error (nthcdr nil (copy-tree '(a b c d))) type-error)
+  t)
 
 (deftest nthcdr.error.2
-  (classify-error (nthcdr 'a (copy-tree '(a b c d))))
-  type-error)
+  (signals-error (nthcdr 'a (copy-tree '(a b c d))) type-error)
+  t)
 
 (deftest nthcdr.error.3
-  (classify-error (nthcdr 0.1 (copy-tree '(a b c d))))
-  type-error)
+  (signals-error (nthcdr 0.1 (copy-tree '(a b c d))) type-error)
+  t)
 
 (deftest nthcdr.error.4
-  (classify-error (nthcdr #\A (copy-tree '(a b c d))))
-  type-error)
+  (signals-error (nthcdr #\A (copy-tree '(a b c d))) type-error)
+  t)
 
 (deftest nthcdr.error.5
-  (classify-error (nthcdr '(a) (copy-tree '(a b c d))))
-  type-error)
+  (signals-error (nthcdr '(a) (copy-tree '(a b c d))) type-error)
+  t)
 
 (deftest nthcdr.error.6
-  (classify-error (nthcdr -10 (copy-tree '(a b c d))))
-  type-error)
+  (signals-error (nthcdr -10 (copy-tree '(a b c d))) type-error)
+  t)
 
 (deftest nthcdr.error.7
-  (classify-error (nthcdr))
-  program-error)
+  (signals-error (nthcdr) program-error)
+  t)
 
 (deftest nthcdr.error.8
-  (classify-error (nthcdr 0))
-  program-error)
+  (signals-error (nthcdr 0) program-error)
+  t)
 
 (deftest nthcdr.error.9
-  (classify-error (nthcdr 0 nil nil))
-  program-error)
+  (signals-error (nthcdr 0 nil nil) program-error)
+  t)
 
 (deftest nthcdr.error.10
-  (classify-error (nthcdr 3 (cons 'a 'b)))
-  type-error)
+  (signals-error (nthcdr 3 (cons 'a 'b)) type-error)
+  t)
 
 (deftest nthcdr.error.11
-  (classify-error (locally (nthcdr 'a (copy-tree '(a b c d))) t))
-  type-error)
+  (signals-error (locally (nthcdr 'a (copy-tree '(a b c d))) t) type-error)
+  t)
+
+;;; Non-error tests
 
 (deftest nthcdr.1
   (nthcdr 0 (copy-tree '(a b c d . e)))

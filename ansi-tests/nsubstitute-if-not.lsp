@@ -713,49 +713,52 @@
 ;;; Error cases
 
 (deftest nsubstitute-if-not.error.1
-  (classify-error (nsubstitute-if-not))
-  program-error)
+  (signals-error (nsubstitute-if-not) program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.2
-  (classify-error (nsubstitute-if-not 'a))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a) program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.3
-  (classify-error (nsubstitute-if-not 'a #'null))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a #'null) program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.4
-  (classify-error (nsubstitute-if-not 'a #'null nil 'bad t))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a #'null nil 'bad t) program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.5
-  (classify-error (nsubstitute-if-not 'a #'null nil
-				      'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a #'null nil
+				      'bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.6
-  (classify-error (nsubstitute-if-not 'a #'null nil :key))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a #'null nil :key) program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.7
-  (classify-error (nsubstitute-if-not 'a #'null nil 1 2))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a #'null nil 1 2) program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.8
-  (classify-error (nsubstitute-if-not 'a #'cons (list 'a 'b 'c)))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a #'cons (list 'a 'b 'c)) program-error)
+  t)
 
 (deftest nsubstitute-if-not.error.9
-  (classify-error (nsubstitute-if-not 'a #'car (list 'a 'b 'c)))
-  type-error)
+  (signals-error (nsubstitute-if-not 'a #'car (list 'a 'b 'c)) type-error)
+  t)
 
 (deftest nsubstitute-if-not.error.10
-  (classify-error (nsubstitute-if-not 'a #'identity (list 'a 'b 'c)
-				  :key #'car))
-  type-error)
+  (signals-error (nsubstitute-if-not 'a #'identity (list 'a 'b 'c)
+				  :key #'car)
+		 type-error)
+  t)
 
 (deftest nsubstitute-if-not.error.11
-  (classify-error (nsubstitute-if-not 'a #'identity (list 'a 'b 'c)
-				  :key #'cons))
-  program-error)
+  (signals-error (nsubstitute-if-not 'a #'identity (list 'a 'b 'c)
+				  :key #'cons)
+		 program-error)
+  t)
 

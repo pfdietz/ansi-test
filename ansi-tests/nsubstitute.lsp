@@ -937,46 +937,46 @@
 ;;; Error cases
 
 (deftest nsubstitute.error.1
-  (classify-error (nsubstitute))
-  program-error)
+  (signals-error (nsubstitute) program-error)
+  t)
 
 (deftest nsubstitute.error.2
-  (classify-error (nsubstitute 'a))
-  program-error)
+  (signals-error (nsubstitute 'a) program-error)
+  t)
 
 (deftest nsubstitute.error.3
-  (classify-error (nsubstitute 'a 'b))
-  program-error)
+  (signals-error (nsubstitute 'a 'b) program-error)
+  t)
 
 (deftest nsubstitute.error.4
-  (classify-error (nsubstitute 'a 'b nil 'bad t))
-  program-error)
+  (signals-error (nsubstitute 'a 'b nil 'bad t) program-error)
+  t)
 
 (deftest nsubstitute.error.5
-  (classify-error (nsubstitute 'a 'b nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nsubstitute 'a 'b nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest nsubstitute.error.6
-  (classify-error (nsubstitute 'a 'b nil :key))
-  program-error)
+  (signals-error (nsubstitute 'a 'b nil :key) program-error)
+  t)
 
 (deftest nsubstitute.error.7
-  (classify-error (nsubstitute 'a 'b nil 1 2))
-  program-error)
+  (signals-error (nsubstitute 'a 'b nil 1 2) program-error)
+  t)
 
 (deftest nsubstitute.error.8
-  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :test #'identity))
-  program-error)
+  (signals-error (nsubstitute 'a 'b (list 'a 'b 'c) :test #'identity) program-error)
+  t)
 
 (deftest nsubstitute.error.9
-  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :test-not #'identity))
-  program-error)
+  (signals-error (nsubstitute 'a 'b (list 'a 'b 'c) :test-not #'identity) program-error)
+  t)
 
 (deftest nsubstitute.error.10
-  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :key #'cons))
-  program-error)
+  (signals-error (nsubstitute 'a 'b (list 'a 'b 'c) :key #'cons) program-error)
+  t)
 
 (deftest nsubstitute.error.11
-  (classify-error (nsubstitute 'a 'b (list 'a 'b 'c) :key #'car))
-  type-error)
+  (signals-error (nsubstitute 'a 'b (list 'a 'b 'c) :key #'car) type-error)
+  t)
 

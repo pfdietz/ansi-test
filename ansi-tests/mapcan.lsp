@@ -86,33 +86,35 @@
   1)
 
 (deftest mapcan.error.1
-  (classify-error (mapcan #'identity 1))
-  type-error)
+  (signals-error (mapcan #'identity 1) type-error)
+  t)
 
 (deftest mapcan.error.2
-  (classify-error (mapcan))
-  program-error)
+  (signals-error (mapcan) program-error)
+  t)
 
 (deftest mapcan.error.3
-  (classify-error (mapcan #'append))
-  program-error)
+  (signals-error (mapcan #'append) program-error)
+  t)
 
 (deftest mapcan.error.4
-  (classify-error (locally (mapcan #'identity 1) t))
-  type-error)
+  (signals-error (locally (mapcan #'identity 1) t) type-error)
+  t)
 
 (deftest mapcan.error.5
-  (classify-error (mapcan #'car '(a b c)))
-  type-error)
+  (signals-error (mapcan #'car '(a b c)) type-error)
+  t)
 
 (deftest mapcan.error.6
-  (classify-error (mapcan #'cons '(a b c)))
-  program-error)
+  (signals-error (mapcan #'cons '(a b c)) program-error)
+  t)
 
 (deftest mapcan.error.7
-  (classify-error (mapcan #'cons '(a b c) '(1 2 3) '(4 5 6)))
-  program-error)
+  (signals-error (mapcan #'cons '(a b c) '(1 2 3) '(4 5 6))
+		 program-error)
+  t)
 
 (deftest mapcan.error.8
-  (classify-error (mapcan #'identity (list* (list 1) (list 2) 3)))
-  type-error)
+  (signals-error (mapcan #'identity (list* (list 1) (list 2) 3))
+		 type-error)
+  t)

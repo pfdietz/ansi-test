@@ -131,13 +131,13 @@
 ;;; Error tests
 
 (deftest maphash.error.1
-  (classify-error (maphash))
-  program-error)
+  (signals-error (maphash) program-error)
+  t)
 
 (deftest maphash.error.2
-  (classify-error (maphash #'list))
-  program-error)
+  (signals-error (maphash #'list) program-error)
+  t)
 
 (deftest maphash.error.3
-  (classify-error (maphash #'list (make-hash-table) nil))
-  program-error)
+  (signals-error (maphash #'list (make-hash-table) nil) program-error)
+  t)

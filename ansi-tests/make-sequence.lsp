@@ -207,60 +207,63 @@
 ;;; Tests for errors
 
 (deftest make-sequence.error.1
-  (classify-error (make-sequence 'symbol 10))
-  type-error)
+  (signals-error (make-sequence 'symbol 10) type-error)
+  t)
 
 (deftest make-sequence.error.2
-  (classify-error (make-sequence 'null 1))
-  type-error)
+  (signals-error (make-sequence 'null 1) type-error)
+  t)
 
 (deftest make-sequence.error.3
-  (classify-error (make-sequence '(vector * 4) 3))
-  type-error)
+  (signals-error (make-sequence '(vector * 4) 3) type-error)
+  t)
 
 (deftest make-sequence.error.4
-  (classify-error (make-sequence '(vector * 2) 3))
-  type-error)
+  (signals-error (make-sequence '(vector * 2) 3) type-error)
+  t)
 
 (deftest make-sequence.error.5
-  (classify-error (make-sequence '(string 4) 3))
-  type-error)
+  (signals-error (make-sequence '(string 4) 3) type-error)
+  t)
 
 (deftest make-sequence.error.6
-  (classify-error (make-sequence '(simple-string 2) 3))
-  type-error)
+  (signals-error (make-sequence '(simple-string 2) 3) type-error)
+  t)
 
 (deftest make-sequence.error.7
-  (classify-error (make-sequence 'cons 0))
-  type-error)
+  (signals-error (make-sequence 'cons 0) type-error)
+  t)
 
 (deftest make-sequence.error.8
-  (classify-error (make-sequence))
-  program-error)
+  (signals-error (make-sequence) program-error)
+  t)
 
 (deftest make-sequence.error.9
-  (classify-error (make-sequence 'list))
-  program-error)
+  (signals-error (make-sequence 'list) program-error)
+  t)
 
 (deftest make-sequence.error.10
-  (classify-error (make-sequence 'list 10 :bad t))
-  program-error)
+  (signals-error (make-sequence 'list 10 :bad t) program-error)
+  t)
 
 (deftest make-sequence.error.11
-  (classify-error (make-sequence 'list 10 :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (make-sequence 'list 10 :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest make-sequence.error.12
-  (classify-error (make-sequence 'list 10 :initial-element))
-  program-error)
+  (signals-error (make-sequence 'list 10 :initial-element)
+		 program-error)
+  t)
 
 (deftest make-sequence.error.13
-  (classify-error (make-sequence 'list 10 0 0))
-  program-error)
+  (signals-error (make-sequence 'list 10 0 0) program-error)
+  t)
 
 (deftest make-sequence.error.14
-  (classify-error (locally (make-sequence 'symbol 10) t))
-  type-error)
+  (signals-error (locally (make-sequence 'symbol 10) t)
+		 type-error)
+  t)
 
 ;;; Order of execution tests
 

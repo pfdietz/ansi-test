@@ -145,7 +145,7 @@
 
 (deftest macrolet.16
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(classify-error (macrolet ((,s () ''a)) (,s)))
+	for form = `(ignore-errors (macrolet ((,s () ''a)) (,s)))
 	unless (eq (eval form) 'a)
 	collect s)
   nil)
@@ -385,7 +385,7 @@
 
 (deftest symbol-macrolet.1
   (loop for s in *cl-non-variable-constant-symbols*
-	for form = `(classify-error (symbol-macrolet ((,s 17)) ,s))
+	for form = `(ignore-errors (symbol-macrolet ((,s 17)) ,s))
 	unless (eql (eval form) 17)
 	collect s)
   nil)
@@ -425,17 +425,20 @@
 		       
 
 (deftest symbol-macrolet.error.1
-  (classify-error
+  (signals-error
    (symbol-macrolet ((x 10))
      (declare (special x))
-     20))
-  program-error)
+     20)
+   program-error)
+  t)
 
 (deftest symbol-macrolet.error.2
-  (classify-error (symbol-macrolet ((t 'a)) t))
-  program-error)
+  (signals-error (symbol-macrolet ((t 'a)) t)
+		 program-error)
+  t)
 
 (deftest symbol-macrolet.error.3
-  (classify-error (symbol-macrolet ((*pathnames* 19)) *pathnames*))
-  program-error)
+  (signals-error (symbol-macrolet ((*pathnames* 19)) *pathnames*)
+		 program-error)
+  t)
      

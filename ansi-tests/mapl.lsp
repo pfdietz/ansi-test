@@ -98,33 +98,34 @@
   (a b c) 3 1 2 3)
 
 (deftest mapl.error.1
-  (classify-error (mapl #'identity 1))
-  type-error)
+  (signals-error (mapl #'identity 1) type-error)
+  t)
 
 (deftest mapl.error.2
-  (classify-error (mapl))
-  program-error)
+  (signals-error (mapl) program-error)
+  t)
 
 (deftest mapl.error.3
-  (classify-error (mapl #'append))
-  program-error)
+  (signals-error (mapl #'append) program-error)
+  t)
 
 (deftest mapl.error.4
-  (classify-error (locally (mapl #'identity 1) t))
-  type-error)
+  (signals-error (locally (mapl #'identity 1) t) type-error)
+  t)
 
 (deftest mapl.error.5
-  (classify-error (mapl #'cons '(a b c)))
-  program-error)
+  (signals-error (mapl #'cons '(a b c)) program-error)
+  t)
 
 (deftest mapl.error.6
-  (classify-error (mapl #'cons '(a b c) '(1 2 3) '(4 5 6)))
-  program-error)
+  (signals-error (mapl #'cons '(a b c) '(1 2 3) '(4 5 6)) program-error)
+  t)
 
 (deftest mapl.error.7
-  (classify-error (mapl #'caar '(a b c)))
-  type-error)
+  (signals-error (mapl #'caar '(a b c)) type-error)
+  t)
 
 (deftest mapl.error.8
-  (classify-error (mapl #'identity (list* (list 1) (list 2) 3)))
-  type-error)
+  (signals-error (mapl #'identity (list* (list 1) (list 2) 3)) type-error)
+  t)
+

@@ -59,45 +59,45 @@
   "ABC" 1)
 
 (deftest make-symbol.error.1
-  (classify-error (make-symbol nil))
-  type-error)
+  (signals-error (make-symbol nil) type-error)
+  t)
 
 (deftest make-symbol.error.2
-  (classify-error (make-symbol 'a))
-  type-error)
+  (signals-error (make-symbol 'a) type-error)
+  t)
 
 (deftest make-symbol.error.3
-  (classify-error (make-symbol 1))
-  type-error)
+  (signals-error (make-symbol 1) type-error)
+  t)
 
 (deftest make-symbol.error.4
-  (classify-error (make-symbol -1))
-  type-error)
+  (signals-error (make-symbol -1) type-error)
+  t)
 
 (deftest make-symbol.error.5
-  (classify-error (make-symbol 1.213))
-  type-error)
+  (signals-error (make-symbol 1.213) type-error)
+  t)
 
 (deftest make-symbol.error.6
-  (classify-error (make-symbol -1312.2))
-  type-error)
+  (signals-error (make-symbol -1312.2) type-error)
+  t)
 
 (deftest make-symbol.error.7
-  (classify-error (make-symbol #\w))
-  type-error)
+  (signals-error (make-symbol #\w) type-error)
+  t)
 
 (deftest make-symbol.error.8
-  (classify-error (make-symbol '(a)))
-  type-error)
+  (signals-error (make-symbol '(a)) type-error)
+  t)
 
 (deftest make-symbol.error.9
-  (classify-error (make-symbol))
-  program-error)
+  (signals-error (make-symbol) program-error)
+  t)
 
 (deftest make-symbol.error.10
-  (classify-error (make-symbol "a" "a"))
-  program-error)
+  (signals-error (make-symbol "a" "a") program-error)
+  t)
 
 (deftest make-symbol.error.11
-  (classify-error (make-symbol '(#\a #\b #\c)))
-  type-error)
+  (signals-error (make-symbol '(#\a #\b #\c))  type-error)
+  t)

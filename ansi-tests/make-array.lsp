@@ -619,29 +619,31 @@
 ;;; Error tests
 
 (deftest make-array.error.1
-  (classify-error (make-array))
-  program-error)
+  (signals-error (make-array) program-error)
+  t)
 
 (deftest make-array.error.2
-  (classify-error (make-array '(10) :bad t))
-  program-error)
+  (signals-error (make-array '(10) :bad t) program-error)
+  t)
 
 (deftest make-array.error.3
-  (classify-error (make-array '(10) :allow-other-keys nil :bad t))
-  program-error)
+  (signals-error (make-array '(10) :allow-other-keys nil :bad t)
+		 program-error)
+  t)
 
 (deftest make-array.error.4
-  (classify-error (make-array '(10) :allow-other-keys nil
-			      :allow-other-keys t :bad t))
-  program-error)
+  (signals-error (make-array '(10) :allow-other-keys nil
+			      :allow-other-keys t :bad t)
+		 program-error)
+  t)
 
 (deftest make-array.error.5
-  (classify-error (make-array '(10) :bad))
-  program-error)
+  (signals-error (make-array '(10) :bad) program-error)
+  t)
 
 (deftest make-array.error.6
-  (classify-error (make-array '(10) 1 2))
-  program-error)
+  (signals-error (make-array '(10) 1 2) program-error)
+  t)
 
 ;;; Order of evaluation tests
 

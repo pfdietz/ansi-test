@@ -36,17 +36,19 @@
   d 2 1 2)
 
 (deftest nth-value.error.1
-  (classify-error (funcall (macro-function 'nth-value)))
-  program-error)
+  (signals-error (funcall (macro-function 'nth-value))
+		 program-error)
+  t)
   
 (deftest nth-value.error.2
-  (classify-error (funcall (macro-function 'nth-value)
-			   '(nth-value 1 '(a b c))))
-  program-error)
+  (signals-error (funcall (macro-function 'nth-value)
+			   '(nth-value 1 '(a b c)))
+		 program-error)
+  t)
 
 (deftest nth-value.error.3
-  (classify-error (funcall (macro-function 'nth-value)
+  (signals-error (funcall (macro-function 'nth-value)
 			   '(nth-value 1 '(a b c))
-			   nil nil))
-  program-error)
-  
+			   nil nil)
+		 program-error)
+  t)

@@ -63,26 +63,20 @@
      (return 'good)))
   good)
 
-;;; (deftest multiple-value-bind.error.1
-;;;  (classify-error (multiple-value-bind))
-;;;  program-error)
-;;;
-;;; (deftest multiple-value-bind.error.2
-;;;  (classify-error (multiple-value-bind (a b c)))
-;;;  program-error)
-
 (deftest multiple-value-bind.error.1
-  (classify-error (funcall (macro-function 'multiple-value-bind)))
-  program-error)
+  (signals-error (funcall (macro-function 'multiple-value-bind))
+		 program-error)
+  t)
   
 (deftest multiple-value-bind.error.2
-  (classify-error (funcall (macro-function 'multiple-value-bind)
-			   '(multiple-value-bind nil nil)))
-  program-error)
+  (signals-error (funcall (macro-function 'multiple-value-bind)
+			   '(multiple-value-bind nil nil))
+		 program-error)
+  t)
 
 (deftest multiple-value-bind.error.3
-  (classify-error (funcall (macro-function 'multiple-value-bind)
+  (signals-error (funcall (macro-function 'multiple-value-bind)
 			   '(multiple-value-bind nil nil)
-			   nil nil))
-  program-error)
-  
+			   nil nil)
+		 program-error)
+  t)

@@ -5,25 +5,28 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest make-random-state.error.1
-  (classify-error (make-random-state nil nil))
-  program-error)
+  (signals-error (make-random-state nil nil) program-error)
+  t)
 
 (deftest make-random-state.error.2
-  (classify-error (make-random-state t nil))
-  program-error)
+  (signals-error (make-random-state t nil) program-error)
+  t)
 
 (deftest make-random-state.error.3
-  (classify-error (make-random-state *random-state* nil))
-  program-error)
+  (signals-error (make-random-state *random-state* nil) program-error)
+  t)
 
 (deftest make-random-state.error.4
   (loop for x in *mini-universe*
 	unless (or (null x) (eq x t) (random-state-p x)
-		   (eq (eval `(classify-error (make-random-state ',x)))
-		       'type-error))
+		   (eval `(signals-error (make-random-state ',x) type-error)))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest make-random-state.1
   (let ((rs (make-random-state)))

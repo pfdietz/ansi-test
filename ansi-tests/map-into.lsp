@@ -348,42 +348,45 @@
 ;;; Error cases
 
 (deftest map-into.error.1
-  (classify-error (map-into 'a #'(lambda () nil)))
-  type-error)
+  (signals-error (map-into 'a #'(lambda () nil)) type-error)
+  t)
 
 ;;; The next test was changed because if the first argument
 ;;; is NIL, map-into is said to 'return nil immediately', so
 ;;; the 'should be prepared' notation for the error checking
 ;;; means that error checking may be skipped.
 (deftest map-into.error.2
-  (case (classify-error (map-into nil #'identity 'a))
-    ((nil type-error) 'good)
-    (t 'bad))
-  good)
+  (and (locally (declare (safety 3))
+		(handler-case (eval '(map-into nil #'identity 'a))
+			      (type-error () nil)))
+       :bad)
+  nil)
 
 (deftest map-into.error.3
-  (classify-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100))
-  type-error)
+  (signals-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100)
+		 type-error)
+  t)
 
 (deftest map-into.error.4
-  (classify-error (map-into))
-  program-error)
+  (signals-error (map-into) program-error)
+  t)
 
 (deftest map-into.error.5
-  (classify-error (map-into (list 'a 'b 'c)))
-  program-error)
+  (signals-error (map-into (list 'a 'b 'c)) program-error)
+  t)
 
 (deftest map-into.error.6
-  (classify-error (locally (map-into 'a #'(lambda () nil)) t))
-  type-error)
+  (signals-error (locally (map-into 'a #'(lambda () nil)) t)
+		 type-error)
+  t)
 
 (deftest map-into.error.7
-  (classify-error (map-into (list 'a 'b 'c) #'cons '(a b c)))
-  program-error)
+  (signals-error (map-into (list 'a 'b 'c) #'cons '(a b c)) program-error)
+  t)
 
 (deftest map-into.error.8
-  (classify-error (map-into (list 'a 'b 'c) #'car '(a b c)))
-  type-error)
+  (signals-error (map-into (list 'a 'b 'c) #'car '(a b c)) type-error)
+  t)
 
 ;;; Order of evaluation tests
 

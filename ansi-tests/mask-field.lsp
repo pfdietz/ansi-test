@@ -5,19 +5,21 @@
 
 (in-package :cl-test)
 
-(in-package :cl-test)
+;;; Error tests
 
 (deftest mask-field.error.1
-  (classify-error (mask-field))
-  program-error)
+  (signals-error (mask-field) program-error)
+  t)
 
 (deftest mask-field.error.2
-  (classify-error (mask-field (byte 1 1)))
-  program-error)
+  (signals-error (mask-field (byte 1 1)) program-error)
+  t)
 
 (deftest mask-field.error.3
-  (classify-error (mask-field (byte 1 1) -1 0))
-  program-error)
+  (signals-error (mask-field (byte 1 1) -1 0) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest mask-field.1
   (loop for x = (random-fixnum)

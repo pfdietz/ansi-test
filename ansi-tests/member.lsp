@@ -233,69 +233,70 @@
 ;;; Error cases
 
 (deftest member.error.1
-  (classify-error (member 'a 'b))
-  type-error)
+  (signals-error (member 'a 'b) type-error)
+  t)
 
 (deftest member.error.2
-  (classify-error (member 'a 1.3))
-  type-error)
+  (signals-error (member 'a 1.3) type-error)
+  t)
 
 (deftest member.error.3
-  (classify-error (member 'a 1))
-  type-error)
+  (signals-error (member 'a 1) type-error)
+  t)
 
 (deftest member.error.4
-  (classify-error (member 'a 0))
-  type-error)
+  (signals-error (member 'a 0) type-error)
+  t)
 
 (deftest member.error.5
-  (classify-error (member 'a "abcde"))
-  type-error)
+  (signals-error (member 'a "abcde") type-error)
+  t)
 
 (deftest member.error.6
-  (classify-error (member 'a #\w))
-  type-error)
+  (signals-error (member 'a #\w) type-error)
+  t)
 
 (deftest member.error.7
-  (classify-error (member 'a t))
-  type-error)
+  (signals-error (member 'a t) type-error)
+  t)
 
 (deftest member.error.8
-  (classify-error (member))
-  program-error)
+  (signals-error (member) program-error)
+  t)
 
 (deftest member.error.9
-  (classify-error (member nil))
-  program-error)
+  (signals-error (member nil) program-error)
+  t)
 
 (deftest member.error.10
-  (classify-error (member nil nil :bad t))
-  program-error)
+  (signals-error (member nil nil :bad t) program-error)
+  t)
 
 (deftest member.error.11
-  (classify-error (member nil nil :test))
-  program-error)
+  (signals-error (member nil nil :test) program-error)
+  t)
 
 (deftest member.error.12
-  (classify-error (member nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (member nil nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest member.error.13
-  (classify-error (member nil nil nil))
-  program-error)
+  (signals-error (member nil nil nil) program-error)
+  t)
 
 (deftest member.error.14
-  (classify-error (locally (member 'a t) t))
-  type-error)
+  (signals-error (locally (member 'a t) t) type-error)
+  t)
 
 (deftest member.error.15
-  (classify-error (member 'a '(a b c) :test #'identity))
-  program-error)
+  (signals-error (member 'a '(a b c) :test #'identity) program-error)
+  t)
 
 (deftest member.error.16
-  (classify-error (member 'a '(a b c) :test-not #'identity))
-  program-error)
+  (signals-error (member 'a '(a b c) :test-not #'identity) program-error)
+  t)
 
 (deftest member.error.17
-  (classify-error (member 'a '(a b c) :key #'cons))
-  program-error)
+  (signals-error (member 'a '(a b c) :key #'cons) program-error)
+  t)

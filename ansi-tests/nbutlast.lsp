@@ -72,42 +72,45 @@
      i))
   (a b c) 1)
 
+;;; Error tests
+
 (deftest nbutlast.error.1
-  (classify-error (let ((x (list* 'a 'b 'c 'd))) (nbutlast x 'a)))
-  type-error)
+  (signals-error (let ((x (list* 'a 'b 'c 'd))) (nbutlast x 'a))
+		 type-error)
+  t)
 
 (deftest nbutlast.error.2
-  (classify-error (nbutlast 'a 10))
-  type-error)
+  (signals-error (nbutlast 'a 10) type-error)
+  t)
 
 (deftest nbutlast.error.3
-  (classify-error (nbutlast 2 10))
-  type-error)
+  (signals-error (nbutlast 2 10) type-error)
+  t)
 
 (deftest nbutlast.error.4
-  (classify-error (nbutlast #\w 10))
-  type-error)
+  (signals-error (nbutlast #\w 10) type-error)
+  t)
 
 (deftest nbutlast.error.5
-  (classify-error (nbutlast (list 'a 'b 'c 'd) -3))
-  type-error)
+  (signals-error (nbutlast (list 'a 'b 'c 'd) -3) type-error)
+  t)
 
 (deftest nbutlast.error.6
-  (classify-error (nbutlast (list 'a) 20.0))
-  type-error)
+  (signals-error (nbutlast (list 'a) 20.0) type-error)
+  t)
 
 (deftest nbutlast.error.7
-  (classify-error (nbutlast (list 'a) -100.0))
-  type-error)
+  (signals-error (nbutlast (list 'a) -100.0) type-error)
+  t)
 
 (deftest nbutlast.error.8
-  (classify-error (nbutlast))
-  program-error)
+  (signals-error (nbutlast) program-error)
+  t)
 
 (deftest nbutlast.error.9
-  (classify-error (nbutlast (list 'a 'b 'c) 3 3))
-  program-error)
+  (signals-error (nbutlast (list 'a 'b 'c) 3 3) program-error)
+  t)
 
 (deftest nbutlast.error.10
-  (classify-error (locally (nbutlast 'a 10) t))
-  type-error)
+  (signals-error (locally (nbutlast 'a 10) t) type-error)
+  t)

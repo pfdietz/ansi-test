@@ -90,53 +90,53 @@
 ;;; Error cases
 
 (deftest notany.error.1
-  (classify-error (notany 1 '(a b c)))
-  type-error)
+  (signals-error (notany 1 '(a b c)) type-error)
+  t)
 
 (deftest notany.error.2
-  (classify-error (notany #\a '(a b c)))
-  type-error)
+  (signals-error (notany #\a '(a b c)) type-error)
+  t)
 
 (deftest notany.error.3
-  (classify-error (notany #() '(a b c)))
-  type-error)
+  (signals-error (notany #() '(a b c)) type-error)
+  t)
 
 (deftest notany.error.4
-  (classify-error (notany #'null 'a))
-  type-error)
+  (signals-error (notany #'null 'a) type-error)
+  t)
 
 (deftest notany.error.5
-  (classify-error (notany #'null 100))
-  type-error)
+  (signals-error (notany #'null 100) type-error)
+  t)
 
 (deftest notany.error.6
-  (classify-error (notany #'null 'a))
-  type-error)
+  (signals-error (notany #'null 'a) type-error)
+  t)
 
 (deftest notany.error.7
-  (classify-error (notany #'eq () 'a))
-  type-error)
+  (signals-error (notany #'eq () 'a) type-error)
+  t)
 
 (deftest notany.error.8
-  (classify-error (notany))
-  program-error)
+  (signals-error (notany) program-error)
+  t)
 
 (deftest notany.error.9
-  (classify-error (notany #'null))
-  program-error)
+  (signals-error (notany #'null) program-error)
+  t)
 
 (deftest notany.error.10
-  (classify-error (locally (notany 1 '(a b c)) t))
-  type-error)
+  (signals-error (locally (notany 1 '(a b c)) t) type-error)
+  t)
 
 (deftest notany.error.11
-  (classify-error (notany #'cons '(a b c)))
-  program-error)
+  (signals-error (notany #'cons '(a b c)) program-error)
+  t)
 
 (deftest notany.error.12
-  (classify-error (notany #'cons '(a b c) '(1 2 4) '(g h j)))
-  program-error)
+  (signals-error (notany #'cons '(a b c) '(1 2 4) '(g h j)) program-error)
+  t)
 
 (deftest notany.error.13
-  (classify-error (notany #'car '(a b c)))
-  type-error)
+  (signals-error (notany #'car '(a b c)) type-error)
+  t)

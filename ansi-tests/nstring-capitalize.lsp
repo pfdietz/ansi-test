@@ -92,26 +92,27 @@
 ;;; Error cases
 
 (deftest nstring-capitalize.error.1
-  (classify-error (nstring-capitalize))
-  program-error)
+  (signals-error (nstring-capitalize) program-error)
+  t)
 
 (deftest nstring-capitalize.error.2
-  (classify-error (nstring-capitalize (copy-seq "abc") :bad t))
-  program-error)
+  (signals-error (nstring-capitalize (copy-seq "abc") :bad t) program-error)
+  t)
 
 (deftest nstring-capitalize.error.3
-  (classify-error (nstring-capitalize (copy-seq "abc") :start))
-  program-error)
+  (signals-error (nstring-capitalize (copy-seq "abc") :start) program-error)
+  t)
 
 (deftest nstring-capitalize.error.4
-  (classify-error (nstring-capitalize (copy-seq "abc") :bad t
-				      :allow-other-keys nil))
-  program-error)
+  (signals-error (nstring-capitalize (copy-seq "abc") :bad t
+				      :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest nstring-capitalize.error.5
-  (classify-error (nstring-capitalize (copy-seq "abc") :end))
-  program-error)
+  (signals-error (nstring-capitalize (copy-seq "abc") :end) program-error)
+  t)
 
 (deftest nstring-capitalize.error.6
-  (classify-error (nstring-capitalize (copy-seq "abc") 1 2))
-  program-error)
+  (signals-error (nstring-capitalize (copy-seq "abc") 1 2) program-error)
+  t)

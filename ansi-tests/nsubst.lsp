@@ -135,41 +135,41 @@
 ;;; Error cases
 
 (deftest nsubst.error.1
-  (classify-error (nsubst))
-  program-error)
+  (signals-error (nsubst) program-error)
+  t)
 
 (deftest nsubst.error.2
-  (classify-error (nsubst 'a))
-  program-error)
+  (signals-error (nsubst 'a) program-error)
+  t)
 
 (deftest nsubst.error.3
-  (classify-error (nsubst 'a 'b))
-  program-error)
+  (signals-error (nsubst 'a 'b) program-error)
+  t)
 
 (deftest nsubst.error.4
-  (classify-error (nsubst 'a 'b nil :foo nil))
-  program-error)
+  (signals-error (nsubst 'a 'b nil :foo nil) program-error)
+  t)
 
 (deftest nsubst.error.5
-  (classify-error (nsubst 'a 'b nil :test))
-  program-error)
+  (signals-error (nsubst 'a 'b nil :test) program-error)
+  t)
 
 (deftest nsubst.error.6
-  (classify-error (nsubst 'a 'b nil 1))
-  program-error)
+  (signals-error (nsubst 'a 'b nil 1) program-error)
+  t)
 
 (deftest nsubst.error.7
-  (classify-error (nsubst 'a 'b nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nsubst 'a 'b nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest nsubst.error.8
-  (classify-error (nsubst 'a 'b (list 'a 'b) :test #'identity))
-  program-error)
+  (signals-error (nsubst 'a 'b (list 'a 'b) :test #'identity) program-error)
+  t)
 
 (deftest nsubst.error.9
-  (classify-error (nsubst 'a 'b (list 'a 'b) :test-not #'identity))
-  program-error)
+  (signals-error (nsubst 'a 'b (list 'a 'b) :test-not #'identity) program-error)
+  t)
 
 (deftest nsubst.error.10
-  (classify-error (nsubst 'a 'b (list 'a 'b) :key #'equal))
-  program-error)
+  (signals-error (nsubst 'a 'b (list 'a 'b) :key #'equal) program-error)
+  t)

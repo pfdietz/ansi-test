@@ -270,50 +270,50 @@
 ;;; Error tests
 
 (deftest nset-difference.error.1
-  (classify-error (nset-difference))
-  program-error)
+  (signals-error (nset-difference) program-error)
+  t)
 
 (deftest nset-difference.error.2
-  (classify-error (nset-difference nil))
-  program-error)
+  (signals-error (nset-difference nil) program-error)
+  t)
 
 (deftest nset-difference.error.3
-  (classify-error (nset-difference nil nil :bad t))
-  program-error)
+  (signals-error (nset-difference nil nil :bad t) program-error)
+  t)
 
 (deftest nset-difference.error.4
-  (classify-error (nset-difference nil nil :key))
-  program-error)
+  (signals-error (nset-difference nil nil :key) program-error)
+  t)
 
 (deftest nset-difference.error.5
-  (classify-error (nset-difference nil nil 1 2))
-  program-error)
+  (signals-error (nset-difference nil nil 1 2) program-error)
+  t)
 
 (deftest nset-difference.error.6
-  (classify-error (nset-difference nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nset-difference nil nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest nset-difference.error.7
-  (classify-error (nset-difference (list 1 2) (list 3 4) :test #'identity))
-  program-error)
+  (signals-error (nset-difference (list 1 2) (list 3 4) :test #'identity) program-error)
+  t)
 
 (deftest nset-difference.error.8
-  (classify-error (nset-difference (list 1 2) (list 3 4) :test-not #'identity))
-  program-error)
+  (signals-error (nset-difference (list 1 2) (list 3 4) :test-not #'identity) program-error)
+  t)
 
 (deftest nset-difference.error.9
-  (classify-error (nset-difference (list 1 2) (list 3 4) :key #'cons))
-  program-error)
+  (signals-error (nset-difference (list 1 2) (list 3 4) :key #'cons) program-error)
+  t)
 
 (deftest nset-difference.error.10
-  (classify-error (nset-difference (list 1 2) (list 3 4) :key #'car))
-  type-error)
+  (signals-error (nset-difference (list 1 2) (list 3 4) :key #'car) type-error)
+  t)
 
 (deftest nset-difference.error.11
-  (classify-error (nset-difference (list 1 2 3) (list* 4 5 6)))
-  type-error)
+  (signals-error (nset-difference (list 1 2 3) (list* 4 5 6)) type-error)
+  t)
 
 (deftest nset-difference.error.12
-  (classify-error (nset-difference (list* 1 2 3) (list 4 5 6)))
-  type-error)
+  (signals-error (nset-difference (list* 1 2 3) (list 4 5 6)) type-error)
+  t)
 

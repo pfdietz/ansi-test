@@ -10,28 +10,28 @@
 ;;; Errors tests on comparison functions
 
 (deftest =.error.1
-  (classify-error (=))
-  program-error)
+  (signals-error (=) program-error)
+  t)
 
 (deftest /=.error.1
-  (classify-error (/=))
-  program-error)
+  (signals-error (/=) program-error)
+  t)
 
 (deftest <.error.1
-  (classify-error (<))
-  program-error)
+  (signals-error (<) program-error)
+  t)
 
 (deftest <=.error.1
-  (classify-error (<=))
-  program-error)
+  (signals-error (<=) program-error)
+  t)
 
 (deftest >.error.1
-  (classify-error (>))
-  program-error)
+  (signals-error (>) program-error)
+  t)
 
 (deftest >=.error.1
-  (classify-error (>=))
-  program-error)
+  (signals-error (>=) program-error)
+  t)
 
 ;;; Tests of =
 

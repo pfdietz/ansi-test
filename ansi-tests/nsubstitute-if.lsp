@@ -706,48 +706,48 @@
 ;;; Error cases
 
 (deftest nsubstitute-if.error.1
-  (classify-error (nsubstitute-if))
-  program-error)
+  (signals-error (nsubstitute-if) program-error)
+  t)
 
 (deftest nsubstitute-if.error.2
-  (classify-error (nsubstitute-if 'a))
-  program-error)
+  (signals-error (nsubstitute-if 'a) program-error)
+  t)
 
 (deftest nsubstitute-if.error.3
-  (classify-error (nsubstitute-if 'a #'null))
-  program-error)
+  (signals-error (nsubstitute-if 'a #'null) program-error)
+  t)
 
 (deftest nsubstitute-if.error.4
-  (classify-error (nsubstitute-if 'a #'null nil 'bad t))
-  program-error)
+  (signals-error (nsubstitute-if 'a #'null nil 'bad t) program-error)
+  t)
 
 (deftest nsubstitute-if.error.5
-  (classify-error (nsubstitute-if 'a #'null nil 'bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nsubstitute-if 'a #'null nil 'bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest nsubstitute-if.error.6
-  (classify-error (nsubstitute-if 'a #'null nil :key))
-  program-error)
+  (signals-error (nsubstitute-if 'a #'null nil :key) program-error)
+  t)
 
 (deftest nsubstitute-if.error.7
-  (classify-error (nsubstitute-if 'a #'null nil 1 2))
-  program-error)
+  (signals-error (nsubstitute-if 'a #'null nil 1 2) program-error)
+  t)
 
 (deftest nsubstitute-if.error.8
-  (classify-error (nsubstitute-if 'a #'cons (list 'a 'b 'c)))
-  program-error)
+  (signals-error (nsubstitute-if 'a #'cons (list 'a 'b 'c)) program-error)
+  t)
 
 (deftest nsubstitute-if.error.9
-  (classify-error (nsubstitute-if 'a #'car (list 'a 'b 'c)))
-  type-error)
+  (signals-error (nsubstitute-if 'a #'car (list 'a 'b 'c)) type-error)
+  t)
 
 (deftest nsubstitute-if.error.10
-  (classify-error (nsubstitute-if 'a #'identity (list 'a 'b 'c)
-				  :key #'car))
-  type-error)
+  (signals-error (nsubstitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'car) type-error)
+  t)
 
 (deftest nsubstitute-if.error.11
-  (classify-error (nsubstitute-if 'a #'identity (list 'a 'b 'c)
-				  :key #'cons))
-  program-error)
+  (signals-error (nsubstitute-if 'a #'identity (list 'a 'b 'c)
+				  :key #'cons) program-error)
+  t)
 

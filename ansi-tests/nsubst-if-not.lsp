@@ -85,35 +85,35 @@
 ;;; error cases
 
 (deftest nsubst-if-not.error.1
-  (classify-error (nsubst-if-not))
-  program-error)
+  (signals-error (nsubst-if-not) program-error)
+  t)
 
 (deftest nsubst-if-not.error.2
-  (classify-error (nsubst-if-not 'a))
-  program-error)
+  (signals-error (nsubst-if-not 'a) program-error)
+  t)
 
 (deftest nsubst-if-not.error.3
-  (classify-error (nsubst-if-not 'a #'null))
-  program-error)
+  (signals-error (nsubst-if-not 'a #'null) program-error)
+  t)
 
 (deftest nsubst-if-not.error.4
-  (classify-error (nsubst-if-not 'a #'null nil :foo nil))
-  program-error)
+  (signals-error (nsubst-if-not 'a #'null nil :foo nil) program-error)
+  t)
 
 (deftest nsubst-if-not.error.5
-  (classify-error (nsubst-if-not 'a #'null nil :test))
-  program-error)
+  (signals-error (nsubst-if-not 'a #'null nil :test) program-error)
+  t)
 
 (deftest nsubst-if-not.error.6
-  (classify-error (nsubst-if-not 'a #'null nil 1))
-  program-error)
+  (signals-error (nsubst-if-not 'a #'null nil 1) program-error)
+  t)
 
 (deftest nsubst-if-not.error.7
-  (classify-error (nsubst-if-not 'a #'null nil
-				 :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nsubst-if-not 'a #'null nil
+				 :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest nsubst-if-not.error.8
-  (classify-error (nsubst-if-not 'a #'null (list 'a nil 'c) :key #'cons))
-  program-error)
+  (signals-error (nsubst-if-not 'a #'null (list 'a nil 'c) :key #'cons) program-error)
+  t)
 

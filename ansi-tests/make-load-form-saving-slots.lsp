@@ -179,15 +179,17 @@
 ;;; General error tests
 
 (deftest make-load-form-saving-slots.error.1
-  (classify-error (make-load-form-saving-slots))
-  program-error)
+  (signals-error (make-load-form-saving-slots) program-error)
+  t)
 
 (deftest make-load-form-saving-slots.error.2
-  (classify-error (make-load-form-saving-slots (make-instance 'mlfss-02)
-					       :slot-names))
-  program-error)
+  (signals-error (make-load-form-saving-slots (make-instance 'mlfss-02)
+					       :slot-names)
+		 program-error)
+  t)
 
 (deftest make-load-form-saving-slots.error.3
-  (classify-error (make-load-form-saving-slots (make-instance 'mlfss-02)
-					       (gensym) t))
-  program-error)
+  (signals-error (make-load-form-saving-slots (make-instance 'mlfss-02)
+					       (gensym) t)
+		 program-error)
+  t)

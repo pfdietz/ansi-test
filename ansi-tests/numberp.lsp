@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest numberp.error.1
-  (classify-error (numberp))
-  program-error)
+  (signals-error (numberp) program-error)
+  t)
 
 (deftest numberp.error.2
-  (classify-error (numberp 0 nil))
-  program-error)
+  (signals-error (numberp 0 nil) program-error)
+  t)
 
 (deftest numberp.error.3
-  (classify-error (numberp 'a nil nil))
-  program-error)
+  (signals-error (numberp 'a nil nil) program-error)
+  t)
 
 (deftest numberp.1
   (loop for x in *universe*

@@ -108,17 +108,21 @@
   nil)
 
 (deftest multiple-value-setq.error.1
-  (classify-error (funcall (macro-function 'multiple-value-setq)))
-  program-error)
+  (signals-error (funcall (macro-function 'multiple-value-setq))
+		 program-error)
+  t)
   
 (deftest multiple-value-setq.error.2
-  (classify-error (funcall (macro-function 'multiple-value-setq)
-			   '(multiple-value-setq nil nil)))
-  program-error)
+  (signals-error (funcall (macro-function 'multiple-value-setq)
+			   '(multiple-value-setq nil nil))
+		 program-error)
+  t)
 
 (deftest multiple-value-setq.error.3
-  (classify-error (funcall (macro-function 'multiple-value-setq)
+  (signals-error (funcall (macro-function 'multiple-value-setq)
 			   '(multiple-value-setq nil nil)
-			   nil nil))
-  program-error)
+			   nil nil)
+		 program-error)
+  t)
+
   

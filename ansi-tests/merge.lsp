@@ -499,74 +499,87 @@
 
 (deftest merge.error.1
   (handler-case (eval
-		 '(locally (declare (optimize (safety 3)))
+		 '(locally (declare (optimize safety))
 			   (merge 'symbol (list 1 2 3) (list 4 5 6) #'<)))
 		(error () :caught))
   :caught)
 
 (deftest merge.error.2
-  (classify-error (merge '(vector * 3) (list 1 2 3) (list 4 5 6) #'<))
-  type-error)
+  (signals-error (merge '(vector * 3) (list 1 2 3) (list 4 5 6) #'<)
+		 type-error)
+  t)
 
 (deftest merge.error.3
-  (classify-error (merge '(bit-vector 3) (list 0 0 0) (list 1 1 1) #'<))
-  type-error)
+  (signals-error (merge '(bit-vector 3) (list 0 0 0) (list 1 1 1) #'<)
+		 type-error)
+  t)
 
 (deftest merge.error.4
-  (classify-error (merge '(vector * 7) (list 1 2 3) (list 4 5 6) #'<))
-  type-error)
+  (signals-error (merge '(vector * 7) (list 1 2 3) (list 4 5 6) #'<)
+		 type-error)
+  t)
 
 (deftest merge.error.5
-  (classify-error (merge '(bit-vector 7) (list 0 0 0) (list 1 1 1) #'<))
-  type-error)
+  (signals-error (merge '(bit-vector 7) (list 0 0 0) (list 1 1 1) #'<)
+		 type-error)
+  t)
 
 (deftest merge.error.6
-  (classify-error (merge 'null (list 1 2 3) (list 4 5 6) #'<))
-  type-error)
+  (signals-error (merge 'null (list 1 2 3) (list 4 5 6) #'<)
+		 type-error)
+  t)
 
 (deftest merge.error.7
-  (classify-error (merge))
-  program-error)
+  (signals-error (merge) program-error)
+  t)
 
 (deftest merge.error.8
-  (classify-error (merge 'list))
-  program-error)
+  (signals-error (merge 'list) program-error)
+  t)
 
 (deftest merge.error.9
-  (classify-error (merge 'list (list 2 4 6)))
-  program-error)
+  (signals-error (merge 'list (list 2 4 6)) program-error)
+  t)
 
 (deftest merge.error.10
-  (classify-error (merge 'list (list 2 4 6) (list 1 3 5)))
-  program-error)
+  (signals-error (merge 'list (list 2 4 6) (list 1 3 5))
+		 program-error)
+  t)
 
 (deftest merge.error.11
-  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :bad t))
-  program-error)
+  (signals-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :bad t)
+		 program-error)
+  t)
 
 (deftest merge.error.12
-  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :key))
-  program-error)
+  (signals-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :key)
+		 program-error)
+  t)
 
 (deftest merge.error.13
-  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :bad t
-			 :allow-other-keys nil))
-  program-error)
+  (signals-error (merge 'list (list 2 4 6) (list 1 3 5) #'< :bad t
+			 :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest merge.error.14
-  (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< 1 2))
-  program-error)
+  (signals-error (merge 'list (list 2 4 6) (list 1 3 5) #'< 1 2)
+		 program-error)
+  t)
 
 (deftest merge.error.15
-  (classify-error (locally (merge '(vector * 3) (list 1 2 3)
+  (signals-error (locally (merge '(vector * 3) (list 1 2 3)
 				  (list 4 5 6) #'<)
-			   t))
-  type-error)
+			   t)
+		 type-error)
+  t)  
 
 (deftest merge.error.16
-  (classify-error (merge 'list (list 1 2) (list 3 4) #'car))
-  program-error)
+  (signals-error (merge 'list (list 1 2) (list 3 4) #'car)
+		 program-error)
+  t)
 
 (deftest merge.error.17
-  (classify-error (merge 'list (list 'a 'b) (list 3 4) #'max))
-  type-error)
+  (signals-error (merge 'list (list 'a 'b) (list 3 4) #'max)
+		 type-error)
+  t)

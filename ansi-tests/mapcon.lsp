@@ -52,34 +52,33 @@
   3 1 2 3)
 
 (deftest mapcon.error.1
-  (classify-error (mapcon #'identity 1))
-  type-error)
+  (signals-error (mapcon #'identity 1) type-error)
+  t)
 
 (deftest mapcon.error.2
-  (classify-error (mapcon))
-  program-error)
+  (signals-error (mapcon) program-error)
+  t)
 
 (deftest mapcon.error.3
-  (classify-error (mapcon #'append))
-  program-error)
+  (signals-error (mapcon #'append) program-error)
+  t)
 
 (deftest mapcon.error.4
-  (classify-error (locally (mapcon #'identity 1) t))
-  type-error)
+  (signals-error (locally (mapcon #'identity 1) t) type-error)
+  t)
 
 (deftest mapcon.error.5
-  (classify-error (mapcon #'caar '(a b c)))
-  type-error)
+  (signals-error (mapcon #'caar '(a b c)) type-error)
+  t)
 
 (deftest mapcon.error.6
-  (classify-error (mapcon #'cons '(a b c)))
-  program-error)
+  (signals-error (mapcon #'cons '(a b c)) program-error)
+  t)
 
 (deftest mapcon.error.7
-  (classify-error (mapcon #'cons '(a b c) '(1 2 3) '(4 5 6)))
-  program-error)
+  (signals-error (mapcon #'cons '(a b c) '(1 2 3) '(4 5 6)) program-error)
+  t)
 
 (deftest mapcon.error.8
-  (classify-error (mapcon #'copy-tree (cons 1 2)))
-  type-error)
-
+  (signals-error (mapcon #'copy-tree (cons 1 2)) type-error)
+  t)

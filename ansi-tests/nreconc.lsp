@@ -26,17 +26,17 @@
   (c b a d e f) 2 1 2)
 
 (deftest nreconc.error.1
-  (classify-error (nreconc))
-  program-error)
+  (signals-error (nreconc) program-error)
+  t)
 
 (deftest nreconc.error.2
-  (classify-error (nreconc nil))
-  program-error)
+  (signals-error (nreconc nil) program-error)
+  t)
 
 (deftest nreconc.error.3
-  (classify-error (nreconc nil nil nil))
-  program-error)
+  (signals-error (nreconc nil nil nil) program-error)
+  t)
 
 (deftest nreconc.error.4
-  (classify-error (nreconc (cons 'a 'b) (list 'z)))
-  type-error)
+  (signals-error (nreconc (cons 'a 'b) (list 'z)) type-error)
+  t)

@@ -50,9 +50,9 @@
 ;;; Need tests on user-defined method combinations
 
 (deftest method-qualifiers.error.1
-  (classify-error (method-qualifiers))
-  program-error)
+  (signals-error (method-qualifiers) program-error)
+  t)
 
 (deftest method-qualifiers.error.2
-  (classify-error (method-qualifiers *mq-method-4* nil))
-  program-error)
+  (signals-error (method-qualifiers *mq-method-4* nil) program-error)
+  t)

@@ -701,41 +701,43 @@
 ;;; Error cases
 
 (deftest mismatch.error.1
-  (classify-error (mismatch))
-  program-error)
+  (signals-error (mismatch) program-error)
+  t)
 
 (deftest mismatch.error.2
-  (classify-error (mismatch nil))
-  program-error)
+  (signals-error (mismatch nil) program-error)
+  t)
 
 (deftest mismatch.error.3
-  (classify-error (mismatch nil nil :bad t))
-  program-error)
+  (signals-error (mismatch nil nil :bad t) program-error)
+  t)
 
 (deftest mismatch.error.4
-  (classify-error (mismatch nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (mismatch nil nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest mismatch.error.5
-  (classify-error (mismatch nil nil :key))
-  program-error)
+  (signals-error (mismatch nil nil :key) program-error)
+  t)
 
 (deftest mismatch.error.6
-  (classify-error (mismatch nil nil 1 2))
-  program-error)
+  (signals-error (mismatch nil nil 1 2) program-error)
+  t)
 
 (deftest mismatch.error.7
-  (classify-error (mismatch '(a b) '(a b) :test #'identity))
-  program-error)
+  (signals-error (mismatch '(a b) '(a b) :test #'identity) program-error)
+  t)
 
 (deftest mismatch.error.8
-  (classify-error (mismatch '(a b) '(a b) :test-not #'identity))
-  program-error)
+  (signals-error (mismatch '(a b) '(a b) :test-not #'identity) program-error)
+  t)
 
 (deftest mismatch.error.9
-  (classify-error (mismatch '(a b) '(a b) :key #'car))
-  type-error)
+  (signals-error (mismatch '(a b) '(a b) :key #'car) type-error)
+  t)
 
 (deftest mismatch.error.10
-  (classify-error (mismatch '(a b) '(a b) :key #'cons))
-  program-error)
+  (signals-error (mismatch '(a b) '(a b) :key #'cons) program-error)
+  t)
+

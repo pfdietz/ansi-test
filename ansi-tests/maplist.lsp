@@ -93,46 +93,49 @@
   (1 2 3) 3 1 2 3)
 
 (deftest maplist.error.1
-  (classify-error (maplist #'identity 'a))
-  type-error)
+  (signals-error (maplist #'identity 'a) type-error)
+  t)
 
 (deftest maplist.error.2
-  (classify-error (maplist #'identity 1))
-  type-error)
+  (signals-error (maplist #'identity 1) type-error)
+  t)
 
 (deftest maplist.error.3
-  (classify-error (maplist #'identity 1.1323))
-  type-error)
+  (signals-error (maplist #'identity 1.1323) type-error)
+  t)
 
 (deftest maplist.error.4
-  (classify-error (maplist #'identity "abcde"))
-  type-error)
+  (signals-error (maplist #'identity "abcde") type-error)
+  t)
 
 (deftest maplist.error.5
-  (classify-error (maplist))
-  program-error)
+  (signals-error (maplist) program-error)
+  t)
 
 (deftest maplist.error.6
-  (classify-error (maplist #'append))
-  program-error)
+  (signals-error (maplist #'append) program-error)
+  t)
 
 (deftest maplist.error.7
-  (classify-error (locally (maplist #'identity 'a) t))
-  type-error)
+  (signals-error (locally (maplist #'identity 'a) t) type-error)
+  t)
 
 (deftest maplist.error.8
-  (classify-error (maplist #'caar '(a b c)))
-  type-error)
+  (signals-error (maplist #'caar '(a b c)) type-error)
+  t)
 
 (deftest maplist.error.9
-  (classify-error (maplist #'cons '(a b c)))
-  program-error)
+  (signals-error (maplist #'cons '(a b c)) program-error)
+  t)
 
 (deftest maplist.error.10
-  (classify-error (maplist #'cons '(a b c) '(1 2 3) '(4 5 6)))
-  program-error)
+  (signals-error (maplist #'cons '(a b c) '(1 2 3) '(4 5 6))
+		 program-error)
+  t)
 
 (deftest maplist.error.11
-  (classify-error (maplist #'identity (list* (list 1) (list 2) 3)))
-  type-error)
+  (signals-error (maplist #'identity (list* (list 1) (list 2) 3))
+		 type-error)
+  t)
+
 

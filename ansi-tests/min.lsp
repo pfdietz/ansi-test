@@ -8,22 +8,20 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest min.error.1
-  (classify-error (min))
-  program-error)
+  (signals-error (min) program-error)
+  t)
 
 (deftest min.error.2
   (loop for x in *mini-universe*
 	unless (or (realp x)
-		   (eq (eval `(classify-error (min ',x)))
-		       'type-error))
+		   (eval `(signals-error (min ',x) type-error)))
 	collect x)
   nil)
 
 (deftest min.error.3
   (loop for x in *mini-universe*
 	unless (or (realp x)
-		   (eq (classify-error** `(classify-error (min 0 ',x)))
-		       'type-error))
+		   (eval `(signals-error (min 0 ',x) type-error)))
 	collect x)
   nil)
 

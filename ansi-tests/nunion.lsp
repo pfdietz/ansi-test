@@ -360,49 +360,49 @@
 ;;; Error tests
 
 (deftest nunion.error.1
-  (classify-error (nunion))
-  program-error)
+  (signals-error (nunion) program-error)
+  t)
 
 (deftest nunion.error.2
-  (classify-error (nunion nil))
-  program-error)
+  (signals-error (nunion nil) program-error)
+  t)
 
 (deftest nunion.error.3
-  (classify-error (nunion nil nil :bad t))
-  program-error)
+  (signals-error (nunion nil nil :bad t) program-error)
+  t)
 
 (deftest nunion.error.4
-  (classify-error (nunion nil nil :key))
-  program-error)
+  (signals-error (nunion nil nil :key) program-error)
+  t)
 
 (deftest nunion.error.5
-  (classify-error (nunion nil nil 1 2))
-  program-error)
+  (signals-error (nunion nil nil 1 2) program-error)
+  t)
 
 (deftest nunion.error.6
-  (classify-error (nunion nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nunion nil nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest nunion.error.7
-  (classify-error (nunion (list 1 2) (list 3 4) :test #'identity))
-  program-error)
+  (signals-error (nunion (list 1 2) (list 3 4) :test #'identity) program-error)
+  t)
 
 (deftest nunion.error.8
-  (classify-error (nunion (list 1 2) (list 3 4) :test-not #'identity))
-  program-error)
+  (signals-error (nunion (list 1 2) (list 3 4) :test-not #'identity) program-error)
+  t)
 
 (deftest nunion.error.9
-  (classify-error (nunion (list 1 2) (list 3 4) :key #'cons))
-  program-error)
+  (signals-error (nunion (list 1 2) (list 3 4) :key #'cons) program-error)
+  t)
 
 (deftest nunion.error.10
-  (classify-error (nunion (list 1 2) (list 3 4) :key #'car))
-  type-error)
+  (signals-error (nunion (list 1 2) (list 3 4) :key #'car) type-error)
+  t)
 
 (deftest nunion.error.11
-  (classify-error (nunion (list 1 2 3) (list* 4 5 6)))
-  type-error)
+  (signals-error (nunion (list 1 2 3) (list* 4 5 6)) type-error)
+  t)
 
 (deftest nunion.error.12
-  (classify-error (nunion (list* 1 2 3) (list 4 5 6)))
-  type-error)
+  (signals-error (nunion (list* 1 2 3) (list 4 5 6)) type-error)
+  t)

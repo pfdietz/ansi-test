@@ -318,50 +318,50 @@
   nil)
 
 (deftest nintersection.error.1
-  (classify-error (nintersection))
-  program-error)
+  (signals-error (nintersection) program-error)
+  t)
 
 (deftest nintersection.error.2
-  (classify-error (nintersection nil))
-  program-error)
+  (signals-error (nintersection nil) program-error)
+  t)
 
 (deftest nintersection.error.3
-  (classify-error (nintersection nil nil :bad t))
-  program-error)
+  (signals-error (nintersection nil nil :bad t) program-error)
+  t)
 
 (deftest nintersection.error.4
-  (classify-error (nintersection nil nil :key))
-  program-error)
+  (signals-error (nintersection nil nil :key) program-error)
+  t)
 
 (deftest nintersection.error.5
-  (classify-error (nintersection nil nil 1 2))
-  program-error)
+  (signals-error (nintersection nil nil 1 2) program-error)
+  t)
 
 (deftest nintersection.error.6
-  (classify-error (nintersection nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (nintersection nil nil :bad t :allow-other-keys nil) program-error)
+  t)
 
 (deftest nintersection.error.7
-  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :test #'identity))
-  program-error)
+  (signals-error (nintersection (list 1 2 3) (list 4 5 6) :test #'identity) program-error)
+  t)
 
 (deftest nintersection.error.8
-  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :test-not #'identity))
-  program-error)
+  (signals-error (nintersection (list 1 2 3) (list 4 5 6) :test-not #'identity) program-error)
+  t)
 
 (deftest nintersection.error.9
-  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :key #'cons))
-  program-error)
+  (signals-error (nintersection (list 1 2 3) (list 4 5 6) :key #'cons) program-error)
+  t)
 
 (deftest nintersection.error.10
-  (classify-error (nintersection (list 1 2 3) (list 4 5 6) :key #'car))
-  type-error)
+  (signals-error (nintersection (list 1 2 3) (list 4 5 6) :key #'car) type-error)
+  t)
 
 (deftest nintersection.error.11
-  (classify-error (nintersection (list 1 2 3) (list* 4 5 6 7)))
-  type-error)
+  (signals-error (nintersection (list 1 2 3) (list* 4 5 6 7)) type-error)
+  t)
 
 (deftest nintersection.error.12
-  (classify-error (nintersection (list* 1 2 3) (list 4 5 6)))
-  type-error)
+  (signals-error (nintersection (list* 1 2 3) (list 4 5 6)) type-error)
+  t)
 

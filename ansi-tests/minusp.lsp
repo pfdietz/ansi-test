@@ -6,21 +6,21 @@
 (in-package :cl-test)
 
 (deftest minusp.error.1
-  (classify-error (minusp))
-  program-error)
+  (signals-error (minusp) program-error)
+  t)
 
 (deftest minusp.error.2
-  (classify-error (minusp 0 0))
-  program-error)
+  (signals-error (minusp 0 0) program-error)
+  t)
 
 (deftest minusp.error.3
-  (classify-error (minusp 0 nil))
-  program-error)
+  (signals-error (minusp 0 nil) program-error)
+  t)
 
 (deftest minusp.error.4
   (loop for x in *mini-universe*
 	unless (realp x)
-	unless (eql (classify-error** `(minusp ',x)) 'type-error)
+	unless (eval `(signals-error (minusp ',x) type-error))
 	collect x)
   nil)
 

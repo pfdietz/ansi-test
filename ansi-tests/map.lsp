@@ -170,36 +170,37 @@
   :caught)
 
 (deftest map.error.2
-  (classify-error (map '(vector * 8) #'identity '(a b c)))
-  type-error)
+  (signals-error (map '(vector * 8) #'identity '(a b c)) type-error)
+  t)
 
 (deftest map.error.3
-  (classify-error (map 'list #'identity '(a b . c)))
-  type-error)
+  (signals-error (map 'list #'identity '(a b . c)) type-error)
+  t)
 
 (deftest map.error.4
-  (classify-error (map))
-  program-error)
+  (signals-error (map) program-error)
+  t)
 
 (deftest map.error.5
-  (classify-error (map 'list))
-  program-error)
+  (signals-error (map 'list) program-error)
+  t)
 
 (deftest map.error.6
-  (classify-error (map 'list #'null))
-  program-error)
+  (signals-error (map 'list #'null) program-error)
+  t)
 
 (deftest map.error.7
-  (classify-error (map 'list #'cons '(a b c d)))
-  program-error)
+  (signals-error (map 'list #'cons '(a b c d)) program-error)
+  t)
 
 (deftest map.error.8
-  (classify-error (map 'list #'cons '(a b c d) '(1 2 3 4) '(5 6 7 8)))
-  program-error)
+  (signals-error (map 'list #'cons '(a b c d) '(1 2 3 4) '(5 6 7 8))
+		 program-error)
+  t)
 
 (deftest map.error.9
-  (classify-error (map 'list #'car '(a b c d)))
-  type-error)
+  (signals-error (map 'list #'car '(a b c d)) type-error)
+  t)
 
 
 ;;; Test mapping on arrays with fill pointers

@@ -24,12 +24,12 @@
   t)
 
 (deftest null.error.1
-  (classify-error (null))
-  program-error)
+  (signals-error (null) program-error)
+  t)
 
 (deftest null.error.2
-  (classify-error (null nil nil))
-  program-error)
+  (signals-error (null nil nil) program-error)
+  t)
 
 (deftest not.1
   (not nil)
@@ -51,9 +51,9 @@
 
 
 (deftest not.error.1
-  (classify-error (not))
-  program-error)
+  (signals-error (not) program-error)
+  t)
 
 (deftest not.error.2
-  (classify-error (not nil nil))
-  program-error)
+  (signals-error (not nil nil) program-error)
+  t)

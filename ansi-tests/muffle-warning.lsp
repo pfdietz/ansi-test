@@ -42,12 +42,14 @@
   good)
 
 (deftest muffle-warning.5
-  (classify-error
+  (signals-error
    (let ((c1 (make-condition 'error))
 	 (c2 (make-condition 'error)))
      (with-condition-restarts
       c1
       (compute-restarts)
       ;; All conditions are now associated with c1
-      (muffle-warning c2))))
-  control-error)
+      (muffle-warning c2)))
+   control-error)
+  t)
+

@@ -72,33 +72,33 @@
   (a b c) 3 1 2 3)
 
 (deftest mapc.error.1
-  (classify-error (mapc #'identity 1))
-  type-error)
+  (signals-error (mapc #'identity 1) type-error)
+  t)
 
 (deftest mapc.error.2
-  (classify-error (mapc))
-  program-error)
+  (signals-error (mapc) program-error)
+  t)
 
 (deftest mapc.error.3
-  (classify-error (mapc #'append))
-  program-error)
+  (signals-error (mapc #'append) program-error)
+  t)
 
 (deftest mapc.error.4
-  (classify-error (locally (mapc #'identity 1) t))
-  type-error)
+  (signals-error (locally (mapc #'identity 1) t) type-error)
+  t)
 
 (deftest mapc.error.5
-  (classify-error (mapc #'cons '(a b c)))
-  program-error)
+  (signals-error (mapc #'cons '(a b c)) program-error)
+  t)
 
 (deftest mapc.error.6
-  (classify-error (mapc #'cons '(a b c) '(1 2 3) '(4 5 6)))
-  program-error)
+  (signals-error (mapc #'cons '(a b c) '(1 2 3) '(4 5 6)) program-error)
+  t)
 
 (deftest mapc.error.7
-  (classify-error (mapc #'car '(a b c)))
-  type-error)
+  (signals-error (mapc #'car '(a b c)) type-error)
+  t)
 
 (deftest mapc.error.8
-  (classify-error (mapc #'identity (list* 1 2 3 4)))
-  type-error)
+  (signals-error (mapc #'identity (list* 1 2 3 4)) type-error)
+  t)

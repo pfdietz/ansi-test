@@ -94,33 +94,33 @@
   (d c b a) 1)
 
 (deftest nreverse.error.1
-  (classify-error (nreverse 'a))
-  type-error)
+  (signals-error (nreverse 'a) type-error)
+  t)
 
 (deftest nreverse.error.2
-  (classify-error (nreverse #\a))
-  type-error)
+  (signals-error (nreverse #\a) type-error)
+  t)
 
 (deftest nreverse.error.3
-  (classify-error (nreverse 10))
-  type-error)
+  (signals-error (nreverse 10) type-error)
+  t)
 
 (deftest nreverse.error.4
-  (classify-error (nreverse 0.3))
-  type-error)
+  (signals-error (nreverse 0.3) type-error)
+  t)
 
 (deftest nreverse.error.5
-  (classify-error (nreverse 10/3))
-  type-error)
+  (signals-error (nreverse 10/3) type-error)
+  t)
 
 (deftest nreverse.error.6
-  (classify-error (nreverse))
-  program-error)
+  (signals-error (nreverse) program-error)
+  t)
 
 (deftest nreverse.error.7
-  (classify-error (nreverse nil nil))
-  program-error)
+  (signals-error (nreverse nil nil) program-error)
+  t)
 
 (deftest nreverse.error.8
-  (classify-error (locally (nreverse 'a) t))
-  type-error)
+  (signals-error (locally (nreverse 'a) t) type-error)
+  t)

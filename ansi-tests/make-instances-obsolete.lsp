@@ -34,11 +34,12 @@
 ;;; Error cases
 
 (deftest make-instances-obsolete.error.1
-  (classify-error (make-instances-obsolete))
-  program-error)
+  (signals-error (make-instances-obsolete) program-error)
+  t)
 
 (deftest make-instances-obsolete.error.2
-  (classify-error (make-instances-obsolete
+  (signals-error (make-instances-obsolete
 		   (find-class 'make-instances-obsolete-class-01)
-		   nil))
-  program-error)
+		   nil)
+		 program-error)
+  t)

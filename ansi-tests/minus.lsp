@@ -8,8 +8,8 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest minus.error.1
-  (classify-error (-))
-  program-error)
+  (signals-error (-) program-error)
+  t)
 
 ;;; Unary minus tests
 (deftest minus.1

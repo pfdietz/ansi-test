@@ -8,20 +8,20 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest numerator.error.1
-  (classify-error (numerator))
-  program-error)
+  (signals-error (numerator) program-error)
+  t)
 
 (deftest numerator.error.2
-  (classify-error (numerator 1/2 nil))
-  program-error)
+  (signals-error (numerator 1/2 nil) program-error)
+  t)
 
 (deftest denominator.error.1
-  (classify-error (denominator))
-  program-error)
+  (signals-error (denominator) program-error)
+  t)
 
 (deftest denominator.error.2
-  (classify-error (denominator 1/2 nil))
-  program-error)
+  (signals-error (denominator 1/2 nil) program-error)
+  t)
 
 (deftest numerator-denominator.1
   (loop for n = (abs (random-fixnum))

@@ -71,12 +71,9 @@
 ;;; Error tests
 
 (deftest next-method-p.error.1
-  (classify-error
+  (signals-error
    (progn
      (eval '(defmethod nmp-gf-06 ((x t)) (next-method-p nil)))
-     (nmp-gf-06 nil)))
-  program-error)
-
-
-
-
+     (nmp-gf-06 nil))
+   program-error)
+  t)

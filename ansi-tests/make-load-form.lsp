@@ -208,13 +208,12 @@
 ;;; Other error tests
 
 (deftest make-load-form.error.1
-  (classify-error (make-load-form))
-  program-error)
+  (signals-error (make-load-form) program-error)
+  t)
 
 (deftest make-load-form.error.2
-  (classify-error
+  (signals-error
    (let ((obj (make-instance 'make-load-form-class-04 :b '(a b c) :c 'a)))
-     (make-load-form obj nil nil)))
-  program-error)
-
-
+     (make-load-form obj nil nil))
+   program-error)
+  t)

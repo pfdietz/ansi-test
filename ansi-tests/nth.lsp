@@ -39,17 +39,17 @@
   b 2 1 2)
 
 (deftest nth.error.1
-  (classify-error (nth))
-  program-error)
+  (signals-error (nth) program-error)
+  t)
 
 (deftest nth.error.2
-  (classify-error (nth 0))
-  program-error)
+  (signals-error (nth 0) program-error)
+  t)
 
 (deftest nth.error.3
-  (classify-error (nth 1 '(a b c) nil))
-  program-error)
+  (signals-error (nth 1 '(a b c) nil) program-error)
+  t)
 
 (deftest nth.error.4
-  (classify-error (nth 0 '(a b c) nil))
-  program-error)
+  (signals-error (nth 0 '(a b c) nil) program-error)
+  t)

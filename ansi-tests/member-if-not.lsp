@@ -93,41 +93,44 @@
 ;;; Error tests
 
 (deftest member-if-not.error.1
-  (classify-error (member-if-not #'identity 'a))
-  type-error)
+  (signals-error (member-if-not #'identity 'a) type-error)
+  t)
   
 (deftest member-if-not.error.2
-  (classify-error (member-if-not))
-  program-error)
+  (signals-error (member-if-not) program-error)
+  t)
   
 (deftest member-if-not.error.3
-  (classify-error (member-if-not #'null))
-  program-error)
+  (signals-error (member-if-not #'null) program-error)
+  t)
   
 (deftest member-if-not.error.4
-  (classify-error (member-if-not #'null '(a b c) :bad t))
-  program-error)
+  (signals-error (member-if-not #'null '(a b c) :bad t) program-error)
+  t)
   
 (deftest member-if-not.error.5
-  (classify-error (member-if-not #'null '(a b c) :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (member-if-not #'null '(a b c) :bad t :allow-other-keys nil)
+		 program-error)
+  t)
   
 (deftest member-if-not.error.6
-  (classify-error (member-if-not #'null '(a b c) :key))
-  program-error)
+  (signals-error (member-if-not #'null '(a b c) :key) program-error)
+  t)
   
 (deftest member-if-not.error.7
-  (classify-error (member-if-not #'null '(a b c) 1 2))
-  program-error)
+  (signals-error (member-if-not #'null '(a b c) 1 2) program-error)
+  t)
 
 (deftest member-if-not.error.8
-  (classify-error (locally (member-if-not #'identity 'a) t))
-  type-error)
+  (signals-error (locally (member-if-not #'identity 'a) t)
+		 type-error)
+  t)
 
 (deftest member-if-not.error.9
-  (classify-error (member-if-not #'cons '(a b c)))
-  program-error)
+  (signals-error (member-if-not #'cons '(a b c)) program-error)
+  t)
 
 (deftest member-if-not.error.10
-  (classify-error (member-if-not #'identity '(a b c) :key #'cons))
-  program-error)
+  (signals-error (member-if-not #'identity '(a b c) :key #'cons)
+		 program-error)
+  t)

@@ -7,17 +7,20 @@
 
 (compile-and-load "numbers-aux.lsp")
 
+;;; Error tests
+
 (deftest max.error.1
-  (classify-error (max))
-  program-error)
+  (signals-error (max) program-error)
+  t)
 
 (deftest max.error.2
   (loop for x in *mini-universe*
 	unless (or (realp x)
-		   (eq (eval `(classify-error (max ',x)))
-		       'type-error))
+		   (eval `(signals-error (max ',x) type-error)))
 	collect x)
   nil)
+
+;;; Non-error tests
 
 (deftest max.1
   (loop for n in *reals*

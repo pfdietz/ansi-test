@@ -73,29 +73,30 @@
   type-error)
 
 (deftest make-list.error.2
-  (classify-error (make-list 'a))
-  type-error)
+  (signals-error (make-list 'a) type-error)
+  t)
 
 (deftest make-list.error.3
-  (classify-error (make-list))
-  program-error)
+  (signals-error (make-list) program-error)
+  t)
 
 (deftest make-list.error.4
-  (classify-error (make-list 5 :bad t))
-  program-error)
+  (signals-error (make-list 5 :bad t) program-error)
+  t)
 
 (deftest make-list.error.5
-  (classify-error (make-list 5 :initial-element))
-  program-error)
+  (signals-error (make-list 5 :initial-element) program-error)
+  t)
 
 (deftest make-list.error.6
-  (classify-error (make-list 5 1 2))
-  program-error)
+  (signals-error (make-list 5 1 2) program-error)
+  t)
 
 (deftest make-list.error.7
-  (classify-error (make-list 5 :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (make-list 5 :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest make-list.error.8
-  (classify-error (locally (make-list 'a) t))
-  type-error)
+  (signals-error (locally (make-list 'a) t) type-error)
+  t)

@@ -122,28 +122,29 @@
 ;; Error cases
 
 (deftest make-string.error.1
-  (classify-error (make-string))
-  program-error)
+  (signals-error (make-string) program-error)
+  t)
 
 (deftest make-string.error.2
-  (classify-error (make-string 10 :bad t))
-  program-error)
+  (signals-error (make-string 10 :bad t) program-error)
+  t)
 
 (deftest make-string.error.3
-  (classify-error (make-string 10 :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (make-string 10 :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest make-string.error.4
-  (classify-error (make-string 10 :initial-element))
-  program-error)
+  (signals-error (make-string 10 :initial-element) program-error)
+  t)
 
 (deftest make-string.error.5
-  (classify-error (make-string 10 1 1))
-  program-error)
+  (signals-error (make-string 10 1 1) program-error)
+  t)
 
 (deftest make-string.error.6
-  (classify-error (make-string 10 :element-type))
-  program-error)
+  (signals-error (make-string 10 :element-type) program-error)
+  t)
 
 ;;; Order of evaluation
 
