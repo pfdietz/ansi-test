@@ -271,3 +271,25 @@
     (%f :a 10 :b 20 :c 30 :a 40 :b 50 :c 60))
   (10 20 30))
     
+;;; More aux parameters
+(deftest flet.33
+  (flet ((%f (x y &aux (a (1+ x)) (b (+ x y a)) (c (list x y a b)))
+	     c))
+    (%f 5 9))
+  (5 9 6 20))
+
+(deftest flet.34
+  (flet ((%f (x y &rest r &key foo bar &aux (c (list x y r foo bar)))
+	     c))
+    (values
+     (%f 1 2)
+     (%f 1 2 :foo 'a)
+     (%f 1 2 :bar 'b)
+     (%f 1 2 :foo 'a :bar 'b)
+     (%f 1 2 :bar 'b :foo 'a)))
+  (1 2 nil nil nil)
+  (1 2 (:foo a) a nil)
+  (1 2 (:bar b) nil b)
+  (1 2 (:foo a :bar b) a b)
+  (1 2 (:bar b :foo a) a b))
+
