@@ -8,11 +8,13 @@
 (compile-and-load "printer-aux.lsp")
 
 (deftest print.random-state.1
-  (let* ((rs1 *random-state*)
-	 (rs2 (with-standard-io-syntax
-	       (read-from-string
-		(write-to-string rs1 :readably t)))))
-    (values
-     (notnot (random-state-p rs2))
-     (is-similar rs1 rs2)))
-  t t)
+  (loop repeat 100
+	nconc
+	(let* ((rs1 (make-random-state *random-state*))
+	       (rs2 (with-standard-io-syntax
+		     (read-from-string
+		      (write-to-string rs1 :readably t))))
+	       (result (list (notnot (random-state-p rs2))
+			     (is-similar rs1 rs2))))
+	  (unless (equal result '(t t)) (list result rs1 rs2))))
+  nil)
