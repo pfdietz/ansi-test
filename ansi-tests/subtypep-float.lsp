@@ -183,11 +183,11 @@
   nil)
 
 (unless (eql 0.0s0 -0.0s0)
-  (deftest subtypep.short-float.zero.2
+  (deftest subtypep.short-float.zero.2a
     (values (subtypep '(short-float 0.0s0)
 		      '(or (short-float (0.0s0)) (member 0.0s0))))
     nil)
-  (deftest subtypep.short-float.zero.
+  (deftest subtypep.short-float.zero.2b
     (values (subtypep '(short-float 0.0s0)
 		      '(or (short-float (0.0s0)) (member -0.0s0))))
     nil))
