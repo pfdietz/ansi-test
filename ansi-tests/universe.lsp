@@ -194,6 +194,20 @@
 		 (when c
 		   (setf (elt s i) c))))
 	s)
+      ;; Specialized strings
+      (make-array 3
+		  :element-type 'character
+		  :displaced-to (make-array 5 :element-type 'character
+					    :initial-contents "abcde")
+		  :displaced-index-offset 1)
+      (make-array 10 :initial-element #\x
+		  :fill-pointer 5
+		  :element-type 'character)
+      (make-array 10 :initial-element #\x
+		  :element-type 'base-char)
+      (make-array 3 :initial-element #\y
+		  :adjustable t
+		  :element-type 'base-char)
       )))
 
 (defparameter *conses*
@@ -261,16 +275,20 @@
      ;; typed arrays
      (loop for tp in '(fixnum float bit character base-char
 		       (signed-byte 8) (unsigned-byte 8))
+	   for element in '(18 16.0f0 0 #\x #\y 127 200)
 	 append
 	   (loop
 	       for d in *array-dimensions*
-	       collect (make-array d :element-type tp)))
+	       collect (make-array d :element-type tp
+				   :initial-element element)))
 
      ;; More typed arrays
      (loop for i from 1 to 64
 	   append
-	   (list (make-array 10 :element-type `(unsigned-byte ,i))
-		 (make-array 10 :element-type `(signed-byte ,i))))
+	   (list (make-array 10 :element-type `(unsigned-byte ,i)
+			     :initial-element 1)
+		 (make-array 10 :element-type `(signed-byte ,i)
+			     :initial-element 0)))
 
      ;; adjustable arrays
      (loop
@@ -288,7 +306,17 @@
       #()
       #*
       #*00000
-      #*1010101010101101)
+      #*1010101010101101
+      (make-array 10 :element-type 'bit
+		  :initial-contents '(0 1 1 0 1 1 1 1 0 1)
+		  :fill-pointer 8)
+      (make-array 5 :element-type 'bit
+		  :displaced-to #*0111000110
+		  :displaced-index-offset 3)
+      (make-array 10 :element-type 'bit
+		  :initial-contents '(1 1 0 0 1 1 1 0 1 1)
+		  :adjustable t)
+      )
 
      ;; Integer arrays
      (list
@@ -326,7 +354,7 @@
       (list (make-array '(0) :element-type nil))
       (error () nil))
 
-     ;; more kinds of arrays here later
+     ;; more kinds of arrays here later?
      ))
 
 (defparameter *hash-tables*
