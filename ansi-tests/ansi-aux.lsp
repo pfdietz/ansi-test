@@ -344,7 +344,7 @@ the condition to go uncaught if it cannot be classified."
 			      (muffle-warning))))
     (proclaim '(optimize (safety 3)))
     (handler-case
-     (apply #'values-list
+     (apply #'values
 	    nil
 	    (multiple-value-list
 	     (if regression-test::*compile-tests*
