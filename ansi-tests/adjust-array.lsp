@@ -5,49 +5,52 @@
 
 (in-package :cl-test)
 
-(deftest adjust-array.1
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)))
-	 (a2 (adjust-array a1 4)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    a2)
+(defmacro def-adjust-array-test (name args1 args2 expected-result)
+  (flet ((%listify (form)
+		   (cond
+		    ((integerp form) `'(,form))
+		    ((null form) nil)
+		    ((and (consp form)
+			  (eq (car form) 'quote)
+			  (consp (cadr form)))
+		     form)
+		    (t `(let ((x ,form)) (if (listp x) x (list x)))))))
+    `(deftest ,name
+       (let* ((a1 (make-array ,@args1))
+	      (a2 (adjust-array a1 ,@args2)))
+	 (assert (or (not (adjustable-array-p a1)) (eq a1 a2)))
+	 (assert (or (adjustable-array-p a1)
+		     (equal (array-dimensions a1) ,(%listify (first args1)))))
+	 (assert (equal (array-dimensions a2) ,(%listify (first args2))))
+	 ,@(unless (or (member :displaced-to args1)
+		       (member :displaced-to args2))
+	     (list '(assert (not (array-displacement a2)))))
+	 a2)
+       ,expected-result)))
+
+(def-adjust-array-test adjust-array.1
+  (5 :initial-contents '(a b c d e))
+  (4)
   #(a b c d))
 
-(deftest adjust-array.2
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)))
-	 (a2 (adjust-array a1 8 :initial-element 'x)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    a2)
+(def-adjust-array-test adjust-array.2
+  (5 :initial-contents '(a b c d e))
+  (8 :initial-element 'x)
   #(a b c d e x x x))
 
-(deftest adjust-array.3
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)))
-	 (a2 (adjust-array a1 4 :initial-contents '(w x y z))))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    a2)
+
+(def-adjust-array-test adjust-array.3
+  (5 :initial-contents '(a b c d e))
+  (4 :initial-contents '(w x y z))
   #(w x y z))
 
-(deftest adjust-array.4
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)))
-	 (a2 (adjust-array a1 8 :initial-contents '(8 7 6 5 4 3 2 1))))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(5))))
-    (assert (not (array-displacement a2)))
-    a2)
+(def-adjust-array-test adjust-array.4
+  (5 :initial-contents '(a b c d e))
+  (8 :initial-contents '(8 7 6 5 4 3 2 1))
   #(8 7 6 5 4 3 2 1))
 
 (deftest adjust-array.5
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :fill-pointer 3))
+  (let* ((a1 (make-array 5 :initial-contents '(a b c d e) :fill-pointer 3))
 	 (a2 (adjust-array a1 4)))
     (assert (if (adjustable-array-p a1)
 		(eq a1 a2)
@@ -196,26 +199,20 @@
     a2)
   #(1 2 3 4 5))
 
-(deftest adjust-array.17
-  (let* ((a0 (make-array nil :initial-element 'x))
-	 (a1 (adjust-array a0 nil)))
-    (values a0 a1))
-  #0ax #0ax)
+(def-adjust-array-test adjust-array.17
+  (nil :initial-element 'x)
+  (nil)
+  #0ax)
 
-(deftest adjust-array.18
-  (let* ((a0 (make-array nil :initial-element 'x))
-	 (a1 (adjust-array a0 nil :initial-contents 'y)))
-    (assert (if (adjustable-array-p a0)
-		(eq a0 a1)
-	      (eq (aref a0) 'x)))
-    a1)
+(def-adjust-array-test adjust-array.18
+  (nil :initial-element 'x)
+  (nil :initial-contents 'y)
   #0ay)
 
-(deftest adjust-array.19
-  (let* ((a0 (make-array nil :initial-element 'x))
-	 (a1 (adjust-array a0 nil :initial-element 'y)))
-    (values a0 a1))
-  #0ax #0ax)
+(def-adjust-array-test adjust-array.19
+  (nil :initial-element 'x)
+  (nil :initial-element 'y)
+  #0ax)
 
 (deftest adjust-array.20
   (let* ((a0 (make-array nil :initial-element 'x))
@@ -226,28 +223,20 @@
 
 ;; 2-d arrays
 
-(deftest adjust-array.21
-  (let* ((a1 (make-array '(4 5) :initial-contents '((1 2 3 4 5)
-						    (3 4 5 6 7)
-						    (5 6 7 8 9)
-						    (7 8 9 1 2))))
-	 (a2 (adjust-array a1 '(2 3))))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(2 3))))
-    a2)
+(def-adjust-array-test adjust-array.21
+  ('(4 5) :initial-contents '((1 2 3 4 5)
+			      (3 4 5 6 7)
+			      (5 6 7 8 9)
+			      (7 8 9 1 2)))
+  ('(2 3))
   #2a((1 2 3)(3 4 5)))
 
-(deftest adjust-array.22
-  (let* ((a1 (make-array '(4 5) :initial-contents '((1 2 3 4 5)
-						    (3 4 5 6 7)
-						    (5 6 7 8 9)
-						    (7 8 9 1 2))))
-	 (a2 (adjust-array a1 '(6 8) :initial-element 0)))
-    (assert (if (adjustable-array-p a1)
-		(eq a1 a2)
-	      (equal (array-dimensions a1) '(6 8))))
-    a2)
+(def-adjust-array-test adjust-array.22
+  ('(4 5) :initial-contents '((1 2 3 4 5)
+			      (3 4 5 6 7)
+			      (5 6 7 8 9)
+			      (7 8 9 1 2)))
+  ('(6 8) :initial-element 0)
   #2a((1 2 3 4 5 0 0 0)
       (3 4 5 6 7 0 0 0)
       (5 6 7 8 9 0 0 0)
@@ -271,40 +260,24 @@
 
 ;;; Adjust an adjustable array
 
-(deftest adjust-array.adjustable.1
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :adjustable t))
-	 (a2 (adjust-array a1 4)))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    a2)
+(def-adjust-array-test adjust-array.adjustable.1
+  (5 :initial-contents '(a b c d e) :adjustable t)
+  (4)
   #(a b c d))
 
-(deftest adjust-array.adjustable.2
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :adjustable t))
-	 (a2 (adjust-array a1 8 :initial-element 'x)))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    a2)
+(def-adjust-array-test adjust-array.adjustable.2
+  (5 :initial-contents '(a b c d e) :adjustable t)
+  (8 :initial-element 'x)
   #(a b c d e x x x))
 
-(deftest adjust-array.adjustable.3
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :adjustable t))
-	 (a2 (adjust-array a1 4 :initial-contents '(w x y z))))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    a2)
+(def-adjust-array-test adjust-array.adjustable.3
+  (5 :initial-contents '(a b c d e) :adjustable t)
+  (4 :initial-contents '(w x y z))
   #(w x y z))
 
-(deftest adjust-array.adjustable.4
-  (let* ((a1 (make-array 5 :initial-contents '(a b c d e)
-			 :adjustable t))
-	 (a2 (adjust-array a1 8 :initial-contents '(8 7 6 5 4 3 2 1))))
-    (assert (eq a1 a2))
-    (assert (not (array-displacement a2)))
-    a2)
+(def-adjust-array-test adjust-array.adjustable.4
+  (5 :initial-contents '(a b c d e) :adjustable t)
+  (8 :initial-contents '(8 7 6 5 4 3 2 1))
   #(8 7 6 5 4 3 2 1))
 
 (deftest adjust-array.adjustable.5
