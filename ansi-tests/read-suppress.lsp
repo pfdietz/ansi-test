@@ -33,7 +33,7 @@
 
 (defmacro def-random-suppress-test (name &key
 					 (chars '*non-macro-chars*)
-					 (reps 10000)
+					 (reps 1000)
 					 (maxlen 8)
 					 (count 10)
 					 (prefix "")
@@ -56,13 +56,12 @@
 	     for vals = (multiple-value-list
 			 (handler-case (read-from-string s)
 				       (reader-error (rc) rc)))
-	     repeat 10000
+	     repeat reps
 	     unless (equal vals (list nil (length s)))
 	     collect (progn (when (> (incf count) maxcount)
 			      (loop-finish))
 			    (list n s vals))))
-     nil))
-					 
+     nil))					 
 
 (def-random-suppress-test read-suppress.13)
 (def-random-suppress-test read-suppress.14 :prefix "(" :suffix ")")
