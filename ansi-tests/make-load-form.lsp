@@ -25,7 +25,7 @@
    (error () :good))
   :good)
 
-(define-condition make-load-form-condition-03 () (a b c))
+(define-condition make-load-form-condition-03 () ((a) (b) (c)))
 
 (deftest make-load-form.3
   (handler-case
@@ -153,6 +153,34 @@
   t
   (nil t t)
   ((a b c) a))
+
+#|
+(defclass make-load-form-class-05a ()
+  ((a :initarg :a)))
+
+(defclass make-load-form-class-05b (make-load-form-class-05a)
+  ((b :initarg :b)))
+
+(defmethod make-load-form ((obj make-load-form-class-05a)
+			   &optional (env t))
+  (declare (ignore env))
+  (let ((newobj (gensym)))
+    `(let ((,newobj (allocate-instance (find-class 'make-load-form-class-04))))
+       ,@(when (slot-boundp obj 'a)
+	   `((setf (slot-value ,newobj 'a) ',(slot-value obj 'a))))
+       ,newobj)))
+
+(defmethod make-load-form :around ((obj make-load-form-class-05b)
+				   &optional (env t))
+  (declare (ignore env))
+  (let ((newobj (gensym)))
+    `(let ((,newobj (allocate-instance (find-class 'make-load-form-class-04))))
+       ,@(when (slot-boundp obj 'a)
+	   `((setf (slot-value ,newobj 'a) ',(slot-value obj 'a))))
+       ,newobj)))
+|#
+
+
 
 ;;; Other error tests
 
