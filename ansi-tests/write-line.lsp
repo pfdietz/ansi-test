@@ -130,6 +130,18 @@
     (write-line "-=|!" nil))
   #.(concatenate 'string "-=|!" (string #\Newline)))
 
+;;; Specialized string tests
+
+(deftest write-line.13
+  (do-special-strings
+   (s "abcde" nil)
+   (assert (equal
+	    (with-output-to-string
+	      (*standard-output*)
+	      (multiple-value-list (write-line "abcde")))
+	    #.(concatenate 'string "abcde" (string #\Newline)))))
+  nil)
+
 ;;; Error tests
 
 (deftest write-line.error.1

@@ -50,10 +50,20 @@
   (length (multiple-value-list (file-write-date "file-write-date.lsp")))
   1)
 
+;;; Specialized string tests
+
+(deftest file-write-date.6
+  (let* ((str "file-write-date.lsp")
+	 (date (file-write-date str)))
+    (do-special-strings
+     (s str nil)
+     (assert (equal (file-write-date s) date))))
+  nil)
+
 ;;; FIXME
 ;;; Add LPN test
 
-;;;
+;;; Error tests
 
 (deftest file-write-date.error.1
   (signals-error (file-write-date) program-error)

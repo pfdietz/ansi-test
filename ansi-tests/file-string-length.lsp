@@ -33,6 +33,17 @@
 		   (assert (= (+ pos1 len) pos2)))))))
   nil)
 
+(deftest file-string-length.3
+  (with-open-file
+   (stream "tmp.dat" :direction :output
+	   :if-exists :supersede)
+   (let* ((s1 "abcde")
+	  (n (file-string-length stream s1)))
+     (do-special-strings
+      (s2 s1 nil)
+      (assert (= (file-string-length stream s2) n)))))
+  nil)
+
 ;;; Error tests
 
 (deftest file-string-length.error.1

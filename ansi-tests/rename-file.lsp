@@ -131,7 +131,65 @@
 	   ))))
   t nil t (t t t nil nil) t nil t t)
 
-;;;
+;;; Specialized string tests
+
+(deftest rename-file.6
+  (do-special-strings
+   (s "file-to-be-renamed.txt" nil)
+   (let ((pn1 s)
+	 (pn2 "file-that-was-renamed.txt"))
+     (delete-all-versions pn1)
+     (delete-all-versions pn2)
+     (with-open-file (s pn1 :direction :output) (format s "Whatever~%"))
+     (let ((results (multiple-value-list (rename-file pn1 pn2))))
+       (destructuring-bind (defaulted-new-name old-truename new-truename)
+	   results
+	 (assert
+	  (equal
+	   (list
+	    (=t (length results) 3)
+	    (probe-file pn1)
+	    (notnot (probe-file pn2))
+	    (list (notnot (pathnamep defaulted-new-name))
+		  (notnot (pathnamep old-truename))
+		  (notnot (pathnamep new-truename))
+		  (typep old-truename 'logical-pathname)
+		  (typep new-truename 'logical-pathname))
+	    (notnot (probe-file defaulted-new-name))
+	    (probe-file old-truename)
+	    (notnot (probe-file new-truename)))
+	   '(t nil t (t t t nil nil) t nil t)))))))
+  nil)
+
+(deftest rename-file.7
+  (do-special-strings
+   (s "file-that-was-renamed.txt" nil)
+   (let ((pn1 "file-to-be-renamed.txt")
+	 (pn2 s))
+     (delete-all-versions pn1)
+     (delete-all-versions pn2)
+     (with-open-file (s pn1 :direction :output) (format s "Whatever~%"))
+     (let ((results (multiple-value-list (rename-file pn1 pn2))))
+       (destructuring-bind (defaulted-new-name old-truename new-truename)
+	   results
+	 (assert
+	  (equal
+	   (list
+	    (=t (length results) 3)
+	    (probe-file pn1)
+	    (notnot (probe-file pn2))
+	    (list (notnot (pathnamep defaulted-new-name))
+		  (notnot (pathnamep old-truename))
+		  (notnot (pathnamep new-truename))
+		  (typep old-truename 'logical-pathname)
+		  (typep new-truename 'logical-pathname))
+	    (notnot (probe-file defaulted-new-name))
+	    (probe-file old-truename)
+	    (notnot (probe-file new-truename)))
+	   '(t nil t (t t t nil nil) t nil t)))))))
+  nil)
+
+;;; Error tests
 
 (deftest rename-file.error.1
   (signals-error (rename-file) program-error)

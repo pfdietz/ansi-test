@@ -49,6 +49,23 @@
 	 (not (pathname-match-p pn1 pn2))))
   nil)
 
+;;; Specialized string tests
+
+(deftest pathname-match-p.7
+  (let ((wpn (parse-namestring "CLTEST:*.LSP")))
+    (assert (wild-pathname-p wpn))
+    (do-special-strings
+     (s "CLTEST:FOO.LSP" nil)
+     (assert (pathname-match-p s wpn))))
+  nil)
+
+(deftest pathname-match-p.8
+  (do-special-strings
+   (s "CLTEST:*.LSP" nil)
+   (assert (pathname-match-p "CLTEST:FOO.LSP" s)))
+  nil)
+   
+
 ;;; Add more tests here
 
 ;;; Here are error tests

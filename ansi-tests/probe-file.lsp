@@ -29,6 +29,18 @@
 	   (probe-file "CLTEST:probe-file.lsp"))
   t)
 
+;;; Specialized string tests
+
+(deftest probe-file.5
+  (do-special-strings
+   (str "probe-file.lsp" nil)
+   (let ((s (open str :direction :input)))
+     (assert (equalpt (truename #p"probe-file.lsp") (probe-file s)))
+     (close s)))
+  nil)
+       
+;;; Error tests
+
 (deftest probe-file.error.1
   (signals-error (probe-file) program-error)
   t)

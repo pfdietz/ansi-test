@@ -56,6 +56,16 @@
     (if (< len 500) len nil))
   nil)
 
+;;; Specialized string tests
+
+(deftest directory.9
+  (do-special-strings
+   (s "nonexistent" nil)
+   (assert (null (directory s))))
+  nil)
+
+;;; Error tests
+
 (deftest directory.error.1
   (signals-error (directory) program-error)
   t)

@@ -106,7 +106,6 @@
      verbosity))
   2 t nil "")
 
-
 ;;; Case where directory shouldn't exist
 
 ;; The directort ansi-tests/scratch must not exist before this
@@ -138,6 +137,17 @@
        verbosity
        )))
   2 t t t "")
+
+;;; Specialized string tests
+
+(deftest ensure-directories-exist.9
+  (do-special-strings
+   (str "ensure-directories-exist.lsp" nil)
+   (let* ((results (multiple-value-list (ensure-directories-exist str))))
+     (assert (eql (length results) 2))
+     (assert (equalt (truename (first results)) (truename str)))
+     (assert (null (second results)))))
+  nil)
 
 ;; FIXME
 ;; Need to add a LPN test

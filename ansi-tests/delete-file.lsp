@@ -51,7 +51,20 @@
        (probe-file pn))))
   t (t) nil)
 
-;;;
+;;; Specialized string tests
+
+(deftest delete-file.5
+  (do-special-strings
+   (pn "scratchfile.txt" nil)
+   (unless (probe-file pn)
+     (with-open-file (s pn :direction :output)
+		     (format s "Contents~%")))
+   (assert (probe-file pn))
+   (assert (equal (multiple-value-list (delete-file pn)) '(t)))
+   (assert (not (probe-file pn))))
+  nil)
+
+;;; Error tests
 
 (deftest delete-file.error.1
   (signals-error (delete-file) program-error)

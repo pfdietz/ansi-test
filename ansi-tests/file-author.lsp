@@ -52,6 +52,14 @@
       author))
   nil)
 
+;;; Specialized string tests
+
+(deftest file-author.7
+  (do-special-strings
+   (s "file-author.lsp" nil)
+   (assert (equal (file-author s) (file-author "file-author.lsp"))))
+  nil)
+
 ;;; FIXME
 ;;; Add LPN test
 

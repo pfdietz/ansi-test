@@ -200,6 +200,15 @@
   (wild-pathname-p "CLTEST:FOO.LISP")
   nil)
 
+;;; Odd strings
+
+(deftest wild-pathname-p.32
+  (do-special-strings
+   (s "CLTEST:FOO.LISP" nil)
+   (let ((vals (multiple-value-list (wild-pathname-p s))))
+     (assert (equal vals '(nil)))))
+  nil)
+
 ;;;
 
 (deftest wild-pathname-p.error.1

@@ -169,3 +169,6 @@
      1
      (return-from done :good)))
   :good)
+
+;;; FIXME: Add more tests on specialized strings.
+

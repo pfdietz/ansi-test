@@ -1234,3 +1234,5 @@
 
 
 ;;; FIXME -- add tests for :element-type :default
+
+;;; FIXME -- add tests for filespec being a specialized string

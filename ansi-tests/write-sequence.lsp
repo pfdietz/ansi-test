@@ -36,7 +36,20 @@
   (:start 1 :end 4 :start 2 :end 3) "bcd")
 (def-write-sequence-test write-sequence.string.13 "" () "")
 
-;;; (Add base-string tests?)
+(defmacro def-write-sequence-special-test (name string args expected)
+  `(deftest ,name
+     (let ((str ,string)
+	   (expected ,expected))
+       (do-special-strings
+	(s str nil)
+	(let ((out (with-output-to-string
+		     (os)
+		     (assert (eq (write-sequence s os ,@args) s)))))
+	  (assert (equal out expected)))))
+     nil))
+
+(def-write-sequence-special-test write-sequence.string.14 "12345" () "12345")
+(def-write-sequence-special-test write-sequence.string.15 "12345" (:start 1 :end 3) "23")
 
 ;;; on lists
 

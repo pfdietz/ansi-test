@@ -120,6 +120,20 @@
     (write-string "-=|!" nil))
   "-=|!")
 
+;;; Specialized string tests
+
+(deftest write-string.13
+  (let (result)
+    (do-special-strings
+     (s "abcde" nil)
+     (assert (equal
+	      (with-output-to-string
+		(*standard-output*)
+		(setq result (multiple-value-list (write-string "abcde"))))
+	      "abcde"))
+     (assert (equal result '("abcde")))))
+  nil)
+
 ;;; Error tests
 
 (deftest write-string.error.1

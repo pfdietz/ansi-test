@@ -69,7 +69,15 @@
        )))
   t t t)
 
-;;;
+;;; Specialized string tests
+
+(deftest truename.6
+  (do-special-strings
+   (s "truename.lsp" nil)
+   (assert (equalp (truename s) (truename "truename.lsp"))))
+  nil)
+
+;;; Error tests
 
 (deftest truename.error.1
   (signals-error (truename) program-error)
