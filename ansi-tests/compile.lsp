@@ -9,7 +9,7 @@
   (progn
     (fmakunbound 'compile.1-fn)
     (values
-     (defun compile.1-fn (x) x)
+     (eval '(defun compile.1-fn (x) x))
      (compiled-function-p 'compile.1-fn)
      (let ((x (compile 'compile.1-fn)))
        (or (eqt x 'compile.1-fn)
