@@ -6655,7 +6655,8 @@ Broken at C::WT-C-INLINE-LOC.
 
 (deftest misc.360
   (let ((c :good))
-    (dotimes (i 1 c)
-      (dotimes (j 1 (setf c :bad)) (go 7))
-      7))
+    (tagbody
+      (dotimes (j 1 (setf c :bad)) (go done))
+      done)
+    c)
   :good)
