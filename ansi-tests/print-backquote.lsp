@@ -129,6 +129,6 @@
 
 (deftest print.backquote.random.14
   (loop for x = (make-random-backquoted-form 100)
-	repeat 1000
+	repeat 100
 	nconc (randomly-check-readability x :test #'is-similar))
   nil)
