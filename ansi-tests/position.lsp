@@ -688,7 +688,7 @@
 
 (deftest position-string.32
   (let* ((s1 (copy-seq "xxxabcdabcdyyyyyyyy"))
-	 (s2 (make-array '(4) :displaced-to s1
+	 (s2 (make-array '(8) :displaced-to s1
 			 :displaced-index-offset 3
 			 :element-type (array-element-type s1))))
     (position #\c s2 :from-end t))
