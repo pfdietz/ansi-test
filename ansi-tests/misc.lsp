@@ -9991,3 +9991,37 @@ Broken at C::WT-MAKE-CLOSURE.
 			 :displaced-index-offset 2)))
     (find #c(1.0 2.0) d1))
   nil)
+
+;;; A crasher bug of REMOVE on non-simple nibble arrays
+
+(deftest misc.541
+  (dotimes (i 1000)
+    (let* ((init '(12 11 8 8 11 10 9 1 3 9 6 12 4 3 6 4 7 10 12 6 11 12 4 15 8 10 7 0 0
+                    0 12 9 6 1 0 14 2 14 6 4 2 2 11 7 13 11 3 9 0 2 3 4 2 11 8 7 9 0 0 3
+                    8 3 10 8 2 8 9 4 9 0 11 4 9 8 12 8 5 2 10 10 1 14 7 8 5 5 7 8 1 13 2
+                    13 12 2 5 11 1 12 12 0 2 5 15 2 14 2 3 10 1 0 7 7 11 3 7 6 1 13 8 4 2
+                    7 14 9 9 7 3 8 1 15 6 11 15 0 11 9 7 15 12 10 6 4 5 6 10 4 4 4 15 5 1
+                    8 9 3 12 11 8 4 10 8 3 15 12 3 4 10 8 12 8 14 2 12 12 14 14 5 14 6 10
+                    13 9 6 4 14 9 6 8 4 11 1 6 0 7 7 5 4 12 15 7 4 4 10 7 3 0 11 10 11 1
+                    8 9 0 12 14 6 2 15 2 5 11 8 3 4 2 9 9 7 0 7 11 13 5 7 12 8 6 12 11 15
+                    3 6 11 0 1 2 7 2 13 14 15 4))
+          (d0 (make-array
+              '(251) :element-type '(integer 0 15)
+              :initial-contents init
+              :adjustable t)))
+      (assert
+       (equalp
+        (remove 7 d0)
+        (coerce (remove 7 init) '(vector (integer 0 15)))))))
+  nil)
+
+;;; Object identity for bit vectors
+
+(deftest misc.542
+  (funcall
+   (compile
+    nil
+    (let ((bv1 (copy-seq #*1))
+	  (bv2 (copy-seq #*1)))
+      `(lambda () (eq ,bv1 ,bv2)))))
+  nil)
