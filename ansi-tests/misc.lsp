@@ -10317,3 +10317,32 @@ Broken at C::WT-MAKE-CLOSURE.
      #c(1.0d0 2.0d0))
     'double-float))
   t)
+
+;;; ACL 6.2 (trial, x86 linux)
+;;; Incorrect return value (t instead of nil)
+
+(deftest misc.565
+  (funcall
+   (compile
+    nil
+    '(lambda (x)
+       (declare (optimize (speed 2) (safety 1) (debug 3) (space 0))
+		(type double-float x))
+       (not (the (eql 1.0d0) x))))
+   1.0d0)
+  nil)
+
+;;; ASH
+;;; Incorrect value (59 == (ash p1 -3))
+
+(deftest misc.566
+  (funcall
+   (compile
+    nil
+    '(lambda (p1)
+                 (declare (optimize (speed 3) (safety 2) (debug 2) (space 0))
+                          (type (integer 465 127871) p1))
+                 (ash p1 -35)))
+   477)
+  0)
+
