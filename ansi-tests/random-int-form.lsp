@@ -108,7 +108,7 @@
 (defvar *random-int-form-catch-tags* nil)
 (defvar *go-tags* nil)
 
-(defvar *maximum-random-int-bits* 45)
+(defvar *maximum-random-int-bits* 36)
 
 (defvar *random-vals-list-bound* 10)
 
@@ -267,14 +267,18 @@
 (defparameter *flet-names* nil)
 
 (defun make-random-integer ()
-  (let ((r (ash 1 (1+ (random 32)))))
-    (- (random r) (floor (/ r 2)))))
+  (let ((r (ash 1 (1+ (random *maximum-random-int-bits*)))))
+    (rcase
+     (6 (- (random r) (floor (/ r 2))))
+     (1 (- r (random (min 10 r))))
+     (1 (+ (floor (/ r 2)) (random (min 10 r)))))))
 
 (defun make-random-rational ()
-  (let* ((r (ash 1 (1+ (random 32))))
-	 (n (random r))
-	 (d (loop for x = (random r) unless (zerop x) do (return x))))
-    (if (coin) (/ n d) (- (/ n d)))))
+  (let* ((r (ash 1 (1+ (random *maximum-random-int-bits*))))
+	 (n (random r)))
+    (assert (>= r 2))
+    (let ((d (loop for x = (random r) unless (zerop x) do (return x))))
+      (if (coin) (/ n d) (- (/ n d))))))
 
 (defun make-random-float ()
   (rcase
@@ -282,6 +286,12 @@
    (1 (random most-positive-single-float))
    (1 (random most-positive-double-float))
    (1 (random most-positive-long-float))))
+
+(defun make-random-symbol ()
+  (rcase
+   (3 (random-from-seq #(a b c d e f g h i j k l m n o p q r s t u v w x y z)))
+   (2 (random-from-seq *cl-symbols-vector*))
+   (1 (gensym))))
 
 (defun random-var-desc ()
   (loop
@@ -342,7 +352,7 @@
 
      ;; flet call
      ;; #-(or armedbear)
-     (30 ;; 5
+     (10
       (make-random-integer-flet-call-form size))
 
      (5 (make-random-aref-form size))
@@ -353,7 +363,8 @@
 				     rational rationalize
 				     numerator denominator
 				     identity progn floor
-				     #-(or armedbear) ignore-errors
+				     ;; #-(or armedbear)
+				     ignore-errors
 				     cl:handler-case
 				     restart-case
 				     ceiling truncate round realpart imagpart
@@ -368,7 +379,6 @@
      (5 (make-random-integer-mapping-form size))
 
      ;; prog1, multiple-value-prog1
-     #-(or armedbear)
      (4
       (let* ((op (random-from-seq #(prog1 multiple-value-prog1)))
 	     (nforms (random 4))
@@ -384,11 +394,15 @@
      
      (2 `(isqrt (abs ,(make-random-integer-form (- size 2)))))
 
-     (2 `(the integer ,(make-random-integer-form (1- size))))
+     ;; #-armedbear
+     (10 `(the integer ,(make-random-integer-form (1- size))))
       
      (1 `(cl:handler-bind nil ,(make-random-integer-form (1- size))))
      (1 `(restart-bind nil ,(make-random-integer-form (1- size))))
-     #-armedbear (1 `(macrolet () ,(make-random-integer-form (1- size))))
+     #-armedbear
+     (1 `(macrolet () ,(make-random-integer-form (1- size))))
+     #-armedbear
+     (1 `(symbol-macrolet () ,(make-random-integer-form (1- size))))
 
      ;; dotimes
      #-allegro
@@ -447,7 +461,7 @@
 	    
      ;; Binary op
      (30
-      (let* ((op (random-from-seq
+     (let* ((op (random-from-seq
 		  '(+ - *  logand min max gcd
 		      lcm
 		      #-:allegro
@@ -480,8 +494,8 @@
      (40
       (let* ((op (random-from-seq #(+ - * logand min max
 				      logior values lcm gcd logxor)))
-	     (nmax (case op ((* lcm gcd) 10) (t 20)))
-	     (nargs (1+ (min (random nmax) (random nmax) (random nmax))))
+	     (nmax (case op ((* lcm gcd) 4) (t (1+ (random 40)))))
+	     (nargs (1+ (min (random nmax) (random nmax))))
 	     (sizes (random-partition (1- size) nargs))
 	     (args (mapcar #'make-random-integer-form sizes)))
 	`(,op ,@args)))
@@ -503,7 +517,7 @@
      (5 (make-random-tagbody-and-progn size))
 
      ;; conditionals
-     (100
+     (30
       (let* ((cond-size (random (max 1 (floor size 2))))
 	     (then-size (random (- size cond-size)))
 	     (else-size (- size 1 cond-size then-size))
@@ -526,7 +540,7 @@
 	    ,(make-random-byte-spec-form s1)
 	    ,(make-random-integer-form s2))))
 
-     (20 (make-random-integer-binding-form size))
+     (50 (make-random-integer-binding-form size))
 
      ;; progv
      #-(or armedbear)
@@ -539,13 +553,12 @@
 	     (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
 	`(block ,name ,(make-random-integer-form (1- size)))))
 
-     #-armedbear
      (20
       (let* ((tag (list 'quote (random-from-seq #(ct1 ct2 ct2 ct4 ct5 ct6 ct7 ct8))))
 	     (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
 	`(catch ,tag ,(make-random-integer-form (1- size)))))
      
-     (20 ;; setq and similar
+     (10 ;; setq and similar
       (make-random-integer-setq-form size))
 
      (10 (make-random-integer-case-form size))
@@ -730,11 +743,17 @@
 	     '(cons integer integer)))))
      e1)))
 
+(defun random2 (n)
+  (min (random n) (random n)))
+
+(defun random-from-seq2 (seq)
+  (elt seq (random2 (length seq))))
+
 (defun make-random-integer-binding-form (size)
   (destructuring-bind (s1 s2) (random-partition (1- size) 2)
-    (let* ((var (rcase
-		 (2 (random-from-seq #(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10)))
-		 (2 (random-from-seq *random-special-vars*))))
+    (let* ((var (random-from-seq2 (rcase
+				   (2 #(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10))
+				   (2 *random-special-vars*))))
 	   (e1 (make-random-integer-form s1))
 	   (type (multiple-value-bind (type2 e)
 		     (make-random-type-for-var var e1)
@@ -750,7 +769,7 @@
 	(rcase
 	 (8 `(,op ((,var ,e1))
 		  ,@(rcase (1 `((declare (dynamic-extent ,var))))
-			   (1 nil))
+			   (3 nil))
 		  ,e2))
 	 (2 `(multiple-value-bind (,var) ,e1 ,e2)))))))
 
@@ -804,7 +823,7 @@
 		  ,@(mapcar #'make-random-integer-form sizes))
 		 ,@keyargs)))
      #-(or armedbear)
-     (1
+     (1      
       (destructuring-bind (size1 size2) (random-partition (1- size) 2)
 	(let* ((vars '(lmv1 lmv2 lmv3 lmv4 lmv5 lmv6))
 	       (var1 (random-from-seq vars))
@@ -1105,6 +1124,9 @@
    ((consp type)
     (let ((type-op (first type)))
       (ecase type-op
+	(or
+	 (assert (cdr type))
+	 (make-random-element-of-type (random-from-seq (cdr type))))
 	(integer
 	 (let ((lo (let ((lo (cadr type)))
 		     (cond
@@ -1145,6 +1167,12 @@
 		 (assert (and (integerp bits) (>= bits 1)))
 		 (make-random-element-of-type
 		  `(integer 0 ,(1- (ash 1 bits)))))))))
+	(eql
+	 (assert (= (length type) 2))
+	 (cadr type))
+	(member
+	 (assert (cdr type))
+	 (random-from-seq (cdr type)))
 	)))
    (t
     (ecase type
@@ -1153,6 +1181,7 @@
       (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| car)))
       (unsigned-byte (random-from-interval
 		      (1+ (ash 1 (random *maximum-random-int-bits*))) 0))
+      (rational (locally (declare (notinline make-random-rational)) (make-random-rational)))
       (integer (let ((x (ash 1 (random *maximum-random-int-bits*))))
 		 (random-from-interval (1+ x) (- x))))
       ))))
@@ -1177,6 +1206,11 @@
 (defvar *compile-using-defun*
   #-(or allegro lispworks) nil
   #+(or allegro lispworks) t)
+
+(defvar *compile-using-defgeneric* nil
+  "If true and *COMPILE-USING-DEFUN* is false, then build a defgeneric form
+   for the function and compile that.")
+
 (defvar *name-to-use-in-optimized-defun* 'dummy-fn-name1)
 (defvar *name-to-use-in-unoptimized-defun* 'dummy-fn-name2)
 
@@ -1195,7 +1229,8 @@
 	    (cl:handler-bind
 	     (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 		     (warning #'muffle-warning)
-		     (error #'(lambda (c)
+		     ((or error serious-condition)
+		      #'(lambda (c)
 				(format t "Compilation failure~%~A~%"
 					(format nil "~S" form))
 				(finish-output *standard-output*)
@@ -1211,15 +1246,23 @@
 					      (with-output-to-string
 						(s)
 						(prin1 c s))))))))
-	     (let ((start-time (get-universal-time)))
+	     (let ((start-time (get-universal-time))
+		   (clf (cdr lambda-form)))
 	       (prog1
-		   (if *compile-using-defun*
-		       (progn
-			 (eval `(defun ,opt-defun-name
-				  ,@(cdr lambda-form)))
-			 (compile opt-defun-name)
-			 (symbol-function opt-defun-name))
-		     (compile nil lambda-form))
+		   (cond
+		    (*compile-using-defun*
+		     (fmakunbound opt-defun-name)
+		     (eval `(defun ,opt-defun-name ,@clf))
+		     (compile opt-defun-name)
+		     (symbol-function opt-defun-name))
+		    (*compile-using-defgeneric*
+		     (fmakunbound opt-defun-name)
+		     (eval `(defgeneric ,opt-defun-name ,(car clf)))
+		     (eval `(defmethod ,opt-defun-name,(mapcar #'(lambda (name) `(,name integer)) (car clf))
+			      ,@(cdr clf)))
+		     (compile opt-defun-name)
+		     (symbol-function opt-defun-name))
+		    (t (compile nil lambda-form)))
 		 (let* ((stop-time (get-universal-time))
 			(total-time (- stop-time start-time)))
 		   (when (> total-time *max-compile-time*)
