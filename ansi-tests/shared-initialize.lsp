@@ -11,7 +11,7 @@
    (c :initarg :c)
    d))
 
-(deftest shared-initialize.1
+(deftest shared-initialize.1.1
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -23,7 +23,7 @@
   (t t t nil)
   (1 3 14))
 
-(deftest shared-initialize.2
+(deftest shared-initialize.1.2
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -33,7 +33,7 @@
   t
   (nil nil nil nil))
 
-(deftest shared-initialize.3
+(deftest shared-initialize.1.3
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -45,7 +45,7 @@
   (t nil nil nil)
   1)
 
-(deftest shared-initialize.4
+(deftest shared-initialize.1.4
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -57,7 +57,7 @@
   (t nil nil nil)
   1)
 
-(deftest shared-initialize.5
+(deftest shared-initialize.1.5
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -69,7 +69,7 @@
   (t nil nil nil)
   1)
 
-(deftest shared-initialize.6
+(deftest shared-initialize.1.6
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -81,7 +81,7 @@
   (t nil nil nil)
   x)
 
-(deftest shared-initialize.7
+(deftest shared-initialize.1.7
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -94,7 +94,7 @@
   (t t nil nil)
   x y)
 
-(deftest shared-initialize.8
+(deftest shared-initialize.1.8
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -108,7 +108,7 @@
   (t t t nil)
   x 10 100)
 
-(deftest shared-initialize.9
+(deftest shared-initialize.1.9
   (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
     (values
      (map-slot-boundp* obj '(a b c d))
@@ -123,6 +123,18 @@
   (t t t nil)
   5 37 213)
 
+(deftest shared-initialize.1.10
+  (let ((obj (allocate-instance (find-class 'shared-init-class-01))))
+    (setf (slot-value obj 'a) 1000)
+    (values
+     (map-slot-boundp* obj '(a b c d))
+     (eqt obj (shared-initialize obj '(a)))
+     (map-slot-boundp* obj '(a b c d))
+     (slot-value obj 'a)))
+  (t nil nil nil)
+  t
+  (t nil nil nil)
+  1000)
 
 ;;; Initforms in the lexical environment of the defclass
 
@@ -141,7 +153,7 @@
        (d))
       (:default-initargs :c 100))))
 
-(deftest shared-initialize.10
+(deftest shared-initialize.2.1
   (progn
     (funcall *shared-init-var-02-init* 5 10)
     (let ((obj (allocate-instance (find-class 'shared-init-class-02))))
@@ -158,7 +170,7 @@
   (t t nil nil)
   (6 11))
 
-(deftest shared-initialize.11
+(deftest shared-initialize.2.2
   (progn
     (funcall *shared-init-var-02-init* 5 10)
     (let ((obj (allocate-instance (find-class 'shared-init-class-02))))
@@ -172,7 +184,7 @@
   (nil nil nil nil)
   (5 10))
 
-(deftest shared-initialize.12
+(deftest shared-initialize.2.3
   (progn
     (funcall *shared-init-var-02-init* 5 10)
     (let ((obj (allocate-instance (find-class 'shared-init-class-02))))
@@ -188,7 +200,7 @@
   (t nil nil nil)
   (6 10))
 
-(deftest shared-initialize.13
+(deftest shared-initialize.2.4
   (progn
     (funcall *shared-init-var-02-init* 5 10)
     (let ((obj (allocate-instance (find-class 'shared-init-class-02))))
@@ -204,7 +216,7 @@
   (nil t nil nil)
   (5 11))
 
-(deftest shared-initialize.14
+(deftest shared-initialize.2.5
   (progn
     (funcall *shared-init-var-02-init* 5 10)
     (let ((obj (allocate-instance (find-class 'shared-init-class-02))))
@@ -220,7 +232,7 @@
   (t t nil nil)
   (5 10))
 
-(deftest shared-initialize.15
+(deftest shared-initialize.2.6
   (progn
     (funcall *shared-init-var-02-init* 5 10)
     (let ((obj (allocate-instance (find-class 'shared-init-class-02))))
@@ -254,7 +266,7 @@
   (when c-p (setf (slot-value obj 'c) c))
   obj)
 
-(deftest shared-initialize.16
+(deftest shared-initialize.3.1
   (let ((obj (make-shared-init-class-03)))
     (values
      (eqt obj (shared-initialize obj nil :a 1 :b 5 :c 19))
@@ -263,4 +275,72 @@
      (shared-init-class-03-c obj)))
   t 1 5 19)
 
+
+;;; Inheritance
+
+(defclass shared-init-class-04a ()
+  ((a :initform 4 :initarg :a)
+   (b :initform 8 :initarg :b)))
+
+(defclass shared-init-class-04b (shared-init-class-04a)
+  ((c :initform 17 :initarg :c) d)
+  (:default-initargs :a 1))
+
+(deftest shared-initialize.4.1
+  (let ((obj (allocate-instance (find-class 'shared-init-class-04b))))
+    (values
+     (eqt obj (shared-initialize obj nil :a 'x))
+     (map-slot-boundp* obj '(a b c d))
+     (slot-value obj 'a)))
+  t
+  (t nil nil nil)
+  x)
+
+(deftest shared-initialize.4.2
+  (let ((obj (allocate-instance (find-class 'shared-init-class-04b))))
+    (values
+     (eqt obj (shared-initialize obj nil))
+     (map-slot-boundp* obj '(a b c d))))
+  t
+  (nil nil nil nil))
+
+(deftest shared-initialize.4.3
+  (let ((obj (allocate-instance (find-class 'shared-init-class-04b))))
+    (values
+     (eqt obj (shared-initialize obj t))
+     (map-slot-boundp* obj '(a b c d))
+     (map-slot-value obj '(a b c))))
+  t
+  (t t t nil)
+  (4 8 17))
+
+(deftest shared-initialize.4.4
+  (let ((obj (allocate-instance (find-class 'shared-init-class-04b))))
+    (values
+     (eqt obj (shared-initialize obj '(a c)))
+     (map-slot-boundp* obj '(a b c d))
+     (map-slot-value obj '(a c))))
+  t
+  (t nil t nil)
+  (4 17))
+
+(deftest shared-initialize.4.5
+  (let ((obj (allocate-instance (find-class 'shared-init-class-04b))))
+    (values
+     (eqt obj (shared-initialize obj '(a c) :c 81))
+     (map-slot-boundp* obj '(a b c d))
+     (map-slot-value obj '(a c))))
+  t
+  (t nil t nil)
+  (4 81))
+
+(deftest shared-initialize.4.6
+  (let ((obj (allocate-instance (find-class 'shared-init-class-04b))))
+    (values
+     (eqt obj (shared-initialize obj '(a c) :a 91))
+     (map-slot-boundp* obj '(a b c d))
+     (map-slot-value obj '(a c))))
+  t
+  (t nil t nil)
+  (91 17))
 
