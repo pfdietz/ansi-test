@@ -1048,15 +1048,15 @@
 	  collect name))
   nil)
 
-(deftest special-operator-p.3
+(deftest special-operator-p.error.1
   (classify-error (special-operator-p 1))
   type-error)
 
-(deftest special-operator-p.4
+(deftest special-operator-p.error.2
   (classify-error (special-operator-p))
   program-error)
 
-(deftest special-operator-p.5
+(deftest special-operator-p.error.3
   (classify-error (special-operator-p 'cons 'cons))
   program-error)
 
