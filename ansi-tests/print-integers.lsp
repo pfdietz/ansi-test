@@ -317,9 +317,9 @@
   nil)	      
 
 (deftest print.integers.random.1
-  (loop for i from 1 to 10000
-	for numbits = (random 40)
+  (loop for numbits = (random 40)
 	for bound = (ash 1 numbits)
 	for r = (- (random (+ bound bound)) bound)
+	repeat 10000
 	nconc (randomly-check-readability r))
   nil)
