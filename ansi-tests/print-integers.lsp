@@ -264,7 +264,10 @@
   (concatenate 'string "#36r-" (make-string 200 :initial-element #\Z))
   (*print-radix* t) (*print-base* 36))
 
-
-
-
-
+(deftest print.integers.random
+  (loop for i from 1 to 10000
+	for numbits = (random 40)
+	for bound = (ash 1 numbits)
+	for r = (- (random (+ bound bound)) bound)
+	nconc (randomly-check-readability r))
+  nil)

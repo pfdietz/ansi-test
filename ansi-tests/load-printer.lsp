@@ -10,4 +10,5 @@
 (load "copy-pprint-dispatch.lsp")
 
 (load "print-integers.lsp")
+(load "print-ratios.lsp")
 
