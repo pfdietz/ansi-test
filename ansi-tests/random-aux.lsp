@@ -18,6 +18,11 @@
        ,@(loop for i from 0 for e in cases collect `(,i ,e))
        (t (error "Can't happen?! (in random-case)~%")))))
 
+(defun random-from-interval (lo hi)
+  "Generate random value from interval [lo,hi)"
+  (assert (> hi lo))
+  (+ (random (- hi lo)) lo))
+
 (defun coin (&optional (n 2))
   "Flip an n-sided coin."
   (eql (random n) 0))
