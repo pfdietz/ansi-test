@@ -16,9 +16,8 @@
 		   short-float single-float double-float long-float)
      for x in '(0.0s0 0.0f0 0.0d0 0.0l0
 		      -0.0s0 -0.0f0 -0.0d0 -0.0l0)
-     for s1 = (format nil "~f" x)
-     for s2 = (let ((*read-default-float-format* type))
-		(prin1-to-string x))
+     for s1 = (let ((*read-default-float-format* type)) (format nil "~f" x))
+     for s2 = (let ((*read-default-float-format* type)) (prin1-to-string x))
      unless (string=t s1 s2)
      collect (list x type s1 s2)))
   nil)
@@ -30,7 +29,7 @@
      for type = (elt #(short-float single-float double-float long-float) i)
      for x = (expt (coerce 10 type)
 		   (- (random 10.0s0) 3))
-     for s1 = (format nil "~f" x)
+     for s1 = (let ((*read-default-float-format* type)) (format nil "~f" x))
      for s2 = (let ((*read-default-float-format* type)) (prin1-to-string x))
      repeat 1000
      when (and (<= 1/1000 x)
@@ -46,7 +45,7 @@
      for type = (elt #(short-float single-float double-float long-float) i)
      for x = (- (expt (coerce 10 type)
 		      (- (random 10.0s0) 3)))
-     for s1 = (format nil "~f" x)
+     for s1 = (let ((*read-default-float-format* type)) (format nil "~f" x))
      for s2 = (let ((*read-default-float-format* type)) (prin1-to-string x))
      repeat 1000
      when (and (>= -1/1000 x)
