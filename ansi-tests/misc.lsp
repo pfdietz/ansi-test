@@ -4038,6 +4038,17 @@
    -100)
   -100)
 
+(deftest misc.238a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 3) (space 2) (safety 3)
+			  (debug 0) (compilation-speed 0)))
+       (min (load-time-value 0))
+       0)))
+  0)
+
 ;;; (in C::MAYBE-LET-CONVERT)
 (deftest misc.239
   (funcall
@@ -4255,6 +4266,26 @@
 	 (%f17 (logandc1 0 (catch 'ct2 0)))))))
   0)
 
+(deftest misc.253a
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (optimize (speed 1) (space 1) (safety 3) (debug 2)
+			  (compilation-speed 1)))
+       (labels ((%f1 (f1-1 f1-2)
+		     (isqrt (abs (complex f1-1 0)))))
+	 (progn
+	   (/
+	    (multiple-value-call #'%f1
+				 (values (1- (restart-bind nil 1416182210))
+					 123337746))
+	    1)
+	   (tagbody)
+	   c))))
+   -34661)
+  -34661)
+
 ;;; Wrong return value
 (deftest misc.254
   (funcall
@@ -4465,6 +4496,10 @@
   (locally (declare (special *s5*))
 	   (let ((v8 (progv '(*s5*) (list 0) (if t *s5* *s5*))))
 	     v8))
+  0)
+
+(deftest misc.267a
+  (let ((x (progv nil nil 0))) x)
   0)
 
 (deftest misc.268
@@ -4812,3 +4847,21 @@ Broken at C::WT-C-INLINE-LOC.
        (let ((v2 (integer-length (expt 0 0))))
          (dotimes (iv4 0 0) (logand v2))))))
   0)
+
+;;; cmucl
+;;; wrong return value
+
+(deftest misc.289
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (speed 3) (space 1) (safety 1) (debug 2)
+			  (compilation-speed 2)))
+       (multiple-value-prog1 (apply (constantly 0) b 0 0 nil)
+			     (catch 'ct8 (throw 'ct8 -2)))))
+   1)
+  0)
+
+
+
