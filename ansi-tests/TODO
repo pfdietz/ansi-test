@@ -84,3 +84,5 @@ Got:      0
 24. Add tests of very large (non-floatable) rationals with floats, if they
   are not already present.
 
+25. Add test that the form in an EQL parameter specializer is evaluated only
+  once, at method definition time.
