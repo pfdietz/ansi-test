@@ -2981,7 +2981,7 @@
        (declare (optimize (debug 1)))
        (block b7
 	 (flet ((%f3 (f3-1 f3-2 f3-3) 0))
-	   (apply #'%f3 0 (catch 737 (return-from b7 (%f3 0 b c))) c nil)))))
+	   (apply #'%f3 0 (catch 'foo (return-from b7 (%f3 0 b c))) c nil)))))
    0 6000 -9000000)
   0)
 
@@ -3061,7 +3061,7 @@
 		    0))
 	 (apply #'%f13
 		(%f13 b 0 0)
-		(catch 729 0)
+		(catch 'ct1 0)
 		(catch 'ct2 (throw 'ct2 c))
 		nil))))
    0 0 0)
