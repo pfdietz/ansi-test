@@ -95,7 +95,49 @@
 							  :can-fail t)))
   nil)
 
+(deftest print.arrau.0.13
+  (subseq (write-to-string (make-array nil :initial-element 0)
+			   :readably nil :array nil)
+	  0 2)
+  "#<")
 
+(deftest print.array.0.14
+  (loop for i from 1 to 64
+	for type = `(unsigned-byte ,i)
+	for a = (make-array nil :element-type type :initial-element 1)
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list i result))
+  nil)
+
+(deftest print.array.0.15
+  (loop for i from 1 to 64
+	for type = `(signed-byte ,i)
+	for a = (make-array nil :element-type type :initial-element -1)
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list i result))
+  nil)
+
+(deftest print.array.0.16
+  (loop for type in '(short-float single-float double-float long-float)
+	for a = (make-array nil :element-type type
+			    :initial-element (coerce 17 type))
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list i result))
+  nil)
+
+(deftest print.array.0.17
+  (loop for type0 in '(short-float single-float double-float
+				   long-float float real)
+	for type = `(complex ,type0)
+	for a = (make-array nil :element-type type
+			    :initial-element (coerce 3 type))
+	for result = (write-to-string a :readably nil :array nil)
+	unless (string= (subseq result 0 2) "#<")
+	collect (list i result))
+  nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Two-d arrays
@@ -260,20 +302,20 @@
      (write-to-string b :readably nil :array t)))
   "#2A((3 8) (2 67))")
 
-(deftest print.array.0.21
+(deftest print.array.2.21
   (loop for a = (make-array (list (random 4) (random 4))
 			    :initial-element (- (random 1000000) 500000))
 	repeat 100 nconc (randomly-check-readability a :test #'is-similar))
   nil)
 
-(deftest print.array.0.22
+(deftest print.array.2.22
   (loop for a = (make-array (list (random 4) (random 4))
 			    :initial-element (- (random 1000000) 500000)
 			    :adjustable t)
 	repeat 100 nconc (randomly-check-readability a :test #'is-similar))
   nil)
 
-(deftest print.array.0.23
+(deftest print.array.2.23
   (loop for d1 = (random 10)
 	for d2 = (random 10)
 	for a = (make-array (list d1 d2)
