@@ -27,6 +27,4 @@ Things to do to the test suite (not a complete list)
 
 12. Make sure all string operators work on displaced character vectors.
 
-13. Add tests for IMPORT.
-
 14. Finish testing DEFSETF

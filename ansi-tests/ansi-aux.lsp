@@ -1358,6 +1358,13 @@ the condition to go uncaught if it cannot be classified."
       (declare (ignorable s))			 
       (incf num))))
 
+(defun external-symbols-in-package (p)
+  (let ((symbols nil))
+    (do-external-symbols (s p)
+      (push s symbols))
+    (sort symbols #'(lambda (s1 s2) (string< (symbol-name s1)
+					     (symbol-name s2))))))
+
 (defun safely-delete-package (package-designator)
   (let ((package (find-package package-designator)))
     (when package
