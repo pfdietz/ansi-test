@@ -7,13 +7,14 @@
 
 (defun sbt-slots (sname s &rest slots)
   (loop for slotname in slots collect
-	(let ((fun (intern (concatenate 'string (string sname) "-" (string slotname))
+	(let ((fun (intern (concatenate 'string (string sname)
+					"-" (string slotname))
 			   :cl-test)))
 	  (funcall (symbol-function fun) s))))
 
 ;;; See the DEFSTRUCT page, and section 3.4.6 (Boa Lambda Lists)
 
-(defstruct (sbt-01 (:constructor sbt-01-con (b a c)))
+(defstruct* (sbt-01 (:constructor sbt-01-con (b a c)))
   a b c)
 
 (deftest structure-boa-test-01/1
@@ -23,7 +24,7 @@
 	    (sbt-01-c s)))
   2 1 3)
 
-(defstruct (sbt-02 (:constructor sbt-02-con (a b c))
+(defstruct* (sbt-02 (:constructor sbt-02-con (a b c))
 		   (:constructor sbt-02-con-2 (a b))
 		   (:constructor sbt-02-con-3 ()))
   (a 'x) (b 'y) (c 'z))
@@ -51,7 +52,7 @@
 
 ;;; &optional in BOA LL
 
-(defstruct (sbt-03 (:constructor sbt-03-con (a b &optional c)))
+(defstruct* (sbt-03 (:constructor sbt-03-con (a b &optional c)))
   c b a)
 
 (deftest structure-boa-test-03/1
@@ -65,7 +66,7 @@
   1 2 3)
 
 
-(defstruct (sbt-04 (:constructor sbt-04-con (a b &optional c)))
+(defstruct* (sbt-04 (:constructor sbt-04-con (a b &optional c)))
   (c nil) b (a nil))
 
 (deftest structure-boa-test-04/1
@@ -79,7 +80,7 @@
   1 2 4)
 
 
-(defstruct (sbt-05 (:constructor sbt-05-con (&optional a b c)))
+(defstruct* (sbt-05 (:constructor sbt-05-con (&optional a b c)))
   (c 1) (b 2) (a 3))
 
 (deftest structure-boa-test-05/1
@@ -103,7 +104,7 @@
   x y z)
 
 
-(defstruct (sbt-06 (:constructor sbt-06-con (&optional (a 'p) (b 'q) (c 'r))))
+(defstruct* (sbt-06 (:constructor sbt-06-con (&optional (a 'p) (b 'q) (c 'r))))
   (c 1) (b 2) (a 3))
 
 (deftest structure-boa-test-06/1
@@ -129,7 +130,7 @@
 
 ;;; Test presence flag in optional parameters
 
-(defstruct (sbt-07 (:constructor sbt-07-con
+(defstruct* (sbt-07 (:constructor sbt-07-con
 				 (&optional (a 'p a-p) (b 'q b-p) (c 'r c-p)
 					    &aux (d (list (notnot a-p)
 							  (notnot b-p)
@@ -155,28 +156,24 @@
 
 ;;; Keyword arguments
 
-(eval-when (compile load eval)
-  (ignore-errors
-    (defstruct (sbt-08 (:constructor sbt-08-con
-				     (&key ((foo a)))))
-      a)))
+(defstruct* (sbt-08 (:constructor sbt-08-con
+				 (&key ((foo a)))))
+  a)
 
 (deftest structure-boa-test-08/1
   (sbt-slots 'sbt-08 (sbt-08-con :foo 10) :a)
   (10))
 
-(eval-when (compile load eval)
-  (ignore-errors
-    (defstruct (sbt-09 (:constructor sbt-09-con
-				     (&key (a 'p a-p)
-					   ((x b) 'q)
-					   (c 'r)
-					   d
-					   ((y e))
-					   ((z f) 's z-p)
-					   &aux (g (list (notnot a-p)
-							 (notnot z-p))))))
-      a b c d e f g)))
+(defstruct* (sbt-09 (:constructor sbt-09-con
+				 (&key (a 'p a-p)
+				       ((x b) 'q)
+				       (c 'r)
+				       d
+				       ((y e))
+				       ((z f) 's z-p)
+				       &aux (g (list (notnot a-p)
+						     (notnot z-p))))))
+  a b c d e f g)
 
 (deftest structure-boa-test-09/1
   (sbt-slots 'sbt-09 (sbt-09-con) :a :b :c :f :g)
@@ -206,7 +203,107 @@
   (sbt-slots 'sbt-09 (sbt-09-con :z 1) :a :b :c :f :g)
   (p q r 1 (nil t)))
 
+;;; Aux variable overriding a default value
+
+(defstruct* (sbt-10 (:constructor sbt-10-con (&aux (a 10)
+						  (b (1+ a)))))
+  (a 1) (b 2))
+
+(deftest structure-boa-test-10/1
+  (sbt-slots 'sbt-10 (sbt-10-con) :a :b)
+  (10 11))
+
+;;; Aux variables with no value
+
+(defstruct* (sbt-11 (:constructor sbt-11-con (&aux a b)))
+  a (b 0 :type integer))
+
+(deftest structure-boa-test-11/1
+  (let ((s (sbt-11-con)))
+    (setf (sbt-11-a s) 'p)
+    (setf (sbt-11-b s) 10)
+    (sbt-slots 'sbt-11 s :a :b))
+  (p 10))
+
+;;; Arguments that correspond to no slots
+
+(defstruct* (sbt-12 (:constructor sbt-12-con (a &optional (b 1)
+					       &rest c
+					       &aux (d (list a b c)))))
+  d)
+
+(deftest structure-boa-12/1
+  (sbt-12-d (sbt-12-con 'x))
+  (x 1 nil))
+
+(deftest structure-boa-12/2
+  (sbt-12-d (sbt-12-con 'x 'y))
+  (x y nil))
+
+(deftest structure-boa-12/3
+  (sbt-12-d (sbt-12-con 'x 'y 1 2 3))
+  (x y (1 2 3)))
 
 
+(defstruct* (sbt-13 (:constructor sbt-13-con
+				 (&key (a 1) (b 2) c &aux (d (list a b c)))))
+  d)
 
+(deftest structure-boa-test-13/1
+  (sbt-13-d (sbt-13-con))
+  (1 2 nil))
+
+(deftest structure-boa-test-13/2
+  (sbt-13-d (sbt-13-con :a 10))
+  (10 2 nil))
+
+(deftest structure-boa-test-13/3
+  (sbt-13-d (sbt-13-con :b 10))
+  (1 10 nil))
+
+(deftest structure-boa-test-13/4
+  (sbt-13-d (sbt-13-con :c 10))
+  (1 2 10))
+
+(deftest structure-boa-test-13/5
+  (sbt-13-d (sbt-13-con :c 10 :a 3))
+  (3 2 10))
+
+(deftest structure-boa-test-13/6
+  (sbt-13-d (sbt-13-con :c 10 :b 3))
+  (1 3 10))
+
+(deftest structure-boa-test-13/7
+  (sbt-13-d (sbt-13-con :a 10 :b 3))
+  (10 3 nil))
+
+(deftest structure-boa-test-13/8
+  (sbt-13-d (sbt-13-con :a 10 :c 'a :b 3))
+  (10 3 a))
+
+
+;;; Allow other keywords
+
+(defstruct* (sbt-14 (:constructor sbt-14-con (&key a b c &allow-other-keys)))
+  (a 1) (b 2) (c 3))
+
+(deftest structure-boa-test-14/1
+  (sbt-slots 'sbt-14 (sbt-14-con) :a :b :c)
+  (1 2 3))
+
+(deftest structure-boa-test-14/2
+  (sbt-slots 'sbt-14 (sbt-14-con :a 9) :a :b :c)
+  (9 2 3))
+
+(deftest structure-boa-test-14/3
+  (sbt-slots 'sbt-14 (sbt-14-con :b 9) :a :b :c)
+  (1 9 3))
+
+(deftest structure-boa-test-14/4
+  (sbt-slots 'sbt-14 (sbt-14-con :c 9) :a :b :c)
+  (1 2 9))
+
+(deftest structure-boa-test-14/5
+  (sbt-slots 'sbt-14 (sbt-14-con :d 9) :a :b :c)
+  (1 2 3))
 

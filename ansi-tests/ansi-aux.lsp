@@ -938,3 +938,8 @@ the condition to go uncaught if it cannot be classified."
 
 (defun safe-elt (x n)
   (classify-error* (elt x n)))
+
+(defmacro defstruct* (&body args)
+  `(eval-when (load eval compile)
+     (ignore-errors
+       (defstruct ,@args))))
