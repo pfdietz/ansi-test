@@ -51,12 +51,13 @@
 ;;; Random printing
 
 (deftest print.cons.random.1
-  (loop
-   for x = (make-random-cons-tree (random 100))
-   repeat 500
-   nconc (randomly-check-readability x))
+  (trim-list
+   (loop
+    for x = (make-random-cons-tree (random 100))
+    repeat 500
+    nconc (randomly-check-readability x))
+   10)
   nil)
-
 
 ;;; Printing with *print-length*
 

@@ -144,11 +144,12 @@
 ;;; Random tests
 
 (deftest print.string.random.1
-  (loop for len = (1+ (random 5))
-	for s = (coerce (loop repeat len collect (random-from-seq +standard-chars+))
-			'string)
-	repeat 1000
-	append (randomly-check-readability s))
+  (trim-list
+   (loop for len = (1+ (random 5))
+	 for s = (coerce (loop repeat len
+			       collect (random-from-seq +standard-chars+))
+			 'string)
+	 repeat 1000
+	 append (randomly-check-readability s))
+   10)
   nil)
-
-

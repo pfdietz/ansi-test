@@ -248,41 +248,49 @@
 ;;; Readability tests
 
 (deftest print.vector.random.1
-  (loop for v in *universe*
-	when (vectorp v)
-	nconc
-	(loop repeat 10
-	      nconc (randomly-check-readability
-		     v :test #'equalp
-		     :can-fail (not (subtypep t (array-element-type v))))))
+  (trim-list
+   (loop for v in *universe*
+	 when (vectorp v)
+	 nconc
+	 (loop repeat 10
+	       nconc (randomly-check-readability
+		      v :test #'equalp
+		      :can-fail (not (subtypep t (array-element-type v))))))
+   10)
   nil)
 
 (deftest print.vector.random.2
-  (loop for i from 2 to 100
-	for type = `(unsigned-byte ,i)
-	for v = (make-array '(4) :element-type type
-			    :initial-contents '(1 3 2 0))
-	nconc
-	(loop repeat 10
-	      nconc (randomly-check-readability v :test #'equalp
-						:can-fail t)))
+  (trim-list
+   (loop for i from 2 to 100
+	 for type = `(unsigned-byte ,i)
+	 for v = (make-array '(4) :element-type type
+			     :initial-contents '(1 3 2 0))
+	 nconc
+	 (loop repeat 10
+	       nconc (randomly-check-readability v :test #'equalp
+						 :can-fail t)))
+   10)
   nil)
 
 (deftest print.vector.random.3
-  (loop for i from 2 to 100
-	for type = `(signed-byte ,i)
-	for v = (make-array '(4) :element-type type
-			    :initial-contents '(-1 1 0 -2))
-	nconc
-	(loop repeat 10
-	      nconc (randomly-check-readability v :test #'equalp
-						:can-fail t)))
+  (trim-list
+   (loop for i from 2 to 100
+	 for type = `(signed-byte ,i)
+	 for v = (make-array '(4) :element-type type
+			     :initial-contents '(-1 1 0 -2))
+	 nconc
+	 (loop repeat 10
+	       nconc (randomly-check-readability v :test #'equalp
+						 :can-fail t)))
+   10)
   nil)
 
 (deftest print.vector.random.4
-  (loop for v = (make-random-vector (1+ (random 100)))
-	repeat 1000
-	nconc (randomly-check-readability v :test #'equalp))
+  (trim-list
+   (loop for v = (make-random-vector (1+ (random 100)))
+	 repeat 1000
+	 nconc (randomly-check-readability v :test #'equalp))
+   10)
   nil)
 
 ;;; *print-length* checks
