@@ -80,6 +80,73 @@
       (gethash 'a table)))
   b 3 1 2 3 b)
 
+
+;;; Tests for 0.0, -0.0 in hash tables
+
+(deftest gethash.zero.1
+  (loop for pz in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for nz = (- pz)
+	for result = (let ((table (make-hash-table :test 'eq)))
+		       (list
+			(setf (gethash pz table) :x)
+			(gethash pz table)
+			(gethash nz table)
+			(setf (gethash nz table) :y)
+			(gethash pz table)
+			(gethash nz table)))
+	unless (or (eql pz nz)
+		   (equal result '(:x :x nil :y :x :y)))
+	collect (list pz nz result))
+  nil)
+
+(deftest gethash.zero.2
+  (loop for pz in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for nz = (- pz)
+	for result = (let ((table (make-hash-table :test 'eql)))
+		       (list
+			(setf (gethash pz table) :x)
+			(gethash pz table)
+			(gethash nz table)
+			(setf (gethash nz table) :y)
+			(gethash pz table)
+			(gethash nz table)))
+	unless (or (eql pz nz)
+		   (equal result '(:x :x nil :y :x :y)))
+	collect (list pz nz result))
+  nil)
+
+(deftest gethash.zero.3
+  (loop for pz in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for nz = (- pz)
+	for result = (let ((table (make-hash-table :test 'equal)))
+		       (list
+			(setf (gethash pz table) :x)
+			(gethash pz table)
+			(gethash nz table)
+			(setf (gethash nz table) :y)
+			(gethash pz table)
+			(gethash nz table)))
+	unless (or (eql pz nz)
+		   (equal result '(:x :x nil :y :x :y)))
+	collect (list pz nz result))
+  nil)
+
+(deftest gethash.zero.4
+  (loop for pz in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for nz = (- pz)
+	for result = (let ((table (make-hash-table :test 'equal)))
+		       (list
+			(setf (gethash pz table) :x)
+			(gethash pz table)
+			(gethash nz table)
+			(setf (gethash nz table) :y)
+			(gethash pz table)
+			(gethash nz table)))
+	unless (or (eql pz nz)
+		   (equal result '(:x :x nil :y :y :y)))
+	collect (list pz nz result))
+  nil)
+
 ;;;; Error tests
 
 (deftest gethash.error.1
