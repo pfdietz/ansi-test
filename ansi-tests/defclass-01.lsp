@@ -589,11 +589,14 @@
 
 (declaim (special *class-21-s1-initvar-1* *class-21-s1-initvar-2*))
 
-(defclass class-21 ()
-  ((s1 :initarg :s1  :initarg :s1b)
-   (s2 :initarg :s1b :initarg :s2))
-  (:default-initargs :s1 (incf *class-21-s1-initvar-1*)
-		     :s1b (incf *class-21-s1-initvar-2*)))
+(let ((*class-21-s1-initvar-1* 0)
+      (*class-21-s1-initvar-2* 0))
+  (declaim (special *class-21-s1-initvar-1* *class-21-s1-initvar-2*))
+  (defclass class-21 ()
+    ((s1 :initarg :s1  :initarg :s1b)
+     (s2 :initarg :s1b :initarg :s2))
+    (:default-initargs :s1  (incf *class-21-s1-initvar-1*)
+		       :s1b (incf *class-21-s1-initvar-2*))))
 
 (deftest class-21.1
   (let* ((*class-21-s1-initvar-1* 10)
@@ -608,9 +611,54 @@
      *class-21-s1-initvar-2*))
   11 21 11 21)
 
+(deftest class-21.2
+  (let* ((*class-21-s1-initvar-1* 10)
+	 (*class-21-s1-initvar-2* 20)
+	 (c (make-instance 'class-21 :s1 'x)))
+    (declare (special *class-21-s1-initvar-1*
+		      *class-21-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)
+     *class-21-s1-initvar-1*
+     *class-21-s1-initvar-2*))
+  x 21 10 21)
 
+(deftest class-21.3
+  (let* ((*class-21-s1-initvar-1* 10)
+	 (*class-21-s1-initvar-2* 20)
+	 (c (make-instance 'class-21 :s1 'x :s1b 'y)))
+    (declare (special *class-21-s1-initvar-1*
+		      *class-21-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)
+     *class-21-s1-initvar-1*
+     *class-21-s1-initvar-2*))
+  x y 10 20)
 
+(deftest class-21.4
+  (let* ((*class-21-s1-initvar-1* 10)
+	 (*class-21-s1-initvar-2* 20)
+	 (c (make-instance 'class-21 :s1b 'y)))
+    (declare (special *class-21-s1-initvar-1*
+		      *class-21-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)
+     *class-21-s1-initvar-1*
+     *class-21-s1-initvar-2*))
+  y y 11 20)
 
-
-
-     
+(deftest class-21.5
+  (let* ((*class-21-s1-initvar-1* 10)
+	 (*class-21-s1-initvar-2* 20)
+	 (c (make-instance 'class-21 :s2 'y)))
+    (declare (special *class-21-s1-initvar-1*
+		      *class-21-s1-initvar-2*))
+    (values
+     (slot-value c 's1)
+     (slot-value c 's2)
+     *class-21-s1-initvar-1*
+     *class-21-s1-initvar-2*))
+  11 y 11 21)
