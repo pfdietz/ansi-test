@@ -1102,7 +1102,7 @@
 	       (- (rem -26 (max 25 (load-time-value 505849129)))
 		  (* -15718867961526428520296254978781964 c))))
    0)
-  26)
+  -26)
 
 ;;; acl bugs (version 6.2, linux x86 trial)
 (deftest misc.90
@@ -1226,6 +1226,48 @@
 	(list v1 v2))))
   :good)
 
+;;; sbcl bugs (0.8.4.40, x86 linux)
+
+(deftest misc.98
+  (funcall (compile nil '(lambda (x)
+			   (declare (type (integer -1000000 1000000) x))
+			   (logand x x 0)))
+	   12345)
+  0)
+
+(deftest misc.99
+  (funcall
+   (compile nil '(lambda (a)
+                   (declare (type (integer 4303063 101130078) a))
+                   (mask-field (byte 18 2) (ash a 77))))
+   57132532)
+  0)
+
+(deftest misc.100
+  (funcall (compile nil '(lambda (c)
+			   (declare (type (integer -3924 1001809828) c))
+			   (declare (optimize (speed 3)))
+			   (min 47 (if (ldb-test (byte 2 14) c)
+				       -570344431
+				     (ignore-errors -732893970)))))
+	   705347625)
+  -570344431)
+
+(deftest misc.101
+  (funcall
+   (compile nil '(lambda (a c)
+		   (declare (type (integer 185501219873 303014665162) a))
+		   (declare (type (integer -160758 255724) c))
+		   (declare (optimize (speed 3)))
+		   (let ((v8
+			  (- -554046873252388011622614991634432
+			     (ignore-errors c)
+			     (unwind-protect 2791485))))
+		     (max (ignore-errors a)
+			  (let ((v6 (- v8 (restart-case 980))))
+			    (min v8 v6))))))
+   259448422916 173715)
+  259448422916)
 
 
 
