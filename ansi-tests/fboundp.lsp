@@ -39,9 +39,20 @@
   (let ((g (gensym))) (fboundp (list 'setf g)))
   nil)
 
+(deftest fboundp.8
+  (catch-type-error (fboundp 1))
+  type-error)
+
+(deftest fboundp.9
+  (catch-type-error (fboundp #\a))
+  type-error)
+
+(deftest fboundp.10
+  (catch-type-error (fboundp '(foo)))
+  type-error)
 
 
-  
+
 
 
   

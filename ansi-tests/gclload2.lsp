@@ -9,6 +9,7 @@
 (load "constantly.lsp")
 (load "complement.lsp")
 (load "fboundp.lsp")
+(load "fmakunbound.lsp")
 (load "function.lsp")
 (load "functionp.lsp")
 (load "lambda-list-keywords.lsp")
