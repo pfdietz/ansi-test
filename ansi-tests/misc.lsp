@@ -9196,3 +9196,83 @@ Broken at C::WT-MAKE-CLOSURE.
 			(conjugate (progn (catch 'ct5 (if t 0 0)) 0))))))
   0)
 
+;;; The value 5085 is not of type FUNCTION.
+
+(deftest misc.495
+  (funcall
+   (compile nil '(lambda (a b)
+		   (declare (type (integer -4197 284380207) a))
+		   (declare (type (integer -23 5088) b))
+		   (declare (ignorable a b))
+		   (declare (optimize (speed 1) (space 2) (debug 0)
+				      (compilation-speed 0) (safety 2)))
+		   (if (position (progn (1+ b) 0)
+				 '(169496 -726 -13623 53307916 128 -258391 156
+					  7432659 30 20 -11))
+		       0
+		     a)))
+   72179019 5084)
+  72179019)
+
+;;; Inconsistent stack height 1 != 2
+
+(deftest misc.496
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil
+		 '(lambda (a)
+		    (declare (type (integer -54915 -3396) a))
+		    (declare (optimize (debug 3) (space 0) (safety 2) (speed 2)
+				       (compilation-speed 3)))
+		    (progn (1+ a) (catch 'ct6 (progn 0)))))
+	-25986))
+  0)
+
+(deftest misc.497
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil
+		 '(lambda (b)
+		    (declare (type (integer -1 0) b))
+		    (declare (optimize (space 3) (compilation-speed 1)
+				       (safety 0) (debug 1) (speed 0)))
+		    (if 0 (prog2 0 0 (1+ b)) 0)))
+	0))
+  0)
+
+;;; Inconsistent stack height 1 != 0
+
+(deftest misc.498
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil
+		 '(lambda (a)
+		    (declare (type (integer -16191 4) a))
+		    (declare (optimize (compilation-speed 2) (space 1) (debug 0)
+				       (safety 0) (speed 2)))
+		    (conjugate (dotimes (iv1 0 0)
+				 (let ((v2 (dotimes (iv3 0 0) (1+ a))))
+				   0)))))
+	-2840))
+  0)
+
+;;; Incompatible object argument for function call
+
+(deftest misc.499
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil
+		 '(lambda (a b)
+		    (declare (type (integer -31415 133871) a))
+		    (declare (type (integer -993 6448) b))
+		    (declare (ignorable a b))
+		    (declare (optimize (space 0) (debug 2) (safety 0) (speed 0)
+				       (compilation-speed 0)))
+		    (progn (ceiling (progn (1+ b) a)) a)))
+	-16435 2620))
+  -16435)
+
