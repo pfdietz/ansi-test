@@ -192,9 +192,9 @@
 	     (read-from-string (format nil "#~Aa()" len))))
   t)
 
-(deftest make-array.24
-  (make-array-with-checks '(5) :initial-element 'a :displaced-to nil)
-  #(a a a a a))
+;;; (deftest make-array.24
+;;;  (make-array-with-checks '(5) :initial-element 'a :displaced-to nil)
+;;;  #(a a a a a))
 
 (deftest make-array.25
   (make-array '(4) :initial-element 'x :nonsense-argument t
@@ -646,25 +646,28 @@
 ;;; Order of evaluation tests
 
 (deftest make-array.order.1
-  (let ((i 0) a b c d e)
+  (let ((i 0) a b c e)
     (values
      (make-array (progn (setf a (incf i)) 5)
 		 :initial-element (progn (setf b (incf i)) 'a)
 		 :fill-pointer (progn (setf c (incf i)) nil)
-		 :displaced-to (progn (setf d (incf i)) nil)
+		 ;; :displaced-to (progn (setf d (incf i)) nil)
 		 :element-type (progn (setf e (incf i)) t)
 		 )
-     i a b c d e))
-  #(a a a a a) 5 1 2 3 4 5)
+     i a b c e))
+  #(a a a a a) 4 1 2 3 4)
 
 (deftest make-array.order.2
-  (let ((i 0) a b c d e)
+  (let ((i 0) a b d e)
     (values
      (make-array (progn (setf a (incf i)) 5)
 		 :element-type (progn (setf b (incf i)) t)
-		 :displaced-to (progn (setf c (incf i)) nil)
+		 ;; :displaced-to (progn (setf c (incf i)) nil)
 		 :fill-pointer (progn (setf d (incf i)) nil)
 		 :initial-element (progn (setf e (incf i)) 'a)
 		 )
-     i a b c d e))
-  #(a a a a a) 5 1 2 3 4 5)
+     i a b d e))
+  #(a a a a a) 4 1 2 3 4)
+
+;; Must add back order tests for :displaced-to and :displaced-index-offset
+

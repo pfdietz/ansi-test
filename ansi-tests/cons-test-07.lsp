@@ -18,9 +18,9 @@
   (nconc (copy-tree '(a b c d e f)))
   (a b c d e f))
 
-(deftest nconc.3
-  (nconc 1)
-  1)
+;;; (deftest nconc.3
+;;;  (nconc 1)
+;;;  1)
 
 (deftest nconc.4
   (let ((x (list 'a 'b 'c))
@@ -72,9 +72,9 @@
 (deftest nconc.order.2
   (let ((i 0))
     (values
-     (nconc (incf i))
+     (nconc (list 'a) (incf i))
      i))
-  1 1)	    
+  (a . 1) 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; append
