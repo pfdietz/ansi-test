@@ -572,7 +572,9 @@
    (let ((s (write-to-string (make-symbol "ABC")
 			     :gensym nil :case :upcase
 			     :readably t :escape nil)))
-     (if (string= s "#:ABC") t s)))
+     (if (and (string= (subseq s 0 2) "#:")
+	      (string= (symbol-name (read-from-string s)) "ABC"))
+	 t s)))
   t)
 
 (deftest print.symbol.prefix.4
