@@ -8731,14 +8731,44 @@ Broken at C::WT-MAKE-CLOSURE.
     '(lambda (a b)
            (declare (type (integer -32933298905 -168011) a))
            (declare (type (integer -190015111797 16) b))
-           (declare
-            (optimize (speed 2)
-                      (compilation-speed 0)
-                      (space 0)
-                      (safety 1)
-                      (debug 0)
-                      ; (sb-c:insert-step-conditions 0)
-		      ))
+           (declare (optimize (speed 2) (compilation-speed 0) (space 0)
+			      (safety 1) (debug 0)))
            (logand (+ b -9255) a 63)))
    -8166030199 -45872222127)
   8)
+
+;;; In sbcl 0.8.17.28-signed-modular-arithmetic.3
+;;; Unreachable code is found or flow graph is not properly depth-first ordered.
+;;; (This is apparently a different bug from the previous ones that
+;;;  were causing this message to be printed.)
+
+(deftest misc.460
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 50354997 50514623) a))
+       (declare (ignorable a))
+       (declare
+	(optimize (speed 0)
+		  (safety 0)
+		  (compilation-speed 3)
+		  (sb-c:insert-step-conditions 0)
+		  (debug 1)
+		  (space 1)))
+       (loop for lv3 below 2
+	     sum (if (find 0
+			   '(-17604051 126613572 -795198 12037855 127043241 -2 -59
+				       -3458890 1505 -1 -2 107498637 -977489 172087 421813
+				       543299114 12 4311490 569 -3509 -4051770 -1 1 1
+				       216399387 -2482 143297 2 304550 -61 -195904988
+				       57682175 2344 1294831 -247 -2 25779388 -296 -12115
+				       -158487 -15)
+			   :test 'eql)
+		     (if (find 0 #(4193594) :test '<)
+			 (min (catch 'ct6 0) (catch 'ct8 0) 0)
+		       (let ((*s1* (cons a 0)))
+			 (car *s1*)))
+		   0))))
+   50395193)
+  0)
