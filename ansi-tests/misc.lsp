@@ -8466,5 +8466,105 @@ Broken at C::WT-MAKE-CLOSURE.
    805)
   0)
 
+;;; "The value -13589 is not of type (INTEGER -15205 18871)"
+(deftest misc.439
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -15205 18871) a))
+       (declare (ignorable a))
+       (declare
+	(optimize (space 2)
+		  ; (sb-c:insert-step-conditions 0)
+		  (speed 1)
+		  (safety 1)
+		  (debug 1)
+		  (compilation-speed 3)))
+       (if (<= a (- (setf a 10305))) a 0)))
+   -13589)
+  10305)
 
+;;; In ACL 7.0 (sparc, Solaris 8, 11 Nov 2004)
+;;; Error: the value of (CAR EXCL::INTEGERS) is NIL, which is not of type INTEGER.
 
+(deftest misc.440
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline logior))
+       (declare (optimize (safety 3) (debug 1) (speed 0) (space 1)
+			  (compilation-speed 3)))
+       (flet ((%f10 (&optional &key
+			       (key1
+				(logior (flet ((%f4 (f4-1
+						     &optional
+						     &key
+						     (key1 0)
+						     (key2 b)
+						     &allow-other-keys)
+						 c))
+					  (%f4 0))))
+			       &allow-other-keys)
+		0))
+	 (let ((*s8* (%f10)))
+	   (declare (special *s8*))
+	   *s8*))))
+   13524 4484529434427 8109510572804)
+  0)
+
+;;; Error: the value of realpart is nil, which is not of type (or rational float).
+(deftest misc.441
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (notinline complex))
+       (declare (optimize (compilation-speed 1) (space 1) (speed 3) (safety 2) (debug 3)))
+       (flet ((%f8 (f8-1 f8-2 &optional
+			 &key (key1 (labels ((%f9 nil a)) (complex (%f9) 0)))
+			 (key2 0) &allow-other-keys)
+		0))
+	 (%f8 0 a))))
+   1 2)
+  0)
+
+;;; Error: the value of excl::x is nil, which is not of type integer.
+(deftest misc.442
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (notinline apply evenp))
+       (declare (optimize (speed 1) (space 1) (safety 1) (compilation-speed 0) (debug 0)))
+       (labels ((%f18 (f18-1 &optional
+			     &key
+			     (key1 (flet ((%f8 nil b)) (if (evenp (%f8)) 0 a)))
+			     (key2 0))
+		  0))
+	 (apply #'%f18 b nil))))
+   505808341634 -39752189)
+  0)
+
+;;; Error: No from-creg to move to <3:iparam2@(:iparam 2){4=c{s:<3>}}> before (move-throw-tag nil nil -> ({18}) ([18>>:frame :dfr]))
+
+(deftest misc.443
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d e)
+       (declare (type (integer -2310674 2) a))
+       (declare (type (integer -492505702625 -147091001460) b))
+       (declare (type (integer -27638568 52971156) c))
+       (declare (type (integer -151 203) d))
+       (declare (type (integer -1400301 8173230) e))
+       (declare (ignorable a b c d e))
+       (declare (optimize (compilation-speed 3) (debug 0) (space 0) (safety 1) (speed 1)))
+       (catch 'ct7 (lcm (case 0
+			  ((-4557) (let ((*s7* (max d))) 0))
+			  ((-15387) c)
+			  (t 0))
+			(unwind-protect (throw 'ct7 b) 0)))))
+   -1748290 -244489705763 38969920 -90 341977)
+  -244489705763)
