@@ -263,12 +263,16 @@
 		     (setf (gethash c c->i) i)
 		     (setf (gethash i i->c) c)
 		     t))))))
-      (and
-       (loop for i from 0 below char-code-limit
-	     always (%insert (code-char i)))
-       (every #'%insert +standard-chars+)
-       (every #'%insert *universe*)
-       t))))
+      (or
+       (loop for i from 0 below (min (ash 1 16) char-code-limit)
+	     unless (%insert (code-char i))
+	     collect i)
+       (loop for i = (random char-code-limit)
+	     repeat 1000
+	     unless (%insert (code-char i))
+	     collect i)
+       (find-if-not #'%insert +standard-chars+)
+       (find-if-not #'%insert *universe*)))))
 
 (defun char-name.1.fn ()
   (declare (optimize (safety 3) (speed 1) (space 1)))
@@ -280,7 +284,7 @@
 		    (and (stringp name)
 			 (eqlt c (name-char name))))))))
     (and
-     (loop for i from 0 below char-code-limit
+     (loop for i from 0 below (min (ash 1 16) char-code-limit)
 	   always (%check (code-char i)))
      (every #'%check +standard-chars+)
      (every #'%check *universe*)

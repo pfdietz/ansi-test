@@ -550,7 +550,7 @@
 
 (deftest char-int.2
   (char-int.2.fn)
-  t)
+  nil)
 
 (deftest char-int.order.1
   (let ((i 0))
