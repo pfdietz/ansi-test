@@ -37,7 +37,8 @@
   1 2)
 
 (deftest loop.13.8
-  (let* ((limit (min 1000 (1- multiple-values-limit)))
+  (let* ((limit (min 1000 (1- (min call-arguments-limit
+				   multiple-values-limit))))
 	 (vals (make-list limit :initial-element :a))
 	 (vals2 (multiple-value-list (eval `(loop return (values ,@vals))))))
     (equalt vals vals2))
