@@ -155,10 +155,11 @@ do the defstruct."
 
 	 ;; The name of the -P function, either the default or the
 	 ;; one specified in the :predicate option
+	 (p-fn-default (make-struct-p-fn name))
 	 (p-fn (cond
 		((or (eq predicate-option :predicate)
 		     (null (cdr predicate-option)))
-		 (make-struct-p-fn name))
+		 p-fn-default)
 		((cadr predicate-option) (cadr predicate-option))
 		(t nil)))
 
@@ -166,10 +167,11 @@ do the defstruct."
 	 (copier-option (find-option options :copier))
 	 ;; The name of the copier function, either the default or
 	 ;; one speciefied in the :copier option
+	 (copy-fn-default (make-struct-copy-fn name))
 	 (copy-fn (cond
 		   ((or (eq copier-option :copier)
 			(null (cdr copier-option)))
-		    (make-struct-copy-fn name))
+		    copy-fn-default)
 		   ((cadr copier-option) (cadr copier-option))
 		   (t nil)))
 
@@ -177,9 +179,11 @@ do the defstruct."
 	 (conc-option (find-option options :conc-name))
 	 ;; String to be prepended to slot names to get the
 	 ;; slot accessor function
+	 (conc-prefix-default
+	  (concatenate 'string (string name) "-"))
 	 (conc-prefix (cond
 		       ((null conc-option)
-			(concatenate 'string (string name) "-"))
+			conc-prefix-default)
 		       ((or (eq conc-option :conc-name)
 			    (null (cadr conc-option)))
 			"")
@@ -211,7 +215,8 @@ do the defstruct."
 
        ;; Test that structure is of the correct type
        (deftest ,(make-struct-test-name name 1)
-	 (and (functionp (function ,make-fn))
+	 (and (fboundp (quote ,make-fn))
+	      (functionp (function ,make-fn))
 	      (symbol-function (quote ,make-fn))
 	      (notnot (typep (,make-fn) (quote ,name))))
 	 t)
@@ -219,16 +224,27 @@ do the defstruct."
        ;; Test that the predicate exists
        ,@(when p-fn
 	   `((deftest ,(make-struct-test-name name 2)
-	       (and (functionp (function ,p-fn))
+	       (and (fboundp (quote ,p-fn))
+		    (functionp (function ,p-fn))
 		    (symbol-function (quote ,p-fn))
 		    (notnot (,p-fn (,make-fn))))
 	       t)))
 
+       ;; When the predicate is not the default, check
+       ;; that the default is not defined.  Tests should
+       ;; be designed so that this function name doesn't
+       ;; collide with anything else.
+       ,@(unless (eq p-fn p-fn-default)
+	   `((deftest ,(make-struct-test-name name 10)
+	       (fboundp (quote ,p-fn-default))
+	       nil)))
+
        ;; Test that the elements of *universe* are not
        ;; of this type
-       (deftest ,(make-struct-test-name name 3)
-	 (count-if (function ,p-fn) *universe*)
-	 0)
+       ,@(when p-fn
+	   `((deftest ,(make-struct-test-name name 3)
+	       (count-if (function ,p-fn) *universe*)
+	       0)))
 
        (deftest ,(make-struct-test-name name 4)
 	 (count-if (function (lambda (x) (typep x (quote ,name))))
@@ -283,10 +299,20 @@ do the defstruct."
        ;; Check that the copy function exists
        ,@(when copy-fn
 	   `((deftest ,(make-struct-test-name name 8)
-	       (and (functionp (function ,copy-fn))
+	       (and (fboundp (quote ,copy-fn))
+		    (functionp (function ,copy-fn))
 		    (symbol-function (quote ,copy-fn))
 		    t)
 	       t)))
+
+       ;; When the copy function name is not the default, check
+       ;; that the default function is not defined.  Tests should
+       ;; be designed so that this name is not accidently defined
+       ;; for something else.
+       ,@(unless (eq copy-fn copy-fn-default)
+	   `((deftest ,(make-struct-test-name name 11)
+	       (fboundp (quote ,copy-fn-default))
+	       nil)))
 
        ;; Check that the copy function properly copies fields
        ,@(when copy-fn
@@ -311,4 +337,5 @@ do the defstruct."
 			     `(eqlt (,fn ,var) (,fn ,var2))))
 			t))))
 	       t)))
+       nil
        )))

@@ -138,4 +138,17 @@
 (defstruct-with-tests (struct-test-12 (:conc-name BLAH-)) a12 b12)
 (defstruct-with-tests (struct-test-13 (:conc-name #\X)) foo-a13 foo-b13)
 
-;;; More to come
+(defstruct-with-tests (struct-test-14 (:predicate)) a14 b14)
+(defstruct-with-tests (struct-test-15 (:predicate nil)) a15 b15)
+(defstruct-with-tests (struct-test-16 :predicate) a16 b16)
+(defstruct-with-tests (struct-test-17
+		       (:predicate struct-test-17-alternate-pred))
+  a17 b17)
+
+(defstruct-with-tests (struct-test-18 :copier) a18 b18)
+(defstruct-with-tests (struct-test-19 (:copier)) a19 b19)
+(defstruct-with-tests (struct-test-20 (:copier nil)) a20 b20)
+(defstruct-with-tests (struct-test-21 (:copier struct-test-21-alt-copier))
+  a21 b21)
+
+
