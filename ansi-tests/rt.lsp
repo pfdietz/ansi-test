@@ -146,10 +146,11 @@ them.")
    |#
 
    ((typep x 'array)
-    (let ((size (array-total-size x)))
-      (loop for i from 0 below size
-	    always (equalp-with-case (row-major-aref x i)
-				     (row-major-aref y i)))))
+    (and (typep y 'array)
+	 (let ((size (array-total-size x)))
+	   (loop for i from 0 below size
+		 always (equalp-with-case (row-major-aref x i)
+					  (row-major-aref y i))))))
 
    (t (eql x y))))
 
