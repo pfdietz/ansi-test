@@ -46,6 +46,50 @@
      evaluated))
   1 t)
 
+;;; Order of evaluation
+
+(deftest get.order.1
+  (let (a b (i 0) (sym (gensym)))
+    (setf (get sym :foo) t)
+    (values
+     (get (progn (setf a (incf i)) sym)
+	  (progn (setf b (incf i)) :foo))
+     a b i))
+  t 1 2 2)
+
+(deftest get.order.2
+  (let (a b (i 0) (sym (gensym)))
+    (values
+     (setf (get (progn (setf a (incf i)) sym)
+		(progn (setf b (incf i)) :foo))
+	   t)
+     a b i
+     (get sym :foo)
+     ))
+  t 1 2 2 t)
+
+(deftest get.order.3
+  (let (a b c (i 0) (sym (gensym)))
+    (setf (get sym :foo) t)
+    (values
+     (get (progn (setf a (incf i)) sym)
+	  (progn (setf b (incf i)) :foo)
+	  (progn (setf c (incf i)) nil))
+     a b c i))
+  t 1 2 3 3)
+
+(deftest get.order.4
+  (let (a b c (i 0) (sym (gensym)))
+    (values
+     (setf (get (progn (setf a (incf i)) sym)
+		(progn (setf b (incf i)) :foo)
+		(progn (setf c (incf i)) nil))
+	   t)
+     a b c i
+     (get sym :foo)
+     ))
+  t 1 2 3 3 t)
+
 ;;; Error tests
 
 (deftest get.error.1
