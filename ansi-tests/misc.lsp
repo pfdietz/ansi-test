@@ -9182,3 +9182,17 @@ Broken at C::WT-MAKE-CLOSURE.
 	
 	-71))
   41397376227)
+
+;;; ABCL (26 Dec 2004)
+;;;  Class verification failed: [...] Illegal exception table range
+
+(deftest misc.494
+  (let #+abcl ((jvm::*catch-errors* nil))
+       nil
+       (funcall
+	(compile nil '(lambda ()
+			(declare (optimize (safety 0) (space 2) (debug 3) (speed 0)
+					   (compilation-speed 2)))
+			(conjugate (progn (catch 'ct5 (if t 0 0)) 0))))))
+  0)
+
