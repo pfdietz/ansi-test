@@ -147,3 +147,34 @@
   y)
 
 
+;;; A test showing nonmonotonicity in the CLOS CPL algorithm
+
+(defclass class-0306a () ((a :initform nil :reader a-slot)))
+(defclass class-0306b (class-0306a) ((a :initform 'x)))
+(defclass class-0306c (class-0306a) ((a :initform 'y)))
+(defclass class-0306d (class-0306b) ())
+(defclass class-0306e (class-0306b) ())
+(defclass class-0306f (class-0306d class-0306c) ())
+(defclass class-0306g (class-0306e) ())
+(defclass class-0306h (class-0306f class-0306g) ())
+
+;;; Class class-0306c should precede class-0306b in the
+;;; CPL for class-0306h, even though it follows it in the CPLs
+;;; for the direct superclasses of class-0306h.
+
+(deftest class-0306.1
+  (loop for obj in
+	(mapcar #'make-instance
+	     '(class-0306a class-0306b class-0306c class-0306d
+	       class-0306e class-0306f class-0306g class-0306h))
+	collect (slot-value obj 'a))
+  (nil x y x x x x y))
+
+(deftest class-0306.2
+  (loop for obj in
+	(mapcar #'make-instance
+	     '(class-0306a class-0306b class-0306c class-0306d
+	       class-0306e class-0306f class-0306g class-0306h))
+	collect (a-slot obj))
+  (nil x y x x x x y))
+
