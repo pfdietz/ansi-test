@@ -50,7 +50,8 @@
      (let* ((str (with-output-to-string (s) (write obj :stream s)))
 	    (obj2 (let ((*read-base* *print-base*))
 		    (handler-case
-		     (read-from-string str)
+		     (let ((*readtable* (copy-readtable nil)))
+		       (read-from-string str))
 		     (reader-error () :error)))))
        (unless (funcall test obj obj2)
 	 (list
