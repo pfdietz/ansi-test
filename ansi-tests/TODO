@@ -69,3 +69,6 @@ Got:      (2 NULL)
     update-counter))
 Expected: 1
 Got:      0
+
+
+20. Add -0.0 tests for EQUALP hash tables
