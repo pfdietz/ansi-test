@@ -303,7 +303,6 @@
        (return form)))))
 
 (defun prune-results (result-list)
-  (assert result-list)
   (loop for result in result-list
 	collect
 	(let ((form (getf result :form))
