@@ -127,6 +127,45 @@
   (a nil)
   (a b))
 
+;;; When c-n-m is called with arguments but omits optionals, those
+;;; optionals are defaulted
+
+(defgeneric cnm-gf-09 (x &optional y)
+  (:method ((x integer) &optional y) (list* x y (call-next-method (1+ x))))
+  (:method ((x t) &optional y) (list x y)))
+
+(deftest call-next-method.10
+  (values
+   (cnm-gf-09 5)
+   (cnm-gf-09 8 'a)
+   (cnm-gf-09 'x)
+   (cnm-gf-09 'x 'y))
+  (5 nil 6 nil)
+  (8 a 9 nil)
+  (x nil)
+  (x y))
+
+(defgeneric cnm-gf-10 (x &optional y z)
+  (:method ((x integer) &optional (y 'a y-p) (z 'b z-p))
+	   (list* x y (notnot y-p) z (notnot z-p) (call-next-method (1+ x))))
+  (:method ((x t) &optional (y 'c y-p) (z 'd z-p))
+	   (list x y (notnot y-p) z (notnot z-p))))
+
+(deftest call-next-method.11
+  (values
+   (cnm-gf-10 5)
+   (cnm-gf-10 8 'p)
+   (cnm-gf-10 8 'p 'q)
+   (cnm-gf-10 'x)
+   (cnm-gf-10 'x 'u)
+   (cnm-gf-10 'x 'u 'v))
+  (5 a nil b nil 6 c nil d nil)
+  (8 p t b nil 9 c nil d nil)
+  (8 p t q t 9 c nil d nil)
+  (x c nil d nil)
+  (x u t d nil)
+  (x u t v t))
+
 ;;; "When providing arguments to call-next-method, the following
 ;;;  rule must be satisfied or an error of type error should be signaled:
 ;;;  the ordered set of applicable methods for a changed set of arguments
