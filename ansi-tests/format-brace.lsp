@@ -13,11 +13,11 @@
   "")
 
 (deftest format.{.1a
-  (format nil "~{~}" nil)
+  (format nil "~{~}" "" nil)
   "")
 
 (deftest format.{.1b
-  (format nil "~0{~}" '(1 2 3))
+  (format nil "~0{~}" "" '(1 2 3))
   "")
 
 (deftest format.{.2
@@ -72,10 +72,38 @@
   (format nil "~{X ~A~^ Y ~A~^ ~}" '(1 2 3 4))
   "X 1 Y 2 X 3 Y 4")
 
+(deftest format.{.12
+  (format nil "~1{~A~^~A~}" '(1))
+  "1")
+
+(deftest format.{.13
+  (format nil "~0{~A~^~A~}" '(1))
+  "")
+
+(deftest format.{.14
+  (format nil "~1{~A~^~A~}" '(1 2 3))
+  "12")
+
+(deftest format.{.15
+  (format nil "~0{~}" "~A" '(1 2 3))
+  "")
+
+(deftest format.{.16
+  (format nil "~1{~}" "~A" '(4 5 6))
+  "4")
+
+
+
+
 ;;; Tests of ~@{ ... ~}
 
 (deftest format.@{.1
-  (format nil "~@{~}")
+  (format nil "~@{~
+~}")
+  "")
+
+(deftest format.@{.1A
+  (format nil "~@{~}" "")
   "")
 
 (deftest format.@{.2
