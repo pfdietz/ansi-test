@@ -128,7 +128,7 @@
   (a d e))
 
 (deftest slot-exists-p.16
-  (let ((obj (make-condition 'slot-exists-p-condition-01)))
+  (let ((obj (make-condition 'slot-exists-p-condition-02)))
     (map-slot-exists-p* obj (list 'a 'b 'c 'd 'e (gensym))))
   (t t t t t nil))
 
