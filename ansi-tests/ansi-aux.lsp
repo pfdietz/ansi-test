@@ -353,6 +353,11 @@ the condition to go uncaught if it cannot be classified."
 
 ;;; From types-and-class.lsp
 
+(defvar *disjoint-types-list*
+    '(cons symbol array
+      number character hash-table function readtable package
+      pathname stream random-state condition restart))
+
 (defun is-t-or-nil (e)
   (or (eqt e t) (eqt e nil)))
 

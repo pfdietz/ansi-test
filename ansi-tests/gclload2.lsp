@@ -178,6 +178,7 @@
 ;;; Tests of types and classes
 
 (load "types-and-class.lsp")
+(load "coerce.lsp")
 
 ;;; Tests of the reader
 

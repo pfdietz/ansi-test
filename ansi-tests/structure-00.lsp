@@ -390,6 +390,30 @@ do the defstruct."
 	     (deftest ,(make-struct-test-name name 15)
 	       (notnot (typep (,make-fn) 'structure-object))
 	       t)
+	     (deftest ,(make-struct-test-name name 16)
+	       (loop for type in *disjoint-types-list*
+		     unless (and
+			     (equalt (multiple-value-list
+				      (subtypep* type (quote ,name)))
+				     '(nil t))
+			     (equalt (multiple-value-list
+				      (subtypep* (quote ,name) type))
+				     '(nil t)))				    
+		     collect type)
+	       nil)
+	     (deftest ,(make-struct-test-name name 17)
+	       (let ((class (find-class (quote ,name))))
+		 (loop for type in *disjoint-types-list*
+		       unless (and
+			       (equalt (multiple-value-list
+					(subtypep* type class))
+				       '(nil t))
+			       (equalt (multiple-value-list
+					(subtypep* class type))
+				       '(nil t)))
+		       collect type))
+	       nil)
 	     ))
        nil
        )))
+

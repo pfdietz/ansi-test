@@ -221,10 +221,7 @@
     (types-6-body)
   0)
 
-(defvar *disjoint-types-list*
-    '(cons symbol array
-      number character hash-table function readtable package
-      pathname stream random-state condition restart))
+(declaim (special *disjoint-types-list*))
 
 (deftest types-7
     (loop
