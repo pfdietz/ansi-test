@@ -8753,7 +8753,7 @@ Broken at C::WT-MAKE-CLOSURE.
 	(optimize (speed 0)
 		  (safety 0)
 		  (compilation-speed 3)
-		  (sb-c:insert-step-conditions 0)
+		  #+sbcl (sb-c:insert-step-conditions 0)
 		  (debug 1)
 		  (space 1)))
        (loop for lv3 below 2
