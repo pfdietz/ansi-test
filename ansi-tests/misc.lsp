@@ -4977,6 +4977,24 @@ Broken at C::WT-C-INLINE-LOC.
    1)
   0)
 
+(deftest misc.293a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (optimize (speed 2) (space 3) (safety 1)
+			  (debug 2) (compilation-speed 2)))
+       (block b6
+	 (multiple-value-prog1
+	  0 b 0
+	  (catch 'ct7
+	    (return-from b6
+	      (catch 'ct2
+		(complex (cl::handler-bind nil -254932942) 0))))))))
+   1 2 3)
+  -254932942)   
+
+
 ;;; failed AVER: "(SUBSETP START START-STACK)"
 
 (deftest misc.294
@@ -4996,6 +5014,22 @@ Broken at C::WT-C-INLINE-LOC.
                0)))))
    1 2 3)
   0)
+
+(deftest misc.294a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (notinline expt))
+       (declare (optimize (speed 1) (space 2) (safety 3)
+			  (debug 0) (compilation-speed 0)))
+       (catch 'ct2
+	 (expt
+	  (catch 'ct2
+	    (throw 'ct2 (if a 0 (multiple-value-prog1 0 (throw 'ct2 c) 0))))
+	  0))))
+   1 2 3)
+  1)
 
 ;;;  The value NIL is not of type SB-C::IR2-BLOCK.
 
