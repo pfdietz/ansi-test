@@ -173,6 +173,27 @@
    (error () :good))
   :good)
 
+;;; A close reading of the rules for keyword arguments to
+;;; generic functions convinced me that the following two
+;;; error tests are necessary.  See sections 7.6.5 of the CLHS.
+
+(deftest defgeneric.error.20
+  (classify-error
+   (let ((fn (defgeneric defgeneric-error-fn.20 (x &key)
+	       (:method ((x number) &key foo) (list x foo))
+	       (:method ((x symbol) &key bar) (list x bar)))))
+     (funcall fn 1 :bar 'a)))
+  program-error)
+
+(deftest defgeneric.error.21
+  (classify-error
+   (let ((fn (defgeneric defgeneric-error-fn.21 (x &key)
+	       (:method ((x number) &key foo &allow-other-keys) (list x foo))
+	       (:method ((x symbol) &key bar) (list x bar)))))
+     (funcall fn 'x :foo 'a)))
+  program-error)
+
+
 ;;; Non error cases
 
 (deftest defgeneric.1
