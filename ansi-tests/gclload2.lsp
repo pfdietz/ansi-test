@@ -152,6 +152,7 @@
 (load "upgraded-array-element-type.lsp")
 (load "vector.lsp")
 (load "vector-pop.lsp")
+(load "vector-push.lsp")
 
 ;;; Tests of packages
 

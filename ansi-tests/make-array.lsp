@@ -225,6 +225,47 @@
 				  (make-string len :initial-element #\)))))))
   t)
 
+(deftest make-array.29
+  (make-array-with-checks '(5) :element-type '(integer 0 (256))
+			  :initial-contents '(0 5 255 119 57))
+  #(0 5 255 119 57))
+
+(deftest make-array.30
+  (make-array-with-checks '(5) :element-type '(integer -128 127)
+			  :initial-contents '(-10 5 -128 86 127))
+  #(-10 5 -128 86 127))
+
+(deftest make-array.31
+  (make-array-with-checks '(5) :element-type '(integer 0 (65536))
+			  :initial-contents '(0 100 65535 7623 13))
+  #(0 100 65535 7623 13))
+
+(deftest make-array.32
+  (make-array-with-checks '(5) :element-type 'fixnum
+			  :initial-contents '(1 2 3 4 5))
+  #(1 2 3 4 5))
+
+(deftest make-array.33
+  (make-array-with-checks '(5) :element-type 'short-float
+			  :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0))
+  #(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0))
+
+(deftest make-array.34
+  (make-array-with-checks '(5) :element-type 'single-float
+			  :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0))
+  #(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0))
+
+(deftest make-array.35
+  (make-array-with-checks '(5) :element-type 'double-float
+			  :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0))
+  #(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0))
+
+(deftest make-array.36
+  (make-array-with-checks '(5) :element-type 'long-float
+			  :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0))
+  #(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0))
+
+
 ;;; Adjustable arrays
 
 (deftest make-array.adjustable.1
