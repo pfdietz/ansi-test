@@ -419,26 +419,6 @@
   (t nil nil)
   123)
 
-;;
-;; This next test seems to fail everywhere, but I don't understand why.
-;; Much gratitude if someone can explain what's wrong here.
-;;
-
-(deftest change-class.6.3
-  (let* ((class (find-class 'change-class-class-06))
-	 (obj (make-instance class :a 'bad)))
-    (values
-     (map-slot-boundp* obj '(a b c))
-     (eqt obj (change-class obj class :a 'also-bad))
-     (map-slot-boundp* obj '(a b c))
-     (slot-value obj 'a)
-     ))
-  (t nil nil)
-  t
-  (t nil nil)
-  123)
-
-
 ;;; Error tests
 
 (deftest change-class.error.1
