@@ -62,7 +62,7 @@
     (setf (char s 5) #\X)
     (setf (fill-pointer s) 6)
     s)
-  "abcXef")
+  "abcdeX")
 
 (deftest char.9
   (let ((s (make-string 5 :initial-element #\a
