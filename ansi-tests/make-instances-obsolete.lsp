@@ -22,12 +22,13 @@
   t (x y z 17) t (x y z 17))
 
 (deftest make-instances-obsolete.2
-  (let* ((class (find-class 'make-instances-obsolete-class-01))
+  (let* ((class-designator 'make-instances-obsolete-class-01)
+	 (class (find-class class-designator))
 	 (obj (make-instance class :a 'x :b 'y :c 'z :d 17)))
     (values
      (eqt (class-of obj) class)
      (map-slot-value obj '(a b c d))
-     (eqt (make-instances-obsolete 'make-instances-obsolete-class-01) class)
+     (eqt (make-instances-obsolete class-designator) class-designator)
      (map-slot-value obj '(a b c d))))
   t (x y z 17) t (x y z 17))
 
