@@ -59,7 +59,7 @@
 (deftest formatter.cond.13
   (let ((fn (formatter "~V[a~;b~;c~;d~;e~;f~;g~;h~;i~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn i nil)))
+	  collect (formatter-call-to-string fn i)))
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (deftest format.cond.14
@@ -124,7 +124,7 @@
 (deftest formatter.cond\:.6
   (let ((fn (formatter "~v[a~;b~;c~;d~:;e~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn i nil)))
+	  collect (formatter-call-to-string fn i)))
   ("e" "a" "b" "c" "d" "e" "e" "e" "e" "e" "e" "e"))
 
 (deftest format.cond\:.7
