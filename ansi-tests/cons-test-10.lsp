@@ -50,30 +50,34 @@
     (last (cons 'a 'b) 2)
   (a . b))
 
-(deftest last-11
-    (catch-type-error (last (list 'a 'b 'c) -1))
+(deftest last.error.1
+  (classify-error (last (list 'a 'b 'c) -1))
   type-error)
 
-(deftest last-12
-    (catch-type-error (last (list 'a 'b 'c) 'a))
+(deftest last.error.2
+  (classify-error (last (list 'a 'b 'c) 'a))
   type-error)
 
-(deftest last-13
-    (catch-type-error (last (list 'a 'b 'c) 10.0))
+(deftest last.error.3
+  (classify-error (last (list 'a 'b 'c) 10.0))
   type-error)
 
-(deftest last-14
-    (catch-type-error (last (list 'a 'b 'c) -10.0))
+(deftest last.error.4
+  (classify-error (last (list 'a 'b 'c) -10.0))
   type-error)
 
-(deftest last-15
-    (catch-type-error (last (list 'a 'b 'c) #\w))
+(deftest last.error.5
+  (classify-error (last (list 'a 'b 'c) #\w))
   type-error)
 
-(deftest last-16
+(deftest last.error.6
   (classify-error (last))
   program-error)
 
-(deftest last-17
+(deftest last.error.7
   (classify-error (last '(a b c) 2 nil))
   program-error)
+
+(deftest last.error.8
+  (classify-error (locally (last (list 'a 'b 'c) 'a) t))
+  type-error)

@@ -811,3 +811,7 @@
 (deftest find.error.10
   (classify-error (find 'a nil :key))
   program-error)
+
+(deftest find.error.11
+  (classify-error (locally (find 'a 'b) t))
+  type-error)

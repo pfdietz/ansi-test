@@ -101,6 +101,14 @@
   (classify-error (list-length nil nil))
   program-error)
 
+(deftest list-length.error.4
+  (classify-error (list-length 'a))
+  type-error)
+
+(deftest list-length.error.5
+  (classify-error (locally (list-length 'a) t))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; listp
 
@@ -213,13 +221,11 @@
   (make-list 5 :initial-element 'a :initial-element 'b)
   (a a a a a))
 
-(deftest make-list-type.error.1
+(deftest make-list.error.1
   (catch-type-error (make-list -1))
   type-error)
 
-;; This next test causes ACL 4.3 (Linux) to loop
-#-allegro
-(deftest make-list-type.error.2
+(deftest make-list.error.2
   (classify-error (make-list 'a))
   type-error)
 
@@ -242,3 +248,7 @@
 (deftest make-list.error.7
   (classify-error (make-list 5 :bad t :allow-other-keys nil))
   program-error)
+
+(deftest make-list.error.8
+  (classify-error (locally (make-list 'a) t))
+  type-error)

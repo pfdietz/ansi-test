@@ -50,3 +50,7 @@
 (deftest array-total-size.error.4
   (classify-error (array-total-size 0))
   type-error)
+
+(deftest array-total-size.error.5
+  (classify-error (locally (array-total-size 0) t))
+  type-error)

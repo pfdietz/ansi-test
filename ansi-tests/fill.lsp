@@ -42,6 +42,10 @@
 			:allow-other-keys t))
   program-error)
 
+(deftest fill.error.11
+  (classify-error (locally (fill 'a 'b) t))
+  type-error)
+
 ;;; Fill on arrays
 
 (deftest array-fill-1

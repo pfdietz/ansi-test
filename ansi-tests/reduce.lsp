@@ -192,6 +192,10 @@
   (classify-error (reduce #'list nil 1 2))
   program-error)
 
+(deftest reduce.error.7
+  (classify-error (locally (reduce 'cons 'a) t))
+  type-error)
+
 ;;;;;;;;
 
 (deftest reduce-string.1
@@ -411,3 +415,4 @@
   (reduce #'cons '(1 2 3) :from-end t :from-end nil
 	  :initial-value nil :initial-value 'a)
   (1 2 3))
+

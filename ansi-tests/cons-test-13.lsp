@@ -172,31 +172,31 @@
 ;;; Error cases
 
 (deftest member.error.1
-  (catch-type-error (member 'a 'b))
+  (classify-error (member 'a 'b))
   type-error)
 
 (deftest member.error.2
-  (catch-type-error (member 'a 1.3))
+  (classify-error (member 'a 1.3))
   type-error)
 
 (deftest member.error.3
-  (catch-type-error (member 'a 1))
+  (classify-error (member 'a 1))
   type-error)
 
 (deftest member.error.4
-  (catch-type-error (member 'a 0))
+  (classify-error (member 'a 0))
   type-error)
 
 (deftest member.error.5
-  (catch-type-error (member 'a "abcde"))
+  (classify-error (member 'a "abcde"))
   type-error)
 
 (deftest member.error.6
-  (catch-type-error (member 'a #\w))
+  (classify-error (member 'a #\w))
   type-error)
 
 (deftest member.error.7
-  (catch-type-error (member 'a t))
+  (classify-error (member 'a t))
   type-error)
 
 (deftest member.error.8
@@ -222,3 +222,7 @@
 (deftest member.error.13
   (classify-error (member nil nil nil))
   program-error)
+
+(deftest member.error.14
+  (classify-error (locally (member 'a t) t))
+  type-error)

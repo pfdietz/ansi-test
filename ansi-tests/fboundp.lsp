@@ -58,3 +58,7 @@
 (deftest fboundp.error.5
   (classify-error (fboundp 'cons nil))
   program-error)
+
+(deftest fboundp.error.6
+  (classify-error (locally (fboundp 1) t))
+  type-error)

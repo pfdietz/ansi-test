@@ -42,3 +42,7 @@
 (deftest endp.error.5
   (classify-error (endp nil nil))
   program-error)
+
+(deftest endp.error.6
+  (catch-type-error (locally (endp 1)))
+  type-error)

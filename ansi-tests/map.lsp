@@ -164,7 +164,8 @@
   (a b c))
 
 (deftest map.error.1
-  (handler-case (map 'symbol #'identity '(a b c))
+  (handler-case (progn (proclaim '(optimize (safety 3)))
+		       (eval '(map 'symbol #'identity '(a b c))))
 		(error () :caught))
   :caught)
 

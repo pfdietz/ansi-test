@@ -25,6 +25,10 @@
   (classify-error (boundp "abc"))
   type-error)
 
+(deftest boundp.error.6
+  (classify-error (locally (boundp "abc") t))
+  type-error)
+
 ;;; See other tests in cl-symbols.lsp
 
 (deftest boundp.1

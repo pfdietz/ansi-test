@@ -175,3 +175,8 @@
 (deftest copy-seq.error.5
   (classify-error (copy-seq "abc" 2 nil))
   program-error)
+
+(deftest copy-seq.error.6
+  (classify-error (locally (copy-seq 10) t))
+  type-error)
+

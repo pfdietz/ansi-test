@@ -388,6 +388,14 @@
   (classify-error (rplaca (cons 'a 'b) (cons 'c 'd) 'garbage))
   program-error)
 
+(deftest rplaca.error.5
+  (classify-error (rplaca 'a 1))
+  type-error)
+
+(deftest rplaca.error.6
+  (classify-error (locally (rplaca 'a 1) t))
+  type-error)
+
 ;; rplacd on a fixnum is a type error
 (deftest rplacd.error.1
   (loop for x in *universe*
@@ -407,3 +415,10 @@
   (classify-error (rplacd (cons 'a 'b) (cons 'c 'd) 'garbage))
   program-error)
 
+(deftest rplacd.error.5
+  (classify-error (rplacd 'a 1))
+  type-error)
+
+(deftest rplacd.error.6
+  (classify-error (locally (rplacd 'a 1) t))
+  type-error)

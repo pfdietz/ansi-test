@@ -35,7 +35,7 @@
 (deftest ldiff-3
     (let* ((x (copy-tree '(a b c d e . f)))
 	   (xcopy (make-scaffold-copy x)))
-      (let ((result (catch-type-error (ldiff x 'a))))
+      (let ((result (ldiff x 'a)))
 	(and
 	 (check-scaffold-copy x xcopy)
 	 result)))
@@ -46,7 +46,7 @@
   (let* ((n 18)
 	 (x (list* 'a 'b 'c 18))
 	 (xcopy (make-scaffold-copy x)))
-    (let ((result (catch-type-error (ldiff x n))))
+    (let ((result (ldiff x n)))
       (and
        (check-scaffold-copy x xcopy)
        result)))
@@ -58,7 +58,7 @@
   (let* ((n 18000000000000)
 	 (x (list* 'a 'b 'c (1- 18000000000001)))
 	 (xcopy (make-scaffold-copy x)))
-    (let ((result (catch-type-error (ldiff x n))))
+    (let ((result (ldiff x n)))
       (and
        (check-scaffold-copy x xcopy)
        result)))
@@ -69,7 +69,7 @@
   (let* ((n (copy-seq "abcde"))
 	 (x (list* 'a 'b 'c n))
 	 (xcopy (make-scaffold-copy x)))
-    (let ((result (catch-type-error (ldiff x n))))
+    (let ((result (ldiff x n)))
       (if (equal result (list 'a 'b 'c))
 	  (check-scaffold-copy x xcopy)
 	result)))
@@ -81,7 +81,7 @@
   (let* ((n (copy-seq "abcde"))
 	 (x (list* 'a 'b 'c n))
 	 (xcopy (make-scaffold-copy x)))
-    (let ((result (catch-type-error (ldiff x (copy-seq n)))))
+    (let ((result (ldiff x (copy-seq n))))
       (if (equal result x)
 	  (check-scaffold-copy x xcopy)
 	result)))
@@ -104,25 +104,25 @@
 ;; Error checking
 
 (deftest ldiff.error.1
-  (catch-type-error (ldiff 10 'a))
+  (classify-error (ldiff 10 'a))
   type-error)
 
 ;; Single atoms are not dotted lists, so the next
 ;; case should be a type-error
 (deftest ldiff.error.2
-  (catch-type-error (ldiff 'a 'a))
+  (classify-error (ldiff 'a 'a))
   type-error)
 
 (deftest ldiff.error.3
-  (catch-type-error (ldiff (make-array '(10) :initial-element 'a) '(a)))
+  (classify-error (ldiff (make-array '(10) :initial-element 'a) '(a)))
   type-error)
 
 (deftest ldiff.error.4
-    (catch-type-error (ldiff 1.23 t))
+    (classify-error (ldiff 1.23 t))
   type-error)
 
 (deftest ldiff.error.5
-    (catch-type-error (ldiff #\w 'a))
+    (classify-error (ldiff #\w 'a))
   type-error)
 
 (deftest ldiff.error.6
@@ -177,22 +177,21 @@
 ;; The next four tests test that tailp handles dotted lists.  See
 ;; TAILP-NIL:T in the X3J13 documentation.
 
-(deftest tailp.error.1
-  (catch-type-error (notnot-mv (tailp 'e (copy-tree '(a b c d . e)))))
+(deftest tailp-2
+  (notnot-mv (tailp 'e (copy-tree '(a b c d . e))))
   t)
 
-(deftest tailp.error.2
-  (catch-type-error (tailp 'z (copy-tree '(a b c d . e))))
+(deftest tailp-3
+  (tailp 'z (copy-tree '(a b c d . e)))
   nil)
 
-(deftest tailp.error.3
-  (catch-type-error (notnot-mv (tailp 10203040506070
-	(list* 'a 'b (1- 10203040506071)))))
+(deftest tailp-4
+  (notnot-mv (tailp 10203040506070
+		    (list* 'a 'b (1- 10203040506071))))
   t)
 
-(deftest tailp.error.4
-  (let ((x "abcde"))
-    (catch-type-error (tailp x (list* 'a 'b (copy-seq x)))))
+(deftest tailp-5
+  (let ((x "abcde")) (tailp x (list* 'a 'b (copy-seq x))))
   nil)
 
 (deftest tailp.error.5

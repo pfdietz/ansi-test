@@ -115,3 +115,6 @@
   (classify-error (some #'null))
   program-error)
 
+(deftest some.error.10
+  (classify-error (locally (some 1 '(a b c)) t))
+  type-error)

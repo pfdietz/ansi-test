@@ -48,3 +48,13 @@
 				    `(adjustable-array-p ',e)))))
 	  collect (list e why)))
   nil)
+
+(deftest adjustable-array-p.error.5
+  (classify-error (locally (adjustable-array-p 10)))
+  type-error)
+
+(deftest adjustable-array-p.error.6
+  (classify-error (let ((x 10))
+		    (locally (declare (optimize (safety 3)))
+			   (adjustable-array-p x))))
+  type-error)

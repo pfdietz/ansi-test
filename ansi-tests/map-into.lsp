@@ -366,3 +366,7 @@
 (deftest map-into.error.5
   (classify-error (map-into (list 'a 'b 'c)))
   program-error)
+
+(deftest map-into.error.6
+  (classify-error (locally (map-into 'a #'(lambda () nil)) t))
+  type-error)

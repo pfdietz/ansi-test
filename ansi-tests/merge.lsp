@@ -486,10 +486,10 @@
 ;;; Tests of error situations
 
 (deftest merge.error.1
-  (handler-case  (eval
-		  '(locally (declare (optimize (safety 3)))
-			    (merge 'symbol (list 1 2 3) (list 4 5 6) #'<)))
-		 (error () :caught))
+  (handler-case (eval
+		 '(locally (declare (optimize (safety 3)))
+			   (merge 'symbol (list 1 2 3) (list 4 5 6) #'<)))
+		(error () :caught))
   :caught)
 
 (deftest merge.error.2
@@ -544,4 +544,11 @@
 (deftest merge.error.14
   (classify-error (merge 'list (list 2 4 6) (list 1 3 5) #'< 1 2))
   program-error)
+
+(deftest merge.error.15
+  (classify-error (locally (merge '(vector * 3) (list 1 2 3)
+				  (list 4 5 6) #'<)
+			   t))
+  type-error)
+
 

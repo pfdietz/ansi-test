@@ -1377,33 +1377,38 @@
 ;;; gensym should be implemented so that its only
 ;;; argument defaults to "G", with NIL causing an error.
 
-(deftest gensym-14
+(deftest gensym.error.1
   (classify-error (gensym 'aaa))
   type-error)
 
-(deftest gensym-15
+(deftest gensym.error.2
   (classify-error (gensym 12.3))
   type-error)
 
-(deftest gensym-16
+(deftest gensym.error.3
   (classify-error (gensym t))
   type-error)
 
-(deftest gensym-17
+(deftest gensym.error.4
   (classify-error (gensym nil))
   type-error) ;; NIL /= no argument!
 
-(deftest gensym-18
+(deftest gensym.error.5
   (classify-error (gensym '(a)))
   type-error)
 
-(deftest gensym-19
+(deftest gensym.error.6
   (classify-error (gensym #\x))
   type-error)
 
-(deftest gensym-20
+(deftest gensym.error.7
   (classify-error (gensym 10 'foo))
   program-error)
+
+(deftest gensym.error.8
+  (classify-error (locally (gensym t) t))
+  type-error)
+
 
 ;;;;;;;;;;;;;;;;;;;;
 

@@ -552,3 +552,7 @@
 (deftest find-if-not.error.10
   (classify-error (find-if-not #'null nil :key))
   program-error)
+
+(deftest find-if-not.error.11
+  (classify-error (locally (find-if-not #'null 'b) t))
+  type-error)

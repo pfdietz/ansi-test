@@ -170,6 +170,11 @@
   (classify-error (member-if #'null '(a b c) 1 2))
   program-error)
 
+(deftest member-if.error.8
+  (classify-error (locally (member-if #'identity 'a) t))
+  type-error)
+
+
 (deftest member-if-not.error.1
   (classify-error (member-if-not #'identity 'a))
   type-error)
@@ -197,3 +202,7 @@
 (deftest member-if-not.error.7
   (classify-error (member-if-not #'null '(a b c) 1 2))
   program-error)
+
+(deftest member-if-not.error.8
+  (classify-error (locally (member-if-not #'identity 'a) t))
+  type-error)

@@ -188,13 +188,16 @@
 
 (deftest concatenate-error.1
   (handler-case
-   (concatenate 'sequence '(a b c))
+   (progn (proclaim '(optimize (safety 3)))
+	  (eval '(concatenate 'sequence '(a b c))))
    (error () :caught))
   :caught)
 
 (deftest concatenate-error.2
-  (handler-case  (concatenate 'fixnum '(a b c d e))
-		 (error () :caught))
+  (handler-case
+      (progn (proclaim '(optimize (safety 3)))
+	     (concatenate 'fixnum '(a b c d e)))
+      (error () :caught))
   :caught)
 
 (deftest concatenate-error.3
@@ -204,3 +207,7 @@
 (deftest concatenate-error.4
   (classify-error (concatenate))
   program-error)
+
+(deftest concatenate-error.5
+  (classify-error (locally (concatenate '(vector * 3) '(a b c d e)) t))
+  type-error)

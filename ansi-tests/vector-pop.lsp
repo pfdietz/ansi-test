@@ -39,4 +39,6 @@
 		    (vector-pop v nil)))
   program-error)
 
-
+(deftest vector-pop.error.5
+  (classify-error (locally (vector-pop (vector 1 2 3)) t))
+  type-error)

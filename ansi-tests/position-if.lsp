@@ -525,3 +525,6 @@
   (classify-error (position-if #'null nil 1 2))
   program-error)
 
+(deftest position-if.error.11
+  (classify-error (locally (position-if #'identity 'b) t))
+  type-error)

@@ -27,6 +27,10 @@
   (classify-error (fdefinition (list 'setf (gensym))))
   undefined-function)
 
+(deftest fdefinition.error.6
+  (classify-error (locally (fdefinition 10) t))
+  type-error)
+
 ;;; Non-error cases
 
 (deftest fdefinition.1

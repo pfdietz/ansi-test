@@ -113,3 +113,12 @@
 				    `(array-displacement ',e)))))
 	collect (list e why)))
   nil)
+
+(deftest array-displacement.error.4
+  (classify-error (array-displacement nil))
+  type-error)
+
+(deftest array-displacement.error.5
+  (classify-error (let ((x nil)) (array-displacement x)))
+  type-error)
+

@@ -246,3 +246,6 @@
   (classify-error (make-sequence 'list 10 0 0))
   program-error)
 
+(deftest make-sequence.error.14
+  (classify-error (locally (make-sequence 'symbol 10) t))
+  type-error)

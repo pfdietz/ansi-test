@@ -528,5 +528,6 @@
   (classify-error (position-if-not #'null nil 1 2))
   program-error)
 
-
-
+(deftest position-if-not.error.11
+  (classify-error (locally (position-if-not #'identity 'b) t))
+  type-error)

@@ -17,6 +17,10 @@
   (classify-error (elt nil -10))
   type-error)
 
+(deftest elt-1b
+  (classify-error (locally (elt nil 0) t))
+  type-error)
+
 (deftest elt-2
   (classify-error (elt nil 1000000))
   type-error)

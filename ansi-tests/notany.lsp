@@ -116,3 +116,7 @@
 (deftest notany.error.9
   (classify-error (notany #'null))
   program-error)
+
+(deftest notany.error.10
+  (classify-error (locally (notany 1 '(a b c)) t))
+  type-error)

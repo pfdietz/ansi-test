@@ -515,15 +515,15 @@
 ;;; Error tests
 
 (deftest count.error.1
-  (catch-type-error (count 'a 1))
+  (classify-error (count 'a 1))
   type-error)
 
 (deftest count.error.2
-  (catch-type-error (count 'a 'a))
+  (classify-error (count 'a 'a))
   type-error)
 
 (deftest count.error.3
-  (catch-type-error (count 'a #\a))
+  (classify-error (count 'a #\a))
   type-error)
 
 (deftest count.error.4
@@ -556,3 +556,8 @@
 			 :allow-other-keys nil
 			 :allow-other-keys t))
   program-error)
+
+(deftest count.error.11
+  (classify-error (locally (count 'a 1) t))
+  type-error)
+

@@ -164,3 +164,7 @@
 (deftest coerce.error.8
   (classify-error (coerce 'x t 'foo))
   program-error)
+
+(deftest coerce.error.9
+  (classify-error (locally (coerce nil 'cons) t))
+  type-error)

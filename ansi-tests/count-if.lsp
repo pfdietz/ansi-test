@@ -447,15 +447,15 @@
 ;;; Error tests
 
 (deftest count-if.error.1
-  (catch-type-error (count-if #'identity 1))
+  (classify-error (count-if #'identity 1))
   type-error)
 
 (deftest count-if.error.2
-  (catch-type-error (count-if #'identity 'a))
+  (classify-error (count-if #'identity 'a))
   type-error)
 
 (deftest count-if.error.3
-  (catch-type-error (count-if #'identity #\a))
+  (classify-error (count-if #'identity #\a))
   type-error)
 
 (deftest count-if.error.4
@@ -488,3 +488,7 @@
 			    :allow-other-keys nil
 			    :allow-other-keys t))
   program-error)
+
+(deftest count-if.error.11
+  (classify-error (locally (count-if #'identity 1) t))
+  type-error)

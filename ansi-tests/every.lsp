@@ -115,3 +115,7 @@
 (deftest every.error.9
   (classify-error (every #'null))
   program-error)
+
+(deftest every.error.10
+  (classify-error (locally (every 1 '(a b c)) t))
+  type-error)

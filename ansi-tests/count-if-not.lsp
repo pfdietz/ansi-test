@@ -447,15 +447,15 @@
 ;;; Error tests
 
 (deftest count-if-not.error.1
-  (catch-type-error (count-if-not #'identity 1))
+  (classify-error (count-if-not #'identity 1))
   type-error)
 
 (deftest count-if-not.error.2
-  (catch-type-error (count-if-not #'identity 'a))
+  (classify-error (count-if-not #'identity 'a))
   type-error)
 
 (deftest count-if-not.error.3
-  (catch-type-error (count-if-not #'identity #\a))
+  (classify-error (count-if-not #'identity #\a))
   type-error)
 
 (deftest count-if-not.error.4
@@ -489,3 +489,6 @@
 				:allow-other-keys t))
   program-error)
 
+(deftest count-if-not.error.11
+  (classify-error (locally (count-if-not #'identity 1) t))
+  type-error)

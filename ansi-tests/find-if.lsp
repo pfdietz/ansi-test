@@ -575,3 +575,7 @@
 (deftest find-if.error.10
   (classify-error (find-if #'null nil :key))
   program-error)
+
+(deftest find-if.error.11
+  (classify-error (locally (find-if #'null 'b) t))
+  type-error)

@@ -76,6 +76,10 @@
   (classify-error (mapc #'append))
   program-error)
 
+(deftest mapc.error.4
+  (classify-error (locally (mapc #'identity 1) t))
+  type-error)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcar
 
@@ -150,6 +154,10 @@
 (deftest mapcar.error.3
   (classify-error (mapcar #'append))
   program-error)
+
+(deftest mapcar.error.4
+  (classify-error (locally (mapcar #'identity 1) t))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
@@ -228,6 +236,10 @@
 (deftest mapcan.error.3
   (classify-error (mapcan #'append))
   program-error)
+
+(deftest mapcan.error.4
+  (classify-error (locally (mapcan #'identity 1) t))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapl
@@ -320,6 +332,10 @@
 (deftest mapl.error.3
   (classify-error (mapl #'append))
   program-error)
+
+(deftest mapl.error.4
+  (classify-error (locally (mapl #'identity 1) t))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; maplist
@@ -419,6 +435,9 @@
   (classify-error (maplist #'append))
   program-error)
 
+(deftest maplist.error.7
+  (classify-error (locally (maplist #'identity 'a) t))
+  type-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mapcan
@@ -463,5 +482,10 @@
 (deftest mapcon.error.3
   (classify-error (mapcon #'append))
   program-error)
+
+(deftest mapcon.error.4
+  (classify-error (locally (mapcon #'identity 1) t))
+  type-error)
+
 
 

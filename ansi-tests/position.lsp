@@ -721,4 +721,6 @@
   (classify-error (position 'a nil 1 2))
   program-error)
 
-
+(deftest position.error.11
+  (classify-error (locally (position 'a 'b) t))
+  type-error)

@@ -56,3 +56,7 @@
 			      'type-error)))
 	  collect (list e why)))
   nil)
+
+(deftest fill-pointer.error.7
+  (classify-error (locally (fill-pointer #2a((a b c)(d e f))) t))
+  type-error)

@@ -66,12 +66,17 @@
 
 (deftest package-name-5
   (notnot-mv (member (classify-error (package-name "NOT-THERE"))
-		  '(type-error package-error)))
+		     '(type-error package-error)))
   t)
 
 (deftest package-name-6
   (notnot-mv (member (classify-error (package-name #\*))
-		  '(type-error package-error)))
+		     '(type-error package-error)))
+  t)
+
+(deftest package-name-6a
+  (notnot-mv (member (classify-error (locally (package-name #\*) t))
+		     '(type-error package-error)))
   t)
 
 (deftest package-name-7
@@ -177,7 +182,11 @@
   t)
 
 (deftest package-nicknames-9
-  (catch-type-error (package-nicknames 10))
+  (classify-error (package-nicknames 10))
+  type-error)
+
+(deftest package-nicknames-9a
+  (classify-error (locally (package-nicknames 10) t))
   type-error)
 
 (deftest package-nicknames-10
@@ -186,7 +195,7 @@
 
 (deftest package-nicknames-11
   (notnot-mv (member (classify-error (package-nicknames "NOT-A-PACKAGE-NAME"))
-		  '(type-error package-error)))
+		     '(type-error package-error)))
   t)
 
 

@@ -35,3 +35,11 @@
 			   'type-error)))
 	collect e)
   nil)
+
+(deftest array-rank.error.4
+  (classify-error (array-rank nil))
+  type-error)
+
+(deftest array-rank.error.5
+  (classify-error (locally (array-rank nil) t))
+  type-error)

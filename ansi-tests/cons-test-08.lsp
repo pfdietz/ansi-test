@@ -23,6 +23,10 @@
   (classify-error (car 'a))
   type-error)
 
+(deftest car-symbol-error.2
+  (classify-error (locally (car 'a) t))
+  type-error)
+
 (deftest cdr-1
   (cdr '(a b))
   (b))
@@ -33,6 +37,10 @@
 
 (deftest cdr-symbol-error
   (classify-error (cdr 'a))
+  type-error)
+
+(deftest cdr-symbol-error.2
+  (classify-error (locally (cdr 'a) t))
   type-error)
 
 (deftest list-length-4
@@ -434,3 +442,5 @@
 (deftest cddddr.error.4
   (classify-error (cddddr '(a c e . b)))
   type-error)
+
+;;; Need to add 'locally' wrapped forms of these

@@ -58,3 +58,12 @@
 				    `(array-dimensions ',e)))))
 	  collect (list e why)))
   nil)
+
+(deftest array-dimensions.error.4
+  (classify-error (array-dimensions nil))
+  type-error)
+
+(deftest array-dimensions.error.5
+  (classify-error (locally (array-dimensions nil)))
+  type-error)
+
