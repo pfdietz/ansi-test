@@ -25,3 +25,6 @@
 (load "no-next-method.lsp")
 (load "remove-method.lsp")
 (load "make-instance.lsp")
+(load "make-instances-obsolete.lsp")
+(load "make-load-form.lsp")
+
