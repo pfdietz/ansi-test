@@ -29,7 +29,7 @@ random-test:
 	rm -f gazonk*
 
 clean:
-	@rm -f test.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.fas *.lib \#*\#
+	@rm -f test.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
 	@rm -rf scratch/
 	@rm -f foo.txt foo.lsp file-that-was-renamed.txt tmp.dat temp.dat
 	@rm -f gazonk*
