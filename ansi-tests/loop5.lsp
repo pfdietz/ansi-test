@@ -176,7 +176,7 @@
 	  for v = (make-array '(10) :initial-contents fvals :element-type type)
 	  for r = (loop for x across v collect x)
 	  unless (equal r fvals)
-	  collect (list i r)))
+	  collect (list fvals r)))
   nil)
 
 (deftest loop.5.43
@@ -187,7 +187,7 @@
 	  for v = (make-array '(10) :initial-contents fvals :element-type type)
 	  for r = (loop for x across v collect x)
 	  unless (equal r fvals)
-	  collect (list i r)))
+	  collect (list fvals r)))
   nil)
 
 ;;; Error cases
