@@ -22,6 +22,7 @@
 ;;; argument TEST is used to compared the reread object and obj.
 
 (defun randomly-check-readability (obj &key (test #'equal))
+  (declare (type function test))
   ;; Generate random printer-control values
   (with-standard-io-syntax
    (let ((*print-array* (coin))
@@ -38,6 +39,9 @@
 	 (*print-pretty* (coin))
 	 (*print-right-margin* (and (coin) (random 100)))
 	 (*print-readably* t)
+	 (*read-default-float-format* (rcase (1 'short-float) (1 'single-float)
+					     (1 'double-float) (1 'long-float)
+					     (1 *read-default-float-format*)))
 	 )
      (let* ((str (with-output-to-string (s) (write obj :stream s)))
 	    (obj2 (let ((*read-base* *print-base*))
@@ -59,6 +63,6 @@
 		(list '*print-lines* *print-lines*)
 		(list '*print-miser-width* *print-miser-width*)
 		(list '*print-pretty* *print-pretty*)
-		(list '*print-right-margin* *print-right-margin*))))))))
-
-       
+		(list '*print-right-margin* *print-right-margin*)
+		(list '*read-default-float-format* *read-default-float-format*)
+		)))))))
