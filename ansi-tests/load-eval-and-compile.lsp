@@ -5,3 +5,4 @@
 (load "compiler-macros.lsp")
 (load "constantp.lsp")
 (load "lambda.lsp")
+(load "eval-when.lsp")
