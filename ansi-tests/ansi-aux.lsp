@@ -351,7 +351,7 @@ the condition to go uncaught if it cannot be classified."
 		 (funcall (compile nil '(lambda ()
 					  (declare (optimize safety))
 					  ,form)))
-	       (eval '(locally (declare (optimize safety)) ,form)))))
+	       (eval ',form))))
      (,error-name (c) t))))
 
 ;;;
