@@ -634,6 +634,25 @@
   (t nil)
   foo)
 
+;;;
+
+(defclass shared-init-class-09 ()
+  ((a :allocation :class :initform 'x)
+   (b :initform 'y)))
+
+(deftest shared-initialize.9.1
+  (let* ((class (find-class 'shared-init-class-08))
+	 (obj (allocate-instance class)))
+    (slot-makunbound obj 'a)
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj '(b)))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (nil t)
+  y)
 
 ;;; Error tests
 
