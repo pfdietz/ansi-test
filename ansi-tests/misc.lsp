@@ -9611,3 +9611,68 @@ Broken at C::WT-MAKE-CLOSURE.
        0)))
    1 -8156 -229264929)
   0)
+
+;;; ecl (25 Jan 2005)
+;;; Error: In a call to AREF, the type of the form *S6* is FIXNUM, not (ARRAY *).
+
+(deftest misc.521
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (speed 0) (safety 1) (debug 1) (compilation-speed 3)
+			  (space 0)))
+       (if b
+	   (let ((*s6* 0))
+	     0)
+	 (let* ((*s6* (make-array nil :initial-element 0)))
+	   (aref *s6*)))))
+   nil)
+  0)
+
+;;; nil is not of type number.
+
+(deftest misc.522
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -25 38) a))
+       (declare (optimize (compilation-speed 3) (safety 3) (debug 1) (space 2) (speed 1)))
+       (flet ((%f2 (f2-1 f2-2
+			 &optional
+			 (f2-3 (labels ((%f6 (&optional (f6-1 0) (f6-2 0)) (max a)))
+				 (%f6 0)))
+			 (f2-4 0) (f2-5 0))
+		   (flet ((%f4 (f4-1 f4-2 f4-3)
+			       (flet ((%f15 () f2-3)) a)))
+		     0)))
+	 (reduce #'(lambda (lmv1 lmv6) a)
+		 (vector 0 0 0 (%f2 a a) 0 a 0 a 0)
+		 :start 4 :from-end t))))
+   35)
+  35)
+
+;;; Incorrect return value
+
+(deftest misc.523
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -1011 978) a))
+       (declare (optimize (compilation-speed 1) (safety 3) (debug 0) (speed 2) (space 1)))
+       (let ((*s5*
+	      (cons 0
+		    (catch 'ct8
+		      (ash
+		       (flet ((%f15 (f15-1)
+				    (return-from %f15 a)))
+			 0)
+		       (min 57
+			    (lognor (throw 'ct8 (shiftf a 332))
+				    (let ((v1 (setf a 371)))
+				      a))))))))
+	 a)))
+   99)
+  332)
