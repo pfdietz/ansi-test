@@ -23,3 +23,4 @@
 (load "print-random-state.lsp")
 (load "print-pathname.lsp")
 (load "print-structure.lsp")
+(load "printer-control-vars.lsp")
