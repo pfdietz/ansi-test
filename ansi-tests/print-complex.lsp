@@ -5,21 +5,23 @@
 
 (in-package :cl-test)
 
-(deftest print-complex.1
+(deftest print.complex.1
   (equalt
    (with-standard-io-syntax
-    (with-output-to-string (s) (prin1 (complex 1 2) s)))
+     (let ((*print-readably* nil))
+       (with-output-to-string (s) (prin1 (complex 1 2) s))))
    "#C(1 2)")
   t)
 
-(deftest print-complex.2
+(deftest print.complex.2
   (equalt
    (with-standard-io-syntax
-    (with-output-to-string (s) (prin1 (complex 1.0 2.0) s)))
+     (let ((*print-readably* nil))
+       (with-output-to-string (s) (prin1 (complex 1.0 2.0) s))))
    "#C(1.0 2.0)")
   t)
 
-(deftest print-complex.random.1
+(deftest print.complex.random.1
   (loop for numbits = (random 40)
 	for bound = (ash 1 numbits)
 	for r = (- (random (+ bound bound)) bound)
@@ -29,7 +31,7 @@
 	nconc (randomly-check-readability (complex r i)))
   nil)
 
-(deftest print-complex.random.2
+(deftest print.complex.random.2
   (loop for numbits = (random 40)
 	for bound = (ash 1 numbits)
 	for num1 = (- (random (+ bound bound)) bound)
@@ -44,13 +46,7 @@
   nil)
 
 ;; General floating point complex printing tests will go here
-
-
-
-
-
-
-
+		
 
 
 

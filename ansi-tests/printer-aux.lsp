@@ -9,8 +9,9 @@
   `(deftest ,name
      (equalpt
       (with-standard-io-syntax
-       (let ,bindings
-	 (with-output-to-string (*standard-output*) (prin1 ,form))))
+	(let ((*print-readably* nil))
+	  (let ,bindings
+	    (with-output-to-string (*standard-output*) (prin1 ,form)))))
       ,result)
      t))
 
