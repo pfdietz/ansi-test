@@ -486,7 +486,9 @@
 ;;; Tests of error situations
 
 (deftest merge.error.1
-  (handler-case  (eval '(merge 'symbol (list 1 2 3) (list 4 5 6) #'<))
+  (handler-case  (eval
+		  '(locally (declare (optimize (safety 3)))
+			    (merge 'symbol (list 1 2 3) (list 4 5 6) #'<)))
 		 (error () :caught))
   :caught)
 
