@@ -19,6 +19,15 @@
 ;;
 ;; This came up on the #lisp irc channel
 
+;;;
+;;; The following two tests are improper, since (see the page for SYMBOL)
+;;; "The consequences are undefined if an attempt is made to alter the home
+;;;  package of a symbol external in the COMMON-LISP package or the KEYWORD package."
+;;;
+;;; They could be rewritten to search for a name that is not interned in KEYWORD.
+;;;
+
+#|
 (deftest keyword.4
   (let ((name "SYMBOL-NAME-FOR-KEYWORD.4")
 	(kwp (find-package "KEYWORD")))
@@ -87,6 +96,7 @@
        (if (boundp s) (eqlt s (symbol-value s)) :not-bound)
        (notnot (constantp s)))))
   nil nil t t :external t t t)
+|#
 
 
 ;;; Note that the case of a symbol inherited into KEYWORD cannot arise
