@@ -10453,8 +10453,8 @@ Broken at C::WT-MAKE-CLOSURE.
        (declare (optimize (speed 3) (safety 1)
 			  (debug 1) (space 2))
 		(type (integer * 397079023) p4))
-	     (string<= "e99mo7yAJ6oU4"
-		       "aaABAAbaa"
+	     (string<= (coerce "e99mo7yAJ6oU4" 'base-string)
+		       (coerce "aaABAAbaa" 'base-string)
 		       :start1
 		       (the
 			   (member -34
