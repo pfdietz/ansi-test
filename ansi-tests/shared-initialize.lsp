@@ -582,6 +582,59 @@
      (slot-value obj 'b)))
   (nil nil) t (t t) foo y)
 
+;;; :around method tests
+
+(defclass shared-init-class-08 ()
+  ((a :initform 'x)
+   (b :initform 'y)))
+
+(defmethod shared-initialize :around ((obj shared-init-class-08) slot-names
+				      &rest args &key only &allow-other-keys)
+  (declare (ignore slot-names args))
+  (setf (slot-value obj 'a) 'foo)
+  (if only obj (call-next-method)))
+
+(deftest shared-initialize.8.1
+  (let* ((class (find-class 'shared-init-class-08))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj nil))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)))
+  (nil nil)
+  t
+  (t nil)
+  foo)
+
+(deftest shared-initialize.8.2
+  (let* ((class (find-class 'shared-init-class-08))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj t))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)
+     (slot-value obj 'b)))
+  (nil nil)
+  t
+  (t t)
+  foo y)
+
+(deftest shared-initialize.8.3
+  (let* ((class (find-class 'shared-init-class-08))
+	 (obj (allocate-instance class)))
+    (values
+     (map-slot-boundp* obj '(a b))
+     (eqt obj (shared-initialize obj t :only t))
+     (map-slot-boundp* obj '(a b))
+     (slot-value obj 'a)))
+  (nil nil)
+  t
+  (t nil)
+  foo)
+
+
 ;;; Error tests
 
 (deftest shared-initialize.error.1
