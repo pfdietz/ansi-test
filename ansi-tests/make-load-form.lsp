@@ -11,26 +11,49 @@
 (defclass make-load-form-class-01 () (a b c))
 
 (deftest make-load-form.1
-  (handler-case
-   (progn (make-load-form (make-instance 'make-load-form-class-01))
-	  :bad)
-   (error () :good))
+  (let* ((fun #'make-load-form)
+	 (obj (make-instance 'make-load-form-class-01)))
+    (if (eql (or (find-method fun nil '(standard-object) nil)
+		 (find-method fun nil (list (find-class t)) nil)
+		 :none)
+	     (car (compute-applicable-methods fun (list obj))))
+	;; The default method applies
+	(handler-case
+	 (progn (make-load-form obj) :bad)
+	 (error () :good))
+      :good))
   :good)
 
 (defstruct make-load-form-struct-02 a b c)
 
 (deftest make-load-form.2
-  (handler-case
-   (progn (make-load-form (make-make-load-form-struct-02)) :bad)
-   (error () :good))
+  (let* ((fun #'make-load-form)
+	 (obj (make-make-load-form-struct-02)))
+    (if (eql (or (find-method fun nil '(structure-object) nil)
+		 (find-method fun nil (list (find-class t)) nil)
+		 :none)
+	     (car (compute-applicable-methods fun (list obj))))
+	;; The default method applies
+	(handler-case
+	 (progn (make-load-form obj) :bad)
+	 (error () :good))
+      :good))
   :good)
 
 (define-condition make-load-form-condition-03 () ((a) (b) (c)))
 
 (deftest make-load-form.3
-  (handler-case
-   (progn (make-load-form (make-condition 'make-load-form-condition-03) :bad))
-   (error () :good))
+  (let* ((fun #'make-load-form)
+	 (obj (make-condition 'make-load-form-condition-03)))
+    (if (eql (or (find-method fun nil '(condition) nil)
+		 (find-method fun nil (list (find-class t)) nil)
+		 :none)
+	     (car (compute-applicable-methods fun (list obj))))
+	;; The default method applies
+	(handler-case
+	 (progn (make-load-form obj :bad))
+	 (error () :good))
+      :good))
   :good)
 
 ;;; Make sure these errors are due to the method, not due to lack of
