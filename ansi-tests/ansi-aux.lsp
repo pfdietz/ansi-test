@@ -1613,5 +1613,18 @@ the condition to go uncaught if it cannot be classified."
 		   (return hi)
 		 (setq lo mid))))))
 
-	     
-  
+(defun rational-safely (x)
+  "Rational a floating point number, making sure the rational
+   number isn't 'too big'.  This is important in implementations such
+   as clisp where the floating bounds can be very large."
+  (assert (floatp x))
+  (multiple-value-bind (significand exponent sign)
+      (integer-decode-float x)
+    (let ((limit 1000)
+	  (radix (float-radix x)))
+      (cond
+       ((< exponent (- limit))
+	(* significand (expt radix (- limit)) sign))
+       ((> exponent limit)
+	(* significand (expt radix limit) sign))
+       (t (rational x))))))
