@@ -44,7 +44,7 @@
 	       (if *compile-unoptimized-form*
 		   (apply (compile nil (getf plist :unoptimized-lambda-form))
 			  (getf plist :vals))
-		 (apply (eval `(function ,(getf plist :unoptimized-lambda-form)))
+		 (apply (the function (eval `(function ,(getf plist :unoptimized-lambda-form))))
 			(getf plist :vals)))))
 
 (defun tn (n &optional (size 100))
