@@ -12,3 +12,5 @@
 (load "read-preserving-whitespace.lsp")
 (load "read-delimited-list.lsp")
 (load "read-from-string.lsp")
+(load "readtable-case.lsp")
+
