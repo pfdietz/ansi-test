@@ -58,6 +58,8 @@
 (load "integer-length.lsp")
 (load "integerp.lsp")
 
+(load "parse-integer.lsp")
+
 (load "rational.lsp")
 (load "rationalize.lsp")
 
