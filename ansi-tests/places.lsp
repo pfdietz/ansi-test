@@ -41,6 +41,17 @@
   #(a b c d)
   3)
 
+(deftest pushnew-order.2
+  (let ((x (vector nil nil nil nil nil))
+	(y (vector 'a 'b 'c 'd 'e))
+	(i 1))
+    (pushnew (aref y (incf i)) (aref x (incf i))
+	     :test (progn (incf i) #'eql))
+    (values x y i))
+  #(nil nil nil (c) nil)
+  #(a b c d e)
+  4)
+
 (deftest remf-order
   (let ((x  (copy-seq #(nil :a :b)))
 	(pa (vector (list :a 1) (list :b 2) (list :c 3) (list :d 4)))
@@ -249,3 +260,176 @@
     (let ((y nil))
       (values (setq x 1) x y)))
   1 1 1)
+
+;;; Tests that, being treated like SETF, this causes multiple values
+;;; to be assigned to (values y z)
+(deftest setf-symbol-macro.3
+  (symbol-macrolet ((x (values y z)))
+    (let ((y nil) (z nil))
+      (values (setq x (values 1 2)) x y z)))
+  1 1 1 2)
+
+(deftest setq.1
+  (setq)
+  nil)
+
+(deftest setq.2
+  (let ((x 0) (y 0))
+    (values (setq x 1 y 2) x y))
+  2 1 2)
+
+(deftest setq.3
+  (let ((x 0) (y 0))
+    (values (setq x (values 1 3) y (values 2 4)) x y))
+  2 1 2)
+
+(deftest setq.4
+  (let (x) (setq x (values 1 2)))
+  1)
+
+(deftest setf.1
+  (setf)
+  nil)
+
+(deftest setf.2
+  (let ((x 0) (y 0))
+    (values (setf x 1 y 2) x y))
+  2 1 2)
+
+(deftest setf.3
+  (let ((x 0) (y 0))
+    (values (setf x (values 1 3) y (values 2 4)) x y))
+  2 1 2)
+
+(deftest setf.4
+  (let (x) (setf x (values 1 2)))
+  1)
+
+;;; Tests of PSETQ
+
+(deftest psetq.1
+  (psetq)
+  nil)
+
+(deftest psetq.2
+  (let ((x 0))
+    (values (psetq x 1) x))
+  nil 1)
+
+(deftest psetq.3
+  (let ((x 0) (y 1))
+    (values (psetq x y y x) x y))
+  nil 1 0)
+
+(deftest psetq.4
+  (let ((x 0))
+    (values
+     (symbol-macrolet ((x y))
+       (let ((y 1))
+	 (psetq x 2)
+	 y))
+     x))
+  2 0)
+
+(deftest psetq.5
+  (let ((w (list nil)))
+    (values
+     (symbol-macrolet ((x (car w)))
+       (psetq x 2))
+     w))
+  nil (2))
+
+(deftest psetq.6
+  (let ((c 0) x y)
+    (psetq x (incf c)
+	   y (incf c))
+    (values c x y))
+  2 1 2)
+
+;;; The next test is a PSETQ that is equivalent to a PSETF
+;;; See PSETF.7 for comments related to this test.
+
+(deftest psetq.7
+  (symbol-macrolet ((x (aref a (incf i)))
+		    (y (aref a (incf i))))
+    (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9)))
+	  (i 0))
+      (psetq x (aref a (incf i))
+	     y (aref a (incf i)))
+      (values a i)))
+  #(0 2 2 4 4 5 6 7 8 9)
+  4)
+
+;;; Tests of PSETF
+
+(deftest psetf.1
+  (psetf)
+  nil)
+
+(deftest psetf.2
+  (let ((x 0))
+    (values (psetf x 1) x))
+  nil 1)
+
+(deftest psetf.3
+  (let ((x 0) (y 1))
+    (values (psetf x y y x) x y))
+  nil 1 0)
+
+(deftest psetf.4
+  (let ((x 0))
+    (values
+     (symbol-macrolet ((x y))
+       (let ((y 1))
+	 (psetf x 2)
+	 y))
+     x))
+  2 0)
+
+(deftest psetf.5
+  (let ((w (list nil)))
+    (values
+     (symbol-macrolet ((x (car w)))
+       (psetf x 2))
+     w))
+  nil (2))
+
+(deftest psetf.6
+  (let ((c 0) x y)
+    (psetf x (incf c)
+	   y (incf c))
+    (values c x y))
+  2 1 2)
+
+;;; According to the standard, the forms to be assigned and
+;;; the subforms in the places to be assigned to are evaluated
+;;; from left to right.  Therefore, PSETF.7 and PSETF.8 should
+;;; do the same thing to A as PSETF.9 does.
+;;; (See the page for PSETF)
+
+(deftest psetf.7
+  (symbol-macrolet ((x (aref a (incf i)))
+		    (y (aref a (incf i))))
+    (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9)))
+	  (i 0))
+      (psetf x (aref a (incf i))
+	     y (aref a (incf i)))
+      (values a i)))
+  #(0 2 2 4 4 5 6 7 8 9)
+  4)
+
+(deftest psetf.8
+  (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9)))
+	(i 0))
+    (psetf (aref a (incf i)) (aref a (incf i))
+	   (aref a (incf i)) (aref a (incf i)))
+    (values a i))
+  #(0 2 2 4 4 5 6 7 8 9)
+  4)
+
+(deftest psetf.9
+  (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9))))
+    (psetf (aref a 1) (aref a 2)
+	   (aref a 3) (aref a 4))
+    a)
+  #(0 2 2 4 4 5 6 7 8 9))

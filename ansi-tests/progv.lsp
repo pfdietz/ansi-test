@@ -66,4 +66,3 @@
 	(progn (setf y (incf c)) nil)
       (values x y c)))
   1 2 2)
-
