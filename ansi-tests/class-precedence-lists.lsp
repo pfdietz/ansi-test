@@ -12,7 +12,11 @@
 	(:method-combination list)
 	.
 	#.(loop for s in *cl-types-that-are-classes-symbols*
-		when (ignore-errors (pcl::find-class-from-cell s (pcl::find-class-cell s)))
+		;; FIXME
+		;; This was added to get gcl to not abort here,
+		;; but it masks ANSI noncompliance
+		#+gcl when #+gcl (ignore-errors (pcl::find-class-from-cell
+						 s (pcl::find-class-cell s)))
 		collect
 		`(:method list ((x ,s)) ',s))))))
 
