@@ -197,6 +197,16 @@
 		  nil))))
   nil)
 
+(deftest =.19
+  (let ((bound (expt 10 1000)))
+    (loop for x in (list most-positive-short-float most-positive-single-float
+			 most-positive-double-float most-positive-long-float)
+	  for d = (and (<= x bound) (truncate x))
+	  when (and d (or (= (* 3/2 d) x)
+			  (= x (* 5/4 d))))
+	  collect (list x d (* 3/2 d) (* 5/4 d))))
+  nil)
+
 (deftest =.order.1
   (let ((i 0) x y)
     (values
@@ -378,6 +388,15 @@
 		    (list (list x i xrat-rat/i))))))
   nil)
 
+(deftest /=.19
+  (let ((bound (expt 10 1000)))
+    (loop for x in (list most-positive-short-float most-positive-single-float
+			 most-positive-double-float most-positive-long-float)
+	  for d = (and (<= x bound) (truncate x))
+	  unless (or (null d) (and (/= (* 3/2 d) x)
+				   (/= x (* 5/4 d))))
+	  collect (list x d (* 3/2 d) (* 5/4 d))))
+  nil)
 
 (deftest /=.order.1
   (let ((i 0) x y)
@@ -628,6 +647,15 @@
 		  nil))))
   nil)
 
+(deftest <.19
+  (let ((bound (expt 10 1000)))
+    (loop for x in (list most-positive-short-float most-positive-single-float
+			 most-positive-double-float most-positive-long-float)
+	  for d = (and (<= x bound) (truncate x))
+	  unless (or (null d) (and (< x (* 3/2 d))
+				   (not (< (* 17/16 d) x))))
+	  collect (list x d (* 3/2 d) (* 17/16 d))))
+  nil)
 
 (deftest <.order.1
   (let ((i 0) x y)
@@ -874,6 +902,16 @@
 		  nil))))
   nil)
 
+(deftest <=.19
+  (let ((bound (expt 10 1000)))
+    (loop for x in (list most-positive-short-float most-positive-single-float
+			 most-positive-double-float most-positive-long-float)
+	  for d = (and (<= x bound) (truncate x))
+	  unless (or (null d) (and (<= x (* 3/2 d))
+				   (not (<= (* 5/4 d) x))))
+	  collect (list x d (* 3/2 d) (* 5/4 d))))
+  nil)
+
 (deftest <=.order.1
   (let ((i 0) x y)
     (values
@@ -1000,6 +1038,16 @@
 		(if (> x xrat-rat/i)
 		    nil
 		    (list (list x i  xrat-rat/i))))))
+  nil)
+
+(deftest >.19
+  (let ((bound (expt 10 1000)))
+    (loop for x in (list most-positive-short-float most-positive-single-float
+			 most-positive-double-float most-positive-long-float)
+	  for d = (and (<= x bound) (truncate x))
+	  unless (or (null d) (and (> (* 3/2 d) x)
+				   (not (> x (* 17/16 d)))))
+	  collect (list x d (* 3/2 d) (* 17/16 d))))
   nil)
 
 (deftest >.order.1
@@ -1131,6 +1179,16 @@
 		(if (>= x xrat-rat/i)
 		    nil
 		    (list (list x i xrat-rat/i))))))
+  nil)
+
+(deftest >=.19
+  (let ((bound (expt 10 1000)))
+    (loop for x in (list most-positive-short-float most-positive-single-float
+			 most-positive-double-float most-positive-long-float)
+	  for d = (and (<= x bound) (truncate x))
+	  unless (or (null d) (and (>= (* 3/2 d) x)
+				   (not (>=  x(* 17/16 d)))))
+	  collect (list x d (* 3/2 d) (* 17/16 d))))
   nil)
 
 (deftest >=.order.1
