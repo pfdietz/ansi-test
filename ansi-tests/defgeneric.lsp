@@ -212,6 +212,7 @@
 (deftest defgeneric.1
   (let ((fn (eval '(defgeneric defgeneric.fun.1 (x y z)
 		     (:method ((x t) (y t) (z t)) (list x y z))))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -226,6 +227,7 @@
   (let ((fn (eval '(defgeneric defgeneric.fun.2 (x y z)
 		     (:documentation "boo!")
 		     (:method ((x t) (y t) (z t)) (vector x y z))))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -252,6 +254,7 @@
   (let ((fn (eval '(defgeneric defgeneric.fun.3 (x y)
 		     (:method ((x t) (y symbol)) (list x y))
 		     (:method ((x symbol) (y t)) (list y x))))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -268,6 +271,7 @@
 		     (:argument-precedence-order y x)
 		     (:method ((x t) (y symbol)) (list x y))
 		     (:method ((x symbol) (y t)) (list y x))))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -282,6 +286,7 @@
 (deftest defgeneric.5
   (let ((fn (eval '(defgeneric defgeneric.fun.5 ()
 		     (:method () (values))))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -293,6 +298,7 @@
 (deftest defgeneric.6
   (let ((fn (eval '(defgeneric defgeneric.fun.6 ()
 		     (:method () (values 'a 'b 'c))))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -304,6 +310,7 @@
 (deftest defgeneric.7
   (let ((fn (eval '(defgeneric defgeneric.fun.7 ()
 		     (:method () (return-from defgeneric.fun.7 'a) 'b)))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -318,6 +325,7 @@
 			      (list x y z))
 		     (:method ((p symbol) &optional q r)
 			      (list r q p))))))
+    (declare (type function fn))
     (values
      (typep* fn 'generic-function)
      (typep* fn 'standard-generic-function)
@@ -343,6 +351,7 @@
 			      (list x y z))
 		     (:method ((p symbol) &optional (q 's) (r 't))
 			      (list r q p))))))
+    (declare (type function fn))
     (values
      (funcall fn 1)
      (funcall fn 1 2)
@@ -360,6 +369,7 @@
  (deftest defgeneric.10
    (let ((fn (eval '(defgeneric defgeneric.fun.10 (x &rest y)
 		      (:method ((x number) &key foo) (list x foo))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :foo 'a)
@@ -375,6 +385,7 @@
  (deftest defgeneric.11
    (let ((fn (eval '(defgeneric defgeneric.fun.11 (x &key)
 		      (:method ((x number) &key foo) (list x foo))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :foo 'a)
@@ -390,6 +401,7 @@
  (deftest defgeneric.12
    (let ((fn (eval '(defgeneric defgeneric.fun.12 (x &key foo bar baz)
 		      (:method ((x number) &rest y) (list x y))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :foo 'a)
@@ -406,6 +418,7 @@
    (let ((fn (eval '(defgeneric defgeneric.fun.13 (x &key)
 		      (:method ((x number) &key foo) (list x foo))
 		      (:method ((x symbol) &key bar) (list x bar))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 'a)
@@ -430,6 +443,7 @@
    (let ((fn (eval '(defgeneric defgeneric.fun.14 (x &key &allow-other-keys)
 		      (:method ((x number) &key foo) (list x foo))
 		      (:method ((x symbol) &key bar) (list x bar))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 'a)
@@ -462,6 +476,7 @@
 		      (:method ((x number) &key foo &allow-other-keys)
 			       (list x foo))
 		      (:method ((x symbol) &key bar) (list x bar))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 'a)
@@ -496,6 +511,7 @@
 			       (list x foo))
 		      (:method ((x symbol) &key foo)
 			       (list x foo))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :foo nil)
@@ -516,6 +532,7 @@
 			       (list x foo (notnot foo-p)))
 		      (:method ((x symbol) &key foo)
 			       (list x foo))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :foo nil)
@@ -536,6 +553,7 @@
 			       (list x y))
 		      (:method ((x symbol) &optional (z nil z-p))
 			       (list x z (notnot z-p)))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 nil)
@@ -554,6 +572,7 @@
    (let ((fn (eval '(defgeneric defgeneric.fun.19 (x &key)
 		      (:method ((x number) &key ((:bar foo) 'a foo-p))
 			       (list x foo (notnot foo-p)))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :bar nil)
@@ -569,6 +588,7 @@
 				          (z (if y-p (1+ y) (+ x 10))
 					     z-p))
 			       (list x y (notnot y-p) z (notnot z-p)))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 5)
@@ -584,6 +604,7 @@
 				(z (if y-p (1+ y) (+ x 10))
 				   z-p))
 			       (list x y (notnot y-p) z (notnot z-p)))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :y 5)
@@ -600,6 +621,7 @@
    (let ((fn (eval '(defgeneric defgeneric.fun.22 (x &key)
 		      (:method ((x number) &key ((:allow-other-keys y)))
 			       (list x y))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 1 :allow-other-keys nil)
@@ -624,6 +646,7 @@
    (let ((fn (eval '(defgeneric defgeneric.fun.23 (x)
 		      (:method ((x number) &aux (y (1+ x))) (list x y))
 		      (:method ((x symbol) &aux (z (list x))) (list x z))))))
+     (declare (type function fn))
      (values
       (funcall fn 1)
       (funcall fn 'a)))
@@ -649,6 +672,7 @@
 				&aux (z (list x y (notnot y-p)
 					      bar (notnot bar-p))))
 			       z)))))
+    (declare (type function fn))
     (values
      (funcall fn 'a)
      (funcall fn 'a 'b)
@@ -662,6 +686,7 @@
 		     (declare (optimize (safety 3)))
 		     (:method ((x symbol)) x)
 		     (declare (optimize (debug 3)))))))
+    (declare (type function fn))
     (funcall fn 'a))
   a)
 
@@ -675,6 +700,7 @@
 		       (:method ((x number) (y number)) (+ x y))
 		       (:method ((x string) (y string))
 				(concatenate 'string x y))))))
+      (declare (type function fn))
       (values
        (funcall fn 1 2)
        (funcall fn "1" "2")))
@@ -686,6 +712,7 @@
 		     (:method ((x integer) &key foo) (list x foo))
 		     (:method ((x number) &key bar) (list x bar))
 		     (:method ((x t) &key baz) (list x baz))))))
+    (declare (type function fn))
     (values
       
      (funcall fn 1)
@@ -725,6 +752,7 @@
 	 (eval '(defgeneric defgeneric.fun.29 (x &key)
 		  (:method ((x defgeneric.29.class.1) &key foo) foo)
 		  (:method ((x defgeneric.29.class.2) &key bar) bar)))))
+    (declare (type function fn))
     (let ((x (make-instance 'defgeneric.29.class.3)))
       (values
        (funcall fn x)
@@ -744,6 +772,7 @@
 		    (:generic-function-class substandard-generic-function)
 		    (:method ((x symbol)) 1)
 		    (:method ((x integer)) 2)))))
+      (declare (type function fn))
       (values
        (typep* fn 'substandard-generic-function)
        (typep* fn 'standard-generic-function)
@@ -777,6 +806,7 @@
 		      (assert (null args)) (setf (car y) x))
 	     (:method (x (y array) &rest args)
 		      (setf (apply #'aref y args) x))))))
+    (declare (type function fn))
     (values
      (let ((z (list 'a 'b)))
        (list
@@ -802,6 +832,7 @@
 			      "FOO"
 			      (declare (optimize (safety 3)))
 			      x)))))
+    (declare (type function fn))
     (values
      (funcall fn 'a)
      (let ((method (first (compute-applicable-methods fn '(a)))))

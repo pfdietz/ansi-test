@@ -6,6 +6,7 @@
 ;;; (load "rt.o")
 (load "cl-test-package.lsp")
 (in-package :cl-test)
+(compile-and-load "ansi-aux-macros.lsp")
 (load "universe.lsp")
 (compile-and-load "random-aux.lsp")
 (compile-and-load "ansi-aux.lsp")

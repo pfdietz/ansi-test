@@ -223,12 +223,12 @@ Results: ~A~%" expected-number form n results))))
       for x in *universe* count
 	(block failed
 	  (let ((p1 (handler-case
-			(funcall (the function p) x)
+			(normally (funcall (the function p) x))
 		      (error () (format t "(FUNCALL ~S ~S) failed~%"
 					P x)
 			(return-from failed t))))
 		(p2 (handler-case
-			(typep x TYPE)
+			(normally (typep x TYPE))
 		      (error () (format t "(TYPEP ~S '~S) failed~%"
 					x TYPE)
 			(return-from failed t)))))
@@ -273,7 +273,7 @@ Results: ~A~%" expected-number form n results))))
 If an error does occur, return type-error on TYPE-ERRORs, or the error
 condition itself on other errors."
 `(locally (declare (optimize (safety 3)))
-  (handler-case ,form
+  (handler-case (normally ,form)
      (type-error () 'type-error)
      (error (c) c))))
 
@@ -282,7 +282,7 @@ condition itself on other errors."
 If an error does occur, return a symbol classify the error, or allow
 the condition to go uncaught if it cannot be classified."
 `(locally (declare (optimize (safety 3)))
-  (handler-case ,form
+  (handler-case (normally ,form)
      (undefined-function () 'undefined-function)
      (program-error () 'program-error)
      (package-error () 'package-error)
@@ -386,6 +386,10 @@ the condition to go uncaught if it cannot be classified."
 ;;;     (defun complement (fn)
 ;;;       #'(lambda (&rest args) (not (apply fn args))))))
 
+
+(declaim (ftype (function (&rest function) (values function &optional))
+		compose))
+
 (defun compose (&rest fns)
   (let ((rfns (reverse fns)))
     #'(lambda (x) (loop for f
@@ -434,11 +438,14 @@ the condition to go uncaught if it cannot be classified."
  " 'simple-base-string))
 
 (defparameter
-  +base-chars+ #.(concatenate 'simple-base-string
-			      "abcdefghijklmnopqrstuvwxyz"
-			      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			      "0123456789"
-			      "<,>.?/\"':;[{]}~`!@#$%^&*()_-+= \\|"))
+  +base-chars+ #.(coerce
+		  (concatenate 'string
+			       "abcdefghijklmnopqrstuvwxyz"
+			       "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			       "0123456789"
+			       "<,>.?/\"':;[{]}~`!@#$%^&*()_-+= \\|")
+		  'simple-base-string))
+		  
 
 (declaim (type simple-base-string +base-chars+))
 
@@ -1277,7 +1284,7 @@ the condition to go uncaught if it cannot be classified."
   `(eval-when #+gcl (load eval compile)
 	      #-gcl (:load-toplevel :compile-toplevel :execute)
      (handler-case (eval '(defstruct ,@args))
-		   (serious-condition () nil))))
+		      (serious-condition () nil))))
 
 (defun sort-package-list (x)
   (sort (copy-list x)

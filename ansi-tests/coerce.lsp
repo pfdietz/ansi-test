@@ -157,8 +157,9 @@
   type-error)
 
 (deftest coerce.error.5
-  (handler-case (eval '(coerce 'not-a-bound-function 'function))
-		(error () :caught))
+  (handler-case
+   (eval '(coerce 'not-a-bound-function 'function))
+   (error () :caught))
   :caught)
 
 (deftest coerce.error.6

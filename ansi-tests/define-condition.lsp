@@ -288,12 +288,12 @@
     (with-output-to-string (s) (print-object c s)))
   "The report for condition-16")
 
+(defun condition-17-report (c s)
+  (format s "condition-17: ~A" (condition-17/s c)))
+
 (define-condition-with-tests condition-17 nil
   ((s :initarg :i1 :reader condition-17/s ))
   (:report condition-17-report))
-
-(defun condition-17-report (c s)
-  (format s "condition-17: ~A" (condition-17/s c)))
 
 (deftest condition-17-report.1
   (let ((*print-escape* nil)

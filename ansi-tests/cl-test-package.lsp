@@ -7,6 +7,7 @@
   (:use :cl :regression-test)
   ;; #+gcl (:use defpackage)
   (:nicknames)
+  (:shadow #:handler-case #:handler-bind)
   (:import-from "COMMON-LISP-USER" #:compile-and-load "==>")
   (:export #:random-from-seq #:random-case #:coin #:random-permute))
 

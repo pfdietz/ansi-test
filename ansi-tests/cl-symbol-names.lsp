@@ -1706,8 +1706,8 @@
     dolist
     dotimes
     formatter
-    handler-bind
-    handler-case
+    cl:handler-bind
+    cl:handler-case
     ignore-errors
     in-package
     incf
