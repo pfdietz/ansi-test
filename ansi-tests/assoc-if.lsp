@@ -37,8 +37,13 @@
   (6 . c))
 
 (deftest assoc-if.4
-    (assoc-if #'null '((a . b) nil (c . d) (nil . e) (f . g)))
+  (assoc-if #'null '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
+
+(deftest assoc-if.5
+  (let () (assoc-if #'null '((a . b) nil (c . d) (nil . e) (f . g))))
+  (nil . e))
+
 
 ;;; Order of argument evaluation
 
