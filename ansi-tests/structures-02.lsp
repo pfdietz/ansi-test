@@ -404,6 +404,10 @@
      (funcall f)))
   nil a nil nil)
 
+;;; Keywords are allowed in defstruct
+(defstruct-with-tests :struct-test-63 a63 b63 c63)
+(defstruct-with-tests struct-test-64 :a63 :b63 :c63)
+
 ;;; Error tests
 
 (deftest copy-structure.error.1
