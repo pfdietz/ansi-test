@@ -2,6 +2,11 @@
 
 (load "char-schar.lsp")
 (load "string.lsp")
+(load "base-string.lsp")
+(load "simple-string.lsp")
+(load "simple-base-string.lsp")
+(load "simple-string-p.lsp")
+(load "stringp.lsp")
 (load "string-upcase.lsp")
 (load "string-downcase.lsp")
 (load "string-capitalize.lsp")

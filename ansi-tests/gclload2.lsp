@@ -50,6 +50,7 @@
 (compile-and-load "char-aux.lsp")
 (load "character.lsp")
 (load "char-compare.lsp")
+(load "name-char.lsp")
 
 ;;; Tests of pathnames
 (load "load-pathnames.lsp")

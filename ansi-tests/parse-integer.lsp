@@ -217,10 +217,30 @@
      (multiple-value-list (parse-integer s2))))
   "123" 3 t (123 3))
 
+(deftest parse-integer.28a
+  (let* ((s (make-array 5 :initial-contents "a123b" :element-type 'character))
+	 (s2 (make-array 3 :displaced-to s :displaced-index-offset 1
+			 :element-type 'character)))
+    (values
+     s2
+     (length s2)
+     (equalpt "123" s2)
+     (multiple-value-list (parse-integer s2))))
+  "123" 3 t (123 3))
+
 (deftest parse-integer.29
   (let ((s (make-array 10 :initial-contents "1234567890"
 		       :fill-pointer 3
 		       :element-type 'base-char)))
+    (values
+     (length s)
+     (multiple-value-list (parse-integer s))))
+  3 (123 3))
+
+(deftest parse-integer.29a
+  (let ((s (make-array 10 :initial-contents "1234567890"
+		       :fill-pointer 3
+		       :element-type 'character)))
     (values
      (length s)
      (multiple-value-list (parse-integer s))))
@@ -235,6 +255,20 @@
      (multiple-value-list (parse-integer s))
      (progn
        (adjust-array s 3 :element-type 'base-char)
+       (multiple-value-list (parse-integer s)))))
+  10
+  (1234567890 10)
+  (123 3))
+
+(deftest parse-integer.30a
+  (let ((s (make-array 10 :initial-contents "1234567890"
+		       :adjustable t
+		       :element-type 'character)))
+    (values
+     (length s)
+     (multiple-value-list (parse-integer s))
+     (progn
+       (adjust-array s 3 :element-type 'character)
        (multiple-value-list (parse-integer s)))))
   10
   (1234567890 10)

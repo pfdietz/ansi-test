@@ -617,35 +617,3 @@
 (deftest char-name.error.2
   (signals-error (char-name #\a #\a) program-error)
   t)
-
-;;;
-
-(deftest name-char.1
-  (name-char.1.body)
-  t)
-
-(deftest name-char.2
-  (loop for s in '("RubOut" "PAGe" "BacKspace" "RetUrn" "Tab" "LineFeed"
-		   "SpaCE" "NewLine")
-	always
-	(let ((c1 (name-char (string-upcase s)))
-	      (c2 (name-char (string-downcase s)))
-	      (c3 (name-char (string-capitalize s)))
-	      (c4 (name-char s)))
-	  (and (eqlt c1 c2) (eqlt c2 c3) (eqlt c3 c4))))
-  t)
-
-(deftest name-char.order.1
-  (let ((i 0))
-    (values
-     (name-char (progn (incf i) "Space"))
-     i))
-  #\Space 1)
-
-(deftest name-char.error.1
-  (signals-error (name-char) program-error)
-  t)
-
-(deftest name-char.error.2
-  (signals-error (name-char "space" "space") program-error)
-  t)

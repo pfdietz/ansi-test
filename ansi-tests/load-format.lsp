@@ -41,3 +41,4 @@
 ;;; 22.3.7
 (load "format-goto.lsp")
 (load "format-conditional.lsp")
+(load "format-brace.lsp")
