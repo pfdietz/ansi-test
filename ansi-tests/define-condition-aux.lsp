@@ -20,68 +20,68 @@
   
   (let ((name (symbol-name name-symbol)))
   `(eval-when (load eval compile)
-     (ignore-errors
-       (define-condition ,name-symbol ,parents ,slot-specs ,@options)
-       ,@(loop for parent in (adjoin 'condition parents)
-	       collect
-	       `(deftest ,(make-def-cond-name name "IS-SUBTYPE-OF/" parent)
-		  (subtypep* ',name-symbol ',parent)
-		  t t))
-       ,@(loop for parent in (adjoin 'condition parents)
-	       collect
-	       `(deftest ,(make-def-cond-name name "IS-SUBTYPE-OF-2/" parent)
-		  (check-all-subtypep ',name-symbol ',parent)
-		  nil))
-       ,@(loop for parent in (adjoin 'condition parents)
-	       collect
-	       `(deftest ,(make-def-cond-name name
-					      "IS-NOT-SUPERTYPE-OF/" parent)
-		  (subtypep* ',parent ',name-symbol)
-		  nil t))
-       ,@(loop for parent in (adjoin 'condition parents)
-	       collect
-	       `(deftest ,(make-def-cond-name name "IS-A/" parent)
-		  (let ((c (make-condition ',name-symbol)))
-		    (notnot-mv (typep c ',parent)))
-		  t))
-       ,@(loop for parent in (adjoin 'condition parents)
-	       collect
-	       `(deftest ,(make-def-cond-name name "IS-SUBCLASS-OF/" parent)
-		  (subtypep* (find-class ',name-symbol)
-			     (find-class ',parent))
-		  t t))
-       ,@(loop for parent in (adjoin 'condition parents)
-	       collect
-	       `(deftest ,(make-def-cond-name name
-					      "IS-NOT-SUPERCLASS-OF/" parent)
-		  (subtypep* (find-class ',parent)
-			     (find-class ',name-symbol))
-		  nil t))
-       ,@(loop for parent in (adjoin 'condition parents)
-	       collect
-	       `(deftest ,(make-def-cond-name name "IS-A-MEMBER-OF-CLASS/"
-					      parent)
-		  (let ((c (make-condition ',name-symbol)))
-		    (notnot-mv (typep c (find-class ',parent))))
-		  t))
-       (deftest ,(make-def-cond-name name "HANDLER-CASE-1")
-	 (let ((c (make-condition ',name-symbol)))
-	   (handler-case (signal c)
-			 (,name-symbol (c1) (eqt c c1))))
-	 t)
-       (deftest ,(make-def-cond-name name "HANDLER-CASE-2")
-	 (let ((c (make-condition ',name-symbol)))
-	   (handler-case (signal c)
-			 (condition (c1) (eqt c c1))))
-	 t)
-       ,@(unless (some #'(lambda (ct) (subtypep ct 'error)) parents)
-	   `((deftest ,(make-def-cond-name name "HANDLER-CASE-3")
-	       (let ((c (make-condition ',name-symbol)))
-		 (handler-case (signal c)
-			       (error () nil)
-			       (,name-symbol (c2) (eqt c c2))))
-	       t)))
-       ))))
+     (ignore-errors (eval '(define-condition ,name-symbol ,parents
+			    ,slot-specs ,@options)))
+     ,@(loop for parent in (adjoin 'condition parents)
+	     collect
+	     `(deftest ,(make-def-cond-name name "IS-SUBTYPE-OF/" parent)
+		(subtypep* ',name-symbol ',parent)
+		t t))
+     ,@(loop for parent in (adjoin 'condition parents)
+	     collect
+	     `(deftest ,(make-def-cond-name name "IS-SUBTYPE-OF-2/" parent)
+		(check-all-subtypep ',name-symbol ',parent)
+		nil))
+     ,@(loop for parent in (adjoin 'condition parents)
+	     collect
+	     `(deftest ,(make-def-cond-name name
+					    "IS-NOT-SUPERTYPE-OF/" parent)
+		(subtypep* ',parent ',name-symbol)
+		nil t))
+     ,@(loop for parent in (adjoin 'condition parents)
+	     collect
+	     `(deftest ,(make-def-cond-name name "IS-A/" parent)
+		(let ((c (make-condition ',name-symbol)))
+		  (notnot-mv (typep c ',parent)))
+		t))
+     ,@(loop for parent in (adjoin 'condition parents)
+	     collect
+	     `(deftest ,(make-def-cond-name name "IS-SUBCLASS-OF/" parent)
+		(subtypep* (find-class ',name-symbol)
+			   (find-class ',parent))
+		t t))
+     ,@(loop for parent in (adjoin 'condition parents)
+	     collect
+	     `(deftest ,(make-def-cond-name name
+					    "IS-NOT-SUPERCLASS-OF/" parent)
+		(subtypep* (find-class ',parent)
+			   (find-class ',name-symbol))
+		nil t))
+     ,@(loop for parent in (adjoin 'condition parents)
+	     collect
+	     `(deftest ,(make-def-cond-name name "IS-A-MEMBER-OF-CLASS/"
+					    parent)
+		(let ((c (make-condition ',name-symbol)))
+		  (notnot-mv (typep c (find-class ',parent))))
+		t))
+     (deftest ,(make-def-cond-name name "HANDLER-CASE-1")
+       (let ((c (make-condition ',name-symbol)))
+	 (handler-case (signal c)
+		       (,name-symbol (c1) (eqt c c1))))
+       t)
+     (deftest ,(make-def-cond-name name "HANDLER-CASE-2")
+       (let ((c (make-condition ',name-symbol)))
+	 (handler-case (signal c)
+		       (condition (c1) (eqt c c1))))
+       t)
+     ,@(unless (some #'(lambda (ct) (subtypep ct 'error)) parents)
+	 `((deftest ,(make-def-cond-name name "HANDLER-CASE-3")
+	     (let ((c (make-condition ',name-symbol)))
+	       (handler-case (signal c)
+			     (error () nil)
+			     (,name-symbol (c2) (eqt c c2))))
+	     t)))
+     )))
 
 
 
