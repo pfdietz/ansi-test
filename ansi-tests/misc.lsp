@@ -4783,3 +4783,32 @@
                  (logand (handler-bind () 0)))))))
    10)
   0)
+
+#|
+ecl (6 Mar 2004)
+(LAMBDA (C::LOC1 C::LOC2) (IF (AND (CONSP C::LOC1)
+				   (EQ (CAR C::LOC1) 'FIXNUM)
+				   (CONSP (CADR C::LOC1))
+				   (EQ (CAADR C::LOC1) 'C::FIXNUM-VALUE)
+				   (EQ (CADR (CADR C::LOC1)) 2))
+			      (PROGN (C::WT1 "(1<<(")
+				     (C::WT1 C::LOC2) (C::WT1 "))"))
+			      (PROGN (C::WT1 "fixnum_expt(")
+				     (C::WT1 C::LOC1)
+				     (C::WT1 #\,)
+				     (C::WT1 C::LOC2)
+				     (C::WT1 #\)))))
+is not of type STRING.
+Broken at C::WT-C-INLINE-LOC.
+|#
+
+(deftest misc.288
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (space 2) (safety 3) (debug 3)
+                          (compilation-speed 2)))
+       (let ((v2 (integer-length (expt 0 0))))
+         (dotimes (iv4 0 0) (logand v2))))))
+  0)
