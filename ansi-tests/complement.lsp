@@ -41,17 +41,19 @@
   1 (t t nil t t nil t nil) 1)
 
 (deftest complement.error.1
-  (classify-error (complement))
-  program-error)
+  (signals-error (complement) program-error)
+  t)
 
 (deftest complement.error.2
-  (classify-error (complement #'not t))
-  program-error)
+  (signals-error (complement #'not t) program-error)
+  t)
 
 (deftest complement.error.3
-  (classify-error (funcall (complement #'identity)))
-  program-error)
+  (signals-error (funcall (complement #'identity))
+		 program-error)
+  t)
 
 (deftest complement.error.4
-  (classify-error (funcall (complement #'identity) t t))
-  program-error)
+  (signals-error (funcall (complement #'identity) t t)
+		 program-error)
+  t)

@@ -82,15 +82,17 @@
   good)
 
 (deftest cond.error.1
-  (classify-error (funcall (macro-function 'cond)))
-  program-error)
+  (signals-error (funcall (macro-function 'cond))
+		 program-error)
+  t)
 
 (deftest cond.error.2
-  (classify-error (funcall (macro-function 'cond)
-			   '(cond)))
-  program-error)
+  (signals-error (funcall (macro-function 'cond) '(cond))
+		 program-error)
+  t)
 
 (deftest cond.error.3
-  (classify-error (funcall (macro-function 'cond)
-			   '(cond) nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'cond) '(cond) nil nil)
+		 program-error)
+  t)
+

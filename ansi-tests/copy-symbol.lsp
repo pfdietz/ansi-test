@@ -84,10 +84,12 @@
        i x y)))
   "x" nil 2 1 2)
 
+;;; Error tests
+
 (deftest copy-symbol.error.1
-  (classify-error (copy-symbol))
-  program-error)
+  (signals-error (copy-symbol) program-error)
+  t)
 
 (deftest copy-symbol.error.2
-  (classify-error (copy-symbol 'a t 'foo))
-  program-error)
+  (signals-error (copy-symbol 'a t 'foo) program-error)
+  t)

@@ -9,12 +9,12 @@
 (compile-and-load "ceiling-aux.lsp")
 
 (deftest ceiling.error.1
-  (classify-error (ceiling))
-  program-error)
+  (signals-error (ceiling) program-error)
+  t)
 
 (deftest ceiling.error.2
-  (classify-error (ceiling 1.0 1 nil))
-  program-error)
+  (signals-error (ceiling 1.0 1 nil) program-error)
+  t)
 
 ;;;
 

@@ -32,10 +32,12 @@
      i))
   (a b c) 1)
 
+;;; Error tests
+
 (deftest copy-tree.error.1
-  (classify-error (copy-tree))
-  program-error)
+  (signals-error (copy-tree) program-error)
+  t)
 
 (deftest copy-tree.error.2
-  (classify-error (copy-tree 'a 'b))
-  program-error)
+  (signals-error (copy-tree 'a 'b) program-error)
+  t)

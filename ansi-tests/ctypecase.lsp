@@ -11,10 +11,11 @@
   a)
 
 (deftest ctypecase.2
-  (classify-error
+  (signals-error
    (let ((x 1))
-     (ctypecase x (symbol 'a))))
-  type-error)
+     (ctypecase x (symbol 'a)))
+   type-error)
+  t)  
 
 (deftest ctypecase.3
   (let ((x 1))
@@ -76,8 +77,8 @@
   :good a)
 
 ;;; (deftest ctypecase.error.1
-;;;  (classify-error (ctypecase))
-;;;  program-error)
+;;;  (signals-error (ctypecase) program-error)
+;;;  t)
 
 
 (deftest ctypecase.13
@@ -99,16 +100,19 @@
   good)
 
 (deftest ctypecase.error.1
-  (classify-error (funcall (macro-function 'ctypecase)))
-  program-error)
+  (signals-error (funcall (macro-function 'ctypecase))
+		 program-error)
+  t)
 
 (deftest ctypecase.error.2
-  (classify-error (funcall (macro-function 'ctypecase)
-			   '(ctypecase t)))
-  program-error)
+  (signals-error (funcall (macro-function 'ctypecase)
+			   '(ctypecase t))
+		 program-error)
+  t)
 
 (deftest ctypecase.error.3
-  (classify-error (funcall (macro-function 'ctypecase)
+  (signals-error (funcall (macro-function 'ctypecase)
 			   '(ctypecase t)
-			   nil nil))
-  program-error)
+			   nil nil)
+		 program-error)
+  t)

@@ -147,12 +147,12 @@
   nil)
 
 (deftest car-symbol-error
-  (classify-error (car 'a))
-  type-error)
+  (signals-error (car 'a) type-error)
+  t)
 
 (deftest car-symbol-error.2
-  (classify-error (locally (car 'a) t))
-  type-error)
+  (signals-error (locally (car 'a) t) type-error)
+  t)
 
 (deftest car.order.1
   (let ((i 0))
@@ -173,400 +173,400 @@
   (b) 1)
 
 (deftest cdr-symbol-error
-  (classify-error (cdr 'a))
-  type-error)
+  (signals-error (cdr 'a) type-error)
+  t)
 
 (deftest cdr-symbol-error.2
-  (classify-error (locally (cdr 'a) t))
-  type-error)
+  (signals-error (locally (cdr 'a) t) type-error)
+  t)
 
 ;;; Error checking of c*r functions
 
 (deftest caar.error.1
-  (classify-error (caar 'a))
-  type-error)
+  (signals-error (caar 'a) type-error)
+  t)
 
 (deftest caar.error.2
-  (classify-error (caar '(a)))
-  type-error)
+  (signals-error (caar '(a)) type-error)
+  t)
 
 (deftest cadr.error.1
-  (classify-error (cadr 'a))
-  type-error)
+  (signals-error (cadr 'a) type-error)
+  t)
 
 (deftest cadr.error.2
-  (classify-error (cadr '(a . b)))
-  type-error)
+  (signals-error (cadr '(a . b)) type-error)
+  t)
 
 (deftest cdar.error.1
-  (classify-error (cdar 'a))
-  type-error)
+  (signals-error (cdar 'a) type-error)
+  t)
 
 (deftest cdar.error.2
-  (classify-error (cdar '(a . b)))
-  type-error)
+  (signals-error (cdar '(a . b)) type-error)
+  t)
 
 (deftest cddr.error.1
-  (classify-error (cddr 'a))
-  type-error)
+  (signals-error (cddr 'a) type-error)
+  t)
 
 (deftest cddr.error.2
-  (classify-error (cddr '(a . b)))
-  type-error)
+  (signals-error (cddr '(a . b)) type-error)
+  t)
 
 (deftest caaar.error.1
-  (classify-error (caaar 'a))
-  type-error)
+  (signals-error (caaar 'a) type-error)
+  t)
 
 (deftest caaar.error.2
-  (classify-error (caaar '(a)))
-  type-error)
+  (signals-error (caaar '(a)) type-error)
+  t)
 
 (deftest caaar.error.3
-  (classify-error (caaar '((a))))
-  type-error)
+  (signals-error (caaar '((a))) type-error)
+  t)
 
 (deftest caadr.error.1
-  (classify-error (caadr 'a))
-  type-error)
+  (signals-error (caadr 'a) type-error)
+  t)
 
 (deftest caadr.error.2
-  (classify-error (caadr '(a . b)))
-  type-error)
+  (signals-error (caadr '(a . b)) type-error)
+  t)
 
 (deftest caadr.error.3
-  (classify-error (caadr '(a . (b))))
-  type-error)
+  (signals-error (caadr '(a . (b))) type-error)
+  t)
 
 (deftest cadar.error.1
-  (classify-error (cadar 'a))
-  type-error)
+  (signals-error (cadar 'a) type-error)
+  t)
 
 (deftest cadar.error.2
-  (classify-error (cadar '(a . b)))
-  type-error)
+  (signals-error (cadar '(a . b)) type-error)
+  t)
 
 (deftest cadar.error.3
-  (classify-error (cadar '((a . c) . b)))
-  type-error)
+  (signals-error (cadar '((a . c) . b)) type-error)
+  t)
 
 (deftest caddr.error.1
-  (classify-error (caddr 'a))
-  type-error)
+  (signals-error (caddr 'a) type-error)
+  t)
 
 (deftest caddr.error.2
-  (classify-error (caddr '(a . b)))
-  type-error)
+  (signals-error (caddr '(a . b)) type-error)
+  t)
 
 (deftest caddr.error.3
-  (classify-error (caddr '(a c . b)))
-  type-error)
+  (signals-error (caddr '(a c . b)) type-error)
+  t)
 
 (deftest cdaar.error.1
-  (classify-error (cdaar 'a))
-  type-error)
+  (signals-error (cdaar 'a) type-error)
+  t)
 
 (deftest cdaar.error.2
-  (classify-error (cdaar '(a)))
-  type-error)
+  (signals-error (cdaar '(a)) type-error)
+  t)
 
 (deftest cdaar.error.3
-  (classify-error (cdaar '((a . b))))
-  type-error)
+  (signals-error (cdaar '((a . b))) type-error)
+  t)
 
 (deftest cdadr.error.1
-  (classify-error (cdadr 'a))
-  type-error)
+  (signals-error (cdadr 'a) type-error)
+  t)
 
 (deftest cdadr.error.2
-  (classify-error (cdadr '(a . b)))
-  type-error)
+  (signals-error (cdadr '(a . b)) type-error)
+  t)
 
 (deftest cdadr.error.3
-  (classify-error (cdadr '(a b . c)))
-  type-error)
+  (signals-error (cdadr '(a b . c)) type-error)
+  t)
 
 (deftest cddar.error.1
-  (classify-error (cddar 'a))
-  type-error)
+  (signals-error (cddar 'a) type-error)
+  t)
 
 (deftest cddar.error.2
-  (classify-error (cddar '(a . b)))
-  type-error)
+  (signals-error (cddar '(a . b)) type-error)
+  t)
 
 (deftest cddar.error.3
-  (classify-error (cddar '((a . b) . b)))
-  type-error)
+  (signals-error (cddar '((a . b) . b)) type-error)
+  t)
 
 (deftest cdddr.error.1
-  (classify-error (cdddr 'a))
-  type-error)
+  (signals-error (cdddr 'a) type-error)
+  t)
 
 (deftest cdddr.error.2
-  (classify-error (cdddr '(a . b)))
-  type-error)
+  (signals-error (cdddr '(a . b)) type-error)
+  t)
 
 (deftest cdddr.error.3
-  (classify-error (cdddr '(a c . b)))
-  type-error)
+  (signals-error (cdddr '(a c . b)) type-error)
+  t)
 
 ;;
 
 (deftest caaaar.error.1
-  (classify-error (caaaar 'a))
-  type-error)
+  (signals-error (caaaar 'a) type-error)
+  t)
 
 (deftest caaaar.error.2
-  (classify-error (caaaar '(a)))
-  type-error)
+  (signals-error (caaaar '(a)) type-error)
+  t)
 
 (deftest caaaar.error.3
-  (classify-error (caaaar '((a))))
-  type-error)
+  (signals-error (caaaar '((a))) type-error)
+  t)
 
 (deftest caaaar.error.4
-  (classify-error (caaaar '(((a)))))
-  type-error)
+  (signals-error (caaaar '(((a)))) type-error)
+  t)
 
 (deftest caaadr.error.1
-  (classify-error (caaadr 'a))
-  type-error)
+  (signals-error (caaadr 'a) type-error)
+  t)
 
 (deftest caaadr.error.2
-  (classify-error (caaadr '(a . b)))
-  type-error)
+  (signals-error (caaadr '(a . b)) type-error)
+  t)
 
 (deftest caaadr.error.3
-  (classify-error (caaadr '(a . (b))))
-  type-error)
+  (signals-error (caaadr '(a . (b))) type-error)
+  t)
 
 (deftest caaadr.error.4
-  (classify-error (caaadr '(a . ((b)))))
-  type-error)
+  (signals-error (caaadr '(a . ((b)))) type-error)
+  t)
 
 (deftest caadar.error.1
-  (classify-error (caadar 'a))
-  type-error)
+  (signals-error (caadar 'a) type-error)
+  t)
 
 (deftest caadar.error.2
-  (classify-error (caadar '(a . b)))
-  type-error)
+  (signals-error (caadar '(a . b)) type-error)
+  t)
 
 (deftest caadar.error.3
-  (classify-error (caadar '((a . c) . b)))
-  type-error)
+  (signals-error (caadar '((a . c) . b)) type-error)
+  t)
 
 (deftest caadar.error.4
-  (classify-error (caadar '((a . (c)) . b)))
-  type-error)
+  (signals-error (caadar '((a . (c)) . b)) type-error)
+  t)
 
 (deftest caaddr.error.1
-  (classify-error (caaddr 'a))
-  type-error)
+  (signals-error (caaddr 'a) type-error)
+  t)
 
 (deftest caaddr.error.2
-  (classify-error (caaddr '(a . b)))
-  type-error)
+  (signals-error (caaddr '(a . b)) type-error)
+  t)
 
 (deftest caaddr.error.3
-  (classify-error (caaddr '(a c . b)))
-  type-error)
+  (signals-error (caaddr '(a c . b)) type-error)
+  t)
 
 (deftest caaddr.error.4
-  (classify-error (caaddr '(a c . (b))))
-  type-error)
+  (signals-error (caaddr '(a c . (b))) type-error)
+  t)
 
 (deftest cadaar.error.1
-  (classify-error (cadaar 'a))
-  type-error)
+  (signals-error (cadaar 'a) type-error)
+  t)
 
 (deftest cadaar.error.2
-  (classify-error (cadaar '(a)))
-  type-error)
+  (signals-error (cadaar '(a)) type-error)
+  t)
 
 (deftest cadaar.error.3
-  (classify-error (cadaar '((a . b))))
-  type-error)
+  (signals-error (cadaar '((a . b))) type-error)
+  t)
 
 (deftest cadaar.error.4
-  (classify-error (cadaar '((a . (b)))))
-  type-error)
+  (signals-error (cadaar '((a . (b)))) type-error)
+  t)
 
 (deftest cadadr.error.1
-  (classify-error (cadadr 'a))
-  type-error)
+  (signals-error (cadadr 'a) type-error)
+  t)
 
 (deftest cadadr.error.2
-  (classify-error (cadadr '(a . b)))
-  type-error)
+  (signals-error (cadadr '(a . b)) type-error)
+  t)
 
 (deftest cadadr.error.3
-  (classify-error (cadadr '(a b . c)))
-  type-error)
+  (signals-error (cadadr '(a b . c)) type-error)
+  t)
 
 (deftest cadadr.error.4
-  (classify-error (cadadr '(a (b . e) . c)))
-  type-error)
+  (signals-error (cadadr '(a (b . e) . c)) type-error)
+  t)
 
 (deftest caddar.error.1
-  (classify-error (caddar 'a))
-  type-error)
+  (signals-error (caddar 'a) type-error)
+  t)
 
 (deftest caddar.error.2
-  (classify-error (caddar '(a . b)))
-  type-error)
+  (signals-error (caddar '(a . b)) type-error)
+  t)
 
 (deftest caddar.error.3
-  (classify-error (caddar '((a . b) . b)))
-  type-error)
+  (signals-error (caddar '((a . b) . b)) type-error)
+  t)
 
 (deftest caddar.error.4
-  (classify-error (caddar '((a  b . c) . b)))
-  type-error)
+  (signals-error (caddar '((a  b . c) . b)) type-error)
+  t)
 
 (deftest cadddr.error.1
-  (classify-error (cadddr 'a))
-  type-error)
+  (signals-error (cadddr 'a) type-error)
+  t)
 
 (deftest cadddr.error.2
-  (classify-error (cadddr '(a . b)))
-  type-error)
+  (signals-error (cadddr '(a . b)) type-error)
+  t)
 
 (deftest cadddr.error.3
-  (classify-error (cadddr '(a c . b)))
-  type-error)
+  (signals-error (cadddr '(a c . b)) type-error)
+  t)
 
 (deftest cadddr.error.4
-  (classify-error (cadddr '(a c e . b)))
-  type-error)
+  (signals-error (cadddr '(a c e . b)) type-error)
+  t)
 
 (deftest cdaaar.error.1
-  (classify-error (cdaaar 'a))
-  type-error)
+  (signals-error (cdaaar 'a) type-error)
+  t)
 
 (deftest cdaaar.error.2
-  (classify-error (cdaaar '(a)))
-  type-error)
+  (signals-error (cdaaar '(a)) type-error)
+  t)
 
 (deftest cdaaar.error.3
-  (classify-error (cdaaar '((a))))
-  type-error)
+  (signals-error (cdaaar '((a))) type-error)
+  t)
 
 (deftest cdaaar.error.4
-  (classify-error (cdaaar '(((a . b)))))
-  type-error)
+  (signals-error (cdaaar '(((a . b)))) type-error)
+  t)
 
 (deftest cdaadr.error.1
-  (classify-error (cdaadr 'a))
-  type-error)
+  (signals-error (cdaadr 'a) type-error)
+  t)
 
 (deftest cdaadr.error.2
-  (classify-error (cdaadr '(a . b)))
-  type-error)
+  (signals-error (cdaadr '(a . b)) type-error)
+  t)
 
 (deftest cdaadr.error.3
-  (classify-error (cdaadr '(a . (b))))
-  type-error)
+  (signals-error (cdaadr '(a . (b))) type-error)
+  t)
 
 (deftest cdaadr.error.4
-  (classify-error (cdaadr '(a . ((b . c)))))
-  type-error)
+  (signals-error (cdaadr '(a . ((b . c)))) type-error)
+  t)
 
 (deftest cdadar.error.1
-  (classify-error (cdadar 'a))
-  type-error)
+  (signals-error (cdadar 'a) type-error)
+  t)
 
 (deftest cdadar.error.2
-  (classify-error (cdadar '(a . b)))
-  type-error)
+  (signals-error (cdadar '(a . b)) type-error)
+  t)
 
 (deftest cdadar.error.3
-  (classify-error (cdadar '((a . c) . b)))
-  type-error)
+  (signals-error (cdadar '((a . c) . b)) type-error)
+  t)
 
 (deftest cdadar.error.4
-  (classify-error (cdadar '((a . (c . d)) . b)))
-  type-error)
+  (signals-error (cdadar '((a . (c . d)) . b)) type-error)
+  t)
 
 (deftest cdaddr.error.1
-  (classify-error (cdaddr 'a))
-  type-error)
+  (signals-error (cdaddr 'a) type-error)
+  t)
 
 (deftest cdaddr.error.2
-  (classify-error (cdaddr '(a . b)))
-  type-error)
+  (signals-error (cdaddr '(a . b)) type-error)
+  t)
 
 (deftest cdaddr.error.3
-  (classify-error (cdaddr '(a c . b)))
-  type-error)
+  (signals-error (cdaddr '(a c . b)) type-error)
+  t)
 
 (deftest cdaddr.error.4
-  (classify-error (cdaddr '(a c b . d)))
-  type-error)
+  (signals-error (cdaddr '(a c b . d)) type-error)
+  t)
 
 (deftest cddaar.error.1
-  (classify-error (cddaar 'a))
-  type-error)
+  (signals-error (cddaar 'a) type-error)
+  t)
 
 (deftest cddaar.error.2
-  (classify-error (cddaar '(a)))
-  type-error)
+  (signals-error (cddaar '(a)) type-error)
+  t)
 
 (deftest cddaar.error.3
-  (classify-error (cddaar '((a . b))))
-  type-error)
+  (signals-error (cddaar '((a . b))) type-error)
+  t)
 
 (deftest cddaar.error.4
-  (classify-error (cddaar '((a . (b)))))
-  type-error)
+  (signals-error (cddaar '((a . (b)))) type-error)
+  t)
 
 (deftest cddadr.error.1
-  (classify-error (cddadr 'a))
-  type-error)
+  (signals-error (cddadr 'a) type-error)
+  t)
 
 (deftest cddadr.error.2
-  (classify-error (cddadr '(a . b)))
-  type-error)
+  (signals-error (cddadr '(a . b)) type-error)
+  t)
 
 (deftest cddadr.error.3
-  (classify-error (cddadr '(a b . c)))
-  type-error)
+  (signals-error (cddadr '(a b . c)) type-error)
+  t)
 
 (deftest cddadr.error.4
-  (classify-error (cddadr '(a (b . e) . c)))
-  type-error)
+  (signals-error (cddadr '(a (b . e) . c)) type-error)
+  t)
 
 (deftest cdddar.error.1
-  (classify-error (cdddar 'a))
-  type-error)
+  (signals-error (cdddar 'a) type-error)
+  t)
 
 (deftest cdddar.error.2
-  (classify-error (cdddar '(a . b)))
-  type-error)
+  (signals-error (cdddar '(a . b)) type-error)
+  t)
 
 (deftest cdddar.error.3
-  (classify-error (cdddar '((a . b) . b)))
-  type-error)
+  (signals-error (cdddar '((a . b) . b)) type-error)
+  t)
 
 (deftest cdddar.error.4
-  (classify-error (cdddar '((a  b . c) . b)))
-  type-error)
+  (signals-error (cdddar '((a  b . c) . b)) type-error)
+  t)
 
 (deftest cddddr.error.1
-  (classify-error (cddddr 'a))
-  type-error)
+  (signals-error (cddddr 'a) type-error)
+  t)
 
 (deftest cddddr.error.2
-  (classify-error (cddddr '(a . b)))
-  type-error)
+  (signals-error (cddddr '(a . b)) type-error)
+  t)
 
 (deftest cddddr.error.3
-  (classify-error (cddddr '(a c . b)))
-  type-error)
+  (signals-error (cddddr '(a c . b)) type-error)
+  t)
 
 (deftest cddddr.error.4
-  (classify-error (cddddr '(a c e . b)))
-  type-error)
+  (signals-error (cddddr '(a c e . b)) type-error)
+  t)
 
 ;;; Need to add 'locally' wrapped forms of these
 

@@ -141,20 +141,20 @@
 ;;; Error tests
 
 ;;; (deftest coerce.error.1
-;;;  (classify-error (coerce -1 '(integer 0 100)))
-;;;  type-error)
+;;;  (signals-error (coerce -1 '(integer 0 100)) type-error)
+;;;  t)
 
 (deftest coerce.error.2
-  (classify-error (coerce '(a b c) '(vector * 2)))
-  type-error)
+  (signals-error (coerce '(a b c) '(vector * 2)) type-error)
+  t)
 
 (deftest coerce.error.3
-  (classify-error (coerce '(a b c) '(vector * 4)))
-  type-error)
+  (signals-error (coerce '(a b c) '(vector * 4)) type-error)
+  t)
 
 (deftest coerce.error.4
-  (classify-error (coerce nil 'cons))
-  type-error)
+  (signals-error (coerce nil 'cons) type-error)
+  t)
 
 (deftest coerce.error.5
   (handler-case
@@ -163,17 +163,18 @@
   :caught)
 
 (deftest coerce.error.6
-  (classify-error (coerce))
-  program-error)
+  (signals-error (coerce) program-error)
+  t)
 
 (deftest coerce.error.7
-  (classify-error (coerce t))
-  program-error)
+  (signals-error (coerce t) program-error)
+  t)
 
 (deftest coerce.error.8
-  (classify-error (coerce 'x t 'foo))
-  program-error)
+  (signals-error (coerce 'x t 'foo) program-error)
+  t)
 
 (deftest coerce.error.9
-  (classify-error (locally (coerce nil 'cons) t))
-  type-error)
+  (signals-error (locally (coerce nil 'cons) t) type-error)
+  t)
+

@@ -7,14 +7,17 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest constantp.error.1
-  (classify-error (constantp))
-  program-error)
+  (signals-error (constantp) program-error)
+  t)
 
 (deftest constantp.error.2
-  (classify-error (constantp nil nil nil))
-  program-error)
+  (signals-error (constantp nil nil nil) program-error)
+  t)
 
+;;; Non-error tests
 
 (deftest constantp.1
   (loop for e in *universe*

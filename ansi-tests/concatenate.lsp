@@ -217,21 +217,24 @@
 ;;; Error tests
 
 (deftest concatenate.error.1
-  (subtypep* (classify-error (concatenate 'sequence '(a b c))) 'error)
-  t t)
+  (signals-error (concatenate 'sequence '(a b c)) error)
+  t)
 
 (deftest concatenate.error.2
-  (subtypep* (classify-error (concatenate 'fixnum '(a b c d e))) 'error)
-  t t)
+  (signals-error (concatenate 'fixnum '(a b c d e)) error)
+  t)
 
 (deftest concatenate.error.3
-  (classify-error (concatenate '(vector * 3) '(a b c d e)))
-  type-error)
+  (signals-error (concatenate '(vector * 3) '(a b c d e))
+		 type-error)
+  t)
 
 (deftest concatenate.error.4
-  (classify-error (concatenate))
-  program-error)
+  (signals-error (concatenate) program-error)
+  t)
 
 (deftest concatenate.error.5
-  (classify-error (locally (concatenate '(vector * 3) '(a b c d e)) t))
-  type-error)
+  (signals-error (locally (concatenate '(vector * 3) '(a b c d e)) t)
+		 type-error)
+  t)
+

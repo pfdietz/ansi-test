@@ -476,66 +476,68 @@
 ;;; Error tests
 
 (deftest count-if.error.1
-  (classify-error (count-if #'identity 1))
-  type-error)
+  (signals-error (count-if #'identity 1) type-error)
+  t)
 
 (deftest count-if.error.2
-  (classify-error (count-if #'identity 'a))
-  type-error)
+  (signals-error (count-if #'identity 'a) type-error)
+  t)
 
 (deftest count-if.error.3
-  (classify-error (count-if #'identity #\a))
-  type-error)
+  (signals-error (count-if #'identity #\a) type-error)
+  t)
 
 (deftest count-if.error.4
-  (classify-error (count-if))
-  program-error)
+  (signals-error (count-if) program-error)
+  t)
 
 (deftest count-if.error.5
-  (classify-error (count-if #'null))
-  program-error)
+  (signals-error (count-if #'null) program-error)
+  t)
 
 (deftest count-if.error.6
-  (classify-error (count-if #'null nil :bad t))
-  program-error)
+  (signals-error (count-if #'null nil :bad t) program-error)
+  t)
 
 (deftest count-if.error.7
-  (classify-error (count-if #'null nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (count-if #'null nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest count-if.error.8
-  (classify-error (count-if #'null nil :key))
-  program-error)
+  (signals-error (count-if #'null nil :key) program-error)
+  t)
 
 (deftest count-if.error.9
-  (classify-error (count-if #'null nil 3 3))
-  program-error)
+  (signals-error (count-if #'null nil 3 3) program-error)
+  t)
 
 ;;; Only leftmost :allow-other-keys argument matters
 (deftest count-if.error.10
-  (classify-error (count-if #'null nil :bad t
+  (signals-error (count-if #'null nil :bad t
 			    :allow-other-keys nil
-			    :allow-other-keys t))
-  program-error)
+			    :allow-other-keys t)
+		 program-error)
+  t)
 
 (deftest count-if.error.11
-  (classify-error (locally (count-if #'identity 1) t))
-  type-error)
+  (signals-error (locally (count-if #'identity 1) t) type-error)
+  t)
 
 (deftest count-if.error.12
-  (classify-error (count-if #'cons '(a b c)))
-  program-error)
+  (signals-error (count-if #'cons '(a b c)) program-error)
+  t)
 
 (deftest count-if.error.13
-  (classify-error (count-if #'car '(a b c)))
-  type-error)
+  (signals-error (count-if #'car '(a b c)) type-error)
+  t)
 
 (deftest count-if.error.14
-  (classify-error (count-if #'identity '(a b c) :key #'cdr))
-  type-error)
+  (signals-error (count-if #'identity '(a b c) :key #'cdr)
+		 type-error)
+  t)
 
 (deftest count-if.error.15
-  (classify-error (count-if #'identity '(a b c) :key #'cons))
-  program-error)
-
-
+  (signals-error (count-if #'identity '(a b c) :key #'cons)
+		 program-error)
+  t)

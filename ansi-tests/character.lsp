@@ -71,12 +71,12 @@
   #\a 1)
 
 (deftest character.error.1
-  (classify-error (character))
-  program-error)
+  (signals-error (character) program-error)
+  t)
 
 (deftest character.error.2
-  (classify-error (character #\a #\a))
-  program-error)
+  (signals-error (character #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -100,12 +100,12 @@
   nil 1)
 
 (deftest characterp.error.1
-  (classify-error (characterp))
-  program-error)
+  (signals-error (characterp) program-error)
+  t)
 
 (deftest characterp.error.2
-  (classify-error (characterp #\a #\b))
-  program-error)
+  (signals-error (characterp #\a #\b) program-error)
+  t)
 
 
 (deftest alpha-char-p.1
@@ -133,12 +133,12 @@
   nil 1)
 
 (deftest alpha-char-p.error.1
-  (classify-error (alpha-char-p))
-  program-error)
+  (signals-error (alpha-char-p) program-error)
+  t)
 
 (deftest alpha-char-p.error.2
-  (classify-error (alpha-char-p #\a #\b))
-  program-error)
+  (signals-error (alpha-char-p #\a #\b) program-error)
+  t)
 
 ;;;
 
@@ -173,12 +173,12 @@
   nil 1)
 
 (deftest alphanumericp.error.1
-  (classify-error (alphanumericp))
-  program-error)
+  (signals-error (alphanumericp) program-error)
+  t)
 
 (deftest alphanumericp.error.2
-  (classify-error (alphanumericp #\a #\b))
-  program-error)
+  (signals-error (alphanumericp #\a #\b) program-error)
+  t)
 
 ;;;
 
@@ -208,12 +208,12 @@
   #\1 2 2)
 
 (deftest digit-char.error.1
-  (classify-error (digit-char))
-  program-error)
+  (signals-error (digit-char) program-error)
+  t)
 
 (deftest digit-char.error.2
-  (classify-error (digit-char 0 10 'foo))
-  program-error)
+  (signals-error (digit-char 0 10 'foo) program-error)
+  t)
 
 ;;;
 
@@ -262,12 +262,12 @@
   0 2 1 2)
 
 (deftest digit-char-p.error.1
-  (classify-error (digit-char-p))
-  program-error)
+  (signals-error (digit-char-p) program-error)
+  t)
   
 (deftest digit-char-p.error.2
-  (classify-error (digit-char-p #\1 10 'foo))
-  program-error)
+  (signals-error (digit-char-p #\1 10 'foo) program-error)
+  t)
 
 ;;;
 
@@ -297,12 +297,12 @@
   nil 1)
 
 (deftest graphic-char-p.error.1
-  (classify-error (graphic-char-p))
-  program-error)
+  (signals-error (graphic-char-p) program-error)
+  t)
 
 (deftest graphic-char-p.error.2
-  (classify-error (graphic-char-p #\a #\a))
-  program-error)
+  (signals-error (graphic-char-p #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -330,12 +330,12 @@
   nil 1)
 
 (deftest standard-char-p.error.1
-  (classify-error (standard-char-p))
-  program-error)
+  (signals-error (standard-char-p) program-error)
+  t)
   
 (deftest standard-char-p.error.2
-  (classify-error (standard-char-p #\a #\a))
-  program-error)
+  (signals-error (standard-char-p #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -363,12 +363,12 @@
   #\A 1)
 
 (deftest char-upcase.error.1
-  (classify-error (char-upcase))
-  program-error)
+  (signals-error (char-upcase) program-error)
+  t)
 
 (deftest char-upcase.error.2
-  (classify-error (char-upcase #\a #\a))
-  program-error)
+  (signals-error (char-upcase #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -396,12 +396,12 @@
   #\a 1)
 
 (deftest char-downcase.error.1
-  (classify-error (char-downcase))
-  program-error)
+  (signals-error (char-downcase) program-error)
+  t)
 
 (deftest char-downcase.error.2
-  (classify-error (char-downcase #\A #\A))
-  program-error)
+  (signals-error (char-downcase #\A #\A) program-error)
+  t)
 
 ;;;
 
@@ -429,12 +429,12 @@
   nil 1)
 
 (deftest upper-case-p.error.1
-  (classify-error (upper-case-p))
-  program-error)
+  (signals-error (upper-case-p) program-error)
+  t)
 
 (deftest upper-case-p.error.2
-  (classify-error (upper-case-p #\a #\A))
-  program-error)
+  (signals-error (upper-case-p #\a #\A) program-error)
+  t)
 
 ;;;
 
@@ -458,12 +458,12 @@
   nil 1)
 
 (deftest lower-case-p.error.1
-  (classify-error (lower-case-p))
-  program-error)
+  (signals-error (lower-case-p) program-error)
+  t)
 
 (deftest lower-case-p.error.2
-  (classify-error (lower-case-p #\a #\a))
-  program-error)
+  (signals-error (lower-case-p #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -487,12 +487,12 @@
   nil 1)
 
 (deftest both-case-p.error.1
-  (classify-error (both-case-p))
-  program-error)
+  (signals-error (both-case-p) program-error)
+  t)
 
 (deftest both-case-p.error.2
-  (classify-error (both-case-p #\a #\a))
-  program-error)
+  (signals-error (both-case-p #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -512,12 +512,12 @@
   nil 1)
 
 (deftest char-code.error.1
-  (classify-error (char-code))
-  program-error)
+  (signals-error (char-code) program-error)
+  t)
 
 (deftest char-code.error.2
-  (classify-error (char-code #\a #\a))
-  program-error)
+  (signals-error (char-code #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -534,12 +534,12 @@
   #\a 1)
 
 (deftest code-char.error.1
-  (classify-error (code-char))
-  program-error)
+  (signals-error (code-char) program-error)
+  t)
 
 (deftest code-char.error.2
-  (classify-error (code-char 1 1))
-  program-error)
+  (signals-error (code-char 1 1) program-error)
+  t)
 
 ;;;
 
@@ -560,12 +560,12 @@
   #\a 1)
 
 (deftest char-int.error.1
-  (classify-error (char-int))
-  program-error)
+  (signals-error (char-int) program-error)
+  t)
 
 (deftest char-int.error.2
-  (classify-error (char-int #\a #\a))
-  program-error)
+  (signals-error (char-int #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -611,12 +611,12 @@
   "Space" 1)
 
 (deftest char-name.error.1
-  (classify-error (char-name))
-  program-error)
+  (signals-error (char-name) program-error)
+  t)
 
 (deftest char-name.error.2
-  (classify-error (char-name #\a #\a))
-  program-error)
+  (signals-error (char-name #\a #\a) program-error)
+  t)
 
 ;;;
 
@@ -643,9 +643,9 @@
   #\Space 1)
 
 (deftest name-char.error.1
-  (classify-error (name-char))
-  program-error)
+  (signals-error (name-char) program-error)
+  t)
 
 (deftest name-char.error.2
-  (classify-error (name-char "space" "space"))
-  program-error)
+  (signals-error (name-char "space" "space") program-error)
+  t)

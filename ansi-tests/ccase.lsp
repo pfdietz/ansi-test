@@ -11,30 +11,29 @@
   2)
 
 (deftest ccase.2
-  (classify-error 
-   (let ((x 1)) (ccase x)))
-  type-error)
+  (signals-error (let ((x 1)) (ccase x)) type-error)
+  t)
 
 (deftest ccase.3
-  (classify-error
-   (let ((x 1))
-     (ccase x (a 1) (b 2) (c 3))))
-  type-error)
+  (signals-error
+   (let ((x 1))(ccase x (a 1) (b 2) (c 3)))
+   type-error)
+  t)
 
 ;;; It is legal to use T or OTHERWISE as key designators
 ;;; in CCASE forms.  They have no special meaning here.
 
 (deftest ccase.4
-  (classify-error
-   (let ((x 1))
-     (ccase x (t nil))))
-  type-error)
+  (signals-error
+   (let ((x 1)) (ccase x (t nil)))
+   type-error)
+  t)
 
 (deftest ccase.5
-  (classify-error
-   (let ((x 1))
-     (ccase x (otherwise nil))))
-  type-error)
+  (signals-error
+   (let ((x 1)) (ccase x (otherwise nil)))
+   type-error)
+  t)
 
 (deftest ccase.6
   (let ((x 'b))
@@ -55,10 +54,10 @@
   a)
 
 (deftest ccase.9
-  (classify-error
-   (let (x)
-     (ccase x (nil 'a))))
-  type-error)
+  (signals-error
+   (let (x) (ccase x (nil 'a)))
+   type-error)
+  t)
 
 (deftest ccase.10
   (let (x)
@@ -71,10 +70,10 @@
   1 2 3)
 
 (deftest ccase.12
-  (classify-error
-   (let ((x t))
-     (ccase x (a 10))))
-  type-error)
+  (signals-error
+   (let ((x t)) (ccase x (a 10)))
+   type-error)
+  t)
 
 (deftest ccase.13
   (let ((x t))
@@ -87,28 +86,28 @@
   1)
 
 (deftest ccase.15
-  (classify-error
-   (let ((x 'otherwise))
-     (ccase x ((t) 10))))
-  type-error)
+  (signals-error
+   (let ((x 'otherwise)) (ccase x ((t) 10)))
+   type-error)
+  t)
 
 (deftest ccase.16
-  (classify-error
-   (let ((x t))
-     (ccase x ((otherwise) 10))))
-  type-error)
+  (signals-error
+   (let ((x t)) (ccase x ((otherwise) 10)))
+   type-error)
+  t)
 
 (deftest ccase.17
-  (classify-error
-   (let ((x 'a))
-     (ccase x (b 0) (c 1) (otherwise 2))))
-  type-error)
+  (signals-error
+   (let ((x 'a)) (ccase x (b 0) (c 1) (otherwise 2)))
+   type-error)
+  t)
 
 (deftest ccase.19
-  (classify-error
-   (let ((x 'a))
-     (ccase x (b 0) (c 1) ((t) 2))))
-  type-error)
+  (signals-error
+   (let ((x 'a)) (ccase x (b 0) (c 1) ((t) 2)))
+   type-error)
+  t)
 
 (deftest ccase.20
   (let ((x #\a))
@@ -195,19 +194,20 @@
 
 
 ;;; (deftest ccase.error.1
-;;;  (classify-error (ccase))
-;;;  program-error)
+;;;  (signals-error (ccase) program-error)
+;;;  t)
 
 (deftest ccase.error.1
-  (classify-error (funcall (macro-function 'ccase)))
-  program-error)
+  (signals-error (funcall (macro-function 'ccase))
+		 program-error)
+  t)
 
 (deftest ccase.error.2
-  (classify-error (funcall (macro-function 'ccase)
-			   '(ccase t)))
-  program-error)
+  (signals-error (funcall (macro-function 'ccase) '(ccase t))
+		 program-error)
+  t)
 
 (deftest ccase.error.3
-  (classify-error (funcall (macro-function 'ccase)
-			   '(ccase t) nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'ccase) '(ccase t) nil nil)
+		 program-error)
+  t)

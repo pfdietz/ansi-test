@@ -83,9 +83,10 @@
   z 2 1 2)
 
 (deftest compile.error.1
-  (classify-error (compile))
-  program-error)
+  (signals-error (compile) program-error)
+  t)
 
 (deftest compile.error.2
-  (classify-error (compile nil '(lambda () nil) 'garbage))
-  program-error)
+  (signals-error (compile nil '(lambda () nil) 'garbage)
+		 program-error)
+  t)

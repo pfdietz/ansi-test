@@ -8,9 +8,9 @@
 ;;; Most tests of CLASS-OF are in other files
 
 (deftest class-of.error.1
-  (classify-error (class-of))
-  program-error)
+  (signals-error (class-of) program-error)
+  t)
 
 (deftest class-of.error.2
-  (classify-error (class-of nil nil))
-  program-error)
+  (signals-error (class-of nil nil) program-error)
+  t)

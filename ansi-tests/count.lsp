@@ -601,64 +601,69 @@
 ;;; Error tests
 
 (deftest count.error.1
-  (classify-error (count 'a 1))
-  type-error)
+  (signals-error (count 'a 1) type-error)
+  t)
 
 (deftest count.error.2
-  (classify-error (count 'a 'a))
-  type-error)
+  (signals-error (count 'a 'a) type-error)
+  t)
 
 (deftest count.error.3
-  (classify-error (count 'a #\a))
-  type-error)
+  (signals-error (count 'a #\a) type-error)
+  t)
 
 (deftest count.error.4
-  (classify-error (count))
-  program-error)
+  (signals-error (count) program-error)
+  t)
 
 (deftest count.error.5
-  (classify-error (count nil))
-  program-error)
+  (signals-error (count nil) program-error)
+  t)
 
 (deftest count.error.6
-  (classify-error (count nil nil :bad t))
-  program-error)
+  (signals-error (count nil nil :bad t) program-error)
+  t)
 
 (deftest count.error.7
-  (classify-error (count nil nil :bad t :allow-other-keys nil))
-  program-error)
+  (signals-error (count nil nil :bad t :allow-other-keys nil)
+		 program-error)
+  t)
 
 (deftest count.error.8
-  (classify-error (count nil nil :key))
-  program-error)
+  (signals-error (count nil nil :key) program-error)
+  t)
 
 (deftest count.error.9
-  (classify-error (count nil nil 3 3))
-  program-error)
+  (signals-error (count nil nil 3 3) program-error)
+  t)
 
 ;;; Only leftmost :allow-other-keys argument matters
 (deftest count.error.10
-  (classify-error (count 'a nil :bad t
+  (signals-error (count 'a nil :bad t
 			 :allow-other-keys nil
-			 :allow-other-keys t))
-  program-error)
+			 :allow-other-keys t)
+		 program-error)
+  t)
 
 (deftest count.error.11
-  (classify-error (locally (count 'a 1) t))
-  type-error)
+  (signals-error (locally (count 'a 1) t) type-error)
+  t)
 
 (deftest count.error.12
-  (classify-error (count 'b '(a b c) :test #'identity))
-  program-error)
+  (signals-error (count 'b '(a b c) :test #'identity)
+		 program-error)
+  t)
 
 (deftest count.error.13
-  (classify-error (count 'b '(a b c) :key #'car))
-  type-error)
+  (signals-error (count 'b '(a b c) :key #'car) type-error)
+  t)
 
 (deftest count.error.14
-  (classify-error (count 'b '(a b c) :test-not #'identity))
-  program-error)
+  (signals-error (count 'b '(a b c) :test-not #'identity)
+		 program-error)
+  t)
 
 (deftest count.error.15
-  (classify-error (count 'b '(a b c) :key #'cons))
-  program-error)
+  (signals-error (count 'b '(a b c) :key #'cons)
+		 program-error)
+  t)

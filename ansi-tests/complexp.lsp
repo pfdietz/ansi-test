@@ -6,16 +6,16 @@
 (in-package :cl-test)
 
 (deftest complexp.error.1
-  (classify-error (complexp))
-  program-error)
+  (signals-error (complexp) program-error)
+  t)
 
 (deftest complexp.error.2
-  (classify-error (complexp 0 0))
-  program-error)
+  (signals-error (complexp 0 0) program-error)
+  t)
 
 (deftest complexp.error.3
-  (classify-error (complexp #C(1 1) nil))
-  program-error)
+  (signals-error (complexp #C(1 1) nil) program-error)
+  t)
 
 (deftest complexp.1
   (loop for x in *universe*

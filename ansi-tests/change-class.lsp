@@ -592,27 +592,29 @@
 ;;; Error tests
 
 (deftest change-class.error.1
-  (classify-error (change-class))
-  program-error)
+  (signals-error (change-class) program-error)
+  t)
 
 (deftest change-class.error.2
-  (classify-error
-   (change-class (make-instance 'change-class-class-01a)))
-  program-error)
+  (signals-error (change-class (make-instance 'change-class-class-01a))
+		 program-error)
+  t)
 
 (deftest change-class.error.3
-  (classify-error
+  (signals-error
    (let ((obj (make-instance 'change-class-class-01a))
 	 (new-class (find-class 'change-class-class-01b)))
-     (change-class obj new-class :c2)))
-  program-error)
+     (change-class obj new-class :c2))
+   program-error)
+  t)
 
 (deftest change-class.error.4
-  (classify-error
+  (signals-error
    (let ((obj (make-instance 'change-class-class-01a))
 	 (new-class (find-class 'change-class-class-01b)))
-     (change-class obj new-class '(nonsense) 'a)))
-  program-error)
+     (change-class obj new-class '(nonsense) 'a))
+   program-error)
+  t)
 
 ;;; According to the page for BUILT-IN-CLASS, using CHANGE-CLASS
 ;;; to change the class to/from a builtin class should raise a

@@ -5,7 +5,8 @@
 
 (in-package :cl-test)
 
-;; Various easy tests of cons
+;;; Various easy tests of cons
+
 (deftest cons-of-symbols
   (cons 'a 'b)
   (a . b))
@@ -14,7 +15,7 @@
   (cons 'a nil)
   (a))
 
-;; successive calls to cons produces results that are equal, but not eq
+;;; successive calls to cons produces results that are equal, but not eq
 (deftest cons-eq-equal
   (let ((x (cons 'a 'b))
 	(y (cons 'a 'b)))
@@ -22,7 +23,7 @@
 	 (equalt x y)))
   t)
 
-;; list can be expressed as a bunch of conses (with nil)
+;;; list can be expressed as a bunch of conses (with nil)
 (deftest cons-equal-list
   (equalt (cons 'a (cons 'b (cons 'c nil)))
 	  (list 'a 'b 'c))
@@ -33,14 +34,16 @@
   (let ((i 0)) (values (cons (incf i) (incf i)) i))
   (1 . 2) 2)
 
+;;; Error tests
+
 (deftest cons.error.1
-  (classify-error (cons))
-  program-error)
+  (signals-error (cons) program-error)
+  t)
 
 (deftest cons.error.2
-  (classify-error (cons 'a))
-  program-error)
+  (signals-error (cons 'a) program-error)
+  t)
 
 (deftest cons.error.3
-  (classify-error (cons 'a 'b 'c))
-  program-error)
+  (signals-error (cons 'a 'b 'c) program-error)
+  t)

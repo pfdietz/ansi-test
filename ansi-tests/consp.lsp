@@ -49,11 +49,12 @@
     (values (consp (incf i)) i))
   nil 1)
 
+;;; Error tests
+
 (deftest consp.error.1
-  (classify-error (consp))
-  program-error)
+  (signals-error (consp) program-error)
+  t)
 
 (deftest consp.error.2
-  (classify-error (consp 'a 'b))
-  program-error)
-
+  (signals-error (consp 'a 'b) program-error)
+  t)

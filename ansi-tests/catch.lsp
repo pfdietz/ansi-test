@@ -83,5 +83,5 @@
   good)
 
 (deftest throw-error
-  (classify-error (throw (gensym) nil))
-  control-error)
+  (signals-error (throw (gensym) nil) control-error)
+  t)

@@ -167,26 +167,27 @@
 ;;; Error tests
 
 (deftest copy-seq.error.1
-  (classify-error (copy-seq 10))
-  type-error)
+  (signals-error (copy-seq 10) type-error)
+  t)
 
 (deftest copy-seq.error.2
-  (classify-error (copy-seq 'a))
-  type-error)
+  (signals-error (copy-seq 'a) type-error)
+  t)
 
 (deftest copy-seq.error.3
-  (classify-error (copy-seq 13.21))
-  type-error)
+  (signals-error (copy-seq 13.21) type-error)
+  t)
 
 (deftest copy-seq.error.4
-  (classify-error (copy-seq))
-  program-error)
+  (signals-error (copy-seq) program-error)
+  t)
 
 (deftest copy-seq.error.5
-  (classify-error (copy-seq "abc" 2 nil))
-  program-error)
+  (signals-error (copy-seq "abc" 2 nil) program-error)
+  t)
 
 (deftest copy-seq.error.6
-  (classify-error (locally (copy-seq 10) t))
-  type-error)
+  (signals-error (locally (copy-seq 10) t) type-error)
+  t)
+
 

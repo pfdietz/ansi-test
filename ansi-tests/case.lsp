@@ -192,19 +192,20 @@
 
 
 ;;; (deftest case.error.1
-;;;  (classify-error (case))
-;;;  program-error)
+;;;  (signals-error (case) program-error)
+;;;  t)
 
 (deftest case.error.1
-  (classify-error (funcall (macro-function 'case)))
-  program-error)
+  (signals-error (funcall (macro-function 'case))
+		 program-error)
+  t)
 
 (deftest case.error.2
-  (classify-error (funcall (macro-function 'case)
-			   '(case t)))
-  program-error)
+  (signals-error (funcall (macro-function 'case) '(case t))
+		 program-error)
+  t)
 
 (deftest case.error.3
-  (classify-error (funcall (macro-function 'case)
-			   '(case t) nil nil))
-  program-error)
+  (signals-error (funcall (macro-function 'case) '(case t) nil nil)
+		 program-error)
+  t)

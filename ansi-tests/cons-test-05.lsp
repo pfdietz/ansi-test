@@ -121,18 +121,18 @@
 	(nth ,(1- len) (car y))))
      a)))
 
-;; set up program error tests
+;; set up program-error tests
 
 (loop for name in *cons-accessors*
       do (eval
 	  `(deftest ,(intern (concatenate 'string (symbol-name name)
 					  ".ERROR.NO-ARGS")
 			     :cl-test)
-	     (classify-error (,name))
-	     program-error))
+	     (signals-error (,name) program-error)
+	     t))
       do (eval
 	  `(deftest ,(intern (concatenate 'string (symbol-name name)
 					  ".ERROR.EXCESS-ARGS")
 			     :cl-test)
-	     (classify-error (,name nil nil))
-	     program-error)))	  
+	     (signals-error (,name nil nil) program-error)
+	     t)))

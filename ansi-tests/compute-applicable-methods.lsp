@@ -107,13 +107,16 @@
 ;;; Error tests
 
 (deftest compute-applicable-methods.error.1
-  (classify-error (compute-applicable-methods))
-  program-error)
+  (signals-error (compute-applicable-methods)
+		 program-error)
+  t)
 
 (deftest compute-applicable-methods.error.2
-  (classify-error (compute-applicable-methods #'cam-gf-01))
-  program-error)
+  (signals-error (compute-applicable-methods #'cam-gf-01)
+		 program-error)
+  t)
 
 (deftest compute-applicable-methods.error.3
-  (classify-error (compute-applicable-methods #'cam-gf-01 '(1 2) nil))
-  program-error)
+  (signals-error (compute-applicable-methods #'cam-gf-01 '(1 2) nil)
+		 program-error)
+  t)

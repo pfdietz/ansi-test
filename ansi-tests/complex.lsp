@@ -5,13 +5,17 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest complex.error.1
-  (classify-error (complex))
-  program-error)
+  (signals-error (complex) program-error)
+  t)
 
 (deftest complex.error.2
-  (classify-error (complex 1 1 nil))
-  program-error)
+  (signals-error (complex 1 1 nil) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest complex.1
   (loop for x in *rationals*

@@ -58,10 +58,12 @@
 ;;;
 
 (deftest clrhash.error.1
-  (classify-error (clrhash))
-  program-error)
+  (signals-error (clrhash) program-error)
+  t)
 
 (deftest clrhash.error.2
-  (classify-error (clrhash (make-hash-table) nil))
-  program-error)
+  (signals-error (clrhash (make-hash-table) nil)
+		 program-error)
+  t)
+
 

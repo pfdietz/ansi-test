@@ -25,10 +25,12 @@
 	    i))
   (a b c) 1)
 
+;;; Error tests
+
 (deftest copy-list.error.1
-  (classify-error (copy-list))
-  program-error)
+  (signals-error (copy-list) program-error)
+  t)
 
 (deftest copy-list.error.2
-  (classify-error (copy-list nil nil))
-  program-error)
+  (signals-error (copy-list nil nil) program-error)
+  t)

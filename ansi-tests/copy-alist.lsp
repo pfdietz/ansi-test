@@ -23,14 +23,16 @@
        t))
   t)
 
+;;; Error tests
+
 (deftest copy-alist.error.1
-  (classify-error (copy-alist))
-  program-error)
+  (signals-error (copy-alist) program-error)
+  t)
 
 (deftest copy-alist.error.2
-  (classify-error (copy-alist nil nil))
-  program-error)
+  (signals-error (copy-alist nil nil) program-error)
+  t)
 
 (deftest copy-alist.error.3
-  (classify-error (copy-alist '((a . b) . c)))
-  type-error)
+  (signals-error (copy-alist '((a . b) . c)) type-error)
+  t)

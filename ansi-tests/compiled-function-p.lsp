@@ -29,11 +29,9 @@
   nil 1)
 
 (deftest compiled-function-p.error.1
-  (classify-error (compiled-function-p))
-  program-error)
+  (signals-error (compiled-function-p) program-error)
+  t)
 
 (deftest compiled-function-p.error.2
-  (classify-error (compiled-function-p nil nil))
-  program-error)
-
-
+  (signals-error (compiled-function-p nil nil) program-error)
+  t)

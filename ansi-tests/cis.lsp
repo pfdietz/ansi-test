@@ -8,12 +8,12 @@
 (compile-and-load "numbers-aux.lsp")
 
 (deftest cis.error.1
-  (classify-error (cis))
-  program-error)
+  (signals-error (cis) program-error)
+  t)
 
 (deftest cis.error.2
-  (classify-error (cis 0 nil))
-  program-error)
+  (signals-error (cis 0 nil) program-error)
+  t)
 
 (deftest cis.1
   (eqlt (cis 0) #c(1.0 0.0))

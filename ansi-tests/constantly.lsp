@@ -27,11 +27,11 @@
   1 (a a a a) 1)
 
 (deftest constantly.error.1
-  (classify-error (cl:constantly))
-  program-error)
+  (signals-error (cl:constantly) program-error)
+  t)
 
 ;;; The next test fails in CMUCL, which has non-conformantly extended
 ;;; the syntax of constantly.
 (deftest constantly.error.2
-  (classify-error (cl:constantly 1 1))
-  program-error)
+  (signals-error (cl:constantly 1 1) program-error)
+  t)

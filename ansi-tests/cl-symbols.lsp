@@ -1138,34 +1138,33 @@
 ;;; Various error cases for symbol-related functions
 
 (deftest symbol-function.error.1
-  (classify-error (symbol-function))
-  program-error)
+  (signals-error (symbol-function) program-error)
+  t)
 
 (deftest symbol-function.error.2
-  (classify-error (symbol-function 'cons nil))
-  program-error)
+  (signals-error (symbol-function 'cons nil) program-error)
+  t)
 
 (deftest symbol-package.error.1
-  (classify-error (symbol-package))
-  program-error)
+  (signals-error (symbol-package) program-error)
+  t)
 
 (deftest symbol-package.error.2
-  (classify-error (symbol-package 'cons nil))
-  program-error)
+  (signals-error (symbol-package 'cons nil) program-error)
+  t)
 
 (deftest symbol-plist.error.1
-  (classify-error (symbol-plist))
-  program-error)
+  (signals-error (symbol-plist) program-error)
+  t)
 
 (deftest symbol-plist.error.2
-  (classify-error (symbol-plist 'cons nil))
-  program-error)
+  (signals-error (symbol-plist 'cons nil) program-error)
+  t)
 
 (deftest symbol-value.error.1
-  (classify-error (symbol-value))
-  program-error)
+  (signals-error (symbol-value) program-error)
+  t)
 
 (deftest symbol-value.error.2
-  (classify-error (symbol-value '*package* nil))
-  program-error)
-
+  (signals-error (symbol-value '*package* nil) program-error)
+  t)

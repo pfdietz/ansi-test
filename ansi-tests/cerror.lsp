@@ -48,9 +48,10 @@
 
 
 (deftest cerror.error.1
-  (classify-error (cerror))
-  program-error)
+  (signals-error (cerror) program-error)
+  t)
 
 (deftest cerror.error.2
-  (classify-error (cerror "foo"))
-  program-error)
+  (signals-error (cerror "foo") program-error)
+  t)
+

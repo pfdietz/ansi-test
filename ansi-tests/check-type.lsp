@@ -11,10 +11,11 @@
   nil a)
 
 (deftest check-type.2
-  (classify-error
+  (signals-error
    (let ((x 'a))
-     (check-type x integer)))
-  type-error)
+     (check-type x integer))
+   type-error)
+  t)
 
 (deftest check-type.3
   (let ((x 'a))

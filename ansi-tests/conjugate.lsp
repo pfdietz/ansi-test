@@ -5,13 +5,17 @@
 
 (in-package :cl-test)
 
+;;; Error tests
+
 (deftest conjugate.error.1
-  (classify-error (conjugate))
-  program-error)
+  (signals-error (conjugate) program-error)
+  t)
 
 (deftest conjugate.error.2
-  (classify-error (conjugate 0 0))
-  program-error)
+  (signals-error (conjugate 0 0) program-error)
+  t)
+
+;;; Non-error tests
 
 (deftest conjugate.1
   (loop for x in *reals*

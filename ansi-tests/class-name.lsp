@@ -27,9 +27,10 @@
   t)
 
 (deftest class-name.error.1
-  (classify-error (class-name))
-  program-error)
+  (signals-error (class-name) program-error)
+  t)
 
 (deftest class-name.error.2
-  (classify-error (class-name (find-class 'symbol) nil))
-  program-error)
+  (signals-error (class-name (find-class 'symbol) nil)
+		 program-error)
+  t)
