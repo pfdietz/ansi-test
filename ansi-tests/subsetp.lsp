@@ -121,6 +121,12 @@
 		   nil)))
   t)
 
+(defharmless subsetp.test-and-test-not.1
+  (subsetp '(a b c) '(a g c e b) :test #'eql :test-not #'eql))
+
+(defharmless subsetp.test-and-test-not.3
+  (subsetp '(a b c) '(a g c e b) :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation tests
 
 (deftest subsetp.order.1

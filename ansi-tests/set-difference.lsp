@@ -144,6 +144,12 @@
      #'<))
   (1 2 3 4))
 
+(defharmless set-difference.test-and-test-not.1
+  (set-difference (list 1 2 3 4) (list 1 7 3 8) :test #'eql :test-not #'eql))
+
+(defharmless set-difference.test-and-test-not.2
+  (set-difference (list 1 2 3 4) (list 1 7 3 8) :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation tests
 
 (deftest set-difference.order.1

@@ -76,6 +76,14 @@
 		#'(lambda (x y) (not (and (realp x) (realp y) (< x y)))))
   (x y z 20))
 
+(defharmless sublis.test-and-test-not.1
+  (sublis '((a . 1) (b . 2)) (list 'a 'b 'c 'd)
+	   :test #'eql :test-not #'eql))
+
+(defharmless sublis.test-and-test-not.2
+  (sublis '((a . 1) (b . 2)) (list 'a 'b 'c 'd)
+	   :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation
 (deftest sublis.order.1
   (let ((i 0) w x y z)

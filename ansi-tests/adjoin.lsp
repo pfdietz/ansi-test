@@ -102,6 +102,11 @@
   (adjoin 10 '(1 2 3) :test-not #'<)
   (1 2 3))
 
+(defharmless adjoin.test-and-test-not.1
+  (adjoin 'a '(b c) :test #'eql :test-not #'eql))
+
+(defharmless adjoin.test-and-test-not.2
+  (adjoin 'a '(b c) :test-not #'eql :test #'eql))
 
 (deftest adjoin.order.1
   (let ((i 0) w x y z)
@@ -148,7 +153,7 @@
 
 (deftest adjoin.repeat-key
   (adjoin 'a '(b c) :test #'eq :test (complement #'eq))
-  (a b c))					      
+  (a b c))
 
 (deftest adjoin.error.1
   (classify-error (adjoin))

@@ -79,6 +79,12 @@
     (tree-equal x y))
   nil)
 
+(defharmless tree-equal.test-and-test-not.1
+  (tree-equal '(a b) '(a b) :test #'eql :test-not #'eql))
+
+(defharmless tree-equal.test-and-test-not.2
+  (tree-equal '(a b) '(a b) :test-not #'eql :test #'eql))
+
 ;;; Keywords tests
 
 (deftest tree-equal.allow-other-keys.1
@@ -98,6 +104,13 @@
 			 :allow-other-keys nil :foo t))
   t)
 
+(deftest tree-equal.keywords.1
+  (notnot-mv (tree-equal '(a . b) '(b . a)
+			 :test (complement #'eql)
+			 :test #'eql))
+  t)
+
+
 ;;; Error tests
 
 (deftest tree-equal.error.1
@@ -116,10 +129,10 @@
   (classify-error (tree-equal '(a b) '(a b) (gensym) t :allow-other-keys nil))
   program-error)
 
+(deftest tree-equal.error.5
+  (classify-error (tree-equal '(a b) '(a b) :test #'identity))
+  program-error)
 
-
-
-
-
-
-    
+(deftest tree-equal.error.6
+  (classify-error (tree-equal '(a b) '(a b) :test #'(lambda (x y z) (eq x y))))
+  program-error)

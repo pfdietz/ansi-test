@@ -597,6 +597,32 @@
      (mismatch m a :from-end t)))
   (4 4 5 nil nil 6 5 6))
 
+;;; test and test-not tests
+
+(defharmless mismatch.test-and-test-not.1
+  (mismatch '(1 2 3) '(1 2 4) :test #'eql :test-not #'eql))
+
+(defharmless mismatch.test-and-test-not.2
+  (mismatch '(1 2 3) '(1 2 4) :test-not #'eql :test #'eql))
+
+(defharmless mismatch.test-and-test-not.3
+  (mismatch #(1 2 3) #(1 2 4) :test #'eql :test-not #'eql))
+
+(defharmless mismatch.test-and-test-not.4
+  (mismatch #(1 2 3) #(1 2 4) :test-not #'eql :test #'eql))
+
+(defharmless mismatch.test-and-test-not.5
+  (mismatch "abc" "abd" :test #'eql :test-not #'eql))
+
+(defharmless mismatch.test-and-test-not.6
+  (mismatch "abc" "abd" :test-not #'eql :test #'eql))
+
+(defharmless mismatch.test-and-test-not.7
+  (mismatch #*011 #*010 :test #'eql :test-not #'eql))
+
+(defharmless mismatch.test-and-test-not.8
+  (mismatch #*011 #*010 :test-not #'eql :test #'eql))
+
 ;;; Keyword tests
 
 (deftest mismatch.allow-other-keys.1

@@ -366,6 +366,58 @@
   (delete 0 (copy-seq #*11111) :count -1)
   #*11111)
 
+;;; test & test-not together is harmless
+
+(defharmless remove-list.test-and-test-not.1
+  (remove 'a '(a b c) :test #'eql :test-not #'eql))
+
+(defharmless remove-list.test-and-test-not.2
+  (remove 'a '(a b c) :test-not #'eql :test #'eql))
+
+(defharmless remove-vector.test-and-test-not.1
+  (remove 'a #(a b c) :test #'eql :test-not #'eql))
+
+(defharmless remove-vector.test-and-test-not.2
+  (remove 'a #(a b c) :test-not #'eql :test #'eql))
+
+(defharmless remove-bit-string.test-and-test-not.1
+  (remove 0 #*0001100100 :test #'eql :test-not #'eql))
+
+(defharmless remove-bit-string.test-and-test-not.2
+  (remove 0 #*0001100100 :test-not #'eql :test #'eql))
+
+(defharmless remove-string.test-and-test-not.1
+  (remove #\0 "0001100100" :test #'eql :test-not #'eql))
+
+(defharmless remove-string.test-and-test-not.2
+  (remove #\0 "0001100100" :test-not #'eql :test #'eql))
+
+
+(defharmless delete-list.test-and-test-not.1
+  (delete 'a (list 'a 'b 'c) :test #'eql :test-not #'eql))
+
+(defharmless delete-list.test-and-test-not.2
+  (delete 'a (list 'a 'b 'c) :test-not #'eql :test #'eql))
+
+(defharmless delete-vector.test-and-test-not.1
+  (delete 'a (vector 'a 'b 'c) :test #'eql :test-not #'eql))
+
+(defharmless delete-vector.test-and-test-not.2
+  (delete 'a (vector 'a 'b 'c) :test-not #'eql :test #'eql))
+
+(defharmless delete-bit-string.test-and-test-not.1
+  (delete 0 (copy-seq #*0001100100) :test #'eql :test-not #'eql))
+
+(defharmless delete-bit-string.test-and-test-not.2
+  (delete 0 (copy-seq #*0001100100) :test-not #'eql :test #'eql))
+
+(defharmless delete-string.test-and-test-not.1
+  (delete #\0 (copy-seq "0001100100") :test #'eql :test-not #'eql))
+
+(defharmless delete-string.test-and-test-not.2
+  (delete #\0 (copy-seq "0001100100") :test-not #'eql :test #'eql))
+
+
 ;;; Order of evaluation tests
 
 (deftest remove.order.1

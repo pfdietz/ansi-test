@@ -188,6 +188,12 @@
 	  :test-not #'>=)
   (d . 15))
 
+(defharmless rassoc.test-and-test-not.1
+  (rassoc 'a '((x . b) (y . a) (z . c)) :test #'eql :test-not #'eql))
+
+(defharmless rassoc.test-and-test-not.2
+  (rassoc 'a '((x . b) (y . a) (z . c)) :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation
 
 (deftest rassoc.order.1

@@ -670,6 +670,30 @@
   (position #\m "adfmpz" :test-not #'char>=)
   4)
 
+(defharmless position.test-and-test-not.1
+  (position 'b '(a b c d) :test #'eql :test-not #'eql))
+
+(defharmless position.test-and-test-not.2
+  (position 'b '(a b c d) :test-not #'eql :test #'eql))
+
+(defharmless position.test-and-test-not.3
+  (position 'b #(a b c d) :test #'eql :test-not #'eql))
+
+(defharmless position.test-and-test-not.4
+  (position 'b #(a b c d) :test-not #'eql :test #'eql))
+
+(defharmless position.test-and-test-not.5
+  (position #\b "abcd" :test #'eql :test-not #'eql))
+
+(defharmless position.test-and-test-not.6
+  (position #\b "abcd" :test-not #'eql :test #'eql))
+
+(defharmless position.test-and-test-not.7
+  (position 1 #*001010010 :test #'eql :test-not #'eql))
+
+(defharmless position.test-and-test-not.8
+  (position 0 #*1110010110111 :test-not #'eql :test #'eql))
+
 (deftest position.order.1
   (let ((i 0) a b c d e f g)
     (values

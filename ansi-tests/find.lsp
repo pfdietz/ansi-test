@@ -781,6 +781,32 @@
   (find #\k "abcdmnop" :test-not #'char>=)
   #\m)
 
+;;; Test & test not
+
+(defharmless find-list.test-and-test-not.1
+  (find 'b '(a b c) :test #'eql :test-not #'eql))
+
+(defharmless find-list.test-and-test-not.2
+  (find 'b '(a b c) :test-not #'eql :test #'eql))
+
+(defharmless find-vector.test-and-test-not.1
+  (find 'b #(a b c) :test #'eql :test-not #'eql))
+
+(defharmless find-vector.test-and-test-not.2
+  (find 'b #(a b c) :test-not #'eql :test #'eql))
+
+(defharmless find-string.test-and-test-not.1
+  (find #\b "abc" :test #'eql :test-not #'eql))
+
+(defharmless find-string.test-and-test-not.2
+  (find #\b "abc" :test-not #'eql :test #'eql))
+
+(defharmless find-bit-string.test-and-test-not.1
+  (find 0 #*110110 :test #'eql :test-not #'eql))
+
+(defharmless find-bit-string.test-and-test-not.2
+  (find 0 #*110110 :test-not #'eql :test #'eql))
+
 ;;; Keyword tests
 
 (deftest find.allow-other-keys.1

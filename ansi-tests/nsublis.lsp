@@ -80,6 +80,14 @@
 		  #'(lambda (x y) (not (and (realp x) (realp y) (< x y)))))
   (x y z 20))
 
+(defharmless nsublis.test-and-test-not.1
+  (nsublis '((a . 1) (b . 2)) (list 'a 'b 'c 'd)
+	   :test #'eql :test-not #'eql))
+
+(defharmless nsublis.test-and-test-not.2
+  (nsublis '((a . 1) (b . 2)) (list 'a 'b 'c 'd)
+	   :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation
 (deftest nsublis.order.1
   (let ((i 0) w x y z)

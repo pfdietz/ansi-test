@@ -259,6 +259,13 @@
      #'<))
   (1 2 3 4 5 6))
 
+(defharmless union.test-and-test-not.1
+  (union (list 1 4 8 10) (list 1 2 3 9 10 13) :test #'eql :test-not #'eql))
+
+(defharmless union.test-and-test-not.2
+  (union (list 1 4 8 10) (list 1 2 3 9 10 13) :test-not #'eql :test #'eql))
+
+
 ;;; Order of evaluation tests
 
 (deftest union.order.1

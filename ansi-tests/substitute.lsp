@@ -966,6 +966,31 @@
     result)
   #*01111)
 
+(defharmless substitute.test-and-test-not.1
+  (substitute 'b 'a (list 'a 'b 'c 'd 'a 'b) :test #'eql :test-not #'eql))
+
+(defharmless substitute.test-and-test-not.2
+  (substitute 'b 'a (list 'a 'b 'c 'd 'a 'b) :test-not #'eql :test #'eql))
+
+(defharmless substitute.test-and-test-not.3
+  (substitute 'b 'a (vector 'a 'b 'c 'd 'a 'b) :test #'eql :test-not #'eql))
+
+(defharmless substitute.test-and-test-not.4
+  (substitute 'b 'a (vector 'a 'b 'c 'd 'a 'b) :test-not #'eql :test #'eql))
+
+(defharmless substitute.test-and-test-not.5
+  (substitute #\b #\a (copy-seq "abcdab") :test #'eql :test-not #'eql))
+
+(defharmless substitute.test-and-test-not.6
+  (substitute #\b #\a (copy-seq "abcdab") :test-not #'eql :test #'eql))
+
+(defharmless substitute.test-and-test-not.7
+  (substitute 1 0 (copy-seq #*001101001) :test #'eql :test-not #'eql))
+
+(defharmless substitute.test-and-test-not.8
+  (substitute 0 1 (copy-seq #*1100110101) :test-not #'eql :test #'eql))
+
+
 (deftest substitute.order.1
   (let ((i 0) a b c d e f g h)
     (values

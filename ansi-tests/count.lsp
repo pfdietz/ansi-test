@@ -87,6 +87,12 @@
   (count 10 '(1 11 2 4 14 5 18 6 7) :test-not #'>=)
   3)
 
+(defharmless count-list.test-and-test-not.1
+  (count 0 '(0 1 2 0 1 2 3 0 1) :test #'eql :test-not #'eql))
+
+(defharmless count-list.test-and-test-not.2
+  (count 0 '(0 1 2 0 1 2 3 0 1) :test-not #'eql :test #'eql))
+
 ;;; On vectors
 
 (deftest count-vector.1
@@ -170,6 +176,12 @@
 (deftest count-vector.18
   (count 10 #(1 11 2 4 14 5 18 6 7) :test-not #'>=)
   3)
+
+(defharmless count-vector.test-and-test-not.1
+  (count 0 #(0 1 2 0 1 2 3 0 1) :test #'eql :test-not #'eql))
+
+(defharmless count-vector.test-and-test-not.2
+  (count 0 #(0 1 2 0 1 2 3 0 1) :test-not #'eql :test #'eql))
 
 ;;; Non-simple vectors
 
@@ -408,6 +420,12 @@
   (count 1 #*00001100100 :test-not #'>)
   3)
 
+(defharmless count-bit-vector.test-and-test-not.1
+  (count 0 #*0011010101100010000 :test #'eql :test-not #'eql))
+
+(defharmless count-bit-vector.test-and-test-not.2
+  (count 0 #*0011010101100010000 :test-not #'eql :test #'eql))
+
 ;;; Tests on strings
 
 (deftest count-string.1
@@ -516,6 +534,12 @@
 (deftest count-string.22
   (count #\1 "00001100100" :test-not #'char>)
   3)
+
+(defharmless count-string.test-and-test-not.1
+  (count #\0 "0011010101100010000" :test #'eql :test-not #'eql))
+
+(defharmless count-string.test-and-test-not.2
+  (count #\0 "0011010101100010000" :test-not #'eql :test #'eql))
 
 ;;; Argument order tests
 

@@ -230,6 +230,12 @@
 	   (not (eql x y))))))
   (4))
 
+(defharmless intersection.test-and-test-not.1
+  (intersection '(a b c) '(a c e) :test #'eql :test-not #'eql))
+
+(defharmless intersection.test-and-test-not.2
+  (intersection '(a b c) '(a c e) :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation tests
 
 (deftest intersection.order.1

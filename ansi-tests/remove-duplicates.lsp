@@ -31,6 +31,22 @@
     y)
   (3 4 1 5 6 2 7))
 
+(defharmless remove-duplicates.test-and-test-not.1
+  (remove-duplicates (list 'a 'b 'c 'd 'a 'e 'f 'd 'g) :test #'eql
+		     :test-not #'eql))
+
+(defharmless remove-duplicates.test-and-test-not.2
+  (remove-duplicates (list 'a 'b 'c 'd 'a 'e 'f 'd 'g) :test-not #'eql
+		     :test #'eql))
+
+(defharmless delete-duplicates.test-and-test-not.1
+  (delete-duplicates (list 'a 'b 'c 'd 'a 'e 'f 'd 'g) :test #'eql
+		     :test-not #'eql))
+
+(defharmless delete-duplicates.test-and-test-not.2
+  (delete-duplicates (list 'a 'b 'c 'd 'a 'e 'f 'd 'g) :test-not #'eql
+		     :test #'eql))
+
 
 ;;; Order of evaluation tests
 

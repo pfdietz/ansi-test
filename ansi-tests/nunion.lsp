@@ -203,7 +203,11 @@
 		    (list (copy-seq "aa")))
   ("aa" "aa"))
 
+(defharmless nunion.test-and-test-not.1
+  (nunion (list 1 4 8 10) (list 1 2 3 9 10 13) :test #'eql :test-not #'eql))
 
+(defharmless nunion.test-and-test-not.2
+  (nunion (list 1 4 8 10) (list 1 2 3 9 10 13) :test-not #'eql :test #'eql))
 
 ;; Check that nunion does not reverse the arguments to :test, :test-not
 

@@ -194,6 +194,12 @@
 	   (not (eql x y))))))
   (4))
 
+(defharmless nintersection.test-and-test-not.1
+  (nintersection (list 'a 'b 'c) (list 'a 'c 'e) :test #'eql :test-not #'eql))
+
+(defharmless nintersection.test-and-test-not.2
+  (nintersection (list 'a 'b 'c) (list 'a 'c 'e) :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation tests
 
 (deftest nintersection.order.1

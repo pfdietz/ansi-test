@@ -150,6 +150,14 @@
   (assoc 10 '((1 a) (5 b) (8 c) (11 d) (12 e)) :test-not #'>=)
   (11 d))
 
+;;; :test & :test-not together are harmless
+
+(defharmless assoc.test-and-test-not.1
+  (assoc 'a '((a . 1) (b . 2)) :test #'eql :test-not #'eql))
+
+(defharmless assoc.test-and-test-not.2
+  (assoc 'a '((a . 1) (b . 2)) :test-not #'eql :test #'eql))
+
 ;;; Order of argument evaluation
 
 (deftest assoc.order.1

@@ -146,6 +146,12 @@
   (member 10 '(1 2 3 4 10 11 14 18) :test-not #'>=)
   (11 14 18))
 
+(defharmless member.test-and-test-not.1
+  (member 'b '(a b c) :test #'eql :test-not #'eql))
+
+(defharmless member.test-and-test-not.2
+  (member 'b '(a b c) :test-not #'eql :test #'eql))
+
 ;;; Order of evaluation
 
 (deftest member.order.1

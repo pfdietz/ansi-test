@@ -1476,3 +1476,16 @@ the condition to go uncaught if it cannot be classified."
 ;;; (when (typep (find-class 'standard-class) 'standard-class)
 ;;;  (defclass substandard-class (standard-class) ())
 ;;;  (defparameter *can-define-metaclasses* t))
+
+;;; Macro for testing that something is undefined but 'harmless'
+
+(defmacro defharmless (name form)
+  `(deftest ,name
+     (block done
+       (let ((*debugger-hook* #'(lambda (&rest args)
+				  (declare (ignore args))
+				  (return-from done :good))))
+	 (handler-case
+	  (unwind-protect (eval ',form) (return-from done :good))
+	  (condition () :good))))
+     :good))

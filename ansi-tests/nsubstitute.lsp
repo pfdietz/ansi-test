@@ -722,6 +722,31 @@
     result)
   #*0101011111)
 
+(defharmless nsubstitute.test-and-test-not.1
+  (nsubstitute 'b 'a (list 'a 'b 'c 'd 'a 'b) :test #'eql :test-not #'eql))
+
+(defharmless nsubstitute.test-and-test-not.2
+  (nsubstitute 'b 'a (list 'a 'b 'c 'd 'a 'b) :test-not #'eql :test #'eql))
+
+(defharmless nsubstitute.test-and-test-not.3
+  (nsubstitute 'b 'a (vector 'a 'b 'c 'd 'a 'b) :test #'eql :test-not #'eql))
+
+(defharmless nsubstitute.test-and-test-not.4
+  (nsubstitute 'b 'a (vector 'a 'b 'c 'd 'a 'b) :test-not #'eql :test #'eql))
+
+(defharmless nsubstitute.test-and-test-not.5
+  (nsubstitute #\b #\a (copy-seq "abcdab") :test #'eql :test-not #'eql))
+
+(defharmless nsubstitute.test-and-test-not.6
+  (nsubstitute #\b #\a (copy-seq "abcdab") :test-not #'eql :test #'eql))
+
+(defharmless nsubstitute.test-and-test-not.7
+  (nsubstitute 1 0 (copy-seq #*001101001) :test #'eql :test-not #'eql))
+
+(defharmless nsubstitute.test-and-test-not.8
+  (nsubstitute 0 1 (copy-seq #*1100110101) :test-not #'eql :test #'eql))
+
+
 ;;;; additional tests
 
 (deftest nsubstitute-list.24

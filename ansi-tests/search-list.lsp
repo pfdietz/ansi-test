@@ -139,14 +139,38 @@
 (deftest search-list.15
   (let ((pat '(10))
 	(target '(1 4 6 10 15 20)))
-    (search pat target :test #'<))
+    (search pat target :test #'>))
   4)
 
 (deftest search-list.16
   (let ((pat '(10))
 	(target '(1 4 6 10 15 20)))
-    (search pat target :test-not #'>=))
+    (search pat target :test-not #'<=))
   4)
+
+(defharmless search.test-and-test-not.1
+  (search '(b c) '(a b c d) :test #'eql :test-not #'eql))
+
+(defharmless search.test-and-test-not.2
+  (search '(b c) '(a b c d) :test-not #'eql :test #'eql))
+
+(defharmless search.test-and-test-not.3
+  (search #(b c) #(a b c d) :test #'eql :test-not #'eql))
+
+(defharmless search.test-and-test-not.4
+  (search #(b c) #(a b c d) :test-not #'eql :test #'eql))
+
+(defharmless search.test-and-test-not.5
+  (search "bc" "abcd" :test #'eql :test-not #'eql))
+
+(defharmless search.test-and-test-not.6
+  (search "bc" "abcd" :test-not #'eql :test #'eql))
+
+(defharmless search.test-and-test-not.7
+  (search #*01 #*0011 :test #'eql :test-not #'eql))
+
+(defharmless search.test-and-test-not.8
+  (search #*01 #*0011 :test-not #'eql :test #'eql))
 
 
 ;;; Keyword tests

@@ -73,6 +73,12 @@
 			      (not (and (realp x) (realp y) (< x y)))))
   (1 2 10 x x 4))
 
+(defharmless nsubset.test-and-test-not.1
+  (nsubst 'a 'b (list 'a 'b 'c 'd 'e) :test #'eq :test-not #'eq))
+
+(defharmless nsubset.test-and-test-not.2
+  (nsubst 'a 'b (list 'a 'b 'c 'd 'e) :test-not #'eq :test #'eq))
+
 ;;; Order of argument evaluation
 (deftest nsubst.order.1
   (let ((i 0) v w x y z)
