@@ -356,6 +356,12 @@
       (%f)))
   1)
 
+;;; Test for bug that showed up in sbcl
+
+(deftest macrolet.39
+  (macrolet ((%m (()) :good)) (%m ()))
+  :good)
+
 ;;; Symbol-macrolet tests
 
 (deftest symbol-macrolet.1
