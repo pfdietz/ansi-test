@@ -1,0 +1,17 @@
+Things to do to the test suite (not a complete list)
+
+1. subtypep and typep on complex types
+
+2. upgraded-complex-part-type
+
+3. More type tests on array types
+
+4. Extend random subtypep tester to complex and array types.
+
+5. Add JA's long form define-method-combination tests (from clisp).
+
+6. adjust-array
+
+7. Address broadcast-stream issues (from Duane Rettig)
+
+8. accuracy tests for numeric functions
