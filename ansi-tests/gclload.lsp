@@ -4,7 +4,7 @@
 ;;; with arbitrary legal garbage.
 ;; (pushnew :ansi-tests-strict-initial-element *features*)
 
-#+:(and clisp win32)            ; w2k exits on (disassemble 'car)
+#+(and clisp win32)            ; w2k exits on (disassemble 'car)
 (without-package-lock ("SYS")
  (defun sys::disassemble-machine-code (a b c)
    (format t "~&<~S ~S ~S>~%" a b c)))
