@@ -9,6 +9,7 @@
 (load "bit-vector.lsp")
 (load "simple-bit-vector.lsp")
 (load "make-array.lsp")
+(load "adjust-array.lsp")
 (load "adjustable-array-p.lsp")
 (load "array-displacement.lsp")
 (load "array-dimension.lsp")
