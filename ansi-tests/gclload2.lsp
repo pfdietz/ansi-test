@@ -69,8 +69,8 @@
 ;;; Tests of sequences
 
 ;;; (load "copy-seq.lsp")
-;;; (load "elt.lsp")
-;;; (load "fill.lsp")
+(load "elt.lsp")
+(load "fill.lsp")
 (load "fill-strings.lsp")
 (load "make-sequence.lsp")
 ;;; (load "subseq.lsp")
@@ -94,6 +94,7 @@
 (load "search-string.lsp")
 (load "mismatch.lsp")
 (load "replace.lsp")
+(load "subseq.lsp")
 (load "substitute.lsp")
 (load "substitute-if.lsp")
 (load "substitute-if-not.lsp")

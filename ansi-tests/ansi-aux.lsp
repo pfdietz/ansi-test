@@ -11,6 +11,31 @@
 (defun make-int-list (n)
   (loop for i from 0 to (1- n) collect i))
 
+(defun make-int-array (n &optional (fn #'make-array))
+  (let ((a (funcall fn n)))
+    (loop
+	for i from 0 to (1- n) do
+	  (setf (aref a i) i))
+    a))
+
+(defun equal-array (a1 a2)
+  (and (typep a1 'array)
+       (typep a2 'array)
+       (= (array-rank a1) (array-rank a2))
+       (let ((ad (array-dimensions a1)))
+	 (and (equal ad (array-dimensions a2))
+	      (if (= (array-rank a1) 1)
+		  (let ((as (first ad)))
+		    (loop
+		     for i from 0 to (1- as)
+		     always (equal (aref a1 i) (aref a2 i))))
+		(let ((as (array-total-size a1)))
+		  (and (= as (array-total-size a2))
+		       (loop
+			for i from 0 to (1- as)
+			always (equal (row-major-aref a1 i)
+				      (row-major-aref a2 i))))))))))
+
 (declaim (special *universe*))
 
 (defun check-type-predicate (P TYPE)
