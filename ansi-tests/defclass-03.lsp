@@ -190,3 +190,16 @@
     (eval '(defclass class-0307b (class-0307a) ((a :initform 'x))))
     (slot-value (make-instance 'class-0307b) 'a))
   x)
+
+(deftest class-0308.1
+  (progn
+    (setf (find-class 'class-0308a) nil
+	  (find-class 'class-0308b) nil)
+    (eval '(defclass class-0308a () ()))
+    (eval '(defclass class-0308b (class-0308a) (a)))
+    (eval '(defclass class-0308a () ((a :initarg :a))))
+    (eval '(defclass class-0308b (class-0308a) ()))
+    (slot-value (make-instance 'class-0308b :a 'x) 'a))
+  x)
+
+
