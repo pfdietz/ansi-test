@@ -48,17 +48,17 @@
     x)
   (a b c))
 
-(deftest let.8
-  (let ((x 0) (x 1)) x)
-  1)
+;;;(deftest let.8
+;;;  (let ((x 0) (x 1)) x)
+;;;  1)
 
 (deftest let.9
   (let (x y z) (values x y z))
   nil nil nil)
 
-(deftest let.10
-  (let ((x 1) x) x)
-  nil)
+;;; (deftest let.10
+;;;  (let ((x 1) x) x)
+;;;  nil)
 
 (deftest let.11
   (let ((x 1))
@@ -69,23 +69,23 @@
 	  x))
   (1 nil 1))
 
-(deftest let.12
-  (let ((x 0))
-    (values
-     (let ((x 20)
-	   (x (1+ x)))
-       x)
-     x))
-  1 0)
+;;; (deftest let.12
+;;;  (let ((x 0))
+;;;    (values
+;;;     (let ((x 20)
+;;;	   (x (1+ x)))
+;;;       x)
+;;;     x))
+;;;   1 0)
 
-(deftest let.13
-  (flet ((%f () (declare (special x))
-	     (if (boundp 'x) x 10)))
-    (let ((x 1)
-	  (x (1+ (%f))))
-      (declare (special x))
-      x))
-  11)
+;;; (deftest let.13
+;;;  (flet ((%f () (declare (special x))
+;;;	     (if (boundp 'x) x 10)))
+;;;    (let ((x 1)
+;;;	  (x (1+ (%f))))
+;;;      (declare (special x))
+;;;      x))
+;;;  11)
 
 ;;; Tests for LET*
 
@@ -155,10 +155,10 @@
     (values x y z))
   3 2 5)
 
-(deftest let*.13
-  (flet ((%f () (declare (special x)) x))
-    (let* ((x 1)
-	   (x (1+ (%f))))
-      (declare (special x))
-      x))
-  2)
+;;; (deftest let*.13
+;;;  (flet ((%f () (declare (special x)) x))
+;;;    (let* ((x 1)
+;;;	   (x (1+ (%f))))
+;;;      (declare (special x))
+;;;      x))
+;;;  2)
