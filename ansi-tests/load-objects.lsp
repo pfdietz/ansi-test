@@ -29,3 +29,4 @@
 (load "make-load-form.lsp")
 (load "make-load-form-saving-slots.lsp")
 (load "with-accessors.lsp")
+(load "with-slots.lsp")
