@@ -39,6 +39,8 @@
 
 (defvar *maximum-random-int-bits* 45)
 
+(defvar *compile-unoptimized-form* #-clisp t #+clisp nil)
+
 (declaim (special *vars*))
 
 (defstruct var-desc
@@ -471,7 +473,10 @@
 	       #+:ecl (si:gc t)
 	       ))))
       (let ((optimized-compiled-fn   (%compile optimized-fn-src))
-	    (unoptimized-compiled-fn (%compile unoptimized-fn-src)))
+	    (unoptimized-compiled-fn
+	     (if *compile-unoptimized-form*
+		 (%compile unoptimized-fn-src)
+	       (eval `(function ,unoptimized-fn-src)))))
 	(declare (type function optimized-compiled-fn unoptimized-compiled-fn))
 	(dolist (vals vals-list)
 	  (setq *int-form-vals* vals)

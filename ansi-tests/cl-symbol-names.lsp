@@ -994,8 +994,10 @@
 
 (defparameter *cl-symbols*
   (let ((pkg (find-package :common-lisp)))
-    (mapcar #'(lambda (str) (intern str pkg))
-	    *cl-symbol-names*)))
+    (#-clisp progn
+     #+clisp ext:without-package-lock  #+clisp ("COMMON-LISP")
+     (mapcar #'(lambda (str) (intern str pkg))
+	     *cl-symbol-names*))))
 
 ;;; Symbols classified by their kind in the spec
 (defparameter *cl-function-symbols*

@@ -10,4 +10,6 @@
   (:import-from "COMMON-LISP-USER" #:compile-and-load "==>")
   (:export #:random-from-seq #:random-case #:coin #:random-permute))
 
-#+cmu (import 'cl::quit :cl-test)
+(let ((s (find-symbol "QUIT" "CL-USER")))
+  (when s (import s :cl-test)))
+
