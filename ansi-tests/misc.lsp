@@ -8651,6 +8651,15 @@ Broken at C::WT-MAKE-CLOSURE.
 	   3)
   60)
 
+(deftest misc.454
+  (let* ((form '(let ((v1 0)) (decf v1 (setq v1 -1))))
+	 (val1 (eval form))
+	 (val2 (funcall (compile nil `(lambda () ,form)))))
+    (if (eql val1 val2) :good
+      (list val1 val2)))
+  :good)
+
+    
 
 
-
+  
