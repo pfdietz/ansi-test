@@ -43,55 +43,65 @@
 
 (deftest log.5
   (loop for type in '(short-float single-float double-float long-float)
+	for zero = (coerce 0 type)
 	nconc
 	(loop
 	 for x = (- (random (coerce 1 type)))
-	 for rlist = (multiple-value-list (log x))
+	 for rlist = (and (/= x zero) (multiple-value-list (log x)))
 	 for y = (car rlist)
 	 repeat 1000
-	 unless (and (null (cdr rlist))
-		     (typep y `(complex ,type)))
+	 unless (or (= x zero)
+		    (and (null (cdr rlist))
+			 (typep y `(complex ,type))))
 	 collect (list x rlist)))
   nil)
 
 (deftest log.6
   (loop for type in '(short-float single-float double-float long-float)
+	for zero = (coerce 0 type)
 	nconc
 	(loop
 	 for x = (- (random (coerce 1000000 type)))
-	 for rlist = (multiple-value-list (log x))
+	 for rlist = (and (/= x zero) (multiple-value-list (log x)))
 	 for y = (car rlist)
 	 repeat 1000
-	 unless (and (null (cdr rlist))
-		     (typep y `(complex ,type)))
+	 unless (or (= x zero)
+		    (and (null (cdr rlist))
+			 (typep y `(complex ,type))))
 	 collect (list x rlist)))
   nil)
 
 (deftest log.7
   (loop for type in '(short-float single-float double-float long-float)
+	for zero = (coerce 0 type)
 	nconc
 	(loop
 	 for x1 = (- (random (coerce 2000 type)) 1000)
 	 for x2 = (1+ (random (coerce 1000 type)))
-	 for rlist = (multiple-value-list (log (complex x1 x2)))
+	 for rlist = (and (/= x1 zero)
+			  (multiple-value-list (log (complex x1 x2))))
 	 for y = (car rlist)
 	 repeat 1000
-	 unless (and (null (cdr rlist))
-		     (typep y `(complex ,type)))
+	 unless (or (= x1 zero)
+		    (and (null (cdr rlist))
+			 (typep y `(complex ,type))))
 	 collect (list x1 x2 rlist)))
   nil)
 
 (deftest log.8
   (loop for type in '(short-float single-float double-float long-float)
+	for zero = (coerce 0 type)
 	nconc
 	(loop
 	 for x1 = (- (random (coerce 2000 type)) 1000)
 	 for x2 = (- -1 (random (coerce 1000 type)))
-	 for rlist = (multiple-value-list (log (complex x1 x2)))
+	 for rlist = (and (/= x1 zero)
+			  (multiple-value-list (log (complex x1 x2))))
 	 for y = (car rlist)
 	 repeat 1000
-	 unless (and (null (cdr rlist))
-		     (typep y `(complex ,type)))
+	 unless (or (= x1 zero)
+		    (and (null (cdr rlist))
+			 (typep y `(complex ,type))))
 	 collect (list x1 x2 rlist)))
   nil)
 
