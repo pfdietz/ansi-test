@@ -8398,3 +8398,27 @@ Broken at C::WT-MAKE-CLOSURE.
 	 (complex (multiple-value-call #'%f10 (values a c b 0 0)) 0))))
    80043 74953652306 33658947 -63099937105 -27842393)
   0)
+
+;;;   #<SB-C:TN COUNT!1> is not valid as the second argument to VOP:
+;;;   SB-VM::FAST-ASH-LEFT-MOD32/UNSIGNED=>UNSIGNED
+;;; Primitive type: T
+;;; SC restrictions:
+;;;   (SB-VM::UNSIGNED-REG)
+;;; The primitive type disallows these loadable SCs:
+;;;   (SB-VM::UNSIGNED-REG)
+
+(deftest misc.438
+  (funcall
+   (compile
+    nil
+    ' (lambda (a)
+	(declare (type (integer 0 1696) a))
+	; (declare (ignorable a))
+	(declare (optimize (space 2) (debug 0) (safety 1)
+		   (compilation-speed 0) (speed 1)))
+	(if (logbitp 0 (ash (1- a) (min 11 a))) 0 0)))
+   805)
+  0)
+
+
+
