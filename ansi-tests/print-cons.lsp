@@ -104,6 +104,7 @@
 (deftest print.backquote.random.6
   (let ((x '`(,@a ,@b)))
     (and (consp x)
+	 (symbolp (car x))
 	 (loop
 	  repeat 20
 	  nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
@@ -112,6 +113,7 @@
 (deftest print.backquote.random.7
   (let ((x '`(,.a ,.b)))
     (and (consp x)
+	 (symbolp (car x))
 	 (loop
 	  repeat 20
 	  nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
@@ -120,6 +122,7 @@
 (deftest print.backquote.random.8
   (let ((x '`(,a ,b)))
     (and (consp x)
+	 (symbolp (car x))
 	 (loop
 	  repeat 20
 	  nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
@@ -128,6 +131,7 @@
 (deftest print.backquote.random.9
   (let ((x '`#(,a ,b)))
     (and (consp x)
+	 (symbolp (car x))
 	 (loop
 	  repeat 20
 	  nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
