@@ -110,12 +110,79 @@
 	 (eqlt sx1 sx2)))
   t)
 
-(deftest sxhash.14
-  (let ((sx1 (sxhash :foo))
-	(sx2 (sxhash '#:foo)))
-    (and (typep sx1 '(and unsigned-byte fixnum))
-	 (eqlt sx1 sx2)))
+;; (deftest sxhash.14
+;;  (let ((sx1 (sxhash :foo))
+;;	(sx2 (sxhash '#:foo)))
+;;    (and (typep sx1 '(and unsigned-byte fixnum))
+;;	 (eqlt sx1 sx2)))
+;;  t)
+
+(deftest sxhash.15
+  (let* ((package-name
+	  (loop for i from 0
+		for name = (format nil "PACKAGE-~A" i)
+		for package = (find-package name)
+		unless package do (return name)))
+	 (sx1
+	  (let* ((package (make-package package-name nil nil))
+		 (symbol (intern "FOO" package)))
+	    (prog1
+	       (sxhash symbol)
+	      (delete-package package))))
+	 (sx2
+	  (let* ((package (make-package package-name nil nil))
+		 (symbol (intern "FOO" package)))
+	    (prog1
+	       (sxhash symbol)
+	      (delete-package package)))))
+    (assert (typep sx1 '(and unsigned-byte fixnum)))
+    (if (= sx1 sx2) :good (list sx1 sx2)))
+  :good)
+
+(deftest sxhash.16
+  (let ((c1 (list 'a))
+	(c2 (list 'a)))
+    (setf (cdr c1) c1)
+    (setf (cdr c2) c2)
+    (let ((sx1 (sxhash c1))
+	  (sx2 (sxhash c2)))
+      (or (eqlt sx1 sx2) (list sx1 sx2))))
   t)
+
+;;; Since similarity of numbers is 'same type and same mathematical value',
+;;; and since sxhash must produce the same value for similar numeric arguments,
+;;; (sxhash 0.0) and (sxhash -0.0) must be eql for all float types.
+
+(deftest sxhash.17
+  (loop for c1 in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for c2 in '(-0.0s0 -0.0f0 -0.0d0 -0.0l0)
+	for sx1 = (sxhash c1)
+	for sx2 = (sxhash c2)
+	unless (eql sx1 sx2)
+	collect (list c1 c2 sx1 sx2))
+  nil)
+
+(deftest sxhash.18
+  (loop for r1 in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for c1 = (complex r1)
+	for r2 in '(-0.0s0 -0.0f0 -0.0d0 -0.0l0)
+	for c2 = (complex r2)
+	for sx1 = (sxhash c1)
+	for sx2 = (sxhash c2)
+	unless (eql sx1 sx2)
+	collect (list c1 c2 sx1 sx2))
+  nil)
+
+(deftest sxhash.19
+  (loop for r1 in '(0.0s0 0.0f0 0.0d0 0.0l0)
+	for c1 = (complex 0 r1)
+	for r2 in '(-0.0s0 -0.0f0 -0.0d0 -0.0l0)
+	for c2 = (complex 0 r2)
+	for sx1 = (sxhash c1)
+	for sx2 = (sxhash c2)
+	unless (eql sx1 sx2)
+	collect (list c1 c2 sx1 sx2))
+  nil)
 
 ;;; Error cases
 
