@@ -111,11 +111,6 @@
   (classify-error (allocate-instance))
   program-error)
 
-;;; I don't think the following two tests are right.
-;;; The function takes a &rest argument, not a &key argument,
-;;; so the section on keyword argument checking doesn't apply
-
-#|
 (deftest allocate-instance.error.2
   (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
 				     :b))
@@ -125,4 +120,3 @@
   (classify-error (allocate-instance (find-class 'allocate-instance-class-01)
 				     '(a b c) nil))
   program-error)
-|#
