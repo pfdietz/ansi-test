@@ -36,6 +36,7 @@
 (load "incf.lsp")
 (load "decf.lsp")
 (load "lcm.lsp")
+(load "signum.lsp")
 
 (load "rational.lsp")
 (load "rationalize.lsp")
