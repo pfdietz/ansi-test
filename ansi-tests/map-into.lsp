@@ -270,35 +270,35 @@
 ;;; Tests on bit vectors
 
 (deftest map-into.bit-vector.1
-  (let ((v #*0100110))
+  (let ((v (copy-seq #*0100110)))
     (map-into v #'(lambda (x) (- 1 x)) v)
     (and (bit-vector-p v)
 	 v))
   #*1011001)
 
 (deftest map-into.bit-vector.2
-  (let ((v #*0100110))
+  (let ((v (copy-seq #*0100110)))
     (map-into v #'(lambda () 0))
     (and (bit-vector-p v)
 	 v))
   #*0000000)
 
 (deftest map-into.bit-vector.3
-  (let ((v #*0100110))
+  (let ((v (copy-seq #*0100110)))
     (map-into v #'identity '(0 1 1 1 0 0 1))
     (and (bit-vector-p v)
 	 v))
   #*0111001)
 
 (deftest map-into.bit-vector.4
-  (let ((v #*0100110))
+  (let ((v (copy-seq #*0100110)))
     (map-into v #'identity '(0 1 1 1))
     (and (bit-vector-p v)
 	 v))
   #*0111110)
 
 (deftest map-into.bit-vector.5
-  (let ((v #*0100110))
+  (let ((v (copy-seq #*0100110)))
     (map-into v #'identity '(0 1 1 1 0 0 1 4 5 6 7))
     (and (bit-vector-p v)
 	 v))
