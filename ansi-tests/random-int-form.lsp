@@ -208,7 +208,7 @@
 (defun make-random-optimize-settings ()
   (loop for settings = (list*
 			(list 'speed (random 4))
-			#+sbcl '(sb-c:insert-step-conditions 0)
+			; #+sbcl '(sb-c:insert-step-conditions 0)
 			(loop for s in '(space safety debug compilation-speed)
 			      for n = (random 4)
 			      collect (list s n)))
