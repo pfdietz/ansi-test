@@ -240,9 +240,9 @@
 		       (equal (symbol-package sym) pg)))
 		(equal (documentation p t)             nil)
 		)))))))
-    (((t t t t t t t t t) (t t t t t t t t t) (t t t t t t t t t))
-     ((t t t t t t t t t) (t t t t t t t t t) (t t t t t t t t t))
-     ((t t t t t t t t t) (t t t t t t t t t) (t t t t t t t t t))))
+    (((t t t t t t t t t t) (t t t t t t t t t t) (t t t t t t t t t t))
+     ((t t t t t t t t t t) (t t t t t t t t t t) (t t t t t t t t t t))
+     ((t t t t t t t t t t) (t t t t t t t t t t) (t t t t t t t t t t))))
 
 ;; Test defpackage with export option
 
