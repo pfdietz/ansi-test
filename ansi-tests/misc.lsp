@@ -6174,6 +6174,24 @@ Broken at C::WT-C-INLINE-LOC.
    -38276611 -11001852)
   1073730663)
 
+;;; wrong return value: T
+(deftest misc.327a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d e)
+       (declare (notinline max vector reduce))
+       (declare (optimize (speed 1) (space 2) (safety 1) (debug 1)
+			  (compilation-speed 2)))
+       (reduce #'(lambda (lmv6 lmv3) lmv3)
+	       (vector 0 (max 0) 0 0
+		       (catch 'ct2 (catch 'ct2 (throw 'ct2 0))) 0 e 0)
+	       
+	       :end 2
+	       :from-end t)))
+   68664683637 328245 881497115 -303855 311427)
+  0)
+    
 ;;; Bugs from abcl
 ;;; Debugger invoked on condition of type TYPE-ERROR:
 ;;;   The value org.armedbear.lisp.Symbol@54 is not of type integer.
@@ -6940,3 +6958,66 @@ Broken at C::WT-C-INLINE-LOC.
 	 0)))
    -3)
   0)
+
+;;; acl 6.2 (x86 linux trial edition, patched, 4/15/04)
+;;; Error: `T' is not of the expected type `NUMBER'
+(deftest misc.369
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d e)
+       (declare (type (integer -15256078323 33828721319) a))
+       (declare (type (integer -44368 22872) b))
+       (declare (type (integer -7623 -7522) c))
+       (declare (type (integer -53 289) d))
+       (declare (type (integer -1853649832248 2196352552304) e))
+       (declare (ignorable a b c d e))
+       (declare (optimize (speed 1) (space 2) (safety 0) (debug 0)
+			  (compilation-speed 3)))
+       (flet ((%f2 (f2-1 &optional &key (key1 0) (key2 e))
+		   (labels ((%f5 (f5-1 f5-2 f5-3 &optional &key
+				       (key1
+					(aref #(397)
+					      (min
+					       0
+					       (max
+						0
+						(let ((v7 (make-array nil :initial-element d)))
+						  (reduce
+						   #'(lambda (lmv5 lmv6) key1)
+						   (vector f2-1 0)
+						   :start 0))))))
+				       &allow-other-keys)
+				 0))
+		     0)))
+	 b)))
+   -2821485338 -35420 -7622 135 9592294022)
+  -35420)
+
+;;; Lispworks personal edition 4.3 (x86 linux)
+;;; Inconsistent return value
+(deftest misc.370
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -3070433 6) a))
+       (declare (type (integer -5 -3) b))
+       (declare (type (integer -4433759745778 -1) c))
+       (declare (ignorable a b c))
+       (declare
+	(optimize (speed 3)
+		  (space 1)
+		  (safety 0)
+		  (debug 2)
+		  (compilation-speed 3)))
+       (flet ((%f15
+	       (f15-1 f15-2
+		      &optional (f15-3 0)
+		      (f15-4 (denominator (setq c -4214677583716))) (f15-5 0)
+		      &key (key1 c) &allow-other-keys)
+	       (progv '(*s1* *s5* *s7*) (list f15-2 0 f15-1) key1)))
+	 (%f15 0 (%f15 c 0) 0))))
+   -1233959 -4 -2643533316361)
+  -4214677583716)
+
