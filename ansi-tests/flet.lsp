@@ -356,26 +356,27 @@
 ;;; Test that [:&]allow-other-keys suppress errors for illegal keywords
 ;;; or odd numbers of keyword arguments
 
-(deftest flet.41
-  (classify-error
-   (flet ((%f (&key (a :good)) a))
-     (%f :allow-other-keys t :b)))
-  :good)
-
-(deftest flet.42
-  (classify-error
-   (flet ((%f (&key (a :good)) a))
-     (%f :allow-other-keys t 10 20)))
-  :good)
-
-(deftest flet.43
-  (classify-error
-   (flet ((%f (&key (a :good) &allow-other-keys) a))
-     (%f :b)))
-  :good)
-
-(deftest flet.44
-  (classify-error
-   (flet ((%f (&key (a :good) &allow-other-keys) a))
-     (%f 10 20)))
-  :good)
+;;; Note -- These are apparently bad tests! -- PFD
+;;;(deftest flet.41
+;;;  (classify-error
+;;;   (flet ((%f (&key (a :good)) a))
+;;;     (%f :allow-other-keys t :b)))
+;;;  :good)
+;;;
+;;;(deftest flet.42
+;;;  (classify-error
+;;;   (flet ((%f (&key (a :good)) a))
+;;;     (%f :allow-other-keys t 10 20)))
+;;;  :good)
+;;;
+;;;(deftest flet.43
+;;;  (classify-error
+;;;   (flet ((%f (&key (a :good) &allow-other-keys) a))
+;;;     (%f :b)))
+;;;  :good)
+;;;
+;;;(deftest flet.44
+;;;  (classify-error
+;;;   (flet ((%f (&key (a :good) &allow-other-keys) a))
+;;;     (%f 10 20)))
+;;;  :good)

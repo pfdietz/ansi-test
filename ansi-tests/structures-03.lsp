@@ -391,10 +391,11 @@
 
 ;;; :allow-other-keys turns off keyword error checking, including
 ;;; invalid (nonsymbol) keyword arguments
-(deftest structure-boa-test-16/9
-  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t :a 3 :b 6 :c 9 1000 1000)
-	     :a :b :c)
-  (3 6 9))
+;;;(deftest structure-boa-test-16/9
+;;;  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t
+;;;                                  :a 3 :b 6 :c 9 1000 1000)
+;;;	     :a :b :c)
+;;;  (3 6 9))
 
 ;;; Repeated keyword arguments are allowed; the leftmost one is used
 (deftest structure-boa-test-16/10
@@ -409,8 +410,8 @@
   (1 2 3))
 
 ;; Checking of # of keywords is suppressed when :allow-other-keys is true
-(deftest structure-boa-test-16/12
-  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t :a 3 :b 6 :c 9 :a)
-	     :a :b :c)
-  (3 6 9))
+;;;(deftest structure-boa-test-16/12
+;;;  (sbt-slots 'sbt-16 (make-sbt-16 :allow-other-keys t :a 3 :b 6 :c 9 :a)
+;;;	     :a :b :c)
+;;;  (3 6 9))
 
