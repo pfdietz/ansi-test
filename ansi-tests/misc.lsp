@@ -7194,3 +7194,29 @@ Broken at C::WT-C-INLINE-LOC.
 	 0)))
    10)
   0)
+
+(deftest misc.378
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (optimize (speed 1) (space 0) (safety 1) (debug 3)
+			  (compilation-speed 2)))
+       (dotimes (iv4 3 0)
+	 (restart-case (round (multiple-value-bind (*s6*) (cons c 0)
+				(car *s6*)))))))
+   1)
+  0)
+
+(deftest misc.379
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 0) (safety 2) (debug 2)
+			  (compilation-speed 1)))
+       (values (floor 0) (multiple-value-bind (v3) (cons 0 0) (car v3))))))
+  0 0)
+
+
+   
