@@ -5,6 +5,10 @@
 
 (in-package :cl-test)
 
+(deftest fill-error.1
+  (classify-error (fill 'a 'b))
+  type-error)
+
 ;;; Fill on arrays
 
 (deftest array-fill-1
