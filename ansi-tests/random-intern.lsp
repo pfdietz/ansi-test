@@ -5,14 +5,6 @@
 
 (in-package :cl-test)
 
-(defconstant
-  +base-chars+ #.(concatenate 'string
-			      "abcdefghijklmnopqrstuvwxyz"
-			      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			      "0123456789"
-			      "<,>.?/\"':;[{]}~`!@#$%^&*()_-+= \\|"))
-(defconstant +num-base-chars+ (length +base-chars+))
-
 (defconstant +max-len-random-symbol+ 63)
 
 (defun make-random-symbol (package)

@@ -215,19 +215,29 @@ the condition to go uncaught if it cannot be classified."
 	       (rotatef (elt seq r) (elt seq (1- i))))))
   seq)
 
-(defconstant +standard-chars+
+(defparameter +standard-chars+
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+|\\=-`{}[]:\";'<>?,./ 
 ")
 
-(defconstant +alpha-chars+ (subseq +standard-chars+ 0 52))
-(defconstant +lower-case-chars+ (subseq +alpha-chars+ 0 26))
-(defconstant +upper-case-chars+ (subseq +alpha-chars+ 26 52))
-(defconstant +alphanumeric-chars+ (subseq +standard-chars+ 0 62))
-(defconstant +digit-chars+ "0123456789")
-(defconstant +extended-digit-chars+ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-(defconstant +code-chars+
+(defparameter
+  +base-chars+ #.(concatenate 'string
+			      "abcdefghijklmnopqrstuvwxyz"
+			      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			      "0123456789"
+			      "<,>.?/\"':;[{]}~`!@#$%^&*()_-+= \\|"))
+
+(defparameter +num-base-chars+ (length +base-chars+))
+
+
+(defparameter +alpha-chars+ (subseq +standard-chars+ 0 52))
+(defparameter +lower-case-chars+ (subseq +alpha-chars+ 0 26))
+(defparameter +upper-case-chars+ (subseq +alpha-chars+ 26 52))
+(defparameter +alphanumeric-chars+ (subseq +standard-chars+ 0 62))
+(defparameter +digit-chars+ "0123456789")
+(defparameter +extended-digit-chars+ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+(defparameter +code-chars+
   (coerce (loop for i from 0 below 256
 		for c = (code-char i)
 		when c collect c)
 	  'string))
-(defconstant +rev-code-chars+ (reverse +code-chars+))
+(defparameter +rev-code-chars+ (reverse +code-chars+))

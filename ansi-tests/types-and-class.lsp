@@ -156,7 +156,8 @@
      *subtype-table*)
   0)
 
-(defconstant +float-types+ '(long-float double-float short-float single-float))
+(defparameter +float-types+
+  '(long-float double-float short-float single-float))
 
 (defun types-4-body ()
   (let ((parent-table (make-hash-table :test #'equal))
