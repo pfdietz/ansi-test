@@ -2098,3 +2098,35 @@
    0)
   -14)
 
+;;; cmucl (9 Nov 2003)
+;;; The assertion (NOT (MEMBER C::KIND '(:DELETED :OPTIONAL :TOP-LEVEL))) failed.
+
+(deftest misc.161
+  (funcall
+   (compile nil
+	    '(lambda (a b c)
+	       (flet ((%f17 (f17-1 f17-2 f17-3)
+			    (flet ((%f2
+				    (f2-1 f2-2
+					  &optional (f2-3 (return-from %f17 f17-1))
+					  (f2-4 (return-from %f17 -57)))
+				    b))
+			      (multiple-value-call #'%f2 (values c -588 55101157)))))
+		 (if nil
+		     (let* ((v6 (%f17 102136 3096194 a)))
+		       b)
+		   c))))
+   -511 -2269809964 250738)
+  250738)
+
+;;; cmucl (9 Nov 2003) Incorrect result at SPEED 0.
+
+(deftest misc.162
+  (let* ((fn `(lambda (a c)
+		(declare (notinline funcall)
+			 (optimize (speed 0) (debug 0)))
+		(labels ((%f17 (f17-1 &optional (f17-4 c))
+			       (return-from %f17 (if f17-4 f17-1 49572640))))
+		  (funcall #'%f17 15128425 a)))))
+    (funcall (compile nil fn) 1 3))
+  15128425)
