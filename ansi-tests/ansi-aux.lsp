@@ -1453,3 +1453,27 @@ the condition to go uncaught if it cannot be classified."
 				       ',macro-form nil nil))
 	      'program-error))
        t t t)))
+
+(defun typep* (element type)
+  (not (not (typep element type))))
+
+(defun applyf (fn &rest args)
+  #'(lambda (&rest more-args) (apply fn (append args more-args))))
+
+(defun slot-boundp* (object slot)
+  (notnot (slot-boundp object slot)))
+
+(defun slot-exists-p* (object slot)
+  (notnot (slot-exists-p object slot)))
+
+(defun map-slot-boundp* (c slots)
+  (mapcar (applyf #'slot-boundp c) slots))
+
+(defun map-slot-exists-p* (c slots)
+  (mapcar (applyf #'slot-exists-p* c) slots))
+
+(defun map-slot-value (c slots)
+  (mapcar (applyf #'slot-value c) slots))
+
+(defun map-typep* (object types)
+  (mapcar (applyf #'typep* object) types))

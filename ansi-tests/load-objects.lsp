@@ -6,6 +6,7 @@
 (compile-and-load "defclass-aux.lsp")
 (load "defclass.lsp")
 (load "defclass-01.lsp")
+(load "defclass-02.lsp")
 (load "defclass-errors.lsp")
 (load "defclass-forward-reference.lsp")
 (load "ensure-generic-function.lsp")
