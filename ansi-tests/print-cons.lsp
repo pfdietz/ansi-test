@@ -137,6 +137,36 @@
 	  nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
   nil)
 
+(deftest print.backquote.random.10
+  (let ((x '`#(,a , .b)))
+    (loop
+     repeat 20
+     nconc (randomly-check-readability x :test #'is-similar)))
+  nil)
+
+(deftest print.backquote.random.11
+  (let ((x '`#(,a , @b)))
+    (loop
+     repeat 20
+     nconc (randomly-check-readability x :test #'is-similar)))
+  nil)
+
+(deftest print.backquote.random.12
+  (let ((x '`#(,a ,b c)))
+    (and (consp x)
+	 (symbolp (car x))
+	 (loop
+	  repeat 20
+	  nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
+  nil)
+
+(deftest print.backquote.random.13
+  (let ((x '`#(,a ,b c)))
+    (loop
+     repeat 20
+     nconc (randomly-check-readability x :test #'is-similar)))
+  nil)
+
 ;; random circular cons graphs
 (deftest print.cons.random.2
   (loop repeat 50
