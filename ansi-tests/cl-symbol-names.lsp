@@ -990,6 +990,11 @@
 "YES-OR-NO-P"
 "ZEROP"))
 
+(defparameter *cl-symbols*
+  (let ((pkg (find-package "COMMON-LISP")))
+    (mapcar #'(lambda (str) (intern str pkg))
+	    *cl-symbol-names*)))
+
 ;;; Symbols classified by their kind in the spec
 (defparameter *cl-function-symbols*
   '(
@@ -1593,6 +1598,7 @@
     /
     //
     ///
+    -
     ))
 
 (defparameter *cl-constant-symbols*
@@ -1651,6 +1657,7 @@
     most-positive-long-float
     most-positive-short-float
     most-positive-single-float
+    multiple-values-limit
     nil
     pi
     short-float-epsilon
@@ -2122,3 +2129,22 @@
 	  (list *cl-type-symbols* *cl-types-that-are-classes-symbols*
 		*cl-system-class-symbols* *cl-class-symbols*
 		*cl-condition-type-symbols*)))
+
+(defparameter *cl-non-function-macro-special-operator-symbols*
+  (set-difference
+   *cl-symbols*
+   (reduce #'union
+	   (list *cl-function-symbols*
+		 *cl-macro-symbols*
+		 *cl-accessor-symbols*
+		 *cl-local-function-symbols*
+		 *cl-local-macro-symbols*
+		 *cl-special-operator-symbols*
+		 *cl-standard-generic-function-symbols*
+		 '(declare)))))
+
+(defparameter *cl-non-variable-constant-symbols*
+  (set-difference
+   *cl-symbols*
+   (union *cl-variable-symbols*
+	  *cl-constant-symbols*)))

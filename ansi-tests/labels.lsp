@@ -176,3 +176,39 @@
 	   (:bar () (1+ (funcall #':foo))))
     (funcall #':bar))
   11)
+
+(deftest labels.24
+  (loop for s in *cl-non-function-macro-special-operator-symbols*
+	for form = `(classify-error (labels ((,s (x) (foo (1- x)))
+					     (foo (y)
+						  (if (<= y 0) 'a
+						    (,s (1- y)))))
+				      (,s 10)))
+	unless (eq (eval form) 'a)
+	collect s)
+  nil)
+
+(deftest labels.25
+  (loop for s in *cl-non-function-macro-special-operator-symbols*
+	for form = `(classify-error
+		     (labels ((,s (x) (foo (1- x)))
+			      (foo (y)
+				   (if (<= y 0) 'a
+				     (,s (1- y)))))
+		       (declare (ftype (function (integer) symbol)
+				       foo ,s))
+		       (,s 10)))
+	unless (eq (eval form) 'a)
+	collect s)
+  nil)
+
+(deftest labels.26
+  (loop for s in *cl-non-function-macro-special-operator-symbols*
+	for form = `(classify-error
+		     (labels (((setf ,s) (&rest args)
+			       (declare (ignore args))
+			       'a))
+		       (setf (,s) 10)))
+	unless (eq (eval form) 'a)
+	collect s)
+  nil)

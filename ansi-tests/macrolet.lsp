@@ -138,4 +138,23 @@
       (foo a)))
   2)
 
+(deftest macrolet.15
+  (macrolet ((nil () ''a))
+    (nil))
+  a)
 
+(deftest macrolet.16
+   (loop for s in *cl-non-function-macro-special-operator-symbols*
+	for form = `(classify-error (macrolet ((,s () ''a)) (,s)))
+	unless (eq (eval form) 'a)
+	collect s)
+  nil)
+
+;;; Symbol-macrolet tests
+
+(deftest symbol-macrolet.1
+  (loop for s in *cl-non-variable-constant-symbols*
+	for form = `(classify-error (symbol-macrolet ((,s 17)) ,s))
+	unless (eql (eval form) 17)
+	collect s)
+  nil)

@@ -101,6 +101,15 @@
     (or (eqlt val (/ (* n (1+ n)) 2)) (list val)))
   t)
 
+;;; Test that all non-variables exported from COMMON-LISP can be bound
+;;; in LET forms.
+(deftest let.15
+  (loop for s in *cl-non-variable-constant-symbols*
+	for form = `(classify-error (let ((,s 17)) ,s))
+	unless (eql (eval form) 17)
+	collect s)
+  nil)
+
 ;;; Tests for LET*
 
 (deftest let*.1
@@ -190,3 +199,12 @@
 	 (val (eval expr)))
     (or (eqlt val (/ (* n (1+ n)) 2)) (list val)))
   t)
+
+;;; Test that all non-variables exported from COMMON-LISP can be bound
+;;; in LET* forms.
+(deftest let*.15
+  (loop for s in *cl-non-variable-constant-symbols*
+	for form = `(classify-error (let* ((,s 17)) ,s))
+	unless (eql (eval form) 17)
+	collect s)
+  nil)
