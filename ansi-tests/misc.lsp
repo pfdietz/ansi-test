@@ -8994,5 +8994,21 @@ Broken at C::WT-MAKE-CLOSURE.
 	-6189))
   33816832)
 
+;;; Bug in CMUCL Snapshot 2004-10
+;;; Invalid number of arguments: 370632372
+
+(deftest misc.479
+  (let ((r (make-array nil :element-type '(unsigned-byte 32)))
+	(fn (compile nil '(lambda (r p2)
+			    (declare (optimize speed (safety 1))
+				     (type (simple-array (unsigned-byte 32) nil) r)
+				     (type integer p2))
+			    (setf (aref r) (logxor 0 (the (integer 2797513123 2798027357) p2)))
+			    (values)))))
+    (funcall fn r 2797674503)
+    (aref r))
+  2797674503)
 
 
+		     
+    
