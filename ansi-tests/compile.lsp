@@ -78,14 +78,12 @@
     (funcall (compile nil `(lambda () (eq ',x ',x)))))
   t)
 
+(deftest compile.7
+  (let ((x (copy-seq "abc")))
+    (eq x (funcall (compile nil `(lambda () ,x)))))
+  t)
 
-
-
-     
-  
-
-	 
-
-
-
-
+(deftest compile.8
+  (let ((x (list 'a 'b)))
+    (eq x (funcall (compile nil `(lambda () ',x)))))
+  t)
