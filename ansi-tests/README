@@ -1,34 +1,13 @@
 This directory contains a partial Common Lisp standards compliance
 test suite.
 
-To load, edit load.lsp and load it.  To run, do this:
+To run the tests, load gclload.lsp.  This will load and
+run the tests.  To just load the tests, load gclload1.lsp
+and gclload2.lsp.
 
-	(in-package :cl-test)
-	(do-tests)
-
-From GCL, instead just load gclload.lsp.  This will automatically
-run the tests.
-
-Individual tests may be run by (do-test '<test name>).
-
-The tests here cover the CONSes, SYMBOLs and PACKAGEs section of the
-hyperspec, as well as fragments of other parts (sequences, types,
-lists, arrays, structures, the reader).  I intend to add tests for the
-other parts of the standard.  The package tests are currently disabled
-in GCL because of a bug in DEFPACKAGE.
-
-When I run this I have a copy of the MK defsystem in the ../defsys30
-directory.  The .system files use the MK forms (not the defsystem from
-ACL).  (Note: when gclload.lsp is loaded the defsystem is not used.)
-
-The tar file contains a modified version of the Waters RT regression
-test package, which gets installed in subdirectory rt/.
+Individual tests may be run by (rt:do-test '<test name>).
 
 Please tell me when you find incorrect test cases.
-
-There are five test cases that cause very long loops on ACL (ELT-*
-tests on type-bogus inputs; I think the system is considering the
-pointers to be very large unsigned integers.)
 
 	Paul Dietz
 	dietz@dls.net
