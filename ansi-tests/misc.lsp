@@ -1036,3 +1036,35 @@
    0)
   0)
 
+;;; cmucl (2003-10-13) "The assertion (NOT (C::BLOCK-DELETE-P BLOCK)) failed."
+(deftest misc.83
+  (funcall
+   (compile nil '(lambda (a c)
+		   (flet ((%f8 () (min c (min a (return-from %f8 c)))))
+		     c)))
+   0 -10)
+  -10)
+
+(deftest misc.84
+  (funcall
+   (compile nil '(lambda (a b)
+		   (flet ((%f18 ()
+				(let ()
+				  (let ()
+				    (if (ldb-test (byte 20 23) b) a
+				      (return-from %f18 431))))))
+		     -674)))
+   0 0)
+  -674)
+
+(deftest misc.85
+  (funcall
+   (compile nil
+	    '(lambda (c)
+	       (labels ((%f14 ()
+			      (let ()
+				(logandc1 (min -32 (return-from %f14 -69793))
+					  c))))
+		     156)))
+   0)
+  156)
