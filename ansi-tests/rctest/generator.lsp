@@ -12,12 +12,18 @@
    for those classes.")
 
 (defgeneric prototype (class)
+  ;; Map a class to a prototype instance of the class.  Cache using
+  ;; *prototype-class-table*.
   (:method ((class standard-class) &aux (name (class-name class)))
 	   (or (gethash name *prototype-class-table*)
 	       (setf (gethash name *prototype-class-table*)
 		     (make-instance class))))
   (:method ((class symbol))
 	   (prototype (find-class class))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Generators are objects that are used to create random instances.
 
 (defclass generator () ())
 

@@ -1,3 +1,11 @@
+(compile-and-load "hash-table-aux.lsp")
+
 (load "hash-table.lsp")
 (load "make-hash-table.lsp")
 (load "hash-table-p.lsp")
+(load "hash-table-count.lsp")
+(load "hash-table-size.lsp")
+(load "hash-table-rehash-size.lsp")
+(load "hash-table-rehash-threshold.lsp")
+(load "hash-table-test.lsp")
+(load "gethash.lsp")

@@ -1,0 +1,52 @@
+;-*- Mode:     Lisp -*-
+;;;; Author:   Paul Dietz
+;;;; Created:  Fri Nov 28 05:56:22 2003
+;;;; Contains: Tests for HASH-TABLE-TEST
+
+(in-package :cl-test)
+
+(deftest hash-table-test.1
+  (hash-table-test (make-hash-table))
+  eql)
+
+(deftest hash-table-test.2
+  (loop for test in '(eq eql equal equalp)
+	unless (eq (hash-table-test (make-hash-table :test test)) test)
+	collect test)
+  nil)
+
+(deftest hash-table-test.3
+  (loop for test in '(eq eql equal equalp)
+	unless (eq (hash-table-test (make-hash-table
+				     :test (symbol-function test)))
+		   test)
+	collect test)
+  nil)
+
+(deftest hash-table-test.4
+  (loop for test in '(eq eql equal equalp)
+	unless (eq (hash-table-test (make-hash-table
+				     :test (eval `(function ,test))))
+		   test)
+	collect test)
+  nil)
+
+;;; Error cases
+
+(deftest hash-table-test.error.1
+  (classify-error (hash-table-test))
+  program-error)
+
+(deftest hash-table-test.error.2
+  (classify-error (hash-table-test (make-hash-table) nil))
+  program-error)
+
+(deftest hash-table-test.error.3
+  (loop for x in *mini-universe*
+	unless (hash-table-p x)
+	unless (eq (eval `(classify-error (hash-table-test ',x)))
+		   'type-error)
+	collect x)
+  nil)
+
+
