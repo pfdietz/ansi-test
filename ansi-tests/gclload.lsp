@@ -10,7 +10,7 @@
    (format t "~&<~S ~S ~S>~%" a b c)))
 
 #+allegro (run-shell-command "rm -f *.fasl")
-#+cmu (run-program "rm" '("-f" "*.x86f" "*.sparcf"))
+#+cmu (run-program "rm" '("-f" "*.x86f" "*.sparcf" "*.ppcf"))
 
 (load "gclload1.lsp")
 (load "gclload2.lsp")
