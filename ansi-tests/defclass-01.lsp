@@ -387,6 +387,49 @@
     (s1 c))
   x)
 
+;;;
 
-    
-    
+(defclass class-15 ()
+  ((s1 :initarg :allow-other-keys :reader s1)))
+
+(deftest class-15.1
+  (let ((c (make-instance 'class-15)))
+    (s1 c))
+  nil)
+
+(deftest class-15.2
+  (let ((c (make-instance 'class-15 :allow-other-keys nil)))
+    (s1 c))
+  nil)
+
+(deftest class-15.3
+  (let ((c (make-instance 'class-15 :allow-other-keys t)))
+    (s1 c))
+  t)
+
+(deftest class-15.4
+  (let ((c (make-instance 'class-15 :allow-other-keys t
+			  :allow-other-keys nil)))
+    (s1 c))
+  t)
+
+(deftest class-15.5
+  (let ((c (make-instance 'class-15 :allow-other-keys nil
+			  :allow-other-keys t)))
+    (s1 c))
+  nil)
+
+(deftest class-15.6
+  (let ((c (make-instance 'class-15 :allow-other-keys t
+			  :foo 'bar)))
+    (s1 c))
+  t)
+
+(deftest class-15.7
+  (let ((c (make-instance 'class-15 :allow-other-keys t
+			  :allow-other-keys nil
+			  :foo 'bar)))
+    (s1 c))
+  t)
+
+
