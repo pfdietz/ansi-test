@@ -292,6 +292,7 @@
 
 (defstruct-with-tests (struct-test-53 (:type vector)
 				      (:initial-offset 5))
+  "This is struct-test-53"
   a53 b53)
 
 (deftest structure-53-1
@@ -302,6 +303,7 @@
 (defstruct-with-tests (struct-test-54 (:type vector)
 				      (:initial-offset 2)
 				      (:include struct-test-53))
+  "This is struct-test-54"
   a54 b54)
 
 (deftest structure-54-1
@@ -333,8 +335,8 @@
 (defstruct-with-tests (struct-test-57 (:include struct-test-22))
   c57 d57)
 
+(defstruct-with-tests struct-test-58
+  "This is struct-test-58"  a-58 b-58)
 
-
-
-;;;; Tests of error cases
-
+(defstruct-with-tests (struct-test-59 (:include struct-test-58))
+  "This is struct-test-59"  a-59 b-59)
