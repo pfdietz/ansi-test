@@ -5130,7 +5130,7 @@ Broken at C::WT-C-INLINE-LOC.
                                         (let ((*s6* (%f1 d))) 0))))
                                    tag1
                                    (+
-                                    (handler-bind ()
+                                    (cl::handler-bind ()
                                       (if (<= -11215713 -819)
                                        (integer-length
                                         (floor (conjugate f14-1)
@@ -5178,7 +5178,7 @@ Broken at C::WT-C-INLINE-LOC.
                                              (unwind-protect
                                                (if (%f9 (go tag4)) 0 0))
                                              tag4
-                                             (handler-case
+                                             (cl::handler-case
                                               0))
                                            h))))
                                       (apply #'%f6 0 nil))))
@@ -5435,7 +5435,7 @@ Broken at C::WT-C-INLINE-LOC.
                            0)
                          tag2)
                        0)
-                     h (handler-case 0))))))
+                     h (cl::handler-case 0))))))
    -7209 -223767 -42093806027 -9 132172281069 138363461574
    -3751010 0)
   0)
@@ -5527,7 +5527,7 @@ Broken at C::WT-C-INLINE-LOC.
                         (let* ((v4 (progn (unwind-protect (go 0)) 0)))
                           0)
                         0)
-                      (logand (handler-bind ()
+                      (logand (cl::handler-bind ()
                                 (logand -15 -2 32578787 10349 e
                                         -24781944 -8)))))))))
    60336 1625 124302 -33193 -8095855 4995857 0 4572381)
@@ -5615,7 +5615,7 @@ Broken at C::WT-C-INLINE-LOC.
                                         (let ((*s6* (%f1 d))) 0))))
                                    tag1
                                    (+
-                                    (handler-bind ()
+                                    (cl::handler-bind ()
                                       (if (<= -11215713 -819)
                                        (integer-length
                                         (floor (conjugate f14-1)
