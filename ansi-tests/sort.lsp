@@ -21,6 +21,24 @@
     (sort a #'<))
   (1 2 3 4 5))
 
+;;;
+;;; Confirm that sort only permutes the sequence, even when given
+;;; a comparison function that does not define a total order.
+;;;
+(deftest sort-list.4
+  (loop
+   repeat 100
+   always
+   (let ((a (list 1 2 3 4 5 6 7 8 9 0))
+	 (cmp (make-array '(10 10))))
+     (loop for i from 0 to 9 do
+	   (loop for j from 0 to 9 do
+		 (setf (aref cmp i j) (zerop (logand (random 1024) 512)))))
+     (setq a (sort a #'(lambda (i j) (aref cmp i j))))
+     (and (eqlt (length a) 10)
+	  (equalt (sort a #'<) '(0 1 2 3 4 5 6 7 8 9)))))
+  t)	
+
 (deftest sort-vector.1
   (let ((a (copy-seq #(1 4 2 5 3))))
     (sort a #'<))
@@ -42,6 +60,20 @@
 		       :fill-pointer 5)))
     (sort a #'<))
   #(10 20 30 40 50))
+
+(deftest sort-vector.5
+  (loop
+   repeat 100
+   always
+   (let ((a (vector 1 2 3 4 5 6 7 8 9 0))
+	 (cmp (make-array '(10 10))))
+     (loop for i from 0 to 9 do
+	   (loop for j from 0 to 9 do
+		 (setf (aref cmp i j) (zerop (logand (random 1024) 512)))))
+     (setq a (sort a #'(lambda (i j) (aref cmp i j))))
+     (and (eqlt (length a) 10)
+	  (equalpt (sort a #'<) #(0 1 2 3 4 5 6 7 8 9)))))
+  t)	
 
 (deftest sort-bit-vector.1
   (let ((a (copy-seq #*10011101)))
