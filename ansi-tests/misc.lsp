@@ -7355,4 +7355,10 @@ Broken at C::WT-C-INLINE-LOC.
        (compile nil '(lambda () (values (rationalize (catch 'ct1 1)) 2)))))
   1 2)
 
-
+(deftest misc.387
+  (let
+      #+armedbear ((jvm::*catch-errors* nil))
+      nil
+      (funcall
+       (compile nil '(lambda () (block b1 (catch 'ct1 (throw 'ct1 (return-from b1 0))))))))
+  0)
