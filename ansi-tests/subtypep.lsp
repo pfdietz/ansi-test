@@ -183,3 +183,14 @@
      100))
   nil)
 
+;;; Check that types that are supposed to be nonempty are
+;;; not subtypes of NIL
+
+(deftest subtypep.nil.1
+  (loop for (type) in *subtype-table*
+	unless (member type '(nil extended-char))
+	append (check-all-not-subtypep type nil))
+  nil)
+
+	
+  
