@@ -140,7 +140,7 @@
   (let ((x nil) (y nil) (z nil))
     (setf (values x y z) (values 1 2 3))
     (values z y x))
-  z y x)
+  3 2 1)
 
 (deftest setf-values.3
   (let ((x nil) (y nil) (z nil))
