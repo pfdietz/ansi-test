@@ -200,3 +200,15 @@
 	 (not (cons (eql c) (eql z)))))
   nil)
 
+;;; Test case that came up in SBCL
+(deftest subtypep.cons.21
+  (check-all-subtypep
+   '(cons integer single-float)
+   '(or (cons fixnum single-float) (cons bignum single-float)))
+  nil)
+
+(deftest subtypep.cons.22
+  (check-all-subtypep
+   '(cons single-float integer)
+   '(or (cons single-float fixnum) (cons single-float bignum)))
+  nil)
