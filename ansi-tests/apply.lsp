@@ -20,7 +20,7 @@
   program-error)
 
 (deftest apply.error.4
-  (classify-errir (apply #'cons (list 1 2 3)))
+  (classify-error (apply #'cons (list 1 2 3)))
   program-error)
 
 ;;; Non-error cases
