@@ -46,7 +46,7 @@
   :good)
 
 (defparameter *no-app-meth-gf-04*
-  (defgeneric no-app-meth-gf-04 (x)))
+  (defgeneric no-app-meth-gf-04 (&rest args)))
 
 (defmethod no-applicable-method ((x (eql *no-app-meth-gf-04*)) &rest args)
   (and (eql x *no-app-meth-gf-04*)
@@ -55,3 +55,4 @@
 (deftest no-applicable-method.7
   (no-app-meth-gf-04 'a 'b 'c 'd)
   (a b c d))
+
