@@ -230,6 +230,43 @@
   (make-array-with-checks '(2 3) :initial-contents '(#(a b c) #(d e f)))
   #2a((a b c) (d e f)))
 
+(deftest make-array.19
+  (make-array-with-checks '(4) :initial-contents
+			  (make-array '(10) :initial-element 1
+				      :fill-pointer 4))
+  #(1 1 1 1))
+
+(deftest make-array.20
+  (let ((a (make-array '(10) :initial-element 1
+		       :fill-pointer 4)))
+    (make-array-with-checks '(3 4) :initial-contents
+			    (list a a a)))
+  #2a((1 1 1 1) (1 1 1 1) (1 1 1 1)))
+
+(deftest make-array.21
+  (make-array-with-checks '(3 4) :initial-contents
+			  (make-array '(10) :initial-element '(1 2 3 4)
+				      :fill-pointer 3))
+  #2a((1 2 3 4) (1 2 3 4) (1 2 3 4)))
+
+(deftest make-array.22
+  (loop for i from 3 below (min array-rank-limit 128)
+	always
+	(equalpt (make-array-with-checks (make-list i :initial-element 0))
+		 (read-from-string (format nil "#~Aa()" i))))
+  t)
+
+(deftest make-array.23
+  (let ((len (1- array-rank-limit)))
+    (equalpt (make-array-with-checks (make-list len :initial-element 0))
+	     (read-from-string (format nil "#~Aa()" len))))
+  t)
+
+(deftest make-array.24
+  (make-array-with-checks '(5) :initial-element 'a :displaced-to nil)
+  #(a a a a a))
+
+
 ;;; Adjustable arrays
 
 (deftest make-array.adjustable.1
@@ -250,5 +287,120 @@
   (make-array-with-checks '(2 3) :adjustable t :initial-element 7)
   #2a((7 7 7) (7 7 7)))
 
+(deftest make-array.adjustable.5
+  (make-array-with-checks '(2 3) :adjustable t
+			  :initial-contents '((1 2 3) "abc"))
+  #2a((1 2 3) (#\a #\b #\c)))
 
+(deftest make-array.adjustable.6
+ (make-array-with-checks '(4) :adjustable t
+			 :initial-contents '(a b c d))
+ #(a b c d))
 
+(deftest make-array.adjustable.7
+ (make-array-with-checks '(4) :adjustable t
+			 :fill-pointer t
+			 :initial-contents '(a b c d))
+ #(a b c d))
+
+(deftest make-array.adjustable.8
+ (make-array-with-checks '(4) :adjustable t
+			 :element-type '(integer 0 (256))
+			 :initial-contents '(1 4 7 9))
+ #(1 4 7 9))
+
+(deftest make-array.adjustable.9
+ (make-array-with-checks '(4) :adjustable t
+			 :element-type 'base-char
+			 :initial-contents "abcd")
+ "abcd")
+
+(deftest make-array.adjustable.10
+ (make-array-with-checks '(4) :adjustable t
+			 :element-type 'bit
+			 :initial-contents '(0 1 1 0))
+ #*0110)
+
+(deftest make-array.adjustable.11
+ (make-array-with-checks '(4) :adjustable t
+			 :element-type 'symbol
+			 :initial-contents '(a b c d))
+ #(a b c d))
+
+;;; Displaced arrays
+
+(deftest make-array.displaced.1
+  (let ((a (make-array '(10) :initial-contents '(a b c d e f g h i j))))
+    (make-array-with-checks '(5) :displaced-to a))
+  #(a b c d e))
+
+(deftest make-array.displaced.2
+  (let ((a (make-array '(10) :initial-contents '(a b c d e f g h i j))))
+    (make-array-with-checks '(5) :displaced-to a
+			    :displaced-index-offset 3))
+  #(d e f g h))
+
+(deftest make-array.displaced.3
+  (let ((a (make-array '(10) :initial-contents '(a b c d e f g h i j))))
+    (make-array-with-checks '(5) :displaced-to a
+			    :displaced-index-offset 5))
+  #(f g h i j))
+
+(deftest make-array.displaced.4
+  (let ((a (make-array '(10) :initial-contents '(a b c d e f g h i j))))
+    (make-array-with-checks '(0) :displaced-to a
+			    :displaced-index-offset 10))
+  #())
+
+(deftest make-array.displaced.5
+  (let ((a (make-array '(10) :element-type '(integer 0 (256))
+		       :initial-contents '(1 3 5 7 9 11 13 15 17 19))))
+    (make-array-with-checks '(5) :element-type '(integer 0 (256))
+			    :displaced-to a))
+  #(1 3 5 7 9))
+
+(deftest make-array.displaced.6
+  (let ((a (make-array '(10) :element-type '(integer 0 (256))
+		       :initial-contents '(1 3 5 7 9 11 13 15 17 19))))
+    (loop for i from 0 to 5 collect
+	  (make-array-with-checks '(5) :element-type '(integer 0 (256))
+				  :displaced-to a
+				  :displaced-index-offset i)))
+  (#(1 3 5 7 9)
+   #(3 5 7 9 11)
+   #(5 7 9 11 13)
+   #(7 9 11 13 15)
+   #(9 11 13 15 17)
+   #(11 13 15 17 19)))
+
+(deftest make-array.displaced.7
+  (let ((a (make-array '(10) :element-type '(integer 0 (256))
+		       :initial-contents '(1 3 5 7 9 11 13 15 17 19))))
+    (make-array-with-checks '(0) :element-type '(integer 0 (256))
+			    :displaced-to a
+			    :displaced-index-offset 10))
+  #())
+
+(deftest make-array.displaced.8
+  (let ((a (make-array '(10) :element-type 'bit
+		       :initial-contents '(0 1 1 0 1 1 1 0 1 0))))
+    (make-array-with-checks '(5) :element-type 'bit
+			    :displaced-to a))
+  #*01101)
+
+(deftest make-array.displaced.9
+  (let ((a (make-array '(10) :element-type 'bit
+		       :initial-contents '(0 1 1 0 1 1 1 0 1 0))))
+    (loop for i from 0 to 5 collect
+	  (make-array-with-checks '(5) :element-type 'bit
+				  :displaced-to a
+				  :displaced-index-offset i)))
+  (#*01101 #*11011 #*10111 #*01110 #*11101 #*11010))
+
+(deftest make-array.displaced.10
+  (let ((a (make-array '(10) :element-type 'bit
+		       :initial-contents '(0 1 1 0 1 1 1 0 1 0))))
+    (make-array-with-checks '(0) :element-type 'bit
+			    :displaced-to a
+			    :displaced-index-offset 10))
+  #*)
