@@ -170,3 +170,59 @@
 (def-pprint-test format.justify.21
   (format nil "~6:<~>")
   "      ")
+
+(def-pprint-test format.justify.22
+  (format nil "~v<~A~>" nil "XYZ")
+  "XYZ")
+
+(def-pprint-test format.justify.23
+  (format nil "~,v<~A~;~A~>" nil "ABC" "DEF")
+  "ABCDEF")
+
+(def-pprint-test format.justify.24
+  (format nil "~,,v<~A~;~A~>" nil "ABC" "DEF")
+  "ABCDEF")
+
+(def-pprint-test format.justify.25
+  (format nil "~,,1,v<~A~;~A~>" nil "ABC" "DEF")
+  "ABC DEF")
+
+(def-pprint-test format.justify.26
+  (format nil "~,,1,v<~A~;~A~>" #\, "ABC" "DEF")
+  "ABC,DEF")
+
+(def-pprint-test format.justify.27
+  (format nil "~6<abc~;def~^~>")
+  "   abc")
+
+(def-pprint-test format.justify.28
+  (format nil "~6@<abc~;def~^~>")
+  "abc   ")
+
+;;; ~:; tests
+
+(def-pprint-test format.justify.29
+  (format nil "~%X ~,,1<~%X ~:;AAA~;BBB~;CCC~>")
+  "
+X AAA BBB CCC")
+
+(def-pprint-test format.justify.30
+  (format nil "~%X ~<~%X ~0,3:;AAA~>~<~%X ~0,3:;BBB~>~<~%X ~0,3:;CCC~>")
+  "
+X 
+X AAA
+X BBB
+X CCC")
+
+(def-pprint-test format.justify.31
+  (format nil "~%X ~<~%X ~0,30:;AAA~>~<~%X ~0,30:;BBB~>~<~%X ~0,30:;CCC~>")
+  "
+X AAABBBCCC")
+
+(def-pprint-test format.justify.32
+  (format nil "~%X ~<~%X ~0,3:;AAA~>,~<~%X ~0,3:;BBB~>,~<~%X ~0,3:;CCC~>")
+  "
+X 
+X AAA,
+X BBB,
+X CCC")
