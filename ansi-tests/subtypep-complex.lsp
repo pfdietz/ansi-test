@@ -39,11 +39,6 @@
 	nconc (check-not-complex-type `(signed-byte ,i)))
   nil)
 
-(deftest subtypep-complex.6
-  (loop for i from 1 to 100
-	nconc (check-not-complex-type `(signed-byte ,i)))
-  nil)
-
 (deftest subtypep-complex.7
   (let ((types '(complex (complex) (complex *))))
     (loop for tp1 in types
