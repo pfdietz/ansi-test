@@ -14,6 +14,7 @@
 (load "and.lsp")
 (load "block.lsp")
 (load "call-arguments-limit.lsp")
+(load "case.lsp")
 (load "catch.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
@@ -33,6 +34,7 @@
 (load "function.lsp")
 (load "functionp.lsp")
 (load "identity.lsp")
+(load "if.lsp")
 (load "labels.lsp")
 (load "lambda-list-keywords.lsp")
 (load "lambda-parameters-limit.lsp")
@@ -47,7 +49,10 @@
 (load "some.lsp")
 (load "t.lsp")
 (load "tagbody.lsp")
+(load "unless.lsp")
 (load "unwind-protect.lsp")
+(load "when.lsp")
+
 
 
 ;;; Tests of conses
