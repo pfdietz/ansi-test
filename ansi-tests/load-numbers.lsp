@@ -61,6 +61,18 @@
 (load "parse-integer.lsp")
 (load "boole.lsp")
 
+(load "logand.lsp")
+(load "logandc1.lsp")
+(load "logandc2.lsp")
+(load "logeqv.lsp")
+(load "logior.lsp")
+(load "lognand.lsp")
+(load "lognor.lsp")
+(load "logorc1.lsp")
+(load "logorc2.lsp")
+(load "lognot.lsp")
+(load "logxor.lsp")
+
 (load "rational.lsp")
 (load "rationalize.lsp")
 
