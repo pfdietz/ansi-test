@@ -1,4 +1,4 @@
-`;-*- Mode:     Lisp -*-
+;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Thu Oct 10 23:21:50 2002
 ;;;; Contains: Tests for DEFVAR
