@@ -10,3 +10,5 @@
 (compile-and-load "ansi-aux.lsp")
 ;;; (unless (probe-file "ansi-aux.o") (compile-file "ansi-aux.lsp"))
 ;;; (load "ansi-aux.o")
+
+(load "cl-symbol-names.lsp")
