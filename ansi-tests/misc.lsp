@@ -8639,3 +8639,9 @@ Broken at C::WT-MAKE-CLOSURE.
 					 (logxor a b (%f3)))))
 	   -22650 20595)
   171)
+
+(deftest misc.452
+  (funcall (compile nil '(lambda (d) (labels ((%f3 () (setf d -1135) -983))
+				       (+ d (%f3) 11267))))
+	   -2914)
+  7370)
