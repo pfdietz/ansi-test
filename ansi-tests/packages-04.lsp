@@ -48,6 +48,20 @@
 	       (progn (delete-package p) t))))))
   t)
 
+(deftest intern.3
+  (let ((cl-user-package (find-package "CL-USER")))
+    (eqt (intern "" cl-user-package)
+	 (intern (make-array 0 :element-type nil))))
+  t)
+
+(deftest intern.4
+  (let ((cl-user-package (find-package "CL-USER")))
+    (eqt (intern (make-array 5 :element-type 'character
+			     :initial-contents "XYZZY") cl-user-package)
+	 (intern (make-array 5 :element-type 'base-char
+			     :initial-contents "XYZZY") cl-user-package)))
+  t)
+
 (deftest intern.error.1
   (classify-error (intern))
   program-error)
