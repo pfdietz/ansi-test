@@ -306,7 +306,7 @@ the condition to go uncaught if it cannot be classified."
      (division-by-zero () 'division-by-zero)
      (floating-point-overflow () 'floating-point-overflow)
      (floating-point-underflow () 'floating-point-underflow)
-     (arithmethic-error () 'arithmetic-error)
+     (arithmetic-error () 'arithmetic-error)
      (error         () 'error)
   )))
 
