@@ -5,6 +5,7 @@
 (load "cl-symbols.lsp")
 
 ;;; Tests of evaluation and compilation
+(load "eval.lsp")
 (load "eval-and-compile.lsp")
 (load "compile.lsp")
 
