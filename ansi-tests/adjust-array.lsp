@@ -339,7 +339,7 @@
   (4 :element-type 'character :initial-contents "wxyz")
   "wxyz")
 
-(def-adjust-array-test adjust-array..string.4
+(def-adjust-array-test adjust-array.string.4
   (5 :element-type 'character :initial-contents "abcde")
   (8 :element-type 'character :initial-contents "87654321")
   "87654321")
@@ -515,7 +515,7 @@
   (4 :element-type 'bit :initial-contents #*1011)
   #*1011)
 
-(def-adjust-array-test adjust-array..bit-vector.4
+(def-adjust-array-test adjust-array.bit-vector.4
   (5 :element-type 'bit :initial-contents #*01100)
   (8 :element-type 'bit :initial-contents #*11110000)
   #*11110000)
