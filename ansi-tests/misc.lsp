@@ -828,6 +828,7 @@
 	   100)
   -1)
 
+;;; sbcl bug (probably #233)
 (deftest misc.63
   (let* ((form '(flet ((%f12 () (setq c -9868204937)))
 		  (if (<= c (%f12)) -2 (if (= c c) b c))))
@@ -840,6 +841,7 @@
 	  (apply (compile nil form2) vals)))
   t)
 
+;;; sbcl bug (probably #233)
 (deftest misc.64
   (let* ((form '(logcount
 		 (if (not (> c (let ((v7 (setq c -246180))) -1)))
@@ -855,6 +857,7 @@
 	  (apply (compile nil form2) vals)))
   t)
 
+;;; sbcl bug (probably #233)
 (deftest misc.65
   (let ((form1 '(lambda (b c)
 		  (declare (type (integer -350684427436 -255912007) b))
@@ -1112,7 +1115,15 @@
 		(if (unwind-protect (unwind-protect 2)) 3 4))))
   1)
 
+;;;
 ;;; cmucl bug (18e+ 10/15/03)
+;;; Also occurs in sbcl (0.8.16.20)
+;;;  "Too large to be represented as a SINGLE-FLOAT"
+;;; (a large bignum is coerced to a single-float in type propagation,
+;;;  with unfortunate results.)
+;;;
+
+;;; Here, the function were the problem occurs is -
 (deftest misc.89
   (funcall
    (compile nil
@@ -1122,6 +1133,41 @@
 		  (* -15718867961526428520296254978781964 c))))
    0)
   -26)
+
+;;; Here, it is MAX
+(deftest misc.89a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d)
+       (declare (type (integer -265115792172 -206231862770) a))
+       (declare (type (integer 11069 58322510034) b))
+       (declare (type (integer -7351 28730) c))
+       (declare (type (integer -913299295156 3670905260104) d))
+       (declare (ignorable a b c d))
+       (declare
+	(optimize (safety 1) (space 1) (compilation-speed 2)
+		  (debug 0) (speed 2)))
+       (- (signum (catch 'ct6 0)) (numerator (* -1303 d -20527703 d c)))))
+   -261283766805 41605749408 5110 1269102278886)
+  -220139978315039892599545286437019126040)
+
+;;; Here, it is MOD
+(deftest misc.89b
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c d)
+       (declare (type (integer -481454219025 239286093202) a))
+       (declare (type (integer -1121405368785 213522) b))
+       (declare (type (integer -103720347879 -241) c))
+       (declare (type (integer -12830115357 3027711346) d))
+       (declare (ignorable a b c d))
+       (declare (optimize (speed 2) (compilation-speed 1) (space 1)
+			  (safety 3) (debug 2)))
+       (floor (load-time-value 0) (min -18 (* a c b -12626)))))
+   -78545446876 -460518205737 -38885914099 1598305189)
+  0 0)
 
 ;;; acl bugs (version 6.2, linux x86 trial)
 (deftest misc.90
