@@ -194,7 +194,21 @@
      (mismatch '(6 7 8 9) a :from-end t)
      (mismatch '(2 3 4 5) a :from-end t)))
   nil nil 4 5 4 0)
-     
+
+(deftest mismatch-vector.24
+  (let ((m (make-array '(6) :initial-contents '(1 2 3 4 5 6)
+		       :fill-pointer 4))
+	(a '(1 2 3 4 5)))
+    (list
+     (mismatch m a)
+     (mismatch m a :from-end t)
+     (setf (fill-pointer m) 5)
+     (mismatch m a)
+     (mismatch m a :from-end t)
+     (setf (fill-pointer m) 6)
+     (mismatch m a)
+     (mismatch m a :from-end t)))
+  (4 4 5 nil nil 6 5 6))     
 
 ;;; tests on bit vectors
 
@@ -349,6 +363,35 @@
 (deftest mismatch-bit-vector.22
   (mismatch #*1111111 '(2 3 3) :from-end t :key 'evenp)
   5)
+
+(deftest mismatch-bit-vector.23
+  (let ((a (make-array '(9) :initial-contents (coerce #*001011000 'list)
+		       :fill-pointer 5
+		       :element-type 'bit)))
+    (values
+     (mismatch #*00101 a)
+     (mismatch #*00101 a :from-end t)
+     (mismatch #*0010 a)
+     (mismatch #*001011 a)
+     (mismatch #*1000 a :from-end t)
+     (mismatch #*0010 a :from-end t)))
+  nil nil 4 5 4 4)
+
+(deftest mismatch-bit-vector.24
+  (let ((m (make-array '(6) :initial-contents (coerce #*001011 'list)
+		       :fill-pointer 4
+		       :element-type 'bit))
+	(a #*00101))
+    (list
+     (mismatch m a)
+     (mismatch m a :from-end t)
+     (setf (fill-pointer m) 5)
+     (mismatch m a)
+     (mismatch m a :from-end t)
+     (setf (fill-pointer m) 6)
+     (mismatch m a)
+     (mismatch m a :from-end t)))
+  (4 4 5 nil nil 6 5 5))
 
 ;;; tests on strings
 
@@ -524,3 +567,32 @@
 (deftest mismatch-string.22
   (mismatch "1111111" "233" :from-end t :key 'evendigitp)
   5)
+
+(deftest mismatch-string.23
+  (let ((a (make-array '(9) :initial-contents (coerce "123456789" 'list)
+		       :fill-pointer 5
+		       :element-type 'character)))
+    (values
+     (mismatch "12345" a)
+     (mismatch "12345" a :from-end t)
+     (mismatch "1234" a)
+     (mismatch "123456" a)
+     (mismatch "6789" a :from-end t)
+     (mismatch "2345" a :from-end t)))
+  nil nil 4 5 4 0)
+
+(deftest mismatch-string.24
+  (let ((m (make-array '(6) :initial-contents (coerce "123456" 'list)
+		       :fill-pointer 4
+		       :element-type 'character))
+	(a "12345"))
+    (list
+     (mismatch m a)
+     (mismatch m a :from-end t)
+     (setf (fill-pointer m) 5)
+     (mismatch m a)
+     (mismatch m a :from-end t)
+     (setf (fill-pointer m) 6)
+     (mismatch m a)
+     (mismatch m a :from-end t)))
+  (4 4 5 nil nil 6 5 6))
