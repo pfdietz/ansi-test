@@ -206,5 +206,19 @@
     (long-float long-float-negative-epsilon)
     (rational 0)))
 
+;;; Compute the number of digits that can be added to 1.0 in the appropriate
+;;; float type, a rational representation of the smallest radix^(-k) s.t.
+;;; 1.0 + radix^(-k) /= 1.0, and the float representation of that value.
+;;; Note that this will in general be > <float-type>-epsilon.
 
-
+(defun find-epsilon (x)
+  (assert (floatp x))
+  (let* ((one (float 1 x))
+	 (radix (float-radix one))
+	 (eps (/ 1 radix)))
+    (loop
+     for next-eps = (/ eps radix)
+     for i from 1
+     until (eql one (+ one next-eps))
+     do (setq eps next-eps)
+     finally (return (values i eps (float eps one))))))

@@ -21,4 +21,8 @@
 (load "round.lsp")
 (load "fround.lsp")
 
+;;; trancdental functions go here
+
+(load "times.lsp")
+
 (load "epsilons.lsp")
