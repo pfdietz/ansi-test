@@ -4863,5 +4863,49 @@ Broken at C::WT-C-INLINE-LOC.
    1)
   0)
 
+;;; sbcl (0.8.8.23.stack.1)
+;;; failed AVER: "(TAILP BLOCK2-STACK BLOCK1-STACK)"
+
+(deftest misc.290
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare
+	(optimize (speed 3) (space 3) (safety 1)
+		  (debug 2) (compilation-speed 0)))
+       (apply (constantly 0) (catch 'ct2 0) 0 (catch 'ct2 0) nil))))
+  0)
+
+(deftest misc.290a
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 2) (space 1) (safety 0)
+                          (debug 0) (compilation-speed 0)))
+       (boole boole-nor
+              (expt
+               (let ((v2 (expt (catch 'ct7 0) 0)))
+                 0)
+               0)
+              (expt (apply (constantly 0) 0 0 (catch 'ct6 0) nil) 0)))))
+  -2)
+
+;; Allegro CL 6.2 (14 Mar 2004) interpreter bug
+;; Error: Cannot go to TAG, its body has been exited.
+
+(deftest misc.291
+  (funcall 
+   #'(lambda (a)
+       (declare (notinline numerator))
+       (declare (optimize (speed 2) (space 3) (safety 2) (debug 0)
+			  (compilation-speed 2)))
+       (tagbody (tagbody (progn a) tag)
+		(go tag)
+		tag))
+   17)
+  nil)
+
 
 
