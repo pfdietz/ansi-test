@@ -6802,3 +6802,13 @@ Broken at C::WT-C-INLINE-LOC.
 	 (elt '(30 101 13 2 10 52 89 57) (min 7 (max 0 a))))))
    -3647332298473)
   57)
+
+;;; "full call to SB-KERNEL:DATA-VECTOR-REF"
+(deftest misc.364
+  (dotimes (iv1 2 0)
+	   (if (> iv1 iv1)
+                 (svref #(2002 3778 1998 3466 530 3279 2033 521 4085)
+                        (min 8 (max 0 iv1)))
+                 0))
+  0)
+
