@@ -26,6 +26,12 @@ random-test:
 		   :if-does-not-exist :create) \
 		  (mapc #'print x)) \
 		#-allegro (quit) #+allegro (excl::exit)))" | $(LISP)
+	rm -f gazonk*
 
 clean:
-	rm -f test.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.fas *.lib \#*\#; rm -rf scratch/; rm -f foo.txt foo.lsp file-that-was-renamed.txt tmp.dat temp.dat
+	@rm -f test.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.fas *.lib \#*\#
+	@rm -rf scratch/
+	@rm -f foo.txt foo.lsp file-that-was-renamed.txt tmp.dat temp.dat
+	@rm -f gazonk*
+	@rm -rf TMP/
+
