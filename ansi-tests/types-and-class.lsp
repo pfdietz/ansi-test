@@ -173,6 +173,17 @@
 	collect (list e types))
   nil)
 
+;;; Union of a type with its complement is universal
+
+(deftest type-or-not-type-is-everything
+  (loop for l in *disjoint-types-list2*
+	append
+	(loop
+	 for type in l
+	 append (check-subtypep t `(or ,type (not ,type)) t)
+	 append (check-subtypep t `(or (not ,type) ,type) t)))
+  nil)
+
 
 (deftest integer-and-ratio-are-disjoint
   (classes-are-disjoint 'integer 'ratio)
@@ -267,7 +278,6 @@
 		    (typep fun 'standard-generic-function))
 	collect (list sym fun))
   nil)
-
 
 ;;; Canonical metaobjects are in the right classes
 

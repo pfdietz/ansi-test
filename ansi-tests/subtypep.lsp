@@ -102,6 +102,18 @@
   (subtypep* 'simple-bit-vector 'simple-vector)
   nil t)
 
+(deftest subtypep.extended-char.1
+  (if (subtypep* 'character 'base-char)
+      (subtypep* 'extended-char nil)
+    (values t t))
+  t t)
+
+(deftest subtypep.bignum.1
+  (if (subtypep* 'integer 'fixnum)
+      (subtypep* 'bignum nil)
+    (values t t))
+  t t)
+
 ;;; SUBTYPEP on CONS types
 
 (defvar *cons-types*

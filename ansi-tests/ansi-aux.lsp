@@ -622,7 +622,7 @@ the condition to go uncaught if it cannot be classified."
     (pathname logical-pathname (eql #p""))
     (stream broadcast-stream concatenated-stream echo-stream
 	    file-stream string-stream synonym-stream two-way-stream)
-    (number real complex float integer rational ratio
+    (number real complex float integer rational ratio fixnum
 	    bit (integer 0 100) (float 0.0 100.0) (integer 0 *)
 	    (rational 0 *) (mod 10)
 	    (eql 0)
