@@ -35,6 +35,13 @@
       (boundp 'x)))
   nil)
 
+(deftest progv.6a
+  (let ((x 0))
+    (declare (special x))
+    (progv '(x) () (setq x 1))
+    x)
+  0)
+
 (deftest progv.7
   (progv '(x y z) '(1 2 3)
     (locally (declare (special x y z))
