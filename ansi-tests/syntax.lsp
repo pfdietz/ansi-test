@@ -675,6 +675,268 @@
   (read-from-string "#c (1 1)")
   #.(complex 1 1) 8)
 
+(def-syntax-test syntax.sharp-c.6
+  (loop for format in '(short-float single-float double-float long-float)
+	for c = (let ((*read-default-float-format* format))
+		  (read-from-string "#c(1.0 0.0)"))
+	unless (eql c (complex (coerce 1 format)
+			       (coerce 0 format)))
+	collect (list format c))
+  nil)
+
+(def-syntax-test syntax.sharp-c.7
+  (loop for format in '(short-float single-float double-float long-float)
+	for c = (let ((*read-default-float-format* format))
+		  (read-from-string "#C(0.0 1.0)"))
+	unless (eql c (complex (coerce 0 format)
+			       (coerce 1 format)))
+	collect (list format c))
+  nil)
+
+;;; Tests of #a
+
+(defmacro def-syntax-array-test (name form expected-result)
+  `(def-syntax-test ,name
+     (let ((v (read-from-string ,form)))
+       (assert (typep v 'simple-array))
+       (assert (not (array-has-fill-pointer-p v)))
+       (assert (eql (array-element-type v)
+		    (upgraded-array-element-type t)))
+       v)
+     ,(eval expected-result)))
+
+(def-syntax-array-test syntax.sharp-a.1
+  "#0anil"
+  (make-array nil :initial-element nil))
+
+(def-syntax-array-test syntax.sharp-a.2
+  "#0a1"
+  (make-array nil :initial-element 1))
+
+(def-syntax-array-test syntax.sharp-a.3
+  "#1a(1 2 3 5)"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.4
+  "#1a\"abcd\""
+  (make-array '(4) :initial-contents '(#\a #\b #\c #\d)))
+
+(def-syntax-array-test syntax.sharp-a.5
+  "#1a#1a(:a :b :c)"
+  (make-array '(3) :initial-contents '(:a :b :c)))
+
+(def-syntax-array-test syntax.sharp-a.6
+  "#1a#.(coerce \"abcd\" 'simple-base-string)"
+  (make-array '(4) :initial-contents '(#\a #\b #\c #\d)))
+
+(def-syntax-array-test syntax.sharp-a.7
+  "#1a#*000110"
+  (make-array '(6) :initial-contents '(0 0 0 1 1 0)))
+
+(def-syntax-array-test syntax.sharp-a.8
+  "#1a#.(make-array 4 :element-type '(unsigned-byte 8)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.9
+  "#1a#.(make-array 4 :element-type '(unsigned-byte 4)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.10
+  "#1a#.(make-array 4 :element-type '(signed-byte 4)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.11
+  "#1a#.(make-array 4 :element-type '(signed-byte 8)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.12
+  "#1a#.(make-array 4 :element-type '(unsigned-byte 16)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.13
+  "#1a#.(make-array 4 :element-type '(signed-byte 16)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.14
+  "#1a#.(make-array 4 :element-type '(unsigned-byte 32)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.15
+  "#1a#.(make-array 4 :element-type '(signed-byte 32)
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.16
+  "#1a#.(make-array 4 :element-type 'fixnum
+                      :initial-contents '(1 2 3 5))"
+  (make-array '(4) :initial-contents '(1 2 3 5)))
+
+(def-syntax-array-test syntax.sharp-a.17
+  "#1anil"
+  (make-array '(0)))
+
+(def-syntax-array-test syntax.sharp-a.18
+  "#2anil"
+  (make-array '(0 0)))
+
+(def-syntax-array-test syntax.sharp-a.19
+  "#2a((2))"
+  (make-array '(1 1) :initial-element 2))
+
+(def-syntax-array-test syntax.sharp-a.20
+  "#2a((1 2 3)(4 5 6))"
+  (make-array '(2 3) :initial-contents #(#(1 2 3) #(4 5 6))))
+
+(def-syntax-array-test syntax.sharp-a.21
+  "#2a#(#(1 2 3)#(4 5 6))"
+  (make-array '(2 3) :initial-contents '((1 2 3) (4 5 6))))
+
+(def-syntax-array-test syntax.sharp-a.22
+  "#2a\"\""
+  (make-array '(0 0)))
+
+(def-syntax-array-test syntax.sharp-a.23
+  "#2a#*"
+  (make-array '(0 0)))
+
+(def-syntax-array-test syntax.sharp-a.24
+  "#1a#.(make-array '(10) :fill-pointer 5 :initial-element 17)"
+  (make-array '(5) :initial-contents '(17 17 17 17 17)))
+
+(def-syntax-array-test syntax.sharp-a.25
+  "#1a#.(make-array '(5) :adjustable t :initial-element 17)"
+  (make-array '(5) :initial-contents '(17 17 17 17 17)))
+
+(def-syntax-array-test syntax.sharp-a.26
+  "#1A#.(let ((x (make-array '(10) :adjustable t
+                      :initial-contents '(1 2 3 4 5 6 7 8 9 10))))
+           (make-array '(5) :displaced-to x :displaced-index-offset 2))"
+  (make-array '(5) :initial-contents '(3 4 5 6 7)))
+
+;;; Tests of #S
+
+(defstruct syntax-test-struct-1
+  a b c)
+
+(def-syntax-test syntax.sharp-s.1
+  (let ((v (read-from-string "#s(syntax-test-struct-1)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t nil nil nil)
+
+(def-syntax-test syntax.sharp-s.2
+  (let ((v (read-from-string "#S(syntax-test-struct-1 :a x :c y :b z)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x z y)
+
+(def-syntax-test syntax.sharp-s.3
+  (let ((v (read-from-string "#s(syntax-test-struct-1 \"A\" x)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x nil nil)
+
+(def-syntax-test syntax.sharp-s.4
+  (let ((v (read-from-string "#S(syntax-test-struct-1 #\\A x)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x nil nil)
+
+(def-syntax-test syntax.sharp-s.5
+  (let ((v (read-from-string "#s(syntax-test-struct-1 :a x :a y)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x nil nil)
+
+(def-syntax-test syntax.sharp-s.6
+  (let ((v (read-from-string "#S(syntax-test-struct-1 :a x :allow-other-keys 1)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x nil nil)
+
+(def-syntax-test syntax.sharp-s.7
+  (let ((v (read-from-string "#s(syntax-test-struct-1 :b z :allow-other-keys nil)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t nil z nil)
+
+
+(def-syntax-test syntax.sharp-s.8
+  (let ((v (read-from-string "#S(syntax-test-struct-1 :b z :allow-other-keys t :a x :foo bar)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x z nil)
+
+(def-syntax-test syntax.sharp-s.9
+  (let ((v (read-from-string "#s(syntax-test-struct-1 a x c y b z :a :bad :b bad2 :c bad3)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x z y)
+
+(def-syntax-test syntax.sharp-s.10
+  (let ((v (read-from-string "#S(syntax-test-struct-1 #:a x #:c y #:b z)")))
+    (values
+     (notnot (typep v 'syntax-test-struct-1))
+     (syntax-test-struct-1-a v)
+     (syntax-test-struct-1-b v)
+     (syntax-test-struct-1-c v)))
+  t x z y)
+
+;; (Put more tests of this in the structure tests)
+
+;;; Tests of #P
+
+(def-syntax-test syntax.sharp-p.1
+  (read-from-string "#p\"\"")
+  #.(parse-namestring "") 4)
+
+(def-syntax-test syntax.sharp-p.2
+  (read-from-string "#P\"syntax.lsp\"")
+  #.(parse-namestring "syntax.lsp") 14)
+
+(def-syntax-test syntax.sharp-p.3
+  (read-from-string "#P \"syntax.lsp\"")
+  #.(parse-namestring "syntax.lsp") 15)
+
+(def-syntax-test syntax.sharp-p.4
+  (let ((*read-eval* nil))
+    (read-from-string "#p\"syntax.lsp\""))
+  #.(parse-namestring "syntax.lsp") 14)
+
 
 ;;;; Various error cases
 
@@ -700,7 +962,3 @@
 (def-syntax-test syntax.sharp-close-paren.1
   (signals-error (read-from-string "#)" nil nil) reader-error)
   t)
-
-
-
-	  
