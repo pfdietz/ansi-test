@@ -23,11 +23,21 @@
   good)
 
 (deftest invoke-debugger.error.1
-  (classify-error (invoke-debugger))
+  (classify-error
+   (block done
+     (let ((*debugger-hook* #'(lambda (&rest args)
+				(declare (ignore args))
+				(return-from done 'bad))))
+       (invoke-debugger))))
   program-error)
 
 (deftest invoke-debugger.error.2
-  (classify-error (invoke-debugger (make-condition 'simple-error) nil))
+  (classify-error
+   (block done
+     (let ((*debugger-hook* #'(lambda (&rest args)
+				(declare (ignore args))
+				(return-from done 'bad))))
+       (invoke-debugger (make-condition 'simple-error) nil))))
   program-error)
 
 ;;; If the debugger hook function expects the wrong number
