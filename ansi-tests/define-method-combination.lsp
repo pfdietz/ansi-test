@@ -5,9 +5,19 @@
 
 (in-package :cl-test)
 
-(define-method-combination times
-  :documentation "Multiplicative method combination, version 1"
-  :operator *)
+(defclass dmc-class-01a () ())
+(defclass dmc-class-01b (dmc-class-01a) ())
+(defclass dmc-class-01c (dmc-class-01a) ())
+(defclass dmc-class-01d (dmc-class-01b dmc-class-01c) ())
+(defclass dmc-class-01e (dmc-class-01c dmc-class-01b) ())
+(defclass dmc-class-01f (dmc-class-01d) ())
+(defclass dmc-class-01g (dmc-class-01a) ())
+(defclass dmc-class-01h (dmc-class-01f dmc-class-01g) ())
+
+(defvar *dmc-times*
+  (define-method-combination times
+    :documentation "Multiplicative method combination, version 1"
+    :operator *))
 
 (defgeneric dmc-gf-01 (x) (:method-combination times))
 
@@ -31,6 +41,10 @@
 		   (dmc-gf-01 'x)))
    (error () :good))
   :good)
+
+(deftest define-method-combination-01.3
+  *dmc-times*
+  times)
 
 (defgeneric dmc-gf-02 (x) (:method-combination times))
 
@@ -56,7 +70,10 @@
    (progn
      (eval '(defmethod dmc-gf-03 ((x integer)) t))
      :bad)
-   (error () :good))
+   (error ()
+	  (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list 1)))
+	    (remove-method #'dmc-gf-03 meth))
+	  :good))
   :good)
 
 (deftest define-method-combination-03.2
@@ -64,7 +81,10 @@
    (progn
      (eval '(defmethod dmc-gf-03 :before ((x cons)) t))
      :bad)
-   (error () :good))
+   (error ()
+     (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list '(a))))
+       (remove-method #'dmc-gf-03 meth))
+     :good))
   :good)
 
 (deftest define-method-combination-03.3
@@ -72,16 +92,31 @@
    (progn
      (eval '(defmethod dmc-gf-03 :after ((x symbol)) t))
      :bad)
-   (error () :good))
+   (error ()
+     (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list 'a)))
+       (remove-method #'dmc-gf-03 meth))
+     :good))
   :good)
 
+(define-method-combination times2
+  :operator *
+  :identity-with-one-argument t)
 
+(defgeneric dmc-gf-04 (x) (:method-combination times2))
 
+(defmethod dmc-gf-04 times2 ((x dmc-class-01b)) 2)
+(defmethod dmc-gf-04 times2 ((x dmc-class-01c)) 3)
+(defmethod dmc-gf-04 times2 ((x dmc-class-01d)) 5)
+(defmethod dmc-gf-04 times2 ((x symbol)) nil)
 
+(deftest define-method-combination-04.1
+  (dmc-gf-04 (make-instance 'dmc-class-01h))
+  30)
 
+(deftest define-method-combination-04.2
+  (dmc-gf-04 (make-instance 'dmc-class-01e))
+  6)
 
-
-
-
-  
-
+(deftest define-method-combination-04.3
+  (dmc-gf-04 'a)
+  nil)
