@@ -29,7 +29,7 @@
 
 ;;; Tests of packages
 
-#-ecl (load "packages.lsp")
+(load "packages.lsp")
 
 ;;; Tests of sequences
 (load "load-sequences.lsp")

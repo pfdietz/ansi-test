@@ -1267,8 +1267,8 @@ the condition to go uncaught if it cannot be classified."
 
 (defmacro defstruct* (&body args)
   `(eval-when (load eval compile)
-     (ignore-errors
-       (defstruct ,@args))))
+     (handler-case (eval '(defstruct ,@args))
+		   (serious-condition () nil))))
 
 
 (defun sort-package-list (x)
