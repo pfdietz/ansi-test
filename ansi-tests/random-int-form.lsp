@@ -37,7 +37,8 @@
 
 (defvar *random-int-form-blocks* nil)
 
-(defun test-random-integer-forms (size nvars n)
+(defun test-random-integer-forms
+  (size nvars n &optional (*random-state* (make-random-state t)))
 
   "Generate random integer forms of size SIZE with NVARS variables.
    Do this N times, returning all those on which a discrepancy
@@ -97,15 +98,19 @@
 	  (y (%r)))
       (list (min x y) (max x y)))))
 
+(defparameter *flet-names* nil)
+
 (defun make-random-integer-form (size vars)
   "Generate a random legal lisp form of size SIZE (roughly).  VARS
    is a list of variable symbols that contain integers."
   (if (<= size 1)
-      ;; Leaf node -- generate a variable or constant
-      (if (= (random 2) 0)
-	  (let ((r (ash 1 (1+ (random 32)))))
-	    (- (random r) (floor (/ r 2))))
-	(random-from-seq vars))
+      ;; Leaf node -- generate a variable, constant, or flet function call
+      (rcase
+       (10 (let ((r (ash 1 (1+ (random 32)))))
+	     (- (random r) (floor (/ r 2)))))
+       (9 (random-from-seq vars))
+       (1 (if *flet-names* (list (random-from-seq *flet-names*))
+	    (random-from-seq vars))))
     ;; (> size 1)
     (rcase
      ;; Unary ops
@@ -118,7 +123,8 @@
       (let* ((op (random-from-seq
 		  '(+ - * logand min max min max ;; gcd lcm
 		      #-:allegro logandc1  ;; bug in ACL 6.2 makes this cause crashes
-		      logandc2 logeqv logior lognand lognor logorc1
+		      logandc2 logeqv logior lognand lognor
+		      #-:allegro logorc1
 		      logorc2 logxor))))
 	(destructuring-bind (leftsize rightsize)
 	    (random-partition (1- size) 2)
@@ -176,8 +182,22 @@
 	      `(if ,pred (return-from ,name ,then) ,else)))
 	;; No blocks -- try again
 	(make-random-integer-form size vars)))
+
+     (5 (make-random-flet-form size vars))
 		
      )))
+
+(defun make-random-flet-form (size vars)
+  "Generate random flet forms, for now with no arguments."
+  (let ((fname (random-from-seq #(%f1 %f2 %f3 %f4 %f5 %f6 %f7 %f8 %f9 %f10
+				  %f11 %f12 %f13 %f14 %f15 %f16 %f17 %f18))))
+    (if (member fname *flet-names* :test #'eq)
+	(make-random-integer-form size vars)
+      (destructuring-bind (s1 s2) (random-partition (max 2 (1- size)) 2)
+	(let ((form1 (make-random-integer-form s1 vars))
+	      (form2 (let ((*flet-names* (cons fname *flet-names*)))
+		       (make-random-integer-form s2 vars))))
+	  `(flet ((,fname () ,form1)) ,form2))))))  
 
 (defun make-random-pred-form (size vars)
   (if (<= size 1)
@@ -324,6 +344,7 @@
 ;;; The return value of PRUNE should be ignored.
 ;;;
 (defun prune (form try-fn)
+  (declare (function try-fn))
   (flet ((try (x) (funcall try-fn x)))
     (when (consp form)
       (let ((op (car form))
@@ -342,7 +363,8 @@
 	  (mapc #'try args)
 	  (prune-fn form try-fn))
 	 
-	 ((- + * min max logand logior logxor logeqv and or not eq eql equal = < > <= >= /=)
+	 ((- + * min max logand logior logxor logeqv
+	     and or not eq eql equal = < > <= >= /=)
 	  (when (every #'constantp args)
 	    (try (eval form)))
 	  (mapc #'try args)
@@ -378,12 +400,27 @@
 	  (let ((name (second form))
 		(body (cddr form)))
 	    (when (and body (null (cdr body)))
-	      (when (not (find-in-tree name body))
-		(try (first body)))
-	      ;; Simplify the subexpression
-	      (prune (first body)
-		     #'(lambda (x)
-			 (try `(block ,name ,x)))))))
+	      (let ((form1 (first body)))
+
+		;; Try removing the block entirely if it is not in use
+		(when (not (find-in-tree name body))
+		  (try form1))
+		
+		;; Try removing the block if its only use is an immediately
+		;; enclosed return-from: (block <n> (return-from <n> <e>))
+		(when (and (consp form1)
+			   (eq (first form1) 'return-from)
+			   (eq (second form1) name)
+			   (not (find-in-tree name (third form1))))
+		  (try (third form1)))
+		
+		;; Otherwise, try to simplify the subexpression
+		(prune form1
+		       #'(lambda (x)
+			   (try `(block ,name ,x))))))))
+
+	 ((flet labels)
+	  (prune-flet form try-fn))
 	 
 	 (otherwise
 	  (prune-fn form try-fn))
@@ -396,9 +433,10 @@
 	       (find-in-tree value (cdr tree))))))
 
 (defun prune-fn (form try-fn)
+  (declare (function try-fn))
   (let* ((i 0)
-	 (op (car form))
-	 (args (cdr form))
+	 (op (first form))
+	 (args (rest form))
 	 (len (length args)))
     (flet ((try-arg (x)
 		    (funcall
@@ -413,40 +451,92 @@
 	       (incf i)))))
 
 (defun prune-let (form try-fn)
+  (declare (function try-fn))
   (let* ((op (car form))
 	 (binding-list (cadr form))
 	 (body (cddr form))
 	 (body-len (length body))
 	 (len (length binding-list)))
+
+    ;; Try to simplify (let ((<name> <form>)) <name>) to <form>
     (when (and (eql len 1)
 	       (eql body-len 1)
 	       (eql (caar binding-list) (car body)))
       (funcall try-fn (cadar binding-list)))
+
+    ;; Try to simplify the forms in the RHS of the bindings
     (let ((i 0))
-      (flet ((try-binding (x)
+      (flet ((try-binding (name form)
 			  (funcall
 			   try-fn
 			   `(,op
 			     (,@(subseq binding-list 0 i)
-				,x
+				(,name ,form)
 				,@(subseq binding-list (1+ i)))
 			     ,@body))))
 	(declare (dynamic-extent (function try-binding)))
-	(loop while (< i len)
-	      do (prune (elt binding-list i) #'try-binding)
+	(loop for binding in binding-list
+	      while (< i len)
+	      do (prune (second binding)
+			#'(lambda (form)
+			    (try-binding (first binding) form))) 
 	      (incf i))))
+
+    ;; Try to simplify the body of the LET form
     (when body
       (unless binding-list
 	(funcall try-fn (car (last body))))
-      (when (and (car binding-list)
-		 (not (cdr binding-list))
-		 (not (cdr body)))
-	(let ((binding (car binding-list)))
+      (when (and (first binding-list)
+		 (not (rest binding-list))
+		 (not (rest body)))
+	(let ((binding (first binding-list)))
 	  (unless (consp (second binding))
 	    (funcall try-fn `(let ()
-			       ,@(subst (cadr binding) (car binding) body))))))
+			       ,@(subst (second binding)
+					(first binding) body))))))
       (prune (car (last body))
 	     #'(lambda (form2)
 		 (funcall try-fn
 			  `(,@(butlast form) ,form2)))))))
+
+(defun prune-flet (form try-fn)
+  (declare (function try-fn))
+  (let* ((op (car form))
+	 (binding-list (cadr form))
+	 (body (cddr form))
+	 (len (length binding-list)))
+    
+    ;; Try to simplify the forms in the RHS of the bindings
+    (let ((i 0))
+      (flet ((try-binding (name args form)
+			  (funcall
+			   try-fn
+			   `(,op
+			     (,@(subseq binding-list 0 i)
+				(,name ,args ,form)
+				,@(subseq binding-list (1+ i)))
+			     ,@body))))
+	(declare (dynamic-extent (function try-binding)))
+	(loop for binding in binding-list
+	      while (< i len)
+	      do (when (null (cdddr binding))
+		   (prune (third binding)
+			  #'(lambda (form)
+			      (try-binding (first binding)
+					   (second binding)
+					   form))))
+	      (incf i))))
+
+    ;; ;; Try to simplify the body of the FLET form
+    (when body
+      ;; No bindings -- try to simplify to the last form in the body
+      (unless binding-list
+	(funcall try-fn (car (last body))))
+
+      (prune (car (last body))
+	     #'(lambda (form2)
+		 (funcall try-fn
+			  `(,@(butlast form) ,form2)))))))
+
+  
 
