@@ -71,6 +71,15 @@
 	      (upgraded-array-element-type 'bit env))))
     (%foo))
   t)
+
+;;; Tests of upgrading NIL (it should be type equivalent to NIL)
+
+(deftest upgraded-array-element-type.nil.1
+  (let ((uaet-nil (upgraded-array-element-type nil)))
+    (loop for e in *universe*
+	  when (typep e uaet-nil)
+	  collect e))
+  nil)
 		   
     
 ;;; Error tests
@@ -82,7 +91,3 @@
 (deftest upgraded-array-element-type.error.2
   (classify-error (upgraded-array-element-type 'bit nil nil))
   program-error)
-
-	    
-	    
-
