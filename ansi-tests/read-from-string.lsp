@@ -68,7 +68,7 @@
        (assert (equal vals '(7123 4))))))
   nil)
 
-(deftest read-from-string.7
+(deftest read-from-string.8
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s "7123")
@@ -77,7 +77,7 @@
        (assert (equal vals '(foo 2))))))
   nil)
 
-(deftest read-from-string.8
+(deftest read-from-string.9
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s "123  ")
@@ -86,7 +86,7 @@
        (assert (equal vals '(123 3))))))
   nil)
 
-(deftest read-from-string.9
+(deftest read-from-string.10
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s (concatenate 'string "( )" (string #\Newline)))
@@ -97,7 +97,7 @@
 
 ;;; Multiple keywords
 
-(deftest read-from-string.10
+(deftest read-from-string.11
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s "7123  ")
@@ -106,7 +106,7 @@
        (assert (equal vals '(123 5))))))
   nil)
 
-(deftest read-from-string.11
+(deftest read-from-string.12
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s "7123  ")
@@ -115,7 +115,7 @@
        (assert (equal vals '(7123 4))))))
   nil)
 
-(deftest read-from-string.12
+(deftest read-from-string.13
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s (concatenate 'string "( )" (string #\Newline)))
@@ -127,7 +127,7 @@
 
 ;;; Allow other keys
 
-(deftest read-from-string.13
+(deftest read-from-string.14
   (with-standard-io-syntax
    (let ((*package* (find-package :cl-test)))
      (do-special-strings
@@ -137,7 +137,7 @@
 	(assert (equal vals '(|ABC| 4)) (vals) "VALS is ~A" vals)))))
   nil)
 
-(deftest read-from-string.14
+(deftest read-from-string.15
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s "123   ")
@@ -146,7 +146,7 @@
        (assert (equal vals '(123 4)) (vals) "VALS is ~A" vals))))
   nil)
 
-(deftest read-from-string.15
+(deftest read-from-string.16
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s "123   ")
@@ -158,7 +158,7 @@
 
 ;;; default for :end
 
-(deftest read-from-string.16
+(deftest read-from-string.17
   (let ((*package* (find-package :cl-test)))
     (do-special-strings
      (s "XYZ   ")

@@ -369,35 +369,35 @@
 (def-syntax-bit-vector-test syntax.sharp-asterisk.5
   "#2*1" 1 1)
 
-(def-syntax-bit-vector-test syntax.sharp-asterisk.5
+(def-syntax-bit-vector-test syntax.sharp-asterisk.6
   "#2*0" 0 0)
 
-(def-syntax-bit-vector-test syntax.sharp-asterisk.6
+(def-syntax-bit-vector-test syntax.sharp-asterisk.7
   "#5*010" 0 1 0 0 0)
 
-(def-syntax-bit-vector-test syntax.sharp-asterisk.7
+(def-syntax-bit-vector-test syntax.sharp-asterisk.8
   "#7*0101" 0 1 0 1 1 1 1)
 
-(def-syntax-bit-vector-test syntax.sharp-asterisk.8
+(def-syntax-bit-vector-test syntax.sharp-asterisk.9
   "#10*01010" 0 1 0 1 0 0 0 0 0 0)
 
-(def-syntax-test syntax.sharp-asterisk.9
+(def-syntax-test syntax.sharp-asterisk.10
   (let ((*read-base* 3))
     (read-from-string "#10*01"))
   #*0111111111
   6)
 
-(def-syntax-test syntax.sharp-asterisk.10
+(def-syntax-test syntax.sharp-asterisk.11
   (let ((*read-suppress* t))
     (values (read-from-string "#1* ")))
   nil)
 
-(def-syntax-test syntax.sharp-asterisk.11
+(def-syntax-test syntax.sharp-asterisk.12
   (let ((*read-suppress* t))
     (values (read-from-string "#1*00")))
   nil)
 
-(def-syntax-test syntax.sharp-asterisk.12
+(def-syntax-test syntax.sharp-asterisk.13
   (let ((*read-suppress* t))
     (values (read-from-string "#*012")))
   nil)
@@ -489,11 +489,11 @@
   (read-from-string "#B-0/10")
   0 7)
 
-(def-syntax-test syntax.sharp-b.8
+(def-syntax-test syntax.sharp-b.9
   (read-from-string "#b0/111")
   0 7)
 
-(def-syntax-test syntax.sharp-b.9
+(def-syntax-test syntax.sharp-b.10
   (let ((*read-eval* nil))
     (read-from-string "#b-10/11"))
   -2/3 8)
@@ -609,7 +609,7 @@
 (def-syntax-test syntax.sharp-r.1
   (loop for i = (random (ash 1 (+ 2 (random 32))))
 	for base = (+ 2 (random 35))
-	for s = (let ((*print-base* base)) (write-to-string i))
+	for s = (write-to-string i :radix nil :base base :readably nil)
 	for c = (random-from-seq "rR")
 	for s2 = (format nil "#~d~c~a" base c s)
 	for s3 = (rcase (1 (string-upcase s2))

@@ -14,5 +14,7 @@
 (load "read-from-string.lsp")
 (load "readtable-case.lsp")
 (load "readtablep.lsp")
+(load "get-macro-character.lsp")
+(load "set-macro-character.lsp")
 
 (load "syntax.lsp")

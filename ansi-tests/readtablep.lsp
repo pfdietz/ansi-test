@@ -6,17 +6,44 @@
 (in-package :cl-test)
 
 (deftest readtablep.1
-  (notnot-mv (readtablep *readtable*))
+    (and (not (readtablep nil))
+	 (not (readtablep 'a))
+	 (not (readtablep 0))
+	 (not (readtablep 1/2))
+	 (not (readtablep 1.2))
+	 (not (readtablep 1.2s2))
+	 (not (readtablep 1.2f3))
+	 (not (readtablep 1.2e2))
+	 (not (readtablep 1.2d2))
+	 (not (readtablep (list 'a)))
+	 (not (readtablep "abcde"))
+	 (not (readtablep t))
+	 (not (readtablep '*readtable*))
+	 (not (readtablep (make-array '(10))))
+	 (not (readtablep (make-array '(10) :element-type 'fixnum)))
+	 (not (readtablep (make-array '(10) :element-type 'float)))
+	 (not (readtablep (make-array '(10) :element-type 'double-float)))
+	 (not (readtablep (make-array '(10) :element-type 'string)))
+	 (not (readtablep (make-array '(10) :element-type 'character)))
+	 (not (readtablep (make-array '(10) :element-type 'bit)))
+	 (not (readtablep (make-array '(10) :element-type 'boolean)))
+	 (not (not (readtablep (copy-readtable))))
+	 (not (readtablep #'car))
+	 )
   t)
 
 (deftest readtablep.2
   (loop for x in *universe*
-	unless (if (readtablep x) (typep x 'readtable)
-		 (not (typep x 'readtable)))
+	unless (if (typep x 'readtable) (readtablep x)
+		 (not (readtablep x)))
 	collect x)
   nil)
 
 (deftest readtablep.3
+  (notnot-mv (readtablep *readtable*))
+  t)
+
+(deftest readtablep.4
   (notnot-mv (readtablep (copy-readtable)))
   t)
 
@@ -33,6 +60,3 @@
 (deftest readtablep.error.3
   (signals-error (readtablep *readtable* nil t t t t) program-error)
   t)
-
-
-

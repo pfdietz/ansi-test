@@ -5,51 +5,6 @@
 
 (in-package :cl-test)
 
-(deftest readtable-valid (not (readtablep *readtable*)) nil)
-(deftest readtablep.1
-    (and (not (readtablep nil))
-	 (not (readtablep 'a))
-	 (not (readtablep 0))
-	 (not (readtablep 1/2))
-	 (not (readtablep 1.2))
-	 (not (readtablep 1.2s2))
-	 (not (readtablep 1.2f3))
-	 (not (readtablep 1.2e2))
-	 (not (readtablep 1.2d2))
-	 (not (readtablep (list 'a)))
-	 (not (readtablep "abcde"))
-	 (not (readtablep t))
-	 (not (readtablep '*readtable*))
-	 (not (readtablep (make-array '(10))))
-	 (not (readtablep (make-array '(10) :element-type 'fixnum)))
-	 (not (readtablep (make-array '(10) :element-type 'float)))
-	 (not (readtablep (make-array '(10) :element-type 'double-float)))
-	 (not (readtablep (make-array '(10) :element-type 'string)))
-	 (not (readtablep (make-array '(10) :element-type 'character)))
-	 (not (readtablep (make-array '(10) :element-type 'bit)))
-	 (not (readtablep (make-array '(10) :element-type 'boolean)))
-	 (not (not (readtablep (copy-readtable))))
-	 (not (readtablep #'car))
-	 )
-  t)
-
-(deftest readtablep.2
-  (loop for x in *universe*
-	unless (if (typep x 'readtable) (readtablep x)
-		 (not (readtablep x)))
-	collect x)
-  nil)
-
-(deftest readtablep.error.1
-  (signals-error (readtablep) program-error)
-  t)
-
-(deftest readtablep.error.2
-  (signals-error (readtablep nil nil) program-error)
-  t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (deftest read-symbol.1
     (let ((*package* (find-package "CL-TEST")))
       (ignore-errors (read-from-string "a")))
