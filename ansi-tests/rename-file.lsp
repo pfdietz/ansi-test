@@ -111,6 +111,8 @@
 	(pn2 "CLTEST:file-that-was-renamed.txt"))
     (delete-all-versions pn1)
     (delete-all-versions pn2)
+    (assert (typep (pathname pn1) 'logical-pathname))
+    (assert (typep (pathname pn2) 'logical-pathname))
     (with-open-file (s pn1 :direction :output) (format s "Whatever~%"))
     (let ((results (multiple-value-list (rename-file pn1 pn2))))
       (destructuring-bind (defaulted-new-name old-truename new-truename)

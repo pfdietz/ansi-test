@@ -45,8 +45,10 @@
   "&")
 
 (deftest with-output-to-string.8
-  (with-output-to-string (s nil :element-type 'base-char)
-			 (write-char #\8 s))
+  (let ((str (with-output-to-string (s nil :element-type 'base-char)
+				    (write-char #\8 s))))
+    (assert (typep str 'simple-base-string))
+    str)
   "8")
 
 (deftest with-output-to-string.9
@@ -88,4 +90,20 @@
     (write-char #\9 s))
   "049")
 
+(deftest with-output-to-string.14
+  (let* ((str1 (make-array '(256) :element-type 'base-char :fill-pointer 0))
+	 (str2 (with-output-to-string
+		 (s nil :element-type 'base-char)
+		 (loop for i below 256
+		       for c = (code-char i)
+		       when (typep c 'base-char)
+		       do (write-char c s)
+		       do (vector-push c str1)))))
+    (if (string= str1 str2) :good
+      (list str1 str2)))
+  :good)
 
+
+    
+      
+				       
