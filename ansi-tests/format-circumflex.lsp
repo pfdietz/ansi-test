@@ -937,8 +937,55 @@
   (format nil "~AY~?X~A" 1 "~A~^~A~^~A" '(2 4) 3)
   "1Y24X3")
 
+(deftest format.^.?.4
+  (format nil "~A~?X~A" 1 "~{~^~A~}~AY~A" '((2 3) 4 5) 6)
+  "1234Y5X6")
+
 (deftest format.^.@?.1
   (format nil "~AY~@?X~A" 1 "~A~0^~A" 2 3 4)
   "1Y2X3")
 
+(deftest format.^.@?.2
+  (format nil "~A~@?X~A" 1 "~{~^~A~}~AY~A" '(2 3) 4 5 6)
+  "1234Y5X6")
 
+;;; ~^ in ~[
+
+(deftest format.^.\[.1
+  (format nil "~{~[X~;Y~;Z~;~0^~]~}" '(0 1 2 3 4))
+  "XYZ")
+
+(deftest format.^.\[.2
+  (format nil "~{~[X~;Y~;Z~:;~0^~]~}" '(1 0 2 8 9 10 0))
+  "YXZ")
+
+(deftest format.^.\[.3
+  (format nil "~{~[X~;Y~0^NO~;Z~;~^~]~}" '(0 1 2 3 4))
+  "XY")
+
+;;; ~^ in ~(
+
+(deftest format.^.\(.1
+  (format nil "~{~(~C~C~0^~C~)W~}" '(#\X #\Y #\Z #\A))
+  "xy")
+
+(deftest format.^.\:\(.1
+  (format nil "~{~:(~C~C~0^~C~)U~}" '(#\X #\Y #\Z #\A))
+  "Xy")
+
+(deftest format.^.@\(.1
+  (format nil "~{~@(~CA ~Cb ~0^~C~)V~}" '(#\x #\y #\Z #\A))
+  "Xa yb ")
+
+(deftest format.^.@\:\(.1
+  (format nil "~{~@:(~CA ~Cb ~0^~C~)W~}" '(#\x #\Y #\Z #\A))
+  "XA YB ")
+
+
+
+
+
+
+
+
+		   
