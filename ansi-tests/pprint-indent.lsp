@@ -40,6 +40,20 @@
 		       (pprint-indent :block 0.1 s))))
   nil)
 
+(deftest pprint-indent.6
+  (my-with-standard-io-syntax
+   (let ((*print-pretty* nil))
+     (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	   unless
+	   (equal
+	    (multiple-value-list
+	     (with-open-stream (s (make-string-output-stream))
+			       (pprint-indent :block x s)))
+	    '(nil))
+	   collect x)))
+  nil)
+
+
 
 
 
