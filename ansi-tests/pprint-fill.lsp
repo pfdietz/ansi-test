@@ -32,13 +32,14 @@
 		    (list (list obj s1 s2))))))))
   nil)
 
-(defmacro def-pprint-fill-test (name args expected-value &key (margin 100) (circle nil))
+(defmacro def-pprint-fill-test (name args expected-value &key (margin 100) (circle nil) (len nil))
   `(deftest ,name
      (my-with-standard-io-syntax
       (let ((*print-pretty* t)
 	    (*print-readably* nil)
 	    (*print-right-margin* ,margin)
 	    (*package* (find-package "CL-TEST"))
+	    (*print-length* ,len)
 	    (*print-circle* ,circle))
 	(with-output-to-string (s) (pprint-fill s ,@args))))
      ,expected-value))
@@ -131,7 +132,7 @@
   "(#1=(A) #1#)" :circle t)
 
 (def-pprint-fill-test pprint-fill.15 ((let ((x (list '|A|))) (setf (cdr x) x) x))
-  "#1=(A . #1#)" :circle t)
+  "#1=(A . #1#)" :circle t :len 500)
 
 
 ;;; Test that pprint-fill returns NIL
