@@ -10107,7 +10107,7 @@ Broken at C::WT-MAKE-CLOSURE.
     t))
   t)
 
-;;; IR2 type checking of unused values in not implemented. 
+;;; IR2 type checking of unused values in [sic] not implemented. 
 
 (deftest misc.549
   (funcall
@@ -10131,3 +10131,16 @@ Broken at C::WT-MAKE-CLOSURE.
        (or p1 (the (eql t) p2))))
    nil t)
   t)
+
+(deftest misc.551
+  (funcall
+   (compile
+    nil
+    '(lambda (p1 p2)
+       (declare (optimize (speed 1) (safety 1) (debug 3) (space 3))
+		(type symbol p1)
+		(type (integer * 55687) p2))
+       (funcall (the (eql +) p1) (the (integer -93015310 16215) p2) 2952)))
+   '+ 823)
+  3775)
+
