@@ -63,6 +63,29 @@
      (return 'good)))
   good)
 
+;;; Works with single values
+(deftest multiple-value-bind.9
+  (multiple-value-bind (x y z) :foo (list x y z))
+  (:foo nil nil))
+
+(deftest multiple-value-bind.10
+  (multiple-value-bind (x) :foo x)
+  :foo)
+
+(deftest multiple-value-bind.11
+  (multiple-value-bind () :foo)
+  nil)
+
+(deftest multiple-value-bind.12
+  (multiple-value-bind () (values))
+  nil)
+
+(deftest multiple-value-bind.13
+  (multiple-value-bind () (values 1 2 3 4 5))
+  nil)
+
+;;; Error cases
+
 (deftest multiple-value-bind.error.1
   (signals-error (funcall (macro-function 'multiple-value-bind))
 		 program-error)
