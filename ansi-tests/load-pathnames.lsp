@@ -23,6 +23,8 @@
 (load "logical-pathname-translations.lsp")
 (load "translate-logical-pathname.lsp")
 
+(load "namestring.lsp")
+
 (load "wild-pathname-p.lsp")
 (load "merge-pathnames.lsp")
 (load "pathname-match-p.lsp")
