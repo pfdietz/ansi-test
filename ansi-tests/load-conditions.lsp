@@ -12,5 +12,6 @@
 (load "ignore-errors.lsp")
 (compile-and-load "define-condition-aux.lsp")
 (load "define-condition.lsp")
+(load "compute-restarts.lsp")
 (load "restart-bind.lsp")
 (load "restart-case.lsp")
