@@ -7,7 +7,7 @@
 
 (deftest features.1
   (let ((f *features*))
-    (or (not (member :draft-ansi-ci f))
+    (or (not (member :draft-ansi-cl f))
 	(not (intersection '(:draft-ansi-cl-2 :ansi-cl) f))))
   t)
 
