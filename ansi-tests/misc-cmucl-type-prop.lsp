@@ -7,6 +7,7 @@
 
 ;;; All these are 'strange template failures'
 ;;; The comment before each is the NAME of the template in the backtrace
+;;; These tests seem to all have (space 2) (speed 3)
 
 ; X86::FAST-LOGAND-C/FIXNUM=>FIXNUM
 (deftest cmcul-type-prop.1
@@ -184,6 +185,7 @@
     'double-float))
   t)
 
+; X86::-/SINGLE-FLOAT
 (deftest cmcul-type-prop.15
   (notnot
    (typep
@@ -312,4 +314,45 @@
 				    (type (integer -93662 *) p2))
 			   (<= -1 (the (integer -2975848 16770677) p2))))
 	    -6548)
+  nil)
+
+; X86::FAST-+-C/FIXNUM=>FIXNUM
+; (simple example)
+(deftest cmucl-type-prop.28
+  (funcall (compile nil '(lambda (p1)
+			   (declare (optimize (speed 2) (safety 1) (debug 0) (space 3))
+				    (type (integer -65545 80818) p1))
+			   (1+ p1)))
+	   -1)
+  0)
+
+; X86::FAST-NEGATE/FIXNUM
+(deftest cmucl-type-prop.29
+  (funcall (compile nil '(lambda (p1)
+			   (declare (optimize (speed 2) (safety 1) (debug 0) (space 3))
+				    (type (integer -4194320 11531) p1))
+			   (- (the (integer -6253866924 34530147) p1))))
+	   -20)
+  20)
+
+;;; Bug in COPY-SEQ
+
+(deftest cmucl-type-prop.30
+  (let ((a (funcall
+	    (compile nil `(lambda ()
+			    (declare (optimize (speed 2) (safety 2) (debug 0) (space 2)))
+			    (copy-seq
+			     ,(make-array '(0) :adjustable t)))))))
+    (and (adjustable-array-p a)
+	 (= (length a) 0)
+	 t))
+  t)
+
+; Bug for PACKAGEP
+
+(deftest cmcul-type-prop.31
+  (funcall (compile nil '(lambda (x)
+			   (declare (optimize (speed 2) (space 3)))
+			   (packagep x)))
+	   t)
   nil)
