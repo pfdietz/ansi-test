@@ -1433,7 +1433,7 @@
   (funcall
    (compile
     nil
-    '(lambda (a)
+    '(lambda (a b)
        (declare (optimize (speed 1) (space 1) (safety 1) (debug 3)
 			  (compilation-speed 1)))
        (catch 'ct4
@@ -1444,7 +1444,7 @@
 	      ((-31 -150) a)
 	      (t b)))
 	  (throw 'ct4 0)))))
-   10)
+   10 20)
   0)
 
 (deftest misc.107e
@@ -7518,7 +7518,6 @@ Broken at C::WT-C-INLINE-LOC.
 ;;; "The value #<SB-C::COMBINATION :FUN # :ARGS (# # #) {C44D1C1}>
 ;;;   is not of type SB-C::REF."
 
-
 (deftest misc.392
   (funcall
    (compile
@@ -7530,3 +7529,239 @@ Broken at C::WT-C-INLINE-LOC.
        (prog2 0 0 (loop for lv4 below 3 count (or b (/= b))))))
    1 2)
   0)
+
+;;; cmucl (2004-09 snapshot)
+;;; "Error in function C::CORE-CALL-TOP-LEVEL-LAMBDA:
+;;;   Unresolved forward reference."
+;;; (in C::CORE-CALL-TOP-LEVEL-LAMBDA)
+
+(deftest misc.393
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -995205 1035654) a))
+       (declare (type (integer 473 114804994247) b))
+       (declare (ignorable a b))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (debug 3) (speed 2) (compilation-speed 0) (space 3)
+		  (safety 3)))
+       (labels ((%f7
+		 (f7-1 f7-2 f7-3
+		       &optional (f7-4 (lcm (if (>= b a) 0 a))) (f7-5 0)
+		       &key)
+		 0))
+	 (progn (%f7 (%f7 b a a b) b 0) 0))))
+   447930 66120263479)
+  0)
+
+(deftest misc.393a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -76 86) a))
+       (declare (type (integer -13771285280 109) b))
+       (declare (ignorable a b))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (safety 3) (space 1) (debug 2) (compilation-speed 3)
+		  (speed 3)))
+       (dotimes (iv1 2 0)
+	 (case (min -3693810 a iv1) ((26 -4) (ldb (byte 13 0) a)) (t b)))))
+   56 -1579426331)
+  0)
+
+;;; cmucl (2004-09 snapshot)
+;;; Wrong values
+
+(deftest misc.394
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -76645001 98715919) a))
+       (declare (type (integer 0 856472753903) b))
+       (declare (ignorable a b))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (speed 2) (space 0) (debug 3) (compilation-speed 0)
+		  (safety 3)))
+       (logeqv 0 b)))
+   -34528661 843541658238)
+  -843541658239)
+
+(deftest misc.395
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 6429252570156 8761983588786) a))
+       (declare (type (integer -400378288 4971722) b))
+       (declare (ignorable a b))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (debug 3) (speed 3) (space 2) (safety 0)
+		  (compilation-speed 3)))
+       (+ (shiftf a 8496033756259) (min 0 b))))
+   8369430915156 -369704905)
+  8369061210251)
+
+;;; "The assertion (EQ (CAR C::STACK) C::CONT) failed."
+(deftest misc.396
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -1601 485) a))
+       (declare (type (integer -190428560464 -1444494) b))
+       (declare (ignorable a b))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (debug 0) (space 2) (speed 0) (safety 3)
+		  (compilation-speed 2)))
+       (apply (constantly 0) 0 (list (signum b)))))
+   -1365 -46960621335)
+  0)
+
+;;; "The assertion (EQ (C::FUNCTIONAL-KIND (C::LAMBDA-HOME C::FUN))
+;;;      :TOP-LEVEL) failed."
+(deftest misc.397
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -168258525920 -2044) a))
+       (declare (type (integer -522 54) b))
+       (declare (ignorable a b))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (speed 0) (safety 3) (compilation-speed 1) (space 0)
+		  (debug 2)))
+       (labels ((%f4 (f4-1 f4-2 &key)
+		     (flet ((%f7 (f7-1 f7-2 f7-3 &optional &key (key1 a))
+				 (progv '(*s1* *s6* *s2*) (list a 0 key1) f4-1)))
+		       f4-2)))
+	 (apply #'%f4 (list a 0)))))
+   -156882103995 -38)
+  0)
+
+;;; "Error in function C::CLOSURE-POSITION:
+;;;   Can't find #<C::LAMBDA-VAR #x594259BD
+;;;                  NAME= IV1
+;;;                  TYPE= #<NUMERIC-TYPE (MOD 3)>>"
+(deftest misc.398
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer -319 7353) a))
+       (declare (type (integer 31751 4233916489) b))
+       (declare (ignorable a b))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (safety 3) (compilation-speed 1) (debug 1) (speed 0)
+		  (space 0)))
+       (conjugate
+	(if t
+	    (labels ((%f12 (f12-1 f12-2 f12-3)
+			   0))
+	      (%f12 0 b 0))
+          (dotimes (iv1 2 0) (catch 'ct2 a))))))
+   4430 3476635674)
+  0)
+
+;;; "NIL is not of type C::CONTINUATION"
+;;; in C::FIND-PUSHED-CONTINUATIONS
+(deftest misc.399
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -3 1) a))
+       (declare (ignorable a))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (space 0) (debug 0) (speed 3) (compilation-speed 2)
+		  (safety 3)))
+       (catch 'ct8 (logior a -457019 -1))))
+   0)
+  -1)
+
+;;; Wrong value
+(deftest misc.400
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 3376 4762) a))
+       (declare (ignorable a))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (debug 0) (safety 0) (space 0) (compilation-speed 3)
+		  (speed 3)))
+       (case (lognand 775 a) ((-7) 0) (t 4))))
+   4182)
+  0)
+
+;;; Invalid number of arguments: 1
+(deftest misc.401
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 7299 257071514003) a))
+       (declare (ignorable a))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (compilation-speed 2) (space 1) (safety 2) (speed 1)
+		  (debug 2)))
+       (logeqv (setq a 220250126156) 0)))
+   157474319912)
+  -220250126157)
+
+;;; "The assertion (EQ (CAR C::NEW-STACK) C::CONT) failed."
+(deftest misc.402
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -19116544 21344004) a))
+       (declare (ignorable a))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (space 1) (safety 3) (debug 1) (compilation-speed 0)
+		  (speed 0)))
+       (dotimes (iv3 2 0)
+	 (progn
+	   (apply (constantly 0)
+		  (list
+		   (let* ((*s1* 0))
+		     *s1*)))
+	   0))))
+   10)
+  0)
+
+;;; "The assertion C::INDIRECT failed."
+(deftest misc.403
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -6456 -32) a))
+       (declare (ignorable a))
+       #+cmucl (declare (optimize (extensions:inhibit-warnings 3)))
+       (declare
+	(optimize (space 3) (safety 1) (compilation-speed 1) (speed 0)
+		  (debug 0)))
+       (dotimes (iv1 0 a) (loop for lv4 below 3 sum (catch 'ct8 0)))))
+   -1648)
+  -1648)
+
+
+
+
+  
+
+
