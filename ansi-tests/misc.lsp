@@ -1481,3 +1481,118 @@
    0)
   0)
 
+(deftest misc.119
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (if (and (if (1+ 0) nil (not (and (not (and (<= 3) nil)) nil)))
+		(if (= -31) -20 -2371))
+	   1493 39720))))
+  39720)
+
+(deftest misc.120
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (type (integer 377036 4184626) c))
+       (if (or (and t (not (and (not (and c nil)) nil))) nil)
+	   3470653 c)))
+   1000000)
+  3470653)
+
+(deftest misc.121
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (if (and (and -92220 (not (and (not (or c nil)) nil))) a) b b)))
+   2000000 150000 -1)
+  150000)
+
+;;; CAR: #:G243 is not a LIST
+(deftest misc.122
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer 2872749 5754655) a))
+       (declare (type (integer 24114340 89504792) b))
+       (declare (type (integer 506491 1412971) c))
+       (declare (ignorable a b c))
+       (declare (optimize (speed 3)))
+       (declare (optimize (safety 1)))
+       (declare (optimize (debug 1)))
+       (- (let ((v7 (ignore-errors a))) -6)
+          (logand (if c -13936 c)
+                  (block b3 (if (if (or t b) (not nil) c)
+                                (return-from b3 -3114)
+                              (ignore-errors 7)
+                              ))))))
+   3000000 30000000 600000)
+  15978)
+
+;;; gcl bug (30 Oct 2003)
+(deftest misc.123
+  (let* ((fn1 '(lambda (b)
+		 (declare (optimize (safety 1)))
+		 (labels ((%f7 (f7-1 f7-2)
+			       (let ((v2 (setq b 723149855)))
+				 25620)))
+		   (max b
+			(multiple-value-call #'%f7 (values b 2))))))
+	 (fn2 '(lambda (b)
+		 (labels ((%f7 (f7-1 f7-2)
+			       (let ((v2 (setq b 723149855)))
+				 25620)))
+		   (max b
+			(multiple-value-call #'%f7 (values b 2))))))
+	 (vals '(1439719153))
+	 (v1 (apply (compile nil fn1) vals))
+	 (v2 (apply (compile nil fn2) vals)))
+    (if (eql v1 v2) :good (list v1 v2)))
+  :good)
+
+(deftest misc.124
+  (let* ((fn1 '(lambda (b)
+		 (declare (optimize (safety 1)))
+		 (labels ((%f7 (f7-1 f7-2)
+			       (let ((v2 (setq b 723149855)))
+				 25620)))
+		   (max b
+			(funcall #'%f7 b 2)))))
+	 (fn2 '(lambda (b)
+		 (labels ((%f7 (f7-1 f7-2)
+			       (let ((v2 (setq b 723149855)))
+				 25620)))
+		   (max b
+			(funcall #'%f7 b 2)))))
+	 (vals '(1439719153))
+	 (v1 (apply (compile nil fn1) vals))
+	 (v2 (apply (compile nil fn2) vals)))
+    (if (eql v1 v2) :good (list v1 v2)))
+  :good)
+
+;;; This passed in gcl, but I added it for completeness.
+(deftest misc.125
+  (let* ((fn1 '(lambda (b)
+		 (declare (optimize (safety 1)))
+		 (labels ((%f7 (f7-1 f7-2)
+			       (let ((v2 (setq b 723149855)))
+				 25620)))
+		   (max b
+			(%f7 b 2)))))
+	 (fn2 '(lambda (b)
+		 (labels ((%f7 (f7-1 f7-2)
+			       (let ((v2 (setq b 723149855)))
+				 25620)))
+		   (max b
+			(%f7 b 2)))))
+	 (vals '(1439719153))
+	 (v1 (apply (compile nil fn1) vals))
+	 (v2 (apply (compile nil fn2) vals)))
+    (if (eql v1 v2) :good (list v1 v2)))
+  :good)
+
+
