@@ -348,6 +348,18 @@
 	collect t1)
   nil)
 
+(deftest subtypep.cons.3
+  (check-equivalence '(and (cons symbol *) (cons * symbol))
+		     '(cons symbol symbol))
+  nil)
+
+(deftest subtypep.cons.4
+  (check-equivalence '(and (cons (integer 0 10) *)
+			   (cons (integer 5 15) (integer 10 20))
+			   (cons * (integer 15 25)))
+		     '(cons (integer 5 10) (integer 15 20)))
+  nil)
+
 ;;; SUBTYPEP on MEMBER types
 
 (deftest subtypep.member.1
