@@ -8645,3 +8645,12 @@ Broken at C::WT-MAKE-CLOSURE.
 				       (+ d (%f3) 11267))))
 	   -2914)
   7370)
+
+(deftest misc.453
+  (funcall (compile nil '(lambda (a) (* a (setf a 2) a (identity 5))))
+	   3)
+  60)
+
+
+
+
