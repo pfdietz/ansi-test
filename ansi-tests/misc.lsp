@@ -10466,3 +10466,26 @@ Broken at C::WT-MAKE-CLOSURE.
 			 p4))))
    9)
   9)
+
+;;; In abcl (14 Mar 2005)
+;;; The value T is not of type number.
+
+(deftest misc.575
+  (equalp #c(1269346.0 47870.12254712875) t)
+  nil)
+
+;;; The value #C(435422075/240892576 373) is not of type NUMBER.
+
+(deftest misc.576
+  (notnot (complexp (* -7023900320 #C(435422075/240892576 373))))
+  t)
+
+;;; The value #C(-555014/122849 -6641556271) is not of type NUMBER.
+
+(deftest misc.577
+  (/ -3185994774 #C(-555014/122849 -6641556271))
+  #C(217230410502882805764/665706755984253572883257634437
+     -319343563321640207257301634954/665706755984253572883257634437))
+
+
+
