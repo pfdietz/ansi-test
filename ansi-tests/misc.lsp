@@ -9788,5 +9788,42 @@ Broken at C::WT-MAKE-CLOSURE.
        (=t (aref result 0) 1))))
   t t t)
 
+;;;  The value 22717067 is not of type (INTEGER 22717067 22717067)
+
+(deftest misc.528
+  (let* ((x 296.3066f0)
+	 (y 22717067)
+	 (form `(lambda (r p2)
+		  (declare (optimize speed (safety 1))
+			   (type (simple-array single-float nil) r)
+			   (type (integer -9369756340 22717335) p2))
+		  (setf (aref r) (* ,x (the (eql 22717067) p2)))
+		  (values)))
+	 (r (make-array nil :element-type 'single-float))
+	 (expected (* x y)))
+    (funcall (compile nil form) r y)
+    (let ((actual (aref r)))
+      (unless (eql expected actual)
+	(list expected actual))))
+  nil)
+
+;;; The value 46790178 is not of type (INTEGER 46790178 46790178).
+
+(deftest misc.529
+  (let* ((x -2367.3296)
+	 (y 46790178)
+	 (form `(lambda (r p2)
+		  (declare (optimize speed (safety 1))
+			   (type (simple-array single-float nil) r)
+			   (type (eql 46790178) p2))
+		  (setf (aref r) (+ ,x (the (integer 45893897) p2)))
+		  (values)))
+	 (r (make-array nil :element-type 'single-float))
+	 (expected (+ x y)))
+    (funcall (compile nil form) r y)
+    (let ((actual (aref r)))
+      (unless (eql expected actual)
+	(list expected actual))))
+  nil)
 
     
