@@ -62,3 +62,18 @@
 	(cons (integer 3 15) (integer 4 15)))
    '(cons (integer 0 15) (integer 0 15)))
   nil)
+
+(deftest subtypep.cons.8
+  (check-equivalence
+   '(or
+     (cons integer (cons symbol integer))
+     (cons symbol (cons integer symbol))
+     (cons symbol (cons symbol integer))
+     (cons symbol (cons integer integer))
+     (cons integer (cons integer symbol))
+     (cons symbol (cons symbol symbol))
+     (cons integer (cons integer integer))
+     (cons integer (cons symbol symbol)))
+   '(cons (or symbol integer)
+	  (cons (or symbol integer) (or symbol integer))))
+  nil)
