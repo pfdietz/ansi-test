@@ -877,3 +877,12 @@
 	  (apply (compile nil form2) vals)))
   t)
 
+;;; sbcl/cmucl bug (on sparc)
+(deftest misc.67
+  (funcall
+    (compile nil '(lambda (x)
+		    (declare (type (integer 10604862 10604862) x)
+			     (optimize speed))
+		    (* x 390)))
+    10604862)
+  4135896180)
