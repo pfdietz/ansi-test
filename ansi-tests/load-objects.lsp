@@ -43,3 +43,4 @@
 (load "defgeneric-method-combination-progn.lsp")
 ;; (load "defgeneric-method-combination-standard.lsp")
 (load "find-class.lsp")
+(load "next-method-p.lsp")
