@@ -26,4 +26,7 @@
 (load "times.lsp")
 (load "plus.lsp")
 
+(load "evenp.lsp")
+(load "oddp.lsp")
+
 (load "epsilons.lsp")
