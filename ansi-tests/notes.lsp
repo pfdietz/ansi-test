@@ -31,3 +31,5 @@
 
 #+sbcl (rt::disable-note :open-if-exists-new-version-no-error)
 
+(defnote :negative-zero-is-similar-to-positive-zero
+  "The definition of similarity implies that -0.0 and 0.0 are similar (for each float type.)  If negative zeros are distinct this is probably not good, since it makes (defconstant x 0.0) be nonportable.")
