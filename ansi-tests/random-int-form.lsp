@@ -47,6 +47,8 @@
 		 (apply (the function (eval `(function ,(getf plist :unoptimized-lambda-form))))
 			(getf plist :vals)))))
 
+(defun p (i) (write (elt $y i) :pretty t :escape t) (values))
+
 (defun tn (n &optional (size 100))
   (length (setq $y (prune-results (setq $x (test-random-integer-forms size 2 n))))))
 
@@ -86,8 +88,8 @@
 (defvar *print-immediately* nil)
 
 (defvar *compile-unoptimized-form*
-  #-(or gcl clisp) t
-  #+(or gcl clisp) nil)
+  #-(or gcl clisp armedbear) t
+  #+(or gcl clisp armedbear) nil)
 
 (declaim (special *vars*))
 
@@ -257,6 +259,7 @@
     ;; (> size 1)
     (rcase
      ;; flet call
+     #-(or armedbear)
      (30 ;; 5
       (make-random-integer-flet-call-form size))
 
@@ -265,19 +268,22 @@
       (let ((op (random-from-seq '(- abs signum 1+ 1- conjugate
 				     rational rationalize
 				     numerator denominator
-				     identity progn floor ignore-errors
+				     identity progn floor
+				     #-(or armedbear) ignore-errors
 				     cl:handler-case restart-case
 				     ceiling truncate round realpart imagpart
 				     integer-length logcount values
 				     locally))))
 	`(,op ,(make-random-integer-form (1- size)))))
 
+     #-(or armedbear)
      (4
       (make-random-integer-unwind-protect-form size))
 
      (5 (make-random-integer-mapping-form size))
 
      ;; prog1, multiple-value-prog1
+     #-(or armedbear)
      (4
       (let* ((op (random-from-seq #(prog1 multiple-value-prog1)))
 	     (nforms (random 4))
@@ -297,6 +303,7 @@
       
      (1 `(cl:handler-bind nil ,(make-random-integer-form (1- size))))
      (1 `(restart-bind nil ,(make-random-integer-form (1- size))))
+     #-(or armedbear)
      (1 `(macrolet () ,(make-random-integer-form (1- size))))
 
      ;; dotimes
@@ -315,7 +322,7 @@
      ;; loop
      (5 (make-random-loop-form (1- size)))
 
-     #-(or gcl ecl)
+     #-(or gcl ecl armedbear)
      ;; load-time-value
      (2
       (let ((arg (let ((*flet-names* nil)
@@ -434,6 +441,7 @@
      (20 (make-random-integer-binding-form size))
 
      ;; progv
+     #-(or armedbear)
      (4 (make-random-integer-progv-form size))
      
      (4 `(let () ,(make-random-integer-form (1- size))))
@@ -443,6 +451,7 @@
 	     (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
 	`(block ,name ,(make-random-integer-form (1- size)))))
 
+     #-(or armedbear)
      (20
       (let* ((tag (list 'quote (random-from-seq #(ct1 ct2 ct2 ct4 ct5 ct6 ct7 ct8))))
 	     (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
@@ -480,6 +489,7 @@
 	;; No blocks -- try again
 	(make-random-integer-form size)))
 
+     #-(or armedbear)
      (20
       (make-random-flet-form size))
 
@@ -628,6 +638,7 @@
 		 (,sequence-op
 		  ,@(mapcar #'make-random-integer-form sizes))
 		 ,@keyargs)))
+     #-(or armedbear)
      (1
       (destructuring-bind (size1 size2) (random-partition (1- size) 2)
 	(let* ((vars '(lmv1 lmv2 lmv3 lmv4 lmv5 lmv6))
