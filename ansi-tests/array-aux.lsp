@@ -30,7 +30,8 @@
   "Call MAKE-ARRAY and do sanity tests on the output."
   (declare (ignore element-type-p initial-contents initial-contents-p
 		   initial-element initial-element-p dio-p))
-  (let ((a (check-values (apply #'make-array dimensions options))))
+  (let ((a (check-values (apply #'make-array dimensions options)))
+	(rank (length dimensions-list)))
     (cond
 
      ((not (typep a 'array))
@@ -47,7 +48,7 @@
       :fail-not-array6)
      
      #-gcl
-     ((not (typep a `(array ,element-type ,(length dimensions-list))))
+     ((not (typep a `(array ,element-type ,rank)))
       :fail-not-array7)
 
      ((not (typep a `(array ,element-type ,dimensions-list)))
@@ -56,6 +57,15 @@
      ((not (typep a `(array ,element-type ,(mapcar (constantly '*)
 						   dimensions-list))))
       :fail-not-array9)
+
+     ((loop for i from 0 below (min 10 rank)
+	    thereis
+	    (let ((x (append (subseq dimensions-list 0 i)
+			     (list '*)
+			     (subseq dimensions-list (1+ i)))))
+	      (or (not (typep a `(array * ,x)))
+		  (not (typep a `(array ,element-type ,x))))))
+      :fail-not-array10)
 
      ((not (check-values (arrayp a))) :fail-not-arrayp)
 
@@ -78,7 +88,7 @@
 	     :fail-not-simple-array6)
 	    #-gcl
 	    ((not (typep a `(simple-array ,element-type
-					  ,(length dimensions-list))))
+					  ,rank)))
 	     :fail-not-array7)
 	    ((not (typep a `(simple-array ,element-type ,dimensions-list)))
 	     :fail-not-simple-array8)
@@ -89,7 +99,7 @@
 	    )))
 
      ;; If the array is a vector, check that...
-     ((and (eq (length dimensions-list) 1) 
+     ((and (eql rank 1) 
 	   (cond
 	    ;; It's in type vector
 	    ((not (typep a 'vector))
@@ -123,7 +133,7 @@
       :fail-array-dimensions)
 
      ;; The rank of the array must equal the number of dimensions
-     ((not (equal (array-rank a) (length dimensions-list)))
+     ((not (equal (array-rank a) rank))
       :fail-array-rank)
 
      ;; Arrays other than vectors cannot have fill pointers
