@@ -161,20 +161,21 @@
     (let* ((pkg (eval `(defpackage ,pkg-name (:use))))
 	   (sym 'foo)
 	   (name (symbol-name sym))
-	   (isym (intern name pkg)))
-      (values
-       (handler-bind
-	((package-error
-	  #'(lambda (c)
-	      (let ((r (find-restart 'continue c)))
-		;; Get rid of the conflicting symbol
-		(unintern isym)
-		(and r (invoke-restart r))))))
-	(import sym pkg))
-       (eqlt (find-symbol (symbol-name sym) pkg) sym)
-       (eqlt (symbol-package sym) (find-package :cl-test))
-       (external-symbols-in-package pkg))))
-  t t t nil)
+	   (isym (intern name pkg))
+	   (outer-restarts (compute-restarts)))
+      (block done
+	(handler-bind
+	 ((package-error
+	   #'(lambda (c)
+	       ;; There should be at least one restart
+	       ;; associated with this condition that was
+	       ;; not a preexisting restart
+	       (assert (set-difference (compute-restarts c)
+				       outer-restarts))
+	       (return-from done :good))))
+	 (import sym pkg)))))
+  :good)
+
 
 (deftest import.error.5
   (let ((pkg-name *import-package-test-name*))
@@ -182,17 +183,17 @@
     (let* ((pkg (eval `(defpackage ,pkg-name (:use))))
 	   (sym 'foo)
 	   (name (symbol-name sym))
-	   (isym (shadow name pkg)))
-      (values
-       (handler-bind
-	((package-error
-	  #'(lambda (c)
-	      (let ((r (find-restart 'continue c)))
-		;; Get rid of the conflicting symbol
-		(unintern isym)
-		(and r (invoke-restart r))))))
-	(import sym pkg))
-       (eqlt (find-symbol (symbol-name sym) pkg) sym)
-       (eqlt (symbol-package sym) (find-package :cl-test))
-       (external-symbols-in-package pkg))))
-  t t t nil)
+	   (isym (shadow name pkg))  ;; shadow instead of intern
+	   (outer-restarts (compute-restarts)))
+      (block done
+	(handler-bind
+	 ((package-error
+	   #'(lambda (c)
+	       ;; There should be at least one restart
+	       ;; associated with this condition that was
+	       ;; not a preexisting restart
+	       (assert (set-difference (compute-restarts c)
+				       outer-restarts))
+	       (return-from done :good))))
+	 (import sym pkg)))))
+  :good)

@@ -55,31 +55,37 @@
 ;;; PFD 01.18.03  This test is working, but suspicious.
 
 (deftest delete-package.5
-  (prog (P1 S1 P2 S2 P3)
+  (prog (p1 s1 p2 s2 p3)
+	(declare (ignorable p1 p2 p3 s1 s2))
 	(safely-delete-package "P3")
 	(safely-delete-package "P2")
 	(safely-delete-package "P1")
 	
-	(setq P1 (make-package "P1" :use ()))
-	(setq S1 (intern "S1" P1))
-	(export S1 "P1")
+	(setq p1 (make-package "P1" :use ()))
+	(setq s1 (intern "S1" P1))
+	(export s1 "P1")
 	
-	(setq P2 (make-package "P2" :use '("P1")))
-	(setq S2  (intern "S2" P2))
-	(export S1 P2)
-	(export S2 "P2")
+	(setq p2 (make-package "P2" :use '("P1")))
+	(setq s2  (intern "S2" p2))
+	(export s1 p2)
+	(export s2 "P2")
 	
-	(setf P3 (make-package "P3" :use '("P2")))
+	(setf p3 (make-package "P3" :use '("P2")))
 	
 	;; Delete the P2 package, catching the continuable
 	;; error and deleting the package
+
+	(let ((outer-restarts (compute-restarts)))
+	  (handler-bind ((package-error
+			  #'(lambda (c)
+			      ;; (let ((r (find-restart 'continue c))) (and r (invoke-restart r)))
+			      (assert (set-difference (compute-restarts c)
+						      outer-restarts))
+			      (return t)
+			      )))
+		      (delete-package p2)))
 	
-	(handler-bind ((package-error
-			#'(lambda (c)
-			    (let ((r (find-restart 'continue c)))
-			      (and r (invoke-restart r))))))
-		      (delete-package P2))
-	
+	#|
 	(unless (and (equal (package-name P1) "P1")
 		     (null  (package-name P2))
 		     (equal (package-name P3) "P3"))
@@ -112,28 +118,26 @@
 	
 	(safely-delete-package P3)
 	(safely-delete-package P1)
-	(return t))
+	(return t)
+	|#
+	)
   t)
 
 ;; deletion of a nonexistent package should cause a continuable
 ;; package-error  (same comments for delete-package.5 apply
 ;; here as well)
 
-;;; PFD 10/14/02 -- These tests are broken again.  I suspect
-;;;   some sort of interaction with the test harness.
-
-;;; PFD 01.18.03  This test is working, but suspicious.
-
 (deftest delete-package.6
-  (progn
-    (safely-delete-package "TEST-20")
-    (handler-bind ((package-error
-		    #'(lambda (c)
-			(let ((r (find-restart 'continue c)))
-			  (and r (invoke-restart r))))))
-		  (and (not (delete-package "TEST-20"))
-		       t)))
-  t)
+  (block done
+    (let ((outer-restarts (compute-restarts)))
+      (safely-delete-package "TEST-20")
+      (handler-bind ((package-error
+		      #'(lambda (c)
+			  (assert (set-difference (compute-restarts c)
+						  outer-restarts))
+			  (return-from done :good))))
+		    (delete-package "TEST-20"))))
+  :good)
 
 (deftest delete-package.error.1
   (signals-error (delete-package) program-error)
