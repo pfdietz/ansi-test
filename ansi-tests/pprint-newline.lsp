@@ -148,6 +148,18 @@ A A A A "
   "A A A A A A A A A A "
   :margin 10)
 
+(deftest pprint-newline.linear.10
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t)
+	 (*print-right-margin* 4)
+	 (*print-miser-width* nil))
+     (with-output-to-string
+       (*standard-output*)
+       (dotimes (i 5) (write "A ") (pprint-newline :linear)))))
+  "A A A A A ")
+
 ;;; :miser
 
 (def-pprint-newline-test pprint-newline.miser.1
@@ -212,3 +224,245 @@ A
   :margin 20
   :miser 20)
 
+(def-pprint-newline-test pprint-newline.miser.8
+  (progn
+    (write "AAAA ")
+    (pprint-newline :linear)
+    (pprint-logical-block
+     (*standard-output* nil)
+     (dotimes (i 4) (write "A ") (pprint-newline :miser))))
+  "AAAA
+A A A A "
+  :margin 10
+  :miser 8)
+
+(def-pprint-newline-test pprint-newline.miser.9
+  (progn
+    (write "AAAA ")
+    (pprint-newline :fill)
+    (pprint-logical-block
+     (*standard-output* nil)
+     (dotimes (i 4) (write "A ") (pprint-newline :miser))))
+  "AAAA
+A A A A "
+  :margin 10
+  :miser 8)
+
+(def-pprint-newline-test pprint-newline.miser.10
+  (pprint-logical-block (*standard-output* nil :prefix "(" :suffix ")")
+			(write "A")
+			(pprint-newline :miser)
+			(pprint-newline :mandatory))
+  "(A
+
+ )"
+  :margin 20
+  :miser 20)
+
+(def-pprint-newline-test pprint-newline.miser.11
+  (pprint-logical-block (*standard-output* nil :prefix "(" :suffix ")")
+			(write "A")
+			(pprint-newline :miser)
+			(pprint-newline :mandatory))
+  "(A
+
+ )"
+  :margin 20
+  :miser 19)
+
+(def-pprint-newline-test pprint-newline.miser.12
+  (pprint-logical-block (*standard-output* nil :prefix "(" :suffix ")")
+			(write "A")
+			(pprint-newline :miser)
+			(pprint-newline :mandatory))
+  "(A
+ )"
+  :margin 20
+  :miser 18)
+
+(deftest pprint-newline.miser.13
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t)
+	 (*print-right-margin* 4)
+	 (*print-miser-width* 4))
+     (with-output-to-string
+       (*standard-output*)
+       (dotimes (i 5) (write "A ") (pprint-newline :miser)))))
+  "A A A A A ")
+
+;;; :fill
+
+(def-pprint-newline-test pprint-newline.fill.1
+  (dotimes (i 10) (write "A ") (pprint-newline :fill))
+  "A A A A A
+A A A A A "
+  :margin 10)
+
+(def-pprint-newline-test pprint-newline.fill.2
+  (dotimes (i 10) (write "A ") (pprint-newline :fill))
+  "A A A
+A A A
+A A A
+A "
+  :margin 6)
+
+(def-pprint-newline-test pprint-newline.fill.3
+  (dotimes (i 10) (write "A ") (pprint-newline :fill))
+  "A A A
+A A A
+A A A
+A "
+  :margin 7)
+
+(def-pprint-newline-test pprint-newline.fill.4
+    (dotimes (i 10) (write "A ") (pprint-newline :fill))
+  "A A A A A
+A A A A A "
+  :margin 10
+  :miser 9)
+
+(def-pprint-newline-test pprint-newline.fill.5
+    (dotimes (i 10) (write "A ") (pprint-newline :fill))
+  "A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+"
+  :margin 10
+  :miser 10)
+
+(def-pprint-newline-test pprint-newline.fill.6
+    (dotimes (i 5)
+      (write '(A B))
+      (write #\Space)
+      (pprint-newline :fill))
+  "(A B) (A B)
+(A B) (A B)
+(A B) "
+  :margin 12)
+
+(def-pprint-newline-test pprint-newline.fill.7
+    (dolist (x '(A (A B) (A A A A A A A A) X (C D) (E F)))
+      (pprint-fill nil x)
+      (write #\Space)
+      (pprint-newline :fill))
+  "A (A B)
+(A A A A A
+ A A A)
+X (C D)
+(E F) "
+  :margin 12)
+
+(def-pprint-newline-test pprint-newline.fill.8
+    (dotimes (i 5)
+      (write '(A B) :pretty nil)
+      (write #\Space)
+      (let ((*print-pretty* nil)) (pprint-newline :fill)))
+  "(A B) (A B) (A B) (A B) (A B) "
+  :margin 12)
+
+(deftest pprint-newline.fill.9
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-right-margin* 4)
+	 (*print-pretty* t)
+	 (*print-miser-width* nil))
+     (with-output-to-string
+       (*standard-output*)
+       (dotimes (i 5) (write "A ") (pprint-newline :fill)))))
+  "A A A A A ")
+
+(deftest pprint-newline.fill.10
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-right-margin* 4)
+	 (*print-pretty* t)
+	 (*print-miser-width* 4))
+     (with-output-to-string
+       (*standard-output*)
+       (dotimes (i 5) (write "A ") (pprint-newline :fill)))))
+  "A A A A A ")
+
+
+;;; :mandatory
+
+(def-pprint-newline-test pprint-newline.mandatory.1
+  (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
+  "A
+A
+A
+A
+")
+
+(def-pprint-newline-test pprint-newline.mandatory.2
+  (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
+  "A
+A
+A
+A
+"
+  :margin 10)
+
+(def-pprint-newline-test pprint-newline.mandatory.3
+  (progn
+    (write "A ")
+    (pprint-newline :mandatory)
+    (write "A "))
+  "A
+A "
+  :margin 1)
+
+(def-pprint-newline-test pprint-newline.mandatory.4
+  (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
+  "A A A A "
+  :pretty nil)
+
+(def-pprint-newline-test pprint-newline.mandatory.5
+  (pprint-logical-block
+   (*standard-output* nil :prefix "<<<" :suffix ">>>")
+   (dotimes (i 4) (write "A ") (pprint-newline :mandatory))
+   (write "A"))
+  "<<<A
+   A
+   A
+   A
+   A>>>")
+
+(deftest pprint-newline.mandatory.6
+  (with-standard-io-syntax
+   (let ((*print-readably* nil)
+	 (*print-escape* nil)
+	 (*print-pretty* t)
+	 (*print-right-margin* 4)
+	 (*print-miser-width* nil))
+     (with-output-to-string
+       (*standard-output*)
+       (dotimes (i 5) (write "A ") (pprint-newline :mandatory)))))
+  "A A A A A ")
+
+;;; Error cases
+
+(deftest pprint-newline.error.1
+  (loop for x in *mini-universe*
+	unless (member x '(:linear :miser :fill :mandatory))
+	unless (eval `(signals-error (pprint-newline ',x) type-error))
+	collect x)
+  nil)
+
+(deftest pprint-newline.error.2
+  (signals-error (pprint-newline) program-error)
+  t)
+
+(deftest pprint-newline.error.3
+  (signals-error (pprint-newline :fill nil nil) program-error)
+  t)
