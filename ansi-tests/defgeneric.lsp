@@ -71,6 +71,108 @@
   program-error)
 
 
+;;; Non-congruent methods cause defgeneric to signal an error
+
+(deftest defgeneric.error.9
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.9 (x)
+	      (:method ((x t)(y t)) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+
+(deftest defgeneric.error.10
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.10 (x &optional y)
+	      (:method ((x t)) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.11
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.11 (x &optional y)
+	      (:method (x &optional y z) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.12
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.12 (x &rest y)
+	      (:method (x) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.13
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.13 (x)
+	      (:method (x &rest y) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.14
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.14 (x &key)
+	      (:method (x) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.15
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.15 (x &key y)
+	      (:method (x) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.16
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.16 (x)
+	      (:method (x &key) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.17
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.17 (x)
+	      (:method (x &key foo) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.18
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.18 (x &key foo)
+	      (:method (x &key) t)))
+     :bad)
+   (error () :good))
+  :good)
+
+(deftest defgeneric.error.19
+  (handler-case
+   (progn
+     (eval '(defgeneric defgeneric-error-fn.19 (x &key foo)
+	      (:method (x &key bar) t)))
+     :bad)
+   (error () :good))
+  :good)
+
 ;;; Non error cases
 
 (deftest defgeneric.1
@@ -167,4 +269,29 @@
      (multiple-value-list (defgeneric.fun.7))
      (multiple-value-list (apply fn nil))))
   t t (a) (a) (a))
+
+(deftest defgeneric.8
+  (let ((fn (eval '(defgeneric defgeneric.fun.8 (x &optional y z)
+		     (:method ((x number) &optional y z)
+			      (list x y z))
+		     (:method ((p symbol) &optional q r)
+			      (list r q p))))))
+    (values
+     (typep* fn 'generic-function)
+     (typep* fn 'standard-generic-function)
+     (multiple-value-list (funcall fn 1))
+     (multiple-value-list (funcall fn 1 2))
+     (multiple-value-list (funcall fn 1 2 3))
+     (multiple-value-list (defgeneric.fun.8 'a))
+     (multiple-value-list (defgeneric.fun.8 'a 'b))
+     (multiple-value-list (defgeneric.fun.8 'a 'b 'c))
+     (multiple-value-list (apply fn '(x y z)))))
+  t t
+  ((1 nil nil))
+  ((1 2 nil))
+  ((1 2 3))
+  ((nil nil a))
+  ((nil b a))
+  ((c b a))
+  ((z y x)))
 
