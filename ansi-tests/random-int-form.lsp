@@ -206,7 +206,7 @@
 (defun make-random-byte-spec-form (size vars)
   (declare (ignore size vars))
   (let* ((pform (random 33))
-	 (sform (random 33)))
+	 (sform (1+ (random 33))))
     `(byte ,sform ,pform)))
 	
 (defun random-partition (n p)
