@@ -16,7 +16,7 @@
     (assert (> len 0))
     `(case (random ,len)
        ,@(loop for i from 0 for e in cases collect `(,i ,e))
-       (t (error "Can't happen?! (in random-case~%")))))
+       (t (error "Can't happen?! (in random-case)~%")))))
 
 (defun coin (&optional (n 2))
   "Flip an n-sided coin."

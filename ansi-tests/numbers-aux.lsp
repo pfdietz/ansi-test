@@ -126,3 +126,43 @@
 	      unless (and (<= m x) (<= m y)
 			  (or (= m x) (= m y)))
 	      collect (list x y m))))
+
+(defun random-nonnegative-real ()
+  (if (coin 3)
+      (random-case
+       (/ (random 10000) (1+ (random 1000)))
+       (/ (random 1000000) (1+ (random 100000)))
+       (/ (random 100000000) (1+ (random 10000000)))
+       (/ (random 1000000000000) (1+ (random 10000000))))
+    (random (random-case
+	     1000
+	     100000
+	     10000000
+	     1000000000
+	     (expt 2.0s0 (random 15))
+	     (expt 2.0f0 (random 32))
+	     (expt 2.0d0 (random 32))
+	     (expt 2.0l0 (random 32))))))
+
+(defun random-real ()
+  (if (coin) (random-nonnegative-real)
+    (- (random-nonnegative-real))))
+
+(defun epsilon (number)
+  (etypecase number
+    (short-float short-float-epsilon)
+    (single-float single-float-epsilon)
+    (double-float double-float-epsilon)
+    (long-float long-float-epsilon)
+    (rational 0)))
+
+(defun negative-epsilon (number)
+  (etypecase number
+    (short-float short-float-negative-epsilon)
+    (single-float single-float-negative-epsilon)
+    (double-float double-float-negative-epsilon)
+    (long-float long-float-negative-epsilon)
+    (rational 0)))
+
+
+
