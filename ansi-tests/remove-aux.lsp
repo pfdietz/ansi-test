@@ -148,6 +148,7 @@
 		  ((2 3) (random (1+ len)))
 		  (t (if (coin) -1 -10000000000000))))
 	 (seq (multiple-value-bind (x y z) (make-random-remove-input len type element-type)
+		(declare (ignore x z))
 		y))
 	 (key (and (coin)
 		   (case type-select
@@ -172,6 +173,7 @@
 (defun random-test-remove-args (maxlen)
   (multiple-value-bind (element-type type len start end from-end count seq key test test-not)
       (make-random-rd-params maxlen)
+    (declare (ignore type))
     (let ((element (if (and (coin) (> len 0))
 		       (random-from-seq seq)
 		     (make-random-element element-type)))
