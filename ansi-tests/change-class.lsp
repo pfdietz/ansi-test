@@ -531,7 +531,8 @@
 
 ;;; After method
 
-(defclass change-class-class-08 () ((a :initarg :a) (b :initarg :b)))
+(ignore-errors
+  (defclass change-class-class-08 () ((a :initarg :a) (b :initarg :b))))
 
 (ignore-errors
   (defmethod change-class :after
