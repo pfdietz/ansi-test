@@ -7,7 +7,7 @@
 
 ;;; See CLtS section 22.1.3.2, "Printing Characters"
 
-(deftest print.chars.1
+(deftest print.char.1
   (with-standard-io-syntax
     (loop for c across +standard-chars+
 	  unless (equal (string c)
