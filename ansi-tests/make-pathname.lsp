@@ -67,3 +67,54 @@
 (deftest make-pathname.8
   (make-pathname-test :version :wild)
   t)
+
+(deftest make-pathname.9
+  (make-pathname-test :defaults *default-pathname-defaults*)
+  t)
+
+(deftest make-pathname.10
+  (make-pathname-test :defaults (make-pathname :name "foo" :type "bar"))
+  t)
+
+(deftest make-pathname.11
+  (make-pathname-test :version :newest)
+  t)
+
+(deftest make-pathname.12
+  (make-pathname-test :case :local)
+  t)
+
+(deftest make-pathname.13
+  (make-pathname-test :case :common)
+  t)
+
+;;; Various constraints on :directory
+
+(deftest make-pathname-error-absolute-up
+  (classify-error (directory (make-pathname :directory '(:absolute :up))))
+  file-error)
+
+(deftest make-pathname-error-absolute-back
+  (classify-error (directory (make-pathname :directory '(:absolute :back))))
+  file-error)
+
+;; The next test is correct, but was causing very large amounts of time to be spent
+;; in buggy implementations
+#|
+(deftest make-pathname-error-absolute-wild-inferiors-up
+  (classify-error (directory (make-pathname :directory '(:absolute :wild-inferiors :up))))
+  file-error)
+|#
+
+(deftest make-pathname-error-relative-wild-inferiors-up
+  (classify-error (length (directory (make-pathname :directory '(:relative :wild-inferiors :up)))))
+  file-error)
+
+(deftest make-pathname-error-absolute-wild-inferiors-back
+  (classify-error (directory (make-pathname :directory '(:absolute :wild-inferiors :back))))
+  file-error)
+
+(deftest make-pathname-error-relative-wild-inferiors-back
+  (classify-error (directory (make-pathname :directory '(:relative :wild-inferiors :back))))
+  file-error)
+
