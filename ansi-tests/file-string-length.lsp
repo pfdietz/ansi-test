@@ -11,7 +11,12 @@
        :if-exists :supersede)
     (loop for x across +standard-chars+
 	  for len = (file-string-length s x)
-	  do (assert (typep len '(or null (integer 0))))))
+	  do (assert (typep len '(or null (integer 0))))
+	  do (let ((pos1 (file-position s)))
+	       (write-char x s)
+	       (let ((pos2 (file-position s)))
+		 (when (and pos1 pos2 len)
+		   (assert (= (+ pos1 len) pos2)))))))
   nil)
 
 (deftest file-string-length.2
@@ -20,7 +25,12 @@
        :if-exists :supersede)
     (loop for x across +standard-chars+
 	  for len = (file-string-length s (string x))
-	  do (assert (typep len '(or null (integer 0))))))
+	  do (assert (typep len '(or null (integer 0))))
+	  do (let ((pos1 (file-position s)))
+	       (write-sequence (string x) s)
+	       (let ((pos2 (file-position s)))
+		 (when (and pos1 pos2 len)
+		   (assert (= (+ pos1 len) pos2)))))))
   nil)
 
 ;;; Error tests
