@@ -16,7 +16,6 @@
 (defun test-if-not-in-cl-package (str)
   (multiple-value-bind (sym status)
       (find-symbol (string-upcase str) 'common-lisp)
-      (declare (ignore sym))
       (or
        ;; Symbol not present in the common lisp package
        (not status)

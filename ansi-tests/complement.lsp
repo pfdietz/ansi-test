@@ -6,11 +6,11 @@
 (in-package :cl-test)
 
 (deftest complement.1
-  (not (funcall (cl::complement #'identity) nil))
+  (not (funcall (complement #'identity) nil))
   nil)
 
 (deftest complement.2
-  (funcall (cl::complement #'identity) t)
+  (funcall (complement #'identity) t)
   nil)
 
 (deftest complement.3
@@ -24,13 +24,12 @@
     (loop for i from 2 to (min 256 (1- call-arguments-limit))
 	  always (progn
 		   (push #\a x)
-		   (apply (cl::complement #'char=) x))))
+		   (apply (complement #'char=) x))))
   t)
 
 (deftest complement.5
   (classify-error (complement))
   program-error)
-
 
 (deftest complement.6
   (classify-error (complement #'not t))

@@ -39,3 +39,18 @@
 (deftest values.A
   (values (values 1 2) (values 3 4 5) (values) (values 10))
   1 3 nil 10)
+
+(deftest values.B
+  (funcall #'values 1 2 3 4)
+  1 2 3 4)
+
+(deftest values.C
+  (let ((x (loop for i from 1 to (min 1000
+				      (1- call-arguments-limit)
+				      (1- multiple-values-limit))
+		 collect i)))
+    (equalt x
+	    (multiple-value-list (apply #'values x))))
+  t)
+
+  

@@ -42,15 +42,23 @@
 		 (fboundp n))))
   t nil)
 
-(deftest fmakunbound.5
+(deftest fmakunbound.error.1
   (catch-type-error (fmakunbound 1))
   type-error)
 
-(deftest fmakunbound.6
+(deftest fmakunbound.error.2
   (catch-type-error (fmakunbound #\a))
   type-error)
 
-(deftest fmakunbound.7
+(deftest fmakunbound.error.3
   (catch-type-error (fmakunbound '(x)))
   type-error)
+
+(deftest fmakunbound.error.4
+  (classify-error (fmakunbound))
+  program-error)
+
+(deftest fmakunbound.error.5
+  (classify-error (fmakunbound (gensym) nil))
+  program-error)
 

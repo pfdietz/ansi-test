@@ -17,6 +17,20 @@
   (some #'(lambda (x) (and x (null x))) *universe*)
   nil)
 
+(deftest null.4
+    (not (some #'null
+	       `(1 a 1.2 "a" #\w (a) ,*terminal-io*
+		   #'car (make-array '(10)))))
+  t)
+
+(deftest null.error.1
+  (classify-error (null))
+  program-error)
+
+(deftest null.error.2
+  (classify-error (null nil nil))
+  program-error)
+
 (deftest not.1
   (not nil)
   t)
@@ -29,4 +43,17 @@
   (some #'(lambda (x) (and x (not x))) *universe*)
   nil)
 
+(deftest not.4
+    (not (some #'not
+	       `(1 a 1.2 "a" #\w (a) ,*terminal-io*
+		   #'car (make-array '(10)))))
+  t)
 
+
+(deftest not.error.1
+  (classify-error (not))
+  program-error)
+
+(deftest not.error.2
+  (classify-error (not nil nil))
+  program-error)

@@ -39,6 +39,18 @@
   (1 . 2)
   (2 1))
 
+(deftest funcall.8
+  (flet ((foo (x y z) (values x y z)))
+    (funcall #'foo 1 2 3))
+  1 2 3)
+
+(deftest funcall.9
+  (flet ((foo () (values)))
+    (funcall #'foo))
+  )
+
+
+
 ;;; FUNCALL should throw an UNDEFINED-FUNCTION condition when
 ;;; called on a symbol with a global definition as a special
 ;;; operator

@@ -317,6 +317,14 @@
   (not (macro-function 'deftype))
   nil)
 
+(deftest typep-nil-null
+    (not (not (typep nil 'null)))
+  t)
+
+(deftest typep-t-null
+    (typep t 'null)
+  nil)
+
 ;;; Special cases of types-6 that are/were causing problems in CMU CL
 
 (deftest keyword-is-subtype-of-atom
@@ -330,3 +338,60 @@
 (deftest extended-char-is-subtype-of-atom
   (subtypep* 'extended-char 'atom)
   t t)
+
+;;; Error checking of type-related functions
+
+(deftest subtypep.error.1
+  (classify-error (subtypep))
+  program-error)
+
+(deftest subtypep.error.2
+  (classify-error (subtypep t))
+  program-error)
+
+(deftest subtypep.error.3
+  (classify-error (subtypep t t nil nil))
+  program-error)
+
+(deftest type-of.error.1
+  (classify-error (type-of))
+  program-error)
+
+(deftest type-of.error.2
+  (classify-error (type-of nil nil))
+  program-error)
+
+(deftest typep.error.1
+  (classify-error (typep))
+  program-error)
+
+(deftest typep.error.2
+  (classify-error (typep nil))
+  program-error)
+
+(deftest typep.error.3
+  (classify-error (typep nil t nil nil))
+  program-error)
+
+(deftest type-error-datum.error.1
+  (classify-error (type-error-datum))
+  program-error)
+
+(deftest type-error-datum.error.2
+  (classify-error
+   (let ((c (make-condition 'type-error :datum nil
+			    :expected-type t)))
+     (type-error-datum c nil)))
+  program-error)
+
+(deftest type-error-expected-type.error.1
+  (classify-error (type-error-expected-type))
+  program-error)
+
+(deftest type-error-expected-type.error.2
+  (classify-error
+   (let ((c (make-condition 'type-error :datum nil
+			    :expected-type t)))
+     (type-error-expected-type c nil)))
+  program-error)
+

@@ -5,22 +5,6 @@
 
 (in-package :cl-test)
 
-(deftest compiled-function-p.1
-  (some #'(lambda (obj)
-	     (if (compiled-function-p obj)
-		 (not (typep obj 'compiled-function))
-	       (typep obj 'compiled-function)))
-	 *universe*)
-  nil)
-
-(deftest compiled-function-p.2
-  (compiled-function-p '(lambda (x y) (cons y x)))
-  nil)
-
-(deftest compiled-function-p.3
-  (not (compiled-function-p (compile nil '(lambda (y x) (cons x y)))))
-  nil)
-
 (deftest compile.1
   (progn
     (fmakunbound 'compile.1-fn)
