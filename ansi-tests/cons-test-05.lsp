@@ -47,6 +47,7 @@
        (eqt (setf (rest x) 'd) 'd)
        x))
   (a . d))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; setting of C*R accessors
 
@@ -69,12 +70,21 @@
 			    (symbol-name fn)
 			    "-SET")
 			  :cl-test)
-		   (let ((x (create-c*r-test ,level)))
+		   (let ((x (create-c*r-test ,level))
+			 (y (list (create-c*r-test ,level)))
+			 (i 0))
 		     (and
-		      (setf (,fn x) 'a)
-		      (eql (,fn x) 'a)
+		      (setf (,fn (progn (incf i) x)) 'a)
+		      (eqlt (,fn x) 'a)
+		      (eqlt i 1)
 		      (setf (,fn x) 'none)
-		      (equal x (create-c*r-test ,level))
+		      (equalt x (create-c*r-test ,level))
+		      (setf (,fn (progn (incf i) (car y))) 'a)
+		      (eqlt (,fn (car y)) 'a)
+		      (eqlt i 2)
+		      (setf (,fn (car y)) 'none)
+		      (null (cdr y))
+		      (equalt (car y) (create-c*r-test ,level))
 		      ))
 		 t))))
 
@@ -89,19 +99,30 @@
 		     (symbol-name fn)
 		     "-SET")
 		   :cl-test)
-	    (let ((x (make-list 20 :initial-element nil)))
+	    (let* ((x (make-list 20 :initial-element nil))
+		   (y (list (copy-list x)))
+		   (cnt 0))
 	      (and
-	       (setf (,fn x) 'a)
+	       (setf (,fn (progn (incf cnt) x)) 'a)
+	       (eqlt cnt 1)
 	       (loop
 		   for i from 1 to 20
 		   do (when (and (not (eql i ,len))
 				 (nth (1- i) x))
 			(return nil))
 		   finally (return t))
-	       (eql (,fn x) 'a)
-	       (nth ,(1- len) x)))
-	  a)))
-
+	       (setf (,fn (car y)) 'a)
+	       (loop
+		   for i from 1 to 20
+		   do (when (and (not (eql i ,len))
+				 (nth (1- i) (car y)))
+			(return nil))
+		   finally (return t))
+	       (eqlt (,fn x) 'a)
+	       (eqlt (nth ,(1- len) x) 'a)
+	       (eqlt (,fn (car y)) 'a)
+	       (nth ,(1- len) (car y))))
+	    a)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nth
@@ -126,12 +147,15 @@
     (error (c) c))
   t)
 
-#|
+;;; Test side effects, evaluation order in assignment to NTH
 (deftest nth-3
-  (catch-type-error (nth -1 (copy-tree '(a b c))))
-  type-error)
-	  
-(deftest nth-4
-  (catch-type-error (nth 'a (copy-tree '(a b c))))
-  type-error)
-|#
+  (let ((i 0)
+	(x (list 'a 'b 'c 'd))
+	y z)
+    (and
+     (eqlt (setf (nth (setf y (incf i)) x) (progn (setf z (incf i)) 'z))
+	   'z)
+     (eqlt y 1)
+     (eqlt z 2)
+     x))
+  (a z c d))

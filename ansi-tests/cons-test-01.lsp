@@ -103,7 +103,7 @@
 		 'union 'nunion
 		 ))
 
-;; All the cons functions have a fnuction binding
+;; All the cons functions have a function binding
 
 (deftest function-bound-cons-fns
   (loop

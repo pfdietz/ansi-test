@@ -13,6 +13,8 @@
 ;;;  There will be a separate test suite
 ;;;    for ACCESSORS x SETF-like macros
 
+;;; See also places.lsp
+
 (deftest push-1
     (let ((x nil))
       (push 'a x))
@@ -47,6 +49,14 @@
 	(list x y)))
   (nil nil))
 
+;;; Confirm argument is executed just once.
+(deftest pop-3
+  (let ((i 0)
+	(a (vector (list 'a 'b 'c))))
+    (pop (aref a (progn (incf i) 0)))
+    (values a i))
+  #((b c)) 1)
+
 (deftest push-and-pop
     (let* ((x (copy-tree '(a b)))
 	  (y x))
@@ -58,6 +68,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; pushnew
+
+;;; See also places.lsp
 
 (deftest pushnew-1
     (let ((x nil))

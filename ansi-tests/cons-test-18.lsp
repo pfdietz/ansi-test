@@ -89,10 +89,10 @@
       (setf (getf p 'c) 3)
       ;; Must check that only a, b, c have properties
       (and
-       (eql (getf p 'a) 1)
-       (eql (getf p 'b) 2)
-       (eql (getf p 'c) 3)
-       (eql
+       (eqlt (getf p 'a) 1)
+       (eqlt (getf p 'b) 2)
+       (eqlt (getf p 'c) 3)
+       (eqlt
 	(loop
 	    for ptr on p by #'cddr count
 	      (not (member (car ptr) '(a b c))))
@@ -105,9 +105,9 @@
       (setf (getf p 'a) 3)
       ;; Must check that only a, b have properties
       (and
-       (eql (getf p 'a) 3)
-       (eql (getf p 'b) 2)
-       (eql
+       (eqlt (getf p 'a) 3)
+       (eqlt (getf p 'b) 2)
+       (eqlt
 	(loop
 	    for ptr on p by #'cddr count
 	      (not (member (car ptr) '(a b))))
@@ -120,10 +120,10 @@
       (setf (getf p 'c 17) 3)
       ;; Must check that only a, b, c have properties
       (and
-       (eql (getf p 'a) 1)
-       (eql (getf p 'b) 2)
-       (eql (getf p 'c) 3)
-       (eql
+       (eqlt (getf p 'a) 1)
+       (eqlt (getf p 'b) 2)
+       (eqlt (getf p 'c) 3)
+       (eqlt
 	(loop
 	    for ptr on p by #'cddr count
 	      (not (member (car ptr) '(a b c))))
@@ -136,9 +136,9 @@
       (setf (getf p 'a 17) 3)
       ;; Must check that only a, b have properties
       (and
-       (eql (getf p 'a) 3)
-       (eql (getf p 'b) 2)
-       (eql
+       (eqlt (getf p 'a) 3)
+       (eqlt (getf p 'b) 2)
+       (eqlt
 	(loop
 	    for ptr on p by #'cddr count
 	      (not (member (car ptr) '(a b))))
@@ -152,9 +152,9 @@
       (setf (getf p 'a (progn (setf foo t) 0)) 3)
       ;; Must check that only a, b have properties
       (and
-       (eql (getf p 'a) 3)
-       (eql (getf p 'b) 2)
-       (eql
+       (eqlt (getf p 'a) 3)
+       (eqlt (getf p 'b) 2)
+       (eqlt
 	(loop
 	    for ptr on p by #'cddr count
 	      (not (member (car ptr) '(a b))))
@@ -162,14 +162,34 @@
        foo))
   t)
 
+(deftest setf-getf-6
+    (let ((p (list (copy-list '(a 1 b 2))))
+	  (cnt1 0) (cnt2 0))
+      (setf (getf (car (progn (incf cnt1) p)) 'c)
+	    (progn (incf cnt2) 3))
+      ;; Must check that only a, b, c have properties
+      (and
+       (eqlt cnt1 1)
+       (eqlt cnt2 1)
+       (eqlt (getf (car p) 'a) 1)
+       (eqlt (getf (car p) 'b) 2)
+       (eqlt (getf (car p) 'c) 3)
+       (eqlt
+	(loop
+	    for ptr on (car p) by #'cddr count
+	      (not (member (car ptr) '(a b c))))
+	0)
+       t))
+  t)
+
 (deftest incf-getf-1
     (let ((p (copy-list '(a 1 b 2))))
       (incf (getf p 'b))
       ;; Must check that only a, b have properties
       (and
-       (eql (getf p 'a) 1)
-       (eql (getf p 'b) 3)
-       (eql
+       (eqlt (getf p 'a) 1)
+       (eqlt (getf p 'b) 3)
+       (eqlt
 	(loop
 	    for ptr on p by #'cddr count
 	      (not (member (car ptr) '(a b))))
@@ -182,10 +202,10 @@
       (incf (getf p 'c 19))
       ;; Must check that only a, b have properties
       (and
-       (eql (getf p 'a) 1)
-       (eql (getf p 'b) 2)
-       (eql (getf p 'c) 20)
-       (eql
+       (eqlt (getf p 'a) 1)
+       (eqlt (getf p 'b) 2)
+       (eqlt (getf p 'c) 20)
+       (eqlt
 	(loop
 	    for ptr on p by #'cddr count
 	      (not (member (car ptr) '(a b c))))
