@@ -3201,5 +3201,28 @@
    1 2)
   2)
 
-
-  
+(deftest misc.193
+  (let* ((form '(IF (IF (<= A (TRUNCATE C (MIN -43 B)))
+			(LOGBITP 0 0) (LOGBITP 0 -1))
+		    0 -36223))
+	 (fn1 `(lambda (a b c)
+		 (declare (type (integer -3 15350342) a))
+		 (declare (type (integer -4357 -1555) b))
+		 (declare (type (integer 5389300879793 6422214587951) c))
+		 (declare (optimize (speed 3)))
+		 (declare (optimize (safety 1)))
+		 (declare (optimize (debug 1)))
+		 ,form))
+	 (fn2 `(lambda (a b c)
+		 (declare (notinline logbitp min truncate <=))
+		 (declare (optimize (safety 3)))
+		 (declare (optimize (speed 0)))
+		 (declare (optimize (debug 0)))
+		 ,form))
+	 (vals '(7792101 -1615 6070931814551))
+	 (result1 (multiple-value-list (apply (compile nil fn1) vals)))
+	 (result2 (multiple-value-list (apply (compile nil fn2) vals))))
+    (if (equal result1 result2)
+	:good
+      (values result1 result2)))
+  :good)
