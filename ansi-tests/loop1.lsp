@@ -177,10 +177,6 @@
   (loop for x from 1 upto 5 collect x)
   (1 2 3 4 5))
 
-(deftest loop.1.33
-  (loop for x from 1 upto 5 collect x)
-  (1 2 3 4 5))
-
 (deftest loop.1.34
   (loop for x from 1 to 4.0 collect x)
   (1 2 3 4))

@@ -87,7 +87,53 @@
   (loop for nil in nil do (return t))
   nil)
 
+(deftest loop.2.17
+  (let ((x '(a b c)))
+    (values
+     x
+     (loop for x in '(d e f) collect (list x))
+     x))
+  (a b c)
+  ((d) (e) (f))
+  (a b c))
 
+(deftest loop.2.18
+  (loop for x of-type (integer 0 10) in '(2 4 6 7) sum x)
+  19)
+  
+;;; Tests of the 'AS' form
 
+(deftest loop.2.19
+  (loop as x in '(1 2 3) sum x)
+  6)
+
+(deftest loop.2.20
+  (loop as x in '(a b c)
+	as y in '(1 2 3)
+	collect (list x y))
+  ((a 1) (b 2) (c 3)))
+
+(deftest loop.2.21
+  (loop as x in '(a b c)
+	for y in '(1 2 3)
+	collect (list x y))
+  ((a 1) (b 2) (c 3)))
+
+(deftest loop.2.22
+  (loop for x in '(a b c)
+	as y in '(1 2 3)
+	collect (list x y))
+  ((a 1) (b 2) (c 3)))
+
+(deftest loop.2.23
+  (let (a b (i 0))
+    (values
+     (loop for e in (progn (setf a (incf i))
+			   '(a b c d e f g))
+	   by (progn (setf b (incf i)) #'cddr)
+	   collect e)
+     a b i))
+  (a c e g)
+  1 2 2)
 
 
