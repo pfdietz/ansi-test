@@ -71,7 +71,7 @@
 	 collect type))
   nil)
 
-(deftest subtypep.aray.6
+(deftest subtypep.array.6
   (loop
    for etype in (cons '* *array-element-types*)
    append
@@ -81,7 +81,7 @@
     `(array ,etype (* 10 * 29 *))))
   nil)
 
-(deftest subtypep.aray.7
+(deftest subtypep.array.7
   (let ((etypes *array-element-types*))
     (loop
      for etp1 in etypes
