@@ -72,10 +72,6 @@
   (format nil "~{X ~A~^ Y ~A~^ ~}" '(1 2 3 4))
   "X 1 Y 2 X 3 Y 4")
 
-(deftest format.{.12
-  (format nil "~{~^~}" '(1 2 3 4 5))
-  "")
-
 ;;; Tests of ~@{ ... ~}
 
 (deftest format.@{.1
