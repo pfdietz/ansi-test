@@ -16,6 +16,7 @@
 (load "call-arguments-limit.lsp")
 (load "case.lsp")
 (load "catch.lsp")
+(load "ccase.lsp")
 (load "constantly.lsp")
 (load "complement.lsp")
 (load "cond.lsp")
