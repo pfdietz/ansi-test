@@ -1342,3 +1342,12 @@
 		  (%f2)))))
    22992834060 -5833)
   82674 0)
+
+;;; cmucl bug (Argument X is not a NUMBER: NIL)
+
+(deftest misc.108
+  (funcall
+   (compile nil '(lambda (b)
+		   (block b7 (- b (ignore-errors (return-from b7 57876))))))
+   10)
+  57876)
