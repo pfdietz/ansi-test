@@ -8188,9 +8188,9 @@ Broken at C::WT-MAKE-CLOSURE.
        (logior
 	(let* ((v5 (reduce #'+ (list 0 a))))
 	  (declare (dynamic-extent v5))
-	  v5))))
+	  (1- v5)))))
    17)
-  17)
+  16)
 
 (deftest misc.428
   (funcall
@@ -8216,4 +8216,31 @@ Broken at C::WT-MAKE-CLOSURE.
 	 (declare (dynamic-extent v8))
 	 (logandc1 v8 28)))))
   28)
+
+;;; poplog 15.53
+;;; Excess type specifier(s) in THE special form
+
+(deftest misc.430
+  (unwind-protect 0 (the integer 1))
+  0)
+
+;;; Wrong return values: T, 0
+(deftest misc.431
+  (funcall
+   (compile
+    nil
+    '(lambda (a) (declare (notinline > *))
+       (declare (optimize (compilation-speed 0) (safety 2) (speed 2) (debug 0) (space 3)))
+       (catch 'ct1 (* a (throw 'ct1 (if (> 0) a 0))))))
+   5445205692802)
+  5445205692802)
+
+;;; Ste: stack empty (missing argument? missing result?)
+(deftest misc.432
+  (loop for x below 2 count (not (not (typep x t))))
+  2)
+
+(deftest misc.433
+  (let ((a 1)) (if (not (/= a 0)) a 0))
+  0)
 
