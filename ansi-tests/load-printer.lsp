@@ -25,3 +25,5 @@
 (load "print-pathname.lsp")
 (load "print-structure.lsp")
 (load "printer-control-vars.lsp")
+(load "pprint-dispatch.lsp")
+(load "pprint-fill.lsp")
