@@ -72,7 +72,6 @@
 	(with-standard-io-syntax
 	 (let ((*readtable* (copy-readtable nil))
 	       (*package* (find-package "CL-TEST")))
-	   (setf (readtable-case *readtable*) :preserve)
 	   (let ((results
 		  (list
 		   (set-syntax-from-char c #\\)
@@ -81,13 +80,12 @@
 	       (list c results))))))
   nil)
 
-(deftest set-syntax-from-char.multiple-escape.1
+(deftest set-syntax-from-char.multiple-escape
   (loop for c across +standard-chars+
 	nconc
 	(with-standard-io-syntax
 	 (let ((*readtable* (copy-readtable nil))
 	       (*package* (find-package "CL-TEST")))
-	   (setf (readtable-case *readtable*) :preserve)
 	   (let ((results
 		  (list
 		   (set-syntax-from-char c #\|)
