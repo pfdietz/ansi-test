@@ -603,24 +603,46 @@
 	  `(progv ',vars (list ,@var-forms) ,body-form))))))
 
 (defun make-random-integer-mapping-form (size)
-  (rcase
-   (1 ;; reduce
-    (let ((sizes (random-partition (1- size) (1+ (random (min 10 (max 1 size))))))
-	  (op (random-from-seq #(+ - * logand logxor logior max min))))
-      `(reduce (function ,op) (list ,@(mapcar #'make-random-integer-form sizes)))))
-   (1 ;; reduce with lambda form
-    (destructuring-bind (size1 size2) (random-partition (1- size) 2)
-      (let* ((vars '(lv1 lv2 lv3 lv4 lv5 lv6))
-	     (var1 (random-from-seq vars))
-	     (var2 (random-from-seq (remove var1 vars)))
-	     (form (let ((*vars* (list*
-				  (make-var-desc :name var1 :type '(integer * *))
-				  (make-var-desc :name var2 :type '(integer * *))
-				  *vars*)))
-		     (make-random-integer-form size1)))
-	     (sizes (random-partition size2 (1+ (random (min 10 (max 1 size2))))))
-	     (args (mapcar #'make-random-integer-form sizes)))
-	`(reduce (function (lambda (,var1 ,var2) ,form)) (list ,@args)))))))		    
+  ;; reduce
+  (let ((keyargs nil)
+	(nargs (1+ (random (min 10 (max 1 size)))))
+	(sequence-op (random-from-seq '(vector list))))
+    (when (coin 2) (setq keyargs '(:from-end t)))
+    (cond
+     ((coin 2)
+      (let ((start (random nargs)))
+	(setq keyargs `(:start ,start ,@keyargs))
+	(when (coin 2)
+	  (let ((end (+ start 1 (random (- nargs start)))))
+	    (setq keyargs `(:end ,end ,@keyargs))))))
+     (t
+      (when (coin 2)
+	(let ((end (1+ (random nargs))))
+	  (setq keyargs `(:end ,end ,@keyargs))))))
+    (rcase
+     (1
+      (let ((sizes (random-partition (1- size) nargs))
+	    (op (random-from-seq #(+ - * logand logxor logior max min))))
+	`(reduce ,(rcase (1 `(function ,op))
+			 (1 `(quote ,op)))
+		 (,sequence-op
+		  ,@(mapcar #'make-random-integer-form sizes))
+		 ,@keyargs)))
+     (1
+      (destructuring-bind (size1 size2) (random-partition (1- size) 2)
+	(let* ((vars '(lmv1 lmv2 lmv3 lmv4 lmv5 lmv6))
+	       (var1 (random-from-seq vars))
+	       (var2 (random-from-seq (remove var1 vars)))
+	       (form (let ((*vars* (list*
+				    (make-var-desc :name var1 :type '(integer * *))
+				    (make-var-desc :name var2 :type '(integer * *))
+				    *vars*)))
+		       (make-random-integer-form size1)))
+	       (sizes (random-partition size2 nargs))
+	       (args (mapcar #'make-random-integer-form sizes)))
+	  `(reduce (function (lambda (,var1 ,var2) ,form))
+		   (,sequence-op ,@args)
+		   ,@keyargs)))))))
 
 (defun make-random-integer-setq-form (size)
   (if *vars*
@@ -634,11 +656,13 @@
 	    (setq var (list var))))
 	(cond
 	 ((equal type '(integer * *))
+	  (assert (not (member var '(lv1 lv2 lv3 lv4 lv5 lv6 lv7 lv8))))
 	  `(,op ,var ,(make-random-integer-form (1- size))))
 	 ((and (consp type)
 	       (eq (car type) 'integer)
 	       (integerp (second type))
 	       (integerp (third type)))
+	  (assert (not (member var '(lv1 lv2 lv3 lv4 lv5 lv6 lv7 lv8))))
 	  `(,op ,var ,(random-from-interval (1+ (third type)) (second type))))
 	 ;; Abort -- can't assign
 	 (t (make-random-integer-form size))))
@@ -1505,7 +1529,7 @@
 	  (let ((arg1 (car args))
 		(arg2 (cadr args))
 		(rest (cddr args)))
-	    (when (and (null (cddr args))
+	    (when (and ;; (null (cddr args))
 		       (consp arg1)
 		       (eql (car arg1) 'function))
 	      (let ((arg1.2 (cadr arg1)))
@@ -1520,13 +1544,14 @@
 					       ,arg2 ,@rest)))))))))
 	    (when (consp arg2)
 	      (case (car arg2)
-		((list)
+		((list vector)
 		 (let ((arg2.rest (cdr arg2)))
+		   (mapc try-fn arg2.rest)
 		   (prune-list arg2.rest
 			       #'prune
 			       #'(lambda (args)
 				   (try `(reduce ,arg1
-						 (list ,@args)
+						 (,(car arg2) ,@args)
 						 ,@rest))))))))))
 
 	 ((apply)
