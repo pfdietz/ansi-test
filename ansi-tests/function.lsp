@@ -92,3 +92,13 @@
 ;;;(deftest function.14
 ;;;  (macrolet ((%f () nil)) (not-mv (typep #'%f 'function)))
 ;;;  nil)
+
+;;; Tests of FUNCTION type specifiers
+
+(deftest function.14
+  (flet ((%f () nil))
+    (declare (optimize safety debug))
+    (let ((f #'%f))
+      (declare (type (function () null) f))
+      (funcall f)))
+  nil)
