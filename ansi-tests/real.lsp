@@ -32,3 +32,31 @@
 		    (not (typep (1+ i) tp)))
 	collect (list i tp))
   nil)
+
+(deftest real.3
+  (loop for i = 4 then (ash i 1)
+	for tp = `(real 0 ,(/ i 3))
+	repeat 200
+	unless (and (not (typep -1 tp))
+		    (not (typep -0.0001 tp))
+		    (typep 0 tp)
+		    (typep 0.0001 tp)
+		    (typep 1 tp)
+		    (typep (/ i 3) tp)
+		    (not (typep (/ (1+ i) 3) tp)))
+	collect (list i tp))
+  nil)
+
+(deftest real.4
+  (loop for i = 4 then (ash i 1)
+	for tp = `(real ,(- (/ i 3)) 0)
+	repeat 200
+	unless (and (not (typep (- -1 (/ i 3)) tp))
+		    (typep (- (/ i 3)) tp)
+		    (typep -1 tp)
+		    (typep 0 tp)
+		    (not (typep 1 tp))
+		    (not (typep (/ i 3) tp))
+		    (not (typep (1+ (/ i 3)) tp)))
+	collect (list i tp))
+  nil)
