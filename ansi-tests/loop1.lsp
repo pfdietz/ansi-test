@@ -95,6 +95,80 @@
 	  collect (progn (incf a) (incf b 2) (incf c 3) x)))
   (0 1 2 3 4 5))
 
+(deftest loop.1.21
+  (loop for x from 0 to 5 by 1/2 collect x)
+  (0 1/2 1 3/2 2 5/2 3 7/2 4 9/2 5))
 
+(deftest loop.1.22
+  (loop for x from 1 below 5 collect x)
+  (1 2 3 4))
 
-  
+(deftest loop.1.23
+  (loop for x from 1 below 5.01 collect x)
+  (1 2 3 4 5))
+
+(deftest loop.1.24
+  (loop for x below 5 from 2 collect x)
+  (2 3 4))
+
+(deftest loop.1.25
+  (loop for x from 10 above 4 collect x)
+  (10 9 8 7 6 5))
+
+(deftest loop.1.26
+  (loop for x from 14 above 6 by 2 collect x)
+  (14 12 10 8))
+
+(deftest loop.1.27
+  (loop for x above 6 from 14 by 2 collect x)
+  (14 12 10 8))
+
+(deftest loop.1.28
+  (loop for x downfrom 16 above 7 by 3 collect x)
+  (16 13 10))
+
+(deftest loop.1.29
+  (let (a b c (i 0))
+    (values
+     (loop for x from (progn (setq a (incf i)) 0)
+	   below (progn (setq b (incf i)) 9)
+	   by (progn (setq c (incf i)) 2)
+	   collect x)
+     a b c i))
+  (0 2 4 6 8)
+  1 2 3 3)
+
+(deftest loop.1.30
+  (let (a b c (i 0))
+    (values
+     (loop for x from (progn (setq a (incf i)) 0)
+	   by (progn (setq c (incf i)) 2)
+	   below (progn (setq b (incf i)) 9)
+	   collect x)
+     a b c i))
+  (0 2 4 6 8)
+  1 3 2 3)
+
+(deftest loop.1.31
+  (let (a b c (i 0))
+    (values
+     (loop for x
+	   below (progn (setq b (incf i)) 9)
+	   by (progn (setq c (incf i)) 2)
+	   from (progn (setq a (incf i)) 0)
+	   collect x)
+     a b c i))
+  (0 2 4 6 8)
+  3 1 2 3)
+
+(deftest loop.1.32
+  (let (a b c (i 0))
+    (values
+     (loop for x
+	   by (progn (setq c (incf i)) 2)
+	   below (progn (setq b (incf i)) 9)
+	   from (progn (setq a (incf i)) 0)
+	   collect x)
+     a b c i))
+  (0 2 4 6 8)
+  3 2 1 3)
