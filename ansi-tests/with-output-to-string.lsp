@@ -97,8 +97,8 @@
 		 (loop for i below 256
 		       for c = (code-char i)
 		       when (typep c 'base-char)
-		       do (write-char c s)
-		       do (vector-push c str1)))))
+		       do (progn (write-char c s)
+				 (vector-push c str1))))))
     (if (string= str1 str2) :good
       (list str1 str2)))
   :good)
