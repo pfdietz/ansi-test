@@ -71,6 +71,16 @@
   "abcdaba"
   "cd")
 
+(deftest string-trim.8a
+  (let* ((s (copy-seq "abcdaba"))
+	 (s2 (string-trim (make-array 4 :initial-contents '(#\a #\b #\c #\d)
+				      :element-type 'base-char
+				      :fill-pointer 2)
+			  s)))
+    (values s s2))
+  "abcdaba"
+  "cd")
+
 (deftest string-trim.9
   (let* ((s (make-array 7 :initial-contents "abcdaba"
 			:element-type 'character
@@ -83,6 +93,16 @@
 (deftest string-trim.10
   (let* ((s (make-array 9 :initial-contents "abcdabadd"
 			:element-type 'character
+			:fill-pointer 7))
+	 (s2 (string-trim "ab" s)))
+    (values s s2))
+  "abcdaba"
+  "cd")
+
+(deftest string-trim.10a
+  (let* ((s (make-array 9 :initial-contents "abcdabadd"
+			:element-type 'base-char
+			:adjustable t
 			:fill-pointer 7))
 	 (s2 (string-trim "ab" s)))
     (values s s2))
@@ -150,6 +170,40 @@
   :notes (:nil-vectors-are-strings)
   (string-trim (make-array '(0) :element-type nil) "abcd")
   "abcd")
+
+(deftest string-trim.22
+  (let ((s (make-array '(6) :initial-contents "abcaeb"
+		       :element-type 'base-char
+		       :adjustable t)))
+    (values (string-trim "ab" s) s))
+  "cae" "abcaeb")
+
+(deftest string-trim.23
+  (let ((s (make-array '(6) :initial-contents "abcaeb"
+		       :element-type 'character
+		       :adjustable t)))
+    (values (string-trim "ab" s) s))
+  "cae" "abcaeb")
+
+(deftest string-trim.24
+  (let* ((etype 'base-char)
+	 (s0 (make-array '(6) :initial-contents "abcaeb"
+			 :element-type etype))
+	 (s (make-array '(3) :element-type etype
+			:displaced-to s0
+			:displaced-index-offset 1)))
+    (values (string-trim "ab" s) s s0))
+  "c" "bca" "abcaeb")
+
+(deftest string-trim.25
+  (let* ((etype 'character)
+	 (s0 (make-array '(6) :initial-contents "abcaeb"
+			 :element-type etype))
+	 (s (make-array '(3) :element-type etype
+			:displaced-to s0
+			:displaced-index-offset 1)))
+    (values (string-trim "ab" s) s s0))
+  "c" "bca" "abcaeb")
 
 (deftest string-trim.order.1
   (let ((i 0) x y)
