@@ -1026,7 +1026,7 @@
 ;;; as their values (and are constant).  Symbols that are
 ;;; merely used in KEYWORD but not present there are exempt.
 
-(deftest keyword-1
+(deftest keyword-behavior
   (let ((result nil)
 	(keyword-package (find-package "KEYWORD")))
     (do-symbols (s keyword-package result)
