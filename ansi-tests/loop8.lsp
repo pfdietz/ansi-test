@@ -118,8 +118,15 @@
 
 ;;; Error cases
 
-;;; According to the spec, it is a program-error for any variable to be bound
-;;; more than once in loop clauses in the same loop form.
+;;; The spec says (in section 6.1.1.7) that:
+;;; "An error of type program-error is signaled (at macro expansion time)
+;;;  if the same variable is bound twice in any variable-binding clause
+;;;  of a single loop expression. Such variables include local variables,
+;;;  iteration control variables, and variables found by destructuring."
+;;;
+;;; This is somewhat ambiguous.  Test loop.8.error.1 binds A twice in
+;;; the same clause, but loop.8.error.2 binds A in two different clauses.
+;;; I am interpreting the spec as ruling out the latter as well.
 
 (deftest loop.8.error.1
   (classify-error
