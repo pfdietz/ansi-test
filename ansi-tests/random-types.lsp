@@ -29,11 +29,11 @@
 	  `(integer ,lo ,hi)))
        )
     (rcase
-     (2 (destructuring-bind (s1 s2)
-	    (random-partition (1- size) 2)
-	  (let ((op (random-from-seq #(cons cons and or))))
-	    `(,op ,(make-random-type s1)
-		  ,(make-random-type s2)))))
+     (2 (let* ((op (random-from-seq #(cons cons and or)))
+	       (nargs (if (eq op 'cons) 2
+			(1+ (random (min size 4)))))
+	       (sizes (random-partition (1- size) nargs)))
+	  `(,op ,@(mapcar #'make-random-type sizes))))
      (1 `(not ,(make-random-type (1- size))))
      )))
 
@@ -78,10 +78,31 @@
 	   (prune-list args
 		       #'prune-type
 		       #'(lambda (args) (try `(cons ,@args)))))
-	  ((integer real float ratio single-float double-float short-float long-float)
+	  ((integer)
+	   (try op)
+	   (try '(eql 0))
+	   (when (= (length args) 2)
+	     (let ((arg1 (first args))
+		   (arg2 (second args)))
+	       (when (and (integerp arg1) (integerp arg2))
+		 (try `(eql ,arg1))
+		 (try `(eql ,arg2))
+		 (when (and (< arg1 0) (<= 0 arg2))
+		   (try `(integer 0 ,arg2)))
+		 (when (and (<= arg1 0) (< 0 arg2))
+		   (try `(integer ,arg1 0)))
+		 (when (> (- arg2 arg1) 1)
+		   (try `(integer ,(+ arg1 (floor (- arg2 arg1) 2)) ,arg2))
+		   (try `(integer ,arg1 ,(- arg2 (floor (- arg2 arg1) 2)))))))))
+	    
+	  ((real float ratio single-float double-float short-float long-float)
 	   (try op))
+	   
 	  ((or and)
 	   (mapc try-fn args)
+	   (loop for i from 0 below (length args)
+		 do (try `(,op ,@(subseq args 0 i)
+			       ,@(subseq args (1+ i)))))
 	   (prune-list args
 		       #'prune-type
 		       #'(lambda (args) (try (cons op args)))))
@@ -92,19 +113,35 @@
 			(eq (car arg) 'not))
 	       (try (second arg)))
 	     (prune-type arg #'(lambda (arg) (try `(not ,arg))))))
+	  
 	  ((member)
 	   (dolist (arg (cdr tp))
 	     (try `(eql ,arg)))
 	   (when (cddr tp)
 	   (try `(member ,@(cddr tp)))))
+
+	  ((eql)
+	   (assert (= (length args) 1))
+	   (let ((arg (first args)))
+	     (unless (= arg 0)
+	       (try `(eql 0))
+	       (cond
+		((< arg -1)
+		 (try `(eql ,(ceiling arg 2))))
+		((> arg 1)
+		 (try `(eql ,(floor arg 2))))))))		 
+	  
 	  )))))
   (values))
 
-(defun prune-type-pair (t1 t2)
-  (let (changed)
+(defun prune-type-pair (pair &optional (fn #'test-types))
+  (declare (type function fn))
+  (let ((t1 (first pair))
+	(t2 (second pair))
+	changed)
     (loop
      do (flet ((%try2 (new-tp)
-		      (when (test-types t1 new-tp)
+		      (when (funcall fn t1 new-tp)
 			(print "Success in first loop")
 			(print new-tp)
 			(setq t2 new-tp
@@ -113,7 +150,7 @@
 	  (catch 'success
 	    (prune-type t2 #'%try2)))
      do (flet ((%try1 (new-tp)
-		      (when (test-types new-tp t2)
+		      (when (funcall fn new-tp t2)
 			(print "Success in second loop")
 			(print new-tp)
 			(setq t1 new-tp
@@ -122,14 +159,71 @@
 	  (catch 'success
 	    (prune-type t1 #'%try1)))
      while changed
-     do (setq changed nil)))
-  (values t1 t2))
+     do (setq changed nil))
+    (list t1 t2)))
 
+(defun test-type-triple (t1 t2 t3)
+  ;; Returns non-nil if a problem is found
+  (multiple-value-bind (sub1 success1)
+      (subtypep t1 t2)
+    (when success1
+      (if sub1
+	  (append
+	   (check-all-subtypep t1 `(or ,t2 ,t3))
+	   (check-all-subtypep `(and ,t1 ,t3) t2))
+	(or (subtypep `(or ,t1 ,t3) t2)
+	    (subtypep t1 `(and ,t2 ,t3)))))))
 
-     
-  
-			   
-	 
+(defun test-random-types3 (n size)
+  (loop for t1 = (make-random-type (1+ (random size)))
+	for t2 = (make-random-type (1+ (random size)))
+	for t3 = (make-random-type (1+ (random size)))
+	for i from 1 to n
+	;; do (print (list t1 t2))
+	do (when (and (= (mod i 100) 0) (> i 0))
+	     (format t "~A " i) (finish-output *standard-output*))
+	when (test-type-triple t1 t2 t3)
+	collect (list t1 t2)
+	finally (terpri)))
+
+(defun prune-type-triple (pair &optional (fn #'test-type-triple))
+  (declare (type function fn))
+  (let ((t1 (first pair))
+	(t2 (second pair))
+	(t3 (third pair))
+	changed)
+    (loop
+     do (flet ((%try2 (new-tp)
+		      (when (funcall fn t1 new-tp t3)
+			(print "Success in first loop")
+			(print new-tp)
+			(setq t2 new-tp
+			      changed t)
+			(throw 'success nil))))
+	  (catch 'success
+	    (prune-type t2 #'%try2)))
+     do (flet ((%try1 (new-tp)
+		      (when (funcall fn new-tp t2 t3)
+			(print "Success in second loop")
+			(print new-tp)
+			(setq t1 new-tp
+			      changed t)
+			(throw 'success nil))))
+	  (catch 'success
+	    (prune-type t1 #'%try1)))
+     do (flet ((%try3 (new-tp)
+		      (when (funcall fn t1 t2 new-tp)
+			(print "Success in second loop")
+			(print new-tp)
+			(setq t3 new-tp
+			      changed t)
+			(throw 'success nil))))
+	  (catch 'success
+	    (prune-type t3 #'%try3)))
+     while changed
+     do (setq changed nil))
+    (list t1 t2 t3)))
+
 
 
   
