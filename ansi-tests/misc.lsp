@@ -4404,4 +4404,22 @@
    1202966173)
   -1)
 
+;;; sbcl 0.8.7.6
+;;; Lisp error during constant folding:
+;;; The function SB-VM::%LEA-MOD32 is undefined.
+
+(deftest misc.265
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -19621 11895) a))
+       (declare (optimize (speed 3) (space 2) (safety 3)
+			  (debug 3) (compilation-speed 3)))
+       (* 0 a 103754)))
+   1)
+  0)
+
+
+
 
