@@ -12,9 +12,9 @@
 
 (deftest misc.1
   (funcall
-   (COMPILE NIL '(LAMBDA (B)
-			 (DECLARE (TYPE (INTEGER 8 22337) B))
-			 (+ B 2607688420)))
+   (compile nil '(lambda (b)
+		   (declare (type (integer 8 22337) b))
+		   (+ b 2607688420)))
    100)
   2607688520)
 
@@ -5931,3 +5931,46 @@ Broken at C::WT-C-INLINE-LOC.
 	      (flet ((%f12 () (rem 0 -43)))
 		(multiple-value-call #'%f12 (values))))))))
   102)
+
+;;; ecl
+;;; Wrong value
+
+(deftest misc.321
+  (funcall
+   (compile
+    nil
+    '(lambda (p)
+       (declare (optimize (speed 1) (space 3) (safety 2) (debug 1)
+			  (compilation-speed 3)))
+       (catch 'ct2
+	 (let* ((v3 (- (if p (throw 'ct2 :good) 0))))
+	   :bad))))
+   t)
+  :good)
+
+;;; segfault
+(deftest misc.322
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (optimize (speed 2) (space 2) (safety 0) (debug 3)
+			  (compilation-speed 2)))
+       (logorc2 (labels ((%f14 (f14-1) a)) (%f14 0))
+		(reduce #'(lambda (lmv1 lmv2) a) (list 0 0)))))
+   3151096069)
+  -1)
+
+;; #1# is undefined
+
+(deftest misc.323
+  (let* ((tail '(:from-end t))
+	 (form
+	  `(lambda ()
+	    (declare (optimize (speed 3) (space 1) (safety 2) (debug 2)
+			       (compilation-speed 2)))
+	    (eval '(reduce #'logior
+			   (vector (reduce #'logand (vector 0 0) . ,tail) 0)
+			   . ,tail)))))
+    (funcall (compile nil form)))
+  0)
