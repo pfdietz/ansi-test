@@ -1806,8 +1806,8 @@
 					2176))
 			    3))
 		   c c)))
-   0)
-  0)
+   3000)
+  3000)
 
 ;;; Lispworks 4.2 (x86 linux personal edition) failures
 
