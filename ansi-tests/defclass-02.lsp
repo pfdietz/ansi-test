@@ -88,7 +88,7 @@
      (map-slot-boundp* c2 '(a b c d))
      (slot-value c1 'a)
      (slot-value c2 'a)
-     (eq (slot-makunbound c2 'a) c1)
+     (eq (slot-makunbound c2 'a) c2)
      (map-slot-boundp* c1 '(a b))
      (map-slot-boundp* c2 '(a b c d))))
   (nil nil)
@@ -168,6 +168,8 @@
 
 ;;;
 
+;;; Show shadowing of slots by :allocation
+
 (defclass class-0207a ()
   ((a :allocation :class)))
 
@@ -212,3 +214,4 @@
   z
   t t t
   x y z)
+
