@@ -160,6 +160,19 @@
 	     (declare (type fixnum x))
 	     "Add one to the fixnum x."
 	     (1+ x)))
-    (declare (ftype (fixnum) integer))
+    (declare (ftype (function (fixnum) integer) %f))
     (%f 10))
+  11)
+
+;;; Keywords can be function names
+(deftest labels.22
+  (labels ((:foo () 10)
+	   (:bar () (1+ (:foo))))
+    (:bar))
+  11)
+
+(deftest labels.23
+  (labels ((:foo () 10)
+	   (:bar () (1+ (funcall #':foo))))
+    (funcall #':bar))
   11)

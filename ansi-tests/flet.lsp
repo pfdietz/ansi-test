@@ -152,7 +152,7 @@
 	     (declare (type fixnum x))
 	     "Add one to the fixnum x."
 	     (1+ x)))
-    (declare (ftype (fixnum) integer))
+    (declare (ftype (function (fixnum) integer) %f))
     (%f 10))
   11)
 
@@ -389,4 +389,13 @@
 (deftest flet.46
   (flet ((t () 'b)) (t))
   b)
+
+;;; Keywords can be function names
+(deftest flet.47
+  (flet ((:foo () 'bar)) (:foo))
+  bar)
+
+(deftest flet.48
+  (flet ((:foo () 'bar)) (funcall #':foo))
+  bar)
 
