@@ -34,5 +34,6 @@
      x))
   a 1)
 
-
-  
+;;; (deftest when.error.1
+;;;  (classify-error (when))
+;;;  program-error)
