@@ -2004,3 +2004,53 @@
    0)
   -20343)
 
+;;; Bug in ecl (cvs head, 4 Nov 2003)
+;;; "/tmp/ecl04Coiwc0V.c:48: `lex0' undeclared (first use in this function)"
+
+(deftest misc.154
+  (funcall
+   (compile nil
+	    '(lambda (b)
+	       (labels ((%f8 nil -39011))
+		 (flet ((%f4 (f4-1 f4-2 &optional (f4-3 (%f8)) (f4-4 b))
+			     (%f8)))
+		   (%f4 -260093 -75538 -501684 (let ((v9 (%f8))) -3))))))
+   0)
+  -39011)
+
+;;; "/tmp/ecl1572CbKzu.c:16: too many arguments to function `APPLY'"
+
+(deftest misc.155
+  (funcall
+   (compile nil
+	    '(lambda (a b c)
+	       (labels ((%f6 (f6-1 f6-2) c))
+		 (multiple-value-call #'%f6 (values a c)))))
+   0 10 20)
+  20)
+
+;;; "The function C::LDB1 is undefined."
+
+(deftest misc.156
+  (funcall
+   (compile nil
+	    '(lambda ()
+	       (let ((v6 (ldb (byte 30 1) 1473))) (let ((v8 v6)) 2395)))))
+  2395)
+
+;;; "/tmp/ecl9CEiD1RL5.c:36: `lex0' undeclared (first use in this function)"
+   
+(deftest misc.157
+  (funcall
+   (compile nil
+	    ' (lambda (c)
+		(labels ((%f11 nil 1))
+		  (flet ((%f9 (f9-1 f9-2)
+			      (case 17466182 ((-12) (%f11)) (t c))))
+		    (%f9 -9913 c)))))
+   17)
+  17)
+
+
+
+
