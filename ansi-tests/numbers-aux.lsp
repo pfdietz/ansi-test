@@ -345,3 +345,9 @@
 				  (min x1 x2) (max x1 x2)
 				  (min y1 y2) (max y1 y2)
 				  n2))))
+(defun safe-tan (x &optional (default 0.0))
+  (handler-case
+   (let ((result (multiple-value-list (tan x))))
+     (assert (null (cdr result)))
+     (car result))
+   (arithmetic-error () default)))
