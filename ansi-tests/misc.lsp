@@ -8617,4 +8617,9 @@ Broken at C::WT-MAKE-CLOSURE.
    -1147 -44004)
   117)
 
+;;; gcl 27 Nov 2004
+;;; Incorrect return value
 
+(deftest misc.449
+  (funcall (compile nil '(lambda (a) (* 10 a (setq a 1000)))) 1)
+  10000)
