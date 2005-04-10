@@ -10689,3 +10689,11 @@ Broken at C::WT-MAKE-CLOSURE.
        (ash c (min 82 -28192897))))
    0 -714979492 1474663829)
   0)
+
+;;; ecl 
+;;; 10000000.0d0 is not of type INTEGER.
+
+(deftest misc.595
+  (floor 1/2 1.0d0)
+  0 #.(float 1/2 1.0d0))
+
