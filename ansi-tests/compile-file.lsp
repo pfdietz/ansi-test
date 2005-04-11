@@ -5,7 +5,8 @@
 
 (in-package :cl-test)
 
-(defun compile-file-test (file funname &rest args &key expect-warnings output-file
+(defun compile-file-test (file funname &rest args &key expect-warnings 
+			       expect-style-warnings output-file
 			       print verbose external-format)
   (declare (ignorable verbose external-format))
   (let* ((target-pathname (or output-file
@@ -27,7 +28,8 @@
 		    ((or error warning)
 		     #'(lambda (c)
 			 (declare (ignore c))
-			 (setf actual-warnings-p t)
+			 (unless (typep c 'style-warning)
+			   (setf actual-warnings-p t))
 			 nil)))
 		   (with-output-to-string
 		     (*standard-output* str)
@@ -40,9 +42,9 @@
       (destructuring-bind
 	  (output-truename warnings-p failure-p)
 	  vals
-	(declare (ignore warnings-p))
 	(assert (if actual-warnings-p failure-p t))
 	(assert (if expect-warnings failure-p t))
+	(assert (if expect-style-warnings warnings-p t))
 	(print (namestring (truename target-pathname)))
 	(print (namestring output-truename))
 	(values
@@ -60,7 +62,7 @@
 
 (deftest compile-file.2
   (compile-file-test "compile-file-test-file-2.lsp" 'compile-file-test-fun.2
-		     :expect-warnings t)
+		     :expect-style-warnings t)
   t t nil nil)
 
 (deftest compile-file.3
