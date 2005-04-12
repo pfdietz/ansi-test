@@ -144,7 +144,22 @@
     (compile-file-test "compile-file-test-file-4.lsp" 'compile-file-test-fun.4))
   t foo)
 
-;;; Add tests for *compile-file-truename*, *compile-file-pathname*
+;;; Tests for *compile-file-truename*, *compile-file-pathname*
+
+(deftest compile-file.16
+  (let* ((file #p"compile-file-test-file-5.lsp")
+	 (target-pathname (compile-file-pathname file))
+	 (*compile-print* nil)
+	 (*compile-verbose* nil))
+    (when (probe-file target-pathname)
+      (delete-file target-pathname))
+    (compile-file file)
+    (load target-pathname)
+    (values
+     (equalpt (truename file) (funcall 'compile-file-test-fun.5))
+     (equalpt (pathname (merge-pathnames file))
+	      (funcall 'compile-file-test-fun.5a))))
+  t t)	 
 
 ;;; Error cases
 
