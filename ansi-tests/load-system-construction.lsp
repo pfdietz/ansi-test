@@ -6,5 +6,6 @@
 (in-package :cl-test)
 
 (load "compile-file.lsp")
+(load "load.lsp")
 
 
