@@ -159,7 +159,37 @@
      (equalpt (truename file) (funcall 'compile-file-test-fun.5))
      (equalpt (pathname (merge-pathnames file))
 	      (funcall 'compile-file-test-fun.5a))))
-  t t)	 
+  t t)
+
+;;; Add tests of logical pathnames
+
+(deftest compile-file.17
+  (let ((file (logical-pathname "CLTEST:COMPILE-FILE-TEST-LP.LSP")))
+    (with-open-file
+     (s file :direction :output :if-exists :supersede :if-does-not-exist :create)
+     (format s "(in-package :cl-test)~%(defun compile-file-test-lp.fun () nil)~%"))
+    (compile-file-test file 'compile-file-test-lp.fun))
+  t nil)
+
+(deftest compile-file.18
+  (let ((file (logical-pathname "CLTEST:COMPILE-FILE-TEST-LP.OUT")))
+    (with-open-file
+     (s file :direction :output :if-exists :supersede :if-does-not-exist :create))
+    (compile-file-test "compile-file-test-file.lsp"
+		       'compile-file-test-fun.1
+		       :output-file file))
+  t nil)
+
+
+  
+
+(deftest compile-file-pathname.1
+  *compile-file-pathname*
+  nil)
+
+(deftest compile-file-truename.1
+  *compile-file-truename*
+  nil)
 
 ;;; Error cases
 
