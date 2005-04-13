@@ -126,14 +126,16 @@
 
 (deftest load.17
   (let ((file #p"load-test-file.lsp"))
+    (fmakunbound 'load-file-test-fun.1)
+    (fmakunbound 'load-file-test-fun.2)
     (values
      (notnot (load file))
      (let ((p1 (pathname (merge-pathnames file)))
-	   (p2 (load-file-test-fun.1)))
+	   (p2 (funcall 'load-file-test-fun.1)))
        (or (equalpt p1 p2)
 	   (list p1 p2)))
      (let ((p1 (truename file))
-	   (p2 (load-file-test-fun.2)))
+	   (p2 (funcall 'load-file-test-fun.2)))
        (or (equalpt p1 p2)
 	   (list p1 p2)))))
   t t t)
@@ -160,8 +162,19 @@
 	   (list p1 p2)))))
   t t)
 
-;;; Add logical pathname test
-
+(deftest load.19
+  (let ((file (logical-pathname "CLTEST:LDTEST.LSP"))
+	(fn 'load-test-fun-3)
+	(*package* (find-package "CL-TEST")))
+    (with-open-file
+     (s file :direction :output :if-exists :supersede
+	:if-does-not-exist :create)
+     (format s "(in-package :cl-test) (defun ~a () :foo)" fn))
+    (fmakunbound fn)
+    (values
+     (notnot (load file))
+     (funcall fn)))
+  t :foo)
 
 ;;; Error tests
 
