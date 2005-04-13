@@ -54,10 +54,10 @@
 	       (v4 (if expect-warnings failure-p t))
 	       (v5 (if expect-style-warnings warnings-p t))
 	       (v6 (or (null output-truename) (pathnamep output-truename)))
-	       (v7 (equalpt (namestring (truename target-pathname))
-			    (namestring output-truename)))
+	       (v7 (equalpt-or-report (namestring (truename target-pathname))
+				      (namestring output-truename)))
 	       (v8 (not (fboundp funname))))
-	   (if (and v1 v2 v3 v4 v5 v6 v7 v8) t
+	   (if (and v1 v2 v3 v4 v5 v6 (eql v7 t) v8) t
 	     (list v1 v2 v3 v4 v5 v6 v7 v8)))
 	 (progn
 	   (load target-pathname)
@@ -163,9 +163,9 @@
     (compile-file file)
     (load target-pathname)
     (values
-     (equalpt (truename file) (funcall 'compile-file-test-fun.5))
-     (equalpt (pathname (merge-pathnames file))
-	      (funcall 'compile-file-test-fun.5a))))
+     (equalpt-or-report (truename file) (funcall 'compile-file-test-fun.5))
+     (equalpt-or-report (pathname (merge-pathnames file))
+			(funcall 'compile-file-test-fun.5a))))
   t t)
 
 ;;; Add tests of logical pathnames

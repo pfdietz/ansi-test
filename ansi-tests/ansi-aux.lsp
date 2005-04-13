@@ -87,6 +87,10 @@ Results: ~A~%" expected-number form n results))))
   "Like EQUALP, but guaranteed to return T for true."
   (apply #'values (mapcar #'notnot (multiple-value-list (equalp x y)))))
 
+(defun equalpt-or-report (x y)
+  "Like EQUALPT, but return either T or a list of the arguments."
+  (or (equalpt x y) (list x y)))
+
 (defun string=t (x y)
   (notnot-mv (string= x y)))
 
