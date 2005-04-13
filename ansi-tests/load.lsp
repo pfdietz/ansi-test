@@ -176,6 +176,20 @@
      (funcall fn)))
   t :foo)
 
+;;; Defaults of the load variables
+
+(deftest load-pathname.1
+  *load-pathname*
+  nil)
+
+(deftest load-truename.1
+  *load-truename*
+  nil)
+
+(deftest load-print.1
+  *load-print*
+  nil)
+
 ;;; Error tests
 
 (deftest load.error.1
