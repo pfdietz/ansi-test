@@ -5,14 +5,17 @@
 
 (in-package :cl-test)
 
-(defun compile-file-test (file funname &rest args &key expect-warnings 
+(defun compile-file-test (file funname &rest args &key
+			       expect-warnings 
 			       expect-style-warnings output-file
-			       print verbose external-format)
-  (declare (ignorable verbose external-format))
+			       (print nil print-p)
+			       (verbose nil verbose-p)
+			       (*compile-print* nil)
+			       (*compile-verbose* nil)
+			       external-format)
+  (declare (ignorable external-format))
   (let* ((target-pathname (or output-file
 			      (compile-file-pathname file)))
-	 (*compile-print* nil)
-	 (*compile-verbose* nil)
 	 (actual-warnings-p nil)
 	 (actual-style-warnings-p nil))
     (when (probe-file target-pathname)
@@ -27,7 +30,6 @@
 				       nil))
 		    ((or error warning)
 		     #'(lambda (c)
-			 (declare (ignore c))
 			 (unless (typep c 'style-warning)
 			   (setf actual-warnings-p t))
 			 nil)))
@@ -41,8 +43,13 @@
 	(print (namestring (truename target-pathname)))
 	(print (namestring output-truename))
 	(values
-	 (let ((v1 (or print verbose (string= str "")))
-	       (v2 (or (not verbose) (position #\; str)))
+	 (let ((v1 (or print verbose
+		       (and (not print-p) *compile-print*)
+		       (and (not verbose-p) *compile-verbose*)
+		       (string= str "")))
+	       (v2 (or (and verbose-p (not verbose))
+		       (and (not verbose-p) (not *compile-verbose*))
+		       (position #\; str)))
 	       (v3 (if actual-warnings-p failure-p t))
 	       (v4 (if expect-warnings failure-p t))
 	       (v5 (if expect-style-warnings warnings-p t))
@@ -180,8 +187,15 @@
 		       :output-file file))
   t nil)
 
+(deftest compile-file.19
+  (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+		     :*compile-verbose* t)
+  t nil)
 
-  
+(deftest compile-file.20
+  (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+		     :*compile-print* t)
+  t nil)  
 
 (deftest compile-file-pathname.1
   *compile-file-pathname*
