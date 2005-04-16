@@ -10697,3 +10697,18 @@ Broken at C::WT-MAKE-CLOSURE.
   (floor 1/2 1.0d0)
   0 #.(float 1/2 1.0d0))
 
+;;; sbcl 0.8.21.45 (x86)
+;;; The function SB-KERNEL:VECTOR-NIL-P is undefined.
+
+(deftest misc.596
+  (notnot
+   (let ((s (coerce "a" 'base-string)))
+     (funcall
+      (compile
+       nil
+       `(lambda ()
+	  (declare (optimize (speed 0) (safety 3) (debug 2) (space 1)))
+	  (typep ,s '(string 1)))))))
+  t)
+
+
