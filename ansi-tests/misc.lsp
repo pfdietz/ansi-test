@@ -10525,20 +10525,32 @@ Broken at C::WT-MAKE-CLOSURE.
      -5067.2056)))
   t)
 
+(deftest misc.581a
+  (notnot
+   (typep
+    (funcall
+     (compile nil '(lambda (x) (declare (type (eql -1.0) x))
+		     ;;; Note!  #x1000001 is the least positive integer
+		     ;;; for which this fails on x86
+		     (+ #x1000001 x)))
+     -1.0f0)
+    'single-float))
+  t)
+
 ;;; Incorrect result
 
 (deftest misc.582
   (let ((result
-	 (funcall
-	  (compile
-	   nil
-	   ' (lambda (p1)
-	       (declare (optimize (speed 0) (safety 1) (debug 1) (space 1))
-			(type (eql -39887.645) p1))
-	       (mod p1 382352925)))
-	  -39887.645)))
+         (funcall
+          (compile
+           nil
+           ' (lambda (p1)
+               (declare (optimize (speed 0) (safety 1) (debug 1) (space 1))
+                        (type (eql -39887.645) p1))
+               (mod p1 382352925)))
+          -39887.645)))
     (if (plusp result)
-	t
+        t
       result))
   t)
 
@@ -10551,9 +10563,9 @@ Broken at C::WT-MAKE-CLOSURE.
      (compile
       nil
       '(lambda (p1)
-	 (declare (optimize (speed 0) (safety 0) (debug 2) (space 3))
-		  (type (complex rational) p1))
-	 (sqrt p1)))
+         (declare (optimize (speed 0) (safety 0) (debug 2) (space 3))
+                  (type (complex rational) p1))
+         (sqrt p1)))
      #c(-9003 -121))))
   t)
 
@@ -10565,8 +10577,8 @@ Broken at C::WT-MAKE-CLOSURE.
     (compile
      nil
      '(lambda (p1 p2)
-	(declare (optimize (speed 1) (safety 1) (debug 0) (space 1))
-		 (type (member -3712.8447) p1)
+        (declare (optimize (speed 1) (safety 1) (debug 0) (space 1))
+        	 (type (member -3712.8447) p1)
 		 (type (integer -34359738403 -24) p2))
 	(scale-float p1 p2)))
     -3712.8447 -27)
