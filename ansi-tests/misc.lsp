@@ -10724,3 +10724,14 @@ Broken at C::WT-MAKE-CLOSURE.
   t)
 
 
+;;; OpenMCL
+;;; Incorrect value
+
+(deftest misc.597
+  (funcall (compile nil '(lambda (c)
+			   (declare (optimize (sped 1) (compilation-speed 2)
+					      (space 1) (debug 1) (safety 2)))
+			   (declare (type (integer 1 41) c))
+			   (logxor -1 c)))
+	   8)
+  -9)
