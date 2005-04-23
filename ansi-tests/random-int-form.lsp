@@ -280,6 +280,39 @@
     (let ((d (loop for x = (random r) unless (zerop x) do (return x))))
       (if (coin) (/ n d) (- (/ n d))))))
 
+(defun make-random-nonnegative-rational ()
+  (let* ((r (ash 1 (1+ (random *maximum-random-int-bits*))))
+	 (n (random r)))
+    (assert (>= r 2))
+    (let ((d (loop for x = (random r) unless (zerop x) do (return x))))
+      (/ n d))))
+
+(defun make-random-positive-rational ()
+  (let* ((r (ash 1 (1+ (random *maximum-random-int-bits*))))
+	 (n (1+ (random r))))
+    (assert (>= r 2))
+    (let ((d (loop for x = (random r) unless (zerop x) do (return x))))
+      (/ n d))))
+
+(defun make-random-bounded-rational (upper-limit lower-inclusive upper-inclusive)
+  (assert (rationalp upper-limit))
+  (assert (not (minusp upper-limit)))
+  (cond
+   ((= upper-limit 0) 0)
+   ((<= upper-limit 1/1000000)
+    (/ (make-random-bounded-rational (* 1000000 upper-limit) lower-inclusive upper-inclusive)
+       1000000))
+   ((>= upper-limit 1000000)
+    (* (random 1000000)
+       (make-random-bounded-rational (/ upper-limit 1000000) lower-inclusive upper-inclusive)))
+   (t
+    (assert (< 1/1000000 upper-limit 1000000))
+    (let ((x 0))
+      (loop do (setq x (* upper-limit (rational (random 1.0))))
+	    while (or (and (not lower-inclusive) (zerop x))
+		      (and (not upper-inclusive) (= x upper-limit)))
+	    finally (return x))))))   
+
 (defun make-random-float ()
   (rcase
    (1 (random most-positive-short-float))
@@ -490,7 +523,7 @@
 	    `(boole ,op ,e1 ,e2)))))	    
 
      ;; n-ary ops
-     (40
+     (20
       (let* ((op (random-from-seq #(+ - * logand min max
 				      logior values lcm gcd logxor)))
 	     (nmax (case op ((* lcm gcd) 4) (t (1+ (random 40)))))
@@ -1164,6 +1197,44 @@
 	     ;; powers of 2...)
 	     (random-from-interval (1+ hi) lo)))))
 
+	(rational
+	 (or
+	  (let ((r (make-random-element-of-type 'rational)))
+	    (and (typep r type) r))
+	  (let ((lo (cadr type))
+		(hi (caddr type))
+		lo= hi=)
+	    (cond
+	     ((consp lo) nil)
+	     ((member lo '(* nil))
+	      (setq lo nil)
+	      (setq lo= nil))
+	     (t
+	      (assert (typep lo 'rational))
+	      (setq lo= t)))
+	    (cond
+	     ((consp hi) nil)
+	     ((member hi '(* nil))
+	      (setq hi nil)
+	      (setq hi= nil))
+	     (t
+	      (assert (typep hi 'rational))
+	      (setq hi= t)))
+	    (assert (or (null lo) (null hi) (<= lo hi)))
+	    (assert (or (null lo) (null hi) (< lo hi) (and lo= hi=)))
+	    (cond
+	     ((null lo)
+	      (cond
+	       ((null hi) (make-random-rational))
+	       (hi= (- hi (make-random-nonnegative-rational)))
+	       (t (- hi (make-random-positive-rational)))))
+	     ((null hi)
+	      (cond
+	       (lo= (+ lo (make-random-nonnegative-rational)))
+	       (t (+ lo (make-random-positive-rational)))))
+	     (t
+	      (+ lo (make-random-bounded-rational (- hi lo) lo= hi=)))))))
+	
 	((single-float double-float long-float short-float)
 	 (let ((lo (cadr type))
 	       (hi (caddr type))
@@ -1265,11 +1336,14 @@
 		   when (typep c type)
 		   return c)))))
 	)))
+   ((typep type 'class)
+    (make-random-element-of-type (class-name type)))
    (t
     (ecase type
       (bit (random 2))
       (boolean (random-from-seq #(nil t)))
       (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| car)))
+      (keyword (random-from-seq #(:a :b :c :d :e :f :g :h :i :j)))
       (unsigned-byte (random-from-interval
 		      (1+ (ash 1 (random *maximum-random-int-bits*))) 0))
       (signed-byte (random-from-interval
@@ -1283,7 +1357,7 @@
       ((float)
        (make-random-element-of-type (random-from-seq #(short-float single-float double-float long-float))))
       ((real) (make-random-element-of-type (random-from-seq #(integer rational float))))
-      ((number) (make-random-element-of-type (random-from-seq #(integer rational float complex))))
+      ((number) (make-random-element-of-type (random-from-seq #(integer rational float #-ecl complex))))
       ((bit-vector) (make-random-vector 'bit '*))
       ((simple-bit-vector) (make-random-vector 'bit '* :simple t))
       ((vector) (make-random-vector '* '*))
@@ -1298,10 +1372,12 @@
       ((base-char standard-char)
        (random-from-seq +standard-chars+))
       ((character) (make-random-character))
+      ((extended-char) (loop for x = (make-random-character) when (typep x 'extended-char) return x))
       ;; Default
       ((atom t *) (make-random-element-of-type
-	      (random-from-seq #(real symbol boolean integer unsigned-byte complex character
-				      (string 1) (bit-vector 1) complex))))
+		   (random-from-seq #(real symbol boolean integer unsigned-byte
+					   #-ecl complex character
+					   (string 1) (bit-vector 1)))))
       ((null) nil)
       ((fixnum)
        (random-from-interval (1+ most-positive-fixnum) most-negative-fixnum))
