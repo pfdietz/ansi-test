@@ -11,29 +11,37 @@
 
 (deftest in-package.1
   (let ((*package* *package*))
-    (let ((p2 (in-package "A")))
-      (and (eqt p2 (find-package "A"))
+    (safely-delete-package "H")
+    (make-package "H" :use ())
+    (let ((p2 (in-package "H")))
+      (and (eqt p2 (find-package "H"))
 	   (eqt *package* p2))))
   t)
 
 (deftest in-package.2
   (let ((*package* *package*))
-    (let ((p2 (in-package |A|)))
-      (and (eqt p2 (find-package "A"))
+    (safely-delete-package "H")
+    (make-package "H" :use ())
+    (let ((p2 (in-package |H|)))
+      (and (eqt p2 (find-package "H"))
 	   (eqt *package* p2))))
   t)
 
 (deftest in-package.3
   (let ((*package* *package*))
-    (let ((p2 (in-package :|A|)))
-      (and (eqt p2 (find-package "A"))
+    (safely-delete-package "H")
+    (make-package "H" :use ())
+    (let ((p2 (in-package :|H|)))
+      (and (eqt p2 (find-package "H"))
 	   (eqt *package* p2))))
   t)
 
 (deftest in-package.4
   (let ((*package* *package*))
-    (let ((p2 (in-package #\A)))
-      (and (eqt p2 (find-package "A"))
+    (safely-delete-package "H")
+    (make-package "H" :use ())
+    (let ((p2 (in-package #\H)))
+      (and (eqt p2 (find-package "H"))
 	   (eqt *package* p2))))
   t)
 
