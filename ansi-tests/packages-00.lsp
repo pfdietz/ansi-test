@@ -18,6 +18,17 @@
     (:export "BAR")))
 
 (report-and-ignore-errors
+  (defpackage "FS-A"
+    (:use)
+    (:nicknames "FS-Q")
+    (:export "FOO")))
+
+(report-and-ignore-errors
+  (defpackage "FS-B"
+    (:use "FS-A")
+    (:export "BAR")))
+
+(report-and-ignore-errors
   (defpackage "DS1"
     (:use)
     (:intern "C" "D")

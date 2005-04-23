@@ -71,32 +71,32 @@
   A::FOO :inherited)
 
 (deftest find-symbol.15
-  (find-symbol "FOO" "B")
-  A::FOO :inherited)
+  (find-symbol "FOO" "FS-B")
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.16
-  (find-symbol "FOO" (find-package "B"))
-  A::FOO :inherited)
+  (find-symbol "FOO" (find-package "FS-B"))
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.17
   (let ((name (make-array '(3) :initial-contents "FOO"
 			  :element-type 'base-char)))
-    (find-symbol name "B"))
-  A::FOO :inherited)
+    (find-symbol name "FS-B"))
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.18
   (let ((name (make-array '(4) :initial-contents "FOOD"
 			  :element-type 'character
 			  :fill-pointer 3)))
-    (find-symbol name "B"))
-  A::FOO :inherited)
+    (find-symbol name "FS-B"))
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.19
   (let ((name (make-array '(4) :initial-contents "FOOD"
 			  :element-type 'base-char
 			  :fill-pointer 3)))
-    (find-symbol name "B"))
-  A::FOO :inherited)
+    (find-symbol name "FS-B"))
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.20
   (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
@@ -104,8 +104,8 @@
 	 (name (make-array '(3) :element-type 'character
 			   :displaced-to name0
 			   :displaced-index-offset 1)))
-    (find-symbol name "B"))
-  A::FOO :inherited)
+    (find-symbol name "FS-B"))
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.21
   (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
@@ -113,18 +113,18 @@
 	 (name (make-array '(3) :element-type 'base-char
 			   :displaced-to name0
 			   :displaced-index-offset 1)))
-    (find-symbol name "B"))
-  A::FOO :inherited)
+    (find-symbol name "FS-B"))
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.22
-  (find-symbol "FOO" (make-array '(1) :initial-element #\B :element-type 'base-char))
-  A::FOO :inherited)
+  (find-symbol "FOO" (make-array '(4) :initial-contents "FS-B" :element-type 'base-char))
+  FS-A::FOO :inherited)
 
 (deftest find-symbol.23
-  (find-symbol "FOO" (make-array '(2) :initial-element #\B
-				 :fill-pointer 1
+  (find-symbol "FOO" (make-array '(5) :initial-contents "FS-BX"
+				 :fill-pointer 4
 				 :element-type 'base-char))
-  A::FOO :inherited)
+  FS-A::FOO :inherited)
 
 
 
