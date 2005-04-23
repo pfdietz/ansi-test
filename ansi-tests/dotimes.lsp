@@ -122,11 +122,30 @@
     y)
   (0 0 0 0))
 
+(deftest dotimes.17a
+  (let ((i 0) (y nil) (bound 4))
+    (declare (special i))
+    (flet ((%f () i))
+      (dotimes (i bound)
+	(push (%f) y)))
+    y)
+  (0 0 0 0))
+
 (deftest dotimes.18
   (let ((i 0) (y nil))
     (declare (special i))
     (flet ((%f () i))
       (dotimes (i 4)
+	(declare (special i))
+	(push (%f) y)))
+    y)
+  (3 2 1 0))
+
+(deftest dotimes.18a
+  (let ((i 0) (y nil) (bound 4))
+    (declare (special i))
+    (flet ((%f () i))
+      (dotimes (i bound)
 	(declare (special i))
 	(push (%f) y)))
     y)
@@ -165,6 +184,22 @@
       (dotimes (i 10 x)
 	(declare (special x)))))
   :good)
+
+(deftest dotimes.23a
+  (let ((x :good) (bound 10))
+    (declare (special x))
+    (let ((x :bad))
+      (dotimes (i bound x)
+	(declare (special x)))))
+  :good)
+
+(deftest dotimes.24
+  (let ((bound 4) (j 0))
+    (values
+     (dotimes (i bound)
+       (incf j) (decf bound))
+     bound j))
+  nil 0 4)
 
 (def-macro-test dotimes.error.1
   (dotimes (i 10)))
