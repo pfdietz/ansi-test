@@ -167,3 +167,20 @@
 (def-type-prop-test float.1 'float '(real) 1)
 (def-type-prop-test float.2 'float '(real float) 2)
 (def-type-prop-test floatp 'floatp '(t) 1)
+
+(defun has-nonzero-length (x) (> (length x) 0))
+
+(def-type-prop-test parse-integer.1 'parse-integer
+  '((and (vector (member #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))
+	 (satisfies has-nonzero-length)))
+  1)
+
+(def-type-prop-test parse-integer.2 'parse-integer
+  `((and (vector (member #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))
+	 (satisfies has-nonzero-length))
+    (eql :start)
+    ,#'(lambda (x &rest rest) (declare (ignore rest))
+	 `(integer 0 (,(length x)))))
+  3)
+
+(def-type-prop-test sxhash 'sxhash '(t) 1)
