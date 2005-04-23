@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(eval-when (load eval compile)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (compile-and-load "random-int-form.lsp"))
 
 (defvar *print-random-type-prop-input* nil)
@@ -56,7 +56,6 @@
 ;;; (compile-and-load "random-int-form.lsp") ;; do this on lisps not supporting recursive compiles
 ;;; (compile-and-load "random-type-prop.lsp")
 ;;; (in-package :cl-test)
-;;; #+sbcl (setq *default-arg-the* nil)   ;; This reduces the rate at which the sbcl IR2 type check bug occurs
 ;;; (load "random-type-prop-tests.lsp")
 ;;; (let (*catch-errors*) (do-test '<testname>))
 ;;; or (let (*catch-errors*) (do-tests))
@@ -82,9 +81,8 @@
 ;;;                              array of specialized type.  This enables one to test
 ;;;                              forms where the result will be unboxed.  Otherwise, just
 ;;;                              return the values.
-;;;  ignore      nil             Ignore conditions that are elements of IGNORE.  For example,
-;;;                              one might bind this to ARITHMETIC-ERROR if you want to
-;;;                              ignore possible floating errors (say).
+;;;  ignore      *default-ignore*  Ignore conditions that are elements of IGNORE.  Default is
+;;;                              ARITHMETIC-ERROR.
 ;;;  test        rt::equalp-with-case   The test function used to compare outputs.  It's
 ;;;                              also handy to use #'approx= to handle approximate equality
 ;;;                              when testing floating point computations, where compiled code
@@ -126,8 +124,15 @@
 	  ; (vals (mapcar #'make-random-element-of-type types))
 	  (vals (setq *params*
 		      (or (make-random-arguments types) (go again))))
-	  (vals (if replicate (mapcar #'replicate vals) vals))
-	  (is-var? (loop repeat (length vals) collect (coin)))
+	  (vals
+	   (if replicate
+	       (mapcar #'replicate vals)
+	     vals))
+	  (is-var? (if (consp replicate)
+		       (progn
+			 (assert (= (length replicate) (length vals)))
+			 (loop for x in replicate collect (or x (coin))))
+		     (loop repeat (length vals) collect (coin))))
 	  (*is-var?* is-var?)
 	  (params (loop for x in is-var?
 			for p in param-names
@@ -360,7 +365,8 @@
      (1 `(,root ,etype))
      (1 `(,root ,etype ,(loop for i below rank collect (make-random-array-dimension-spec val i))))
      (1 `(,root ,etype ,(loop for i below rank collect (array-dimension val i))))
-     (1 `(,root ,etype ,rank)))))
+     #-ecl (1 `(,root ,etype ,rank))
+     )))
 
 (defmethod make-random-type-containing ((val string))
   (rcase
@@ -391,16 +397,20 @@
    (1 'complex)
    (1 'number)
    #-gcl (1 
-	  (let ((t1 (type-of (realpart val)))
-		(t2 (type-of (imagpart val))))
-	    (cond
-	     ((subtypep t1 t2) `(complex ,(upgraded-complex-part-type t2)))
-	     ((subtypep t2 t1) `(complex ,(upgraded-complex-part-type t1)))
-	     ((and (subtypep t1 'rational)
-		   (subtypep t2 'rational))
-	      `(complex rational))
-	     (t
-	      `(complex ,(upgraded-complex-part-type `(or ,t1 ,t2)))))))
+	  (let* ((t1 (type-of (realpart val)))
+		 (t2 (type-of (imagpart val)))
+		 (part-type
+		  (cond
+		   ((subtypep t1 t2) (upgraded-complex-part-type t2))
+		   ((subtypep t2 t1) (upgraded-complex-part-type t1))
+		   ((and (subtypep t1 'rational)
+			 (subtypep t2 'rational))
+		    'rational)
+		   (t
+		    (upgraded-complex-part-type `(or ,t1 ,t2))))))
+	    (if (subtypep 'real part-type)
+		'(complex real)
+	      `(complex ,part-type))))
    (1 `(eql ,val))))
 
 (defmethod make-random-type-containing ((val generic-function))
@@ -432,6 +442,14 @@
     (loop repeat length
 	  do (setq result `(cons ,element-type ,result)))
     result))
+
+(defun make-sequence-type (length &optional (element-type t))
+  (rcase
+   (1 `(vector ,element-type ,length))
+   (1 (make-list-type length 'null element-type))))
+
+(defun make-random-sequence-type-containing (element)
+  (make-sequence-type (random 10) (make-random-type-containing element)))
 
 (defun same-set-p (set1 set2 &rest args &key key test test-not)
   (declare (ignorable key test test-not))
@@ -539,3 +557,63 @@
 				       :adjustable adj)))
 	      (setf (gethash obj *replicate-table*) new-obj)
 	      (values new-obj obj new-obj)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(declaim (special *isomorphism-table*))
+
+(defun isomorphic-p (obj1 obj2)
+  (let ((*isomorphism-table* (make-hash-table)))
+    (isomorphic-p* obj1 obj2)))
+
+(defgeneric isomorphic-p* (obj1 obj2)
+  (:documentation
+   "Returns true iff obj1 and obj2 are 'isomorphic' (that is, have the same structure,
+    including the same leaf values and the same pattern of sharing).  It should be
+    the case that (isomorphic-p obj (replicate obj)) is true."))
+
+(defmethod isomorphic-p* ((obj1 t) (obj2 t))
+  (eql obj1 obj2))
+
+(defmethod isomorphic-p* ((obj1 cons) (obj2 cons))
+  (let ((previous (gethash obj1 *isomorphism-table*)))
+    (cond
+     (previous
+      ;; If we've already produced a mapping from obj1 to something,
+      ;; isomorphism requires that obj2 be that object
+      (eq previous obj2))
+     ;; Otherwise, assume obj1 will map to obj2 and recurse
+     (t
+      (setf (gethash obj1  *isomorphism-table*) obj2)
+      (and (isomorphic-p* (car obj1) (car obj2))
+	   (isomorphic-p* (cdr obj1) (cdr obj2)))))))
+
+(defmethod isomorphic-p* ((obj1 array) (obj2 array))
+  (let ((previous (gethash obj1 *isomorphism-table*)))
+    (cond
+     (previous
+      ;; If we've already produced a mapping from obj1 to something,
+      ;; isomorphism requires that obj2 be that object
+      (eq previous obj2))
+     (t
+      (setf (gethash obj1 *isomorphism-table*) obj2)
+      (and (equal (array-dimensions obj1) (array-dimensions obj2))
+	   (equal (array-element-type obj1) (array-element-type obj2))
+	   (if (array-has-fill-pointer-p obj1)
+	       (and (array-has-fill-pointer-p obj2)
+		    (eql (fill-pointer obj1) (fill-pointer obj2)))
+	     (not (array-has-fill-pointer-p obj2)))
+	   (let (to-1 (index-1 0) to-2 (index-2 0))
+	     (multiple-value-setq (to-1 index-1) (array-displacement obj1))
+	     (multiple-value-setq (to-2 index-2) (array-displacement obj2))
+	     (if to-1
+		 (and to-2
+		      (eql index-1 index-2)
+		      (isomorphic-p* to-1 to-2))
+	       ;; Not displaced -- recurse on elements
+	       (let ((total-size (array-total-size obj1)))
+		 (loop for i below total-size
+		       always (isomorphic-p* (row-major-aref obj1 i)
+					     (row-major-aref obj2 i)))))))))))
+
+
