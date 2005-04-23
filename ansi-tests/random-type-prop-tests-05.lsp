@@ -20,6 +20,10 @@
 
 (def-type-prop-test consp 'consp '(t) 1)
 (def-type-prop-test atom 'atom '(t) 1)
+
+(def-type-prop-test rplaca 'rplaca '(cons t) 2 :replicate t)
+(def-type-prop-test rplacd 'rplacd '(cons t) 2 :replicate t)
+
 (def-type-prop-test car 'car '((cons t t)) 1)
 (def-type-prop-test first 'first '((cons t t)) 1)
 (def-type-prop-test cdr 'cdr '((cons t t)) 1)
@@ -70,6 +74,8 @@
   '((cons t (cons t (cons t (cons t (cons t (cons t (cons t (cons t (cons t (cons t t)))))))))))
   1)
 
+(def-type-prop-test pop '(lambda (x) (list (pop x) x)) '((cons t t)) 1)
+(def-type-prop-test push '(lambda (x y) (list (push x y) x y)) '(t t) 2)
 
 (def-type-prop-test copy-tree.1 'copy-tree '((cons t t)) 1)
 (def-type-prop-test copy-tree.2 'copy-tree '((cons (cons t t) (cons t t))) 1)
@@ -98,17 +104,47 @@
 				       (eql :key) (or null (eql not) (eql ,#'not))
 				       (eql :test) (or (eql equal) (eql ,#'equal))) 7)
 
+(def-type-prop-test nsubst.1 'nsubst '(t t t) 3 :replicate t)
+(def-type-prop-test nsubst.2 'nsubst '(t t (cons t t)) 3 :replicate t)
+(def-type-prop-test nsubst.3 'nsubst '(t t list) 3 :replicate t)
+(def-type-prop-test nsubst.4 'nsubst '(t t (cons (cons t t) (cons t t))) 3 :replicate t)
+(def-type-prop-test nsubst.5 'nsubst `(boolean t (cons (cons t t) (cons t t))
+					       (eql :key)
+					       (or null (eql not) (eql ,#'not))) 5
+					       :replicate t)
+(def-type-prop-test nsubst.6 'nsubst `(t t (cons (cons t t) (cons t t)) (eql :test) (or (eql equal) (eql ,#'equal))) 5 :replicate t)
+(def-type-prop-test nsubst.7 'nsubst `(t t (cons (cons t t) (cons t t)) (eql :test-not) (or (eql equal) (eql ,#'equal))) 5 :replicate t)
+(def-type-prop-test nsubst.8 'nsubst `(t t (cons (cons t t) (cons t t))
+					 (eql :key) (or null (eql not) (eql ,#'not))
+					 (eql :test) (or (eql equal) (eql ,#'equal))) 7
+					 :replicate t)
+
+
 (def-type-prop-test subst-if.1 'subst-if `(t (or (eql not) (eql ,#'not)) list) 3)
 (def-type-prop-test subst-if.2 'subst-if `(t (or (eql not) (eql ,#'not)) (cons (or null t) (or null t))) 3)
 (def-type-prop-test subst-if.3 'subst-if `(t (eql identity)
 					     (cons (cons (cons t t) (cons t t)) (cons (cons t t) (cons t t)))
 					     (eql :key) (or null (eql not) (eql ,#'not))) 5)
 
+(def-type-prop-test nsubst-if.1 'nsubst-if `(t (or (eql not) (eql ,#'not)) list) 3 :replicate t)
+(def-type-prop-test nsubst-if.2 'nsubst-if `(t (or (eql not) (eql ,#'not)) (cons (or null t) (or null t))) 3 :replicate t)
+(def-type-prop-test nsubst-if.3 'nsubst-if `(t (eql identity)
+					       (cons (cons (cons t t) (cons t t)) (cons (cons t t) (cons t t)))
+					       (eql :key) (or null (eql not) (eql ,#'not))) 5
+					       :replicate t)
+
 (def-type-prop-test subst-if-not.1 'subst-if-not `(t (or (eql not) (eql ,#'not)) list) 3)
 (def-type-prop-test subst-if-not.2 'subst-if-not `(t (or (eql not) (eql ,#'not)) (cons (or null t) (or null t))) 3)
 (def-type-prop-test subst-if-not.3 'subst-if-not `(t (eql identity)
 						     (cons (cons (cons t t) (cons t t)) (cons (cons t t) (cons t t)))
 						     (eql :key) (or null (eql not) (eql ,#'not))) 5)
+
+(def-type-prop-test nsubst-if-not.1 'nsubst-if-not `(t (or (eql not) (eql ,#'not)) list) 3 :replicate t)
+(def-type-prop-test nsubst-if-not.2 'nsubst-if-not `(t (or (eql not) (eql ,#'not)) (cons (or null t) (or null t))) 3 :replicate t)
+(def-type-prop-test nsubst-if-not.3 'nsubst-if-not `(t (eql identity)
+						       (cons (cons (cons t t) (cons t t)) (cons (cons t t) (cons t t)))
+						       (eql :key) (or null (eql not) (eql ,#'not))) 5
+						       :replicate t)
 
 (def-type-prop-test tree-equal.1 'tree-equal (list t #'(lambda (x) `(or t (eql ,(copy-tree x))))) 2)
 (def-type-prop-test tree-equal.2 'tree-equal (list 'list #'(lambda (x) `(or list (eql ,(copy-tree t))))) 2)
@@ -144,17 +180,18 @@
 (def-type-prop-test append.4 'append '(list list list t) 4)
 
 (def-type-prop-test nconc.1 'nconc '(list) 1)
-(def-type-prop-test nconc.2 '(lambda (x y) (nconc (copy-list x) y))  '(list list) 2)
-(def-type-prop-test nconc.3 '(lambda (x y z) (nconc (copy-list x) (copy-list y) z))  '(list list list) 3)
+(def-type-prop-test nconc.2 'nconc '(list list) 2 :replicate t)
+(def-type-prop-test nconc.3 'nconc '(list list list) 3 :replicate t)
+(def-type-prop-test nconc.4 'nconc '(list list list list) 4 :replicate t)
 
 (def-type-prop-test revappend 'revappend '(list t) 2)
-(def-type-prop-test nreconc '(lambda (x y) (nreconc (copy-list x) y)) '(list t) 2)
+(def-type-prop-test nreconc 'nreconc '(list t) 2 :replicate t)
 
 (def-type-prop-test butlast.1 'butlast '(list) 1)
 (def-type-prop-test butlast.2 'butlast '(list (integer 0 20)) 2)
 
-(def-type-prop-test nbutlast.1 '(lambda (x) (nbutlast (copy-list x))) '(list) 1)
-(def-type-prop-test nbutlast.2 '(lambda (x n) (nbutlast (copy-list x) n)) '(list (integer 0 20)) 2)
+(def-type-prop-test nbutlast.1 'nbutlast '(list) 1 :replicate t)
+(def-type-prop-test nbutlast.2 'nbutlast '(list (integer 0 20)) 2 :replicate t)
 
 (def-type-prop-test last.1 'last '(list) 1)
 (def-type-prop-test last.2 'last '(list (integer 0 15)) 2)
@@ -219,6 +256,10 @@
 
 (def-type-prop-test mapl.1 'mapl '((eql list)) 2 :rest-type 'list :maxargs 10)
 (def-type-prop-test mapl.2 'mapl `((eql ,#'vector)) 2 :rest-type 'list :maxargs 10)
+
+(def-type-prop-test mapcan.1 'mapcan '((eql list)) 2 :rest-type 'list :maxargs 10)
+
+(def-type-prop-test mapcon.1 'mapcon '((eql copy-list) list) 2)
 
 (def-type-prop-test acons 'acons 
   (list t t #'(lambda (x y) (make-list-type (random 5) 'null '(or null (cons t t)))))
@@ -358,4 +399,130 @@
   4
   :test #'(lambda (x y) (same-set-p x y :key #'car)))
 
-;;; Others cons-related functions here
+(def-type-prop-test nintersection.1 'nintersection '(list list) 2 :test #'same-set-p :replicate t)
+(def-type-prop-test nintersection.2 'nintersection '(list list (eql :key) (eql identity))  4 :test #'same-set-p :replicate t)
+(def-type-prop-test nintersection.3 'nintersection
+  (list #'(lambda () (make-list-type (random 10) 'null 'integer))
+	#'(lambda (x) (make-list-type (random 10) 'null 'integer))
+	'(eql :key)
+	`(member 1+ ,#'1+))
+  4
+  :test #'same-set-p
+  :replicate t)
+(def-type-prop-test nintersection.4 'nintersection
+  (list #'(lambda () (make-list-type (random 10) 'null '(cons integer null)))
+	#'(lambda (x) (make-list-type (random 10) 'null '(cons integer null)))
+	'(eql :key)
+	`(member car ,#'car))
+  4
+  :test #'(lambda (x y) (same-set-p x y :key #'car))
+  :replicate t)
+(def-type-prop-test nintersection.5 'nintersection
+  (list #'(lambda () (make-list-type (random 10) 'null '(cons integer null)))
+	#'(lambda (x) (make-list-type (random 10) 'null '(cons integer null)))
+	'(eql :test)
+	`(member equal ,#'equal))
+  4
+  :test #'(lambda (x y) (same-set-p x y :key #'car))
+  :replicate t)
+
+
+(def-type-prop-test adjoin.1 'adjoin '(t list) 2)
+(def-type-prop-test adjoin.2 'adjoin '((integer 0 1) list) 2)
+(def-type-prop-test adjoin.3 'adjoin `((integer 0 10) (cons number (cons number (cons number null)))
+				       (eql :test) (or (eql =) (eql ,#'=)))
+  4)
+(def-type-prop-test adjoin.4 'adjoin `(number
+				       (cons number (cons number (cons number (cons number null))))
+				       (eql :test-not) (or (eql /=) (eql ,#'/=)))
+  4)
+(def-type-prop-test adjoin.5 'adjoin `(number
+				       (cons number (cons number (cons number (cons number null))))
+				       (eql :key) (or (member 1+ 1- ,#'1+ ,#'1-)))
+  4)
+
+(def-type-prop-test pushnew.1 '(lambda (x y) (list (pushnew x y) y)) '(t list) 2)
+(def-type-prop-test pushnew.2 '(lambda (x y) (list (pushnew x y) y)) '((integer 0 1) list) 2)
+(def-type-prop-test pushnew.3 '(lambda (x y) (list (pushnew x y :test #'=) y))
+  `((integer 0 10) (cons number (cons number (cons number null))))
+  2)
+(def-type-prop-test pushnew.4 '(lambda (x y) (list (pushnew x y :test-not #'/=) y))
+  `((integer 0 10) (cons number (cons number (cons number null))))
+  2)
+(def-type-prop-test pushnew.5 '(lambda (x y) (list (pushnew x y :key #'1+) y))
+  `(number (cons number (cons number (cons number (cons number null)))))
+  2)
+
+(def-type-prop-test set-difference.1 'set-difference '(list list) 2)
+(def-type-prop-test set-difference.2 'set-difference '((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))))
+  2)
+(def-type-prop-test set-difference.3 'set-difference `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test) (member = ,#'=))
+  4)
+(def-type-prop-test set-difference.4 'set-difference `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test-not) (member /= ,#'/=))
+  4)
+(def-type-prop-test set-difference.5 'set-difference `((cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (eql :key) (member evenp oddp ,#'evenp ,#'oddp))
+  4)
+
+(def-type-prop-test nset-difference.1 'nset-difference '(list list) 2 :replicate t)
+(def-type-prop-test nset-difference.2 'nset-difference '((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))))
+  2 :replicate t)
+(def-type-prop-test nset-difference.3 'nset-difference `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test) (member = ,#'=))
+  4 :replicate t)
+(def-type-prop-test nset-difference.4 'nset-difference `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test-not) (member /= ,#'/=))
+  4 :replicate t)
+(def-type-prop-test nset-difference.5 'nset-difference `((cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (eql :key) (member evenp oddp ,#'evenp ,#'oddp))
+  4 :replicate t)
+
+
+(def-type-prop-test set-exclusive-or.1 'set-exclusive-or '(list list) 2)
+(def-type-prop-test set-exclusive-or.2 'set-exclusive-or '((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))))
+  2)
+(def-type-prop-test set-exclusive-or.3 'set-exclusive-or `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test) (member = ,#'=))
+  4)
+(def-type-prop-test set-exclusive-or.4 'set-exclusive-or `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test-not) (member /= ,#'/=))
+  4)
+(def-type-prop-test set-exclusive-or.5 'set-exclusive-or `((cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (eql :key) (member evenp oddp ,#'evenp ,#'oddp))
+  4)
+
+(def-type-prop-test nset-exclusive-or.1 'nset-exclusive-or '(list list) 2 :replicate t)
+(def-type-prop-test nset-exclusive-or.2 'nset-exclusive-or '((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))))
+  2 :replicate t)
+(def-type-prop-test nset-exclusive-or.3 'nset-exclusive-or `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test) (member = ,#'=))
+  4 :replicate t)
+(def-type-prop-test nset-exclusive-or.4 'nset-exclusive-or `((cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) (cons (unsigned-byte 3) null)))
+						       (eql :test-not) (member /= ,#'/=))
+  4 :replicate t)
+(def-type-prop-test nset-exclusive-or.5 'nset-exclusive-or `((cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (cons (unsigned-byte 3) (cons (unsigned-byte 3) null))
+						       (eql :key) (member evenp oddp ,#'evenp ,#'oddp))
+  4 :replicate t)
+
+(def-type-prop-test subsetp.1 'subsetp '(list list) 2)
+(def-type-prop-test subsetp.2 'subsetp '((cons integer null)
+					 (cons integer (cons integer (cons integer (cons integer null)))))
+  2)
