@@ -11,4 +11,8 @@
 (load "random-type-prop-tests-02.lsp")
 (load "random-type-prop-tests-03.lsp")
 (load "random-type-prop-tests-04.lsp")
+(load "random-type-prop-tests-05.lsp")
+(load "random-type-prop-tests-06.lsp")
+(load "random-type-prop-tests-07.lsp")
+(load "random-type-prop-tests-08.lsp")
 
