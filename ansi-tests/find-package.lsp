@@ -27,52 +27,66 @@
   t)
 
 (deftest find-package.4
-  (let ((p (ignore-errors (find-package "A"))))
-    (if (packagep p)
-	t
-      p))
+  (progn
+    (set-up-packages)
+    (let ((p (ignore-errors (find-package "A"))))
+      (if (packagep p)
+	  t
+	p)))
   t)
 
 (deftest find-package.5
-  (let ((p (ignore-errors (find-package #\A))))
-    (if (packagep p)
-	t
-      p))
+  (progn
+    (set-up-packages)
+    (let ((p (ignore-errors (find-package #\A))))
+      (if (packagep p)
+	  t
+	p)))
   t)
 
 (deftest find-package.6
-  (let ((p (ignore-errors (find-package "B"))))
-    (if (packagep p)
-	t
-      p))
+  (progn
+    (set-up-packages)
+    (let ((p (ignore-errors (find-package "B"))))
+      (if (packagep p)
+	  t
+	p)))
   t)
 
 (deftest find-package.7
-  (let ((p (ignore-errors (find-package #\B))))
-    (if (packagep p)
-	t
-      p))
+  (progn
+    (set-up-packages)
+    (let ((p (ignore-errors (find-package #\B))))
+      (if (packagep p)
+	  t
+	p)))
   t)
 
 (deftest find-package.8
-  (let ((p (ignore-errors (find-package "Q")))
-	(p2 (ignore-errors (find-package "A"))))
-    (and (packagep p)
-	 (packagep p2)
-	 (eqt p p2)))
+  (progn
+    (set-up-packages)
+    (let ((p (ignore-errors (find-package "Q")))
+	  (p2 (ignore-errors (find-package "A"))))
+      (and (packagep p)
+	   (packagep p2)
+	   (eqt p p2))))
   t)
 
 (deftest find-package.9
-  (let ((p (ignore-errors (find-package "A")))
-	(p2 (ignore-errors (find-package "B"))))
-    (eqt p p2))
+  (progn
+    (set-up-packages)
+    (let ((p (ignore-errors (find-package "A")))
+	  (p2 (ignore-errors (find-package "B"))))
+      (eqt p p2)))
   nil)
 
 (deftest find-package.10
-  (let ((p (ignore-errors (find-package #\Q)))
-	(p2 (ignore-errors (find-package "Q"))))
-    (and (packagep p)
-	 (eqt p p2)))
+  (progn
+    (set-up-packages)
+    (let ((p (ignore-errors (find-package #\Q)))
+	  (p2 (ignore-errors (find-package "Q"))))
+      (and (packagep p)
+	   (eqt p p2))))
   t)
 
 (deftest find-package.11

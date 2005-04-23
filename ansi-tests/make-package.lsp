@@ -93,6 +93,7 @@
 
 (deftest make-package.7
   (progn
+    (set-up-packages)
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '("A")))))
       (prog1
@@ -106,6 +107,7 @@
 
 (deftest make-package.7a
   (progn
+    (set-up-packages)
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '(#:|A|)))))
       (prog1
@@ -119,6 +121,7 @@
 
 (deftest make-package.7b
   (progn
+    (set-up-packages)
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '(#\A)))))
       (prog1
@@ -132,6 +135,7 @@
 
 (deftest make-package.8
   (progn
+    (set-up-packages)
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '("A")))))
       (multiple-value-prog1
@@ -145,6 +149,7 @@
 
 (deftest make-package.8a
   (progn
+    (set-up-packages)
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '(#:|A|)))))
       (multiple-value-prog1
@@ -158,6 +163,7 @@
 
 (deftest make-package.8b
   (progn
+    (set-up-packages)
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '(#\A)))))
       (multiple-value-prog1
@@ -171,6 +177,7 @@
 
 (deftest make-package.9
   (progn
+    (set-up-packages)
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '("A")))))
       (multiple-value-prog1
@@ -184,6 +191,7 @@
 
 (deftest make-package.9a
   (progn
+    (set-up-packages)
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '(#:|A|)))))
       (multiple-value-prog1
@@ -197,6 +205,7 @@
 
 (deftest make-package.9b
   (progn
+    (set-up-packages)
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '(#\A)))))
       (multiple-value-prog1
@@ -380,6 +389,7 @@
 (defmacro def-make-package-test3 (test-name name-form)
   `(deftest ,test-name
      (let ((name ,name-form))
+       (set-up-packages)
        (safely-delete-package "TEST1")
        (assert (find-package name))
        (let ((p (ignore-errors (make-package "TEST1" :use (list name)))))
@@ -435,22 +445,29 @@
 ;; exist as packages or nicknames of packages
 
 (deftest make-package.error.1
-  (handle-non-abort-restart (make-package "A"))
+  (progn
+    (set-up-packages)
+    (handle-non-abort-restart (make-package "A")))
   success)  
 
 (deftest make-package.error.2
-  (handle-non-abort-restart (make-package "Q"))
+  (progn
+    (set-up-packages)
+    (handle-non-abort-restart (make-package "Q")))
   success)
 
 (deftest make-package.error.3
-  (handle-non-abort-restart
-   (safely-delete-package "TEST1")
-   (make-package "TEST1" :nicknames '("A")))
+  (progn
+    (set-up-packages)
+    (handle-non-abort-restart
+     (safely-delete-package "TEST1")
+     (make-package "TEST1" :nicknames '("A"))))
   success)
 
 (deftest make-package.error.4
   (handle-non-abort-restart
    (safely-delete-package "TEST1")
+   (safely-delete-package "Q")
    (make-package "TEST1" :nicknames '("Q")))
   success)
 

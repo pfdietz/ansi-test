@@ -57,18 +57,35 @@
   find-symbol.11 :internal)
 
 (deftest find-symbol.12
-  (find-symbol "FOO" #\A)
-  A::FOO :external)
+  (progn
+    (set-up-packages)
+    (let ((vals (multiple-value-list (find-symbol "FOO" #\A))))
+      (values (length vals)
+	      (package-name (symbol-package (first vals)))
+	      (symbol-name (first vals))
+	      (second vals))))
+  2 "A" "FOO" :external)
 
 (deftest find-symbol.13
   (progn
+    (set-up-packages)
     (intern "X" (find-package "A"))
-    (find-symbol "X" #\A))
-  A::X :internal)
+    (let ((vals (multiple-value-list (find-symbol "X" #\A))))
+      (values (length vals)
+	      (package-name (symbol-package (first vals)))
+	      (symbol-name (first vals))
+	      (second vals))))
+  2 "A" "X" :internal)
 
 (deftest find-symbol.14
-  (find-symbol "FOO" #\B)
-  A::FOO :inherited)
+  (progn
+    (set-up-packages)
+    (let ((vals (multiple-value-list (find-symbol "FOO" #\B))))
+      (values (length vals)
+	      (package-name (symbol-package (first vals)))
+	      (symbol-name (first vals))
+	      (second vals))))
+  2 "A" "FOO" :inherited)
 
 (deftest find-symbol.15
   (find-symbol "FOO" "FS-B")

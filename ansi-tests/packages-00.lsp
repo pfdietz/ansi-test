@@ -17,6 +17,18 @@
     (:use "A")
     (:export "BAR")))
 
+(defun set-up-packages ()
+  (safely-delete-package "A")
+  (safely-delete-package "B")
+  (safely-delete-package "Q")
+  (defpackage "A"
+    (:use)
+    (:nicknames "Q")
+    (:export "FOO"))
+  (defpackage "B"
+    (:use "A")
+    (:export "BAR")))
+
 (report-and-ignore-errors
   (defpackage "FS-A"
     (:use)

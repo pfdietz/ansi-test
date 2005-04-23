@@ -16,15 +16,18 @@
 
 ;; The required packages are present
 (deftest list-all-packages.2
-  (subsetp
-   (list (find-package "CL")
-	 (find-package "CL-USER")
-	 (find-package "KEYWORD")
-	 (find-package "A")
-	 (find-package "REGRESSION-TEST")
-	 (find-package "CL-TEST")
-	 (find-package "B"))
-   (list-all-packages))
+  (progn
+    (set-up-packages)
+    (notnot
+     (subsetp
+      (list (find-package "CL")
+	    (find-package "CL-USER")
+	    (find-package "KEYWORD")
+	    (find-package "A")
+	    (find-package "REGRESSION-TEST")
+	    (find-package "CL-TEST")
+	    (find-package "B"))
+      (list-all-packages))))
   t)
 
 ;; The list returned has only packages in it

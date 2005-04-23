@@ -10,12 +10,14 @@
 (declaim (optimize (safety 3)))
 
 (deftest do-symbols.1
-  (equalt
-   (remove-duplicates
-    (sort-symbols (let ((all nil))
-		    (do-symbols (x "B" all) (push x all)))))
-   (list (find-symbol "BAR" "B")
-	 (find-symbol "FOO" "A")))
+  (progn
+    (set-up-packages)
+    (equalt
+     (remove-duplicates
+      (sort-symbols (let ((all nil))
+		      (do-symbols (x "B" all) (push x all)))))
+     (list (find-symbol "BAR" "B")
+	   (find-symbol "FOO" "A"))))
   t)
 
 ;;
@@ -29,11 +31,11 @@
       (do-symbols (x pkg all) (push x all))))))
 
 (deftest do-symbols.2
-    (collect-symbols "DS1")
+  (collect-symbols "DS1")
   (DS1:A DS1:B DS1::C DS1::D))
 
 (deftest do-symbols.3
-    (collect-symbols "DS2")
+  (collect-symbols "DS2")
   (DS2:A DS2::E DS2::F DS2:G DS2:H))
 
 (deftest do-symbols.4
@@ -91,6 +93,7 @@
   `(deftest ,test-name
      (let ((name ,name-form))
        (assert (string= name "B"))
+       (set-up-packages)
        (equalt
 	(remove-duplicates
 	 (sort-symbols (let ((all nil))
