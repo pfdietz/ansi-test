@@ -48,6 +48,8 @@
 			       #:defnote
 			       #:my-aref
 			       #:*catch-errors*
+			       #:*passed-tests*
+			       #:*failed-tests*
 			       #:disable-note))))))
 ;;  )
 

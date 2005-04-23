@@ -47,6 +47,9 @@
 (defvar *expanded-eval* nil "When true, convert the tests into a form that is less likely to have compiler optimizations.")
 (defvar *optimization-settings* '((safety 3)))
 
+(defvar *failed-tests* nil "After DO-TESTS, becomes the list of names of tests that have failed")
+(defvar *passed-tests* nil "After DO-TESTS, becomes the list of names of tests that have passed")
+
 (defvar *expected-failures* nil
   "A list of test names that are expected to fail.")
 
@@ -270,12 +273,11 @@
 	  (handler-case
 	   (let ((st (format nil "Actual value~P: ~
                       ~{~S~^~%~15t~}.~%"
-			    (length r) r)))
+			     (length r) r)))
 	     (format s "~A" st))
 	   (error () (format s "Actual value: #<error during printing>~%")
 		  ))
-	  (finish-output s)
-	  ))))
+	  (finish-output s)))))
   (when (not (pend entry)) *test*))
 
 (defun expanded-eval (form)
@@ -321,6 +323,8 @@
 
 (defun do-tests (&optional
 		 (out *standard-output*))
+  (setq *failed-tests* nil
+	*passed-tests* nil)
   (dolist (entry (cdr *entries*))
     (setf (pend entry) t))
   (if (streamp out)
@@ -338,8 +342,11 @@
   (dolist (entry (cdr *entries*))
     (when (and (pend entry)
 	       (not (has-disabled-note entry)))
-      (format s "~@[~<~%~:; ~:@(~S~)~>~]"
-	      (do-entry entry s))
+      (let ((success? (do-entry entry s)))
+	(if success?
+	  (push (name entry) *passed-tests*)
+	  (push (name entry) *failed-tests*))
+	(format s "~@[~<~%~:; ~:@(~S~)~>~]" success?))
       (finish-output s)
       ))
   (let ((pending (pending-tests))
