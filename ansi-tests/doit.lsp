@@ -6,7 +6,7 @@
 
 #+allegro (run-shell-command "rm -f *.fasl")
 #+allegro (setq *enclose-printer-errors* nil)
-#+cmucl (run-program "rm -f *.x86f")
+#+cmu (run-program "rm -f *.x86f")
 
 (load "gclload1.lsp")
 (load "gclload2.lsp")
@@ -20,7 +20,13 @@
   (rt:disable-note :assume-no-gray-streams))
 
 (in-package :cl-test)
+
+;;; These two tests will misbehave if the tests are being
+;;; invoked from a file that is being loaded, so remove them
+(when *load-pathname*
+  (mapc #'regression-test:rem-test '(load-pathname.1 load-truename.1)))
+
 (time (regression-test:do-tests))
 
 #+allegro (cl-user::exit)
-#+(or cmucl sbcl gcl armedbear) (cl-user::quit)
+#+(or cmu sbcl gcl armedbear) (cl-user::quit)
