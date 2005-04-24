@@ -4,9 +4,16 @@
 ;;; with arbitrary legal garbage.
 ;; (pushnew :ansi-tests-strict-initial-element *features*)
 
-#+allegro (run-shell-command "rm -f *.fasl")
 #+allegro (setq *enclose-printer-errors* nil)
-#+cmu (run-program "rm" '("-f" "*.x86f" "*.sparcf" "*.ppcf"))
+
+;;; Remove compiled files
+(let* ((fn (compile-file-pathname "doit.lsp"))
+       (type (pathname-type fn))
+       (dir-pathname (make-pathname :name :wild :type type))
+       (files (directory dir-pathname)))
+  (assert type)
+  (assert (not (string-equal type "lsp")))
+  (mapc #'delete-file files))
 
 (load "gclload1.lsp")
 (load "gclload2.lsp")
@@ -20,4 +27,10 @@
   (rt:disable-note :assume-no-gray-streams))
 
 (in-package :cl-test)
+
+;;; These two tests will misbehave if the tests are being
+;;; invoked from a file that is being loaded, so remove them
+(when *load-pathname*
+  (mapc #'regression-test:rem-test '(load-pathname.1 load-truename.1)))
+
 (time (regression-test:do-tests))

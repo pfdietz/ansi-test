@@ -4,9 +4,16 @@
 ;;; with arbitrary legal garbage.
 ;; (pushnew :ansi-tests-strict-initial-element *features*)
 
-#+allegro (run-shell-command "rm -f *.fasl")
 #+allegro (setq *enclose-printer-errors* nil)
-#+cmu (run-program "rm -f *.x86f")
+
+;;; Remove compiled files
+(let* ((fn (compile-file-pathname "doit.lsp"))
+       (type (pathname-type fn))
+       (dir-pathname (make-pathname :name :wild :type type))
+       (files (directory dir-pathname)))
+  (assert type)
+  (assert (not (string-equal type "lsp")))
+  (mapc #'delete-file files))
 
 (load "gclload1.lsp")
 (load "gclload2.lsp")
