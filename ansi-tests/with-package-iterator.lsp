@@ -6,7 +6,7 @@
 (in-package :cl-test)
 (declaim (optimize (safety 3)))
 
-(compile-and-load "package-aux.lsp")
+(load "package-aux.lsp")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; with-package-iterator
@@ -31,27 +31,39 @@
 ;;; multiple inheritance
 
 (deftest with-package-iterator.5
-  (with-package-iterator-all '("A"))
+  (progn
+    (set-up-packages)
+    (with-package-iterator-all '("A")))
   t)
 
 (deftest with-package-iterator.6
-  (with-package-iterator-all '(#:|A|))
+  (progn
+    (set-up-packages)
+    (with-package-iterator-all '(#:|A|)))
   t)
 
 (deftest with-package-iterator.7
-  (with-package-iterator-all '(#\A))
+  (progn
+    (set-up-packages)
+    (with-package-iterator-all '(#\A)))
   t)
 
 (deftest with-package-iterator.8
-  (with-package-iterator-internal (list (find-package "A")))
+  (progn
+    (set-up-packages)
+    (with-package-iterator-internal (list (find-package "A"))))
   t)
 
 (deftest with-package-iterator.9
-  (with-package-iterator-external (list (find-package "A")))
+  (progn
+    (set-up-packages)
+    (with-package-iterator-external (list (find-package "A"))))
   t)
 
 (deftest with-package-iterator.10
-  (with-package-iterator-inherited (list (find-package "A")))
+  (progn
+    (set-up-packages)
+    (with-package-iterator-inherited (list (find-package "A"))))
   t)
 
 (deftest with-package-iterator.11

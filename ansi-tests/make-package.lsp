@@ -467,7 +467,7 @@
 (deftest make-package.error.4
   (handle-non-abort-restart
    (safely-delete-package "TEST1")
-   (safely-delete-package "Q")
+   (set-up-packages)
    (make-package "TEST1" :nicknames '("Q")))
   success)
 

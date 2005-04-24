@@ -10,19 +10,27 @@
 ;;; package-name
 
 (deftest package-name.1
-  (let () (ignore-errors (package-name "A")))
+  (progn
+    (set-up-packages)
+    (package-name "A"))
   "A")
 
 (deftest package-name.2
-  (let () (ignore-errors (package-name #\A)))
+  (progn
+    (set-up-packages)
+    (package-name #\A))
   "A")
 
 (deftest package-name.3
-  (let () (ignore-errors (package-name "Q")))
+  (progn
+    (set-up-packages)
+    (package-name "Q"))
   "A")
 
 (deftest package-name.4
-  (let () (ignore-errors (package-name #\Q)))
+  (progn
+    (set-up-packages)
+    (package-name #\Q))
   "A")
 
 (deftest package-name.5
@@ -101,7 +109,7 @@
   (loop
    for p in (list-all-packages) count
    (not (equal (package-name p)
-	       (ignore-errors (package-name (package-name p))))))
+	       (package-name (package-name p)))))
   0)
 
 ;;; Specialized sequence tests

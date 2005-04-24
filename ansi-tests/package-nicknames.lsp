@@ -10,44 +10,52 @@
 ;;; package-nicknames
 
 (deftest package-nicknames.1
-  (let () (ignore-errors (package-nicknames "A")))
+  (progn
+    (set-up-packages)
+    (package-nicknames "A"))
   ("Q"))
 
 (deftest package-nicknames.2
-  (let () (ignore-errors (package-nicknames #\A)))
+  (progn
+    (set-up-packages)
+    (package-nicknames #\A))
   ("Q"))
 
 (deftest package-nicknames.3
-  (let () (ignore-errors (package-nicknames ':|A|)))
+  (progn
+    (set-up-packages)
+    (package-nicknames ':|A|))
   ("Q"))
 
 (deftest package-nicknames.4
-  (let () (ignore-errors (package-nicknames "B")))
+  (progn
+    (set-up-packages)
+    (package-nicknames "B"))
   nil)
 
 (deftest package-nicknames.5
-  (let () (ignore-errors (package-nicknames #\B)))
+  (progn
+    (set-up-packages)
+    (package-nicknames #\B))
   nil)
 
 (deftest package-nicknames.6
-  (let () (ignore-errors (package-nicknames '#:|B|)))
+  (progn
+    (set-up-packages)
+    (package-nicknames '#:|B|))
   nil)
 
 (deftest package-nicknames.7
-  (let ()
-    (ignore-errors
-      (subsetp '(#.(string '#:cl))
-	       (package-nicknames "COMMON-LISP")
-	       :test #'string=)))
+  (subsetp '(#.(string '#:cl))
+	   (package-nicknames "COMMON-LISP")
+	   :test #'string=)
   t)
 
 (deftest package-nicknames.8
-  (let ()
-    (ignore-errors
-      (notnot
-       (subsetp '(#.(string '#:cl-user))
-		(package-nicknames "COMMON-LISP-USER")
-		:test #'string=))))
+  (notnot
+   (subsetp '(#.(string '#:cl-user))
+	    (package-nicknames "COMMON-LISP-USER")
+	    :test #'string=))
   t)
 
 (deftest package-nicknames.9
@@ -59,7 +67,9 @@
   t)
 
 (deftest package-nicknames.10
-  (let () (ignore-errors (package-nicknames (find-package "A"))))
+  (progn
+    (set-up-packages)
+    (package-nicknames (find-package "A")))
   ("Q"))
 
 (deftest package-nicknames.11

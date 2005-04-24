@@ -1066,8 +1066,3 @@ the condition to go uncaught if it cannot be classified."
   (let ((eps 1.0d-4))
     (<= (abs (- x y))
        (* eps (max (abs x) (abs y))))))
-
-
-
-    
-    
