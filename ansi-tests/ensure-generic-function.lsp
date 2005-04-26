@@ -130,7 +130,60 @@
        (funcall fn 'a))))
   1 t 1 t 1)
 
+(deftest ensure-generic-function.11
+  (let ((f 'egf-fun-11))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (x)
+		       (:method ((x t)) 1)))))
+      (values
+       (funcall fn 'a)
+       (eqlt fn (eval `(macrolet ((%m (&environment env)
+				      (ensure-generic-function ',f :lambda-list '(x)
+							       :environment env)))
+			 (%m))))
+       (funcall fn 'a))))
+  1 t 1)
 
+(deftest ensure-generic-function.12
+  (let ((f 'egf-fun-12))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (x)
+		       (:documentation "foo")
+		       (:method ((x t)) 1)))))
+      (values
+       (funcall fn 'a)
+       (or (documentation f 'function) "foo")
+       (eqlt fn (ensure-generic-function f :lambda-list '(x) :documentation "bar"))
+       (or (documentation f 'function) "bar")
+       (funcall fn 'a))))
+  1 "foo" t "bar" 1)
+
+(deftest ensure-generic-function.13
+  (let ((f 'egf-fun-13))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (x y)
+		       (declare (optimize safety (speed 0) (debug 0) (space 0)))
+		       (:method ((x t) (y t)) (list x y))))))
+      (values
+       (funcall fn 'a 'b)
+       (eqlt fn (ensure-generic-function f :lambda-list '(x y)
+					 :declare '(optimize (safety 0) (debug 2) speed (space 1))))
+       (funcall fn 'a 1))))
+  (a b) t (a 1))
+
+(deftest ensure-generic-function.14
+  (let ((f '(setf egf-fun-14)))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (val x)
+		       (:method ((val t) (x cons)) (setf (car x) val))))))
+      (values
+       (let ((z (cons 'a 'b)))
+	 (list (setf (egf-fun-14 z) 'c) z))
+       (eqlt fn (ensure-generic-function f :lambda-list '(val x)))
+       (let ((z (cons 'a 'b)))
+	 (list (setf (egf-fun-14 z) 'c) z)))))
+  (c (c . b)) t (c (c . b)))       
+		       
 ;;; Many more tests are needed for other combinations of keyword parameters
 
 (deftest ensure-generic-function.error.1
