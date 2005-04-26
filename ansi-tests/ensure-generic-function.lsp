@@ -6,7 +6,9 @@
 (in-package :cl-test)
 
 (deftest ensure-generic-function.1
-  (signals-error (ensure-generic-function 'car) error)
+  (if (typep #'car 'generic-function)
+      t
+    (signals-error (ensure-generic-function 'car) error))
   t)
 
 (deftest ensure-generic-function.2
@@ -55,6 +57,79 @@
       `(signals-error (ensure-generic-function ',f :lambda-list '(x y))
 		      error))))
   nil t t t)
+
+(deftest ensure-generic-function.7
+  (let ((f 'egf-fun-7))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (x)
+		       (:method ((x symbol)) (list x :a))
+		       (:method ((x integer)) (list x :b))
+		       (:method ((x t)) (list x :c))))))
+      (values
+       (mapcar fn '(x 2 3/2))
+       (eqlt fn (ensure-generic-function f :lambda-list '(x)))
+       (mapcar fn '(x 2 3/2)))))
+  ((x :a) (2 :b) (3/2 :c))
+  t
+  ((x :a) (2 :b) (3/2 :c)))
+
+(deftest ensure-generic-function.8
+  (let ((f 'egf-fun-8))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (x y)
+		       (:method ((x t) (y symbol)) 1)
+		       (:method ((x symbol) (y t)) 2)))))
+      (values
+       (mapcar fn '(a a 3) '(b 4 b))
+       (eqlt fn (ensure-generic-function f :lambda-list '(x y)
+					 :argument-precedence-order '(y x)))
+       (mapcar fn '(a a 3) '(b 4 b)))))
+  (2 2 1)
+  t
+  (1 2 1))
+
+(deftest ensure-generic-function.9
+  (let ((f 'egf-fun-9))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (x)
+		       (:method-combination +)
+		       (:method + ((x t)) 1)
+		       (:method + ((x symbol)) 2)
+		       (:method + ((x (eql nil))) 4)))))
+      (values
+       (mapcar fn '(3/2 a nil))
+       (eqlt fn (ensure-generic-function f :lambda-list '(x)
+					 :method-class 'standard-method))
+       (mapcar fn '(3/2 a nil))
+       (eqlt fn (ensure-generic-function f :lambda-list '(x)
+					 :method-class
+					 (find-class 'standard-method)))
+       (mapcar fn '(3/2 a nil)))))
+       
+       
+  (1 3 7)
+  t
+  (1 3 7)
+  t
+  (1 3 7))
+
+(deftest ensure-generic-function.10
+  (let ((f 'egf-fun-10))
+    (when (fboundp f) (fmakunbound f))
+    (let ((fn (eval `(defgeneric ,f (x)
+		       (:method ((x t)) 1)))))
+      (values
+       (funcall fn 'a)
+       (eqlt fn (ensure-generic-function f :lambda-list '(x)
+					 :generic-function-class
+					 'standard-generic-function))
+       (funcall fn 'a)
+       (eqlt fn (ensure-generic-function f :lambda-list '(x)
+					 :generic-function-class
+					 (find-class 'standard-generic-function)))
+       (funcall fn 'a))))
+  1 t 1 t 1)
+
 
 ;;; Many more tests are needed for other combinations of keyword parameters
 
