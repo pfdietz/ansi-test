@@ -67,10 +67,12 @@
 ;; user whether the symbol should be imported.
 ;;
 (deftest export.4
-  (handler-case
-   (export 'b::bar "A")
-   (package-error () 'package-error)
-   (error (c) c))
+  (progn
+    (set-up-packages)
+    (handler-case
+     (export 'b::bar "A")
+     (package-error () 'package-error)
+     (error (c) c)))
   package-error)
 
 ;;
