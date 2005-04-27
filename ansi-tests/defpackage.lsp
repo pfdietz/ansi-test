@@ -85,24 +85,26 @@
 ;; Check use argument
 ;; Try several ways of specifying the package to be used
 (deftest defpackage.4
-  (loop
-   for n in '("A" :|A| #\A) count
-   (not
-    (ignore-errors
-      (progn
-	(safely-delete-package "H")
-	(let ((p (ignore-errors (eval `(defpackage "H" (:use ,n))))))
-	  (and
-	   (packagep p)
-	   (equal (package-name p)              "H")
-	   (equal (package-use-list p)          (list (find-package "A")))
-	   (equal (package-used-by-list p)      nil)
-	   (equal (package-nicknames p)         nil)
-	   (equal (package-shadowing-symbols p) nil)
-	   (eql (num-symbols-in-package p)
-		(num-external-symbols-in-package "A"))
-	   (equal (documentation p t)             nil)
-	   ))))))
+  (progn
+    (set-up-packages)
+    (loop
+     for n in '("A" :|A| #\A) count
+     (not
+      (ignore-errors
+	(progn
+	  (safely-delete-package "H")
+	  (let ((p (ignore-errors (eval `(defpackage "H" (:use ,n))))))
+	    (and
+	     (packagep p)
+	     (equal (package-name p)              "H")
+	     (equal (package-use-list p)          (list (find-package "A")))
+	     (equal (package-used-by-list p)      nil)
+	     (equal (package-nicknames p)         nil)
+	     (equal (package-shadowing-symbols p) nil)
+	     (eql (num-symbols-in-package p)
+		  (num-external-symbols-in-package "A"))
+	     (equal (documentation p t)             nil)
+	     )))))))
   0)
 
 ;; Test defpackage shadow option, and null use
