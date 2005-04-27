@@ -168,7 +168,10 @@
 	(t (apply #'warn args)))
   nil)
 
-(defun do-test (&optional (name *test*))
+(defun do-test (&optional (name *test*)
+		&key 
+		((:catch-errors *catch-errors*) *catch-errors*)
+		((:compile *compile-tests*) *compile-tests*))
   #-sbcl (do-entry (get-entry name))
   #+sbcl (handler-bind ((sb-ext:code-deletion-note #'muffle-warning))
 		       (do-entry (get-entry name))))
@@ -321,8 +324,9 @@
       (throw '*in-test* nil)
       (do-entries *standard-output*)))
 
-(defun do-tests (&optional
-		 (out *standard-output*))
+(defun do-tests (&key (out *standard-output*)
+		      ((:catch-errors *catch-errors*) *catch-errors*)
+		      ((:compile *compile-tests*) *compile-tests*))
   (setq *failed-tests* nil
 	*passed-tests* nil)
   (dolist (entry (cdr *entries*))
@@ -407,3 +411,19 @@
     (unless note (error "~A is not a note or note name." n))
     (setf (note-disabled note) nil)
     note))
+
+;;; Extended random regression
+
+(defun do-extended-tests (&key (tests *passed-tests*) (count nil)
+			       ((:catch-errors *catch-errors*) *catch-errors*)
+			       ((:compile *compile-tests*) *compile-tests*))
+  "Execute randomly chosen tests from TESTS until one fails or until
+   COUNT is an integer and that many tests have been executed."
+  (let ((test-vector (coerce tests 'simple-vector)))
+    (let ((n (length test-vector)))
+      (when (= n 0) (error "Must provide at least one test."))
+      (loop for i from 0
+	    for name = (svref test-vector (random n))
+	    until (eql i count)
+	    do (print name)
+	    unless (do-test name) return (values name (1+ i))))))
