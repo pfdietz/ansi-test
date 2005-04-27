@@ -41,6 +41,7 @@
 			       #:deftest
 			       #:do-test
 			       #:do-tests
+			       #:do-extended-tests
 			       #:get-test
 			       #:pending-tests
 			       #:rem-all-tests
