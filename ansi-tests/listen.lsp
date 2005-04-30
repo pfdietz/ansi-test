@@ -21,10 +21,10 @@
   (with-input-from-string (*standard-input* "A") (notnot-mv (listen)))
   t)
 
-(deftest listen.5
-  (when (interactive-stream-p *standard-input*)
-    (clear-input) (listen))
-  nil)
+;;; (deftest listen.5
+;;;  (when (interactive-stream-p *standard-input*)
+;;;    (clear-input) (listen))
+;;;  nil)
 
 (deftest listen.6
   (with-input-from-string
