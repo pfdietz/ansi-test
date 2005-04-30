@@ -7,5 +7,6 @@
 
 (load "compile-file.lsp")
 (load "load.lsp")
+(load "with-compilation-unit.lsp")
 
 
