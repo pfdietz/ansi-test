@@ -46,6 +46,7 @@
   (funcall (nmp-gf-03 10 'a))
   nil)
 
+(defgeneric nmp-gf-04 (x y))
 (defmethod nmp-gf-04 ((x integer) (y symbol)) #'next-method-p)
 (defmethod nmp-gf-04 ((x t) (y (eql nil))) (constantly 2))
 
@@ -59,6 +60,7 @@
 
 ;; With AROUND methods
 
+(defgeneric nmp-gf-05 (x))
 (defmethod nmp-gf-05 :around ((x number)) (notnot-mv (next-method-p)))
 (defmethod nmp-gf-05 ((x integer)) 'foo)
 

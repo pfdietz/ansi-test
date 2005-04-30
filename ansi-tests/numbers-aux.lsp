@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(eval-when (load eval)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (compile-and-load "random-aux.lsp"))
 
 ;;; Binary search on reals

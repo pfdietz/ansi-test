@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(load "packages-00.lsp")
+(compile-and-load "packages-00.lsp")
 
 ;;(declaim (optimize (safety 3)))
 

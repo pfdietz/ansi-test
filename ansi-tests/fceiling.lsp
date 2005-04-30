@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (compile-and-load "numbers-aux.lsp")
-(ignore-errors (compile-and-load "fceiling-aux.lsp"))
+(compile-and-load "fceiling-aux.lsp")
 
 (deftest fceiling.error.1
   (signals-error (fceiling) program-error)

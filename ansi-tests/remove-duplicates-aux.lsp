@@ -36,7 +36,7 @@
 	    do (push (elt sequence i) result))
       (loop for i from start below end
 	    for x = (elt sequence i)
-	    for kx = (if key (funcall (the function key) x) x)
+	    for kx = (funcall (the function key) x)
 	    unless (position kx
 			     sequence
 			     :start (1+ i)

@@ -9,7 +9,7 @@
   (declare (ignore args))
   (if (coin) `(eql ,c) 'character))
 
-(eval-when (load eval) (compile 'char-or-same))
+(eval-when (:load-toplevel :execute) (compile 'char-or-same))
 
 (def-type-prop-test char=.1 'char= nil 2 :rest-type 'base-char :maxargs 5)
 (def-type-prop-test char=.2 'char= '(character character) 2)

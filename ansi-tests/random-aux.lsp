@@ -151,5 +151,30 @@
 	count
 	(+ expected bound))))
 
+(defun random-partition* (n p)
+  "Partition n into p numbers, each >= 0.  Return list of numbers."
+  (assert (<= 1 p))
+  (cond
+   ((= p 1) (list n))
+   ((= n 0) (make-list p :initial-element 0))
+   (t (let* ((r (random p))
+	     (n1 (random (1+ n))))
+	(cond
+	 ((= r 0)
+	  (cons n1 (random-partition* (- n n1) (1- p))))
+	 ((= r (1- p))
+	  (append (random-partition* (- n n1) (1- p)) (list n1)))
+	 (t
+	  (let* ((n2 (random (1+ (- n n1))))
+		 (n3 (- n n1 n2)))
+	    (append (random-partition* n2 r)
+		    (list n1)
+		    (random-partition* n3 (- p 1 r))))))))))
 
+(defun random-partition (n p)
+  "Partition n into p numbers, each >= 1 (if possible.)"
+  (cond
+   ((<= n p)
+    (make-list p :initial-element 1))
+   (t (mapcar #'1+ (random-partition* (- n p) p)))))
 

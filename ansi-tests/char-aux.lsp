@@ -299,7 +299,11 @@
 	    (let ((c (name-char x)))
 	      (or (not c)
 		  (characterp c)
+		  ;; FIXME The rest of this wasn't reachable
+		  #|
 		  (let ((name (char-name c)))
 		    (declare (type (or null string) name))
 		    (and name
-			 (string-equal name s))))))))
+			 (string-equal name s)))
+		  |#
+		  )))))

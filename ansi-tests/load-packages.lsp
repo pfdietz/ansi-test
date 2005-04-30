@@ -4,7 +4,7 @@
 ;;;; Contains: Loader for files containing package tests
 
 
-(load "packages-00.lsp")
+(compile-and-load "packages-00.lsp")
 (load "find-symbol.lsp")
 (load "find-all-symbols.lsp")
 (load "find-package.lsp")

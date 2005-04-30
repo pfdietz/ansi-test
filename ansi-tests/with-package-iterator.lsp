@@ -6,7 +6,7 @@
 (in-package :cl-test)
 (declaim (optimize (safety 3)))
 
-(load "package-aux.lsp")
+(compile-and-load "package-aux.lsp")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; with-package-iterator

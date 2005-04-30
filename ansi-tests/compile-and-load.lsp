@@ -34,7 +34,10 @@
 		 (>= (cadr former-data) source-write-time))
       (when (or (not target-write-time)
 		(<= target-write-time source-write-time))
-	(compile-file pathname))
+	(handler-bind
+	 #-sbcl ()
+	 #+sbcl ((sb-ext:code-deletion-note #'muffle-warning))
+	 (compile-file pathname)))
       (if former-data
 	  (setf (cadr former-data) source-write-time)
 	(push (list pathname source-write-time) *compiled-and-loaded-files*))

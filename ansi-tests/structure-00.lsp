@@ -262,6 +262,7 @@ do the defstruct."
 		       (cons slot-name (create-instance-of-type type))
 		     (cons slot-name (defstruct-maketemp name "SLOTTEMP" i)))))
 	 )
+    (declare (ignorable initial-offset))
     ;; Build the tests in an eval-when form
     `(eval-when (:load-toplevel :compile-toplevel :execute)
 

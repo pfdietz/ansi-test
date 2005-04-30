@@ -91,6 +91,12 @@
 		       (gethash n *notes*))
 	  thereis (and note (note-disabled note)))))
 
+(defun has-note (entry note)
+  (unless (note-p note)
+    (let ((new-note (gethash note *notes*)))
+      (setf note new-note)))
+  (and note (not (not (member note (entry-notes entry))))))
+
 (defun pending-tests ()
   (loop for entry in (cdr *entries*)
 	when (and (pend entry) (not (has-disabled-note entry)))
@@ -172,9 +178,7 @@
 		&key 
 		((:catch-errors *catch-errors*) *catch-errors*)
 		((:compile *compile-tests*) *compile-tests*))
-  #-sbcl (do-entry (get-entry name))
-  #+sbcl (handler-bind ((sb-ext:code-deletion-note #'muffle-warning))
-		       (do-entry (get-entry name))))
+  (do-entry (get-entry name)))
 
 (defun my-aref (a &rest args)
   (apply #'aref a args))
@@ -233,26 +237,33 @@
 
       (block aborted
 	(setf r
-	      (flet ((%do
-		      ()
-		      (cond
-		       (*compile-tests*
-			(multiple-value-list
-			 (funcall (compile
-				   nil
-				   `(lambda ()
-				      (declare
-				       (optimize ,@*optimization-settings*))
-				      ,(form entry))))))
-		       (*expanded-eval*
-			(multiple-value-list
-			 (expanded-eval (form entry))))
-		       (t
-			(multiple-value-list
-			 (eval (form entry)))))))
+	      (flet ((%do ()
+			  (handler-bind
+			   #-sbcl nil
+			   #+sbcl ((sb-ext:code-deletion-note #'(lambda (c)
+								  (if (has-note entry :do-not-muffle)
+								      nil
+								    (muffle-warning c)))))
+			   (cond
+			    (*compile-tests*
+			     (multiple-value-list
+			      (funcall (compile
+					nil
+					`(lambda ()
+					   (declare
+					    (optimize ,@*optimization-settings*))
+					   ,(form entry))))))
+			    (*expanded-eval*
+			     (multiple-value-list
+			      (expanded-eval (form entry))))
+			    (t
+			     (multiple-value-list
+			      (eval (form entry))))))))
 		(if *catch-errors*
 		    (handler-bind
-		     (#-ecl (style-warning #'muffle-warning)
+		     (#-ecl (style-warning #'(lambda (c) (if (has-note entry :do-not-muffle-warnings)
+							     c
+							   (muffle-warning c))))
 			    (error #'(lambda (c)
 				       (setf aborted t)
 				       (setf r (list c))
@@ -278,8 +289,7 @@
                       ~{~S~^~%~15t~}.~%"
 			     (length r) r)))
 	     (format s "~A" st))
-	   (error () (format s "Actual value: #<error during printing>~%")
-		  ))
+	   (error () (format s "Actual value: #<error during printing>~%")))
 	  (finish-output s)))))
   (when (not (pend entry)) *test*))
 
@@ -337,7 +347,7 @@
 	  (stream out :direction :output)
 	(do-entries stream))))
 
-(defun do-entries* (s)
+(defun do-entries (s)
   (format s "~&Doing ~A pending test~:P ~
              of ~A tests total.~%"
           (count t (the list (cdr *entries*)) :key #'pend)
@@ -382,11 +392,6 @@
 	  ))
       (finish-output s)
       (null pending))))
-
-(defun do-entries (s)
-  #-sbcl (do-entries* s)
-  #+sbcl (handler-bind ((sb-ext:code-deletion-note #'muffle-warning))
-		       (do-entries* s)))
 
 ;;; Note handling functions and macros
 
