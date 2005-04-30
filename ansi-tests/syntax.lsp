@@ -239,41 +239,50 @@
 
 (def-syntax-test syntax.sharp-backslash.5
   (flet ((%f (s) (read-from-string (concatenate 'string "#\\" s))))
-    (loop for c across +standard-chars+
-	  for name = (char-name c)
-	  unless (or (null name)
-		     (and (eql (%f name) c)
-			  (eql (%f (string-downcase name)) c)
-			  (eql (%f (string-upcase name)) c)
-			  (eql (%f (string-capitalize name)) c)))
-	  collect (list c name)))
+    (let ((good-chars (concatenate 'string +alphanumeric-chars+
+				   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
+      (loop for c across +standard-chars+
+	    for name = (char-name c)
+	    unless (or (null name)
+		       (string/= "" (string-trim good-chars name))
+		       (and (eql (%f name) c)
+			    (eql (%f (string-downcase name)) c)
+			    (eql (%f (string-upcase name)) c)
+			    (eql (%f (string-capitalize name)) c)))
+	    collect (list c name))))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.6
   (flet ((%f (s) (read-from-string (concatenate 'string "#\\" s))))
-    (loop for i below (min 65536 char-code-limit)
-	  for c = (code-char i)
-	  for name = (and c (char-name c))
-	  unless (or (null name)
-		     (and (eql (%f name) c)
-			  (eql (%f (string-downcase name)) c)
-			  (eql (%f (string-upcase name)) c)
-			  (eql (%f (string-capitalize name)) c)))
-	  collect (list i c name)))
+    (let ((good-chars (concatenate 'string +alphanumeric-chars+
+				   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
+      (loop for i below (min 65536 char-code-limit)
+	    for c = (code-char i)
+	    for name = (and c (char-name c))
+	    unless (or (null name)
+		       (string/= "" (string-trim good-chars name))
+		       (and (eql (%f name) c)
+			    (eql (%f (string-downcase name)) c)
+			    (eql (%f (string-upcase name)) c)
+			    (eql (%f (string-capitalize name)) c)))
+	    collect (list i c name))))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.7
   (flet ((%f (s) (read-from-string (concatenate 'string "#\\" s))))
-    (loop for i = (random (min (ash 1 24) char-code-limit))
-	  for c = (code-char i)
-	  for name = (and c (char-name c))
-	  repeat 1000
-	  unless (or (null name)
-		     (and (eql (%f name) c)
-			  (eql (%f (string-downcase name)) c)
-			  (eql (%f (string-upcase name)) c)
-			  (eql (%f (string-capitalize name)) c)))
-	  collect (list i c name)))
+    (let ((good-chars (concatenate 'string +alphanumeric-chars+
+				   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
+      (loop for i = (random (min (ash 1 24) char-code-limit))
+	    for c = (code-char i)
+	    for name = (and c (char-name c))
+	    repeat 1000
+	    unless (or (null name)
+		       (string/= "" (string-trim good-chars name))
+		       (and (eql (%f name) c)
+			    (eql (%f (string-downcase name)) c)
+			    (eql (%f (string-upcase name)) c)
+			    (eql (%f (string-capitalize name)) c)))
+	    collect (list i c name))))
   nil)
 
 
