@@ -334,10 +334,6 @@
      do (setq eps next-eps)
      finally (return (values i eps (float eps one))))))
 
-;;; Approximate equality function
-(defun approx= (x y &optional (eps (epsilon x)))
-  (<= (abs (/ (- x y) (max (abs x) 1))) eps))
-
 (defun test-log-op-with-decls (op xlo xhi ylo yhi niters
 				  &optional
 				  (decls '((optimize (speed 3) (safety 1)

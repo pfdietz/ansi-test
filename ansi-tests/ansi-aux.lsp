@@ -1035,3 +1035,7 @@ the condition to go uncaught if it cannot be classified."
     (<= (abs (- x y))
        (* eps (max (abs x) (abs y))))))
 |#
+
+;;; Approximate equality function
+(defun approx= (x y &optional (eps (epsilon x)))
+  (<= (abs (/ (- x y) (max (abs x) 1))) eps))
