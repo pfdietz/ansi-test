@@ -116,6 +116,16 @@
      (load-file-test s 'load-test-package::f)))
   t load-test-package::good)
 
+(deftest load.15a
+  (let ((*package* (find-package "CL-TEST")))
+    (values
+     (with-input-from-string
+      (s "(eval-when (:load-toplevel :execute) (setq *package* (find-package \"LOAD-TEST-PACKAGE\")))
+          (defun f () 'good)")
+      (multiple-value-list (load-file-test s 'load-test-package::f)))
+     (read-from-string "GOOD")))
+  (t load-test-package::good) good)
+
 (deftest load.16
   (let ((*readtable* (copy-readtable nil)))
     (set-macro-character #\! (get-macro-character #\'))
@@ -123,6 +133,21 @@
      (s "(in-package :cl-test) (defun load-file-test-fun.3 () !good)")
      (load-file-test s 'load-file-test-fun.3)))
   t good)
+
+(deftest load.16a
+  (let ((*readtable* *readtable*)
+	(*package* (find-package "CL-TEST")))
+    (values
+     (with-input-from-string
+      (s "(in-package :cl-test)
+         (eval-when (:load-toplevel :execute)
+            (setq *readtable* (copy-readtable nil))
+            (set-macro-character #\\! (get-macro-character #\\')))
+         (defun load-file-test-fun.3 () !good)")
+      (multiple-value-list
+       (load-file-test s 'load-file-test-fun.3)))
+     (read-from-string "!FOO")))
+  (t good) !FOO)
 
 (deftest load.17
   (let ((file #p"load-test-file.lsp"))
