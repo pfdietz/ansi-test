@@ -286,12 +286,53 @@ the condition to go uncaught if it cannot be classified."
 					  (declare (optimize (safety ,safety)))
 					  ,form)))
 	       (eval ',form))))
-     (,error-name (c) (printable-p c)))))
+     (,error-name (c) 
+		  (cond
+		   ,@(if (eq error-name 'type-error)
+			 `(((typep (type-error-datum c)
+				   (type-error-expected-type c))
+			    (values
+			     nil
+			     (list (list 'typep (type-error-datum c)
+					 (type-error-expected-type c))
+				   "==> true"))))
+		       nil)
+		   (t (printable-p c)))))))
 
 (defmacro signals-error-always (form error-name)
   `(values
     (signals-error ,form ,error-name)
     (signals-error ,form ,error-name :safety 0)))
+
+(defmacro signals-type-error (var datum-form form &key (safety 3))
+  (let ((lambda-form
+	 `(lambda (,var)
+	    (declare (optimize (safety ,safety)))
+	    ,form)))
+    `(let ((,var ,datum-form))
+       (handler-bind
+	((warning #'(lambda (c) (declare (ignore c))
+		      (muffle-warning))))
+					; (proclaim '(optimize (safety 3)))
+	(handler-case
+	 (apply #'values
+		nil
+		(multiple-value-list
+		 (funcall
+		  (if regression-test::*compile-tests*
+		      (compile nil ',lambda-form)
+		    (eval ',lambda-form))
+		  ,var)))
+	 (type-error
+	  (c)
+	  (let ((datum (type-error-datum c))
+		(expected-type (type-error-expected-type c)))
+	    (cond
+	     ((not (eql ,var datum))
+	      (list :datum-mismatch ,var datum))
+	     ((typep datum expected-type)
+	      (list :is-typep datum expected-type))
+	     (t (printable-p c))))))))))
 
 (defun printable-p (obj)
   "Returns T iff obj can be printed to a string."
