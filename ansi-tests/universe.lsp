@@ -468,9 +468,9 @@
 
 (defparameter *methods*
   (list
-   #+(or (not :gcl) :ansi-cl)
+   #+(or (not :gcl) :ansi-cl )
    (find-method #'meaningless-user-generic-function-for-universe nil
-		'(integer integer integer))
+		(mapcar #'find-class '(integer integer integer)))
    ;; Add more methods here
    ))
    
