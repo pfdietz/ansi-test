@@ -8,5 +8,5 @@
 (load "compile-file.lsp")
 (load "load.lsp")
 (load "with-compilation-unit.lsp")
-
-
+(load "features.lsp")
+(load "modules.lsp")

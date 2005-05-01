@@ -8,7 +8,6 @@
 (load "describe.lsp")
 (load "disassemble.lsp")
 (load "environment-functions.lsp")
-(load "features.lsp")
 (load "room.lsp")
 (load "time.lsp")
 (load "trace.lsp")

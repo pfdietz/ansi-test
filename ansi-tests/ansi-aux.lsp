@@ -324,8 +324,8 @@ the condition to go uncaught if it cannot be classified."
 	 (or (not (second results))
 	     (not (first results))))))
 
-(declaim (ftype (function (&rest function) (values function &optional))
-		compose))
+;; (declaim (ftype (function (&rest function) (values function &optional))
+;;		compose))
 
 (defun compose (&rest fns)
   (let ((rfns (reverse fns)))
@@ -1039,3 +1039,21 @@ the condition to go uncaught if it cannot be classified."
 ;;; Approximate equality function
 (defun approx= (x y &optional (eps (epsilon x)))
   (<= (abs (/ (- x y) (max (abs x) 1))) eps))
+
+(defun epsilon (number)
+  (etypecase number
+    (complex (* 2 (epsilon (realpart number)))) ;; crude
+    (short-float short-float-epsilon)
+    (single-float single-float-epsilon)
+    (double-float double-float-epsilon)
+    (long-float long-float-epsilon)
+    (rational 0)))
+
+(defun negative-epsilon (number)
+  (etypecase number
+    (complex (* 2 (negative-epsilon (realpart number)))) ;; crude
+    (short-float short-float-negative-epsilon)
+    (single-float single-float-negative-epsilon)
+    (double-float double-float-negative-epsilon)
+    (long-float long-float-negative-epsilon)
+    (rational 0)))

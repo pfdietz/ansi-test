@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (compile-and-load "numbers-aux.lsp")
-(ignore-errors (compile-and-load "ftruncate-aux.lsp"))
+(compile-and-load "ftruncate-aux.lsp")
 
 ;;; Error tests
 

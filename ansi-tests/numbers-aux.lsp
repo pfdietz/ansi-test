@@ -299,24 +299,6 @@
 	       (floating-point-overflow () t))
 	      collect (list x y (min x y)))))
 
-(defun epsilon (number)
-  (etypecase number
-    (complex (* 2 (epsilon (realpart number)))) ;; crude
-    (short-float short-float-epsilon)
-    (single-float single-float-epsilon)
-    (double-float double-float-epsilon)
-    (long-float long-float-epsilon)
-    (rational 0)))
-
-(defun negative-epsilon (number)
-  (etypecase number
-    (complex (* 2 (negative-epsilon (realpart number)))) ;; crude
-    (short-float short-float-negative-epsilon)
-    (single-float single-float-negative-epsilon)
-    (double-float double-float-negative-epsilon)
-    (long-float long-float-negative-epsilon)
-    (rational 0)))
-
 ;;; Compute the number of digits that can be added to 1.0 in the appropriate
 ;;; float type, a rational representation of the smallest radix^(-k) s.t.
 ;;; 1.0 + radix^(-k) /= 1.0, and the float representation of that value.

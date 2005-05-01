@@ -20,3 +20,7 @@
 (deftest features.3
   (not (member :cltl2 *features*))
   t)
+
+(deftest features.4
+  (notnot (every #'symbolp *features*))
+  t)
