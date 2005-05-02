@@ -272,7 +272,7 @@ the condition to go uncaught if it cannot be classified."
 ;;; The above is badly designed, since it fails when some signals
 ;;; may be in more than one class/
 
-(defmacro signals-error (form error-name &key (safety 3))
+(defmacro signals-error (form error-name &key (safety 3) name)
   `(handler-bind
     ((warning #'(lambda (c) (declare (ignore c))
 			      (muffle-warning))))
@@ -293,9 +293,18 @@ the condition to go uncaught if it cannot be classified."
 				   (type-error-expected-type c))
 			    (values
 			     nil
-			     (list (list 'typep (type-error-datum c)
-					 (type-error-expected-type c))
+			     (list (list 'typep (list 'quote
+						      (type-error-datum c))
+					 (list 'quote
+					       (type-error-expected-type c)))
 				   "==> true"))))
+		       nil)
+		   ,@(if (eq error-name 'undefined-function)
+			 `(((not (eq (cell-error-name c) ',name))
+			    (values
+			     nil
+			     (list 'cell-error-name "==>"
+				   (cell-error-name c)))))
 		       nil)
 		   (t (printable-p c)))))))
 
