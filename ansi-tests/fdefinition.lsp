@@ -16,15 +16,19 @@
   t)
 
 (deftest fdefinition.error.3
-  (signals-error (fdefinition (gensym)) undefined-function)
+  (let ((v (gensym)))
+    (eval `(signals-error (fdefinition ',v) undefined-function
+			  :name ,v)))
   t)
 
 (deftest fdefinition.error.4
-  (signals-error (fdefinition 10) type-error)
+  (signals-error (fdefinition 10) type-error :name 10)
   t)
 
 (deftest fdefinition.error.5
-  (signals-error (fdefinition (list 'setf (gensym))) undefined-function)
+  (let ((fn `(setf ,(gensym))))
+    (eval `(signals-error (fdefinition ',fn) undefined-function
+			  :name ,fn)))
   t)
 
 (deftest fdefinition.error.6
