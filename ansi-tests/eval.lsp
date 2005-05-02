@@ -51,3 +51,8 @@
     (eval `(signals-error (eval (list ',v)) undefined-function
 			  :name ,v)))
   t)
+
+(deftest eval.error.4
+  (let ((v (gensym)))
+    (eval `(signals-error (eval ',v) unbound-variable :name ,v)))
+  t)
