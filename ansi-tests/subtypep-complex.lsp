@@ -57,7 +57,7 @@
      ((or (equal ucpt1 ucpt2)
 	  (subtypep t1 t2))
       (unless (equal result '(t t))
-	(list (list t1 t2 ucpt1 ucpt2 result))))
+	(list (list :case1 t1 t2 ucpt1 ucpt2 result))))
      (t
       (multiple-value-bind
 	  (ucpt-sub1? good1?)
@@ -69,16 +69,16 @@
 	   ((and good2? ucpt-sub1? (not ucpt-sub2?))
 	    (assert good1?)
 	    (unless (equal result '(nil t))
-	      (list (list t1 t2 ucpt1 ucpt2 result))))
+	      (list (list :case2 t1 t2 ucpt1 ucpt2 result))))
 	   ((and good1? (not ucpt-sub1?) ucpt-sub2?)
 	    (assert good2?)
 	    (unless (equal result '(nil t))
-	      (list (list t1 t2 ucpt1 ucpt2 result))))
+	      (list (list :case3 t1 t2 ucpt1 ucpt2 result))))
 	   ((and ucpt-sub1? ucpt-sub2?)
 	    (assert good1?)
 	    (assert good2?)
 	    (unless (equal result '(t t))
-	      (list (list t1 t2 ucpt1 ucpt2 result)))))))))))
+	      (list (list :case4 t1 t2 ucpt1 ucpt2 result)))))))))))
 
 (deftest subtypep-complex.8
   (let ((types (reverse
