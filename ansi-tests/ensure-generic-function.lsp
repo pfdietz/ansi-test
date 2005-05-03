@@ -167,7 +167,7 @@
       (values
        (funcall fn 'a 'b)
        (eqlt fn (ensure-generic-function f :lambda-list '(x y)
-					 :declare '(optimize (safety 0) (debug 2) speed (space 1))))
+					 :declare '((optimize (safety 0) (debug 2) speed (space 1)))))
        (funcall fn 'a 1))))
   (a b) t (a 1))
 
