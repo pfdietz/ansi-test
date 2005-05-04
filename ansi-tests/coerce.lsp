@@ -179,3 +179,22 @@
   (signals-error (locally (coerce nil 'cons) t) type-error)
   t)
 
+(deftest coerce.error.10
+  (let* ((tp1 '(vector character))
+	 (tp2 `(vector t))
+	 (tp3 `(or ,tp1 ,tp2)))
+    (if (not (subtypep tp3 'vector))
+	t
+      (handler-case
+       (eval `(coerce '(#\a #\b #\c) ',tp3))
+       (type-error (c)
+	 (cond
+	  ((typep (type-error-datum c)
+		  (type-error-expected-type c))
+	   `((typep ',(type-error-datum c)
+		    ',(type-error-expected-type c))
+	     "==>" true))
+	  (t t)))
+       (error (c) (declare (ignore c)) t))))
+  t)
+
