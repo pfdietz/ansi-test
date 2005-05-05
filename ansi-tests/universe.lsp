@@ -456,7 +456,8 @@
 
 (eval-when (:load-toplevel :execute)
   (compile 'meaningless-user-function-for-universe)
-  (compile 'meaningless-user-generic-function-for-universe)
+  ;; Conditionalize to avoid a cmucl bug
+  #-cmu (compile 'meaningless-user-generic-function-for-universe)
   )
 
 (defparameter *functions*
