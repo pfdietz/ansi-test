@@ -11,16 +11,17 @@
   nil a)
 
 (deftest check-type.2
-  (signals-error
-   (let ((x 'a))
-     (check-type x integer))
-   type-error)
+  (signals-type-error x 'a (check-type x integer))
   t)
 
 (deftest check-type.3
   (let ((x 'a))
     (handler-bind
-     ((type-error #'(lambda (c) (store-value 15 c))))
+     ((type-error #'(lambda (c)
+		      (assert (eql (type-error-datum c) x))
+		      (assert (not (typep x (type-error-expected-type c))))
+		      ;; Can we assume the expected-type is NUMBER?
+		      (store-value 15 c))))
      (values (check-type x number) x)))
   nil 15)
 
@@ -32,21 +33,32 @@
 (deftest check-type.5
   (let ((x 'a))
     (handler-bind
-     ((type-error #'(lambda (c) (store-value "abc" c))))
+     ((type-error #'(lambda (c)
+		      (assert (eql (type-error-datum c) x))
+		      (assert (not (typep x (type-error-expected-type c))))
+		      ;; Can we assume the expected-type is STRING?
+		      (store-value "abc" c))))
      (values (check-type x string "a string") x)))
   nil "abc")
 
 (deftest check-type.6
   (let ((x 'a))
     (handler-bind
-     ((type-error #'(lambda (c) (declare (ignore c)) (store-value 15 nil))))
+     ((type-error #'(lambda (c)
+		      (assert (eql (type-error-datum c) x))
+		      (assert (not (typep x (type-error-expected-type c))))
+		      ;; Can we assume the expected-type is NUMBER?
+		      (store-value 15 nil))))
      (values (check-type x number) x)))
   nil 15)
 
 (deftest check-type.7
   (let ((x 'a))
     (handler-bind
-     ((type-error #'(lambda (c) (declare (ignore c)) (store-value 15))))
+     ((type-error #'(lambda (c)
+		      (assert (eql (type-error-datum c) x))
+		      (assert (not (typep x (type-error-expected-type c))))
+		      ;; Can we assume the expected-type is NUMBER?
+		      (store-value 15))))
      (values (check-type x number) x)))
   nil 15)
-

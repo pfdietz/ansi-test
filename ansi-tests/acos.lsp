@@ -94,10 +94,6 @@
 (deftest acos.error.3
   (loop for x in *mini-universe*
 	unless (or (numberp x)
-		   (eval `(signals-error (acos ',x) type-error)))
+		   (eval `(signals-type-error x ',x (acos x))))
 	collect x)
   nil)
-
-
-
-

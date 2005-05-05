@@ -11,10 +11,9 @@
   a)
 
 (deftest ctypecase.2
-  (signals-error
-   (let ((x 1))
-     (ctypecase x (symbol 'a)))
-   type-error)
+  (signals-type-error
+   x 1
+   (ctypecase x (symbol 'a)))
   t)  
 
 (deftest ctypecase.3
@@ -69,7 +68,10 @@
   (let ((x 1))
     (values
      (handler-bind
-      ((type-error #'(lambda (c) (store-value 'a c))))
+      ((type-error #'(lambda (c)
+		       (assert (eql (type-error-datum c) 1))
+		       (assert (not (typep 1 (type-error-expected-type c))))
+		       (store-value 'a c))))
       (ctypecase x
        (symbol :good)
        (float :bad)))

@@ -44,14 +44,13 @@
   t)
 
 (deftest adjustable-array-p.error.3
-  (signals-error (adjustable-array-p 10) type-error)
+  (signals-type-error x 10 (adjustable-array-p x))
   t)
 
 (deftest adjustable-array-p.error.4
   (loop for e in *mini-universe*
 	unless (or (typep e 'array)
-		   (eval `(signals-error (adjustable-array-p ',e)
-					 type-error)))
+		   (eval `(signals-type-error x ',e (adjustable-array-p x))))
 	collect e)
   nil)
 

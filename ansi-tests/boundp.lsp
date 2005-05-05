@@ -14,19 +14,19 @@
   t)
 
 (deftest boundp.error.3
-  (signals-error (boundp 1) type-error)
+  (signals-type-error x 1 (boundp 1))
   t)
 
 (deftest boundp.error.4
-  (signals-error (boundp '(setf car)) type-error)
+  (signals-type-error x '(setf car) (boundp x))
   t)
 
 (deftest boundp.error.5
-  (signals-error (boundp "abc") type-error)
+  (signals-type-error x "abc" (boundp x))
   t)
 
 (deftest boundp.error.6
-  (signals-error (locally (boundp "abc") t) type-error)
+  (signals-type-error x "abc" (locally (boundp x) t))
   t)
 
 ;;; See other tests in cl-symbols.lsp

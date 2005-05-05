@@ -84,7 +84,7 @@
 (deftest cosh.error.3
   (loop for x in *mini-universe*
 	unless (or (numberp x)
-		   (eval `(signals-error (cosh ',x) type-error)))
+		   (eval `(signals-type-error x ',x (cosh x))))
 	collect x)
   nil)
 

@@ -54,7 +54,7 @@
 		   (typep x 'stream)
 		   (equalt
 		    (eval `(multiple-value-list
-			    (signals-error (clear-output ',x) type-error)))
+			    (signals-type-error x ',x (clear-output x))))
 		    '(t)))
 	collect x)
   nil)

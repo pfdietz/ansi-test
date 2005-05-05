@@ -47,8 +47,7 @@
 (deftest array-total-size.error.3
   (loop for e in *mini-universe*
 	unless (or (typep e 'array)
-		   (eval `(signals-error (array-total-size ',e)
-					 type-error)))
+		   (eval `(signals-type-error x ',e (array-total-size ',e))))
 	collect e)
   nil)
 
@@ -57,6 +56,6 @@
   t)
 
 (deftest array-total-size.error.5
-  (signals-error (locally (array-total-size 0) t)
-		 type-error)
+  (signals-type-error x 0 (locally (array-total-size x) t))
   t)
+

@@ -56,6 +56,8 @@
    (declare (type function fn))
    (loop for x in *universe*
 	 always (or (characterp x)
+		    ;; FIXME -- catch the type error and check that datum
+		    ;; is eql to x (and that datum is not in the expected type)
 		    (eqt (catch-type-error (funcall fn x)) 'type-error)))))
 
 (defun standard-char.5.body ()

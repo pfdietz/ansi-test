@@ -137,13 +137,11 @@
   t)
 
 (deftest assoc-if-not.error.9
-  (signals-error (assoc-if-not #'car '((a b)(c d)))
-		 type-error)
+  (signals-type-error x 'a (assoc-if-not #'car '((a b)(c d))))
   t)
 
 (deftest assoc-if-not.error.10
-  (signals-error (assoc-if-not #'identity '((a b)(c d)) :key #'car)
-		 type-error)
+  (signals-type-error x 'a (assoc-if-not #'identity '((a b)(c d)) :key #'car))
   t)
 
 (deftest assoc-if-not.error.11
@@ -157,5 +155,5 @@
   t)
 
 (deftest assoc-if-not.error.13
-  (signals-error (assoc-if-not #'identity 'y) type-error)
+  (signals-type-error x 'y (assoc-if-not #'identity x))
   t)

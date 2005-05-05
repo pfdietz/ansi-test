@@ -525,15 +525,15 @@
 ;;; Error tests
 
 (deftest count-if-not.error.1
-  (signals-error (count-if-not #'identity 1) type-error)
+  (signals-type-error x 1 (count-if-not #'identity x))
   t)
 
 (deftest count-if-not.error.2
-  (signals-error (count-if-not #'identity 'a) type-error)
+  (signals-type-error x 'a (count-if-not #'identity x))
   t)
 
 (deftest count-if-not.error.3
-  (signals-error (count-if-not #'identity #\a) type-error)
+  (signals-type-error x #\a (count-if-not #'identity x))
   t)
 
 (deftest count-if-not.error.4

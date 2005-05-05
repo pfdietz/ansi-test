@@ -230,15 +230,15 @@
 ;;; Error tests
 
 (deftest copy-seq.error.1
-  (signals-error (copy-seq 10) type-error)
+  (signals-type-error x 10 (copy-seq x))
   t)
 
 (deftest copy-seq.error.2
-  (signals-error (copy-seq 'a) type-error)
+  (signals-type-error x 'a (copy-seq x))
   t)
 
 (deftest copy-seq.error.3
-  (signals-error (copy-seq 13.21) type-error)
+  (signals-type-error x 13.21 (copy-seq x))
   t)
 
 (deftest copy-seq.error.4
@@ -252,5 +252,3 @@
 (deftest copy-seq.error.6
   (signals-error (locally (copy-seq 10) t) type-error)
   t)
-
-

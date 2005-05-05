@@ -22,14 +22,14 @@
 (deftest ash.error.4
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eval `(signals-error (ash ',x 0) type-error)))
+		   (eval `(signals-type-error x ',x (ash x 0))))
 	collect x)
   nil)
 
 (deftest ash.error.5
   (loop for x in *mini-universe*
 	unless (or (integerp x)
-		   (eval `(signals-error (ash 0 ',x) type-error)))
+		   (eval `(signals-type-error x ',x (ash 0 x))))
 	collect x)
   nil)
 

@@ -149,7 +149,7 @@
   nil)
 
 (deftest car-symbol-error
-  (signals-error (car 'a) type-error)
+  (signals-type-error x 'a (car x))
   t)
 
 (deftest car-symbol-error.2
@@ -175,7 +175,7 @@
   (b) 1)
 
 (deftest cdr-symbol-error
-  (signals-error (cdr 'a) type-error)
+  (signals-type-error x 'a (cdr x))
   t)
 
 (deftest cdr-symbol-error.2

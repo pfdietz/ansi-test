@@ -292,6 +292,6 @@
   t)
 
 (deftest assoc.error.12
-  (signals-error (assoc 'x 'y) type-error)
+  (signals-type-error x 'y (assoc 'x x))
   t)
 

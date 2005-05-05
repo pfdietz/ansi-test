@@ -111,7 +111,7 @@
 (deftest atanh.error.3
   (loop for x in *mini-universe*
 	unless (or (numberp x)
-		   (eval `(signals-error (atanh ',x) type-error)))
+		   (eval `(signals-type-error x ',x (atanh x))))
 	collect x)
   nil)
 

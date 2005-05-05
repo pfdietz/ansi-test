@@ -11,28 +11,22 @@
   2)
 
 (deftest ccase.2
-  (signals-error (let ((x 1)) (ccase x)) type-error)
+  (signals-type-error x 1 (ccase x))
   t)
 
 (deftest ccase.3
-  (signals-error
-   (let ((x 1))(ccase x (a 1) (b 2) (c 3)))
-   type-error)
+  (signals-type-error x 1 (ccase x (a 1) (b 2) (c 3)))
   t)
 
 ;;; It is legal to use T or OTHERWISE as key designators
 ;;; in CCASE forms.  They have no special meaning here.
 
 (deftest ccase.4
-  (signals-error
-   (let ((x 1)) (ccase x (t nil)))
-   type-error)
+  (signals-type-error x 1 (ccase x (t nil)))
   t)
 
 (deftest ccase.5
-  (signals-error
-   (let ((x 1)) (ccase x (otherwise nil)))
-   type-error)
+  (signals-type-error x 1 (ccase x (otherwise nil)))
   t)
 
 (deftest ccase.6
@@ -54,9 +48,7 @@
   a)
 
 (deftest ccase.9
-  (signals-error
-   (let (x) (ccase x (nil 'a)))
-   type-error)
+  (signals-type-error x nil (ccase x (nil 'a)))
   t)
 
 (deftest ccase.10
@@ -70,9 +62,7 @@
   1 2 3)
 
 (deftest ccase.12
-  (signals-error
-   (let ((x t)) (ccase x (a 10)))
-   type-error)
+  (signals-type-error x t (ccase x (a 10)))
   t)
 
 (deftest ccase.13
@@ -86,27 +76,19 @@
   1)
 
 (deftest ccase.15
-  (signals-error
-   (let ((x 'otherwise)) (ccase x ((t) 10)))
-   type-error)
+  (signals-type-error x 'otherwise (ccase x ((t) 10)))
   t)
 
 (deftest ccase.16
-  (signals-error
-   (let ((x t)) (ccase x ((otherwise) 10)))
-   type-error)
+  (signals-type-error x t (ccase x ((otherwise) 10)))
   t)
 
 (deftest ccase.17
-  (signals-error
-   (let ((x 'a)) (ccase x (b 0) (c 1) (otherwise 2)))
-   type-error)
+  (signals-type-error x 'a (ccase x (b 0) (c 1) (otherwise 2)))
   t)
 
 (deftest ccase.19
-  (signals-error
-   (let ((x 'a)) (ccase x (b 0) (c 1) ((t) 2)))
-   type-error)
+  (signals-type-error x 'a (ccase x (b 0) (c 1) ((t) 2)))
   t)
 
 (deftest ccase.20

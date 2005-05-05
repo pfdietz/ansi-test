@@ -118,18 +118,10 @@
 (deftest array-displacement.error.3
   (loop for e in *mini-universe*
 	unless (or (typep e 'array)
-		   (eval `(signals-error (array-displacement ',e)
-					 type-error)))
+		   (eval `(signals-type-error x ',e (array-displacement ',e))))
 	collect e)
   nil)
 
 (deftest array-displacement.error.4
-  (signals-error (array-displacement nil) type-error)
+  (signals-type-error x nil (array-displacement x))
   t)
-
-(deftest array-displacement.error.5
-  (signals-error (let ((x nil)) (array-displacement x))
-		 type-error)
-  t)
-
-

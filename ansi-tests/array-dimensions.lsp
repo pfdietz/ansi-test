@@ -53,13 +53,12 @@
 (deftest array-dimensions.error.3
   (loop for e in *mini-universe*
 	unless (or (typep e 'array)
-		   (eval `(signals-error (array-dimensions ',e)
-					 type-error)))
+		   (eval `(signals-type-error x ',e (array-dimensions x))))
 	collect e)
   nil)
 
 (deftest array-dimensions.error.4
-  (signals-error (array-dimensions nil) type-error)
+  (signals-type-error x nil (array-dimensions x))
   t)
 
 (deftest array-dimensions.error.5

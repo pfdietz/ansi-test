@@ -53,18 +53,18 @@
 
 (deftest boole.error.5
   (let ((bad (loop for i from 1 until (not (member i *boole-vals*)))))
-    (eval `(signals-error (boole ,bad 1 1) type-error)))
+    (eval `(signals-type-error x ',bad (boole x 1 1))))
   t)
 
 (deftest boole.error.6
   (loop for n in *boole-val-names*
-	unless (eval `(signals-error (boole ,n nil 1) type-error))
+	unless (eval `(signals-type-error x nil (boole ,n nil 1)))
 	collect n)
   nil)
 
 (deftest boole.error.7
   (loop for n in *boole-val-names*
-	unless (eval `(signals-error (boole ,n 1 nil) type-error))
+	unless (eval `(signals-type-error x nil (boole ,n 1 nil)))
 	collect n)
   nil)
 

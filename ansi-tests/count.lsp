@@ -653,15 +653,15 @@
 ;;; Error tests
 
 (deftest count.error.1
-  (signals-error (count 'a 1) type-error)
+  (signals-type-error x 1 (count 'a x))
   t)
 
 (deftest count.error.2
-  (signals-error (count 'a 'a) type-error)
+  (signals-type-error x 'a (count 'a x))
   t)
 
 (deftest count.error.3
-  (signals-error (count 'a #\a) type-error)
+  (signals-type-error x #\a (count 'a x))
   t)
 
 (deftest count.error.4
