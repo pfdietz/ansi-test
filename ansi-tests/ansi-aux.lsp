@@ -286,27 +286,39 @@ the condition to go uncaught if it cannot be classified."
 					  (declare (optimize (safety ,safety)))
 					  ,form)))
 	       (eval ',form))))
-     (,error-name (c) 
+     (,error-name (c)
 		  (cond
-		   ,@(if (eq error-name 'type-error)
-			 `(((typep (type-error-datum c)
-				   (type-error-expected-type c))
-			    (values
-			     nil
-			     (list (list 'typep (list 'quote
-						      (type-error-datum c))
-					 (list 'quote
-					       (type-error-expected-type c)))
-				   "==> true"))))
-		       nil)
-		   ,@(if (and name-p (member error-name '(undefined-function
-							  unbound-variable)))
-			 `(((not (eq (cell-error-name c) ',name))
-			    (values
-			     nil
-			     (list 'cell-error-name "==>"
-				   (cell-error-name c)))))
-		       nil)		   
+		   ,@(case error-name
+		       (type-error
+			`(((typep (type-error-datum c)
+				  (type-error-expected-type c))
+			   (values
+			    nil
+			    (list (list 'typep (list 'quote
+						     (type-error-datum c))
+					(list 'quote
+					      (type-error-expected-type c)))
+				  "==> true")))))
+		       ((undefined-function unbound-variable)
+			(and name-p
+			     `(((not (eq (cell-error-name c) ',name))
+				(values
+				 nil
+				 (list 'cell-error-name "==>"
+				       (cell-error-name c)))))))
+		       ((stream-error end-of-file reader-error)
+			`(((not (streamp (stream-error-stream c)))
+			   (values
+			    nil
+			    (list 'stream-error-stream "==>"
+				  (stream-error-stream c))))))
+		       (file-error
+			`(((not (pathnamep (pathname (file-error-pathname c))))
+			   (values
+			    nil
+			    (list 'file-error-pathname "==>"
+				  (file-error-pathname c))))))
+		       (t nil))
 		   (t (printable-p c)))))))
 
 (defmacro signals-error-always (form error-name)
