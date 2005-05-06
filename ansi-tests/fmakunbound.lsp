@@ -45,7 +45,7 @@
 (deftest fmakunbound.error.1
   (check-type-error #'fmakunbound
 		    #'(lambda (x) (typep x '(or symbol (cons (eql setf) (cons symbol null))))))
-  t)
+  nil)
 
 (deftest fmakunbound.error.2
   (check-type-error #'fmakunbound (constantly nil)
@@ -70,4 +70,4 @@
 
 (deftest fmakunbound.error.7
   (check-type-error #'(lambda (x) (fmakunbound `(setf ,x)))  #'symbolp)
-  t)
+  nil)
