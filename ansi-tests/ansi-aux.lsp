@@ -272,7 +272,7 @@ the condition to go uncaught if it cannot be classified."
 ;;; The above is badly designed, since it fails when some signals
 ;;; may be in more than one class/
 
-(defmacro signals-error (form error-name &key (safety 3) (name nil name-p))
+(defmacro signals-error (form error-name &key (safety 3) (name nil name-p) (inline nil))
   `(handler-bind
     ((warning #'(lambda (c) (declare (ignore c))
 			      (muffle-warning))))
@@ -281,11 +281,13 @@ the condition to go uncaught if it cannot be classified."
      (apply #'values
 	    nil
 	    (multiple-value-list
-	     (if regression-test::*compile-tests*
-		 (funcall (compile nil '(lambda ()
+	     ,(cond
+	       (inline form)
+	       (regression-test::*compile-tests*
+		`(funcall (compile nil '(lambda ()
 					  (declare (optimize (safety ,safety)))
-					  ,form)))
-	       (eval ',form))))
+					  ,form))))
+	       (t `(eval ',form)))))
      (,error-name (c)
 		  (cond
 		   ,@(case error-name
@@ -326,12 +328,13 @@ the condition to go uncaught if it cannot be classified."
     (signals-error ,form ,error-name)
     (signals-error ,form ,error-name :safety 0)))
 
-(defmacro signals-type-error (var datum-form form &key (safety 3))
+(defmacro signals-type-error (var datum-form form &key (safety 3) (inline nil))
   (let ((lambda-form
 	 `(lambda (,var)
 	    (declare (optimize (safety ,safety)))
 	    ,form)))
     `(let ((,var ,datum-form))
+       (declare (optimize safety))
        (handler-bind
 	((warning #'(lambda (c) (declare (ignore c))
 		      (muffle-warning))))
@@ -341,9 +344,11 @@ the condition to go uncaught if it cannot be classified."
 		nil
 		(multiple-value-list
 		 (funcall
-		  (if regression-test::*compile-tests*
-		      (compile nil ',lambda-form)
-		    (eval ',lambda-form))
+		 ,(cond
+		   (inline `(function ,lambda-form))
+		   (regression-test::*compile-tests*
+		     `(compile nil ',lambda-form))
+		   (t `(eval ',lambda-form)))
 		  ,var)))
 	 (type-error
 	  (c)
@@ -355,6 +360,23 @@ the condition to go uncaught if it cannot be classified."
 	     ((typep datum expected-type)
 	      (list :is-typep datum expected-type))
 	     (t (printable-p c))))))))))
+
+(declaim (special *mini-universe*))
+
+(defun check-type-error* (pred-fn guard-fn &optional (universe *mini-universe*))
+  "Check that for all elements in some set, either guard-fn is true or
+   pred-fn signals a type error."
+  (let (val)
+    (loop for e in universe
+	  unless (or (funcall guard-fn e)
+		     (equal
+		      (setf val (multiple-value-list
+				 (signals-type-error x e (funcall pred-fn x) :inline t)))
+		      '(t)))
+	collect (list e val))))
+
+(defmacro check-type-error (&body args)
+  `(locally (declare (optimize safety)) (check-type-error* ,@args)))
 
 (defun printable-p (obj)
   "Returns T iff obj can be printed to a string."
@@ -1120,3 +1142,5 @@ the condition to go uncaught if it cannot be classified."
     (double-float double-float-negative-epsilon)
     (long-float long-float-negative-epsilon)
     (rational 0)))
+
+(defun sequencep (x) (typep x 'sequence))

@@ -42,8 +42,5 @@
   t)
 
 (deftest hash-table-test.error.3
-  (loop for x in *mini-universe*
-	unless (hash-table-p x)
-	unless (eval `(signals-error (hash-table-test ',x) type-error))
-	collect x)
+  (check-type-error #'hash-table-test #'hash-table-p)
   nil)

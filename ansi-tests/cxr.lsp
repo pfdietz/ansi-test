@@ -148,11 +148,11 @@
   (car nil)
   nil)
 
-(deftest car-symbol-error
-  (signals-type-error x 'a (car x))
-  t)
+(deftest car.error.1
+  (check-type-error #'car #'listp)
+  nil)
 
-(deftest car-symbol-error.2
+(deftest car.error.2
   (signals-error (locally (car 'a) t) type-error)
   t)
 
@@ -174,11 +174,11 @@
     (values (cdr (progn (incf i) '(a b))) i))
   (b) 1)
 
-(deftest cdr-symbol-error
-  (signals-type-error x 'a (cdr x))
-  t)
+(deftest cdr.error.1
+  (check-type-error #'cdr #'listp)
+  nil)
 
-(deftest cdr-symbol-error.2
+(deftest cdr.error.2
   (signals-error (locally (cdr 'a) t) type-error)
   t)
 

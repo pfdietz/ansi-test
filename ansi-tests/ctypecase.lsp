@@ -11,10 +11,8 @@
   a)
 
 (deftest ctypecase.2
-  (signals-type-error
-   x 1
-   (ctypecase x (symbol 'a)))
-  t)  
+  (check-type-error #'(lambda (x) (ctypecase x (symbol 'a))) #'symbolp)
+  nil)
 
 (deftest ctypecase.3
   (let ((x 1))

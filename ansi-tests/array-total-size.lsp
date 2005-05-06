@@ -45,10 +45,7 @@
   t)
 
 (deftest array-total-size.error.3
-  (loop for e in *mini-universe*
-	unless (or (typep e 'array)
-		   (eval `(signals-type-error x ',e (array-total-size ',e))))
-	collect e)
+  (check-type-error #'array-total-size #'arrayp)
   nil)
 
 (deftest array-total-size.error.4

@@ -36,10 +36,7 @@
   t)
 
 (deftest array-rank.error.3
-  (loop for e in *mini-universe*
-	unless (or (typep e 'array)
-		   (eval `(signals-type-error x ',e (array-rank x))))
-	collect e)
+  (check-type-error #'array-rank #'arrayp)
   nil)
 
 (deftest array-rank.error.4

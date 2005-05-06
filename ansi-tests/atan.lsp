@@ -133,24 +133,15 @@
   t)
 
 (deftest atan.error.3
-  (loop for x in *mini-universe*
-	unless (or (numberp x)
-		   (eval `(signals-type-error x ',x (atan x))))
-	collect x)
+  (check-type-error #'atan #'numberp)
   nil)
 
 (deftest atan.error.4
-  (loop for x in *mini-universe*
-	unless (or (realp x)
-		   (eval `(signals-type-error x ',x (atan x 1))))
-	collect x)
+  (check-type-error #'(lambda (x) (atan x 1)) #'realp)
   nil)
 
 (deftest atan.error.5
-  (loop for x in *mini-universe*
-	unless (or (realp x)
-		   (eval `(signals-type-error x ',x (atan 1 x))))
-	collect x)
+  (check-type-error #'(lambda (x) (atan 1 x)) #'realp)
   nil)
 
 

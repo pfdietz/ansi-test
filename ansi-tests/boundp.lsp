@@ -14,8 +14,8 @@
   t)
 
 (deftest boundp.error.3
-  (signals-type-error x 1 (boundp 1))
-  t)
+  (check-type-error #'boundp #'symbolp)
+  nil)
 
 (deftest boundp.error.4
   (signals-type-error x '(setf car) (boundp x))

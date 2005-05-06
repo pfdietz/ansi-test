@@ -43,8 +43,7 @@
   (loop
    for x in (list 'a 1 1.0 #\w (make-array '(10))
 		  '(a b . c) (symbol-package 'cons))
-   count (not (eqt (catch-type-error (list-length x))
-		   'type-error)))
+   count (not (eval `(signals-type-error x ',x (list-length x)))))
   0)
 
 (deftest list-length.error.2

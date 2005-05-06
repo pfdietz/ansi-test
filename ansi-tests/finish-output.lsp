@@ -48,12 +48,7 @@
   t)
 
 (deftest finish-output.error.3
-  (loop for x in *mini-universe*
-	unless (or (member x '(nil t))
-		   (typep x 'stream)
-		   (equalt
-		    (eval `(multiple-value-list
-			    (signals-error (finish-output ',x) type-error)))
-		    '(t)))
-	collect x)
+  (check-type-error #'finish-output
+		    #'(lambda (x) (typep x '(or stream (member nil t)))))
   nil)
+

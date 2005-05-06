@@ -110,26 +110,25 @@
 ;; Error checking
 
 (deftest ldiff.error.1
-  (signals-error (ldiff 10 'a) type-error)
+  (signals-type-error x 10 (ldiff x 'a))
   t)
 
 ;; Single atoms are not dotted lists, so the next
 ;; case should be a type-error
 (deftest ldiff.error.2
-  (signals-error (ldiff 'a 'a) type-error)
+  (signals-type-error x 'a (ldiff x 'a))
   t)
 
 (deftest ldiff.error.3
-  (signals-error (ldiff (make-array '(10) :initial-element 'a) '(a))
-		 type-error)
+  (signals-type-error x (make-array '(10) :initial-element 'a) (ldiff x '(a)))
   t)
 
 (deftest ldiff.error.4
-  (signals-error (ldiff 1.23 t) type-error)
+  (signals-type-error x 1.23 (ldiff x t))
   t)
 
 (deftest ldiff.error.5
-  (signals-error (ldiff #\w 'a) type-error)
+  (signals-type-error x #\w (ldiff x 'a))
   t)
 
 (deftest ldiff.error.6

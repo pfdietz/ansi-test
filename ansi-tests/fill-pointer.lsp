@@ -69,13 +69,8 @@
   t)
 
 (deftest fill-pointer.error.6
-  (loop for e in *mini-universe*
-	when (and (or (not (typep e 'vector))
-		      (not (array-has-fill-pointer-p e)))
-		  (not (eval `(signals-error
-			       (fill-pointer ',e)
-			       type-error))))
-	collect (list e))
+  (check-type-error #'fill-pointer #'(lambda (x) (and (vectorp x)
+						      (array-has-fill-pointer-p x))))
   nil)
 
 (deftest fill-pointer.error.7

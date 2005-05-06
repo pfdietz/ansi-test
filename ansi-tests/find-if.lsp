@@ -543,16 +543,8 @@
 ;;; Error tests
 
 (deftest find-if.error.1
-  (signals-error (find-if #'null 'b) type-error)
-  t)
-
-(deftest find-if.error.2
-  (signals-error (find-if #'identity 10) type-error)
-  t)
-
-(deftest find-if.error.3
-  (signals-error (find-if '1+ 1.4) type-error)
-  t)
+  (check-type-error #'(lambda (x) (find-if #'null x)) #'(lambda (x) (typep x 'sequence)))
+  nil)
 
 (deftest find-if.error.4
   (signals-error (find-if 'null '(a b c . d)) type-error)
@@ -615,7 +607,7 @@
   a 2 1 2)
 
 (deftest find-if.order.2
-  (let ((i 0) a b c d e f g)
+  (let ((i 0) a b c d e f)
     (values
      (find-if (progn (setf a (incf i)) #'null)
 	      (progn (setf b (incf i)) '(nil nil nil a nil nil))
@@ -629,7 +621,7 @@
 
 
 (deftest find-if.order.3
-  (let ((i 0) a b c d e f g)
+  (let ((i 0) a b c d e f)
     (values
      (find-if (progn (setf a (incf i)) #'null)
 	      (progn (setf b (incf i)) '(nil nil nil a nil nil))

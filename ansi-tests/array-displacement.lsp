@@ -116,10 +116,7 @@
   t)
 
 (deftest array-displacement.error.3
-  (loop for e in *mini-universe*
-	unless (or (typep e 'array)
-		   (eval `(signals-type-error x ',e (array-displacement ',e))))
-	collect e)
+  (check-type-error #'array-displacement #'arrayp)
   nil)
 
 (deftest array-displacement.error.4

@@ -14,10 +14,7 @@
   t)
 
 (deftest imagpart.error.3
-  (loop for x in *mini-universe*
-	unless (or (numberp x)
-		   (eval `(signals-error (imagpart ',x) type-error)))
-	collect x)
+  (check-type-error #'imagpart #'numberp)
   nil)
 
 (deftest imagpart.1

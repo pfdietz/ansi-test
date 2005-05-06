@@ -15,17 +15,14 @@
   (signals-error (evenp 0 nil) program-error)
   t)
 
+(deftest evenp.error.3
+  (check-type-error #'evenp #'integerp)
+  nil)
+
 (deftest evenp.1
   (loop for x in *numbers*
 	when (integerp x)
 	do (evenp x))
-  nil)
-
-(deftest evenp.2
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (evenp ',x) type-error)))
-	collect x)
   nil)
 
 (deftest evenp.3

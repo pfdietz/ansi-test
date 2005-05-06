@@ -101,5 +101,5 @@
   t)
 
 (deftest funcall.error.7
-  (signals-error (funcall #'car 'a) type-error)
+  (signals-type-error x 'a (funcall #'car x))
   t)

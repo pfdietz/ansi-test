@@ -21,7 +21,9 @@
 	unless (or (typep x 'file-stream)
 		   (typep x 'broadcast-stream)
 		   (handler-case (progn (file-length x) nil)
-				 (type-error () t)
+				 (type-error (c)
+					     (assert (not (typep x (type-error-expected-type c))))
+					     t)
 				 (condition () nil)))
 	collect x)
   nil)
@@ -62,10 +64,8 @@
   t)
 
 (deftest file-length.error.9
-  (signals-error
-   (let ((s (make-concatenated-stream)))
-     (unwind-protect (file-length s) (close s)))
-   type-error)
+  (signals-type-error s (make-concatenated-stream)
+		      (unwind-protect (file-length s) (close s)))
   t)
 
 (deftest file-length.error.10
@@ -79,18 +79,14 @@
 
 (deftest file-length.error.11
   :notes (:assume-no-simple-streams :assume-no-gray-streams)
-  (signals-error
-   (let ((s (make-string-input-stream "abcde")))
-     (unwind-protect (file-length s) (close s)))
-   type-error)
+  (signals-type-error s (make-string-input-stream "abcde")
+		      (unwind-protect (file-length s) (close s)))
   t)
 
 (deftest file-length.error.12
   :notes (:assume-no-simple-streams :assume-no-gray-streams)
-  (signals-error
-   (let ((s (make-string-output-stream)))
-     (unwind-protect (file-length s) (close s)))
-   type-error)
+  (signals-type-error s (make-string-output-stream)
+		      (unwind-protect (file-length s) (close s)))
   t)
 
 ;;; Non-error tests

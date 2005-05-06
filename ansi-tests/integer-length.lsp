@@ -18,11 +18,7 @@
   t)
 
 (deftest integer-length.error.4
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (integer-length ',x)
-					 type-error)))
-	collect x)
+  (check-type-error #'integer-length #'integerp)
   nil)
 
 (deftest integer-length.1

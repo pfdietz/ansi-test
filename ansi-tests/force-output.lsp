@@ -49,13 +49,8 @@
   t)
 
 (deftest force-output.error.3
-  (loop for x in *mini-universe*
-	unless (or (member x '(nil t))
-		   (typep x 'stream)
-		   (equalt
-		    (eval `(multiple-value-list
-			    (signals-error (force-output ',x) type-error)))
-		    '(t)))
-	collect x)
+  (check-type-error #'force-output
+		    #'(lambda (x) (typep x '(or stream (member nil t)))))
   nil)
+
 

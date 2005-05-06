@@ -15,9 +15,5 @@
   t)
 
 (deftest hash-table-size.error.3
-  (loop for x in *mini-universe*
-	unless (hash-table-p x)
-	unless (eval `(signals-error (hash-table-size ',x)
-				     type-error))
-	collect x)
+  (check-type-error #'hash-table-size #'hash-table-p)
   nil)

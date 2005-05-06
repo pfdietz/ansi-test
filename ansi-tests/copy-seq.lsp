@@ -230,16 +230,8 @@
 ;;; Error tests
 
 (deftest copy-seq.error.1
-  (signals-type-error x 10 (copy-seq x))
-  t)
-
-(deftest copy-seq.error.2
-  (signals-type-error x 'a (copy-seq x))
-  t)
-
-(deftest copy-seq.error.3
-  (signals-type-error x 13.21 (copy-seq x))
-  t)
+  (check-type-error #'copy-seq #'sequencep)
+  nil)
 
 (deftest copy-seq.error.4
   (signals-error (copy-seq) program-error)

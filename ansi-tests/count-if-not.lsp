@@ -525,16 +525,8 @@
 ;;; Error tests
 
 (deftest count-if-not.error.1
-  (signals-type-error x 1 (count-if-not #'identity x))
-  t)
-
-(deftest count-if-not.error.2
-  (signals-type-error x 'a (count-if-not #'identity x))
-  t)
-
-(deftest count-if-not.error.3
-  (signals-type-error x #\a (count-if-not #'identity x))
-  t)
+  (check-type-error #'(lambda (x) (count-if-not #'identity x)) #'sequencep)
+  nil)
 
 (deftest count-if-not.error.4
   (signals-error (count-if-not) program-error)

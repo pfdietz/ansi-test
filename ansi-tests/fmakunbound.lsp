@@ -43,15 +43,17 @@
   t nil)
 
 (deftest fmakunbound.error.1
-  (signals-error (fmakunbound 1) type-error)
+  (check-type-error #'fmakunbound
+		    #'(lambda (x) (typep x '(or symbol (cons (eql setf) (cons symbol null))))))
   t)
 
 (deftest fmakunbound.error.2
-  (signals-error (fmakunbound #\a) type-error)
-  t)
+  (check-type-error #'fmakunbound (constantly nil)
+		    '((setf) (setf . foo) (setf foo . bar) (setf foo bar)))
+  nil)
 
 (deftest fmakunbound.error.3
-  (signals-error (fmakunbound '(x)) type-error)
+  (signals-type-error x '(x) (fmakunbound x))
   t)
 
 (deftest fmakunbound.error.4
@@ -66,3 +68,6 @@
   (signals-error (locally (fmakunbound 1) t) type-error)
   t)
 
+(deftest fmakunbound.error.7
+  (check-type-error #'(lambda (x) (fmakunbound `(setf ,x)))  #'symbolp)
+  t)

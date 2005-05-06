@@ -82,10 +82,7 @@
   t)
 
 (deftest acosh.error.3
-  (loop for x in *mini-universe*
-	unless (or (numberp x)
-		   (eval `(signals-type-error x ',x (acosh x))))
-	collect x)
+  (check-type-error #'acosh #'numberp)
   nil)
 
 

@@ -10,7 +10,7 @@
 ;; elt on lists
 
 (deftest elt.1
-  (signals-error (elt nil 0) type-error)
+  (signals-error (elt x 0) type-error)
   t)
 
 (deftest elt.1a

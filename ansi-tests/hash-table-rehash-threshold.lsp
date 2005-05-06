@@ -35,9 +35,5 @@
   t)
 
 (deftest hash-table-rehash-threshold.error.3
-  (loop for x in *mini-universe*
-	unless (hash-table-p x)
-	unless (eval `(signals-error (hash-table-rehash-threshold ',x)
-				     type-error))
-	collect x)
+  (check-type-error #'hash-table-rehash-threshold #'hash-table-p)
   nil)

@@ -28,7 +28,7 @@
 (deftest isqrt.error.5
   (loop for x in *mini-universe*
 	unless (or (and (integerp x) (>= x 0))
-		   (eval `(signals-error (isqrt ',x) type-error)))
+		   (eval `(signals-type-error x ',x (isqrt x))))
 	collect x)
   nil)
 

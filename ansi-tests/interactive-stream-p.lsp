@@ -15,11 +15,7 @@
   nil)
 
 (deftest interactive-stream-p.error.1
-  (loop for x in *mini-universe*
-	unless (or (typep x 'stream)
-		   (eval `(signals-error (interactive-stream-p ',x)
-					 type-error)))
-	collect x)
+  (check-type-error #'interactive-stream-p #'streamp)
   nil)
 
 (deftest interactive-stream-p.error.2

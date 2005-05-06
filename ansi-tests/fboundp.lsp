@@ -51,25 +51,42 @@
   t 1)
 
 (deftest fboundp.error.1
-  (signals-error (fboundp 1) type-error)
-  t)
+  (check-type-error #'fboundp #'(lambda (x) (typep x '(or symbol (cons (eql setf) (cons symbol null))))))
+  nil)
 
 (deftest fboundp.error.2
-  (signals-error (fboundp #\a) type-error)
+  (signals-type-error x '(x) (fboundp x))
   t)
 
 (deftest fboundp.error.3
-  (signals-error (fboundp '(foo)) type-error)
+  (signals-type-error x '(setf) (fboundp x))
   t)
 
 (deftest fboundp.error.4
-  (signals-error (fboundp) program-error)
+  (signals-type-error x '(setf foo . bar) (fboundp x))
   t)
 
 (deftest fboundp.error.5
-  (signals-error (fboundp 'cons nil) program-error)
+  (signals-type-error x '(setf foo bar) (fboundp x))
   t)
 
 (deftest fboundp.error.6
+  (signals-error (fboundp) program-error)
+  t)
+
+(deftest fboundp.error.7
+  (signals-error (fboundp 'cons nil) program-error)
+  t)
+
+(deftest fboundp.error.8
   (signals-error (locally (fboundp 1) t) type-error)
   t)
+
+(deftest fboundp.error.9
+  (signals-type-error x '(setf . foo) (fboundp x))
+  t)
+
+(deftest fboundp.error.10
+  (check-type-error #'(lambda (x) (fboundp `(setf ,x)))
+		    #'symbolp)
+  nil)

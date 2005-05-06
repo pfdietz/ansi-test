@@ -11,10 +11,7 @@
 ;;; Error tests
 
 (deftest gcd.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (gcd ',x) type-error)))
-	collect x)
+  (check-type-error #'gcd #'integerp)
   nil)
 
 ;;; Non-error tests

@@ -99,28 +99,8 @@
 ;;; argument defaults to "G", with NIL causing an error.
 
 (deftest gensym.error.1
-  (signals-error (gensym 'aaa) type-error)
-  t)
-
-(deftest gensym.error.2
-  (signals-error (gensym 12.3) type-error)
-  t)
-
-(deftest gensym.error.3
-  (signals-error (gensym t) type-error)
-  t)
-
-(deftest gensym.error.4
-  (signals-error (gensym nil) type-error) ;; NIL /= no argument!
-  t)
-
-(deftest gensym.error.5
-  (signals-error (gensym '(a)) type-error)
-  t)
-
-(deftest gensym.error.6
-  (signals-error (gensym #\x) type-error)
-  t)
+  (check-type-error #'gensym #'(lambda (x) (typep x '(or string unsigned-byte))))
+  nil)
 
 (deftest gensym.error.7
   (signals-error (gensym 10 'foo) program-error)

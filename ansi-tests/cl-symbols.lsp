@@ -1146,10 +1146,7 @@
   t)
 
 (deftest symbol-package.error.3
-  (loop for x in *mini-universe*
-	for form = `(signals-type-error x ',x (symbol-package x))
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'symbol-package #'symbolp)
   nil)
 
 
@@ -1162,18 +1159,12 @@
   t)
 
 (deftest symbol-plist.error.3
-  (loop for x in *mini-universe*
-	for form = `(signals-type-error x ',x (symbol-plist x))
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'symbol-plist #'symbolp)
   nil)
 
 (deftest symbol-plist.error.4
-  (loop for x in *mini-universe*
-	for form = `(signals-type-error x ',x (setf (symbol-plist x)
-						    (find-package "CL-USER")))
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'(lambda (x) (setf (symbol-plist x) nil))
+		    #'symbolp)
   nil)
 
 
@@ -1187,17 +1178,11 @@
   t)
 
 (deftest symbol-value.error.3
-  (loop for x in *mini-universe*
-	for form = `(signals-type-error x ',x (symbol-value x))
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'symbol-value #'symbolp)
   nil)
 
 (deftest symbol-value.error.4
-  (loop for x in *mini-universe*
-	for form = `(signals-type-error x ',x (setf (symbol-value x) nil))
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'(lambda (x) (setf (symbol-value x) nil)) #'symbolp)
   nil)
 
 (deftest symbol-value.error.5

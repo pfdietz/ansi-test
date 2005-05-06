@@ -279,32 +279,19 @@
 ;;; Error cases
 
 (deftest every.error.1
-  (signals-error (every 1 '(a b c)) type-error)
-  t)
+  (check-type-error #'(lambda (x) (every x '(a b c)))
+		    #'(lambda (x) (typep x '(or function symbol))))
+  nil)
 
 (deftest every.error.2
-  (signals-error (every #\a '(a b c)) type-error)
-  t)
+  (check-type-error #'(lambda (x) (every #'null x))
+		    #'(lambda (x) (typep x 'sequence)))
+  nil)
 
 (deftest every.error.3
-  (signals-error (every #() '(a b c)) type-error)
-  t)
-
-(deftest every.error.4
-  (signals-error (every #'null 'a) type-error)
-  t)
-
-(deftest every.error.5
-  (signals-error (every #'null 100) type-error)
-  t)
-
-(deftest every.error.6
-  (signals-error (every #'null 'a) type-error)
-  t)
-
-(deftest every.error.7
-  (signals-error (every #'eq () 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (every #'eq () x))
+		    #'(lambda (x) (typep x 'sequence)))
+  nil)
 
 (deftest every.error.8
   (signals-error (every) program-error)

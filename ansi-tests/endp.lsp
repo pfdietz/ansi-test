@@ -26,17 +26,9 @@
      i))
   nil 1)
 
-(deftest endp-symbol-error
-  (catch-type-error (endp 'a))
-  type-error)
-
-(deftest endp-fixnum-error
-  (catch-type-error (endp 1))
-  type-error)
-
-(deftest endp-float-error
-  (catch-type-error (endp 0.9212d4))
-  type-error)
+(deftest endp.error.1
+  (check-type-error #'endp #'listp)
+  nil)
 
 (deftest endp.error.4
   (signals-error (endp) program-error)
@@ -49,4 +41,3 @@
 (deftest endp.error.6
   (signals-error (locally (endp 1)) type-error)
   t)
-

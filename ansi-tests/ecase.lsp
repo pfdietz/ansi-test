@@ -10,22 +10,22 @@
   2)
 
 (deftest ecase.2
-  (signals-error (ecase 1) type-error)
+  (signals-type-error x 1 (ecase x))
   t)
 
 (deftest ecase.3
-  (signals-error (ecase 1 (a 1) (b 2) (c 3)) type-error)
+  (signals-type-error x 1 (ecase x (a 1) (b 2) (c 3)))
   t)
 
 ;;; It is legal to use T or OTHERWISE as key designators
 ;;; in ECASE forms.  They have no special meaning here.
 
 (deftest ecase.4
-  (signals-error (ecase 1 (t nil)) type-error)
+  (signals-type-error x 1 (ecase x (t nil)))
   t)
 
 (deftest ecase.5
-  (signals-error (ecase 1 (otherwise nil)) type-error)
+  (signals-type-error x 1 (ecase x (otherwise nil)))
   t)
 
 (deftest ecase.6
@@ -45,7 +45,7 @@
   a)
 
 (deftest ecase.9
-  (signals-error (ecase nil (nil 'a)) type-error)
+  (signals-type-error x nil (ecase x (nil 'a)))
   t)
 
 (deftest ecase.10
@@ -57,7 +57,7 @@
   1 2 3)
 
 (deftest ecase.12
-  (signals-error (ecase t (a 10)) type-error)
+  (signals-type-error x t (ecase x (a 10)))
   t)
 
 (deftest ecase.13
@@ -70,25 +70,23 @@
   1)
 
 (deftest ecase.15
-  (signals-error (ecase 'otherwise ((t) 10)) type-error)
+  (signals-type-error x 'otherwise (ecase x ((t) 10)))
   t)
 
 (deftest ecase.16
-  (signals-error (ecase t ((otherwise) 10)) type-error)
+  (signals-type-error x t (ecase x ((otherwise) 10)))
   t)
 
 (deftest ecase.17
-  (signals-error (ecase 'a (b 0) (c 1) (otherwise 2))
-		 type-error)
+  (signals-type-error x 'a (ecase x (b 0) (c 1) (otherwise 2)))
   t)
 
 (deftest ecase.18
-  (signals-error (ecase 'a (b 0) (c 1) ((otherwise) 2))
-		 type-error)
+  (signals-type-error x 'a (ecase x (b 0) (c 1) ((otherwise) 2)))
   t)
 
 (deftest ecase.19
-  (signals-error (ecase 'a (b 0) (c 1) ((t) 2)) type-error)
+  (signals-type-error x 'a (ecase x (b 0) (c 1) ((t) 2)))
   t)
 
 (deftest ecase.20

@@ -868,16 +868,8 @@
 ;;; Error tests
 
 (deftest find.error.1
-  (signals-error (find 'a 'b) type-error)
-  t)
-
-(deftest find.error.2
-  (signals-error (find 'a 10) type-error)
-  t)
-
-(deftest find.error.3
-  (signals-error (find 'a 1.4) type-error)
-  t)
+  (check-type-error #'(lambda (x) (find 'a x)) #'(lambda (x) (typep x 'sequence)))
+  nil)
 
 (deftest find.error.4
   (signals-error (find 'e '(a b c . d)) type-error)
@@ -940,7 +932,7 @@
   a 2 1 2)
 
 (deftest find.order.2
-  (let ((i 0) a b c d e f g)
+  (let ((i 0) a b c d e f)
     (values
      (find (progn (setf a (incf i)) nil)
 	   (progn (setf b (incf i)) '(nil nil nil a nil nil))
@@ -953,7 +945,7 @@
   a 6 1 2 3 4 5 6)
 
 (deftest find.order.3
-  (let ((i 0) a b c d e f g)
+  (let ((i 0) a b c d e f)
     (values
      (find (progn (setf a (incf i)) nil)
 	   (progn (setf b (incf i)) '(nil nil nil a nil nil))

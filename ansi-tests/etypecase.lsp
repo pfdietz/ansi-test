@@ -12,7 +12,7 @@
   a)
 
 (deftest etypecase.2
-  (signals-error (etypecase 1 (symbol 'a)) type-error)
+  (signals-type-error x 1 (etypecase x (symbol 'a)))
   t)
 
 (deftest etypecase.3

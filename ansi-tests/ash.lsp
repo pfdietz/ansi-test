@@ -20,17 +20,11 @@
   t)
 
 (deftest ash.error.4
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-type-error x ',x (ash x 0))))
-	collect x)
+  (check-type-error #'(lambda (x) (ash x 0)) #'integerp)
   nil)
 
 (deftest ash.error.5
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-type-error x ',x (ash 0 x))))
-	collect x)
+  (check-type-error #'(lambda (x) (ash 0 x)) #'integerp)
   nil)
 
 ;;; Non-error tests
@@ -59,7 +53,7 @@
   t)
 
 (deftest ash.4
-  (loop for i from -1 to -1000
+  (loop for i from -1 downto -1000
 	always (eql (ash i i) -1))
   t)
 

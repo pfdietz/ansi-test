@@ -35,16 +35,5 @@
   t)
 
 (deftest hash-table-rehash-size.error.3
-  (loop for x in *mini-universe*
-	unless (hash-table-p x)
-	unless (eval `(signals-error (hash-table-rehash-size ',x)
-				     type-error))
-	collect x)
+  (check-type-error #'hash-table-rehash-size #'hash-table-p)
   nil)
-
-
-
-
-
-
-  

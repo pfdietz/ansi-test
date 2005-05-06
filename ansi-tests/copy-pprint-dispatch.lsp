@@ -120,11 +120,5 @@
   t)
 
 (deftest copy-pprint-dispatch.error.2
-  (loop for x in *mini-universe*
-	for results = (multiple-value-list
-		       (eval `(signals-type-error x ',x (copy-pprint-dispatch x))))
-	unless (or (null x)
-		   (equal results '(t)))
-	collect (list x results))
+  (check-type-error #'copy-pprint-dispatch #'null)
   nil)
-

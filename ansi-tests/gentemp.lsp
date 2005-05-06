@@ -109,7 +109,7 @@
 (deftest gentemp.error.1
   (loop for x in *mini-universe*
 	unless (or (stringp x)
-		   (eql (eval `(signals-error (gentemp ',x) type-error)) t))
+		   (eql (eval `(signals-type-error x ',x (gentemp x))) t))
 	collect x)
   nil)
 
@@ -117,15 +117,10 @@
   (loop for x in *mini-universe*
 	unless (or (typep x 'package)
 		   (string-designator-p x)
-		   (eql (eval `(signals-error (gentemp "T" ',x) type-error)) t))
+		   (eql (eval `(signals-type-error x ',x (gentemp "T" x))) t))
 	collect x)
   nil)
 
 (deftest gentemp.error.3
   (signals-error (gentemp "" *package* nil) program-error)
   t)
-
-
-
- 
-  

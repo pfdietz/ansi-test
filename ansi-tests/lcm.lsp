@@ -9,10 +9,7 @@
 (compile-and-load "gcd-aux.lsp")
 
 (deftest lcm.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (lcm ',x) type-error)))
-	collect x)
+  (check-type-error #'lcm #'integerp)
   nil)
 
 (deftest lcm.1

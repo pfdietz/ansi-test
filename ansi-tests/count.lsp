@@ -653,16 +653,8 @@
 ;;; Error tests
 
 (deftest count.error.1
-  (signals-type-error x 1 (count 'a x))
-  t)
-
-(deftest count.error.2
-  (signals-type-error x 'a (count 'a x))
-  t)
-
-(deftest count.error.3
-  (signals-type-error x #\a (count 'a x))
-  t)
+  (check-type-error #'(lambda (x) (count 'a x)) #'sequencep)
+  nil)
 
 (deftest count.error.4
   (signals-error (count) program-error)

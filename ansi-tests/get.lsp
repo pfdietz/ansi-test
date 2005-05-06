@@ -105,19 +105,9 @@
   t)
 
 (deftest get.error.4
-  (loop for x in *mini-universe*
-	for form = `(signals-error (get ',x :foo) type-error)
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'(lambda (x) (get x :foo)) #'symbolp)
   nil)
 
 (deftest get.error.5
-  (loop for x in *mini-universe*
-	for form = `(signals-error (setf (get ',x :foo) nil) type-error)
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'(lambda (x) (setf (get x :foo) nil)) #'symbolp)
   nil)
-
-
-
- 
