@@ -319,3 +319,10 @@
   (signals-error (nset-difference (list* 1 2 3) (list 4 5 6)) type-error)
   t)
 
+(deftest nset-difference.error.13
+  (check-type-error #'(lambda (x) (nset-difference (list 'a 'b) x)) #'listp)
+  nil)
+
+(deftest nset-difference.error.14
+  (check-type-error #'(lambda (x) (nset-difference x (list 'a 'b))) #'listp)
+  nil)

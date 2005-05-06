@@ -267,32 +267,17 @@
 ;;; Error cases
 
 (deftest notany.error.1
-  (signals-error (notany 1 '(a b c)) type-error)
-  t)
-
-(deftest notany.error.2
-  (signals-error (notany #\a '(a b c)) type-error)
-  t)
-
-(deftest notany.error.3
-  (signals-error (notany #() '(a b c)) type-error)
-  t)
+  (check-type-error #'(lambda (x) (notany x '(a b c)))
+		    (typef '(or symbol function)))
+  nil)
 
 (deftest notany.error.4
-  (signals-error (notany #'null 'a) type-error)
-  t)
-
-(deftest notany.error.5
-  (signals-error (notany #'null 100) type-error)
-  t)
-
-(deftest notany.error.6
-  (signals-error (notany #'null 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (notany #'null x)) #'sequencep)
+  nil)
 
 (deftest notany.error.7
-  (signals-error (notany #'eq () 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (notany #'eql () x)) #'sequencep)
+  nil)
 
 (deftest notany.error.8
   (signals-error (notany) program-error)

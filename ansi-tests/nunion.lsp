@@ -408,3 +408,11 @@
 (deftest nunion.error.12
   (signals-error (nunion (list* 1 2 3) (list 4 5 6)) type-error)
   t)
+
+(deftest nunion.error.13
+  (check-type-error #'(lambda (x) (nunion x (list 1 2 3))) #'listp)
+  nil)
+
+(deftest nunion.error.14
+  (check-type-error #'(lambda (x) (nunion (list 1 2 3) x)) #'listp)
+  nil)

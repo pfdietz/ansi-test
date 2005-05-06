@@ -10,17 +10,11 @@
 ;;; Error tests
 
 (deftest logxor.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logxor ',x) type-error)))
-	collect x)
+  (check-type-error #'logxor #'integerp)
   nil)
 
 (deftest logxor.error.2
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logxor 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logxor 0 x)) #'integerp)
   nil)
 
 

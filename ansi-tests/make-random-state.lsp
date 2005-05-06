@@ -20,10 +20,7 @@
   t)
 
 (deftest make-random-state.error.4
-  (loop for x in *mini-universe*
-	unless (or (null x) (eq x t) (random-state-p x)
-		   (eval `(signals-error (make-random-state ',x) type-error)))
-	collect x)
+  (check-type-error #'make-random-state (typef '(or (member nil t) random-state)))
   nil)
 
 ;;; Non-error tests

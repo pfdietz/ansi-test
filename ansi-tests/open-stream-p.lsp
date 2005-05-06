@@ -50,8 +50,5 @@
   t)
 
 (deftest open-stream-p.error.3
-  (loop for x in *mini-universe*
-	unless (or (typep x 'stream)
-		   (eval `(signals-error (open-stream-p ',x) type-error)))
-	collect x)
+  (check-type-error #'open-stream-p #'streamp)
   nil)

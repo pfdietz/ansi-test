@@ -10,17 +10,11 @@
 ;;; Error tests
 
 (deftest logorc1.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logorc1 ',x 0) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logorc1 x 0)) #'integerp)
   nil)
 
 (deftest logorc1.error.2
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logorc1 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logorc1 0 x)) #'integerp)
   nil)
 
 (deftest logorc1.error.3

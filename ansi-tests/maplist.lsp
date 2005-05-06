@@ -95,8 +95,8 @@
   (1 2 3) 3 1 2 3)
 
 (deftest maplist.error.1
-  (signals-error (maplist #'identity 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (maplist #'identity x)) #'listp)
+  nil)
 
 (deftest maplist.error.2
   (signals-error (maplist #'identity 1) type-error)

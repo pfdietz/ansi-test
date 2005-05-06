@@ -405,3 +405,11 @@
   (signals-error (intersection '(a b . c) '(d e f))
 		 type-error)
   t)
+
+(deftest intersection.error.13
+  (check-type-error #'(lambda (x) (intersection x '(a b c))) #'listp)
+  nil)
+
+(deftest intersection.error.14
+  (check-type-error #'(lambda (x) (intersection '(a b c) x)) #'listp)
+  nil)

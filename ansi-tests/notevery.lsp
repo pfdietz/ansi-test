@@ -270,32 +270,17 @@
 ;;; Error cases
 
 (deftest notevery.error.1
-  (signals-error (notevery 1 '(a b c)) type-error)
-  t)
-
-(deftest notevery.error.2
-  (signals-error (notevery #\a '(a b c)) type-error)
-  t)
-
-(deftest notevery.error.3
-  (signals-error (notevery #() '(a b c)) type-error)
-  t)
+  (check-type-error #'(lambda (x) (notevery x '(a b c)))
+		    (typef '(or symbol function)))
+  nil)
 
 (deftest notevery.error.4
-  (signals-error (notevery #'null 'a) type-error)
-  t)
-
-(deftest notevery.error.5
-  (signals-error (notevery #'null 100) type-error)
-  t)
-
-(deftest notevery.error.6
-  (signals-error (notevery #'null 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (notevery #'null x)) #'sequencep)
+  nil)
 
 (deftest notevery.error.7
-  (signals-error (notevery #'eq () 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (notevery #'eql () x)) #'sequencep)
+  nil)
 
 (deftest notevery.error.8
   (signals-error (notevery) program-error)

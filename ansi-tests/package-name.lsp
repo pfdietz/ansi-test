@@ -175,3 +175,6 @@
   (signals-error (package-name "CL" nil) program-error)
   t)
 
+(deftest package-name.error.3
+  (check-type-error #'package-name #'package-designator-p)
+  nil)

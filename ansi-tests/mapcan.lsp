@@ -88,8 +88,8 @@
   1)
 
 (deftest mapcan.error.1
-  (signals-error (mapcan #'identity 1) type-error)
-  t)
+  (check-type-error #'(lambda (x) (mapcan #'identity x)) #'listp)
+  nil)
 
 (deftest mapcan.error.2
   (signals-error (mapcan) program-error)

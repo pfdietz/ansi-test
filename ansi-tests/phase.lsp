@@ -14,10 +14,7 @@
   t)
 
 (deftest phase.error.3
-  (loop for x in *mini-universe*
-	unless (or (numberp x)
-		   (eval `(signals-error (phase ',x) type-error)))
-	collect x)
+  (check-type-error #'phase #'numberp)
   nil)
 
 (deftest phase.1

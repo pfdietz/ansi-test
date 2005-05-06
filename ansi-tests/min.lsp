@@ -12,17 +12,11 @@
   t)
 
 (deftest min.error.2
-  (loop for x in *mini-universe*
-	unless (or (realp x)
-		   (eval `(signals-error (min ',x) type-error)))
-	collect x)
+  (check-type-error #'min #'realp)
   nil)
 
 (deftest min.error.3
-  (loop for x in *mini-universe*
-	unless (or (realp x)
-		   (eval `(signals-error (min 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (min 0 x)) #'realp)
   nil)
 
 (deftest min.1

@@ -454,8 +454,8 @@
 ;;; Error cases
 
 (deftest map-into.error.1
-  (signals-error (map-into 'a #'(lambda () nil)) type-error)
-  t)
+  (check-type-error #'(lambda (x) (map-into x (constantly nil))) #'sequencep)
+  nil)
 
 ;;; The next test was changed because if the first argument
 ;;; is NIL, map-into is said to 'return nil immediately', so
@@ -469,9 +469,9 @@
   nil)
 
 (deftest map-into.error.3
-  (signals-error (map-into (copy-seq '(a b c)) #'cons '(d e f) 100)
-		 type-error)
-  t)
+  (check-type-error #'(lambda (x) (map-into (copy-seq '(a b c)) #'cons '(d e f) x))
+		    #'sequencep)
+  nil)
 
 (deftest map-into.error.4
   (signals-error (map-into) program-error)

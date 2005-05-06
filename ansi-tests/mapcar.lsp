@@ -81,8 +81,8 @@
   3 1 2 3)
 
 (deftest mapcar.error.1
-  (signals-error (mapcar #'identity 1) type-error)
-  t)
+  (check-type-error #'(lambda (x) (mapcar #'identity x)) #'listp)
+  nil)
 
 (deftest mapcar.error.2
   (signals-error (mapcar) program-error)

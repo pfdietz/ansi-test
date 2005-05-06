@@ -88,22 +88,12 @@
 ;;; Error tests
 
 (deftest make-broadcast-stream.error.1
-  (loop for x in *mini-universe*
-	unless (or (and (typep x 'stream) (output-stream-p x))
-		   (handler-case (progn (make-broadcast-stream x) nil)
-				 (type-error () t)
-				 (condition nil)))
-
-	collect x)
+  (check-type-error #'make-broadcast-stream
+		    #'(lambda (x) (and (streamp x) (output-stream-p x))))
   nil)
 
 (deftest make-broadcast-stream.error.2
-  (loop for x in *streams*
-	unless (or (and (typep x 'stream) (output-stream-p x))
-		   (handler-case (progn (make-broadcast-stream x) nil)
-				 (type-error () t)
-				 (condition nil)))
-
-	collect x)
+  (check-type-error #'make-broadcast-stream
+		    #'(lambda (x) (and (streamp x) (output-stream-p x)))
+		    *streams*)
   nil)
-

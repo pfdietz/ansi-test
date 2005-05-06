@@ -254,10 +254,9 @@
   t)
 
 (deftest read-sequence.error.6
-  (signals-error
-   (read-sequence 'a (make-string-input-stream "abc"))
-   type-error)
-  t)
+  (check-type-error #'(lambda (x) (read-sequence x (make-string-input-stream "abc")))
+		    #'sequencep)
+  nil)
 
 (deftest read-sequence.error.7
   (signals-error
@@ -267,34 +266,28 @@
 
 ;;; This test appears to cause Allegro CL to crash
 (deftest read-sequence.error.8
-  (signals-error
-   (read-sequence (make-string 3) (make-string-input-stream "abc")
-		  :start -1)
-
-   type-error)
+  (signals-type-error x -1
+		      (read-sequence (make-string 3)
+				     (make-string-input-stream "abc")
+				     :start x))
   t)
 
 (deftest read-sequence.error.9
-  (signals-error
-   (read-sequence (make-string 3) (make-string-input-stream "abc")
-		  :start 'a)
-
-   type-error)
-  t)
+  (check-type-error #'(lambda (s)
+			(read-sequence (make-string 3) (make-string-input-stream "abc")
+				       :start s))
+		    (typef 'unsigned-byte))
+  nil)
 
 (deftest read-sequence.error.10
-  (signals-error
-   (read-sequence (make-string 3) (make-string-input-stream "abc")
-		  :end -1)
-   type-error)
+  (signals-type-error x -1
+		      (read-sequence (make-string 3) (make-string-input-stream "abc")
+				     :end x))
   t)
 
 (deftest read-sequence.error.11
-  (signals-error
-   (read-sequence (make-string 3) (make-string-input-stream "abc")
-		  :end 'b)
-   type-error)
-  t)
-
-
-
+  (check-type-error #'(lambda (e)
+			(read-sequence (make-string 3) (make-string-input-stream "abc")
+				       :end e))
+		    (typef '(or unsigned-byte null)))
+  nil)

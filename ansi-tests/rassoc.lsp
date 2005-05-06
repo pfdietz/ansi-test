@@ -303,3 +303,7 @@
 (deftest rassoc.error.10
   (signals-error (rassoc 'z '((a . b) . c)) type-error)
   t)
+
+(deftest rassoci.error.11
+  (check-type-error #'(lambda (x) (rassoc 'a x)) #'listp)
+  nil)

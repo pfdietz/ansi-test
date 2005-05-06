@@ -71,16 +71,10 @@
   t)
 
 (deftest pathname-host.error.2
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (handler-case (progn (pathname-host x) nil)
-				 (type-error () t)
-				 (condition () nil)))
-	collect x)
+  (check-type-error #'pathname-host #'could-be-pathname-designator)
   nil)
 
 (deftest pathname-host.error.3
   (signals-error (pathname-host *default-pathname-defaults* '#:bogus t)
 		 program-error)
   t)
-

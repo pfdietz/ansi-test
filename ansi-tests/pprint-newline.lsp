@@ -453,17 +453,13 @@ A "
 ;;; Error cases
 
 (deftest pprint-newline.error.1
-  (loop for x in *mini-universe*
-	unless (member x '(:linear :miser :fill :mandatory))
-	unless (eval `(signals-error (pprint-newline ',x) type-error))
-	collect x)
+  (check-type-error #'pprint-newline
+		    (typef '(member :linear :miser :fill :mandatory)))
   nil)
 
 (deftest pprint-newline.error.1-unsafe
-  (loop for x in *mini-universe*
-	unless (member x '(:linear :miser :fill :mandatory))
-	unless (eval `(signals-error (locally (declare (optimize (safety 0))) (pprint-newline ',x)) type-error))
-	collect x)
+  (check-type-error #'(lambda (x) (declare (optimize (safety 0))) (pprint-newline x))
+		    (typef '(member :linear :miser :fill :mandatory)))
   nil)
 
 (deftest pprint-newline.error.2

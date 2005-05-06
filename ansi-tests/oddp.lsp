@@ -18,10 +18,7 @@
   t)
 
 (deftest oddp.error.3
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (oddp ',x) type-error)))
-	collect x)
+  (check-type-error #'oddp #'integerp)
   nil)
 
 ;;; Non-error tests

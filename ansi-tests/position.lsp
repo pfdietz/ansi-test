@@ -808,16 +808,8 @@
 ;;; Error tests
 
 (deftest position.error.1
-  (signals-error (position 'a 'b) type-error)
-  t)
-
-(deftest position.error.2
-  (signals-error (position 'a 10) type-error)
-  t)
-
-(deftest position.error.3
-  (signals-error (position 'a 1.4) type-error)
-  t)
+  (check-type-error #'(lambda (x) (position 'a x)) #'sequencep)
+  nil)
 
 (deftest position.error.4
   (signals-error (position 'e '(a b c . d)) type-error)

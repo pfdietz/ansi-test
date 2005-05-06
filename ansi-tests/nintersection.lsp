@@ -367,3 +367,10 @@
   (signals-error (nintersection (list* 1 2 3) (list 4 5 6)) type-error)
   t)
 
+(deftest nintersection.error.13
+  (check-type-error #'(lambda (x) (nintersection x (copy-seq '(a b c)))) #'listp)
+  nil)
+
+(deftest nintersection.error.14
+  (check-type-error #'(lambda (x) (nintersection (copy-seq '(a b c)) x)) #'listp)
+  nil)

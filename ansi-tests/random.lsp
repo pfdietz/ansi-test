@@ -17,10 +17,7 @@
   t)
 
 (deftest random.error.3
-  (loop for x in *mini-universe*
-	unless (or (and (realp x) (> x 0))
-		   (eval `(signals-error (random ',x) type-error)))
-	collect x)
+  (check-type-error #'random (typef '(real (0))))
   nil)
 
 (deftest random.1

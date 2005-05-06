@@ -10,24 +10,8 @@
 ;;; Error tests
 
 (deftest nthcdr.error.1
-  (signals-error (nthcdr nil (copy-tree '(a b c d))) type-error)
-  t)
-
-(deftest nthcdr.error.2
-  (signals-error (nthcdr 'a (copy-tree '(a b c d))) type-error)
-  t)
-
-(deftest nthcdr.error.3
-  (signals-error (nthcdr 0.1 (copy-tree '(a b c d))) type-error)
-  t)
-
-(deftest nthcdr.error.4
-  (signals-error (nthcdr #\A (copy-tree '(a b c d))) type-error)
-  t)
-
-(deftest nthcdr.error.5
-  (signals-error (nthcdr '(a) (copy-tree '(a b c d))) type-error)
-  t)
+  (check-type-error #'(lambda (x) (nthcdr x (copy-list '(a b c d)))) (typef 'unsigned-byte))
+  nil)
 
 (deftest nthcdr.error.6
   (signals-error (nthcdr -10 (copy-tree '(a b c d))) type-error)

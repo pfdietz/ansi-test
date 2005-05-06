@@ -118,36 +118,8 @@
   "ABC" 1)
 
 (deftest make-symbol.error.1
-  (signals-error (make-symbol nil) type-error)
-  t)
-
-(deftest make-symbol.error.2
-  (signals-error (make-symbol 'a) type-error)
-  t)
-
-(deftest make-symbol.error.3
-  (signals-error (make-symbol 1) type-error)
-  t)
-
-(deftest make-symbol.error.4
-  (signals-error (make-symbol -1) type-error)
-  t)
-
-(deftest make-symbol.error.5
-  (signals-error (make-symbol 1.213) type-error)
-  t)
-
-(deftest make-symbol.error.6
-  (signals-error (make-symbol -1312.2) type-error)
-  t)
-
-(deftest make-symbol.error.7
-  (signals-error (make-symbol #\w) type-error)
-  t)
-
-(deftest make-symbol.error.8
-  (signals-error (make-symbol '(a)) type-error)
-  t)
+  (check-type-error #'make-symbol #'stringp)
+  nil)
 
 (deftest make-symbol.error.9
   (signals-error (make-symbol) program-error)
@@ -158,5 +130,5 @@
   t)
 
 (deftest make-symbol.error.11
-  (signals-error (make-symbol '(#\a #\b #\c))  type-error)
+  (signals-type-error x '(#\a #\b #\c) (make-symbol x))
   t)

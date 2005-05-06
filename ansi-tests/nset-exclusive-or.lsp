@@ -367,3 +367,11 @@
 (deftest nset-exclusive-or.error.12
   (signals-error (nset-exclusive-or (list* 1 2 3) (list 4 5 6)) type-error)
   t)
+
+(deftest nset-exclusive-or.error.13
+  (check-type-error #'(lambda (x) (nset-exclusive-or x (list 'a 'b))) #'listp)
+  nil)
+
+(deftest nset-exclusive-or.error.14
+  (check-type-error #'(lambda (x) (nset-exclusive-or (list 'a 'b) x)) #'listp)
+  nil)

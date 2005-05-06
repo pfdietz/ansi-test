@@ -154,24 +154,8 @@
 ;;; Error tests
 
 (deftest nreverse.error.1
-  (signals-error (nreverse 'a) type-error)
-  t)
-
-(deftest nreverse.error.2
-  (signals-error (nreverse #\a) type-error)
-  t)
-
-(deftest nreverse.error.3
-  (signals-error (nreverse 10) type-error)
-  t)
-
-(deftest nreverse.error.4
-  (signals-error (nreverse 0.3) type-error)
-  t)
-
-(deftest nreverse.error.5
-  (signals-error (nreverse 10/3) type-error)
-  t)
+  (check-type-error #'nreverse #'sequencep)
+  nil)
 
 (deftest nreverse.error.6
   (signals-error (nreverse) program-error)

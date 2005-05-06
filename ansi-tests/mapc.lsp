@@ -74,8 +74,8 @@
   (a b c) 3 1 2 3)
 
 (deftest mapc.error.1
-  (signals-error (mapc #'identity 1) type-error)
-  t)
+  (check-type-error #'(lambda (x) (mapc #'identity x)) #'listp)
+  nil)
 
 (deftest mapc.error.2
   (signals-error (mapc) program-error)

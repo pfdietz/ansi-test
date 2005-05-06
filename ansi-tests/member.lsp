@@ -235,8 +235,8 @@
 ;;; Error cases
 
 (deftest member.error.1
-  (signals-error (member 'a 'b) type-error)
-  t)
+  (check-type-error #'(lambda (x) (member 'a x)) #'listp)
+  nil)
 
 (deftest member.error.2
   (signals-error (member 'a 1.3) type-error)

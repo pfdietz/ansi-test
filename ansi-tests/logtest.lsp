@@ -20,17 +20,11 @@
   t)
 
 (deftest logtest.error.4
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logtest ',x -1) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logtest x -1)) #'integerp)
   nil)
 
 (deftest logtest.error.5
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logtest -1 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logtest -1 x)) #'integerp)
   nil)
 
 ;;; Non-error tests

@@ -83,41 +83,21 @@
   t)
 
 (deftest pathname-match-p.error.4
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (eval `(signals-error (pathname-match-p ',x #p"")
-					 type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (pathname-match-p x #p""))
+		    #'could-be-pathname-designator)
   nil)
 
 (deftest pathname-match-p.error.5
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (eval `(signals-error (pathname-match-p ',x #p"")
-					 type-error
-					 :safety 0)))
-	collect x)
+  (check-type-error #'(lambda (x) (declare (optimize (safety 0))) (pathname-match-p x #p""))
+		    #'could-be-pathname-designator)
   nil)
 
 (deftest pathname-match-p.error.6
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (eval `(signals-error (pathname-match-p #p"" ',x)
-					 type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (pathname-match-p #p"" x))
+		    #'could-be-pathname-designator)
   nil)
 
 (deftest pathname-match-p.error.7
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (eval `(signals-error (pathname-match-p #p"" ',x)
-					 type-error
-					 :safety 0)))
-	collect x)
+  (check-type-error #'(lambda (x) (declare (optimize (safety 0))) (pathname-match-p #p"" x))
+		    #'could-be-pathname-designator)
   nil)
-
-
-
-
-
-

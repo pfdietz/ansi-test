@@ -192,3 +192,7 @@
 			   (list 'a 'b 'c 'd))
 		 type-error)
   t)
+
+(deftest nsublis.error.9
+  (check-type-error #'(lambda (x) (nsublis x (list 'a 'b))) #'listp)
+  nil)

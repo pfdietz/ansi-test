@@ -95,8 +95,8 @@
 ;;; Error tests
 
 (deftest member-if-not.error.1
-  (signals-error (member-if-not #'identity 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (member-if-not #'identity x)) #'listp)
+  nil)
   
 (deftest member-if-not.error.2
   (signals-error (member-if-not) program-error)

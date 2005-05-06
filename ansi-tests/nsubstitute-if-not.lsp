@@ -794,3 +794,6 @@
 		 program-error)
   t)
 
+(deftest nsubstitute-if-not.error.12
+  (check-type-error #'(lambda (x) (nsubstitute-if-not 1 #'null x)) #'sequencep)
+  nil)

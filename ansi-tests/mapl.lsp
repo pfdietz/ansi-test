@@ -100,8 +100,8 @@
   (a b c) 3 1 2 3)
 
 (deftest mapl.error.1
-  (signals-error (mapl #'identity 1) type-error)
-  t)
+  (check-type-error #'(lambda (x) (mapl #'identity x)) #'sequencep)
+  nil)
 
 (deftest mapl.error.2
   (signals-error (mapl) program-error)

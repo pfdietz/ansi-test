@@ -132,10 +132,7 @@
   t t)
 
 (deftest read-byte.error.5
-  (loop for x in *mini-universe*
-	unless (or (streamp x)
-		   (eval `(signals-error (read-byte ',x) type-error)))
-	collect x)
+  (check-type-error #'read-byte #'streamp)
   nil)
 
 (deftest read-byte.error.6
@@ -177,10 +174,7 @@
   t)
 
 (deftest write-byte.error.4
-  (loop for x in *mini-universe*
-	unless (or (streamp x)
-		   (eval `(signals-error (write-byte 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (write-byte 0 x)) #'streamp)
   nil)
 
 (deftest write-byte.error.5

@@ -535,16 +535,8 @@
 ;;; Error tests
 
 (deftest position-if.error.1
-  (signals-error (position-if #'identity 'b) type-error)
-  t)
-
-(deftest position-if.error.2
-  (signals-error (position-if #'identity 10) type-error)
-  t)
-
-(deftest position-if.error.3
-  (signals-error (position-if 'null 1.4) type-error)
-  t)
+  (check-type-error #'(lambda (x) (position-if #'identity x)) #'sequencep)
+  nil)
 
 (deftest position-if.error.4
   (signals-error (position-if 'null '(a b c . d)) type-error)

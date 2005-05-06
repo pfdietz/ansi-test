@@ -537,16 +537,8 @@
 ;;; Error tests
 
 (deftest position-if-not.error.1
-  (signals-error (position-if-not #'identity 'b) type-error)
-  t)
-
-(deftest position-if-not.error.2
-  (signals-error (position-if-not #'identity 10) type-error)
-  t)
-
-(deftest position-if-not.error.3
-  (signals-error (position-if-not 'null 1.4) type-error)
-  t)
+  (check-type-error #'(lambda (x) (position-if-not #'identity x)) #'sequencep)
+  nil)
 
 (deftest position-if-not.error.4
   (signals-error (position-if-not 'identity '(a b c . d)) type-error)

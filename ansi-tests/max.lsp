@@ -14,10 +14,11 @@
   t)
 
 (deftest max.error.2
-  (loop for x in *mini-universe*
-	unless (or (realp x)
-		   (eval `(signals-error (max ',x) type-error)))
-	collect x)
+  (check-type-error #'max #'realp)
+  nil)
+
+(deftest max.error.3
+  (check-type-error #'(lambda (x) (max 0 x)) #'realp)
   nil)
 
 ;;; Non-error tests

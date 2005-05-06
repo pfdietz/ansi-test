@@ -22,14 +22,11 @@
   t)
 
 (deftest logbitp.error.4
-  (signals-error (logbitp -1 0) type-error)
-  t)
+  (check-type-error #'(lambda (x) (logbitp x 0)) (typef 'unsigned-byte))
+  nil)
 
 (deftest logbitp.error.5
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logbitp 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logbitp 0 x)) #'integerp)
   nil)
 
 ;;; Non-error tests

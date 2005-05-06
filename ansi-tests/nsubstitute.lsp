@@ -1024,3 +1024,6 @@
   (signals-error (nsubstitute 'a 'b (list 'a 'b 'c) :key #'car) type-error)
   t)
 
+(deftest nsubstitute.error.12
+  (check-type-error #'(lambda (x) (nsubstitute 1 0 x)) #'sequencep)
+  nil)

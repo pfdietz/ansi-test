@@ -1144,3 +1144,14 @@ the condition to go uncaught if it cannot be classified."
     (rational 0)))
 
 (defun sequencep (x) (typep x 'sequence))
+
+(defun typef (type) #'(lambda (x) (typep x type)))
+
+(defun package-designator-p (x)
+  "TRUE if x could be a package designator.  The package need not
+   actually exist."
+  (or (packagep x)
+      (handler-case (and (locally (declare (optimize safety))
+				  (string x))
+			 t)
+		    (type-error () nil))))

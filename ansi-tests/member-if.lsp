@@ -101,8 +101,8 @@
 ;;; Error cases
 
 (deftest member-if.error.1
-  (signals-error (member-if #'identity 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (member-if #'identity x)) #'listp)
+  nil)
   
 (deftest member-if.error.2
   (signals-error (member-if) program-error)

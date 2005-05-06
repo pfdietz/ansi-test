@@ -10,10 +10,7 @@
 ;;; Error tests
 
 (deftest lognot.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (lognot ',x) type-error)))
-	collect x)
+  (check-type-error #'lognot #'integerp)
   nil)
 
 (deftest lognot.error.2

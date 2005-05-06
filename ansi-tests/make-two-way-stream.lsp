@@ -218,43 +218,25 @@
   t)
 
 (deftest make-two-way-stream.error.4
-  (loop for x in *mini-universe*
-	unless (or (and (typep x 'stream) (input-stream-p x))
-		   (eval `(signals-error
-			   (let ((os (make-string-output-stream)))
-			     (make-two-way-stream ',x os))
-			   type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (make-two-way-stream x (make-string-output-stream)))
+		    #'(lambda (x) (and (streamp x) (input-stream-p x))))
   nil)
 
 (deftest make-two-way-stream.error.5
-  (loop for x in *streams*
-	unless (or (and (typep x 'stream) (input-stream-p x))
-		   (eval `(signals-error
-			   (let ((os (make-string-output-stream)))
-			     (make-two-way-stream ',x os))
-			   type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (make-two-way-stream x (make-string-output-stream)))
+		    #'(lambda (x) (and (streamp x) (input-stream-p x)))
+		    *streams*)
   nil)
 
 (deftest make-two-way-stream.error.6
-  (loop for x in *mini-universe*
-	unless (or (and (typep x 'stream) (output-stream-p x))
-		   (eval `(signals-error
-			   (let ((is (make-string-input-stream "foo")))
-			     (make-two-way-stream is ',x))
-			   type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (make-two-way-stream (make-string-input-stream "foo") x))
+		    #'(lambda (x) (and (streamp x) (output-stream-p x))))
   nil)
 
 (deftest make-two-way-stream.error.7
-  (loop for x in *streams*
-	unless (or (and (typep x 'stream) (output-stream-p x))
-		   (eval `(signals-error
-			   (let ((is (make-string-input-stream "foo")))
-			     (make-two-way-stream is ',x))
-			   type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (make-two-way-stream (make-string-input-stream "foo") x))
+		    #'(lambda (x) (and (streamp x) (output-stream-p x)))
+		    *streams*)
   nil)
 
 

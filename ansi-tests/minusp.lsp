@@ -18,10 +18,7 @@
   t)
 
 (deftest minusp.error.4
-  (loop for x in *mini-universe*
-	unless (realp x)
-	unless (eval `(signals-error (minusp ',x) type-error))
-	collect x)
+  (check-type-error #'minusp #'realp)
   nil)
 
 (deftest minusp.1

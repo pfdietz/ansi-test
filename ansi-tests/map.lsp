@@ -220,6 +220,10 @@
   (signals-error-always (map 'symbol #'identity '(a b c)) type-error)
   t t)
 
+(deftest map.error.1a
+  (signals-error (map 'symbol #'identity '(a b c)) type-error)
+  t)
+
 (deftest map.error.2
   (signals-error (map '(vector * 8) #'identity '(a b c)) type-error)
   t)
@@ -267,6 +271,14 @@
 	(eval `(signals-error (map ',type #'identity '(1 2 3 4 5 6)) type-error))
       t))
   t)
+
+(deftest map.error.12
+  (check-type-error #'(lambda (x) (map 'list #'identity x)) #'sequencep)
+  nil)
+
+(deftest map.error.13
+  (check-type-error #'(lambda (x) (map 'vector #'cons '(a b c d) x)) #'sequencep)
+  nil)
 
 ;;; Test mapping on arrays with fill pointers
 

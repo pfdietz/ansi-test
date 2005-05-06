@@ -10,17 +10,15 @@
 ;;; Error tests
 
 (deftest logand.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logand ',x) type-error)))
-	collect x)
+  (check-type-error #'logand #'integerp)
   nil)
 
 (deftest logand.error.2
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logand 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logand 0 x)) #'integerp)
+  nil)
+
+(deftest logand.error.3
+  (check-type-error #'(lambda (x) (logand x 1)) #'integerp)
   nil)
 
 ;;; Non-error tests

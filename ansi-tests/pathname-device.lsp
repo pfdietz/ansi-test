@@ -70,10 +70,5 @@
   t)
 
 (deftest pathname-device.error.2
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (handler-case (progn (pathname-device x) nil)
-				 (type-error () t)
-				 (condition () nil)))
-	collect x)
+  (check-type-error #'pathname-device #'could-be-pathname-designator)
   nil)

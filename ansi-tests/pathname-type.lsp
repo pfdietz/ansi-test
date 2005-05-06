@@ -71,10 +71,5 @@
   t)
 
 (deftest pathname-type.error.2
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (handler-case (progn (pathname-type x) nil)
-				 (type-error () t)
-				 (condition () nil)))
-	collect x)
+  (check-type-error #'pathname-type #'could-be-pathname-designator)
   nil)

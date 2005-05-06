@@ -41,9 +41,5 @@
   t)
 
 (deftest makunbound.error.3
-  (loop for x in *mini-universe*
-	for form = `(signals-error (makunbound ',x) type-error)
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'makunbound #'symbolp)
   nil)
-

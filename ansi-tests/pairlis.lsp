@@ -87,3 +87,10 @@
   (signals-error (pairlis '(a . b) '(c . d)) type-error)
   t)
 
+(deftest pairlis.error.7
+  (check-type-error #'(lambda (x) (pairlis x '(a b))) #'listp)
+  nil)
+
+(deftest pairlis.error.8
+  (check-type-error #'(lambda (x) (pairlis '(a b) x)) #'listp)
+  nil)

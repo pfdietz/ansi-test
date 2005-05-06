@@ -93,9 +93,5 @@
   t)
 
 (deftest make-synonym-stream.error.3
-  (loop for x in *mini-universe*
-	unless (or (symbolp x)
-		   (eval `(signals-error (make-synonym-stream ',x)
-					 type-error)))
-	collect x)
+  (check-type-error #'make-synonym-stream #'symbolp)
   nil)

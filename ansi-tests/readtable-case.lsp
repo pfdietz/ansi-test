@@ -64,28 +64,18 @@
   t)
 
 (deftest readtable-case.error.3
-  (loop for x in *mini-universe*
-	for form = `(signals-error (readtable-case ',x) type-error)
-	unless (or (typep x 'readtable)
-		   (eql (eval form) t))
-	collect (list x form))
+  (check-type-error #'readtable-case (typef 'readtable))
   nil)
 
 (deftest readtable-case.error.4
-  (loop for x in *mini-universe*
-	for form = `(signals-error (let ((rt (copy-readtable)))
-				     (setf (readtable-case rt) ',x))
-				   type-error)
-	unless (or (member x '(:upcase :downcase :preserve :invert))
-		   (eql (eval form) t))
-	collect x)
+  (check-type-error #'(lambda (x)
+			(let ((rt (copy-readtable)))
+			  (setf (readtable-case rt) x)))
+		    (typef '(member :upcase :downcase :preserve :invert)))
   nil)
 
 (deftest readtable-case.error.5
-  (loop for x in *mini-universe*
-	for form = `(signals-error (setf (readtable-case ',x) :upcase)
-				   type-error)
-	unless (or (typep x 'readtable)
-		   (eql (eval form) t))
-	collect x)
+  (check-type-error #'(lambda (x) (setf (readtable-case x) :upcase))
+		    (typef 'readtable))
   nil)
+

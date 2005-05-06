@@ -54,8 +54,8 @@
   3 1 2 3)
 
 (deftest mapcon.error.1
-  (signals-error (mapcon #'identity 1) type-error)
-  t)
+  (check-type-error #'(lambda (x) (mapcon #'identity x)) #'listp)
+  nil)
 
 (deftest mapcon.error.2
   (signals-error (mapcon) program-error)

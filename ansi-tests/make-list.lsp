@@ -71,12 +71,8 @@
 
 
 (deftest make-list.error.1
-  (catch-type-error (make-list -1))
-  type-error)
-
-(deftest make-list.error.2
-  (signals-error (make-list 'a) type-error)
-  t)
+  (check-type-error #'make-list (typef 'unsigned-byte))
+  nil)
 
 (deftest make-list.error.3
   (signals-error (make-list) program-error)

@@ -20,10 +20,7 @@
   t)
 
 (deftest plusp.error.4
-  (loop for x in *mini-universe*
-	unless (realp x)
-	unless (eval `(signals-error (plusp ',x) type-error))
-	collect x)
+  (check-type-error #'plusp #'realp)
   nil)
 
 ;;; Non-error tests

@@ -18,10 +18,7 @@
   t)
 
 (deftest rationalize.error.4
-  (loop for x in *mini-universe*
-	unless (or (realp x)
-		   (eval `(signals-error (rationalize ',x) type-error)))
-	collect x)
+  (check-type-error #'rationalize #'realp)
   nil)
 
 (deftest rationalize.1

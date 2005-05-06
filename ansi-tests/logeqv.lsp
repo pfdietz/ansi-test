@@ -10,17 +10,11 @@
 ;;; Error tests
 
 (deftest logeqv.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logeqv ',x) type-error)))
-	collect x)
+  (check-type-error #'logeqv #'integerp)
   nil)
 
 (deftest logeqv.error.2
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logeqv 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logeqv 0 x)) #'integerp)
   nil)
 
 ;;; Non-error tests

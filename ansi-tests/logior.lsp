@@ -12,17 +12,11 @@
 ;;; Error tests
 
 (deftest logior.error.1
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logior ',x) type-error)))
-	collect x)
+  (check-type-error #'logior #'integerp)
   nil)
 
 (deftest logior.error.2
-  (loop for x in *mini-universe*
-	unless (or (integerp x)
-		   (eval `(signals-error (logior 0 ',x) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (logior 0 x)) #'integerp)
   nil)
 
 ;;; Non-error tests

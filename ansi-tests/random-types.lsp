@@ -18,7 +18,7 @@
 		   (random-from-interval r (- r)))))
        (1 (random-from-seq #(integer unsigned-byte ratio rational real float
 			     short-float single-float double-float
-			     long-float complex symbol cons)))
+			     long-float complex symbol cons function)))
        (1
 	(let* ((len (random *maximum-random-int-bits*))
 	       (r1 (ash 1 len))
@@ -36,7 +36,13 @@
 	       (sizes (random-partition (1- size) nargs)))
 	  `(,op ,@(mapcar #'make-random-type sizes))))
      (1 `(not ,(make-random-type (1- size))))
+     (1 (make-random-function-type size))
      )))
+
+(defun make-random-function-type (size)
+  (let* ((sizes (random-partition (1- size) 2))
+	 (types (mapcar #'make-random-type sizes)))
+    `(function (,(car types)) ,(cadr types))))
 
 (defun test-random-types (n size)
   (loop for t1 = (make-random-type size)

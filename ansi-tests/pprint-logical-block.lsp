@@ -252,51 +252,42 @@ abcd3")
 ;;; Error cases
 
 (deftest pprint-logical-block.error.1
-  (loop for x in *mini-universe*
-	for form = `(pprint-logical-block (*standard-output* '(1) :prefix ',x))
-	unless (or (stringp x)
-		   (eq (eval `(signals-error ,form type-error)) t))
-	collect x)
+  (check-type-error #'(lambda (x)
+			(pprint-logical-block (*standard-output* '(1) :prefix x)))
+		    #'stringp)
   nil)
 
 (deftest pprint-logical-block.error.1-unsafe
-  (loop for x in *mini-universe*
-	for form = `(pprint-logical-block (*standard-output* '(1) :prefix ',x))
-	unless (or (stringp x)
-		   (eq (eval `(signals-error ,form type-error :safety 0)) t))
-	collect x)
+  (check-type-error #'(lambda (x)
+			(declare (optimize (safety 0)))
+			(pprint-logical-block (*standard-output* '(1) :prefix x)))
+		    #'stringp)
   nil)
 
 (deftest pprint-logical-block.error.2
-  (loop for x in *mini-universe*
-	for form = `(pprint-logical-block (*standard-output* '(1) :suffix ',x))
-	unless (or (stringp x)
-		   (eq (eval `(signals-error ,form type-error)) t))
-	collect x)
+  (check-type-error #'(lambda (x)
+			(pprint-logical-block (*standard-output* '(1) :suffix x)))
+		    #'stringp)
   nil)
 
 (deftest pprint-logical-block.error.2-unsafe
-  (loop for x in *mini-universe*
-	for form = `(pprint-logical-block (*standard-output* '(1) :suffix ',x))
-	unless (or (stringp x)
-		   (eq (eval `(signals-error ,form type-error :safety 0)) t))
-	collect x)
+  (check-type-error #'(lambda (x)
+			(declare (optimize (safety 0)))
+			(pprint-logical-block (*standard-output* '(1) :suffix x)))
+		    #'stringp)
   nil)
 
 (deftest pprint-logical-block.error.3
-  (loop for x in *mini-universe*
-	for form = `(pprint-logical-block (*standard-output* '(1) :per-line-prefix ',x))
-	unless (or (stringp x)
-		   (eq (eval `(signals-error ,form type-error)) t))
-	collect x)
+  (check-type-error #'(lambda (x)
+			(pprint-logical-block (*standard-output* '(1) :per-line-prefix x)))
+		    #'stringp)
   nil)
 
 (deftest pprint-logical-block.error.3-unsafe
-  (loop for x in *mini-universe*
-	for form = `(pprint-logical-block (*standard-output* '(1) :per-line-prefix ',x))
-	unless (or (stringp x)
-		   (eq (eval `(signals-error ,form type-error :safety 0)) t))
-	collect x)
+  (check-type-error #'(lambda (x)
+			(declare (optimize (safety 0)))
+			(pprint-logical-block (*standard-output* '(1) :per-line-prefix x)))
+		    #'stringp)
   nil)
 
 (deftest pprint-logical-block.error.4

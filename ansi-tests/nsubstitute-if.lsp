@@ -792,3 +792,6 @@
 				  :key #'cons) program-error)
   t)
 
+(deftest nsubstitute-if.error.12
+  (check-type-error #'(lambda (x) (nsubstitute-if 0 #'identity x)) #'sequencep)
+  nil)

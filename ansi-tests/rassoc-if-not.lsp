@@ -140,3 +140,7 @@
 (deftest rassoc-if-not.error.11
   (signals-error (rassoc-if-not #'identity '((a . b) . c)) type-error)
   t)
+
+(deftest rassoc-if-not.error.12
+  (check-type-error #'(lambda (x) (rassoc-if-not #'identity x)) #'listp)
+  nil)
