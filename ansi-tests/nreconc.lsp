@@ -42,7 +42,3 @@
 (deftest nreconc.error.4
   (signals-error (nreconc (cons 'a 'b) (list 'z)) type-error)
   t)
-
-(deftest nreconc.error.5
-  (check-type-error #'(lambda (x) (nreconc x '(a b))) #'listp)
-  nil)
