@@ -259,3 +259,12 @@
 (deftest subsetp.error.12
   (signals-error (subsetp (list* 1 2 3) (list 1 2 3 4 5 6)) type-error)
   t)
+
+(deftest subsetp.error.13
+  (check-type-error #'(lambda (x) (subsetp x nil)) #'listp)
+  nil)
+
+(deftest subsetp.error.14
+  (check-type-error #'(lambda (x) (subsetp nil x)) #'listp)
+  nil)
+

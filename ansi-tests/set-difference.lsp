@@ -320,3 +320,12 @@
 (deftest set-difference.error.12
   (signals-error (set-difference (list* 1 2 3) (list 4 5 6)) type-error)
   t)
+
+(deftest set-difference.error.13
+  (check-type-error #'(lambda (x) (set-difference x '(a b c))) #'listp)
+  nil)
+
+(deftest set-difference.error.14
+  (check-type-error #'(lambda (x) (set-difference '(a b c) x)) #'listp)
+  nil)
+

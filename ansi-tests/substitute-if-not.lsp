@@ -867,3 +867,6 @@
 		 program-error)
   t)
 
+(deftest substitute-if-not.error.12
+  (check-type-error #'(lambda (x) (substitute-if-not 'a #'not x)) #'sequencep)
+  nil)

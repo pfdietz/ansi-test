@@ -221,18 +221,14 @@
   t)
 
 (deftest wild-pathname-p.error.3
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (eval `(signals-error (wild-pathname-p ',x)
-					 type-error)))
-	collect x)
+  (check-type-error #'wild-pathname-p
+		    (typef '(or pathname string file-stream
+				synonym-stream)))
   nil)
 
 (deftest wild-pathname-p.error.4
-  (loop for x in *mini-universe*
-	unless (or (could-be-pathname-designator x)
-		   (eval `(signals-error (wild-pathname-p ',x)
-					 type-error
-					 :safety 0)))
-	collect x)
+  (check-type-error #'(lambda (x) (declare (optimize (safety 0)))
+			(wild-pathname-p x))
+		    (typef '(or pathname string file-stream
+				synonym-stream)))
   nil)

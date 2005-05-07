@@ -235,3 +235,7 @@
 (deftest sort.error.10
   (signals-error (sort (list 1 2 3 4) #'elt) type-error)
   t)
+
+(deftest sort.error.11
+  (check-type-error #'(lambda (x) (sort x #'<)) #'sequencep)
+  nil)

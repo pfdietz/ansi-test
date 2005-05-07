@@ -80,8 +80,5 @@
   t)
 
 (deftest tanh.error.3
-  (loop for x in *mini-universe*
-	unless (or (numberp x)
-		   (eval `(signals-error (tanh ',x) type-error)))
-	collect x)
+  (check-type-error #'tanh #'numberp)
   nil)

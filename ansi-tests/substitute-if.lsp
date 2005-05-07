@@ -890,3 +890,7 @@
 				  :key #'cons)
 		 program-error)
   t)
+
+(deftest substitute-if.error.12
+  (check-type-error #'(lambda (x) (substitute-if 'a #'not x)) #'sequencep)
+  nil)

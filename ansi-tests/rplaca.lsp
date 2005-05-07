@@ -27,9 +27,7 @@
 
 ;; rplaca on a non-cons is a type error
 (deftest rplaca.error.1
-  (loop for x in *universe*
-	thereis (and (not (consp x))
-		     (not (eval `(signals-error (rplaca ',x 1) type-error)))))
+  (check-type-error #'(lambda (x) (rplaca x 1)) #'consp)
   nil)
 
 (deftest rplaca.error.2
@@ -42,10 +40,6 @@
 
 (deftest rplaca.error.4
   (signals-error (rplaca (cons 'a 'b) (cons 'c 'd) 'garbage) program-error)
-  t)
-
-(deftest rplaca.error.5
-  (signals-error (rplaca 'a 1) type-error)
   t)
 
 (deftest rplaca.error.6

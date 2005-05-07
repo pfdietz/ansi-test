@@ -43,6 +43,7 @@
      x))
   2 1)
 
-
-
- 
+;;; Add a test that (1) checks if the compiler normally delays
+;;; warnings until the end of a file and, if so, (2) checks that
+;;; with-compilation-unit delays the warnings for more than one
+;;; file compilation until the end of the unit.

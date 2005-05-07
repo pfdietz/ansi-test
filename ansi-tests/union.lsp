@@ -412,3 +412,12 @@
 (deftest union.error.12
   (signals-error (union (list* 1 2 3) (list 4 5 6)) type-error)
   t)
+
+(deftest union.error.13
+  (check-type-error #'(lambda (x) (union x nil)) #'listp)
+  nil)
+
+(deftest union.error.14
+  (check-type-error #'(lambda (x) (union nil x)) #'listp)
+  nil)
+

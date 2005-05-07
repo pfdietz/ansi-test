@@ -1138,3 +1138,6 @@
   (signals-error (substitute 'a 'b (list 'a 'b 'c) :key #'car) type-error)
   t)
 
+(deftest substitute.error.12
+  (check-type-error #'(lambda (x) (substitute 'a 'b x)) #'sequencep)
+  nil)

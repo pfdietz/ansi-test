@@ -205,3 +205,21 @@
   (signals-error (write-sequence "abcde" *standard-output* :start)
 		 program-error)
   t)
+
+(deftest write-sequence.error.14
+  (check-type-error #'(lambda (x) (write-sequence x *standard-output*))
+		    #'sequencep)
+  nil)
+
+(deftest write-sequence.error.15
+  (check-type-error #'(lambda (x) (write-sequence "abcde" *standard-output*
+						  :start x))
+		    (typef 'unsigned-byte))
+  nil)
+
+(deftest write-sequence.error.16
+  (check-type-error #'(lambda (x) (write-sequence "abcde" *standard-output*
+						  :end x))
+		    (typef '(or null unsigned-byte)))
+  nil)
+

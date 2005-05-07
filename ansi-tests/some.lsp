@@ -273,32 +273,17 @@
 
 
 (deftest some.error.1
-  (signals-error (some 1 '(a b c)) type-error)
-  t)
-
-(deftest some.error.2
-  (signals-error (some #\a '(a b c)) type-error)
-  t)
-
-(deftest some.error.3
-  (signals-error (some #() '(a b c)) type-error)
-  t)
+  (check-type-error #'(lambda (x) (some x '(a b c)))
+		    (typef '(or symbol function)))
+  nil)
 
 (deftest some.error.4
-  (signals-error (some #'null 'a) type-error)
-  t)
-
-(deftest some.error.5
-  (signals-error (some #'null 100) type-error)
-  t)
-
-(deftest some.error.6
-  (signals-error (some #'null 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (some #'null x)) #'sequencep)
+  nil)
 
 (deftest some.error.7
-  (signals-error (some #'eq () 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (some #'eql () x)) #'sequencep)
+  nil)
 
 (deftest some.error.8
   (signals-error (some) program-error)

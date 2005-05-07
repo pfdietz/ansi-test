@@ -41,8 +41,8 @@
   t 1)
 
 (deftest special-operator-p.error.1
-  (signals-error (special-operator-p 1) type-error)
-  t)
+  (check-type-error #'special-operator-p #'symbolp)
+  nil)
 
 (deftest special-operator-p.error.2
   (signals-error (special-operator-p) program-error)
@@ -51,4 +51,3 @@
 (deftest special-operator-p.error.3
   (signals-error (special-operator-p 'cons 'cons) program-error)
   t)
-

@@ -83,9 +83,5 @@
   t)
 
 (deftest stream-element-type.error.3
-  (loop for x in *mini-universe*
-	unless (or (typep x 'stream)
-		   (eval `(signals-error (stream-element-type ',x)
-					 type-error)))
-	collect x)
+  (check-type-error #'stream-element-type #'streamp)
   nil)

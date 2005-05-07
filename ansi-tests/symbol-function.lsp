@@ -24,18 +24,12 @@
   t)
 
 (deftest symbol-function.error.3
-  (loop for x in *mini-universe*
-	for form = `(signals-error (symbol-function ',x) type-error)
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'symbol-function #'symbolp)
   nil)
 
 (deftest symbol-function.error.4
-  (loop for x in *mini-universe*
-	for form = `(signals-error (setf (symbol-function ',x) #'identity)
-				   type-error)
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'(lambda (x) (setf (symbol-function x) #'identity))
+		    #'symbolp)
   nil)
 
 (deftest symbol-function.error.5

@@ -216,3 +216,7 @@
 (deftest stable-sort.error.10
   (signals-error (stable-sort (list 1 2 3 4) #'elt) type-error)
   t)
+
+(deftest stable-sort.error.11
+  (check-type-error #'(lambda (x) (stable-sort x #'<)) #'sequencep)
+  nil)

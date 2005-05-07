@@ -237,6 +237,10 @@
   (signals-error (remove-duplicates (list 'a 'b 'c) :key #'car) type-error)
   t)
 
+(deftest remove-duplicates.error.9
+  (check-type-error #'remove-duplicates #'sequencep)
+  nil)
+
 ;;;
 
 (deftest delete-duplicates.error.1
@@ -274,6 +278,10 @@
 (deftest delete-duplicates.error.9
   (signals-error (delete-duplicates (list 'a 'b 'c) :key #'car) type-error)
   t)
+
+(deftest delete-duplicates.error.10
+  (check-type-error #'delete-duplicates #'sequencep)
+  nil)
 
 ;;; Specialized string tests
 

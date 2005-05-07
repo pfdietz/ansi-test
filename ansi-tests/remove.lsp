@@ -861,6 +861,10 @@
   (signals-error (remove 'a (list 'a 'b 'c) :key #'car) type-error)
   t)
 
+(deftest remove.error.11
+  (check-type-error #'(lambda (x) (remove 'a x)) #'sequencep)
+  nil)
+
 
 ;;;
 
@@ -903,6 +907,10 @@
 (deftest delete.error.10
   (signals-error (delete 'a (list 'a 'b 'c) :key #'car) type-error)
   t)
+
+(deftest delete.error.11
+  (check-type-error #'(lambda (x) (delete 'a x)) #'sequencep)
+  nil)
 
 ;;; More specialized string tests
 

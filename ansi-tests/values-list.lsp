@@ -14,8 +14,8 @@
   t)
 
 (deftest values-list.error.3
-  (signals-error (values-list 'a) type-error)
-  t)
+  (check-type-error #'values-list #'list)
+  nil)
 
 (deftest values-list.error.4
   (signals-error (values-list '(a b c . d)) type-error)

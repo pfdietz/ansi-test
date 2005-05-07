@@ -223,8 +223,8 @@
 ;;;;;;;;
 
 (deftest reduce.error.1
-  (signals-error (reduce 'cons 'a) type-error)
-  t)
+  (check-type-error #'(lambda (x) (reduce 'cons x)) #'sequencep)
+  nil)
 
 (deftest reduce.error.2
   (signals-error (reduce) program-error)

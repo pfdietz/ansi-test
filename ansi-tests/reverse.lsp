@@ -169,24 +169,8 @@
 ;;; Error cases
 
 (deftest reverse.error.1
-  (signals-error (reverse 'a) type-error)
-  t)
-
-(deftest reverse.error.2
-  (signals-error (reverse #\a) type-error)
-  t)
-
-(deftest reverse.error.3
-  (signals-error (reverse 10) type-error)
-  t)
-
-(deftest reverse.error.4
-  (signals-error (reverse 0.3) type-error)
-  t)
-
-(deftest reverse.error.5
-  (signals-error (reverse 10/3) type-error)
-  t)
+  (check-type-error #'reverse #'sequencep)
+  nil)
 
 (deftest reverse.error.6
   (signals-error (reverse) program-error)

@@ -69,12 +69,5 @@
   t)
 
 (deftest remprop.error.4
-  (loop for x in *mini-universe*
-	unless (or (symbolp x)
-		   (eval `(signals-error (remprop ',x nil) type-error)))
-	collect x)
+  (check-type-error #'(lambda (x) (remprop x nil)) #'symbolp)
   nil)
-
-
-
-	

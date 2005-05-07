@@ -14,22 +14,6 @@
   "1234abcdABCD")
 
 (deftest symbol-name.3
-  (signals-error (symbol-name 1) type-error)
-  t)
-
-(deftest symbol-name.4
-  (signals-error (symbol-name '(a)) type-error)
-  t)
-
-(deftest symbol-name.5
-  (signals-error (symbol-name "ABCDE") type-error)
-  t)
-
-(deftest symbol-name.6
-  (signals-error (symbol-name 12913.0213) type-error)
-  t)
-
-(deftest symbol-name.7
   (symbol-name :|abcdefg|)
   "abcdefg")
 
@@ -44,10 +28,7 @@
   t)
 
 (deftest symbol-name.error.3
-  (loop for x in *mini-universe*
-	for form = `(signals-error (symbol-name ',x) type-error)
-	unless (or (symbolp x) (eval form))
-	collect x)
+  (check-type-error #'symbol-name #'symbolp)
   nil)
 
 

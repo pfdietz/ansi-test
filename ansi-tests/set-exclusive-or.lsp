@@ -361,6 +361,14 @@
   (signals-error (set-exclusive-or (list* 1 2 3) (list 4 5 6)) type-error)
   t)
 
+(deftest set-exclusive-or.error.13
+  (check-type-error #'(lambda (x) (set-exclusive-or x '(a b c))) #'listp)
+  nil)
+
+(deftest set-exclusive-or.error.14
+  (check-type-error #'(lambda (x) (set-exclusive-or '(a b c) x)) #'listp)
+  nil)
+
 
 ;;; Randomized test
 

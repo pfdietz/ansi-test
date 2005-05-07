@@ -18,10 +18,7 @@
   t)
 
 (deftest zerop.error.4
-  (loop for x in *mini-universe*
-	unless (or (numberp x)
-		   (eval `(signals-error (zerop ',x) type-error)))
-	collect x)
+  (check-type-error #'zerop #'numberp)
   nil)
 
 (deftest zerop.1
