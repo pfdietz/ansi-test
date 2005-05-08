@@ -35,6 +35,7 @@
 	until (>= count 100))
   nil)
 
+#|
 (deftest encode-universal-time.2
   (loop with count = 0
 	for year = (+ 1901 (random 1000))
@@ -59,6 +60,7 @@
 	collect (progn (incf count) (list vals time decoded-vals))
 	until (>= count 100))
   nil)
+|#
 
 (deftest encode-universal-time.3
   (loop with count = 0
