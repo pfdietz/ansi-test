@@ -14,3 +14,4 @@
 (load "user-homedir-pathname.lsp")
 
 (load "decode-universal-time.lsp")
+(load "encode-universal-time.lsp")
