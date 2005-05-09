@@ -15,3 +15,4 @@
 
 (load "decode-universal-time.lsp")
 (load "encode-universal-time.lsp")
+(load "get-universal-time.lsp")
