@@ -69,3 +69,19 @@
     (eval '(defmethod disassemble-example-fn3 ((x t)(y t)(z t)) (list x y z)))
     (disassemble-it 'disassemble-example-fn3))
   t nil)
+
+;;; Error tests
+
+(deftest disassemble.error.1
+  (signals-error (disassemble) program-error)
+  t)
+
+(deftest disassemble.error.2
+  (signals-error (disassemble 'car nil) program-error)
+  t)
+
+(deftest disassemble.error.3
+  (check-type-error #'disassemble
+		    (typef '(or function symbol (cons (eql setf) (cons symbol null)))))
+  nil)
+
