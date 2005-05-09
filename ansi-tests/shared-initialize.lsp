@@ -263,9 +263,12 @@
 			      (c nil c-p)
 			      &allow-other-keys)
   (declare (ignore slots-to-init))
-  (when a-p (setf (slot-value obj 'a) a))
-  (when b-p (setf (slot-value obj 'b) b))
-  (when c-p (setf (slot-value obj 'c) c))
+;;  (when a-p (setf (slot-value obj 'a) a))
+;;  (when b-p (setf (slot-value obj 'b) b))
+;;  (when c-p (setf (slot-value obj 'c) c))
+  (when a-p (setf (shared-init-class-03-a obj) a))
+  (when b-p (setf (shared-init-class-03-b obj) b))
+  (when c-p (setf (shared-init-class-03-c obj) c))
   obj)
 
 (deftest shared-initialize.3.1
