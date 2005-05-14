@@ -69,5 +69,14 @@
   t)
 
 (deftest fmakunbound.error.7
-  (check-type-error #'(lambda (x) (fmakunbound `(setf ,x)))  #'symbolp)
+  (loop for x in *mini-universe*
+	unless (symbolp x)
+	nconc
+	(handler-case
+	 (list x (fmakunbound `(setf ,x)))
+	 (type-error (c)
+		     (assert (not (typep (type-error-datum c)
+					 (type-error-expected-type c))))
+		     nil)
+	 (error (c) (list (list x c)))))
   nil)
