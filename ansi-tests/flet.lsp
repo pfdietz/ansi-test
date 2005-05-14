@@ -521,3 +521,16 @@
 	(declare (special x))
 	(%f))))
   :good)
+
+(deftest flet.69
+  (let ((*x* 0))
+    (declare (special *x*))
+    (flet ((%f (i)
+	       #'(lambda (arg)
+		   (declare (ignore arg))
+		   (incf *x* i))))
+      (values
+       (mapcar (%f 1) '(a b c))
+       (mapcar (%f 2) '(a b c)))))
+  (1 2 3)
+  (5 7 9))
