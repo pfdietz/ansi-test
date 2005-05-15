@@ -41,12 +41,6 @@
 		   (equal doc (documentation fn t)))))))
   "FOO2")
 
-(deftest documentation.function.t.5
-  (let* ((sym (gensym))
-	 (fn (eval `#'(lambda () ',sym))))
-    (documentation fn t))
-  nil)
-
 (deftest documentation.function.t.6
   (let* ((sym (gensym))
 	 (fn (eval `#'(lambda () ',sym)))
@@ -56,6 +50,30 @@
        (assert (or (null (documentation fn t))
 		   (equal doc (documentation fn t))))))
   "FOO3")
+
+(deftest documentation.function.t.6a
+  (let* ((sym (gensym))
+	 (fn (compile nil `(lambda () ',sym)))
+	 (doc "FOO3A"))
+    (multiple-value-prog1
+       (setf (documentation fn t) (copy-seq doc))
+       (assert (or (null (documentation fn t))
+		   (equal doc (documentation fn t))))))
+  "FOO3A")
+
+;; Reorder 5, 5a and 6, 6a to expose possible interaction bug
+
+(deftest documentation.function.t.5
+  (let* ((sym (gensym))
+	 (fn (eval `#'(lambda () ',sym))))
+    (documentation fn t))
+  nil)
+
+(deftest documentation.function.t.5a
+  (let* ((sym (gensym))
+	 (fn (compile nil `(lambda () ',sym))))
+    (documentation fn t))
+  nil)
 
 (deftest documentation.function.t.7
   (let* ((sym (gensym))
@@ -141,7 +159,7 @@
 	  (doc "FOO7"))
       (multiple-value-prog1
        (setf (documentation fn 'function) (copy-seq doc))
-       (assert (or (null (documentation fn 'functiom))
+       (assert (or (null (documentation fn 'function))
 		   (equal doc (documentation fn 'function)))))))
   "FOO7")
 
@@ -160,7 +178,7 @@
 	  (doc "FOO8"))
       (multiple-value-prog1
        (setf (documentation fn 'compiler-macro) (copy-seq doc))
-       (assert (or (null (documentation fn 'functiom))
+       (assert (or (null (documentation fn 'function))
 		   (equal doc (documentation fn 'compiler-macro)))))))
   "FOO8")
 
@@ -213,8 +231,6 @@
        (assert (or (null (documentation sym 'function))
 		   (equal doc (documentation sym 'function)))))))
   "FOO9B")
-
-
 
 ;;; documentation (x symbol) (doc-type (eql 'compiler-macro))
 
@@ -316,7 +332,237 @@
 	     (values
 	      (documentation pkg t)
 	      (setf (documentation pkg t) (copy-seq doc)))
-	     (assert (or (null (documentation pkg 't))
-			 (equal doc (documentation pkg 't)))))))
+	     (assert (or (null (documentation pkg t))
+			 (equal doc (documentation pkg t)))))))
       (delete-package package-name)))
   nil "FOO15")
+
+;;; documentation (x standard-class) (doc-type (eql 't))
+
+(deftest documentation.standard-class.t.1
+  (let* ((sym (gensym))
+	 (class-form `(defclass ,sym () ())))
+    (eval class-form)
+    (let ((class (find-class sym))
+	  (doc "FOO16"))
+      (multiple-value-prog1
+       (values
+	(documentation class t)
+	(setf (documentation class t) (copy-seq doc)))
+       (assert (or (null (documentation class t))
+		   (equal doc (documentation class t)))))))
+  nil "FOO16")
+
+;;; documentation (x standard-class) (doc-type (eql 'type))
+
+(deftest documentation.standard-class.type.1
+  (let* ((sym (gensym))
+	 (class-form `(defclass ,sym () ())))
+    (eval class-form)
+    (let ((class (find-class sym))
+	  (doc "FOO17"))
+      (multiple-value-prog1
+       (values
+	(documentation class 'type)
+	(setf (documentation class 'type) (copy-seq doc)))
+       (assert (or (null (documentation class 'type))
+		   (equal doc (documentation class 'type)))))))
+  nil "FOO17")
+
+;;; documentation (x structure-class) (doc-type (eql 't))
+	
+(deftest documentation.struct-class.t.1
+  (let* ((sym (gensym))
+	 (class-form `(defstruct ,sym a b c)))
+    (eval class-form)
+    (let ((class (find-class sym))
+	  (doc "FOO18"))
+      (multiple-value-prog1
+       (values
+	(documentation class t)
+	(setf (documentation class t) (copy-seq doc)))
+       (assert (or (null (documentation class t))
+		   (equal doc (documentation class t)))))))
+  nil "FOO18")
+
+;;; documentation (x structure-class) (doc-type (eql 'type))
+
+(deftest documentation.struct-class.type.1
+  (let* ((sym (gensym))
+	 (class-form `(defstruct ,sym a b c)))
+    (eval class-form)
+    (let ((class (find-class sym))
+	  (doc "FOO19"))
+      (multiple-value-prog1
+       (values
+	(documentation class 'type)
+	(setf (documentation class 'type) (copy-seq doc)))
+       (assert (or (null (documentation class 'type))
+		   (equal doc (documentation class 'type)))))))
+  nil "FOO19")
+
+;;; documentation (x symbol) (doc-type (eql 'type))
+
+(deftest documentation.symbol.type.1
+  (let* ((sym (gensym))
+	 (class-form `(defclass ,sym () ()))
+	 (doc "FOO20"))
+    (eval class-form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'type)
+      (setf (documentation sym 'type) (copy-seq doc)))
+     (assert (or (null (documentation sym 'type))
+		 (equal doc (documentation sym 'type))))))
+  nil "FOO20")
+
+(deftest documentation.symbol.type.2
+  (let* ((sym (gensym))
+	 (class-form `(defstruct ,sym a b c))
+	 (doc "FOO21"))
+    (eval class-form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'type)
+      (setf (documentation sym 'type) (copy-seq doc)))
+     (assert (or (null (documentation sym 'type))
+		 (equal doc (documentation sym 'type))))))
+  nil "FOO21")
+
+(deftest documentation.symbol.type.3
+  (let* ((sym (gensym))
+	 (type-form `(deftype ,sym () t))
+	 (doc "FOO21A"))
+    (eval type-form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'type)
+      (setf (documentation sym 'type) (copy-seq doc)))
+     (assert (or (null (documentation sym 'type))
+		 (equal doc (documentation sym 'type))))))
+  nil "FOO21A")
+
+;;; documentation (x symbol) (doc-type (eql 'structure))
+
+(deftest documentation.symbol.structure.1
+  (let* ((sym (gensym))
+	 (class-form `(defstruct ,sym a b c))
+	 (doc "FOO22"))
+    (eval class-form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'structure)
+      (setf (documentation sym 'structure) (copy-seq doc)))
+     (assert (or (null (documentation sym 'structure))
+		 (equal doc (documentation sym 'structure))))))
+  nil "FOO22")
+
+(deftest documentation.symbol.structure.2
+  (let* ((sym (gensym))
+	 (class-form `(defstruct (,sym (:type list)) a b c))
+	 (doc "FOO23"))
+    (eval class-form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'structure)
+      (setf (documentation sym 'structure) (copy-seq doc)))
+     (assert (or (null (documentation sym 'structure))
+		 (equal doc (documentation sym 'structure))))))
+  nil "FOO23")
+
+(deftest documentation.symbol.structure.3
+  (let* ((sym (gensym))
+	 (class-form `(defstruct (,sym (:type vector)) a b c))
+	 (doc "FOO24"))
+    (eval class-form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'structure)
+      (setf (documentation sym 'structure) (copy-seq doc)))
+     (assert (or (null (documentation sym 'structure))
+		 (equal doc (documentation sym 'structure))))))
+  nil "FOO24")
+
+;;; documentation (x symbol) (doc-type (eql 'variable))
+
+(deftest documentation.symbol.variable.1
+  (let* ((sym (gensym))
+	 (form `(defvar ,sym))
+	 (doc "FOO25"))
+    (eval form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'variable)
+      (setf (documentation sym 'variable) (copy-seq doc)))
+     (assert (or (null (documentation sym 'variable))
+		 (equal doc (documentation sym 'variable))))))
+  nil "FOO25")
+
+(deftest documentation.symbol.variable.2
+  (let* ((sym (gensym))
+	 (form `(defvar ,sym t))
+	 (doc "FOO26"))
+    (eval form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'variable)
+      (setf (documentation sym 'variable) (copy-seq doc)))
+     (assert (or (null (documentation sym 'variable))
+		 (equal doc (documentation sym 'variable))))))
+  nil "FOO26")
+
+(deftest documentation.symbol.variable.3
+  (let* ((sym (gensym))
+	 (form `(defparameter ,sym t))
+	 (doc "FOO27"))
+    (eval form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'variable)
+      (setf (documentation sym 'variable) (copy-seq doc)))
+     (assert (or (null (documentation sym 'variable))
+		 (equal doc (documentation sym 'variable))))))
+  nil "FOO27")
+
+(deftest documentation.symbol.variable.4
+  (let* ((sym (gensym))
+	 (form `(defconstant ,sym t))
+	 (doc "FOO27"))
+    (eval form)
+    (multiple-value-prog1
+     (values
+      (documentation sym 'variable)
+      (setf (documentation sym 'variable) (copy-seq doc)))
+     (assert (or (null (documentation sym 'variable))
+		 (equal doc (documentation sym 'variable))))))
+  nil "FOO27")
+
+
+;;; Defining new methods for DOCUMENTATION
+
+(defgeneric documentation-test-class-1-doc-accessor (obj))
+(defgeneric (setf documentation-test-class-1-doc-accessor) (newdoc obj))
+
+(defclass documentation-test-class-1 () ((my-doc :accessor documentation-test-class-1-doc-accessor
+						 :type (or null string)
+						 :initform nil)))
+  
+(defmethod documentation-test-class-1-doc-accessor ((obj documentation-test-class-1) )
+  (slot-value obj 'my-doc))
+(defmethod (setf documentation-test-class-1-doc-accessor) ((newdoc string) (obj documentation-test-class-1))
+  (setf (slot-value obj 'my-doc) newdoc))
+
+(defmethod documentation ((obj documentation-test-class-1) (doctype (eql t)))
+  (documentation-test-class-1-doc-accessor obj))
+
+(defmethod (setf documentation) ((newdoc string) (obj documentation-test-class-1) (doctype (eql t)))
+  (setf (documentation-test-class-1-doc-accessor obj) newdoc))
+
+(deftest documentation.new-method.1
+  (let ((obj (make-instance 'documentation-test-class-1)))
+    (values
+     (documentation obj t)
+     (setf (documentation obj t) "FOO28")
+     (documentation obj t)))
+  nil "FOO28" "FOO28")
+
