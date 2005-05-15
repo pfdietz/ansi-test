@@ -86,3 +86,32 @@
 	 (declare (special *x*))
 	 (list (funcall fn 'b) *x*)))))
   t t t a (b nil))
+
+;;; Compiler macros on setf functions
+
+(deftest define-compiler-macro.4
+  (let* ((sym (gensym))
+	 (fun-def-form `(defun ,sym (x) (car x)))
+	 (setf-fun-def-form `(defun (setf ,sym) (newval x) (setf (car x) newval)))
+	 (setf-compiler-macro-def-form
+	  `(define-compiler-macro (setf ,sym) (newval x)
+	     (declare (special *x*))
+	     (setf *x* t)
+	     (return-from ,sym `(setf (car ,x) ,newval)))))
+    (values
+     (equalt (list sym) (multiple-value-list (eval fun-def-form)))
+     (equalt `((setf ,sym)) (multiple-value-list (eval setf-fun-def-form)))
+     (equalt `((setf ,sym)) (multiple-value-list (eval setf-compiler-macro-def-form)))
+     (notnot (typep (compiler-macro-function `(setf ,sym)) 'function))
+     (eval `(,sym (list 'a 'b)))
+     (eval `(let ((arg (list 1 2)))
+	      (list (setf (,sym arg) 'z) arg)))
+     (let ((fn (compile nil `(lambda (u v) (setf (,sym u) v)))))
+       (let ((*x* nil)
+	     (arg (list 1 2)))
+	 (declare (special *x*))
+	 (list (funcall fn arg 'y) arg)))))
+  t t t t a (z (z 2)) (y (y 2)))
+
+
+     
