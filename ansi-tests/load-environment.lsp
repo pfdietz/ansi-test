@@ -10,7 +10,7 @@
 (load "environment-functions.lsp")
 (load "room.lsp")
 (load "time.lsp")
-(load "trace.lsp")
+(load "trace.lsp") ;; and untrace
 (load "user-homedir-pathname.lsp")
 
 (load "decode-universal-time.lsp")
@@ -20,3 +20,7 @@
 (load "get-internal-time.lsp")
 
 (load "documentation.lsp")
+(load "inspect.lsp")
+(load "dribble.lsp")
+(load "ed.lsp")
+
