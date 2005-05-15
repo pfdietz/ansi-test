@@ -18,3 +18,5 @@
 (load "get-universal-time.lsp")
 (load "sleep.lsp")
 (load "get-internal-time.lsp")
+
+(load "documentation.lsp")
