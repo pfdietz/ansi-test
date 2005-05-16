@@ -113,5 +113,44 @@
 	 (list (funcall fn arg 'y) arg)))))
   t t t t a (z (z 2)) (y (y 2)))
 
+;;; Test of documentation
 
-     
+(deftest define-compiler-macro.5
+  (let* ((sym (gensym))
+	 (form `(define-compiler-macro ,sym (x) "DCM.5" x))
+	 (form2 `(defun ,sym (x) "DCM.5-WRONG" x)))
+    (eval form)
+    (eval form2)
+    (or (documentation sym 'compiler-macro) "DCM.5"))
+  "DCM.5")
+
+(deftest define-compiler-macro.6
+  (let* ((sym (gensym))
+	 (form `(define-compiler-macro ,sym (x) "DCM.6" x))
+	 (form2 `(defun ,sym (x) "DCM.6-WRONG" x)))
+    (eval form2)
+    (eval form)
+    (or (documentation sym 'compiler-macro) "DCM.6"))
+  "DCM.6")
+
+;;; NOTINLINE turns off a compiler macro
+
+(deftest define-compiler-macro.7
+  (let* ((sym (gensym))
+	 (form `(define-compiler-macro ,sym (x y)
+		  (declare (special *x*))
+		  (setf *x* :bad)
+		  `(list ,x ,y)))
+	 (form2 `(defun ,sym (x y) (list x y))))
+    (eval form)
+    (eval form2)
+    (compile sym)
+    (let ((*x* :good))
+      (declare (special *x*))
+      (values
+       (funcall (compile nil `(lambda (a b)
+				(declare (notinline ,sym))
+				(,sym a b)))
+		5 11)
+       *x*)))
+  (5 11) :good)
