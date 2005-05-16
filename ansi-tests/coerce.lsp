@@ -180,6 +180,7 @@
   t)
 
 (deftest coerce.error.10
+  :notes (:result-type-element-type-by-subtype)
   (let* ((tp1 '(vector character))
 	 (tp2 `(vector t))
 	 (tp3 `(or ,tp1 ,tp2)))
