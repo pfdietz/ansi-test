@@ -154,3 +154,22 @@
 		5 11)
        *x*)))
   (5 11) :good)
+
+(deftest define-compiler-macro.8
+  (let* ((sym (gensym))
+	 (form `(define-compiler-macro ,sym (x y)
+		  (declare (special *x*))
+		  (setf *x* :bad)
+		  `(list ,x ,y)))
+	 (form2 `(defmacro ,sym (x y) `(list ,x ,y))))
+    (eval form)
+    (eval form2)
+    (let ((*x* :good))
+      (declare (special *x*))
+      (values
+       (funcall (compile nil `(lambda (a b)
+				(declare (notinline ,sym))
+				(,sym a b)))
+		7 23)
+       *x*)))
+  (7 23) :good)
