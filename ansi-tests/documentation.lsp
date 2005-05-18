@@ -91,6 +91,38 @@
 		   (equal doc (documentation fn t))))))
   "FOO4")
 
+(deftest documentation.function.t.9
+  (loop for s in *cl-function-symbols*
+	for fn = (symbol-function s)
+	for doc = (documentation fn t)
+	unless (or (null doc) (string doc))
+	collect (list s doc))
+  nil)
+
+(deftest documentation.function.t.10
+  (loop for s in *cl-accessor-symbols*
+	for fn = (symbol-function s)
+	for doc = (documentation fn t)
+	unless (or (null doc) (string doc))
+	collect (list s doc))
+  nil)
+
+(deftest documentation.function.t.11
+  (loop for s in *cl-macro-symbols*
+	for fn = (macro-function s)
+	for doc = (documentation fn t)
+	unless (or (null doc) (string doc))
+	collect (list s doc))
+  nil)
+
+(deftest documentation.function.t.12
+  (loop for s in *cl-standard-generic-function-symbols*
+	for fn = (symbol-function s)
+	for doc = (documentation fn t)
+	unless (or (null doc) (string doc))
+	collect (list s doc))
+  nil)
+
 ;;; documentation (x function) (doc-type (eql 'function))
 
 (deftest documentation.function.function.1
@@ -113,7 +145,7 @@
 (deftest documentation.function.function.3
   (let* ((sym (gensym)))
     (eval `(defmacro ,sym () nil))
-    (documentation (symbol-function sym) 'function))
+    (documentation (macro-function sym) 'function))
   nil)
 
 (deftest documentation.function.function.4
@@ -142,7 +174,6 @@
        (assert (or (null (documentation fn 'function))
 		   (equal doc (documentation fn 'function))))))
   "FOO4A")
-
 
 ;;; documentation (x list) (doc-type (eql 'function))
 
@@ -231,6 +262,27 @@
        (assert (or (null (documentation sym 'function))
 		   (equal doc (documentation sym 'function)))))))
   "FOO9B")
+
+(deftest documentation.symbol.function.7
+  (loop for s in *cl-special-operator-symbols*
+	for doc = (documentation s 'function)
+	unless (or (null doc) (stringp doc))
+	collect (list s doc))
+  nil)
+
+(deftest documentation.symbol.function.8
+  (loop for s in *cl-function-or-accessor-symbols*
+	for doc = (documentation s 'function)
+	unless (or (null doc) (stringp doc))
+	collect (list s doc))
+  nil)
+
+(deftest documentation.symbol.function.9
+  (loop for s in *cl-macro-symbols*
+	for doc = (documentation s 'function)
+	unless (or (null doc) (stringp doc))
+	collect (list s doc))
+  nil)
 
 ;;; documentation (x symbol) (doc-type (eql 'compiler-macro))
 
@@ -369,6 +421,7 @@
 		   (equal doc (documentation class 'type)))))))
   nil "FOO17")
 
+
 ;;; documentation (x structure-class) (doc-type (eql 't))
 	
 (deftest documentation.struct-class.t.1
@@ -441,6 +494,14 @@
      (assert (or (null (documentation sym 'type))
 		 (equal doc (documentation sym 'type))))))
   nil "FOO21A")
+
+(deftest documentation.symbol.type.4
+  (loop for s in *cl-all-type-symbols*
+	for doc = (documentation s 'type)
+	unless (or (null doc) (stringp doc))
+	collect (list doc))
+  nil)
+
 
 ;;; documentation (x symbol) (doc-type (eql 'structure))
 
@@ -537,6 +598,19 @@
 		 (equal doc (documentation sym 'variable))))))
   nil "FOO27")
 
+(deftest documentation.symbol.variable.5
+  (loop for s in *cl-variable-symbols*
+	for doc = (documentation s 'variable)
+	unless (or (null doc) (stringp doc))
+	collect (list s doc))
+  nil)
+
+(deftest documentation.symbol.variable.6
+  (loop for s in *cl-constant-symbols*
+	for doc = (documentation s 'variable)
+	unless (or (null doc) (stringp doc))
+	collect (list s doc))
+  nil)
 
 ;;; Defining new methods for DOCUMENTATION
 
