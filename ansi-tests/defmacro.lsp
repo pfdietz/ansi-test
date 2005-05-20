@@ -31,7 +31,7 @@
     (assert (eq (defmacro defmacro.1-macro (x y) `(list 1 ,x 2 ,y 3))
 		'defmacro.1-macro))
     (assert (macro-function 'defmacro.1-macro))
-    (defmacro.1-macro 'a 'b))
+    (eval `(defmacro.1-macro 'a 'b)))
   (1 a 2 b 3))
 
 (deftest defmacro.2
@@ -40,7 +40,7 @@
 		  (return-from defmacro.2-macro `(cons ,x ,y)))
 		'defmacro.2-macro))
     (assert (macro-function 'defmacro.2-macro))
-    (defmacro.2-macro 'a 'b))
+    (eval `(defmacro.2-macro 'a 'b)))
   (a . b))
 
 ;;; The macro function is defined in the lexical environment in which
@@ -248,3 +248,71 @@
    (p q t b nil)
    (p q t r t)))
 
+;;; Optional with destructuring
+(deftest defmacro.19
+  (progn
+    (defmacro defmacro.19-macro (&optional ((x . y) '(a . b)))
+      `(list ',x ',y))
+    (mapcar #'eval '((defmacro.19-macro)
+		     (defmacro.19-macro (c d)))))
+  ((a b) (c (d))))
+
+;;; Allow other keys
+
+(deftest defmacro.20
+  (progn
+    (defmacro defmacro.20-macro (&key x y z &allow-other-keys)
+      `(list ',x ',y ',z))
+    (mapcar #'eval '((defmacro.20-macro)
+		     (defmacro.20-macro :x a)
+		     (defmacro.20-macro :y b)
+		     (defmacro.20-macro :z c)
+		     (defmacro.20-macro :x a :y b)
+		     (defmacro.20-macro :z c :y b)
+		     (defmacro.20-macro :z c :x a)
+		     (defmacro.20-macro :z c :x a :y b)
+		     (defmacro.20-macro nil nil)
+		     (defmacro.20-macro :allow-other-keys nil)
+		     (defmacro.20-macro :allow-other-keys nil :foo bar)
+		     (defmacro.20-macro :z c :z nil :x a :abc 0 :y b :x t))))
+  ((nil nil nil)
+   (a nil nil)
+   (nil b nil)
+   (nil nil c)
+   (a b nil)
+   (nil b c)
+   (a nil c)
+   (a b c)
+   (nil nil nil)
+   (nil nil nil)
+   (nil nil nil)
+   (a b c)))
+
+(deftest defmacro.21
+  (progn
+    (defmacro defmacro.21-macro (&key x y z)
+      `(list ',x ',y ',z))
+    (mapcar #'eval '((defmacro.21-macro)
+		     (defmacro.21-macro :x a)
+		     (defmacro.21-macro :y b)
+		     (defmacro.21-macro :z c)
+		     (defmacro.21-macro :x a :y b)
+		     (defmacro.21-macro :z c :y b)
+		     (defmacro.21-macro :z c :x a)
+		     (defmacro.21-macro :z c :x a :y b)
+		     (defmacro.21-macro :allow-other-keys nil)
+		     (defmacro.21-macro :allow-other-keys t :foo bar))))
+  ((nil nil nil)
+   (a nil nil)
+   (nil b nil)
+   (nil nil c)
+   (a b nil)
+   (nil b c)
+   (a nil c)
+   (a b c)
+   (nil nil nil)
+   (nil nil nil)))
+
+		     
+		     
+	    
