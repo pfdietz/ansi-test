@@ -11,6 +11,5 @@
 (load "defmacro.lsp")
 (load "the.lsp")
 (load "symbol-macrolet.lsp")
+(load "proclaim.lsp")
 (load "locally.lsp")
-
-
