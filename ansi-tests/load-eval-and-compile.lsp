@@ -14,3 +14,6 @@
 (load "proclaim.lsp")
 (load "declaim.lsp")
 (load "locally.lsp")
+(load "ignore.lsp")
+(load "ignorable.lsp")
+
