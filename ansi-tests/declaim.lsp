@@ -38,19 +38,19 @@
   nil)
 
 (deftest declaim.9
+  (progn (eval `(declaim (ftype (function (t) t)))) nil)
+  nil)
+
+(deftest declaim.10
   (let ((sym (gensym)))
     (eval `(declaim (declaration ,sym)))
     (eval `(declaim (,sym)))
     nil)
   nil)
 
-(deftest declaim.10
+(deftest declaim.11
   (let ((sym (gensym)))
     (eval `(declaim (optimize) (special ,sym) (inline) (special)))
     (eval `(flet ((%f () ,sym))
 	     (let ((,sym :good)) (%f)))))
   :good)
-
-
-
-

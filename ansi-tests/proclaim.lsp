@@ -12,6 +12,13 @@
 	     (let ((,sym :good)) (%f)))))
   :good)
 
+(deftest proclaim.2
+  (let ((sym (gensym)))
+    (proclaim `(declaration ,sym))
+    (proclaim `(,sym))
+    nil)
+  nil)
+
 ;;; Error cases
 
 (deftest proclaim.error.1
@@ -41,5 +48,24 @@
 (deftest proclaim.error.7
   (signals-error (proclaim `(ftype . foo)) type-error)
   t)
+
+(deftest proclaim.error.8
+  (signals-error (proclaim '(type integer . foo)) type-error)
+  t)
+
+(deftest proclaim.error.9
+  (signals-error (proclaim '(integer . foo)) type-error)
+  t)
+
+(deftest proclaim.error.10
+  (signals-error (proclaim '(declaration . foo)) type-error)
+  t)
+
+(deftest proclaim.error.11
+  (signals-error (proclaim '(ftype (function (t) t) . foo)) type-error)
+  t)
+
+
+
 
 
