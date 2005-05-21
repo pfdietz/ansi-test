@@ -16,4 +16,5 @@
 (load "locally.lsp")
 (load "ignore.lsp")
 (load "ignorable.lsp")
-
+(load "dynamic-extent.lsp")
+(load "optimize.lsp")
