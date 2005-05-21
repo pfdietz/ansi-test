@@ -267,6 +267,19 @@
       hashes))
   :good)
 
+;;; The hash of a symbol does not change when its package changes
+(deftest sxhash.23
+  (progn
+    (safely-delete-package "A")
+    (defpackage "A" (:use))
+    (let* ((pkg (find-package "A"))
+	   (sym (intern "FOO" pkg))
+	   (hash (sxhash sym)))
+      (unintern sym pkg)
+      (let ((hash2 (sxhash sym)))
+	(if (eql hash hash2) nil (list hash hash2)))))
+  nil)      
+
 ;;; Error cases
 
 (deftest sxhash.error.1
