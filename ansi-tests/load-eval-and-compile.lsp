@@ -12,4 +12,5 @@
 (load "the.lsp")
 (load "symbol-macrolet.lsp")
 (load "proclaim.lsp")
+(load "declaim.lsp")
 (load "locally.lsp")
