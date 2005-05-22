@@ -10,8 +10,9 @@
 
 #+lispworks (setq compiler::*compiler-warnings* nil)
 
-#+ecl (setq c:*suppress-compiler-warnings* t
-            c:*suppress-compiler-notes* t)
+#+ecl (compile nil '(lambda () nil))
+
+#+ecl (setq c:*suppress-compiler-warnings* t c:*suppress-compiler-notes* t)
 
 #+clisp (setq custom::*warn-on-floating-point-contagion* nil)
 
