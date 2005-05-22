@@ -73,6 +73,15 @@
       (defun-test-fun-5)))
   2 1)
 
+;; Documentation
+
+(deftest defun.8
+  (let* ((sym (gensym))
+	 (doc "DEFUN.8")
+	 (form `(defun ,sym () ,doc nil)))
+    (or (documentation sym 'function) doc))
+  "DEFUN.8")
+
 ;;; Error tests
 
 (deftest defun.error.1
