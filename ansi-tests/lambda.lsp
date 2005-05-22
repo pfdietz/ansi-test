@@ -273,6 +273,26 @@
       ((lambda (&aux (y x)) (declare (special x)) y))))
   :good)
 
+(deftest lambda.55
+  (let* ((doc "LMB55")
+	 (fn (eval `#'(lambda () ,doc nil)))
+	 (cfn (compile nil fn)))
+    (values
+     (or (documentation fn t) doc)
+     (or (documentation cfn t) doc)))
+  "LMB55"
+  "LMB55")
+
+(deftest lambda.56
+  (let* ((doc "LMB56")
+	 (fn (eval `#'(lambda () ,doc nil)))
+	 (cfn (compile nil fn)))
+    (values
+     (or (documentation fn 'function) doc)
+     (or (documentation cfn 'function) doc)))
+  "LMB56"
+  "LMB56")
+
 ;;; Tests of lambda as a macro
 
 (deftest lambda.macro.1
@@ -282,6 +302,8 @@
 (deftest lambda.macro.2
   (funcall (eval (macroexpand '(lambda () 10))))
   10)
+
+;;; Error tests
 
 (deftest lambda.error.1
   (signals-error (funcall (macro-function 'lambda))
