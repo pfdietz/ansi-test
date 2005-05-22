@@ -73,6 +73,21 @@
 	  (close s)))))
   nil)
 
+(deftest stream-element-type.6
+  :notes (:assume-no-simple-streams)
+  (let ((pn "foo.txt"))
+    (delete-all-versions pn)
+    (let ((s (open pn :direction :output
+		   :element-type :default)))
+      (let ((etype (stream-element-type s)))
+	(unwind-protect
+	    (multiple-value-bind (sub1 good1) (subtypep* etype 'integer)
+	      (multiple-value-bind (sub2 good2) (subtypep* etype 'character)
+		(or (not good1)
+		    (not good2)
+		    sub1 sub2)))
+	  (close s)))))
+  t)
 
 (deftest stream-element-type.error.1
   (signals-error (stream-element-type) program-error)
