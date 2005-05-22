@@ -181,3 +181,8 @@
       (or (not success1)
 	  (not success2)
 	  (eqlt sub1 sub2)))))
+
+;;; For use in deftype tests
+(deftype even-array (&optional type size)
+  `(and (array ,type ,size)
+	(satisfies even-size-p)))

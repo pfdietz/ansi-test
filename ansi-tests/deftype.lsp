@@ -5,8 +5,39 @@
 
 (in-package :cl-test)
 
-;;; FIXME
-;;; Need to add non-error tests
+(compile-and-load "types-aux.lsp")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; deftype
+
+(deftest deftype.1
+  (typep 1 '(even-array integer (10)))
+  nil)
+
+(deftest deftype.2
+  (typep nil '(even-array t (*)))
+  nil)
+
+(deftest deftype.3
+  (notnot-mv (typep (make-array '(10)) '(even-array t (*))))
+  t)
+
+(deftest deftype.4
+  (typep (make-array '(5)) '(even-array t (*)))
+  nil)
+
+(deftest deftype.5
+  (notnot-mv (typep (make-string 10) '(even-array character (*))))
+  t)
+
+(deftest deftype.6
+  (notnot-mv
+   (typep (make-array '(3 5 6) :element-type '(unsigned-byte 8))
+	  '(even-array (unsigned-byte 8))))
+  t)
+
+
+;;; Error tests
 
 (deftest deftype.error.1
   (signals-error (funcall (macro-function 'deftype))
