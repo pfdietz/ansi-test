@@ -11,9 +11,12 @@
   t)
 
 (deftest user-homedir-pathname.2
-  (let ((pn (user-homedir-pathname)))
-    (notnot-mv (pathnamep pn)))
-  t)
+  (let* ((pn-list (multiple-value-list (user-homedir-pathname)))
+	 (pn (first pn-list)))
+    (values
+     (length pn-list)
+     (notnot-mv (pathnamep pn))))
+  1 t)
 
 (deftest user-homedir-pathname.3
   (let ((pn (user-homedir-pathname)))
