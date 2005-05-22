@@ -18,3 +18,4 @@
 (load "ignorable.lsp")
 (load "dynamic-extent.lsp")
 (load "optimize.lsp")
+(load "special.lsp")

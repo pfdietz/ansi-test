@@ -102,3 +102,86 @@
       (declare (type (function () null) f))
       (funcall f)))
   nil)
+
+(deftest function.15
+  (flet ((%f (x) (declare (ignore x)) nil))
+    (declare (ftype (function (nil) nil) %f))
+    :good)
+  :good)
+
+(deftest function.16
+  (flet ((%f (x) (declare (ignore x)) nil))
+    (declare (ftype (function (t) null) %f))
+    (values
+     (%f 'a)
+     (locally (declare (ftype (function (integer) t) %f))
+	      (%f 10))
+     (%f 'b)))
+  nil nil nil)
+
+(deftest function.17
+  (flet ((%f (&optional x) x))
+    (declare (ftype (function (&optional integer) t) %f))
+    (values (%f) (%f 10) (%f) (%f (1+ most-positive-fixnum))))
+  nil 10 nil #.(1+ most-positive-fixnum))
+
+(deftest function.18
+  (flet ((%f (&rest x) x))
+    (declare (ftype (function (&rest symbol) t) %f))
+    (values (%f) (%f 'a) (%f 'a 'b 'c)))
+  () (a) (a b c))
+
+(deftest function.19
+  (flet ((%f (&key foo bar) (list foo bar)))
+    (declare (ftype (function (&key (:foo t) (:bar t)) list) %f))
+    (values
+     (%f) (%f :foo 1)
+     (%f :foo 1 :foo 2)
+     (%f :bar 'a)
+     (%f :bar 'a :bar 'b)
+     (%f :foo 'x :bar 'y)
+     (%f :bar 'x :foo 'y)
+     (%f :bar 'x :foo 'y :bar 'z :foo 'w)
+     ))
+  (nil nil)
+  (1 nil)
+  (1 nil)
+  (nil a)
+  (nil a)
+  (x y)
+  (y x)
+  (y x))
+
+(deftest function.20
+  (flet ((%f (&key foo) foo))
+    (declare (ftype (function (&key (:foo t) (:allow-other-keys t)) t) %f))
+    (values (%f) (%f :foo 'a) (%f :allow-other-keys nil)
+	    (%f :allow-other-keys t :foo 'z)))
+  nil a nil z)
+
+(deftest function.21
+  (flet ((%f (&key foo &allow-other-keys) foo))
+    (declare (ftype (function (&key (:foo integer)) t) %f))
+    (values (%f) (%f :foo 123)))
+  nil 123)
+
+(deftest function.22
+  (flet ((%f (&key foo &allow-other-keys) foo))
+    (declare (ftype (function (&key (:foo integer) (:bar t)) t) %f))
+    (values (%f) (%f :foo 123) (%f :bar 'x) (%f :foo 12 :bar 'y)))
+  nil 123 nil 12)
+
+(deftest function.23
+  (flet ((%f (&key foo &allow-other-keys) foo))
+    (declare (ftype (function (&key (:foo integer) &allow-other-keys) t) %f))
+    (values (%f) (%f :foo 123) (%f :bar 'x) (%f :foo 12 :bar 'y)))
+  nil 123 nil 12)
+
+(deftest function.24
+  (flet ((%f (&rest r &key foo bar) (list r foo bar)))
+    (declare (ftype (function (&rest symbol &key (:foo t) (:bar t)) list) %f))
+    (values (%f) (%f :foo 'a) (%f :bar 'b) (%f :bar 'd :foo 'c)))
+  (nil nil nil)
+  ((:foo a) a nil)
+  ((:bar b) nil b)
+  ((:bar d :foo c) c d))
