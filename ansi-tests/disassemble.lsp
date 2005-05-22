@@ -70,6 +70,18 @@
     (disassemble-it 'disassemble-example-fn3))
   t nil)
 
+(deftest disassemble.11
+  (let ((fn 'disassemble-example-fn4))
+    (when (fboundp fn) (fmakunbound fn))
+    (eval `(defun ,fn (x) x))
+    (let ((is-compiled? (typep (symbol-function fn) 'compiled-function)))
+      (multiple-value-call
+       #'values
+       (disassemble-it fn)
+       (if is-compiled? (notnot (typep (symbol-function fn) 'compiled-function))
+	 (not (typep (symbol-function fn) 'compiled-function))))))
+  t nil t)
+
 ;;; Error tests
 
 (deftest disassemble.error.1
