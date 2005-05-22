@@ -164,7 +164,8 @@
 ;; test of class name as second argument
 (deftest change-class.1.12
   (let ((obj (make-instance 'change-class-class-01a :b 1))
-	(new-class (find-class 'change-class-class-01b)))
+	;; (new-class (find-class 'change-class-class-01b))
+	)
     (values
      (eqt obj (change-class obj 'change-class-class-01b :c2 3))
      (typep* obj 'change-class-class-01a)
