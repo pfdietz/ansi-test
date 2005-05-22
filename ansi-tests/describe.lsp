@@ -34,7 +34,8 @@
   (loop for x in *universe*
 	for s1 = nil
 	for s2 = nil
-	for s3 = (with-output-to-string (s) (setf (values s1 s2) (harness-for-describe #'(lambda () (describe x s)))))
+	for s3 = (with-output-to-string (s)
+		     (setf (values s1 s2) (harness-for-describe #'(lambda () (describe x s)))))
 	when (or (equal s3 "") (not (equal "" s2)) (not (equal "" s1)))
 	collect (list x s1 s2 s3))
   nil)
@@ -52,6 +53,22 @@
 	when (or (equal "" s1) (not (equal "" s2)))
 	collect (list x s1 s2))
   nil)
+
+;;; Defining methods for describe-object
+
+(defclass describe-object-test-class-01 () ((s1 :initarg :s1) (s2 :initarg :s2) (s3 :initarg :s3)))
+
+(defmethod describe-object ((obj describe-object-test-class-01) stream)
+  (format stream "ABCDE ~A ~A ~A XYZ" (slot-value obj 's1) (slot-value obj 's2) (slot-value obj 's3)))
+
+(deftest describe.5
+  (let ((obj (make-instance 'describe-object-test-class-01 :s1 2 :s2 6 :s3 17)))
+    (multiple-value-bind (str1 str2) (harness-for-describe #'(lambda () (describe obj)))
+      (if (or (search "ABCDE 2 6 17 XYZ" str1)
+	      (search "ABCDE 2 6 17 XYZ" str2))
+	  :good
+	(list str1 str2))))
+  :good)
 
 ;;; Error cases
 
