@@ -252,18 +252,6 @@
 
 ;;; Error checking of type-related functions
 
-(deftest typep.error.1
-  (signals-error (typep) program-error)
-  t)
-
-(deftest typep.error.2
-  (signals-error (typep nil) program-error)
-  t)
-
-(deftest typep.error.3
-  (signals-error (typep nil t nil nil) program-error)
-  t)
-
 (deftest type-error-datum.error.1
   (signals-error (type-error-datum) program-error)
   t)

@@ -18,4 +18,5 @@
 (load "deftype.lsp")
 (load "standard-generic-function.lsp")
 (load "type-of.lsp")
+(load "typep.lsp")
 (load "class-precedence-lists.lsp")
