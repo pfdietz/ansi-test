@@ -237,7 +237,7 @@
   (signals-error (remove-duplicates (list 'a 'b 'c) :key #'car) type-error)
   t)
 
-(deftest remove-duplicates.error.9
+(deftest remove-duplicates.error.10
   (check-type-error #'remove-duplicates #'sequencep)
   nil)
 
