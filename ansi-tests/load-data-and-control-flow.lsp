@@ -55,6 +55,7 @@
 (load "multiple-value-call.lsp") ;; include multiple-value-list
 (load "multiple-value-prog1.lsp")
 (load "multiple-value-setq.lsp")
+(load "multiple-value-list.lsp")
 (load "nil.lsp")
 (load "not-and-null.lsp")
 (load "notany.lsp")
