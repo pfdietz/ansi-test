@@ -168,10 +168,10 @@
 
 (deftest deftype.15
   (let* ((sym (gensym))
-	 (a 1)
-	 (form `(deftype ,sym (&optional (x a))
-		  (declare (special a))
-		  `(integer 0 ,x))))
+	 (form `(let ((a 1))
+		  (deftype ,sym (&optional (x a))
+		    (declare (special a))
+		    `(integer 0 ,x)))))
     (values
      (eqlt (eval form) sym)
      (let ((a 2))
