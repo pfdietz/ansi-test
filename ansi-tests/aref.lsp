@@ -135,6 +135,29 @@
 
 ;;; To add: aref on displaced arrays, arrays with fill pointers, etc.
 
+(deftest aref.special-integer.1
+  (do-special-integer-vectors
+   (v #(1 1 0 1 0 1) nil)
+   (assert (= (aref v 0) 1))
+   (assert (= (aref v 1) 1))
+   (assert (= (aref v 2) 0))
+   (assert (= (aref v 3) 1))
+   (assert (= (aref v 4) 0))
+   (assert (= (aref v 5) 1)))
+  nil)
+
+(deftest aref.special-strings.1
+  (do-special-strings
+   (s "ABCDE" nil)
+   (assert (eql (aref s 0) #\A))
+   (assert (eql (aref s 1) #\B))
+   (assert (eql (aref s 2) #\C))
+   (assert (eql (aref s 3) #\D))
+   (assert (eql (aref s 4) #\E)))
+  nil)
+
+;;; Error tests
+
 (deftest aref.error.1
   (signals-error (aref) program-error)
   t)
