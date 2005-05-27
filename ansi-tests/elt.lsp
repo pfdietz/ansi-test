@@ -441,3 +441,17 @@
 (deftest elt.error.3
   (signals-error (elt nil 0 nil) program-error)
   t)
+
+(deftest elt.error.4
+  (do-special-integer-vectors
+   (v #(1 1 0 1 0 1) nil)
+   (assert (eql t (eval `(signals-error (elt ,v -1) type-error))))
+   (assert (eql t (eval `(signals-error (elt ,v 6) type-error)))))
+  nil)
+
+(deftest elt.error.5
+  (do-special-strings
+   (s "ABCDEFGH" nil)
+   (assert (eql t (eval `(signals-error (elt ,s -1) type-error))))
+   (assert (eql t (eval `(signals-error (elt ,s 8) type-error)))))
+  nil)
