@@ -208,6 +208,7 @@
   "abc")
 
 (deftest map.48
+  :notes (:result-type-element-type-by-subtype)
   (let ((type '(or (vector t 10) (vector t 5))))
     (if (subtypep type '(vector t))
 	(equalpt (map type #'identity '(1 2 3 4 5)) #(1 2 3 4 5))
