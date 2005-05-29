@@ -5,9 +5,10 @@
 
 (in-package :ba-test)
 
-;;; Tests of COMPILE
-
 (declaim (notinline compile-fails?))
+
+;;; Utility functions
+
 (defun compile-fails? (&rest args)
   (cl:handler-case
    (let ((vals (multiple-value-list (apply #'compile args))))
@@ -25,6 +26,16 @@
 	   (consp (cdr x))
 	   (symbolp (cadr x))
 	   (null (cddr x)))))
+
+(defun symbol-or-function-p (x)
+  (or (symbolp x)
+      (and (consp x)
+	   (eql (car x) 'function)
+	   (consp (cdr x))
+	   (null (cddr x))
+	   (function-name-p (cadr x)))))
+
+;;; Tests of COMPILE
 
 (deftest compile.1
   (loop for x in *mini-universe*
@@ -192,12 +203,7 @@
 
 (deftest ignore.1
   (loop for x in *mini-universe*
-	unless (or (symbolp x)
-		   (and (consp x)
-			(eql (car x) 'function)
-			(consp (cdr x))
-			(symbolp (cadr x))
-			(null (cddr x)))
+	unless (or (symbol-or-function-p x)
 		   (eval `(signals-error (locally (declare (ignore ,x)) nil)
 					 error)))
 	collect x)
@@ -211,14 +217,10 @@
 
 (deftest ignorable.1
   (loop for x in *mini-universe*
-	unless (or (symbolp x)
-		   (and (consp x)
-			(eql (car x) 'function)
-			(consp (cdr x))
-			(symbolp (cadr x))
-			(null (cddr x)))
-		   (eval `(signals-error (locally (declare (ignorable ,x)) nil)
-					 error)))
+	unless (or (symbol-or-function-p x)
+		   (eval `(signals-error
+			   (locally (declare (ignorable ,x)) nil)
+			   error)))
 	collect x)
   nil)
 
@@ -230,17 +232,28 @@
 
 (deftest dynamic-extent.1
   (loop for x in *mini-universe*
-	unless (or (symbolp x)
-		   (and (consp x)
-			(eql (car x) 'function)
-			(consp (cdr x))
-			(symbolp (cadr x))
-			(null (cddr x)))
-		   (eval `(signals-error (locally (declare (dynamic-extent ,x)) nil)
-					 error)))
+	unless (or (symbol-or-function-p x)
+		   (eval `(signals-error
+			   (locally (declare (dynamic-extent ,x)) nil)
+			   error)))
 	collect x)
   nil)
 
 (deftest dynamic-extent.2
   (signals-error (locally (declare (dynamic-extent . foo)) nil) error)
   t)
+
+;;; TYPE declarations
+;;; Test that violation of the type declarations is detected, and
+;;; leads to an error in safe code.
+
+(deftest type.1
+  (loop for x in *mini-universe*
+	for tp = (type-of x)
+	for lambda-form = `(lambda (y) (declare (optimize safety)
+						(type (not ,tp) y)) y)
+	for fn = (progn (print lambda-form)
+			(eval `(function ,lambda-form)))
+	unless (eval `(signals-error (funcall ',fn ',x) error))
+	collect x)
+  nil)
