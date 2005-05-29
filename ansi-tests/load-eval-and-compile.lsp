@@ -22,3 +22,4 @@
 (load "macroexpand.lsp")
 (load "macroexpand-1.lsp")
 (load "declaration.lsp")
+(load "type.lsp")
