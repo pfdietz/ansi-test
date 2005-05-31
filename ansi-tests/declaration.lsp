@@ -21,7 +21,7 @@
     nil)
   nil)
 
-;;; For the error tests, see the page in the CLHS for TYPE.
+;;; For the error tests, see the page in the CLHS for TYPE:
 ;;; "A symbol cannot be both the name of a type and the name
 ;;;  of a declaration. Defining a symbol as the name of a class,
 ;;;  structure, condition, or type, when the symbol has been
@@ -61,7 +61,7 @@
 
 (deftest declaration.9
   (let ((sym (gensym)))
-    (eval `(defstruct ,sym a b c) error)
+    (eval `(defstruct ,sym a b c))
     (eval `(signals-error-always (proclaim '(declaration ,sym))
 				 error)))
   t t)
