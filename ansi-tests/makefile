@@ -5,6 +5,8 @@
 # LISP=abcl
 # LISP=ecl
 
+MAKE=make
+
 test:
 	@rm -rf scratch
 	cat doit.lsp | $(LISP) | tee test.out
@@ -54,6 +56,7 @@ rt_1000_8:
 
 clean:
 	@rm -f test.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
+	@(cd beyond-ansi; $(MAKE) clean)
 	@rm -rf scratch/ scratch.txt
 	@rm -f foo.txt foo.lsp foo.dat
 	@rm -f tmp.txt tmp.dat tmp2.dat temp.dat
