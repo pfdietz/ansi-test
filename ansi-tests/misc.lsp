@@ -10775,3 +10775,15 @@ Broken at C::WT-MAKE-CLOSURE.
 			  (space 1) (compilation-speed 3)))
        (logxor (ash 0 (min 90 0)) 0))))
   0)
+
+(deftest misc.601
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (notinline gcd))
+       (declare
+	(optimize (debug 3) (space 3) (safety 3)
+		  (compilation-speed 2) (speed 3)))
+       (logeqv 0 (gcd 0)))))
+  -1)
