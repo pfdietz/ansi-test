@@ -10761,3 +10761,17 @@ Broken at C::WT-MAKE-CLOSURE.
        (lognand b (deposit-field b (byte 0 0) 3762528061))))
    20408096470)
   -3225589269)
+
+;;; SBCL 0.9.1.21
+;;; The function SB-C::SPECIFER-TYPE is undefined.
+
+(deftest misc.600
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (notinline min ash))
+       (declare (optimize (speed 0) (debug 1) (safety 1)
+			  (space 1) (compilation-speed 3)))
+       (logxor (ash 0 (min 90 0)) 0))))
+  0)
