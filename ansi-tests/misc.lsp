@@ -10735,3 +10735,29 @@ Broken at C::WT-MAKE-CLOSURE.
 			   (logxor -1 c)))
 	   8)
   -9)
+
+;;; SBCL 0.9.1.19
+;;; Failure of IMAGPART in compiled code
+
+(deftest misc.598
+  (funcall (compile nil '(lambda (p1)
+			   (declare (optimize (speed 2) (safety 0) (debug 3)
+					      (space 1))
+				    (type short-float p1))
+			   (imagpart (the short-float p1))))
+	   -79916.61s0)
+  -0.0s0)
+
+;;; The value 20408096470 is not of type (INTEGER 19856842407 20640917103)
+
+(deftest misc.599
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (type (integer 19856842407 20640917103) b))
+       (declare (optimize (debug 1) (speed 3) (compilation-speed 2)
+			  (safety 3) (space 3)))
+       (lognand b (deposit-field b (byte 0 0) 3762528061))))
+   20408096470)
+  -3225589269)
