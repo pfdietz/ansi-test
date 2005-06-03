@@ -472,7 +472,7 @@
 (deftest make-sequence.error.15
   :notes (:result-type-element-type-by-subtype)
   (if (subtypep '(or (vector bit) (vector t)) 'vector)
-      (signals-error (make-sequence '(or (vector bit) (vector t)) 10 :initial-element 0) type-error)
+      (signals-error (make-sequence '(or (vector bit) (vector t)) 10 :initial-element 0) error)
     t)
   t)
 
