@@ -77,6 +77,40 @@
 	collect (not (string= "ab" "xyab" :start2 i :end2 nil)))
   (t t nil t))
 
+;;; Keyword argument processing
+
+(deftest string-comparison.allow-other-keys.1
+  (loop for fn in '(string= string<= string>= string/= string< string>
+		    string-equal string-not-greaterp string-not-lessp
+		    string-not-equal string-lessp string-greaterp)
+	for expected in '(nil 0 nil 0 0 nil nil 0 nil 0 0 nil)
+	for result = (funcall fn "a" "b" :allow-other-keys t :foo nil)
+	unless (eql result expected)
+	collect (list fn expected result))
+  nil)
+
+(deftest string-comparison.allow-other-keys.2
+  (loop for fn in '(string= string<= string>= string/= string< string>
+		    string-equal string-not-greaterp string-not-lessp
+		    string-not-equal string-lessp string-greaterp)
+	for expected in '(nil nil 0 0 nil 0 nil nil 0 0 nil 0)
+	for result = (funcall fn "c" "b" :allow-other-keys t
+			      :allow-other-keys nil :foo 1)
+	unless (eql result expected)
+	collect (list fn expected result))
+  nil)
+
+(deftest string-comparison.allow-other-keys.3
+  (loop for fn in '(string= string<= string>= string/= string< string>
+		    string-equal string-not-greaterp string-not-lessp
+		    string-not-equal string-lessp string-greaterp)
+	for expected in '(nil 0 nil 0 0 nil nil 0 nil 0 0 nil)
+	for result = (funcall fn "a" "b" :allow-other-keys nil)
+	unless (eql result expected)
+	collect (list fn expected result))
+  nil)
+
+
 ;;; Order of evaluation
 
 (deftest string=.order.1
@@ -660,3 +694,322 @@
      (string-not-lessp s1 "a")
      (string-not-lessp "a" s1)))
   0 0 0 0 0 nil 0)
+
+;;; Error cases
+
+(deftest string=.error.1
+  (signals-error (string=) program-error)
+  t)
+
+(deftest string=.error.2
+  (signals-error (string= "") program-error)
+  t)
+
+(deftest string=.error.3
+  (signals-error (string= "a" "b" nil nil) program-error)
+  t)
+
+(deftest string=.error.4
+  (signals-error (string= "a" "b" :start1) program-error)
+  t)
+
+(deftest string=.error.5
+  (signals-error (string= "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string=.error.6
+  (signals-error (string= "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+(deftest string/=.error.1
+  (signals-error (string/=) program-error)
+  t)
+
+(deftest string/=.error.2
+  (signals-error (string/= "") program-error)
+  t)
+
+(deftest string/=.error.3
+  (signals-error (string/= "a" "b" nil nil) program-error)
+  t)
+
+(deftest string/=.error.4
+  (signals-error (string/= "a" "b" :start1) program-error)
+  t)
+
+(deftest string/=.error.5
+  (signals-error (string/= "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string/=.error.6
+  (signals-error (string/= "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+
+(deftest string<.error.1
+  (signals-error (string<) program-error)
+  t)
+
+(deftest string<.error.2
+  (signals-error (string< "") program-error)
+  t)
+
+(deftest string<.error.3
+  (signals-error (string< "a" "b" nil nil) program-error)
+  t)
+
+(deftest string<.error.4
+  (signals-error (string< "a" "b" :start1) program-error)
+  t)
+
+(deftest string<.error.5
+  (signals-error (string< "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string<.error.6
+  (signals-error (string< "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+
+(deftest string<=.error.1
+  (signals-error (string<=) program-error)
+  t)
+
+(deftest string<=.error.2
+  (signals-error (string<= "") program-error)
+  t)
+
+(deftest string<=.error.3
+  (signals-error (string<= "a" "b" nil nil) program-error)
+  t)
+
+(deftest string<=.error.4
+  (signals-error (string<= "a" "b" :start1) program-error)
+  t)
+
+(deftest string<=.error.5
+  (signals-error (string<= "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string<=.error.6
+  (signals-error (string<= "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+
+(deftest string>.error.1
+  (signals-error (string>) program-error)
+  t)
+
+(deftest string>.error.2
+  (signals-error (string> "") program-error)
+  t)
+
+(deftest string>.error.3
+  (signals-error (string> "a" "b" nil nil) program-error)
+  t)
+
+(deftest string>.error.4
+  (signals-error (string> "a" "b" :start1) program-error)
+  t)
+
+(deftest string>.error.5
+  (signals-error (string> "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string>.error.6
+  (signals-error (string> "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+
+(deftest string>=.error.1
+  (signals-error (string>=) program-error)
+  t)
+
+(deftest string>=.error.2
+  (signals-error (string>= "") program-error)
+  t)
+
+(deftest string>=.error.3
+  (signals-error (string>= "a" "b" nil nil) program-error)
+  t)
+
+(deftest string>=.error.4
+  (signals-error (string>= "a" "b" :start1) program-error)
+  t)
+
+(deftest string>=.error.5
+  (signals-error (string>= "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string>=.error.6
+  (signals-error (string>= "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+
+(deftest string-equal.error.1
+  (signals-error (string-equal) program-error)
+  t)
+
+(deftest string-equal.error.2
+  (signals-error (string-equal "") program-error)
+  t)
+
+(deftest string-equal.error.3
+  (signals-error (string-equal "a" "b" nil nil) program-error)
+  t)
+
+(deftest string-equal.error.4
+  (signals-error (string-equal "a" "b" :start1) program-error)
+  t)
+
+(deftest string-equal.error.5
+  (signals-error (string-equal "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string-equal.error.6
+  (signals-error (string-equal "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+(deftest string-not-equal.error.1
+  (signals-error (string-not-equal) program-error)
+  t)
+
+(deftest string-not-equal.error.2
+  (signals-error (string-not-equal "") program-error)
+  t)
+
+(deftest string-not-equal.error.3
+  (signals-error (string-not-equal "a" "b" nil nil) program-error)
+  t)
+
+(deftest string-not-equal.error.4
+  (signals-error (string-not-equal "a" "b" :start1) program-error)
+  t)
+
+(deftest string-not-equal.error.5
+  (signals-error (string-not-equal "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string-not-equal.error.6
+  (signals-error (string-not-equal "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+(deftest string-lessp.error.1
+  (signals-error (string-lessp) program-error)
+  t)
+
+(deftest string-lessp.error.2
+  (signals-error (string-lessp "") program-error)
+  t)
+
+(deftest string-lessp.error.3
+  (signals-error (string-lessp "a" "b" nil nil) program-error)
+  t)
+
+(deftest string-lessp.error.4
+  (signals-error (string-lessp "a" "b" :start1) program-error)
+  t)
+
+(deftest string-lessp.error.5
+  (signals-error (string-lessp "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string-lessp.error.6
+  (signals-error (string-lessp "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+(deftest string-greaterp.error.1
+  (signals-error (string-greaterp) program-error)
+  t)
+
+(deftest string-greaterp.error.2
+  (signals-error (string-greaterp "") program-error)
+  t)
+
+(deftest string-greaterp.error.3
+  (signals-error (string-greaterp "a" "b" nil nil) program-error)
+  t)
+
+(deftest string-greaterp.error.4
+  (signals-error (string-greaterp "a" "b" :start1) program-error)
+  t)
+
+(deftest string-greaterp.error.5
+  (signals-error (string-greaterp "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string-greaterp.error.6
+  (signals-error (string-greaterp "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+(deftest string-not-lessp.error.1
+  (signals-error (string-not-lessp) program-error)
+  t)
+
+(deftest string-not-lessp.error.2
+  (signals-error (string-not-lessp "") program-error)
+  t)
+
+(deftest string-not-lessp.error.3
+  (signals-error (string-not-lessp "a" "b" nil nil) program-error)
+  t)
+
+(deftest string-not-lessp.error.4
+  (signals-error (string-not-lessp "a" "b" :start1) program-error)
+  t)
+
+(deftest string-not-lessp.error.5
+  (signals-error (string-not-lessp "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string-not-lessp.error.6
+  (signals-error (string-not-lessp "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
+
+(deftest string-not-greaterp.error.1
+  (signals-error (string-not-greaterp) program-error)
+  t)
+
+(deftest string-not-greaterp.error.2
+  (signals-error (string-not-greaterp "") program-error)
+  t)
+
+(deftest string-not-greaterp.error.3
+  (signals-error (string-not-greaterp "a" "b" nil nil) program-error)
+  t)
+
+(deftest string-not-greaterp.error.4
+  (signals-error (string-not-greaterp "a" "b" :start1) program-error)
+  t)
+
+(deftest string-not-greaterp.error.5
+  (signals-error (string-not-greaterp "a" "b" 1 nil) program-error)
+  t)
+
+(deftest string-not-greaterp.error.6
+  (signals-error (string-not-greaterp "a" "b" :allow-other-keys nil
+			  :allow-other-keys t :foo 'bar)
+		 program-error)
+  t)
