@@ -23,14 +23,6 @@
   (check-type-predicate 'is-t-or-nil 'boolean)
   0)
 
-;; Two type inclusions on booleans
-;; have been conditionalized to prevent
-;; some tests from doing too badly on CMU CL on x86
-;; These should get removed when I get a more up to date
-;; image for that platform -- pfd
-
-
-
 (deftest types.3
   (loop
    for (t1 t2) in *subtype-table*
@@ -241,15 +233,6 @@
   (notnot-mv (macro-function 'deftype))
   t)
 
-(deftest typep-nil-null
-  (notnot-mv (typep nil 'null))
-  t)
-
-(deftest typep-t-null
-  (typep t 'null)
-  nil)
-
-
 ;;; Error checking of type-related functions
 
 (deftest type-error-datum.error.1
@@ -277,105 +260,3 @@
    program-error)
   t)
 
-;;; Tests of env arguments to typep
-
-(deftest typep.env.1
-  (notnot-mv (typep 0 'bit nil))
-  t)
-
-(deftest typep.env.2
-  (macrolet ((%foo (&environment env)
-		   (notnot-mv (typep 0 'bit env))))
-    (%foo))
-  t)
-
-(deftest typep.env.3
-  (macrolet ((%foo (&environment env)
-		   (notnot-mv (typep env (type-of env)))))
-    (%foo))
-  t)
-
-;;; Other typep tests
-
-(deftest typep.1
-  (notnot-mv (typep 'a '(eql a)))
-  t)
-
-(deftest typep.2
-  (notnot-mv (typep 'a '(and (eql a))))
-  t)
-
-(deftest typep.3
-  (notnot-mv (typep 'a '(or (eql a))))
-  t)
-
-(deftest typep.4
-  (typep 'a '(eql b))
-  nil)
-
-(deftest typep.5
-  (typep 'a '(and (eql b)))
-  nil)
-
-(deftest typep.6
-  (typep 'a '(or (eql b)))
-  nil)
-
-(deftest typep.7
-  (notnot-mv (typep 'a '(satisfies symbolp)))
-  t)
-
-(deftest typep.8
-  (typep 10 '(satisfies symbolp))
-  nil)
-
-(deftest typep.9
-  (let ((class (find-class 'symbol)))
-    (notnot-mv (typep 'a class)))
-  t)
-
-(deftest typep.10
-  (let ((class (find-class 'symbol)))
-    (notnot-mv (typep 'a `(and ,class))))
-  t)
-
-(deftest typep.11
-  (let ((class (find-class 'symbol)))
-    (typep 10 class))
-  nil)
-
-(deftest typep.12
-  (let ((class (find-class 'symbol)))
-    (typep 10 `(and ,class)))
-  nil)
-
-(deftest typep.13
-  (typep 'a '(and symbol integer))
-  nil)
-
-(deftest typep.14
-  (notnot-mv (typep 'a '(or symbol integer)))
-  t)
-
-(deftest typep.15
-  (notnot-mv (typep 'a '(or integer symbol)))
-  t)
-
-(deftest typep.16
-  (let ((c1 (find-class 'number))
-	(c2 (find-class 'symbol)))
-    (notnot-mv (typep 'a `(or ,c1 ,c2))))
-  t)
-
-(deftest typep.17
-  (let ((c1 (find-class 'number))
-	(c2 (find-class 'symbol)))
-    (notnot-mv (typep 'a `(or ,c2 ,c1))))
-  t)
-
-(deftest typep.18
-  (let ((i 0))
-    (values
-     (notnot (typep (incf i) '(and (integer 0 10) (integer -5 6))))
-     i))
-  t 1)
