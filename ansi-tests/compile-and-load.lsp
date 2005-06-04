@@ -23,6 +23,9 @@
   "Find the file indicated by PATHSPEC, compiling it first if
    the associated compiled file is out of date."
   (let* ((pathname (pathname pathspec))
+	 (pathname (if *load-pathname*
+		       (merge-pathnames pathname *load-pathname*)
+		     pathname))		     
 	 (former-data (assoc pathname *compiled-and-loaded-files*
 			     :test #'equalp))
 	 (compile-pathname (compile-file-pathname pathname))
