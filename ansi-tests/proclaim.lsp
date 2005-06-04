@@ -19,6 +19,12 @@
     nil)
   nil)
 
+(deftest proclaim.3
+  (let ((i 0))
+    (proclaim (progn (incf i) '(optimize)))
+    i)
+  1)
+
 ;;; Error cases
 
 (deftest proclaim.error.1
