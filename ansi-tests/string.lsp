@@ -136,7 +136,12 @@
   (do-special-strings (s "X")
 		      (or (array-has-fill-pointer-p s)
 			  (assert (typep s '(string 1)))))
-  nil)		     
+  nil)
+
+(deftest string.26
+  (let ((i 0))
+    (values (string (progn (incf i) "")) i))
+  "" 1)
 
 ;;; Error tests
 

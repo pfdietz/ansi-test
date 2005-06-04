@@ -96,6 +96,20 @@
      s i a b c))
   #\a "zazzz" 3 1 2 3)
 
+;;; Error tests
+
+(deftest char.error.1
+  (signals-error (char) program-error)
+  t)
+
+(deftest char.error.2
+  (signals-error (char "abc") program-error)
+  t)
+
+(deftest char.error.3
+  (signals-error (char "abc" 1 nil) program-error)
+  t)
+
 ;;; Tests of schar
 
 (deftest schar.1
@@ -162,3 +176,18 @@
       (progn (setf c (incf i)) #\a))
      s i a b c))
   #\a "zazzz" 3 1 2 3)
+
+;;; Error tests
+
+(deftest schar.error.1
+  (signals-error (schar) program-error)
+  t)
+
+(deftest schar.error.2
+  (signals-error (schar "abc") program-error)
+  t)
+
+(deftest schar.error.3
+  (signals-error (schar "abc" 1 nil) program-error)
+  t)
+

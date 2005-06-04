@@ -58,3 +58,20 @@
   :notes (:nil-vectors-are-strings)
   (notnot-mv (simple-string-p (make-array '(37) :element-type nil)))
   t)
+
+(deftest simple-string-p.10
+  (let ((i 0))
+    (values
+     (notnot (simple-string-p (progn (incf i) "")))
+     i))
+  t 1)
+
+;;; Error tests
+
+(deftest simple-string-p.error.1
+  (signals-error (simple-string-p) program-error)
+  t)
+
+(deftest simple-string-p.error.2
+  (signals-error (simple-string-p "" nil) program-error)
+  t)

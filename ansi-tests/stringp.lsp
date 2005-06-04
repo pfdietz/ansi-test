@@ -82,3 +82,19 @@
 			       :initial-contents '(#\a #\b #\c #\d))))
   t)
 
+(deftest stringp.15
+  (let ((i 0))
+    (values
+     (notnot (stringp (progn (incf i) "")))
+     i))
+  t 1)
+
+;;; Error tests
+
+(deftest stringp.error.1
+  (signals-error (stringp) program-error)
+  t)
+
+(deftest stringp.error.2
+  (signals-error (stringp "" nil) program-error)
+  t)
