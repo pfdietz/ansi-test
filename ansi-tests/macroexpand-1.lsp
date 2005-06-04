@@ -16,31 +16,48 @@
 ;;; Non-error tests
 
 (deftest macroexpand-1.1
-  (loop for x in *universe*
-	unless (or (symbolp x)
-		   (consp x)
-		   (eql (macroexpand-1 x) x))
-	collect (list x (macroexpand-1 x)))
+  (let (vals)
+    (loop for x in *universe*
+	  unless (or (symbolp x)
+		     (consp x)
+		     (progn
+		       (setq vals (multiple-value-list (macroexpand-1 x)))
+		       (and (= (length vals) 2)
+			    (eql (car vals) x)
+			    (null (cadr vals)))))
+	  collect (cons x vals)))
   nil)
 
 (deftest macroexpand-1.2
-  (loop for x in *universe*
-	unless (or (symbolp x)
-		   (consp x)
-		   (eql (macroexpand-1 x nil) x))
-	collect (list x (macroexpand-1 x nil)))
+  (let (vals)
+    (loop for x in *universe*
+	  unless (or (symbolp x)
+		     (consp x)
+		     (progn
+		       (setq vals (multiple-value-list (macroexpand-1 x nil)))
+		       (and (= (length vals) 2)
+			    (eql (car vals) x)
+			    (null (cadr vals)))))
+	  collect (cons x vals)))
   nil)
 
 (deftest macroexpand-1.3
-  (macrolet ((%m (&environment env)
-		 `(quote
-		   ,(loop for x in *universe*
-			  unless (or (symbolp x)
-				     (consp x)
-				     (eql (macroexpand-1 x env) x))
-			  collect (list x (macroexpand-1 x env))))))
+  (macrolet
+      ((%m (&environment env)
+	   `(quote
+	     ,(let (vals)
+		(loop for x in *universe*
+		      unless (or (symbolp x)
+				 (consp x)
+				 (progn
+				   (setq vals (multiple-value-list (macroexpand-1 x env)))
+				   (and (= (length vals) 2)
+					(eql (car vals) x)
+					(null (cadr vals)))))
+		      collect (cons x vals))))))
     (%m))
   nil)
+
 
 (deftest macroexpand-1.4
   (macrolet ((%m () ''foo))
@@ -49,10 +66,20 @@
       (%m2)))
   foo)
 
+(deftest macroexpand-1.5
+  (let ((form (list (gensym)))
+	(i 0))
+    (values
+     (equalt (macroexpand-1 (progn (incf i) form)) form)
+     i))
+  t 1)
 
-
-
-
-
-  
-
+(deftest macroexpand-1.6
+  (let ((form (list (gensym)))
+	(i 0) a b)
+    (values
+     (equalt (macroexpand-1 (progn (setf a (incf i)) form)
+			    (progn (setf b (incf i)) nil))
+	     form)
+     i a b))
+  t 2 1 2)

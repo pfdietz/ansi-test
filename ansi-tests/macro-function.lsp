@@ -86,6 +86,54 @@
      fn)
   nil)
 
+(deftest macro-function.12
+  (let ((sym (gensym)))
+    (eval `(defmacro ,sym () t))
+    (let ((i 0))
+      (values
+       (funcall (macro-function (progn (incf i) sym)) (list sym) nil)
+       i)))
+  t 1)
+
+(deftest macro-function.13
+  (let ((sym (gensym)))
+    (eval `(defmacro ,sym () t))
+    (let ((i 0) a b)
+      (values
+       (funcall (macro-function (progn (setf a (incf i)) sym)
+				(progn (setf b (incf i)) nil))
+		(list sym) nil)
+       i a b)))
+  t 2 1 2)
+
+(deftest macro-function.14
+  (let ((sym (gensym))
+	(i 0))
+    (setf (macro-function (progn (incf i) sym)) (macro-function 'pop))
+    (values 
+     (eval `(let ((x '(a b c)))
+	      (list
+	       (,sym x)
+	       x)))
+     i))
+  (a (b c)) 1)
+
+(deftest macro-function.15
+  (let ((sym (gensym))
+	(i 0) a b)
+    (setf (macro-function (progn (setf a (incf i)) sym)
+			  (progn (setf b (incf i)) nil))
+	  (macro-function 'pop))
+    (values 
+     (eval `(let ((x '(a b c)))
+	      (list
+	       (,sym x)
+	       x)))
+     i a b))
+  (a (b c)) 2 1 2)
+
+
+
 ;;; Error tests
 
 (deftest macro-function.error.1

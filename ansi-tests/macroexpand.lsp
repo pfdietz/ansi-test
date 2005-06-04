@@ -16,31 +16,48 @@
 ;;; Non-error tests
 
 (deftest macroexpand.1
-  (loop for x in *universe*
-	unless (or (symbolp x)
-		   (consp x)
-		   (eql (macroexpand x) x))
-	collect (list x (macroexpand x)))
+  (let (vals)
+    (loop for x in *universe*
+	  unless (or (symbolp x)
+		     (consp x)
+		     (progn
+		       (setq vals (multiple-value-list (macroexpand x)))
+		       (and (= (length vals) 2)
+			    (eql (car vals) x)
+			    (null (cadr vals)))))
+	  collect (cons x vals)))
   nil)
 
 (deftest macroexpand.2
-  (loop for x in *universe*
-	unless (or (symbolp x)
-		   (consp x)
-		   (eql (macroexpand x nil) x))
-	collect (list x (macroexpand x nil)))
+  (let (vals)
+    (loop for x in *universe*
+	  unless (or (symbolp x)
+		     (consp x)
+		     (progn
+		       (setq vals (multiple-value-list (macroexpand x nil)))
+		       (and (= (length vals) 2)
+			    (eql (car vals) x)
+			    (null (cadr vals)))))
+	  collect (cons x vals)))
   nil)
 
 (deftest macroexpand.3
-  (macrolet ((%m (&environment env)
-		 `(quote
-		   ,(loop for x in *universe*
-			  unless (or (symbolp x)
-				     (consp x)
-				     (eql (macroexpand x env) x))
-			  collect (list x (macroexpand x env))))))
+  (macrolet
+      ((%m (&environment env)
+	   `(quote
+	     ,(let (vals)
+		(loop for x in *universe*
+		      unless (or (symbolp x)
+				 (consp x)
+				 (progn
+				   (setq vals (multiple-value-list (macroexpand x env)))
+				   (and (= (length vals) 2)
+					(eql (car vals) x)
+					(null (cadr vals)))))
+		      collect (cons x vals))))))
     (%m))
   nil)
+
 
 (deftest macroexpand.4
   (macrolet ((%m () ''foo))
@@ -49,9 +66,20 @@
       (%m2)))
   foo)
 
+(deftest macroexpand.5
+  (let ((form (list (gensym)))
+	(i 0))
+    (values
+     (equalt (macroexpand (progn (incf i) form)) form)
+     i))
+  t 1)
 
-
-
-
-
-  
+(deftest macroexpand.6
+  (let ((form (list (gensym)))
+	(i 0) a b)
+    (values
+     (equalt (macroexpand (progn (setf a (incf i)) form)
+			  (progn (setf b (incf i)) nil))
+	     form)
+     i a b))
+  t 2 1 2)
