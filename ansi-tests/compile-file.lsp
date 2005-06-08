@@ -60,7 +60,7 @@
 	   (if (and v1 v2 v3 v4 v5 v6 (eql v7 t) v8) t
 	     (list v1 v2 v3 v4 v5 v6 v7 v8)))
 	 (progn
-	   (load target-pathname)
+	   (load output-truename)
 	   (funcall funname)))))))
 
 (deftest compile-file.1
@@ -141,7 +141,8 @@
   (let ((s (open "foo.fasl" :direction :output :if-exists :supersede
 		 :if-does-not-exist :create)))
     (close s)
-    (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+    (compile-file-test "compile-file-test-file.lsp"
+		       'compile-file-test-fun.1
 		       :output-file s))
   t nil)
 
