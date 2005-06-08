@@ -14,6 +14,7 @@
 		    (mapcar #'symbol-name
 			    '(#:random-from-seq #:random-case #:coin
 			      #:random-permute #:*universe* #:*mini-universe*
+			      #:*cl-symbols*
 			      #:signals-error #:typef)))))
   (let ((s (find-symbol "QUIT" "CL-USER")))
     (when s (import s :cl-test))))
