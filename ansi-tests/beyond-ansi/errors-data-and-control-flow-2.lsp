@@ -124,3 +124,69 @@
 (def-all-error-test progv.3 'listp '(progv x nil nil))
 (def-all-error-test progv.4 'listp '(progv '(a) x nil))
 
+;;; SETQ
+
+(def-error-test setq.1 (setq . x))
+(def-error-test setq.2 (let ((x t)) (setq x)))
+(def-error-test setq.3 (let ((x t)) (setq x . foo)))
+(def-error-test setq.4 (let ((x 1)) (setq x nil . foo)))
+(def-error-test setq.5 (let ((x 1) (y 2)) (setq x nil y)))
+(def-all-error-test setq.6 'symbolp #'(lambda (x) `(setq ,x nil)))
+(def-error-test setq.7
+  (let ((sym (gensym)))
+    (eval `(defconstant ,sym nil))
+    (eval `(setq ,sym t))
+    (eval sym)))
+
+;;; PSETQ
+
+(def-error-test psetq.1 (psetq . x))
+(def-error-test psetq.2 (let ((x t)) (psetq x)))
+(def-error-test psetq.3 (let ((x t)) (psetq x . foo)))
+(def-error-test psetq.4 (let ((x 1)) (psetq x nil . foo)))
+(def-error-test psetq.5 (let ((x 1) (y 2)) (psetq x nil y)))
+(def-all-error-test psetq.6 'symbolp #'(lambda (x) `(psetq ,x nil)))
+(def-error-test psetq.7
+  (let ((sym (gensym)))
+    (eval `(defconstant ,sym nil))
+    (eval `(psetq ,sym t))
+    (eval sym)))
+;;; I suggest it would be useful for PSETQ to detect when it is
+;;; being asked to assign to the same variable twice, since this
+;;; isn't well defined.
+(def-error-test psetq.8 (let ((x 0)) (psetq x 1 x 2) x))
+
+;;; BLOCK
+
+(def-error-test block.1 (block))
+(def-error-test block.2 (block . foo))
+(def-all-error-test block.3 'symbolp #'(lambda (x) `(block ,x)))
+(def-error-test block.4 (block nil . foo))
+
+;;; CATCH
+
+(def-error-test catch.1 (catch))
+(def-error-test catch.2 (catch . foo))
+(def-error-test catch.3 (catch 'tag . foo))
+(def-all-error-test catch.4 (constantly nil) '(catch x (throw x nil))
+  :vals *cl-symbols*)
+
+
+;;; GO
+
+(def-error-test go.1 (go))
+(def-error-test go.2 (go . foo))
+(def-all-error-test go.3 (typef '(or symbol integer))
+  #'(lambda (x) `(go ,x)))
+(def-error-test go.4 (tagbody (go done . foo) done))
+(def-error-test go.5 (tagbody (go done foo) done))
+
+;;; RETURN-FROM
+
+(def-error-test return-from.1 (return-from))
+(def-error-test return-from.2 (return-from . foo))
+(def-error-test return-from.3 (return-from foo))
+(def-error-test return-from.4 (block foo (return-from foo . t)))
+(def-error-test return-from.5 (block foo (return-from foo nil . 2)))
+(def-error-test return-from.6 (block foo (return-from foo nil 3)))
+
