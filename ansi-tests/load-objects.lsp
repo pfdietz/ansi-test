@@ -54,3 +54,5 @@
 (load "class-name.lsp")
 (load "class-of.lsp")
 (load "unbound-slot.lsp")
+(load "defmethod.lsp")
+
