@@ -210,10 +210,21 @@
 	    (eval `(signals-error (,sym 1 2) program-error))))
   t t)
 
+(deftest defmethod.error.14
+  (let ((sym (gensym)))
+    (eval `(locally (declare (optimize safety)) (defmethod ,sym ((x t) &key) x)))
+    (values (eval `(signals-error (,sym) program-error))
+	    (eval `(signals-error (,sym 1 2) program-error))
+	    (eval `(signals-error (,sym 1 :bogus t) program-error))
+	    (eval `(signals-error (,sym 1 :allow-other-keys nil :allow-other-keys t :bogus t) program-error))))
+  t t t t)
 
-
-
-
-
+(deftest defmethod.error.15
+  (let ((sym (gensym)))
+    (eval `(locally (declare (optimize safety)) (defmethod ,sym ((x t) &key y) x)))
+    (values (eval `(signals-error (,sym 1 :bogus t) program-error))
+	    (eval `(signals-error (,sym 1 :y) program-error))
+	    (eval `(signals-error (,sym 1 3 nil) program-error))))
+  t t t)
 
 
