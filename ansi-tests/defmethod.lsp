@@ -34,6 +34,96 @@
      (funcall sym 1)))
   t t (1) (1))
 
+(deftest defmethod.4
+  (let* ((sym (gensym))
+	 (method
+	  (eval `(defmethod (setf ,sym) ((x t) (y cons)) (setf (car y) x)))))
+    (values
+     (typep* method 'standard-method)
+     (fboundp sym)
+     (typep* (fdefinition `(setf ,sym)) 'standard-generic-function)
+     (let ((x (cons 1 2))) (list (funcall (fdefinition `(setf ,sym)) 3 x) x))))
+  t nil t (3 (3 . 2)))
+
+(deftest defmethod.5
+  (let* ((sym (gensym))
+	 (method
+	  (eval `(defmethod ,sym ((x integer)) (return-from ,sym (list x))))))
+    (values
+     (typep* method 'standard-method)
+     (typep* (fdefinition sym) 'standard-generic-function)
+     (funcall sym 1)))
+  t t (1))
+
+(deftest defmethod.6
+  (let* ((sym (gensym))
+	 (method
+	  (eval `(defmethod (setf ,sym) ((x t) (y cons)) (return-from ,sym (setf (car y) x))))))
+    (values
+     (typep* method 'standard-method)
+     (fboundp sym)
+     (typep* (fdefinition `(setf ,sym)) 'standard-generic-function)
+     (let ((x (cons 1 2))) (list (funcall (fdefinition `(setf ,sym)) 3 x) x))))
+  t nil t (3 (3 . 2)))
+
+(deftest defmethod.7
+  (let* ((sym (gensym))
+	 (method
+	  (eval `(defmethod ,sym ((x integer) &aux (y (list x))) y))))
+    (values
+     (typep* method 'standard-method)
+     (typep* (fdefinition sym) 'standard-generic-function)
+     (funcall sym 1)))
+  t t (1))
+
+(deftest defmethod.8
+  (let* ((sym (gensym))
+	 (method (eval `(defmethod ,sym ((x integer) &key z) (list x z)))))
+    (values
+     (typep* method 'standard-method)
+     (typep* (fdefinition sym) 'standard-generic-function)
+     (funcall sym 1)
+     (funcall sym 2 :z 3)
+     (funcall sym 4 :allow-other-keys nil)
+     (funcall sym 5 :allow-other-keys t :bogus 17)
+     (funcall sym 6 :allow-other-keys t :allow-other-keys nil :bogus 17)
+     ))
+  t t (1 nil) (2 3) (4 nil) (5 nil) (6 nil))
+
+(deftest defmethod.9
+  (let* ((sym (gensym))
+	 (method (eval `(defmethod ,sym ((x integer) &key (z :missing)) (list x z)))))
+    (values
+     (typep* method 'standard-method)
+     (typep* (fdefinition sym) 'standard-generic-function)
+     (funcall sym 1)
+     (funcall sym 2 :z 3)
+     (funcall sym 4 :allow-other-keys nil)
+     ))
+  t t (1 :missing) (2 3) (4 :missing))
+
+(deftest defmethod.10
+  (let* ((sym (gensym))
+	 (method (eval `(defmethod ,sym ((x integer) &key (z :missing z-p)) (list x z (notnot z-p))))))
+    (values
+     (typep* method 'standard-method)
+     (typep* (fdefinition sym) 'standard-generic-function)
+     (funcall sym 1)
+     (funcall sym 2 :z 3)
+     (funcall sym 4 :allow-other-keys nil)
+     ))
+  t t (1 :missing nil) (2 3 t) (4 :missing nil))
+
+(deftest defmethod.11
+  (let* ((sym (gensym))
+	 (method (eval `(defmethod ,sym ((x integer) &rest z) (list x z)))))
+    (values
+     (typep* method 'standard-method)
+     (typep* (fdefinition sym) 'standard-generic-function)
+     (funcall sym 1)
+     (funcall sym 2 3)
+     ))
+  t t (1 nil) (2 (3)))
 
 ;;; Error cases
 
@@ -111,6 +201,14 @@
     (eval `(signals-error (defmethod ,sym ((x t) &key) x) error)))
   t)
 
+;;; Calling the implicitly defined generic function
+
+(deftest defmethod.error.13
+  (let ((sym (gensym)))
+    (eval `(locally (declare (optimize safety)) (defmethod ,sym ((x t)) x)))
+    (list (eval `(signals-error (,sym) program-error))
+	  (eval `(signals-error (,sym 1 2) program-error))))
+  t t)
 
 
 
