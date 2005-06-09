@@ -206,8 +206,8 @@
 (deftest defmethod.error.13
   (let ((sym (gensym)))
     (eval `(locally (declare (optimize safety)) (defmethod ,sym ((x t)) x)))
-    (list (eval `(signals-error (,sym) program-error))
-	  (eval `(signals-error (,sym 1 2) program-error))))
+    (values (eval `(signals-error (,sym) program-error))
+	    (eval `(signals-error (,sym 1 2) program-error))))
   t t)
 
 
