@@ -23,8 +23,6 @@ Things to do to the test suite (not a complete list)
 11. Address issues with broadcast streams (C. Rhodes) -- apparent
    contradictions in the spec.
 
-12. Make sure all string operators work on displaced character vectors.
-
 17. Tests that have an argument that provides a return value for special
   conditions (like eof) that happens to be the same as a normal value the
   functions would return (suggested by CR).
@@ -73,14 +71,9 @@ Got:      0
   :notes and the :notes comment is printed out.  This will help explain
   what the failures mean.
 
-25. Add test that the form in an EQL parameter specializer is evaluated only
-  once, at method definition time.
-
 26. Test that various builtin functions, when compiled with type declarations
   on parameters, do the right thing.  Probably the best way to do this is
   a collection of random test harnesses.
-
-27. Be sure the various string operations work on non-simple strings.
 
 28. Add tests for reading/printing with packages with weird names (lower case letters,
   digits, etc.)
@@ -92,12 +85,6 @@ Got:      0
   of the compiler (and compiler macros).
 
 30. Add more pathname equality tests to equal.lsp
-
-31. Add tests for GENTEMP
-
-32. Check that the fields of standardized error conditions are set properly
-
-33. Test SETF MACRO-FUNCTION
 
 34. (from C Rhodes) Test that CERROR allows additional arguments after a
   condition designating itself to be used in the continue format control.
