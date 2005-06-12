@@ -233,6 +233,19 @@
   (notnot-mv (macro-function 'deftype))
   t)
 
+;;; TYPE-ERROR accessors
+
+(deftest type-error-datum.1
+  (let ((c (make-condition 'type-error :datum 'a :expected-type 'integer)))
+    (type-error-datum c))
+  a)
+
+(deftest type-error-expected-type.1
+  (let ((c (make-condition 'type-error
+			   :datum 'a :expected-type 'integer)))
+    (type-error-expected-type c))
+  integer)
+
 ;;; Error checking of type-related functions
 
 (deftest type-error-datum.error.1
