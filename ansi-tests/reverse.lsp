@@ -166,6 +166,28 @@
      i))
   (d c b a) 1)
 
+;;; Constant folding tests
+
+(deftest reverse.fold.1
+  (flet ((%f () (reverse '(a b c))))
+    (values
+     (%f)
+     (let ((seq (%f))) (setf (elt seq 0) 'z) seq)
+     (%f)))
+  (c b a)
+  (z b a)
+  (c b a))
+
+(deftest reverse.fold.2
+  (flet ((%f () (reverse #(a b c))))
+    (values
+     (%f)
+     (let ((seq (%f))) (setf (elt seq 0) 'z) seq)
+     (%f)))
+  #(c b a)
+  #(z b a)
+  #(c b a))
+
 ;;; Error cases
 
 (deftest reverse.error.1

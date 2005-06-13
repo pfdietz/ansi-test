@@ -281,6 +281,18 @@
      s i a b c))
   "xyz" "axyz" 3 1 2 3)
 
+;;; Constant folding
+
+(deftest subseq.fold.1
+  (flet ((%f () (subseq '(1 2 3) 0)))
+    (values
+     (%f)
+     (let ((seq (%f))) (setf (elt seq 0) 0) seq)
+     (%f)))
+  (1 2 3)
+  (0 2 3)
+  (1 2 3))
+
 ;;; Error cases
 
 (deftest subseq.error.1

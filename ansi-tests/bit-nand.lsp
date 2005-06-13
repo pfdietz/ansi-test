@@ -228,6 +228,12 @@
      x y z))
   #*1 2 1 2)
 
+(deftest bit-nand.fold.1
+  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
+	     (bit-nand #*00101 #*10100)))
+    (values (%f) (let ((bv (%f))) (setf (elt bv 0) 0) bv) (%f)))
+  #*11011 #*01011 #*11011)
+
 ;;; Error tests
 
 (deftest bit-nand.error.1

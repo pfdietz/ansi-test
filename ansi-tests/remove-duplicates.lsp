@@ -54,6 +54,27 @@
   (delete-duplicates (list 'a 'b 'c 'd 'a 'e 'f 'd 'g) :test-not #'eql
 		     :test #'eql))
 
+;;; Const fold tests
+
+(deftest remove-duplicates.fold.1
+  (flet ((%f () (remove-duplicates '(1 2 3 3))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 0) seq) (%f)))
+  (1 2 3) (0 2 3) (1 2 3))
+
+(deftest remove-duplicates.fold.2
+  (flet ((%f () (remove-duplicates #(1 2 3 3))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 0) seq) (%f)))
+  #(1 2 3) #(0 2 3) #(1 2 3))
+
+(deftest remove-duplicates.fold.3
+  (flet ((%f () (remove-duplicates #*0011)))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
+  #*01 #*11 #*01)
+
+(deftest remove-duplicates.fold.4
+  (flet ((%f () (remove-duplicates "1233")))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) #\0) seq) (%f)))
+  "123" "023" "123")
 
 ;;; Order of evaluation tests
 

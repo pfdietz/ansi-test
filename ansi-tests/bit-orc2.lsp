@@ -228,6 +228,12 @@
      x y z))
   #*1 2 1 2)
 
+(deftest bit-orc2.fold.1
+  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
+	     (bit-orc2 #*00101 #*01011)))
+    (values (%f) (let ((bv (%f))) (setf (elt bv 0) 0) bv) (%f)))
+  #*10101 #*00101 #*10101)
+
 ;;; Error tests
 
 (deftest bit-orc2.error.1

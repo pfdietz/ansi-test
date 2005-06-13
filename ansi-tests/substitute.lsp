@@ -1092,6 +1092,38 @@
   (substitute 'a 0 (list 1 2 0 3 1 0 3) :allow-other-keys nil)
   (1 2 a 3 1 a 3))
 
+;;; Constant folding tests
+
+(deftest substitute.fold.1
+  (flet ((%f () (substitute 'z 'b '(a b c))))
+    (values
+     (%f)
+     (let ((seq (%f))) (setf (elt seq 0) 'd) seq)
+     (%f)))
+  (a z c)
+  (d z c)
+  (a z c))
+
+(deftest substitute.fold.2
+  (flet ((%f () (substitute 'z 'b #(a b c))))
+    (values
+     (%f)
+     (let ((seq (%f))) (setf (elt seq 0) 'd) seq)
+     (%f)))
+  #(a z c)
+  #(d z c)
+  #(a z c))
+
+(deftest substitute.fold.3
+  (flet ((%f () (substitute 0 1 #*001101)))
+    (values
+     (%f)
+     (let ((seq (%f))) (setf (elt seq 0) 1) seq)
+     (%f)))
+  #*000000
+  #*100000
+  #*000000)
+
 ;;; Error cases
 
 (deftest substitute.error.1

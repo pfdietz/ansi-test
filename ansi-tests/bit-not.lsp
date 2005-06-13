@@ -127,6 +127,12 @@
      i x))
   #*110010 1 1)
 
+(deftest bit-not.fold.1
+  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
+	     (bit-not #*00101)))
+    (values (%f) (let ((bv (%f))) (setf (elt bv 0) 0) bv) (%f)))
+  #*11010 #*01010 #*11010)
+
 ;;; Error tests
 
 (deftest bit-not.error.1

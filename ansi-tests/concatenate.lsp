@@ -287,6 +287,38 @@
      i x y z))
   "abcdefghi" 3 1 2 3)
 
+;;; Constant folding tests
+
+(deftest concatenate.fold.1
+  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
+	     (concatenate 'list '(a b) '(c d))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
+  (a b c d) (z b c d) (a b c d))
+
+(deftest concatenate.fold.2
+  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
+	     (concatenate 'vector '(a b) '(c d))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
+  #(a b c d) #(z b c d) #(a b c d))
+
+(deftest concatenate.fold.3
+  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
+	     (concatenate 'bit-vector '(0 0) '(1 0 1))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
+  #*00101 #*10101 #*00101)
+
+(deftest concatenate.fold.4
+  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
+	     (concatenate 'string "ab" "cd")))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) #\z) seq) (%f)))
+  "abcd" "zbcd" "abcd")
+
+(deftest concatenate.fold.5
+  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
+	     (concatenate 'list '(a b c d))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
+  (a b c d) (z b c d) (a b c d))
+  
 ;;; Error tests
 
 (deftest concatenate.error.1

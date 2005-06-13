@@ -139,6 +139,24 @@
      i a b))
   10.0f0 2 1 2)
 
+;;; Constant folding test
+;;; If the coerce call is folded to a constant, this will fail
+;;; when that constant is modified.
+
+(deftest coerce.fold.1
+  (flet ((%f () (declare (optimize speed (safety 0)))
+	    (coerce '(1 2 3) 'vector)))
+    (values
+     (%f)
+     (let ((v (%f)))
+       (setf (aref v 0) 0)
+       v)
+     (%f)))
+  #(1 2 3)
+  #(0 2 3)
+  #(1 2 3))
+  
+
 ;;; Error tests
 
 ;;; (deftest coerce.error.1
@@ -198,4 +216,3 @@
 	  (t t)))
        (error (c) (declare (ignore c)) t))))
   t)
-

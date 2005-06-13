@@ -228,6 +228,12 @@
      x y z))
   #*0 2 1 2)
 
+(deftest bit-and.fold.1
+  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
+	     (bit-and #*01101 #*01011)))
+    (values (%f) (let ((bv (%f))) (setf (elt bv 0) 1) bv) (%f)))
+  #*01001 #*11001 #*01001)
+
 ;;; Error tests
 
 (deftest bit-and.error.1

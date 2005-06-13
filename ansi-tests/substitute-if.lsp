@@ -840,6 +840,23 @@
   (substitute-if 'a #'zerop (list 1 2 0 3 1 0 3) :allow-other-keys nil)
   (1 2 a 3 1 a 3))
 
+;;; Constant folding tests
+
+(deftest substitute-if.fold.1
+  (flet ((%f () (substitute-if 'z 'null '(a nil b))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'd) seq) (%f)))
+  (a z b) (d z b) (a z b))
+
+(deftest substitute-if.fold.2
+  (flet ((%f () (substitute-if 'z 'null #(a nil b))))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'd) seq) (%f)))
+  #(a z b) #(d z b) #(a z b))
+
+(deftest substitute-if.fold.3
+  (flet ((%f () (substitute-if 0 'plusp #*100110)))
+    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
+  #*000000 #*100000 #*000000)
+
 ;;; Error cases
 
 (deftest substitute-if.error.1
