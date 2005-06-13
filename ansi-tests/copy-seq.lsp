@@ -227,6 +227,11 @@
     (values (copy-seq (progn (incf i) "abc")) i))
   "abc" 1)
 
+(def-fold-test copy-seq.fold.1 (copy-seq '(a b c)))
+(def-fold-test copy-seq.fold.2 (copy-seq #(a b c)))
+(def-fold-test copy-seq.fold.3 (copy-seq #*01101100))
+(def-fold-test copy-seq.fold.4 (copy-seq "abcdef"))
+
 ;;; Error tests
 
 (deftest copy-seq.error.1

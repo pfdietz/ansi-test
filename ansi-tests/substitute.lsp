@@ -1094,35 +1094,10 @@
 
 ;;; Constant folding tests
 
-(deftest substitute.fold.1
-  (flet ((%f () (substitute 'z 'b '(a b c))))
-    (values
-     (%f)
-     (let ((seq (%f))) (setf (elt seq 0) 'd) seq)
-     (%f)))
-  (a z c)
-  (d z c)
-  (a z c))
-
-(deftest substitute.fold.2
-  (flet ((%f () (substitute 'z 'b #(a b c))))
-    (values
-     (%f)
-     (let ((seq (%f))) (setf (elt seq 0) 'd) seq)
-     (%f)))
-  #(a z c)
-  #(d z c)
-  #(a z c))
-
-(deftest substitute.fold.3
-  (flet ((%f () (substitute 0 1 #*001101)))
-    (values
-     (%f)
-     (let ((seq (%f))) (setf (elt seq 0) 1) seq)
-     (%f)))
-  #*000000
-  #*100000
-  #*000000)
+(def-fold-test substitute.fold.1 (substitute 'z 'b '(a b c)))
+(def-fold-test substitute.fold.2 (substitute 'z 'b #(a b c)))
+(def-fold-test substitute.fold.3 (substitute 0 1 #*001101))
+(def-fold-test substitute.fold.4 (substitute #\a #\b "abcebadfke"))
 
 ;;; Error cases
 

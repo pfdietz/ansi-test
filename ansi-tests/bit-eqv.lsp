@@ -229,11 +229,7 @@
      x y z))
   #*1 2 1 2)
 
-(deftest bit-eqv.fold.1
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (bit-eqv #*01101 #*10100)))
-    (values (%f) (let ((bv (%f))) (setf (elt bv 0) 1) bv) (%f)))
-  #*00110 #*10110 #*00110)
+(def-fold-test bit-eqv.fold.1 (bit-eqv #*01101 #*10100))
 
 ;;; Error tests
 

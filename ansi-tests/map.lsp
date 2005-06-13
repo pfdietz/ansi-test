@@ -428,11 +428,4 @@
 
 ;;; Constant folding test
 
-(deftest map.fold.1
-  (let ((f (compile nil '(lambda () (declare (optimize speed (safety 0)))
-			   (map 'vector #'identity '(a b c))))))
-    (let ((v (funcall f)))
-      (setf (aref v 0) nil)
-      (values v (funcall f))))
-  #(nil b c)
-  #(a b c))
+(def-fold-test map.fold.1 (map 'vector #'identity '(a b c)))

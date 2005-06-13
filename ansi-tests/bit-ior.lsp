@@ -228,11 +228,7 @@
      x y z))
   #*0 2 1 2)
 
-(deftest bit-ior.fold.1
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (bit-ior #*00101 #*10100)))
-    (values (%f) (let ((bv (%f))) (setf (elt bv 0) 0) bv) (%f)))
-  #*10101 #*00101 #*10101)
+(def-fold-test bit-ior.fold.1 (bit-ior #*00101 #*10100))
 
 ;;; Error tests
 

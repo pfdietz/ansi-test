@@ -818,20 +818,14 @@
 
 ;;; Constant folding tests
 
-(deftest substitute-if-not.fold.1
-  (flet ((%f () (substitute-if-not 'z 'identity '(a nil b))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'd) seq) (%f)))
-  (a z b) (d z b) (a z b))
-
-(deftest substitute-if-not.fold.2
-  (flet ((%f () (substitute-if-not 'z 'identity #(a nil b))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'd) seq) (%f)))
-  #(a z b) #(d z b) #(a z b))
-
-(deftest substitute-if-not.fold.3
-  (flet ((%f () (substitute-if-not 0 'zerop #*100110)))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
-  #*000000 #*100000 #*000000)
+(def-fold-test substitute-if-not.fold.1
+  (substitute-if-not 'z 'identity '(a nil b)))
+(def-fold-test substitute-if-not.fold.2
+  (substitute-if-not 'z 'identity #(a nil b)))
+(def-fold-test substitute-if-not.fold.3
+  (substitute-if-not 0 'zerop #*100110))
+(def-fold-test substitute-if-not.fold.4
+  (substitute-if-not #\0 #'digit-char-p "asdaw82213nn1239123dd"))
 
 ;;; Error cases
 

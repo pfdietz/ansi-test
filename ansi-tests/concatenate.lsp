@@ -289,35 +289,14 @@
 
 ;;; Constant folding tests
 
-(deftest concatenate.fold.1
-  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
-	     (concatenate 'list '(a b) '(c d))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  (a b c d) (z b c d) (a b c d))
-
-(deftest concatenate.fold.2
-  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
-	     (concatenate 'vector '(a b) '(c d))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  #(a b c d) #(z b c d) #(a b c d))
-
-(deftest concatenate.fold.3
-  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
-	     (concatenate 'bit-vector '(0 0) '(1 0 1))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
-  #*00101 #*10101 #*00101)
-
-(deftest concatenate.fold.4
-  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
-	     (concatenate 'string "ab" "cd")))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) #\z) seq) (%f)))
-  "abcd" "zbcd" "abcd")
-
-(deftest concatenate.fold.5
-  (flet ((%f () (declaim (optimize speed (safety 0) (space 0)))
-	     (concatenate 'list '(a b c d))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  (a b c d) (z b c d) (a b c d))
+(def-fold-test concatenate.fold.1 (concatenate 'list '(a b) '(c d)))
+(def-fold-test concatenate.fold.2 (concatenate 'vector '(a b) '(c d)))
+(def-fold-test concatenate.fold.3 (concatenate 'bit-vector '(0 0) '(1 0 1)))
+(def-fold-test concatenate.fold.4 (concatenate 'string "ab" "cd"))
+(def-fold-test concatenate.fold.5 (concatenate 'list '(a b c d)))
+(def-fold-test concatenate.fold.6 (concatenate 'vector #(a b c d)))
+(def-fold-test concatenate.fold.7 (concatenate 'bit-vector #*110101101))
+(def-fold-test concatenate.fold.8 (concatenate 'string "abcdef"))
   
 ;;; Error tests
 

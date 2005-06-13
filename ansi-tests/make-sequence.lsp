@@ -502,4 +502,15 @@
      i a b c d e))
   (a a a a a) 5 1 2 3 4 5)
 
+;;; Const fold tests
+
+(def-fold-test make-sequence.fold.1
+  (make-sequence 'list 5 :initial-element 'a))
+(def-fold-test make-sequence.fold.2
+  (make-sequence 'vector 5 :initial-element 'a))
+(def-fold-test make-sequence.fold.3
+  (make-sequence 'bit-vector 5 :initial-element 0))
+(def-fold-test make-sequence.fold.4
+  (make-sequence 'string 5 :initial-element #\a))
+
 ;;; FIXME: Add tests for upgrading of character subtypes

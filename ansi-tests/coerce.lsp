@@ -143,19 +143,9 @@
 ;;; If the coerce call is folded to a constant, this will fail
 ;;; when that constant is modified.
 
-(deftest coerce.fold.1
-  (flet ((%f () (declare (optimize speed (safety 0)))
-	    (coerce '(1 2 3) 'vector)))
-    (values
-     (%f)
-     (let ((v (%f)))
-       (setf (aref v 0) 0)
-       v)
-     (%f)))
-  #(1 2 3)
-  #(0 2 3)
-  #(1 2 3))
-  
+(def-fold-test coerce.fold.1 (coerce '(1 2 3) 'vector))
+(def-fold-test coerce.fold.2 (coerce '(1 0 1) 'bit-vector))
+(def-fold-test coerce.fold.3 (coerce '(#\a #\b #\c) 'string))
 
 ;;; Error tests
 

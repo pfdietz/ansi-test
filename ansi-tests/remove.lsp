@@ -463,101 +463,20 @@
 
 ;;; Const fold tests
 
-(deftest remove.fold.1
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove 'c '(a b c d e))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  (a b d e)
-  (z b d e)
-  (a b d e))
+(def-fold-test remove.fold.1 (remove 'c '(a b c d e)))
+(def-fold-test remove.fold.2 (remove 'c #(a b c d e)))
+(def-fold-test remove.fold.3 (remove 1 #*0011011001))
+(def-fold-test remove.fold.4 (remove #\c "abcde"))
 
-(deftest remove.fold.2
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove 'c #(a b c d e))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  #(a b d e)
-  #(z b d e)
-  #(a b d e))
+(def-fold-test remove-if.fold.1 (remove-if 'null '(a b nil d e)))
+(def-fold-test remove-if.fold.2 (remove-if #'null #(a b nil d e)))
+(def-fold-test remove-if.fold.3 (remove-if 'plusp #*0011011001))
+(def-fold-test remove-if.fold.4 (remove-if 'digit-char-p "ab0de"))
 
-(deftest remove.fold.3
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove 1 #*0011011001)))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
-  #*00000
-  #*10000
-  #*00000)
-
-(deftest remove.fold.4
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove #\c "abcde")))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) #\z) seq) (%f)))
-  "abde"
-  "zbde"
-  "abde")
-
-(deftest remove-if.fold.1
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if 'null '(a b nil d e))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  (a b d e)
-  (z b d e)
-  (a b d e))
-
-(deftest remove-if.fold.2
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if #'null #(a b nil d e))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  #(a b d e)
-  #(z b d e)
-  #(a b d e))
-
-(deftest remove-if.fold.3
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if 'plusp #*0011011001)))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
-  #*00000
-  #*10000
-  #*00000)
-
-(deftest remove-if.fold.4
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if 'digit-char-p "ab0de")))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) #\z) seq) (%f)))
-  "abde"
-  "zbde"
-  "abde")
-
-(deftest remove-if-not.fold.1
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if-not #'identity '(a b nil d e))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  (a b d e)
-  (z b d e)
-  (a b d e))
-
-(deftest remove-if-not.fold.2
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if-not 'identity #(a b nil d e))))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 'z) seq) (%f)))
-  #(a b d e)
-  #(z b d e)
-  #(a b d e))
-
-(deftest remove-if-not.fold.3
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if-not #'zerop #*0011011001)))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) 1) seq) (%f)))
-  #*00000
-  #*10000
-  #*00000)
-
-(deftest remove-if-not.fold.4
-  (flet ((%f () (declare (optimize speed (safety 0) (space 0)))
-	     (remove-if-not #'alpha-char-p "ab-de")))
-    (values (%f) (let ((seq (%f))) (setf (elt seq 0) #\z) seq) (%f)))
-  "abde"
-  "zbde"
-  "abde")
+(def-fold-test remove-if-not.fold.1 (remove-if-not #'identity '(a b nil d e)))
+(def-fold-test remove-if-not.fold.2 (remove-if-not 'identity #(a b nil d e)))
+(def-fold-test remove-if-not.fold.3 (remove-if-not #'zerop #*0011011001))
+(def-fold-test remove-if-not.fold.4 (remove-if-not #'alpha-char-p "ab-de"))
 
 ;;; Order of evaluation tests
 

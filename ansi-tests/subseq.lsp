@@ -283,15 +283,10 @@
 
 ;;; Constant folding
 
-(deftest subseq.fold.1
-  (flet ((%f () (subseq '(1 2 3) 0)))
-    (values
-     (%f)
-     (let ((seq (%f))) (setf (elt seq 0) 0) seq)
-     (%f)))
-  (1 2 3)
-  (0 2 3)
-  (1 2 3))
+(def-fold-test subseq.fold.1 (subseq '(1 2 3) 0))
+(def-fold-test subseq.fold.2 (subseq #(1 2 3) 0))
+(def-fold-test subseq.fold.3 (subseq #*011101 0))
+(def-fold-test subseq.fold.4 (subseq "abcdef" 0))
 
 ;;; Error cases
 

@@ -168,25 +168,10 @@
 
 ;;; Constant folding tests
 
-(deftest reverse.fold.1
-  (flet ((%f () (reverse '(a b c))))
-    (values
-     (%f)
-     (let ((seq (%f))) (setf (elt seq 0) 'z) seq)
-     (%f)))
-  (c b a)
-  (z b a)
-  (c b a))
-
-(deftest reverse.fold.2
-  (flet ((%f () (reverse #(a b c))))
-    (values
-     (%f)
-     (let ((seq (%f))) (setf (elt seq 0) 'z) seq)
-     (%f)))
-  #(c b a)
-  #(z b a)
-  #(c b a))
+(def-fold-test reverse.fold.1 (reverse '(a b c)))
+(def-fold-test reverse.fold.2 (reverse #(a b c)))
+(def-fold-test reverse.fold.3 (reverse #*00111101011011))
+(def-fold-test reverse.fold.4 (reverse "abcdefgh"))
 
 ;;; Error cases
 

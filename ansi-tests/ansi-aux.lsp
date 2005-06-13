@@ -1155,3 +1155,13 @@ the condition to go uncaught if it cannot be classified."
 				  (string x))
 			 t)
 		    (type-error () nil))))
+
+(defmacro def-fold-test (name form)
+  "Create a test that FORM, which should produce a fresh value,
+   does not improperly introduce sharing during constant folding."
+  `(deftest ,name
+     (flet ((%f () (declare (optimize (speed 3) (safety 0) (space 0)
+				      (compilation-speed 0) (debug 0)))
+	       ,form))
+       (eq (%f) (%f)))
+     nil))
