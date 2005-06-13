@@ -138,6 +138,8 @@
      i a b c))
   "aBcdef" 3 1 2 3)
 
+(def-fold-test string-capitalize.fold.1 (string-capitalize "ABCDE"))
+
 ;;; Error cases
 
 (deftest string-capitalize.error.1

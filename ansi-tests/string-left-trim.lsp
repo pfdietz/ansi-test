@@ -214,6 +214,8 @@
      i x y))
   "abc d e f  " 2 1 2)
 
+(def-fold-test string-left-trim.fold.1 (string-left-trim " " " abcd"))
+
 ;;; Error cases
 
 (deftest string-left-trim.error.1

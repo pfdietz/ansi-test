@@ -143,6 +143,8 @@
     (values (string (progn (incf i) "")) i))
   "" 1)
 
+(def-fold-test string.fold.1 (string #\A))
+
 ;;; Error tests
 
 (deftest string.error.1

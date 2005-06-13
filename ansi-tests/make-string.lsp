@@ -85,6 +85,8 @@
      (equalt s "")))
   t t t)
 
+(def-fold-test make-string.fold.1 (make-string 5 :initial-element #\a))
+
 ;;; Keyword tests
 ;
 (deftest make-string.allow-other-keys.1

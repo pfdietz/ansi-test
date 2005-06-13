@@ -134,6 +134,8 @@
      i a b c))
   "AbcdEF" 3 1 2 3)
 
+(def-fold-test string-downcase.fold.1 (string-downcase "ABCDE"))
+
 ;;; Error cases
 
 (deftest string-downcase.error.1

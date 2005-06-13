@@ -133,6 +133,10 @@
       :start (progn (setf c (incf i)) 1))
      i a b c))
   "aBCDef" 3 1 2 3)
+
+;;; Const fold tests
+
+(def-fold-test string-upcase.fold.1 (string-upcase "abcde"))
   
 ;;; Error tests
 
