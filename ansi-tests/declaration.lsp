@@ -27,6 +27,12 @@
 ;;;  structure, condition, or type, when the symbol has been
 ;;;  declared as a declaration name, or vice versa, signals an error."
 
+;;; Declare these only if bad declarations produce warnings.
+
+(when (block done
+	(handler-bind ((warning #'(lambda (c) (return-from done t))))
+		      (eval `(let () (declare (,(gensym))) nil))))
+
 (deftest declaration.4
   (let ((sym (gensym)))
     (proclaim `(declaration ,sym))
@@ -54,7 +60,7 @@
 
 (deftest declaration.8
   (let ((sym (gensym)))
-    (eval `(deftype ,sym () error))
+    (eval `(deftype ,sym () 'error))
     (eval `(signals-error-always (proclaim '(declaration ,sym))
 				 error)))
   t t)
@@ -79,6 +85,8 @@
     (eval `(signals-error-always (proclaim '(declaration ,sym))
 				 error)))
   t t)
+
+)
 
 
 
