@@ -213,6 +213,8 @@
      i x y))
   "   abc d e f" 2 1 2)
 
+(def-fold-test string-right-trim.fold.1 (string-right-trim " " "abcd "))
+
 ;;; Error cases
 
 (deftest string-right-trim.error.1
