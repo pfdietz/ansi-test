@@ -363,6 +363,8 @@
 	#'<)
   (1 1 2 2 3 3))
 
+(def-fold-test union.fold.1 (union '(a b c d e) '(d x y a w c)))
+
 ;;; Error tests
 
 (deftest union.error.1

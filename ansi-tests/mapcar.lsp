@@ -80,6 +80,11 @@
   ((a 1) (b 2) (c 3))
   3 1 2 3)
 
+(def-fold-test mapcar.fold.1 (mapcar 'identity '(a b c d)))
+(def-fold-test mapcar.fold.2 (mapcar 'not '(t nil nil t t)))
+
+;;; Error tests
+
 (deftest mapcar.error.1
   (check-type-error #'(lambda (x) (mapcar #'identity x)) #'listp)
   nil)

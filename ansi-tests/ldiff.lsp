@@ -105,7 +105,10 @@
 	    (progn (setf y (incf i))
 		   'd))
      i x y))
-  (a b c) 2 1 2)       
+  (a b c) 2 1 2)
+
+(def-fold-test ldiff.fold.1 (ldiff '(a b c) 'x))
+(def-fold-test ldiff.fold.2 (let ((x '(a b c))) (ldiff x (cddr x))))
 
 ;; Error checking
 

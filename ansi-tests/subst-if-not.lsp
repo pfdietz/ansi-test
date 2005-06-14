@@ -53,6 +53,8 @@
      i w x y z))
   (1 2 a a c)
   4 1 2 3 4)
+
+(def-fold-test subst-if-not.fold.1 (subst-if-not 'a #'consp '((1 . 2) 3 . 4)))
   
 ;;; Keywords tests for subst-if-not
 

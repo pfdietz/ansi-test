@@ -47,6 +47,11 @@
   ((a . b)(c . d))
   3 1 2 3)
 
+(def-fold-test acons.fold.1 (acons 'x 'y nil))
+(def-fold-test acons.fold.2 (acons 1 2 '((3 . 4) (5 . 6))))
+
+;;; Error tests
+
 (deftest acons.error.1
   (signals-error (acons) program-error)
   t)

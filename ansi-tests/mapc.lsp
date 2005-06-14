@@ -46,11 +46,6 @@
      x))
   ((a a a a a) 3))
 
-(defvar *mapc.6-var* nil)
-(defun mapc.6-fun (x)
-  (push x *mapc.6-var*)
-  x)
-
 (deftest mapc.6
   (let* ((x (copy-list '(a b c d e f g h)))
 	 (xcopy (make-scaffold-copy x)))
@@ -72,6 +67,8 @@
 		  '(1 2 3)))
      i x y z))
   (a b c) 3 1 2 3)
+
+;;; Error tests
 
 (deftest mapc.error.1
   (check-type-error #'(lambda (x) (mapc #'identity x)) #'listp)

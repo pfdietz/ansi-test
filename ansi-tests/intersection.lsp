@@ -349,6 +349,8 @@
    #'<)
   (3 4))
 
+(def-fold-test intersection.fold.1 (intersection '(a b c d e f) '(d w a x b y)))
+
 ;;; Error tests
 
 (deftest intersection.error.1

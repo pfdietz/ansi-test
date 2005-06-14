@@ -36,6 +36,8 @@
   (let ((i 0)) (values (cons (incf i) (incf i)) i))
   (1 . 2) 2)
 
+(def-fold-test cons.fold.1 (cons 'a 'b))
+
 ;;; Error tests
 
 (deftest cons.error.1

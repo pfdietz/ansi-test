@@ -56,6 +56,8 @@
   (1 2 a a c)
   4 1 2 3 4)
 
+(def-fold-test subst-if.fold.1 (subst-if 'x 'numberp '(a b 3 (4) c d . 12)))
+
 ;;; Keyword tests for subst-if
 
 (deftest subst-if.allow-other-keys.1

@@ -94,6 +94,11 @@
      i x y z))
   (1 2 3) 3 1 2 3)
 
+(def-fold-test maplist.fold.1 (maplist 'car '(a b c d e)))
+(def-fold-test maplist.fold.2 (maplist #'cadr '(a b c d e)))
+
+;;; Error tests
+
 (deftest maplist.error.1
   (check-type-error #'(lambda (x) (maplist #'identity x)) #'listp)
   nil)

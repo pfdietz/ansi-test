@@ -69,6 +69,10 @@
   (a a a a a)
   3 1 2 3)
 
+(def-fold-test make-list.fold.1 (make-list 1))
+(def-fold-test make-list.fold.2 (make-list 10 :initial-element 'x))
+
+;;; Error tests
 
 (deftest make-list.error.1
   (check-type-error #'make-list (typef 'unsigned-byte))

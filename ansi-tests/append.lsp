@@ -62,6 +62,11 @@
   (let ((i 0)) (values (append (incf i)) i))
   1 1)
 
+(def-fold-test append.fold.1 (append '(a b c) nil))
+(def-fold-test append.fold.2 (append nil '(x) nil))
+
+;;; Error tests
+
 (deftest append.error.1
   (signals-error (append '(a . b) '(z))
 		 type-error)

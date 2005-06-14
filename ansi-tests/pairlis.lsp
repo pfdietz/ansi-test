@@ -63,6 +63,10 @@
        t))
   t)
 
+(def-fold-test pairlis.fold.1 (pairlis '(a b) '(c d)))
+
+;;; Error tests
+
 (deftest pairlis.error.1
   (signals-error (pairlis) program-error)
   t)

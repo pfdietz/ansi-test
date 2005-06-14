@@ -76,6 +76,12 @@
      i))
   (a b c) 1)
 
+(def-fold-test butlast.fold.1 (butlast '(a b) 1))
+(def-fold-test butlast.fold.2 (butlast '(a b c d e f) 3))
+(def-fold-test butlast.fold.3 (butlast '(a b c d e f g h i) 7))
+
+;;; Error tests
+
 (deftest butlast.error.1
   (signals-error (butlast (copy-tree '(a b c d)) 'a)
 		 type-error)

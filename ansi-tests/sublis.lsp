@@ -116,6 +116,10 @@
   (z b c d)
   4 1 2 3 4)
 
+;;; Const fold tests
+
+(def-fold-test sublis.fold.1 (sublis '((a . b)) '(a x y . a)))
+
 
 ;;; Keyword tests
 

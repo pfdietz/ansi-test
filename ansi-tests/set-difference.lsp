@@ -270,6 +270,8 @@
    #'<)
   nil)
 
+(def-fold-test set-difference.fold.1 (set-difference '(a b c d e f g h) '(b w h x e y)))
+
 ;;; Error tests
 
 

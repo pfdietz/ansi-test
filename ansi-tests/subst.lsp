@@ -107,7 +107,9 @@
   ((10 b . b) b b c ((b)) z)
   5 1 2 3 4 5)
 
+;;; Const fold tests
 
+(def-fold-test subst.fold.1 (subst 'a 'b '(a b c (a . b) . a)))
 
 ;;; Keyword tests for subst
 

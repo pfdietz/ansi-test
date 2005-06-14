@@ -617,3 +617,8 @@
     (cons nil (rev-assoc-list (cdr x))))
    (t
     (acons (cdar x) (caar x) (rev-assoc-list (cdr x))))))
+
+(defvar *mapc.6-var* nil)
+(defun mapc.6-fun (x)
+  (push x *mapc.6-var*)
+  x)

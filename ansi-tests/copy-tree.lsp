@@ -34,6 +34,10 @@
      i))
   (a b c) 1)
 
+(def-fold-test copy-tree.fold.1 (copy-tree '(a . b)))
+(def-fold-test copy-tree.fold.2 (copy-tree '(a)))
+(def-fold-test copy-tree.fold.3 (copy-tree '(a b c d e)))
+
 ;;; Error tests
 
 (deftest copy-tree.error.1

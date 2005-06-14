@@ -34,6 +34,12 @@
 	  (incf i) (incf i) (incf i) (incf i)))
   (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16))
 
+(def-fold-test list.fold.1 (list 'a))
+(def-fold-test list.fold.2 (list 'a 'b))
+(def-fold-test list.fold.3 (list 'a 'b 'c 'd 'e 'f))
+
+;;; LIST* tests
+
 (deftest list*.1
   (list* 1 2 3)
   (1 2 . 3))
@@ -62,3 +68,7 @@
 	   (incf i) (incf i) (incf i) (incf i)
 	   (incf i) (incf i) (incf i) (incf i)))
   (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 . 16))
+
+(def-fold-test list*.fold.1 (list* 'a 'b))
+(def-fold-test list*.fold.2 (list* 'a 'b 'c))
+(def-fold-test list*.fold.3 (list* 'a 'b 'c 'd 'e 'f))

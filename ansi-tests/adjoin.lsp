@@ -133,6 +133,8 @@
   (a b c d e)
   5 1 2 3 4 5)
 
+(def-fold-test adjoin.fold.1 (adjoin 'x '(a b c nil d)))
+
 (deftest adjoin.allow-other-keys.1
   (adjoin 'a '(b c) :bad t :allow-other-keys t)
   (a b c))

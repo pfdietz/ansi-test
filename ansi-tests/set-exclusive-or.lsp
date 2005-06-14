@@ -313,6 +313,10 @@
 	#'<)
   nil)
 
+(def-fold-test set-exclusive-or.fold.1 (set-exclusive-or '(a b c d e f) '(b x e y z c)))
+
+;;; Error tests
+
 (deftest set-exclusive-or.error.1
   (signals-error (set-exclusive-or) program-error)
   t)

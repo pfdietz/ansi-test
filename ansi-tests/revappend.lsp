@@ -41,6 +41,11 @@
      i x y))
   (c b a d e f) 2 1 2)
 
+(def-fold-test revappend.fold.1 (revappend '(x) nil))
+(def-fold-test revappend.fold.2 (revappend '(x y z) nil))
+
+;;; Error tests
+
 (deftest revappend.error.1
   (signals-error (revappend) program-error)
   t)
