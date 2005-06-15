@@ -380,3 +380,38 @@
     (declare (optimize))
     (%x))
   t)
+
+(deftest macrolet.43
+  (let ((*x* nil))
+    (declare (special *x*))
+    (let ((*f* #'(lambda () *x*)))
+      (declare (special *f*))
+      (eval `(macrolet ((%m (*x*)
+			    (declare (special *f*))
+			    (funcall *f*)))
+	       (%m t)))))
+  nil)
+
+(deftest macrolet.44
+  (let ((*x* nil))
+    (declare (special *x*))
+    (let ((*f* #'(lambda () *x*)))
+      (declare (special *f*))
+      (eval `(macrolet ((%m (*x*)
+			    (declare (special *f* *x*))
+			    (funcall *f*)))
+	       (%m t)))))
+  t)
+
+(deftest macrolet.45
+  (let ((*x* nil))
+    (declare (special *x*))
+    (let ((*f* #'(lambda () *x*)))
+      (declare (special *f*))
+      (eval `(macrolet ((%m ((*x*))
+			    (declare (special *f* *x*))
+			    (funcall *f*)))
+	       (%m (t))))))
+  t)
+
+;;; TODO: more special declarations for other macrolet arguments

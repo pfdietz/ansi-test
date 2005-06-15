@@ -118,6 +118,7 @@ Got:      0
     the parent type(s).  (This came up in ABCL.)
 
 44. Add tests for SPECIAL declarations in MACROLET (requested by piso on #lisp)
+  (partially done)
 
 45. Test (WARN (FORMATTER ...)) (and check that FORMATTER functions work with
   other error signaling functions.)
