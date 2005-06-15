@@ -131,7 +131,7 @@
 (deftest slot-value.error.5
   (let ((built-in-class (find-class 'built-in-class))
 	(slot-name (gensym)))
-    (loop for e in *mini-universe*
+    (loop for e in *universe*
 	  for class = (class-of e)
 	  when (and (eq (class-of class) built-in-class)
 		    (handler-case (progn (slot-value e slot-name) t)
@@ -142,7 +142,7 @@
 (deftest slot-value.error.6
   (let ((built-in-class (find-class 'built-in-class))
 	(slot-name (gensym)))
-    (loop for e in *mini-universe*
+    (loop for e in *universe*
 	  for class = (class-of e)
 	  when (and (eq (class-of class) built-in-class)
 		    (handler-case (setf (slot-value e slot-name) t)

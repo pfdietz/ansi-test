@@ -39,13 +39,9 @@
   t)
 
 (deftest make-instance.error.6
-  (let ((classes (remove-duplicates
-		  (remove-if-not
-		   #'(lambda (cl) (typep cl 'built-in-class))
-		   (mapcar #'class-of *universe*)))))
-    (loop for cl in classes
-	  unless (eval `(signals-error (make-instance ',cl) error))
-	  collect cl))
+  (loop for cl in *built-in-classes*
+	unless (eval `(signals-error (make-instance ',cl) error))
+	collect cl)
   nil)
 
 ;; Definitions of methods

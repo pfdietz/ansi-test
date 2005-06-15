@@ -465,7 +465,8 @@
 	(macro-function 'cond)
 	#'meaningless-user-function-for-universe
 	#'meaningless-user-generic-function-for-universe
-	#'(lambda (x) x)))
+	#'(lambda (x) x)
+	(compile nil '(lambda (x) x))))
 
 (defparameter *methods*
   (list
@@ -524,3 +525,10 @@
 		  *methods*))
     '(;;; Others to fill in gaps
       1.2s0 1.3f0 1.5d0 1.8l0 3/5 10000000000000000000000))))
+
+(defparameter *classes*
+  (remove-duplicates (mapcar #'class-of *universe*)))
+
+(defparameter *built-in-classes*
+  (remove-if-not #'(lambda (x) (typep x 'built-in-class))
+		 *classes*))

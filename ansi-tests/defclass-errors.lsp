@@ -168,3 +168,24 @@
 	 (,option nil))
        program-error)))
   t)
+
+(deftest defclass.error.23
+  (loop for cl in *built-in-classes*
+	for name = (class-name cl)
+	unless (or (not name)
+		   (handler-case
+		    (progn (eval `(defclass ,(gensym) (,name))) nil)
+		    (error (c) c)))
+	collect (list cl name))
+  nil)
+
+(deftest defclass.error.24
+  (loop for cl in *built-in-classes*
+	for name = (class-name cl)
+	unless (or (not name)
+		   (handler-case
+		    (progn (eval `(defclass ,name ())))
+		    (error (c) c)))
+	collect (list cl name))
+  nil)
+
