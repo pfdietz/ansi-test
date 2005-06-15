@@ -164,6 +164,14 @@
        append (check-equivalence sym class))
   nil)
 
+(deftest all-classes-are-type-equivalent-to-their-names.2
+  (loop for x in *universe*
+	for cl = (class-of x)
+	for name = (class-name cl)
+	when name
+	append (check-equivalence name cl))
+  nil)
+
 ;;; Check that all class names in CL that name standard-classes or
 ;;; structure-classes are subtypes of standard-object and structure-object,
 ;;; respectively
@@ -178,6 +186,14 @@
 	collect sym)
   nil)
 
+(deftest all-standard-classes-are-subtypes-of-standard-object.2
+  (loop for x in *universe*
+	for class = (class-of x)
+	when (and (typep class 'standard-class)
+		  (not (subtypep class 'standard-object)))
+	collect x)
+  nil)
+
 (deftest all-structure-classes-are-subtypes-of-structure-object
   (loop for sym being the external-symbols of "COMMON-LISP"
 	for class = (find-class sym nil)
@@ -186,6 +202,14 @@
 		  (or (not (subtypep sym 'structure-object))
 		      (not (subtypep class 'structure-object))))
 	collect sym)
+  nil)
+
+(deftest all-structure-classes-are-subtypes-of-structure-object.2
+  (loop for x in *universe*
+	for cl = (class-of x)
+	when (and (typep cl 'structure-class)
+		  (not (subtypep cl 'structure-object)))
+	collect x)
   nil)
 		  
 ;;; Confirm that only the symbols exported from CL that are supposed
