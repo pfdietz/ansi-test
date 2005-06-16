@@ -71,18 +71,8 @@ Got:      0
   :notes and the :notes comment is printed out.  This will help explain
   what the failures mean.
 
-26. Test that various builtin functions, when compiled with type declarations
-  on parameters, do the right thing.  Probably the best way to do this is
-  a collection of random test harnesses.
-
 28. Add tests for reading/printing with packages with weird names (lower case letters,
   digits, etc.)
-
-29. There are many opportunities for random testing of string/list/sequence functions,
-  comparing APPLY/FUNCALL of the functions vs. evaluation of compiled forms in which
-  some of the arguments have declared types, or are given as constants in the form
-  to be compiled.  This will exercise type-sensitive and context sensitive parts
-  of the compiler (and compiler macros).
 
 30. Add more pathname equality tests to equal.lsp
 
@@ -107,7 +97,6 @@ Got:      0
 39. There are various constraints that things defined at the top level become
   available at compile time.  Test these constraints.
 
-
 40, Check that OPEN, etc. do pathname merging.
 
 41. Add tests for MOD, REM
@@ -119,6 +108,3 @@ Got:      0
 
 44. Add tests for SPECIAL declarations in MACROLET (requested by piso on #lisp)
   (partially done)
-
-45. Test (WARN (FORMATTER ...)) (and check that FORMATTER functions work with
-  other error signaling functions.)
