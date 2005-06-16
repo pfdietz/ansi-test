@@ -77,6 +77,35 @@
     (cdr y))
   (a b))
 
+(deftest dynamic-extent.12
+  (let* ((contents '(1 0 0 1 1 0 1 1 0 1))
+	 (n (length contents)))
+    (loop for i from 1 to 32
+	  for type = `(unsigned-byte ,i)
+	  for form1 = `(make-array '(,n) :initial-contents ',contents
+				   :element-type ',type)
+	  for form2 = `(let ((a ,form1))
+			 (declare (dynamic-extent a))
+			 (declare (type (simple-array ,type (,n))))
+			 (declare (notinline coerce))
+			 (declare (optimize speed (safety 0)))
+			 (equal (coerce a 'list) ',contents))
+	  unless (funcall (compile nil `(lambda () ,form2)))
+	  collect i))
+  nil)
+
+(deftest dynamic-extent.13
+  (let ((s (make-string 10 :initial-element #\a)))
+    (declare (dynamic-extent s) (optimize speed (safety 0)))
+    (notnot (every #'(lambda (c) (eql c #\a)) s)))
+  t)
+
+(deftest dynamic-extent.14
+  (let ((s (make-string 10 :initial-element #\a
+			:element-type 'base-char)))
+    (declare (dynamic-extent s) (notinline every) (optimize speed (safety 0)))
+    (notnot (every #'(lambda (c) (eql c #\a)) s)))
+  t)
 
 
 
