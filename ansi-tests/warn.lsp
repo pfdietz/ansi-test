@@ -159,3 +159,17 @@
 (deftest warn.18
   (signals-error (warn (make-condition 'simple-error)) type-error)
   t)
+
+(deftest warn.19
+  (let ((warned nil))
+    (handler-bind
+     ((warning #'(lambda (c)
+		   (assert (typep c 'simple-warning))
+		   (setf warned t)
+		   (muffle-warning c))))
+     (values
+      (multiple-value-list
+       (warn (make-condition 'simple-warning
+			     :format-control (formatter "Foo!"))))
+      warned)))
+  (nil) t)

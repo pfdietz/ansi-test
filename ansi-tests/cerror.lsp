@@ -19,6 +19,13 @@
 		  (simple-error (c) (frob-simple-error c fmt))))
   t)
 
+(deftest cerror.2a
+  (let* ((fmt (formatter "Cerror"))
+	 (cnd (make-condition 'simple-error :format-control fmt)))
+    (handler-case (cerror "Continue on." cnd)
+		  (simple-error (c) (frob-simple-error c fmt))))
+  t)
+
 (deftest cerror.3
   (let ((fmt "Cerror"))
     (handler-case (cerror "Continue" 'simple-error :format-control fmt)
@@ -27,6 +34,12 @@
 
 (deftest cerror.4
   (let ((fmt "Cerror: ~A"))
+    (handler-case (cerror "On on" fmt 10)
+		  (simple-error (c) (frob-simple-error c fmt 10))))
+  t)
+
+(deftest cerror.4a
+  (let ((fmt (formatter "Cerror: ~A")))
     (handler-case (cerror "On on" fmt 10)
 		  (simple-error (c) (frob-simple-error c fmt 10))))
   t)
@@ -46,6 +59,7 @@
 		  10))
   10)
 
+;;; Program error cases
 
 (deftest cerror.error.1
   (signals-error (cerror) program-error)
