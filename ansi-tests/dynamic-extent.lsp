@@ -11,31 +11,33 @@
 
 (deftest dynamic-extent.2
   (let ((x 'a))
-    (declare (dynamic-extent x))
+    (declare (dynamic-extent x) (optimize speed (safety 0)))
     x)
   a)
 
 (deftest dynamic-extent.3
   (let ((x (list 'a 'b 'c)))
-    (declare (dynamic-extent x))
+    (declare (dynamic-extent x) (optimize speed (safety 0)))
     (length x))
   3)
 
 (deftest dynamic-extent.4
   (let ((x (vector 'a 'b 'c)))
-    (declare (dynamic-extent x))
+    (declare (dynamic-extent x) (optimize speed (safety 0)))
     (length x))
   3)
 
 (deftest dynamic-extent.5
   (flet ((%f (x) (list 'a x)))
-    (declare (dynamic-extent (function %f)))
+    (declare (dynamic-extent (function %f))
+	     (optimize speed (safety 0)))
     (mapcar #'%f '(1 2 3)))
   ((a 1) (a 2) (a 3)))
 
 (deftest dynamic-extent.6
   (labels ((%f (x) (list 'a x)))
-    (declare (dynamic-extent (function %f)))
+    (declare (dynamic-extent (function %f))
+	     (optimize speed (safety 0)))
     (mapcar #'%f '(1 2 3)))
   ((a 1) (a 2) (a 3)))
 
@@ -43,20 +45,23 @@
   (labels ((%f (x) (if (consp x)
 		       (cons (%f (car x)) (%f (cdr x)))
 		     '*)))
-    (declare (dynamic-extent (function %f)))
+    (declare (dynamic-extent (function %f))
+	     (optimize speed (safety 0)))
     (mapcar #'%f '((1) 2 (3 4 5))))
   ((* . *) * (* * * . *)))
 
 (deftest dynamic-extent.8
   (let ((x (+ most-positive-fixnum 2)))
-    (declare (dynamic-extent x))
+    (declare (dynamic-extent x)
+	     (optimize speed (safety 0)))
     (1- x))
   #.(1+ most-positive-fixnum))
 
 (deftest dynamic-extent.9
   (flet ((f () (list 'a 'b)))
     (let ((f (list 'c 'd)))
-      (declare (dynamic-extent (function f)))
+      (declare (dynamic-extent (function f))
+	       (optimize speed (safety 0)))
       f))
   (c d))
 
@@ -64,7 +69,8 @@
   (let ((x nil))
     (values
      x
-     (locally (declare (dynamic-extent x) (notinline length))
+     (locally (declare (dynamic-extent x) (notinline length)
+		       (optimize speed (safety 0)))
 	      (setq x (list 'a 'b 'c 'd 'e))
 	      (prog1 (length x) (setq x t)))
      x))
@@ -73,7 +79,8 @@
 (deftest dynamic-extent.11
   (let* ((x (list 'a 'b))
 	 (y (cons 'c x)))
-    (declare (dynamic-extent y))
+    (declare (dynamic-extent y)
+	     (optimize speed (safety 0)))
     (cdr y))
   (a b))
 
