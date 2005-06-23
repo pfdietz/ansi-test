@@ -184,7 +184,7 @@
 	for name = (class-name cl)
 	unless (or (not name)
 		   (handler-case
-		    (progn (eval `(defclass ,name ())))
+		    (progn (eval `(defclass ,name ())) nil)
 		    (error (c) c)))
 	collect (list cl name))
   nil)
