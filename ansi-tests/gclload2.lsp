@@ -47,10 +47,7 @@
 (load "load-strings.lsp")
 
 ;;; Tests for character functions
-(compile-and-load "char-aux.lsp")
-(load "character.lsp")
-(load "char-compare.lsp")
-(load "name-char.lsp")
+(load "load-characters.lsp")
 
 ;;; Tests of pathnames
 (load "load-pathnames.lsp")
@@ -75,8 +72,4 @@
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
-(load "misc.lsp")
-
-;;; Misc. tests dealing with type propagation in CMUCL
-(load "misc-cmucl-type-prop.lsp")
-
+(load "load-misc.lsp")
