@@ -28,13 +28,19 @@
 (deftest make-condition.3
   (let* ((tp '(or program-error type-error))
 	 (c (make-condition tp)))
-    (notnot-mv (typep c tp)))
+    (or (not (and (subtypep tp condition)
+		  (or (subtypep 'program-error tp)
+		      (subtypep 'type-error tp))))
+	(notnot-mv (typep c tp))))
   t)
 
 (deftest make-condition.4
   (let* ((tp '(and simple-error type-error))
 	 (c (make-condition tp)))
-    (notnot-mv (typep c tp)))
+    (or (not (and (subtypep 'simple-error tp)
+		  (subtypep 'type-error tp)
+		  (subtypep tp 'condition)))
+	(notnot-mv (typep c tp))))
   t)
 
 ;;; Error tests
