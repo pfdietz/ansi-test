@@ -82,6 +82,8 @@
      i a b))
   z 2 1 2)
 
+;;; Error tests
+
 (deftest compile.error.1
   (signals-error (compile) program-error)
   t)
