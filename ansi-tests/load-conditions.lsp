@@ -1,4 +1,6 @@
 ;;; Tests of conditions
+(compile-and-load "types-aux.lsp")
+(compile-and-load "define-condition-aux.lsp")
 (load "condition.lsp")
 (load "cell-error-name.lsp")
 (load "assert.lsp")
@@ -10,7 +12,6 @@
 (load "handler-bind.lsp")
 (load "handler-case.lsp")
 (load "ignore-errors.lsp")
-(compile-and-load "define-condition-aux.lsp")
 (load "define-condition.lsp")
 (load "compute-restarts.lsp")
 (load "restart-bind.lsp")
