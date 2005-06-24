@@ -22,3 +22,4 @@
 (load "continue.lsp")
 (load "store-value.lsp")
 (load "use-value.lsp")
+(load "make-condition.lsp")
