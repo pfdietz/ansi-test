@@ -174,11 +174,13 @@
 	(t (apply #'warn args)))
   nil)
 
-(defun do-test (&optional (name *test*)
-		&key 
-		((:catch-errors *catch-errors*) *catch-errors*)
-		((:compile *compile-tests*) *compile-tests*))
-  (do-entry (get-entry name)))
+(defun do-test (&optional (name *test*) &rest key-args)
+  (flet ((%parse-key-args
+	  (&key
+	   ((:catch-errors *catch-errors*) *catch-errors*)
+	   ((:compile *compile-tests*) *compile-tests*))
+	  (do-entry (get-entry name))))
+    (apply #'%parse-key-args key-args)))
 
 (defun my-aref (a &rest args)
   (apply #'aref a args))
