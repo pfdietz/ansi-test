@@ -107,6 +107,12 @@
      collect (list i form)))
   nil)
 
+(deftest multiple-value-setq.13
+  (multiple-value-setq nil :good)
+  :good)
+
+;;; Error tests
+
 (deftest multiple-value-setq.error.1
   (signals-error (funcall (macro-function 'multiple-value-setq))
 		 program-error)
