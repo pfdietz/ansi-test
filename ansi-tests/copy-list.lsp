@@ -27,6 +27,9 @@
 	    i))
   (a b c) 1)
 
+(def-fold-test copy-list.fold.1 (copy-list '(a b c d)))
+(def-fold-test copy-list.fold.2 (copy-list '(a . b)))
+
 ;;; Error tests
 
 (deftest copy-list.error.1
