@@ -24,10 +24,11 @@
 ;;; the local function declaration
 (deftest labels.4
   (block %f
-    (labels ((%f (&optional (x (return-from %f 10)))
-	       20))
-      (%f)))
-  10)
+    (labels ((%f (&optional (x (return-from %f :good)))
+	       nil))
+      (%f)
+      :bad))
+  :good)
 
 (deftest labels.5
   (labels ((%f () (return-from %f 15) 35))
