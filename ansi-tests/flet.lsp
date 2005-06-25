@@ -24,10 +24,11 @@
 ;;; the local function declaration
 (deftest flet.4
   (block %f
-    (flet ((%f (&optional (x (return-from %f 10)))
-	       20))
-      (%f)))
-  10)
+    (flet ((%f (&optional (x (return-from %f :good)))
+	       nil))
+      (%f)
+      :bad))
+  :good)
 
 (deftest flet.5
   (flet ((%f () (return-from %f 15) 35))
