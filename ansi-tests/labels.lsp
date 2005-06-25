@@ -30,6 +30,17 @@
       :bad))
   :good)
 
+;;; Keyword parameter initializers are not in the blocked defined
+;;; by the local function declaration
+
+(deftest labels.4a
+  (block %f
+    (labels ((%f (&key (x (return-from %f :good)))
+	       nil))
+      (%f)
+      :bad))
+  :good)
+
 (deftest labels.5
   (labels ((%f () (return-from %f 15) 35))
     (%f))
@@ -41,7 +52,8 @@
   (block %f
     (labels ((%f (&aux (x (return-from %f 10)))
 	       20))
-      (%f)))
+      (%f)
+      :bad))
   10)
 
 ;;; The function is visible inside itself
@@ -55,6 +67,22 @@
 
 (deftest labels.7b
   (labels ((%f (x &aux (b (%g x))) b)
+	   (%g (y) (+ y y)))
+    (%f 10))
+  20)
+
+;;; Scope of defined function names includes &OPTIONAL parameters
+
+(deftest labels.7c
+  (labels ((%f (x &optional (b (%g x))) b)
+	   (%g (y) (+ y y)))
+    (%f 10))
+  20)
+
+;;; Scope of defined function names includes &KEY parameters
+
+(deftest labels.7d
+  (labels ((%f (x &key (b (%g x))) b)
 	   (%g (y) (+ y y)))
     (%f 10))
   20)

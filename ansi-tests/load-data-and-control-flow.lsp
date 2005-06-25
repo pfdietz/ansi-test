@@ -50,6 +50,7 @@
 (load "lambda-list-keywords.lsp")
 (load "lambda-parameters-limit.lsp")
 (load "let.lsp")
+(load "letstar.lsp")
 (load "macrolet.lsp")
 (load "multiple-value-bind.lsp")
 (load "multiple-value-call.lsp") ;; include multiple-value-list

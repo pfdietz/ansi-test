@@ -30,6 +30,16 @@
       :bad))
   :good)
 
+;;; Key arguments are not in the block defined by
+;;; the local function declaration
+(deftest flet.4a
+  (block %f
+    (flet ((%f (&key (x (return-from %f :good)))
+	       nil))
+      (%f)
+      :bad))
+  :good)
+
 (deftest flet.5
   (flet ((%f () (return-from %f 15) 35))
     (%f))
