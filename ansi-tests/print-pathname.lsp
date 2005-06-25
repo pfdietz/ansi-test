@@ -23,7 +23,11 @@
 	(let ((ns (ignore-errors (namestring p))))
 	  "Read 22.1.3.11 before commenting on this test"
 	  (when ns
-	    (let ((expected-result (concatenate 'string "#P\"" ns "\""))
+	    (let ((expected-result
+                   (concatenate 'string "#P"
+                                (with-standard-io-syntax
+				 (write-to-string ns :readably nil
+						  :escape t))))
 		  (result (with-standard-io-syntax
 			   (write-to-string p :readably nil :escape t))))
 	      (unless (string= expected-result result)
