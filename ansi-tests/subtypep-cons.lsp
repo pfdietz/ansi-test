@@ -314,3 +314,8 @@
   (notnot-mv (subtypep '(cons nil nil) 'real))
   t t)
 
+(deftest subtypep.cons.38
+  (let ((t1 '(cons t (complex (real -32 0))))
+	(t2 `(not (cons t (complex (integer * -500))))))
+    (subtypep-and-contrapositive-are-consistent t1 t2))
+  t)
