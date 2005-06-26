@@ -13,72 +13,59 @@
   a)
 
 (deftest the.3
-  (loop for e in *universe*
-	for x = (multiple-value-list (eval `(the (values) (quote ,e))))
-	unless (and x (not (cdr x)) (eql (car x) e))
-	collect e)
+  (check-predicate #'(lambda (e)
+		       (let ((x (multiple-value-list (eval `(the (values) (quote ,e))))))
+			 (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.4
-  (loop for e in *universe*
-	for x = (multiple-value-list (eval `(the ,(type-of e) (quote ,e))))
-	unless (and x (not (cdr x)) (eql (car x) e))
-	collect e)
+  (check-predicate #'(lambda (e)
+		       (let ((x (multiple-value-list (eval `(the ,(type-of e) (quote ,e))))))
+			 (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.5
-  (loop for e in *universe*
-	for x = (multiple-value-list (eval `(the (values ,(type-of e))
-					      (quote ,e))))
-	unless (and x (not (cdr x)) (eql (car x) e))
-	collect e)
+  (check-predicate #'(lambda (e)
+		       (let ((x (multiple-value-list (eval `(the (values ,(type-of e)) (quote ,e))))))
+			 (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.6
-  (loop for e in *universe*
-	for x = (multiple-value-list (eval `(the (values ,(type-of e) t)
-					      (quote ,e))))
-	unless (and x (not (cdr x)) (eql (car x) e))
-	collect e)
+  (check-predicate #'(lambda (e)
+		       (let ((x (multiple-value-list (eval `(the (values ,(type-of e) t) (quote ,e))))))
+			 (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.7
-  (loop for e in *universe*
-	for x = (multiple-value-list (eval `(the (values ,(type-of e))
-					      (values (quote ,e) :ignored))))
-	unless (and (eql (length x) 2)
-		    (eql (car x) e)
-		    (eql (cadr x) :ignored))
-	collect e)
+  (check-predicate
+   #'(lambda (e)
+       (let ((x (multiple-value-list (eval `(the (values ,(type-of e))
+					      (values (quote ,e) :ignored))))))
+	 (and (eql (length x) 2)
+	      (eql (car x) e)
+	      (eql (cadr x) :ignored)))))
   nil)
 
 (deftest the.8
-  (loop for e in *universe*
-	when (and (constantp e)
-		  (not (eql (eval `(the ,(type-of e) ,e)) e)))
-	collect e)
+  (check-predicate #'(lambda (e) (or (not (constantp e))
+				     (eql (eval `(the ,(type-of e) ,e)) e))))
   nil)
 
 (deftest the.9
-  (loop for e in *universe*
-	when (and (constantp e)
-		  (not (eql (eval `(the ,(class-of e) ,e)) e)))
-	collect e)
+  (check-predicate #'(lambda (e) (or (not (constantp e))
+				     (eql (eval `(the ,(class-of e) ,e)) e))))
   nil)
 
 (deftest the.10
-  (loop for e in *universe*
-	unless (eql (eval `(the ,(class-of e) ',e)) e)
-	collect e)
+  (check-predicate #'(lambda (e) (eql (eval `(the ,(class-of e) ',e)) e)))
   nil)
 
 (deftest the.11
-  (loop for e in *universe*
-	for type = (type-of e)
-	for x = (multiple-value-list (eval `(the ,type (the ,type
-							 (quote ,e)))))
-	unless (and x (not (cdr x)) (eql (car x) e))
-	collect e)
+  (check-predicate
+   #'(lambda (e)
+       (let* ((type (type-of e))
+	      (x (multiple-value-list (eval `(the ,type (the ,type (quote ,e)))))))
+	 (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.12

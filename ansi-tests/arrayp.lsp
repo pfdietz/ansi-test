@@ -28,12 +28,7 @@
   t)
 
 (deftest arrayp.6
-  (loop for e in *universe*
-	for a = (arrayp e)
-	for b = (typep e 'array)
-	when (or (and a (not b))
-		 (and b (not a)))
-	collect e)
+  (check-type-predicate #'arrayp 'array)
   nil)
 
 (deftest arrayp.order.1

@@ -34,9 +34,7 @@
   nil)
 
 (deftest rationalp.3
-  (loop for x in *universe*
-	when (if (typep x 'rational) (not (rationalp x)) (rationalp x))
-	collect x)
+  (check-type-predicate #'rationalp 'rational)
   nil)
 
 

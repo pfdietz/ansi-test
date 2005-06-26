@@ -6,15 +6,8 @@
 (in-package :cl-test)
 
 (deftest packagep.1
-  (loop
-   for x in *universe* count
-   (unless (eqt (not (packagep x))
-		(not (typep x 'package)))
-	   (format t
-		   "(packagep ~S) = ~S, (typep x 'package) = ~S~%"
-		   x (packagep x) x (typep x 'package))
-	   t))
-  0)
+  (check-type-predicate #'packagep 'package)
+  nil)
 
 ;;; *package* is always a package
 

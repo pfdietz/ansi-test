@@ -63,12 +63,11 @@
 
 ;;; In ANSI CL, symbols and cons can no longer be functions
 (deftest functionp.10
-  (loop for x in *universe*
-	when (and (or (numberp x) (characterp x)
-		      (symbolp x) (consp x)
-		      (typep x 'array))
-		  (functionp x))
-	collect x)
+  (check-predicate #'(lambda (x)
+		       (not (and (or (numberp x) (characterp x)
+				     (symbolp x) (consp x)
+				     (typep x 'array))
+				 (functionp x)))))
   nil)
 
 (deftest functionp.11
@@ -78,6 +77,8 @@
 (deftest functionp.12
   (flet ((%f () nil)) (not-mv (functionp #'%f)))
   nil)
+
+;;; TODO: Add check-type-predicate test?
 
 (deftest functionp.order.1
   (let ((i 0))

@@ -21,7 +21,7 @@
 
 (deftest boolean-type.3
   (check-type-predicate 'is-t-or-nil 'boolean)
-  0)
+  nil)
 
 (deftest types.3
   (loop

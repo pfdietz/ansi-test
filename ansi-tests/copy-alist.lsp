@@ -25,9 +25,9 @@
        t))
   t)
 
-(def-fold-test copy-alist.1 (copy-alist '((a . b) nil (c . d))))
-(def-fold-test copy-alist.2 (car (copy-alist '((a . b) nil (c . d)))))
-(def-fold-test copy-alist.3 (caddr (copy-alist '((a . b) nil (c . d)))))
+(def-fold-test copy-alist.2 (copy-alist '((a . b) nil (c . d))))
+(def-fold-test copy-alist.3 (car (copy-alist '((a . b) nil (c . d)))))
+(def-fold-test copy-alist.4 (caddr (copy-alist '((a . b) nil (c . d)))))
 
 ;;; Error tests
 

@@ -33,10 +33,7 @@
   t)
 
 (deftest readtablep.2
-  (loop for x in *universe*
-	unless (if (typep x 'readtable) (readtablep x)
-		 (not (readtablep x)))
-	collect x)
+  (check-type-predicate #'readtablep 'readtable)
   nil)
 
 (deftest readtablep.3

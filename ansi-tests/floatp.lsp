@@ -26,12 +26,6 @@
   nil)
 
 (deftest floatp.3
-  (loop for x in *universe*
-	for vals = (multiple-value-list (floatp x))
-	unless (and (= (length vals) 1)
-		    (if (car vals)
-			(typep x 'float)
-		      (not (typep x 'float))))
-	collect x)
+  (check-type-predicate #'floatp 'float)
   nil)
 

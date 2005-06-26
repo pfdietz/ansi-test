@@ -65,12 +65,9 @@
 ;;; The next test demonstrates an incompatibility between CLtL1 and ANSI CL.
 ;;; In ANSI CL, symbols and cons can no longer also be of type FUNCTION.
 (deftest function.10
-  (loop for x in *universe*
-	when (and (or (numberp x) (characterp x)
-		      (symbolp x) (consp x)
-		      (typep x 'array))
-		  (typep x 'function))
-	collect x)
+  (check-predicate (typef '(not (and (or number character symbol
+					 cons array)
+				     function))))
   nil)
 
 (deftest function.11

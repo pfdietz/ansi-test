@@ -14,10 +14,10 @@
   nil)
 
 (deftest complement.3
-  (every #'(lambda (x) (eql (funcall (cl::complement #'not) x)
-			    (not (not x))))
-	 *universe*)
-  t)
+  (check-predicate
+   #'(lambda (x) (eql (funcall (cl::complement #'not) x)
+		      (not (not x)))))
+  nil)
 
 (deftest complement.4
   (let ((x '(#\b)))

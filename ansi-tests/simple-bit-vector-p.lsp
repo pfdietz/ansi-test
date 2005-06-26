@@ -47,11 +47,8 @@
   nil)
 
 (deftest simple-bit-vector-p.12
-  (loop for e in *universe*
-	for p1 = (typep e 'simple-bit-vector)
-	for p2 = (simple-bit-vector-p e)
-	always (if p1 p2 (not p2)))
-  t)
+  (check-type-predicate #'simple-bit-vector-p 'simple-bit-vector)
+  nil)
 
 (deftest simple-bit-vector-p.error.1
   (signals-error (simple-bit-vector-p) program-error)

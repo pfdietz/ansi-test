@@ -6,11 +6,7 @@
 (in-package :cl-test)
 
 (deftest compiled-function-p.1
-  (some #'(lambda (obj)
-	     (if (check-values (compiled-function-p obj))
-		 (not (typep obj 'compiled-function))
-	       (typep obj 'compiled-function)))
-	 *universe*)
+  (check-type-predicate #'compiled-function-p 'compiled-function)
   nil)
 
 (deftest compiled-function-p.2

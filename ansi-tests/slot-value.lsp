@@ -131,21 +131,21 @@
 (deftest slot-value.error.5
   (let ((built-in-class (find-class 'built-in-class))
 	(slot-name (gensym)))
-    (loop for e in *universe*
-	  for class = (class-of e)
-	  when (and (eq (class-of class) built-in-class)
-		    (handler-case (progn (slot-value e slot-name) t)
-				  (error () nil)))
-	  collect e))
+    (check-predicate
+     #'(lambda (e)
+	 (let ((class (class-of e)))
+	   (or (not (eq (class-of class) built-in-class))
+	       (handler-case (progn (slot-value e slot-name) nil)
+			     (error () t)))))))
   nil)
 
 (deftest slot-value.error.6
   (let ((built-in-class (find-class 'built-in-class))
 	(slot-name (gensym)))
-    (loop for e in *universe*
-	  for class = (class-of e)
-	  when (and (eq (class-of class) built-in-class)
-		    (handler-case (setf (slot-value e slot-name) t)
-				  (error () nil)))
-	  collect e))
+    (check-predicate
+     #'(lambda (e)
+	 (let ((class (class-of e)))
+	   (or (not (eq (class-of class) built-in-class))
+	       (handler-case (setf (slot-value e slot-name) nil)
+				  (error () t)))))))
   nil)

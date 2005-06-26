@@ -20,11 +20,7 @@
 ;;; Non-error tests
 
 (deftest constantp.1
-  (loop for e in *universe*
-	when (and (not (symbolp e))
-		   (not (consp e))
-		   (not (constantp e)))
-	collect e)
+  (check-predicate #'(lambda (e) (or (symbolp e) (consp e) (constantp e))))
   nil)
 
 (deftest constantp.2

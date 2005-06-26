@@ -38,12 +38,8 @@
   nil)
 
 (deftest realp.6
-  (loop for x in *universe*
-	for vals = (multiple-value-list (realp x))
-	for p = (car vals)
-	when (or (/= (length vals) 1)
-		 (if (typep x 'real) (not p) p))
-	collect (cons x vals))
+  (check-type-predicate #'realp 'real)
   nil)
+
 
 

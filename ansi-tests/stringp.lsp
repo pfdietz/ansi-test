@@ -6,11 +6,8 @@
 (in-package :cl-test)
 
 (deftest stringp.1
-  (loop for x in *universe*
-	always (if (typep x 'string)
-		   (stringp x)
-		 (not (stringp x))))
-  t)
+  (check-type-predicate #'stringp 'string)
+  nil)
 
 (deftest stringp.2
   (notnot (stringp "abcd"))

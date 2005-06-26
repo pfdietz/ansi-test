@@ -12,10 +12,8 @@
   0)
 
 (deftest array-rank.2
-  (loop for e in *universe*
-	when (and (typep e 'vector)
-		  (not (eql (array-rank e) 1)))
-	collect e)
+  (check-predicate #'(lambda (e) (or (not (typep e 'vector))
+				     (eql (array-rank e) 1))))
   nil)
 
 (deftest array-rank.order.1

@@ -18,11 +18,5 @@
   t)
 
 (deftest complexp.1
-  (loop for x in *universe*
-	for vals = (multiple-value-list (complexp x))
-	when (or (/= (length vals) 1)
-		 (if (typep x 'complex)
-		     (not (car vals))
-		   (car vals)))
-	collect (cons x vals))
+  (check-type-predicate #'complexp 'complex)
   nil)

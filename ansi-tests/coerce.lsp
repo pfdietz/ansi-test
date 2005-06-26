@@ -6,22 +6,21 @@
 (in-package :cl-test)
 
 (deftest coerce.1
-  (loop for x in *universe*
-	for type = (type-of x)
-	unless (and (consp type) (eqt (car type) 'function))
-	count (not (eql (coerce x type) x)))
-  0)
+  (check-predicate #'(lambda (x)
+		       (let ((type (type-of x)))
+			 (or (and (consp type) (eqt (car type) 'function))
+			     (eql (coerce x type) x)))))
+  nil)
 
 (deftest coerce.2
-  (loop for x in *universe*
-	count (not (eql (coerce x t) x)))
-  0)
+  (check-predicate #'(lambda (x) (eql (coerce x t) x)))
+  nil)
 
 (deftest coerce.3
-  (loop for x in *universe*
-	for class = (class-of x)
-	when (and class (not (eql (coerce x class) x)))
-	collect x)
+  (check-predicate
+   #'(lambda (x)
+       (let ((class (class-of x)))
+	 (eql (coerce x class) x))))
   nil)
 
 (deftest coerce.4

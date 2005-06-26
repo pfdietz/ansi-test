@@ -8,11 +8,7 @@
 ;;; More tests for this are in make-array.lsp
 
 (deftest simple-vector-p.1
-  (loop for e in *universe*
-	unless (if (typep e 'simple-vector)
-		   (simple-vector-p e)
-		 (not (simple-vector-p e)))
-	collect e)
+  (check-type-predicate #'simple-vector-p 'simple-vector)
   nil)
 
 (deftest simple-vector-p.2

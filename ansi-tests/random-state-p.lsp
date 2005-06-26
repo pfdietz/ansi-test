@@ -14,11 +14,7 @@
   t)
 
 (deftest random-state-p.1
-  (loop for x in *universe*
-	when (if (typep x 'random-state)
-		 (not (random-state-p x))
-	       (random-state-p x))
-	collect x)
+  (check-type-predicate #'random-state-p 'random-state)
   nil)
 
 (deftest random-state-p.2

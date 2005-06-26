@@ -110,9 +110,7 @@
 
 (deftest upgraded-array-element-type.nil.1
   (let ((uaet-nil (upgraded-array-element-type nil)))
-    (loop for e in *universe*
-	  when (typep e uaet-nil)
-	  collect e))
+    (check-predicate (typef `(not ,uaet-nil))))
   nil)
     
 ;;; Error tests

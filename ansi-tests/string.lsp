@@ -33,10 +33,11 @@
   t "FOO")
 
 (deftest string.7
-  (loop for x in *universe*
-	always (handler-case (stringp (string x))
-			     (type-error () :caught)))
-  t)
+  (check-predicate
+   #'(lambda (x)
+       (handler-case (stringp (string x))
+		     (type-error () :caught))))
+  nil)
 
 (deftest string.8 
   :notes (:nil-vectors-are-strings)
@@ -94,10 +95,7 @@
   nil)
 
 (deftest string.16
-  (loop for s in *universe*
-	when (and (stringp s)
-		  (not (eq s (string s))))
-	collect s)
+  (check-predicate #'(lambda (s) (or (not (stringp s)) (eq s (string s)))))
   nil)
 
 (deftest string.17

@@ -47,11 +47,8 @@
   nil)
 
 (deftest bit-vector-p.12
-  (loop for e in *universe*
-	for p1 = (typep e 'bit-vector)
-	for p2 = (bit-vector-p e)
-	always (if p1 p2 (not p2)))
-  t)
+  (check-type-predicate #'bit-vector-p 'bit-vector)
+  nil)
 
 (deftest bit-vector-p.order.1
   (let ((i 0) x)

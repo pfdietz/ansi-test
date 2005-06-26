@@ -16,48 +16,38 @@
 ;;; Non-error tests
 
 (deftest macroexpand-1.1
-  (let (vals)
-    (loop for x in *universe*
-	  unless (or (symbolp x)
-		     (consp x)
-		     (progn
-		       (setq vals (multiple-value-list (macroexpand-1 x)))
-		       (and (= (length vals) 2)
-			    (eql (car vals) x)
-			    (null (cadr vals)))))
-	  collect (cons x vals)))
+  (check-predicate
+   #'(lambda (x)
+       (or (symbolp x) (consp x)
+	   (let ((vals (multiple-value-list (macroexpand-1 x))))
+	     (and (= (length vals) 2)
+		  (eql (car vals) x)
+		  (null (cadr vals)))))))
   nil)
 
 (deftest macroexpand-1.2
-  (let (vals)
-    (loop for x in *universe*
-	  unless (or (symbolp x)
-		     (consp x)
-		     (progn
-		       (setq vals (multiple-value-list (macroexpand-1 x nil)))
-		       (and (= (length vals) 2)
-			    (eql (car vals) x)
-			    (null (cadr vals)))))
-	  collect (cons x vals)))
+  (check-predicate
+   #'(lambda (x)
+       (or (symbolp x) (consp x)
+	   (let ((vals (multiple-value-list (macroexpand-1 x nil))))
+	     (and (= (length vals) 2)
+		  (eql (car vals) x)
+		  (null (cadr vals)))))))
   nil)
 
 (deftest macroexpand-1.3
   (macrolet
       ((%m (&environment env)
 	   `(quote
-	     ,(let (vals)
-		(loop for x in *universe*
-		      unless (or (symbolp x)
-				 (consp x)
-				 (progn
-				   (setq vals (multiple-value-list (macroexpand-1 x env)))
-				   (and (= (length vals) 2)
-					(eql (car vals) x)
-					(null (cadr vals)))))
-		      collect (cons x vals))))))
+	     ,(check-predicate
+	       #'(lambda (x)
+		   (or (symbolp x) (consp x)
+		       (let ((vals (multiple-value-list (macroexpand-1 x env))))
+			 (and (= (length vals) 2)
+			      (eql (car vals) x)
+			      (null (cadr vals))))))))))
     (%m))
   nil)
-
 
 (deftest macroexpand-1.4
   (macrolet ((%m () ''foo))

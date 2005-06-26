@@ -18,11 +18,5 @@
   t)
 
 (deftest numberp.1
-  (loop for x in *universe*
-	for vals = (multiple-value-list (numberp x))
-	for val = (car vals)
-	unless (and (= (length vals) 1)
-		    (if val (typep x 'number)
-		      (not (typep x 'number))))
-	collect (cons x vals))
+  (check-type-predicate #'numberp 'number)
   nil)

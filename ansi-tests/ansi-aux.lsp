@@ -172,9 +172,10 @@ Results: ~A~%" expected-number form n results))))
     (assert (fboundp p))
     (setf p (symbol-function p)))
   (assert (typep p 'function))
-  
+
   (loop
-      for x in *universe* count
+      for x in *universe*
+      when
 	(block failed
 	  (let ((p1 (handler-case
 			(normally (funcall (the function p) x))
@@ -190,7 +191,18 @@ Results: ~A~%" expected-number form n results))))
 			(and (not p1) p2))
 		(format t "(FUNCALL ~S ~S) = ~S, (TYPEP ~S '~S) = ~S~%"
 			P x p1 x TYPE p2)
-		t)))))
+		t)))
+	collect x))
+
+;;; We have a common idiom where a guarded predicate should be
+;;; true everywhere
+
+(defun check-predicate (predicate &optional guard (universe *universe*))
+  "Return all elements of UNIVERSE for which the guard (if present) is false
+   and for which PREDICATE is false."
+  (remove-if #'(lambda (e) (or (and guard (funcall guard e))
+			       (funcall predicate e)))
+	     universe))
 
 (declaim (special *catch-error-type*))
 

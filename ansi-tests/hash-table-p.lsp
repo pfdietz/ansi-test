@@ -14,11 +14,8 @@
   nil)
 
 (deftest hash-table-p.2
-  (loop for e in *universe*
-	for p = (typep e 'hash-table)
-	for q = (hash-table-p e)
-	always (if p q (not q)))
-  t)
+  (check-type-predicate #'hash-table-p 'hash-table)
+  nil)
 
 (deftest hash-table-p.3
   (let ((i 0))

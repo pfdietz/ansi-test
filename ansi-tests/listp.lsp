@@ -33,7 +33,7 @@
 
 (deftest listp-universe
   (check-type-predicate 'listp 'list)
-  0)
+  nil)
 
 (deftest listp.order.1
   (let ((i 0))

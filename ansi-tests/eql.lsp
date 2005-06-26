@@ -10,8 +10,8 @@
 ;;; is true.
 
 (deftest eql.1
-  (loop for x in *universe* always (check-values (eql x x)))
-  t)
+  (check-predicate #'(lambda (x) (eql x x)))
+  nil)
 
 (deftest eql.2
   (eqlt 2 (1+ 1))

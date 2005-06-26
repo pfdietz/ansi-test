@@ -54,7 +54,7 @@
 ;;
 (deftest null-null-universe
   (check-type-predicate 'null 'null)
-  0)
+  nil)
 
 (defvar *cons-fns*
   (list 'cons 'consp 'atom 'rplaca 'rplacd

@@ -10,15 +10,11 @@
   t)
 
 (deftest symbolp.2
-  (loop for x in *symbols*
-	unless (symbolp x)
-	collect x)
+  (check-predicate #'symbolp nil *symbols*)
   nil)
 
 (deftest symbolp.3
-  (loop for x in (set-difference *universe* *symbols*)
-	when (symbolp x)
-	collect x)
+  (check-predicate (complement #'symbolp) #'(lambda (x) (member x *symbols*)))
   nil)
 
 ;;; Error cases

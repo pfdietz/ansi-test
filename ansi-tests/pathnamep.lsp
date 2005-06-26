@@ -6,22 +6,16 @@
 (in-package :cl-test)
 
 (deftest pathnamep.1
-  (loop for x in *universe*
-	unless (if (pathnamep x) (typep x 'pathname)
-		 (not (typep x 'pathname)))
-	collect x)
+  (check-type-predicate #'pathnamep 'pathname)
   nil)
 
 (deftest pathnamep.2
-  (loop for x in *universe*
-	always (eql (length (multiple-value-list (pathnamep x))) 1))
-  t)
+  (check-predicate #'(lambda (x) (eql (length (multiple-value-list (pathnamep x))) 1)))
+  nil)
 
 (deftest pathnamep.3
-  (loop for x in *universe*
-	always (or (not (typep x 'logical-pathname))
-		   (pathnamep x)))
-  t)
+  (check-predicate (typef '(not logical-pathname)) #'pathnamep)
+  nil)
 
 (deftest pathnamep.error.1
   (signals-error (pathnamep) program-error)

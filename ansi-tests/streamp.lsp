@@ -15,11 +15,7 @@
   nil)
 
 (deftest streamp.2
-  (loop for x in *universe*
-	when (if (typep x 'stream)
-		 (not (streamp x))
-	       (streamp x))
-	collect x)
+  (check-type-predicate #'streamp 'stream)
   nil)
 
 (deftest streamp.3

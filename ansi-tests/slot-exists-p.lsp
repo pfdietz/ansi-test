@@ -49,9 +49,7 @@
 
 (deftest slot-exists-p.8
   (let ((slot-name (gensym)))
-    (loop for x in *universe*
-	  when (slot-exists-p x slot-name)
-	  collect x))
+    (check-predicate #'(lambda (x) (not (slot-exists-p x slot-name)))))
   nil)
 
 ;;; With various types

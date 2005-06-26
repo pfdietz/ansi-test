@@ -6,10 +6,7 @@
 (in-package :cl-test)
 
 (deftest sxhash.1
-  (loop for x in *universe*
-	for hash-code = (sxhash x)
-	unless (typep hash-code '(and unsigned-byte fixnum))
-	collect x)
+  (check-predicate #'(lambda (x) (typep (sxhash x) '(and unsigned-byte fixnum))))
   nil)
 
 (deftest sxhash.2

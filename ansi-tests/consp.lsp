@@ -35,16 +35,14 @@
 ;; For everything in *universe*, it is either an atom, or satisfies
 ;; consp, but not both
 (deftest consp-xor-atom-universe
-  (notnot-mv
-   (every #'(lambda (x) (or (and (consp x) (not (atom x)))
-			    (and (not (consp x)) (atom x))))
-	  *universe*))
-  t)
+  (check-predicate #'(lambda (x) (or (and (consp x) (not (atom x)))
+				     (and (not (consp x)) (atom x)))))
+  nil)
 
 ;; Everything in type cons satisfies consp, and vice versa
 (deftest consp-cons-universe
   (check-type-predicate 'consp 'cons)
-  0)
+  nil)
 
 (deftest consp.order.1
   (let ((i 0))

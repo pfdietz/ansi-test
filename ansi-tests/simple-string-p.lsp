@@ -6,11 +6,8 @@
 (in-package :cl-test)
 
 (deftest simple-string-p.1
-  (loop for x in *universe*
-	always (if (typep x 'simple-string)
-		   (simple-string-p x)
-		 (not (simple-string-p x))))
-  t)
+  (check-type-predicate #'simple-string-p 'simple-string)
+  nil)
 
 (deftest simple-string-p.2
   (notnot-mv (simple-string-p "ancd"))
