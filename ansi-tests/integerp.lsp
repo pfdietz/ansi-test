@@ -26,13 +26,7 @@
   nil)
 
 (deftest integerp.2
-  (loop for x in *universe*
-	for vals = (multiple-value-list (integerp x))
-	unless (and (= (length vals) 1)
-		    (if (typep x 'integer)
-			(first vals)
-		      (not (first vals))))
-	collect (cons x vals))
+  (check-type-predicate #'integerp 'integer)
   nil)
 
 
