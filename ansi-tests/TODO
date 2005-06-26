@@ -2,9 +2,13 @@ Things to do to the test suite (not a complete list)
 
 1. subtypep and typep on complex types
 
+2. Refactor random type/element-of-type code.  There's too much
+  duplication.
+
 3. More type tests on array types
 
-4. Extend random subtypep tester to complex and array types.
+4. Extend random subtypep tester to array types. (complex types already added,
+  but should extend generator of random real types)
 
 5. Add JA's long form define-method-combination tests (from clisp),
   or write own.
@@ -59,9 +63,6 @@ Got:      (2 NULL)
 Expected: 1
 Got:      0
 
-20. Add destructuring-bind and destructuring macro lambda list tests
-  for key and optional arguments, if they do not already exist
-
 21. The random tester showed (SETF AREF) wasn't being tested enough.  Add tests.
 
 22. Add more symbol printing tests.  In particular, there doesn't appear to
@@ -78,10 +79,6 @@ Got:      0
 
 34. (from C Rhodes) Test that CERROR allows additional arguments after a
   condition designating itself to be used in the continue format control.
-
-
-35. Add test to verify that a user-defined function, when called on the
-  wrong number of arguments in safe code, emits a program-error.
 
 36. Add tests for bad default-initargs in object constructors.
 
@@ -108,3 +105,5 @@ Got:      0
 
 44. Add tests for SPECIAL declarations in MACROLET (requested by piso on #lisp)
   (partially done)
+
+45. Sweep files for missing order-of-execution tests
