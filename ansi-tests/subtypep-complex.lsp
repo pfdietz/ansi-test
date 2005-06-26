@@ -64,16 +64,20 @@
 	  (subtypep* ucpt1 ucpt2)
 	(multiple-value-bind
 	    (ucpt-sub2? good2?)
-	    (subtypep* ucpt1 ucpt2)
+	    (subtypep* ucpt2 ucpt1)
 	  (cond
+	   ;; the second is not a subtype of the first
 	   ((and good2? ucpt-sub1? (not ucpt-sub2?))
 	    (assert good1?)
 	    (unless (equal result '(nil t))
 	      (list (list :case2 t1 t2 ucpt1 ucpt2 result))))
+	   ;; the first is not a subtype of the second
 	   ((and good1? (not ucpt-sub1?) ucpt-sub2?)
 	    (assert good2?)
 	    (unless (equal result '(nil t))
 	      (list (list :case3 t1 t2 ucpt1 ucpt2 result))))
+	   ;; they are both subtypes of each other, and so represent
+	   ;; the same set of objects
 	   ((and ucpt-sub1? ucpt-sub2?)
 	    (assert good1?)
 	    (assert good2?)
