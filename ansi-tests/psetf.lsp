@@ -174,7 +174,7 @@
   ((a . 1)) ((c . 2)))
 
 ;;; TODO: c*r accessors with > 2 a/d
-;;; TODO: first,...,tenth
+;;; TODO: third,...,tenth
 
 (deftest psetf.18
   (let* ((x (vector 'a 'b))
