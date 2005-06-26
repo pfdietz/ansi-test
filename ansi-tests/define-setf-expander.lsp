@@ -100,3 +100,26 @@
      (copy-tree x)))
   nil 1 ((foo . 1)) 2 ((foo . 2)) 3 ((bar . 3) (foo . 2)))
 
+(deftest define-setf-expander.6
+  (let ((n (gensym))
+	(doc "D-S-EX.6"))
+    (assert (null (documentation n 'setf)))
+    (assert (eql (eval `(define-setf-expander ,n ()
+			  ,doc (values nil nil nil nil nil)))
+		 n))
+    (or (documentation n 'setf) doc))
+  "D-S-EX.6")
+
+(deftest define-setf-expander.7
+  (let ((n (gensym))
+	(doc "D-S-EX.7"))
+    (assert (null (documentation n 'setf)))
+    (assert (eql (eval `(define-setf-expander ,n ()
+			  (values nil nil nil nil nil)))
+		 n))
+    (assert (null (documentation n 'setf)))
+    (values
+     (setf (documentation n 'setf) doc)
+     (or (documentation n 'setf) doc)))
+  "D-S-EX.7"
+  "D-S-EX.7")
