@@ -33,8 +33,12 @@
   a b w nil)
 
 (deftest destructuring-bind.7
-  (destructuring-bind (x y &optional (z 'w z-p)) '(a b c) (values x y z z-p))
+  (destructuring-bind (x y &optional (z 'w z-p)) '(a b c) (values x y z (notnot z-p)))
   a b c t)
+
+(deftest destructuring-bind.7a
+  (destructuring-bind (x y &optional (z x z-p)) '(a b) (values x y z z-p))
+  a b a nil)
 
 (deftest destructuring-bind.8
   (destructuring-bind (x y &optional z w) '(a b c) (values x y z w))
@@ -56,6 +60,10 @@
   (destructuring-bind (x y &body z) '(a b c d) (values x y z))
   a b (c d))
 
+(deftest destructuring-bind.12a
+  (destructuring-bind ((x y &body z)) '((a b c d)) (values x y z))
+  a b (c d))
+
 (deftest destructuring-bind.13
   (destructuring-bind (&whole x y z) '(a b) (values x y z))
   (a b) a b)
@@ -75,6 +83,15 @@
 (deftest destructuring-bind.17
   (destructuring-bind (&key a b c) '(:c 1) (values a b c))
   nil nil 1)
+
+(deftest destructuring-bind.17a
+  (destructuring-bind (&key (a 'foo) (b 'bar) c) '(:c 1) (values a b c))
+  foo bar 1)
+
+(deftest destructuring-bind.17c
+  (destructuring-bind (&key (a 'foo a-p) (b a b-p) (c 'zzz c-p)) '(:c 1)
+    (values a b c a-p b-p (notnot c-p)))
+  foo foo 1 nil nil t)
 
 (deftest destructuring-bind.18
   (destructuring-bind ((&key a b c)) '((:c 1 :b 2)) (values a b c))
@@ -135,6 +152,14 @@
     (declare (optimize))
     (declare))
   nil)
+
+(deftest destructuring-bind.29
+  (destructuring-bind (x &aux y) '(:foo) (values x y))
+  :foo nil)
+  
+(deftest destructuring-bind.30
+  (destructuring-bind (x &aux (y (list x))) '(:foo) (values x y))
+  :foo (:foo))
 
 ;;; Error cases
 
