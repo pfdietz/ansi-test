@@ -151,7 +151,7 @@
 
 ;;; flet works with a large (maximal?) number of arguments
 (deftest flet.20
-  (let* ((n (min (1- lambda-parameters-limit) 1024)))
+  (let* ((n (min (1- lambda-parameters-limit) 1024))
 	 (vars (loop repeat n collect (gensym))))
     (eval
      `(eqlt ,n
