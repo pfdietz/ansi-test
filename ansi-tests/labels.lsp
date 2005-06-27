@@ -179,8 +179,8 @@
 ;;; labels works with the maximum number of arguments (if
 ;;; not too many.)
 (deftest labels.20
-  (let* ((n (min lambda-parameters-limit 1024))
-	 (vars (loop for i from 1 to n collect (gensym))))
+  (let* ((n (min (1- lambda-parameters-limit) 1024))
+	 (vars (loop repeat n collect (gensym))))
     (eval
      `(eqlt ,n
 	    (labels ((%f ,vars (+ ,@ vars)))
