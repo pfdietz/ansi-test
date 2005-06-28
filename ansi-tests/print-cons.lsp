@@ -67,6 +67,7 @@
   nil)
 
 ;; random circular cons graphs
+#-lispworks
 (deftest print.cons.random.2
   (loop repeat 50
 	nconc
