@@ -1,9 +1,10 @@
 # LISP=gcl
-LISP=sbcl --noinform
+# LISP=sbcl --noinform
 # LISP=~/sbcl/src/runtime/sbcl --core ~/sbcl/output/sbcl.core --noinform
 # LISP=clisp -ansi -q
 # LISP=abcl
 # LISP=ecl
+# LISP=/usr/local/lib/LispWorks/nongraphic-lispworks-4450
 
 MAKE=make
 
