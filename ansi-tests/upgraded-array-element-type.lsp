@@ -55,8 +55,9 @@
 (deftest upgraded-array-element-type.4
   (loop for type in *upgraded-array-types-to-check*
 	for upgraded-type = (upgraded-array-element-type type)
-	always (empirical-subtypep type upgraded-type))
-  t)
+	unless (empirical-subtypep type upgraded-type)
+	collect (list type upgraded-type))
+  nil)
 
 ;; Include an environment (NIL, denoting the default null lexical
 ;; environment)
@@ -64,8 +65,9 @@
 (deftest upgraded-array-element-type.5
   (loop for type in *upgraded-array-types-to-check*
 	for upgraded-type = (upgraded-array-element-type type nil)
-	always (empirical-subtypep type upgraded-type))
-  t)
+	unless (empirical-subtypep type upgraded-type)
+	collect (list type upgraded-type))
+  nil)
 
 (deftest upgraded-array-element-type.6
   (macrolet
