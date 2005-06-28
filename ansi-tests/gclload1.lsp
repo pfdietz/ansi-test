@@ -9,6 +9,7 @@
             compiler:*compile-print* nil)
 
 #+lispworks (setq compiler::*compiler-warnings* nil)
+#+lispworks (make-echo-stream *standard-input* *standard-output*)
 
 #+ecl (compile nil '(lambda () nil))
 
