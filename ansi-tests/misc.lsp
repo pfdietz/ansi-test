@@ -10787,3 +10787,11 @@ Broken at C::WT-MAKE-CLOSURE.
 		  (compilation-speed 2) (speed 3)))
        (logeqv 0 (gcd 0)))))
   -1)
+
+;;; Lispworks 4450
+;;; Show sporadic bugs in compiled code
+
+(deftest misc.602
+  (let ((form '(lambda () (if (oddp (progn (vector) 3747237)) 'a nil))))
+    (loop repeat 10 collect (funcall (compile nil form))))
+  (a a a a a a a a a a))
