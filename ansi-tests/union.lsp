@@ -415,11 +415,15 @@
   (signals-error (union (list* 1 2 3) (list 4 5 6)) type-error)
   t)
 
+;;; The next two tests used to check for union with NIL, but arguably
+;;; that goes beyond the 'be prepared to signal an error' requirement,
+;;; since a union algorithm doesn't have to traverse one argument
+;;; if the other is the empty list.
+
 (deftest union.error.13
-  (check-type-error #'(lambda (x) (union x nil)) #'listp)
+  (check-type-error #'(lambda (x) (union x '(1 2))) #'listp)
   nil)
 
 (deftest union.error.14
-  (check-type-error #'(lambda (x) (union nil x)) #'listp)
+  (check-type-error #'(lambda (x) (union '(1 2) x)) #'listp)
   nil)
-

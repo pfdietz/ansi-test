@@ -260,11 +260,15 @@
   (signals-error (subsetp (list* 1 2 3) (list 1 2 3 4 5 6)) type-error)
   t)
 
+;;; The next two tests previously compared against NIL, but arguably
+;;; a conforming implementation is not required to signal an error
+;;; in these cases, since it doesn't have to traverse the other list.
+
 (deftest subsetp.error.13
-  (check-type-error #'(lambda (x) (subsetp x nil)) #'listp)
+  (check-type-error #'(lambda (x) (subsetp x '(a b))) #'listp)
   nil)
 
 (deftest subsetp.error.14
-  (check-type-error #'(lambda (x) (subsetp nil x)) #'listp)
+  (check-type-error #'(lambda (x) (subsetp '(a b) x)) #'listp)
   nil)
 
