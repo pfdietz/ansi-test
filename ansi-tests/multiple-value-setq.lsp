@@ -111,6 +111,14 @@
   (multiple-value-setq nil :good)
   :good)
 
+(deftest multiple-value-setq.14
+  (multiple-value-setq nil (values))
+  nil)
+
+(deftest multiple-value-setq.15
+  (multiple-value-setq nil (values 'a 'b))
+  a)
+
 ;;; Error tests
 
 (deftest multiple-value-setq.error.1
