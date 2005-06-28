@@ -20,7 +20,7 @@
 (load "get-internal-time.lsp")
 
 (load "documentation.lsp")
-(load "inspect.lsp")
+#-lispworks (load "inspect.lsp")
 (load "dribble.lsp")
 (load "ed.lsp")
 
