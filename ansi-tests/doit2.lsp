@@ -6,6 +6,11 @@
   (rt:disable-note :assume-no-simple-streams)
   (rt:disable-note :assume-no-gray-streams))
 
+#+lispworks
+(progn
+  (rtest:disable-note :allow-nil-arrays)
+  (rtest:disable-note :nil-vectors-are-strings))
+
 (in-package :cl-test)
 
 ;;; These two tests will misbehave if the tests are being
