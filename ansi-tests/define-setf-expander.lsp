@@ -12,20 +12,21 @@
 
 (defun my-car (x) (car x))
 
-(defparameter *define-setf-expander-vals.1*
-  (multiple-value-list
-   (define-setf-expander my-car (place &environment env)
-     (multiple-value-bind (temps vals stores set-form get-form)
-	 (get-setf-expansion place env)
-       (declare (ignore stores set-form))
-       (let ((store (gensym))
-	     (temp (gensym)))
-	 (values
-	  `(,@temps ,temp)
-	  `(,@vals ,get-form)
-	  `(,store)
-	  `(progn (rplaca ,temp ,store) ,store)
-	  `(my-car ,temp)))))))
+(ignore-errors
+  (defparameter *define-setf-expander-vals.1*
+    (multiple-value-list
+     (define-setf-expander my-car (place &environment env)
+       (multiple-value-bind (temps vals stores set-form get-form)
+	   (get-setf-expansion place env)
+	 (declare (ignore stores set-form))
+	 (let ((store (gensym))
+	       (temp (gensym)))
+	   (values
+	    `(,@temps ,temp)
+	    `(,@vals ,get-form)
+	    `(,store)
+	    `(progn (rplaca ,temp ,store) ,store)
+	    `(my-car ,temp))))))))
 
 (deftest define-setf-expander.1
   *define-setf-expander-vals.1*
