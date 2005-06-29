@@ -100,6 +100,7 @@
 
 (deftest make-array.8
   (let ((a (make-array-with-checks 8 :element-type '(integer 0 (256)))))
+    ;; Should return a symbol only in error situations
     (and (symbolp a) a))
   nil)
 
@@ -112,6 +113,39 @@
   (make-array-with-checks '(8) :element-type '(integer 0 (256))
 			  :initial-contents '(4 3 2 1 9 8 7 6))
   #(4 3 2 1 9 8 7 6))
+
+(deftest make-array.8c
+  (loop for i from 1 to 32
+	for tp = `(unsigned-byte ,i)
+	for a = (make-array 5 :fill-pointer 3 :element-type tp :initial-contents '(1 1 0 0 1))
+	when (symbolp a)
+	collect (list i tp a))
+  nil)
+
+(deftest make-array.8d
+  (loop for i from 2 to 32
+	for tp = `(signed-byte ,i)
+	for a = (make-array 5 :fill-pointer 3 :element-type tp :initial-contents '(1 1 0 0 1))
+	when (symbolp a)
+	collect (list i tp a))
+  nil)
+
+(deftest make-array.8e
+  (loop for tp in '(short-float single-float double-float long-float)
+	for v in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for a = (make-array 5 :fill-pointer 3 :element-type tp :initial-element v)
+	when (symbolp a)
+	collect (list tp v a))
+  nil)
+
+(deftest make-array.8f
+  (loop for tp in '(short-float single-float double-float long-float)
+	for v in '(1.0s0 1.0f0 1.0d0 1.0l0)
+	for a = (make-array 5 :fill-pointer 3 :element-type `(complex ,tp)
+			    :initial-element (complex v))
+	when (symbolp a)
+	collect (list tp v a))
+  nil)
 
 ;;; Zero dimensional arrays
 
@@ -131,6 +165,23 @@
 (deftest make-array.12
   (make-array-with-checks nil :element-type 'bit :initial-contents 1)
   #0a1)
+
+(deftest make-array.12a
+  (make-array-with-checks 10 :element-type 'bit :initial-contents '(1 0 0 1 1 0 0 1 0 0)
+			  :fill-pointer 6)
+  #*100110)
+
+(deftest make-array.12b
+  (make-array-with-checks 10 :element-type 'character
+			  :initial-contents "abcdefghij"
+			  :fill-pointer 8)
+  "abcdefgh")
+
+(deftest make-array.12c
+  (make-array-with-checks 10 :element-type 'base-char
+			  :initial-contents "abcdefghij"
+			  :fill-pointer 8)
+  "abcdefgh")
 
 (deftest make-array.13
   (make-array-with-checks nil :element-type t :initial-contents 'a)
@@ -301,6 +352,27 @@
 			 :fill-pointer t
 			 :initial-contents '(a b c d))
  #(a b c d))
+
+(deftest make-array.adjustable.7a
+ (make-array-with-checks '(4) :adjustable t
+			 :element-type 'bit
+			 :fill-pointer t
+			 :initial-contents '(1 0 0 1))
+ #(1 0 0 1))
+
+(deftest make-array.adjustable.7b
+ (make-array-with-checks '(4) :adjustable t
+			 :element-type 'base-char
+			 :fill-pointer t
+			 :initial-contents "abcd")
+ "abcd")
+
+(deftest make-array.adjustable.7c
+ (make-array-with-checks '(4) :adjustable t
+			 :element-type 'character
+			 :fill-pointer t
+			 :initial-contents "abcd")
+ "abcd")
 
 (deftest make-array.adjustable.8
  (make-array-with-checks '(4) :adjustable t
