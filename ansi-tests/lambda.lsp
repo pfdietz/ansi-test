@@ -336,6 +336,16 @@
 	 nil))))
   :good)
 
+(deftest lambda.64
+  (let ((x :bad))
+    (declare (special x))
+    (flet ((%f () x))
+      ((lambda (x &aux (y (%f)))
+	 (declare (type t y) (special x))
+	 y)
+       :good)))
+  :good)
+
 ;;; Tests of lambda as a macro
 
 (deftest lambda.macro.1
