@@ -19,6 +19,7 @@
        (1 (random-from-seq #(integer unsigned-byte ratio rational real float
 			     short-float single-float double-float
 			     long-float complex symbol cons function)))
+       #|
        (1
 	(let* ((len (random *maximum-random-int-bits*))
 	       (r1 (ash 1 len))
@@ -28,6 +29,9 @@
 	       (lo (min x y))
 	       (hi (max x y)))
 	  `(integer ,lo ,hi)))
+       |#
+       (1 (make-random-real-type))
+       (1 (make-random-complex-type))
        )
     (rcase
      (2 (let* ((op (random-from-seq #(cons cons and or)))
@@ -36,8 +40,28 @@
 	       (sizes (random-partition (1- size) nargs)))
 	  `(,op ,@(mapcar #'make-random-type sizes))))
      (1 `(not ,(make-random-type (1- size))))
-     (1 (make-random-function-type size))
+     ; (1 (make-random-function-type size))
      )))
+
+(defun make-random-real-type ()
+  (rcase
+   (1 (random-from-seq '(integer unsigned-byte short-float single-float
+				 double-float long-float rational real)))
+   (1 (destructuring-bind (lo hi)
+	  (make-random-integer-range)
+	(rcase
+	 (4 `(integer ,lo ,hi))
+	 (1 `(integer ,lo))
+	 (1 `(integer ,lo *))
+	 (2 `(integer * ,hi)))))
+   (1 (let ((r1 (random-real))
+	    (r2 (random-real)))
+	`(real ,(min r1 r2) ,(max r2 r2))))
+   ;;; Add more cases here
+   ))
+
+(defun make-random-complex-type ()
+  `(complex ,(make-random-real-type)))
 
 (defun make-random-function-type (size)
   (let* ((sizes (random-partition (1- size) 2))

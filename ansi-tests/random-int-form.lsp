@@ -108,8 +108,6 @@
 (defvar *random-int-form-catch-tags* nil)
 (defvar *go-tags* nil)
 
-(defvar *maximum-random-int-bits* 36)
-
 (defvar *random-vals-list-bound* 10)
 
 (defvar *max-compile-time* 0)
@@ -241,22 +239,6 @@
 	(cons (car form) (mapcan #'fn-symbols-in-form* (cdr form)))
       (mapcan #'fn-symbols-in-form* form))))
 
-(defun make-random-integer-range (&optional var)
-  "Generate a list (LO HI) of integers, LO <= HI.  This is used
-   for generating integer types."
-  (declare (ignore var))
-  (rcase
-   (1 (flet ((%r () (let ((r (ash 1 (1+ (random *maximum-random-int-bits*)))))
-		      (- (random r) (floor (/ r 2))))))
-	(let ((x (%r))
-	      (y (%r)))
-	  (list (min x y) (max x y)))))
-   (1 (let* ((b (ash 1 (1+ (random *maximum-random-int-bits*))))
-	     (b2 (floor (/ b 2))))
-	(let ((x (- (random b) b2))
-	      (y (- (random b) b2)))
-	  (list (min x y) (max x y)))))))
-
 (defun fn-arg-name (fn-name arg-index)
   (intern (concatenate 'string
 		       (subseq (symbol-name fn-name) 1)
@@ -266,65 +248,7 @@
 (declaim (special *flet-names*))
 (defparameter *flet-names* nil)
 
-(defun make-random-integer ()
-  (let ((r (ash 1 (1+ (random *maximum-random-int-bits*)))))
-    (rcase
-     (6 (- (random r) (floor (/ r 2))))
-     (1 (- r (random (min 10 r))))
-     (1 (+ (floor (/ r 2)) (random (min 10 r)))))))
 
-(defun make-random-rational ()
-  (let* ((r (ash 1 (1+ (random *maximum-random-int-bits*))))
-	 (n (random r)))
-    (assert (>= r 2))
-    (let ((d (loop for x = (random r) unless (zerop x) do (return x))))
-      (if (coin) (/ n d) (- (/ n d))))))
-
-(defun make-random-nonnegative-rational ()
-  (let* ((r (ash 1 (1+ (random *maximum-random-int-bits*))))
-	 (n (random r)))
-    (assert (>= r 2))
-    (let ((d (loop for x = (random r) unless (zerop x) do (return x))))
-      (/ n d))))
-
-(defun make-random-positive-rational ()
-  (let* ((r (ash 1 (1+ (random *maximum-random-int-bits*))))
-	 (n (1+ (random r))))
-    (assert (>= r 2))
-    (let ((d (loop for x = (random r) unless (zerop x) do (return x))))
-      (/ n d))))
-
-(defun make-random-bounded-rational (upper-limit lower-inclusive upper-inclusive)
-  (assert (rationalp upper-limit))
-  (assert (not (minusp upper-limit)))
-  (cond
-   ((= upper-limit 0) 0)
-   ((<= upper-limit 1/1000000)
-    (/ (make-random-bounded-rational (* 1000000 upper-limit) lower-inclusive upper-inclusive)
-       1000000))
-   ((>= upper-limit 1000000)
-    (* (random 1000000)
-       (make-random-bounded-rational (/ upper-limit 1000000) lower-inclusive upper-inclusive)))
-   (t
-    (assert (< 1/1000000 upper-limit 1000000))
-    (let ((x 0))
-      (loop do (setq x (* upper-limit (rational (random 1.0))))
-	    while (or (and (not lower-inclusive) (zerop x))
-		      (and (not upper-inclusive) (= x upper-limit)))
-	    finally (return x))))))   
-
-(defun make-random-float ()
-  (rcase
-   (1 (random most-positive-short-float))
-   (1 (random most-positive-single-float))
-   (1 (random most-positive-double-float))
-   (1 (random most-positive-long-float))))
-
-(defun make-random-symbol ()
-  (rcase
-   (3 (random-from-seq #(a b c d e f g h i j k l m n o p q r s t u v w x y z)))
-   (2 (random-from-seq *cl-symbols-vector*))
-   (1 (gensym))))
 
 (defun random-var-desc ()
   (loop
@@ -426,7 +350,6 @@
      
      (2 `(isqrt (abs ,(make-random-integer-form (- size 2)))))
 
-     ;; #-armedbear
      (10 `(the integer ,(make-random-integer-form (1- size))))
       
      (1 `(cl:handler-bind nil ,(make-random-integer-form (1- size))))
@@ -549,7 +472,7 @@
      (5 (make-random-tagbody-and-progn size))
 
      ;; conditionals
-     (30
+     (60
       (let* ((cond-size (random (max 1 (floor size 2))))
 	     (then-size (random (- size cond-size)))
 	     (else-size (- size 1 cond-size then-size))
@@ -575,7 +498,7 @@
      (50 (make-random-integer-binding-form size))
 
      ;; progv
-     #-(or armedbear ecl)
+     #-(or ecl)
      (4 (make-random-integer-progv-form size))
      
      (4 `(let () ,(make-random-integer-form (1- size))))
@@ -1068,7 +991,7 @@
     (rcase
       (1 (if (coin) t nil))
       (3 `(not ,(make-random-pred-form (1- size))))
-      (6 (destructuring-bind (leftsize rightsize)
+      (12 (destructuring-bind (leftsize rightsize)
 	     (random-partition (1- size) 2)
 	   `(,(random-from-seq '(and or))
 	     ,(make-random-pred-form leftsize)
