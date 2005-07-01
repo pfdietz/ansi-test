@@ -42,7 +42,7 @@
   "bar")
 
 (deftest lambda.10
-  ((lambda (x) (declare (type symbol x))) 'z)
+  ((lambda (x) (declare (type symbol x) (ignorable x))) 'z)
   nil)
 
 (deftest lambda.11
@@ -185,17 +185,20 @@
 
 (deftest lambda.39
   (let ((a-p :bad))
+    (declare (ignorable a-p))
     ((lambda (&key (a nil a-p) (b a-p)) (list a (notnot a-p) (notnot b)))))
   (nil nil nil))
      
 (deftest lambda.40
   (let ((a-p :bad))
+    (declare (ignorable a-p))
     ((lambda (&key (a nil a-p) (b a-p)) (list a (notnot a-p) (notnot b)))
      :a 1))
   (1 t t))
 
 (deftest lambda.41
   (let ((a-p :bad))
+    (declare (ignorable a-p))
     ((lambda (&key (a nil a-p) (b a-p)) (list a (notnot a-p) (notnot b)))
      :a nil))
   (nil t t))
@@ -292,6 +295,46 @@
      (or (documentation cfn 'function) doc)))
   "LMB56"
   "LMB56")
+
+;;; Uninterned symbols as lambda variables
+
+(deftest lambda.57
+  ((lambda (#1=#:foo) #1#) 17)
+  17)
+
+(deftest lambda.58
+  ((lambda (&rest #1=#:foo) #1#) 'a 'b 'c)
+  (a b c))
+
+(deftest lambda.59
+  ((lambda (&optional #1=#:foo) #1#))
+  nil)
+
+(deftest lambda.60
+  ((lambda (&optional (#1=#:foo t)) #1#))
+  t)
+
+(deftest lambda.61
+  ((lambda (&optional (#1=#:foo t)) #1#) 'bar)
+  bar)
+
+(deftest lambda.62
+  ((lambda (&key #1=#:foo) #1#) :foo 12)
+  12)
+
+;;; Test that declarations for aux variables are handled properly
+
+(deftest lambda.63
+  (let ((y :bad1))
+    (declare (ignore y))
+    (let ((y :bad2))
+      (declare (special y))
+      (flet ((%f () y))
+	((lambda (x &aux (y :good))
+	   (declare (special y) (ignore x))
+	   (%f))
+	 nil))))
+  :good)
 
 ;;; Tests of lambda as a macro
 
