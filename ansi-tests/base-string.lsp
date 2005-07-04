@@ -22,6 +22,7 @@
   t t)
 
 (deftest base-string.5
+  :notes (:allow-nil-arrays)
   (subtypep* '(array nil (*)) 'base-string)
   nil t)
 

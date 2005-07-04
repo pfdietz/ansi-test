@@ -38,13 +38,16 @@
   nil t)
 
 (deftest simple-base-string.9
+  :notes (:allow-nil-arrays)
   (subtypep* '(simple-array nil (*)) 'simple-base-string)
   nil t)
 
 (deftest simple-base-string.10
+  :notes (:allow-nil-arrays)
   (typep* (make-array '(0) :element-type nil) 'simple-base-string)
   nil)
 
 (deftest simple-base-string.11
+  :notes (:allow-nil-arrays)
   (typep* (make-array '(12) :element-type nil) 'simple-base-string)
   nil)
