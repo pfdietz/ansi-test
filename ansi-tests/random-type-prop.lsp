@@ -366,14 +366,22 @@
      (1 `(,root ,etype ,(loop for i below rank collect (make-random-array-dimension-spec val i))))
      (1 `(,root ,etype ,(loop for i below rank collect (array-dimension val i))))
      #-ecl (1 `(,root ,etype ,rank))
+     (4 (call-next-method))
      )))
 
 (defmethod make-random-type-containing ((val string))
   (rcase
-   (1 (let ((root (if (and (coin)
-			   (typep val 'simple-string))
-		      'simple-string
-		    'string)))
+   (1 (let ((root (cond
+		   ((and (coin)
+			 (typep val 'base-string))
+		    (cond
+		     ((and (coin) (typep val 'simple-base-string))
+		      'simple-base-string)
+		     (t 'base-string)))
+		   ((and (coin)
+			 (typep val 'simple-string))
+		    'simple-string)
+		   (t 'string))))
 	(rcase (1 root)
 	       (1 `(,root))
 	       (3 `(,root ,(make-random-array-dimension-spec val 0))))))
@@ -425,6 +433,11 @@
 	  'compiled-function
 	'function))
    (1 t)))
+
+(defmethod make-random-type-containing ((val sequence))
+  (rcase
+   (1 'sequence)
+   (2 (call-next-method))))
 
 ;;; Macro for defining random type prop tests
 
