@@ -104,11 +104,14 @@
 
 (deftest format.d.4
   (with-standard-io-syntax
-   (loop for x = (ash 1 (+ 2 (random 80)))
+   (loop with limit = 10
+	 with count = 0
+	 for x = (ash 1 (+ 2 (random 80)))
 	 for mincol = (random 30)
 	 for i = (- (random (+ x x)) x)
 	 for s1 = (format nil "~@D" i)
-	 for s2 = (format nil (format nil "~~~d@d" mincol) i)
+	 for format-string = (format nil "~~~d@d" mincol)
+	 for s2 = (format nil format-string i)
 	 for pos = (search s1 s2)
 	 repeat 1000
 	 when (or (null pos)
@@ -117,12 +120,17 @@
 		       (or (/= (length s2) mincol)
 			   (not (eql (position #\Space s2 :test-not #'eql)
 				     (- (length s2) (length s1)))))))
-	 collect (list i mincol s1 s2 pos)))
+	 collect (if (> (incf count) limit)
+		     "Count limit exceeded"
+		     (list i mincol s1 format-string s2 pos))
+	 while (<= count limit)))
   nil)
 
 (deftest formatter.d.4
   (with-standard-io-syntax
-   (loop for x = (ash 1 (+ 2 (random 80)))
+   (loop with limit = 10
+	 with count = 0
+	 for x = (ash 1 (+ 2 (random 80)))
 	 for mincol = (random 30)
 	 for i = (- (random (+ x x)) x)
 	 for s1 = (format nil "~@D" i)
@@ -137,7 +145,10 @@
 		       (or (/= (length s2) mincol)
 			   (not (eql (position #\Space s2 :test-not #'eql)
 				     (- (length s2) (length s1)))))))
-	 collect (list i mincol s1 s2 pos)))
+	 collect (if (> (incf count) limit)
+		     "Count limit exceeded"
+		   (list i mincol s1 s2 pos))
+	 while (<= count limit)))
   nil)
 
 (deftest format.d.5
@@ -202,7 +213,9 @@
 (deftest format.d.7
   (let ((fn (formatter "~v,v@D")))
     (with-standard-io-syntax
-     (loop for x = (ash 1 (+ 2 (random 80)))
+     (loop with limit = 10
+	   with count = 0
+	   for x = (ash 1 (+ 2 (random 80)))
 	   for mincol = (random 30)
 	   for padchar = (random-from-seq +standard-chars+)
 	   for i = (- (random (+ x x)) x)
@@ -218,7 +231,10 @@
 			 (or (/= (length s2) mincol)
 			     (find padchar s2 :end (- (length s2) (length s1))
 				   :test-not #'eql))))
-	   collect (list i mincol s1 s2 pos))))
+	   collect (if (> (incf count) limit)
+		       "Count limit exceeded"
+		     (list i mincol s1 s2 s3 pos))
+	   while (<= count limit))))
   nil)
 
 ;;; Comma tests
