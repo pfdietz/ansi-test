@@ -34,6 +34,7 @@
 	 (total (car (last cumulative-weights)))
 	 (r (gensym)))
     (assert (every #'plusp weights))
+    (when (typep total 'ratio) (setf total (coerce total 'double-float)))
     `(let ((,r (random ,total)))
        (cond
 	,@(loop for case in (butlast cases)
@@ -257,3 +258,23 @@
     (make-list p :initial-element 1))
    (t (mapcar #'1+ (random-partition* (- n p) p)))))
 
+
+;;; Random method combination
+;;; Methods in this method combination take a single method qualifier,
+;;; which is a positive integer.  Each method is invoked
+;;; with probability proportional to its qualifier.
+;;;
+;;; Inside a method, a throw to the symbol FAIL causes
+;;; the application to repeat.  This enables methods to abort
+;;; and retry the random selection process.
+
+(defun positive-integer-qualifier-p (qualifiers)
+  (typep qualifiers '(cons (integer 1) null)))
+
+(define-method-combination randomized nil ((method-list positive-integer-qualifier-p))
+  (assert method-list)
+  (let ((clauses (mapcar #'(lambda (method)
+			     (let ((weight (car (method-qualifiers method))))
+			       `(,weight (call-method ,method))))
+			 method-list)))
+  `(loop (catch 'fail (return (rcase ,@clauses))))))
