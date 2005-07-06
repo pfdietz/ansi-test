@@ -11,9 +11,10 @@ Things to do to the test suite (not a complete list)
   but should extend generator of random real types)
 
 5. Add JA's long form define-method-combination tests (from clisp),
-  or write own.
+  or write own (partially done)
 
-6. adjust-array (partially done)
+6. adjust-array (need to add specialized integer arrays other than
+  bit vectors, and float vectors)
 
 7. Address synonym-stream issues (from Duane Rettig)
 
