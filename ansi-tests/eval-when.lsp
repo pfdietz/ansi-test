@@ -63,3 +63,45 @@
 
 ;;; More EVAL-WHEN tests to go here
 
+(deftest eval-when.2
+  (eval-when () :bad)
+  nil)
+
+(deftest eval-when.3
+  (eval-when (:execute))
+  nil)
+
+(deftest eval-when.4
+  (eval-when (:execute) :good)
+  :good)
+
+(deftest eval-when.5
+  (eval-when (:compile-toplevel) :bad)
+  nil)
+
+(deftest eval-when.6
+  (eval-when (:load-toplevel) :bad)
+  nil)
+
+(deftest eval-when.7
+  (eval-when (:compile-toplevel :execute) :good)
+  :good)
+
+(deftest eval-when.8
+  (eval-when (:load-toplevel :execute) :good)
+  :good)
+
+(deftest eval-when.9
+  (eval-when (:load-toplevel :compile-toplevel) :bad)
+  nil)
+
+(deftest eval-when.10
+  (eval-when (:load-toplevel :compile-toplevel :execute) :good)
+  :good)
+
+(deftest eval-when.11
+  (eval-when (:execute) (values 'a 'b 'c 'd))
+  a b c d)
+
+
+
