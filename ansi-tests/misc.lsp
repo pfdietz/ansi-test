@@ -10795,3 +10795,10 @@ Broken at C::WT-MAKE-CLOSURE.
   (let ((form '(lambda () (if (oddp (progn (vector) 3747237)) 'a nil))))
     (loop repeat 10 collect (funcall (compile nil form))))
   (a a a a a a a a a a))
+
+;;; gcl 2.7.0 (12 Jul 2005)
+;;; Error in WHEN [or a callee]: The GO tag #:G3614 is missing.
+
+(deftest misc.603
+  (funcall (compile nil '(lambda () (let ((x (values 0))) 0))))
+  0)
