@@ -103,5 +103,33 @@
   (eval-when (:execute) (values 'a 'b 'c 'd))
   a b c d)
 
+(deftest eval-when.12
+  (let ((x :good))
+    (values (eval-when (:load-toplevel) (setq x :bad)) x))
+  nil :good)
 
+(deftest eval-when.13
+  (let ((x :good))
+    (values (eval-when (:compile-toplevel) (setq x :bad)) x))
+  nil :good)
+
+(deftest eval-when.14
+  (let ((x :bad))
+    (values (eval-when (:execute) (setq x :good)) x))
+  :good :good)
+
+(deftest eval-when.15
+  (let ((x :good))
+    (values (eval-when (load) (setq x :bad)) x))
+  nil :good)
+
+(deftest eval-when.16
+  (let ((x :good))
+    (values (eval-when (compile) (setq x :bad)) x))
+  nil :good)
+
+(deftest eval-when.17
+  (let ((x :bad))
+    (values (eval-when (eval) (setq x :good)) x))
+  :good :good)
 
