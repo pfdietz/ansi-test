@@ -5,15 +5,16 @@
 
 (in-package :cl-test)
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
+(eval-when (:compile-toplevel :load-toplevel)
+  (compile-and-load "random-aux.lsp")
   (compile-and-load "random-int-form.lsp"))
 
 (defvar *print-random-type-prop-input* nil)
 (defparameter *random-type-prop-result* nil)
 
 (defgeneric make-random-type-containing (val)
-  (:documentation
-   "Given a value, generate a random type that contains that value."))
+  (:method-combination randomized)
+  (:documentation "Given a value, generate a random type that contains that value."))
 
 (declaim (special *param-types* *params* *is-var?* *form*))
 
@@ -232,95 +233,114 @@
     ;; (dolist (v vals) (describe v))
     vals))
 
-;; Default method
-(defmethod make-random-type-containing ((val t)) t)
+(defmacro defmethods (name &rest bodies)
+  `(progn
+     ,@(mapcar
+	#'(lambda (body) `(defmethod ,name ,@body))
+	bodies)))
 
-(defmethod make-random-type-containing ((val standard-class))
-  (random-from-seq #(standard-class class t)))
+(defmethods make-random-type-containing 
+  (4 ((val t))
+     (rcase
+      (1 t)
+      (1 (if (consp val) 'cons 'atom))
+      (1 `(eql ,val))
+      (1 (let* ((n1 (random 4))
+		(n2 (random 4))
+		;; Replace these calls with (make-random-element-of-type t)
+		;; at some point
+		(l1 (loop repeat n1 collect (random-leaf)))
+		(l2 (loop repeat n2 collect (random-leaf))))
+	   `(member ,@l1 ,val ,@l2)))))
 
-(defmethod make-random-type-containing ((val structure-class))
-  (random-from-seq #(structure-class class t)))
+  (1 ((val standard-object)) 'standard-object)
+  (1 ((val class)) 'class)
+  (1 ((val standard-class)) 'standard-class)
+  (1 ((val structure-class)) 'structure-class)
+  (1 ((val number)) 'number)
+  (1 ((val real)) 'real)
+  (1 ((val ratio)) 'ratio)
 
-(defmethod make-random-type-containing ((val integer))
-  (rcase
-   (2 (let ((tp (random-from-seq '(t number real rational))))
-	(if #-allegro (coin) #+allegro nil
-	    (find-class tp) tp)))
-   (1 (random-from-seq '(integer signed-byte atom)))
-   #- allegro (1 (find-class 'integer))
-   (2 `(eql ,val))
-   (2 (let* ((n1 (random 4))
-	     (n2 (random 4))
-	     (l1 (loop repeat n1 collect (make-random-integer)))
-	     (l2 (loop repeat n2 collect (make-random-integer))))
-	`(member ,@l1 ,val ,@l2)))
-   (4 (let ((lo (abs (make-random-integer))))
-	`(integer ,(- val lo))))
-   (4 (let ((lo (abs (make-random-integer))))
-	`(integer ,(- val lo) *)))
-   (4 (let ((hi (abs (make-random-integer))))
-	`(integer * ,(+ val hi))))
-   (8 (let ((lo (abs (make-random-integer)))
-	    (hi (abs (make-random-integer))))
-	`(integer ,(- val lo) ,(+ val hi))))
-   (2 (if (>= val 0) `unsigned-byte
-	(make-random-type-containing val)))))
+  (1 ((val integer))
+     (rcase
+      (1 'integer)
+      (1 'signed-byte)
+      (1 (let* ((n1 (random 4))
+		(n2 (random 4))
+		(l1 (loop repeat n1 collect (make-random-integer)))
+		(l2 (loop repeat n2 collect (make-random-integer))))
+	   `(member ,@l1 ,val ,@l2)))
+      (1 (let ((lo (abs (make-random-integer))))
+	   `(integer ,(- val lo))))
+      (2 (let ((lo (abs (make-random-integer))))
+	   `(integer ,(- val lo) *)))
+      (2 (let ((hi (abs (make-random-integer))))
+	   `(integer * ,(+ val hi))))
+      (4 (let ((lo (abs (make-random-integer)))
+	       (hi (abs (make-random-integer))))
+	   `(integer ,(- val lo) ,(+ val hi))))
+      (1 (if (>= val 0) 'unsigned-byte (throw 'fail nil)))))
 
-(defmethod make-random-type-containing ((val character))
-  (rcase
-   (1 `(eql ,val))
-   (1 'character)
-   (1 (if (typep val 'base-char) 'base-char (make-random-type-containing val)))
-   (1 (if (typep val 'standard-char) 'standard-char (make-random-type-containing val)))
-   (1 (if (typep val 'extended-char) 'extended-char (make-random-type-containing val)))
-   (1 (let* ((n1 (random 4))
-	     (n2 (random 4))
-	     (l1 (loop repeat n1 collect (make-random-character)))
-	     (l2 (loop repeat n2 collect (make-random-character))))
-	`(member ,@l1 ,val ,@l2)))
-   (1 (random-from-seq #(t atom)))))
+  (2 ((val character))
+     (rcase
+      (1 'character)
+      (1 (if (typep val 'base-char) 'base-char
+	   #-sbcl 'extended-char
+	   #+sbcl (throw 'fail nil)
+	   ))
+      (1 (if (typep val 'standard-char) 'standard-char (throw 'fail nil)))
+      (1 (let* ((n1 (random 4))
+		(n2 (random 4))
+		(l1 (loop repeat n1 collect (make-random-character)))
+		(l2 (loop repeat n2 collect (make-random-character))))
+	   `(member ,@l1 ,val ,@l2)))))
 
-(defmethod make-random-type-containing ((val symbol))
-  (rcase
-   (1 `(eql ,val))
-   (3 'symbol)
-   (1 (if (null val) 'null (make-random-type-containing val)))
-   (1 (if (member val '(t nil)) 'boolean (make-random-type-containing val)))
-   (1 (if (keywordp val) 'keyword (make-random-type-containing val)))
-   (1 (let* ((n1 (random 4))
-	     (n2 (random 4))
-	     (l1 (loop repeat n1 collect (make-random-symbol)))
-	     (l2 (loop repeat n2 collect (make-random-symbol))))
-	`(member ,@l1 ,val ,@l2)))
-   (1 (random-from-seq #(t atom)))))
+  (1 ((val null)) 'null)
 
-(defmethod make-random-type-containing ((val rational))
-  (rcase
-   (1 `(eql ,val))
-   (1 (let* ((n1 (random 4))
-	     (n2 (random 4))
-	     (l1 (loop repeat n1 collect (make-random-element-of-type 'rational)))
-	     (l2 (loop repeat n2 collect (make-random-element-of-type 'rational))))
-	`(member ,@l1 ,val ,@l2)))
-   (1 `(rational ,val))
-   (1 `(rational * ,val))
-   (1 (let ((v (make-random-element-of-type 'rational)))
-	(if (<= v val)
-	    `(rational ,v ,val)
-	  `(rational ,val ,v))))
-   ))
+  (2 ((val symbol))
+     (rcase
+      (1 'symbol)
+      (1 (typecase val (boolean 'boolean) (keyword 'keyword) (otherwise (throw 'fail nil))))
+      (1 (let* ((n1 (random 4))
+		(n2 (random 4))
+		(l1 (loop repeat n1 collect (make-random-symbol)))
+		(l2 (loop repeat n2 collect (make-random-symbol))))
+	   `(member ,@l1 ,val ,@l2)))))
 
-(defmethod make-random-type-containing ((val float))
-  (let ((names (loop for tp in '(short-float single-float double-float long-float)
-		     when (typep val tp)
-		     collect tp)))
-    (rcase
-     (1 `(eql ,val))
-     (1 `(member ,val))
-     (1 (random-from-seq names))
-     (1 (if (>= val 0)
-	    `(,(random-from-seq names) ,(float 0 val) ,val)
-	  `(,(random-from-seq names) ,val ,(float 0 val)))))))
+  (1 ((val rational))
+     (rcase
+      (1 'rational)
+      (1 (let* ((n1 (random 4))
+		(n2 (random 4))
+		(l1 (loop repeat n1 collect (make-random-element-of-type 'rational)))
+		(l2 (loop repeat n2 collect (make-random-element-of-type 'rational))))
+	   `(member ,@l1 ,val ,@l2)))
+      (1 `(rational ,val))
+      (1 `(rational * ,val))
+      (1 (let ((v (make-random-element-of-type 'rational)))
+	   (if (<= v val)
+	       `(rational ,v ,val)
+	     `(rational ,val ,v))))))
+  
+  (1 ((val float))
+     (rcase
+      (1 (let* ((n1 (random 4))
+		(n2 (random 4))
+		(l1 (loop repeat n1 collect (- 2 (random (float 1.0 val)))))
+		(l2 (loop repeat n2 collect (- 2 (random (float 1.0 val))))))
+	   `(member ,@l1 ,val ,@l2)))
+      (1 (let ((names (float-types-containing val)))
+	   (random-from-seq names)))
+      (1 (let ((name (random-from-seq (float-types-containing val))))
+	   (if (>= val 0)
+	       `(,name ,(coerce 0 name) ,val)
+	     `(,name ,val ,(coerce 0 name)))))))
+  )
+
+(defun float-types-containing (val)
+  (loop for n in '(short-float single-float double-float long-float float)
+	when (typep val n)
+	collect n))	
 
 (defun make-random-array-dimension-spec (array dim-index)
   (assert (<= 0 dim-index))
@@ -328,20 +348,19 @@
   (let ((dim (array-dimension array dim-index)))
     (rcase (1 '*) (1 dim))))
 
-(defmethod make-random-type-containing ((val bit-vector))
-  (rcase
-   (1 (let ((root (if (and (coin)
-			   (typep val 'simple-bit-vector))
-		      'simple-bit-vector
-		    'bit-vector)))
-	(rcase (1 root)
-	       (1 `(,root))
-	       (3 `(,root ,(make-random-array-dimension-spec val 0))))))
-   (2 (call-next-method))))
+;;; More methods
+(defmethods make-random-type-containing
+  (3 ((val bit-vector))
+     (let ((root (if (and (coin)
+			  (typep val 'simple-bit-vector))
+		     'simple-bit-vector
+		   'bit-vector)))
+       (rcase (1 root)
+	      (1 `(,root))
+	      (3 `(,root ,(make-random-array-dimension-spec val 0))))))
 
-(defmethod make-random-type-containing ((val vector))
-  (rcase
-   (2 (let ((root 'vector)
+  (3 ((val vector))
+     (let ((root 'vector)
 	    (alt-root (if (and (coin) (simple-vector-p val)) 'simple-vector 'vector))
 	    (etype (rcase (1 '*)
 			  (1 (array-element-type val))
@@ -353,91 +372,76 @@
 	       (2 (if (and (simple-vector-p val) (coin))
 		      `(simple-vector ,(make-random-array-dimension-spec val 0))
 		    `(,root ,etype ,(make-random-array-dimension-spec val 0)))))))
-   (3 (call-next-method))))
 
-(defmethod make-random-type-containing ((val array))
-  (let ((root (if (and (coin) (typep val 'simple-array)) 'simple-array 'array))
+  (3 ((val array))
+     (let ((root (if (and (coin) (typep val 'simple-array)) 'simple-array 'array))
 	(etype (rcase (1 (array-element-type val)) (1 '*)))
 	(rank (array-rank val)))
-    (rcase
-     (1 root)
-     (1 `(,root))
-     (1 `(,root ,etype))
-     (1 `(,root ,etype ,(loop for i below rank collect (make-random-array-dimension-spec val i))))
-     (1 `(,root ,etype ,(loop for i below rank collect (array-dimension val i))))
-     #-ecl (1 `(,root ,etype ,rank))
-     (4 (call-next-method))
-     )))
+       (rcase
+	(1 root)
+	(1 `(,root))
+	(1 `(,root ,etype))
+	(1 `(,root ,etype ,(loop for i below rank collect (make-random-array-dimension-spec val i))))
+	(1 `(,root ,etype ,(loop for i below rank collect (array-dimension val i))))
+	#-ecl (1 `(,root ,etype ,rank)))))
 
-(defmethod make-random-type-containing ((val string))
-  (rcase
-   (1 (let ((root (cond
-		   ((and (coin)
-			 (typep val 'base-string))
-		    (cond
-		     ((and (coin) (typep val 'simple-base-string))
-		      'simple-base-string)
-		     (t 'base-string)))
-		   ((and (coin)
-			 (typep val 'simple-string))
-		    'simple-string)
-		   (t 'string))))
-	(rcase (1 root)
-	       (1 `(,root))
-	       (3 `(,root ,(make-random-array-dimension-spec val 0))))))
-   (2 (call-next-method))))
+  (3 ((val string))
+     (let ((root (cond
+		  ((and (coin)
+			(typep val 'base-string))
+		   (cond
+		    ((and (coin) (typep val 'simple-base-string))
+		     'simple-base-string)
+		    (t 'base-string)))
+		  ((and (coin)
+			(typep val 'simple-string))
+		   'simple-string)
+		  (t 'string))))
+       (rcase (1 root)
+	      (1 `(,root))
+	      (3 `(,root ,(make-random-array-dimension-spec val 0))))))
 
-(defmethod make-random-type-containing ((val cons))
-  (rcase
-   (2 'cons)
-   (2 'list)
-   (1 `(cons ,(make-random-type-containing (car val))))
-   (1 `(cons ,(make-random-type-containing (car val))
-	     ,(random-from-seq #(t *))))
-   (2 `(cons ,(random-from-seq #(t *)) 
-	     ,(make-random-type-containing (cdr val))))
-   (2 `(cons ,(make-random-type-containing (car val))
-	     ,(make-random-type-containing (cdr val))))
-   (1 t)))
+  (1 ((val list)) 'list)
 
-(defmethod make-random-type-containing ((val complex))
-  (rcase
-   (1 'complex)
-   (1 'number)
-   #-gcl (1 
-	  (let* ((t1 (type-of (realpart val)))
-		 (t2 (type-of (imagpart val)))
-		 (part-type
-		  (cond
-		   ((subtypep t1 t2) (upgraded-complex-part-type t2))
-		   ((subtypep t2 t1) (upgraded-complex-part-type t1))
-		   ((and (subtypep t1 'rational)
-			 (subtypep t2 'rational))
-		    'rational)
-		   (t
-		    (upgraded-complex-part-type `(or ,t1 ,t2))))))
-	    (if (subtypep 'real part-type)
-		'(complex real)
-	      `(complex ,part-type))))
-   (1 `(eql ,val))))
+  (1 ((val cons))
+     (rcase
+      (1 'cons)
+      (2 `(cons ,(make-random-type-containing (car val))
+		,(make-random-type-containing (cdr val))))
+      (1 `(cons ,(make-random-type-containing (car val))
+		,(random-from-seq #(t *))))
+      (1 `(cons ,(make-random-type-containing (car val))))
+      (1 `(cons ,(random-from-seq #(t *))
+		,(make-random-type-containing (cdr val))
+		))))
 
-(defmethod make-random-type-containing ((val generic-function))
-  (rcase
-   (1 'generic-function)
-   (1 (call-next-method))))
+  (1 ((val complex))
+     (rcase
+      (1 'complex)
+      #-gcl
+      (1 (let* ((t1 (type-of (realpart val)))
+		(t2 (type-of (imagpart val)))
+		(part-type
+		 (cond
+		  ((subtypep t1 t2) (upgraded-complex-part-type t2))
+		  ((subtypep t2 t1) (upgraded-complex-part-type t1))
+		  ((and (subtypep t1 'rational)
+			(subtypep t2 'rational))
+		   'rational)
+		  (t
+		   (upgraded-complex-part-type `(or ,t1 ,t2))))))
+	   (if (subtypep 'real part-type)
+	       '(complex real)
+	     `(complex ,part-type))))))
 
-(defmethod make-random-type-containing ((val function))
-  (rcase
-   (1 'function)
-   (1 (if (typep val 'compiled-function)
-	  'compiled-function
-	'function))
-   (1 t)))
-
-(defmethod make-random-type-containing ((val sequence))
-  (rcase
-   (1 'sequence)
-   (2 (call-next-method))))
+  (1 ((val generic-function)) 'generic-function)
+  (1 ((val function))
+     (rcase
+      (1 'function)
+      (1 (if (typep val 'compiled-function)
+	     'compiled-function
+	   'function))))
+  )
 
 ;;; Macro for defining random type prop tests
 
