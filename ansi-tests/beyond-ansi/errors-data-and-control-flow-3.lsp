@@ -116,3 +116,95 @@
 (def-all-error-test multiple-value-setq.5 (constantly nil)
   #'(lambda (x) `(multiple-value-setq (,x) nil))
   :vals cl-test::*cl-constant-symbols*)
+
+;;; VALUES
+
+(def-all-error-test values.1 'listp #'(lambda (x) (cons 'values x)))
+(def-all-error-test values.2 'listp #'(lambda (x) (list* 'values 1 x)))
+
+;;; NTH-VALUE
+
+(def-error-test nth-value.1 (nth-value))
+(def-error-test nth-value.2 (nth-value 0))
+(def-error-test nth-value.3 (nth-value 1 '(a b c) 2))
+(def-all-error-test nth-value.4 (constantly nil) #'(lambda (x) `(nth-value ',x)))
+(def-all-error-test nth-value.5 (constantly nil) #'(lambda (x) `(nth-value . ,x)))
+(def-all-error-test nth-value.6 (constantly nil) #'(lambda (x) `(nth-value 0 . ,x)))
+(def-all-error-test nth-value.7 'integerp #'(lambda (x) `(nth-value ',x nil)))
+(def-error-test nth-value.8 (nth-value -1 'x))
+(def-all-error-test nth-value.9 'null #'(lambda (x) `(nth-value 0 'a . ,x)))
+
+;;; PROG
+
+(def-error-test prog.1 (prog))
+(def-all-error-test prog.2 'listp #'(lambda (x) `(prog . ,x)))
+(def-all-error-test prog.3 'listp #'(lambda (x) `(prog ,x)))
+(def-all-error-test prog.4 'listp #'(lambda (x) `(prog () . ,x)))
+(def-all-error-test prog.5 (typef '(or symbol cons))  #'(lambda (x) `(prog (,x))))
+(def-all-error-test prog.6 'listp #'(lambda (x) `(prog (v . ,x))))
+(def-all-error-test prog.7 'listp #'(lambda (x) `(prog ((v . ,x)))))
+(def-error-test prog.8 (prog ((x nil nil))))
+(def-all-error-test prog.9 'null #'(lambda (x) `(prog ((v nil . ,x)))))
+(def-error-test prog.10 (prog () (return nil) . bar))
+
+;;; PROG*
+
+(def-error-test prog*.1 (prog*))
+(def-all-error-test prog*.2 'listp #'(lambda (x) `(prog* . ,x)))
+(def-all-error-test prog*.3 'listp #'(lambda (x) `(prog* ,x)))
+(def-all-error-test prog*.4 'listp #'(lambda (x) `(prog* () . ,x)))
+(def-all-error-test prog*.5 (typef '(or symbol cons))  #'(lambda (x) `(prog* (,x))))
+(def-all-error-test prog*.6 'listp #'(lambda (x) `(prog* (v . ,x))))
+(def-all-error-test prog*.7 'listp #'(lambda (x) `(prog* ((v . ,x)))))
+(def-error-test prog*.8 (prog* ((x nil nil))))
+(def-all-error-test prog*.9 'null #'(lambda (x) `(prog* ((v nil . ,x)))))
+(def-error-test prog*.10 (prog* () (return nil) . bar))
+
+;;; PROG1
+
+(def-error-test prog1.1 (prog1))
+(def-all-error-test prog1.2 #'listp #'(lambda (x) `(prog1 . ,x)))
+(def-all-error-test prog1.3 #'listp #'(lambda (x) `(prog1 nil . ,x)))
+(def-error-test prog1.4 (block nil (prog1 (return t) . foo)))
+
+;;; PROG2
+
+(def-error-test prog2.1 (prog2))
+(def-all-error-test prog2.2 #'listp #'(lambda (x) `(prog2 . ,x)))
+(def-error-test prog2.3 (prog2 t))
+(def-all-error-test prog2.4 #'listp #'(lambda (x) `(prog2 nil . ,x)))
+(def-all-error-test prog2.5 #'listp #'(lambda (x) `(prog2 'a 'b . ,x)))
+(def-all-error-test prog2.6 #'listp #'(lambda (x) `(prog2 'a 'b nil . ,x)))
+(def-error-test prog2.7 (block nil (prog2 (return t) nil . foo)))
+
+;;; PROGN
+
+(def-all-error-test progn.1 'listp #'(lambda (x) `(progn . ,x)))
+(def-all-error-test progn.2 'listp #'(lambda (x) `(progn nil . ,x)))
+(def-all-error-test progn.3 'listp #'(lambda (x) `(progn 'a 'b . ,x)))
+
+;;; DEFINE-MODIFY-MACRO
+
+(def-error-test define-modify-macro.1 (define-modify-macro))
+(def-error-test define-modify-macro.2 (define-modify-macro #.(gensym)))
+(def-all-error-test define-modify-macro.3 'symbolp #'(lambda (x) `(define-modify-macro ,x ())))
+(def-all-error-test define-modify-macro.4 'listp #'(lambda (x) `(define-modify-macro #.(gensym) ,x)))
+(def-all-error-test define-modify-macro.5 'listp #'(lambda (x) `(define-modify-macro #.(gensym) () . ,x)))
+(def-all-error-test define-modify-macro.6 'symbolp #'(lambda (x) `(define-modify-macro #.(gensym) () ,x)))
+(def-all-error-test define-modify-macro.7 'stringp #'(lambda (x) `(define-modify-macro #.(gensym) () #.(gensym) ,x)))
+(def-all-error-test define-modify-macro.8 'listp #'(lambda (x) `(define-modify-macro #.(gensym) () #.(gensym) . ,x)))
+(def-all-error-test define-modify-macro.9 'listp #'(lambda (x) `(define-modify-macro #.(gensym) () #.(gensym) "foo" . ,x)))
+(def-all-error-test define-modify-macro.10 (constantly nil)
+  #'(lambda (x) `(define-modify-macro #.(gensym) () #.(gensym) "foo" ,x)))
+
+;;; DEFSETF
+
+(def-error-test defsetf.1 (defsetf))
+(def-error-test defsetf.2 (defsetf #.(gensym)))
+(def-all-error-test defsetf.3 'listp #'(lambda (x) `(defsetf ,x)))
+(def-all-error-test defsetf.4 'listp #'(lambda (x) `(defsetf #.(gensym) . ,x)))
+(def-all-error-test defsetf.5 'listp #'(lambda (x) `(defsetf #.(gensym) #.(gensym) . ,x)))
+(def-all-error-test defsetf.6 'stringp #'(lambda (x) `(defsetf #.(gensym) #.(gensym) ,x)))
+(def-all-error-test defsetf.7 'null #'(lambda (x) `(defsetf #.(gensym) #.(gensym) "foo" . ,x)))
+(def-all-error-test defsetf.8 (constantly nil) #'(lambda (x) `(defsetf #.(gensym) #.(gensym) "foo" ,x)))
+(def-all-error-test defsetf.9 (typef '(or list symbol)) #'(lambda (x) `(defsetf #.(gensym) ,x)))
