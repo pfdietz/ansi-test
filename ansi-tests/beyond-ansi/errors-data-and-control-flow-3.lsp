@@ -81,6 +81,10 @@
   (multiple-value-bind (x) nil (declare) . 1))
 (def-error-test multiple-value-bind.9
   (multiple-value-bind (x) 1 (declare (type symbol x)) x))
+(def-error-test multiple-value-bind.10
+  (multiple-value-bind (x) 1 nil (declare) nil))
+(def-error-test multiple-value-bind.11
+  (multiple-value-bind (x) 1 "foo" "bar" (declare) nil))
 
 ;;; MULTIPLE-VALUE-CALL
 
@@ -145,7 +149,6 @@
 (def-all-error-test prog.7 'listp #'(lambda (x) `(prog ((v . ,x)))))
 (def-error-test prog.8 (prog ((x nil nil))))
 (def-all-error-test prog.9 'null #'(lambda (x) `(prog ((v nil . ,x)))))
-(def-error-test prog.10 (prog () (return nil) . bar))
 
 ;;; PROG*
 
@@ -158,14 +161,12 @@
 (def-all-error-test prog*.7 'listp #'(lambda (x) `(prog* ((v . ,x)))))
 (def-error-test prog*.8 (prog* ((x nil nil))))
 (def-all-error-test prog*.9 'null #'(lambda (x) `(prog* ((v nil . ,x)))))
-(def-error-test prog*.10 (prog* () (return nil) . bar))
 
 ;;; PROG1
 
 (def-error-test prog1.1 (prog1))
 (def-all-error-test prog1.2 #'listp #'(lambda (x) `(prog1 . ,x)))
 (def-all-error-test prog1.3 #'listp #'(lambda (x) `(prog1 nil . ,x)))
-(def-error-test prog1.4 (block nil (prog1 (return t) . foo)))
 
 ;;; PROG2
 
@@ -175,7 +176,6 @@
 (def-all-error-test prog2.4 #'listp #'(lambda (x) `(prog2 nil . ,x)))
 (def-all-error-test prog2.5 #'listp #'(lambda (x) `(prog2 'a 'b . ,x)))
 (def-all-error-test prog2.6 #'listp #'(lambda (x) `(prog2 'a 'b nil . ,x)))
-(def-error-test prog2.7 (block nil (prog2 (return t) nil . foo)))
 
 ;;; PROGN
 
@@ -208,3 +208,58 @@
 (def-all-error-test defsetf.7 'null #'(lambda (x) `(defsetf #.(gensym) #.(gensym) "foo" . ,x)))
 (def-all-error-test defsetf.8 (constantly nil) #'(lambda (x) `(defsetf #.(gensym) #.(gensym) "foo" ,x)))
 (def-all-error-test defsetf.9 (typef '(or list symbol)) #'(lambda (x) `(defsetf #.(gensym) ,x)))
+
+;;; Need long form defsetf error tests
+
+;;; FIXME: add tests for defsetf-lambda-lists
+
+(def-all-error-test defsetf.10 'symbolp #'(lambda (x)  `(defsetf #.(gensym) (#1=#.(gensym)) (,x) #1#)))
+(def-all-error-test defsetf.11 'listp #'(lambda (x) `(defsetf #.(gensym) (#.(gensym)) ., x)))
+(def-all-error-test defsetf.12 'listp #'(lambda (x) `(defsetf #.(gensym) (#.(gensym)) , x)))
+(def-all-error-test defsetf.13 'listp #'(lambda (x) `(defsetf #.(gensym) (#.(gensym)) (a . ,x))))
+
+(def-error-test defsetf.14 (defsetf #.(gensym) () () nil (declare (optimize)) nil))
+(def-error-test defsetf.15 (defsetf #.(gensym) () () "foo" "bar" (declare (optimize)) nil))
+
+;;; FIXME -- Add tests for DEFINE-SETF-EXPANDER
+
+(def-error-test get-setf-expansion.1 (get-setf-expansion))
+(def-all-error-test get-setf-expansion.2 'listp #'(lambda (x) `(get-setf-expansion . ,x)))
+(def-all-error-test get-setf-expansion.3 (typef '(or list symbol))
+  #'(lambda (x) `(get-setf-expansion ,x)))
+
+;;; FIXME -- figure out how to test for invalid environment objects
+;;;   Must make an assumption about what can be an environment
+
+;;; SETF tests
+
+(def-all-error-test setf.1 (constantly nil) #'(lambda (x) `(setf ,x)))
+(def-all-error-test setf.2 'listp #'(lambda (x) `(setf . ,x)))
+(def-all-error-test setf.3 'listp #'(lambda (x) `(setf ,x nil)))
+(def-all-error-test setf.4 'listp #'(lambda (x) `(let (a) (setf a . ,x))))
+
+;;; PSETF tests
+
+(def-all-error-test psetf.1 (constantly nil) #'(lambda (x) `(psetf ,x)))
+(def-all-error-test psetf.2 'listp #'(lambda (x) `(psetf . ,x)))
+(def-all-error-test psetf.3 'listp #'(lambda (x) `(psetf ,x nil)))
+(def-all-error-test psetf.4 'listp #'(lambda (x) `(let (a) (psetf a . ,x))))
+
+;;; SHIFTF tests
+
+(def-error-test shiftf.1 (shiftf))
+(def-all-error-test shiftf.2 'listp #'(lambda (x) `(shiftf . ,x)))
+(def-all-error-test shiftf.3 (constantly nil) #'(lambda (x) `(shiftf ,x)))
+(def-all-error-test shiftf.4 'listp #'(lambda (x) `(let (a) (shiftf a . ,x))))
+(def-all-error-test shiftf.5 'listp #'(lambda (x) `(shiftf ,x nil)))
+(def-all-error-test shiftf.6 'listp #'(lambda (x) `(let (a b) (shiftf a b . ,x))))
+(def-all-error-test shiftf.7 'listp #'(lambda (x) `(let (a) (shiftf ,x a nil))))
+(def-all-error-test shiftf.8 'listp #'(lambda (x) `(let (a) (shiftf a ,x nil))))
+
+;;; ROTATEF tests
+
+(def-all-error-test rotatef.1 'listp #'(lambda (x) `(rotatef . ,x)))
+(def-all-error-test rotatef.2 'listp #'(lambda (x) `(rotatef ,x)))
+(def-all-error-test rotatef.3 'listp #'(lambda (x) `(let (a) (rotatef a ,x))))
+(def-all-error-test rotatef.4 'listp #'(lambda (x) `(let (a) (rotatef a . ,x))))
+(def-all-error-test rotatef.5 'listp #'(lambda (x) `(let (a) (rotatef ,x a))))
