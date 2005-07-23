@@ -120,6 +120,9 @@
 		collect (list type1 type2))))
   nil)
 
+(deftest subtypep.array.10
+  (subtypep* '(array t nil) 'integer)
+  nil t)
 
 
 ;;;; Tests on the definitions of various vector types
