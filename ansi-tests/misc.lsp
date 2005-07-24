@@ -10802,3 +10802,81 @@ Broken at C::WT-MAKE-CLOSURE.
 (deftest misc.603
   (funcall (compile nil '(lambda () (let ((x (values 0))) 0))))
   0)
+
+;;; gcl 2.7.0 (23 Jul 2005, experimental cvs HEAD)
+;;; Error in COMPILER::T1EXPR [or a callee]:
+;;;   LOAD-TIME-VALUE is not of type (OR RATIONAL FLOAT).
+
+(deftest misc.604
+  (let ((form '(lambda (p1 p2)
+                 (declare (optimize (speed 2) (safety 1) (debug 3) (space 3))
+                          (type real p1) (type t p2))
+                 (eql (the (rational -55253767/37931089) p1) (the atom p2)))))
+    (funcall (compile nil form) -55253767/37931089 'a))
+  nil)
+
+;;; Error in FUNCALL [or a callee]: LOAD-TIME-VALUE is not of type NUMBER.
+
+(deftest misc.605
+  (let ((form '(lambda (p1 p2)
+		 (declare (optimize (speed 3) (safety 1) (debug 0) (space 0))
+			  (type number p1) (type (float 0.0 3579.314s0) p2))
+		 (eql (the real p1) p2))))
+    (not (funcall (compile nil form) 3579.314s0 3579.314s0)))
+  nil)
+
+;;; Error in COMPILER::CMP-ANON [or a callee]: #\a is not of type FIXNUM.
+
+(deftest misc.606
+  (let ((form '(lambda ()
+		 (declare (optimize (speed 3) (safety 2) (debug 3) (space 2)))
+		 (equal #\a #c(-1775806.0s0 88367.29s0)))))
+    (funcall (compile nil form)))
+  nil)
+
+;;; Error in COMPILER::CMP-ANON [or a callee]: #*1 is not of type FIXNUM.
+
+(deftest misc.607
+  (funcall (compile nil '(lambda ()
+			   (declare (optimize (speed 0) (safety 2) (debug 2) (space 2)))
+			   (equal #*1 1))))
+  nil)
+
+;;; Error in COMPILER::CMP-ANON [or a callee]: #\& is not of type FIXNUM.
+
+(deftest misc.608
+  (funcall (compile nil '(lambda (p1)
+			   (declare (optimize (speed 3) (safety 2) (debug 3) (space 3))
+				    (type (integer -62603278 -31187) p1))
+			   (equal p1 #\&)))
+	   -31228)
+  nil)
+
+;;; Wrong return value (was returning T)
+
+(deftest misc.609
+  (funcall (compile nil '(lambda ()
+			   (declare (optimize (speed 0) (safety 0) (debug 0) (space 3)))
+			   (equalp "b" #*))))
+  nil)
+
+;;; Error in COMPILER::CMP-ANON [or a callee]: 7933992 is not of type SYMBOL.
+
+(deftest misc.610
+  (not (funcall (compile nil '(lambda (p2)
+				(declare (optimize (speed 1) (safety 1) (debug 3) (space 2))
+					 (type (cons symbol) p2))
+				(typep -32 p2)))
+		'(eql -32)))
+  nil)
+
+;;; Error in CAR [or a callee]: -757161859 is not of type LIST.
+
+(deftest misc.611
+  (funcall (compile nil '(lambda (p1)
+			   (declare (optimize (speed 1) (safety 3) (debug 0) (space 2))
+				    (type (cons atom) p1))
+			   (car p1)))
+	   '(48144509 . a))
+  48144509)
+
