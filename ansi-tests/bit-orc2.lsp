@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "bit-aux.lsp")
+
 (deftest bit-orc2.1
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))
 	 (s2 (make-array nil :initial-element 0 :element-type 'bit)))
@@ -233,6 +235,12 @@
 	     (bit-orc2 #*00101 #*01011)))
     (values (%f) (let ((bv (%f))) (setf (elt bv 0) 0) bv) (%f)))
   #*10101 #*00101 #*10101)
+
+;;; Random tests
+
+(deftest bit-orc2.random.1
+  (bit-random-test-fn #'bit-orc2 #'logorc2)
+  nil)
 
 ;;; Error tests
 

@@ -6,6 +6,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "bit-aux.lsp")
+
 (deftest bit-eqv.1
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))
 	 (s2 (make-array nil :initial-element 0 :element-type 'bit)))
@@ -230,6 +232,12 @@
   #*1 2 1 2)
 
 (def-fold-test bit-eqv.fold.1 (bit-eqv #*01101 #*10100))
+
+;;; Random tests
+
+(deftest bit-eqv.random.1
+  (bit-random-test-fn #'bit-eqv #'logeqv)
+  nil)
 
 ;;; Error tests
 

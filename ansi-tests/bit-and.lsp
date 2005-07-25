@@ -5,6 +5,8 @@
 
 (in-package :cl-test)
 
+(compile-and-load "bit-aux.lsp")
+
 (deftest bit-and.1
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))
 	 (s2 (make-array nil :initial-element 0 :element-type 'bit)))
@@ -229,6 +231,12 @@
   #*0 2 1 2)
 
 (def-fold-test bit-and.fold.1 (bit-and #*01101 #*01011))
+
+;;; Randomized tests
+
+(deftest bit-and.random.1
+  (bit-random-test-fn #'bit-and #'logand)
+  nil)
 
 ;;; Error tests
 
