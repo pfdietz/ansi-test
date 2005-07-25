@@ -793,7 +793,7 @@
   (8 :initial-contents '(0 1 0 1 1 0 1 0) :element-type 'bit)
   #*01011010)
 
-(def-adjust-array-fp-test adjust-array.bit-vectoradjustable.5
+(def-adjust-array-fp-test adjust-array.bit-vector.adjustable.5
   (5 :initial-contents '(1 1 1 0 0) :fill-pointer 3 :adjustable t :element-type 'bit)
   (4 :element-type 'bit :initial-element 0)
   (assert (eq (aref a2 3) 0))
