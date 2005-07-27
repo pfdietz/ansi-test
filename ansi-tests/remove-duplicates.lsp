@@ -329,7 +329,134 @@
      (assert (string= s2 "abcdefgz"))))
   nil)
 
+;;; Order of elements kept under EQUAL, EQUALP tests
 
+(deftest remove-duplicates.2
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (remove-duplicates (list x y) :test 'equal)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) nil t)
+
+(deftest remove-duplicates.2a
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (remove-duplicates (list x 'x y) :test 'equal)))
+    (values
+     result
+     (notnot (eql (cadr result) x))
+     (notnot (eql (cadr result) y))))
+  (x (a)) nil t)
+
+(deftest remove-duplicates.3
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (remove-duplicates (list x y) :test 'equal :from-end t)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) t nil)
+
+(deftest remove-duplicates.3a
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (remove-duplicates (list x 'u 'v y) :test 'equal :from-end t)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a) u v) t nil)
+
+(deftest remove-duplicates.4
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (remove-duplicates (list x y) :test 'equalp)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) nil t)
+
+(deftest remove-duplicates.5
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (remove-duplicates (list x y) :test 'equalp :from-end t)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) t nil)
+
+;;; Similar, but destructive
+
+(deftest delete-duplicates.2
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (delete-duplicates (list x y) :test 'equal)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) nil t)
+
+(deftest delete-duplicates.2a
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (delete-duplicates (list x 'x y) :test 'equal)))
+    (values
+     result
+     (notnot (eql (cadr result) x))
+     (notnot (eql (cadr result) y))))
+  (x (a)) nil t)
+
+(deftest delete-duplicates.3
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (delete-duplicates (list x y) :test 'equal :from-end t)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) t nil)
+
+(deftest delete-duplicates.3a
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (delete-duplicates (list x 'u 'v y) :test 'equal :from-end t)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a) u v) t nil)
+
+(deftest delete-duplicates.4
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (delete-duplicates (list x y) :test 'equalp)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) nil t)
+
+(deftest delete-duplicates.5
+  (let* ((x (list 'a))
+	 (y (list 'a))
+	 (result (delete-duplicates (list x y) :test 'equalp :from-end t)))
+    (values
+     result
+     (notnot (eql (car result) x))
+     (notnot (eql (car result) y))))
+  ((a)) t nil)
+
+
+
+    
+    
 
 
 		    
