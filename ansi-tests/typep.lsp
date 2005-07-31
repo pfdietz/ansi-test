@@ -146,3 +146,30 @@
      (notnot (typep (incf i) '(and (integer 0 10) (integer -5 6))))
      i))
   t 1)
+
+(defun typep.19-fn (reps &optional (prob .5))
+  (let* ((vec "abcdefghijklmnopqrstuvwxyz"))
+    (flet ((%make-random-type
+	    ()
+	    `(and character (member ,@(loop for e across vec
+					    when (< (random 1.0) prob)
+					    collect e)))))
+      (loop 
+       for t1 = (%make-random-type)
+       for t2 = (%make-random-type)
+       for t3 = `(and ,t1 ,t2)
+       for result1 = (loop for e across vec
+			   when (if (typep e t3)
+				    (or (not (typep e t1)) (not (typep e t2)))
+				  (and (typep e t1) (typep e t2)))
+			   collect e)
+       repeat reps
+       when result1
+       nconc (list result1 t1 t2 t3)))))
+
+(eval-when (:load-toplevel) (compile 'typep.19-fn))
+
+(deftest typep.19 (typep.19-fn 1000) nil)
+
+	    
+			     
