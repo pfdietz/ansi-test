@@ -124,6 +124,17 @@
   (subtypep* '(array t nil) 'integer)
   nil t)
 
+(deftest subtypep.array.11
+  (subtypep* '(array t nil) '(array t (*)))
+  nil t)
+
+(deftest subtypep.array.12
+  (subtypep* '(array t nil) '(array t 1))
+  nil t)
+
+(deftest subtypep.array.13
+  (subtypep* '(array bit nil) '(array bit 1))
+  nil t)
 
 ;;;; Tests on the definitions of various vector types
 
