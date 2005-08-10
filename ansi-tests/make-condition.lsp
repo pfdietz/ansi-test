@@ -28,7 +28,7 @@
 (deftest make-condition.3
   (let* ((tp '(or program-error type-error))
 	 (c (make-condition tp)))
-    (or (not (and (subtypep tp condition)
+    (or (not (and (subtypep tp 'condition)
 		  (or (subtypep 'program-error tp)
 		      (subtypep 'type-error tp))))
 	(notnot-mv (typep c tp))))
