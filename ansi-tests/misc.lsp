@@ -10890,3 +10890,42 @@ Broken at C::WT-MAKE-CLOSURE.
                    (the (member "foo" #\- :b "bar") p2))))
    #*1 :b)
   nil)
+
+;;; Error in APPLY [or a callee]: The tag CT1 is undefined.
+
+(deftest misc.613
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+      (declare (type (integer -20326914 13338097) a))
+      (declare (ignorable a))
+      (declare (optimize (space 3) (safety 1) (debug 3)
+		(speed 1) (compilation-speed 3)))
+      (let* ((*s7* (catch 'ct1
+		     (reduce #'(lambda (lmv6 lmv5)
+				 (throw 'ct1 0))
+			     (list a 0 0) :end 2))))
+	(declare (special *s7*))
+	0)))
+   1)
+  0)
+
+;;; Error in MULTIPLE-VALUE-BIND [or a callee]: Cannot get relocated section contents
+
+(deftest misc.614
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+      (declare (type (integer -3873004182 -3717314779) a))
+      (declare (ignorable a))
+      (declare (optimize (debug 0) (safety 1) (speed 3)
+		(space 0) (compilation-speed 0)))
+      (let* ((v1 (make-array nil :initial-element
+			     (reduce #'logand (list a 0 a)))))
+	(declare (dynamic-extent v1))
+	0)))
+   -3755148485)
+  0)
+
