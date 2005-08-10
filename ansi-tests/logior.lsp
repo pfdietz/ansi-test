@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-(in-package :cl-test)
-
 (compile-and-load "numbers-aux.lsp")
 
 ;;; Error tests
