@@ -10898,16 +10898,11 @@ Broken at C::WT-MAKE-CLOSURE.
    (compile
     nil
     '(lambda (a)
-      (declare (type (integer -20326914 13338097) a))
-      (declare (ignorable a))
       (declare (optimize (space 3) (safety 1) (debug 3)
 		(speed 1) (compilation-speed 3)))
-      (let* ((*s7* (catch 'ct1
-		     (reduce #'(lambda (lmv6 lmv5)
-				 (throw 'ct1 0))
-			     (list a 0 0) :end 2))))
-	(declare (special *s7*))
-	0)))
+      (catch 'ct1
+	(reduce #'(lambda (lmv6 lmv5) (throw 'ct1 0))
+		(list a 0 0) :end 2))))
    1)
   0)
 
