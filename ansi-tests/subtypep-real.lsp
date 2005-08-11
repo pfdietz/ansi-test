@@ -194,3 +194,8 @@
 (deftest subtypep.real.24
   (check-all-subtypep '(not (real -1/2 1/2)) '(not (eql 0)))
   nil)
+
+(deftest subtypep.real.25
+  (check-all-subtypep t '(or (not (real 0 10)) (not (real -100 -50))))
+  nil)
+
