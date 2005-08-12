@@ -26,12 +26,10 @@
 		  (handler-bind
 		   ((style-warning #'(lambda (c)
 				       (declare (ignore c))
-;				       (break "foo")
 				       (setf actual-style-warnings-p t)
 				       nil))
 		    ((or error warning)
 		     #'(lambda (c)
-;			 (break "bar")
 			 (unless (typep c 'style-warning)
 			   (setf actual-warnings-p t))
 			 nil)))
@@ -42,9 +40,8 @@
       (destructuring-bind
 	  (output-truename warnings-p failure-p)
 	  vals
-;	(print (namestring (truename target-pathname)))
-;	(print (namestring output-truename))
-;	(format t "str ~a~%" str)
+	(print (namestring (truename target-pathname)))
+	(print (namestring output-truename))
 	(values
 	 (let ((v1 (or print verbose
 		       (and (not print-p) *compile-print*)

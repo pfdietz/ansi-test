@@ -627,8 +627,8 @@
   (defmethod (setf documentation-test-class-1-doc-accessor) ((newdoc string) (obj documentation-test-class-1))
     (setf (slot-value obj 'my-doc) newdoc))
   
-;  (defmethod documentation ((obj documentation-test-class-1) (doctype (eql t)))
-;    (documentation-test-class-1-doc-accessor obj))
+  (defmethod documentation ((obj documentation-test-class-1) (doctype (eql t)))
+    (documentation-test-class-1-doc-accessor obj))
 
   (defmethod (setf documentation) ((newdoc string) (obj documentation-test-class-1) (doctype (eql t)))
     (setf (documentation-test-class-1-doc-accessor obj) newdoc)))
