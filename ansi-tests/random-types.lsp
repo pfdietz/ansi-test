@@ -9,6 +9,8 @@
 (compile-and-load "random-aux.lsp")
 (compile-and-load "random-int-form.lsp")
 
+(defparameter *random-types* nil)
+
 (defun make-random-type (size)
   (if (<= size 1)
       (rcase
@@ -73,6 +75,7 @@
 	for t2 = (make-random-type size)
 	for i from 0 below n
 	;; do (print (list t1 t2))
+        do (setf *random-types* (list t1 t2))
 	do (when (and (= (mod i 100) 0) (> i 0))
 	     (format t "~A " i) (finish-output *standard-output*))
 	when (test-types t1 t2)
@@ -195,15 +198,16 @@
 
 (defun test-type-triple (t1 t2 t3)
   ;; Returns non-nil if a problem is found
-  (multiple-value-bind (sub1 success1)
-      (subtypep t1 t2)
-    (when success1
-      (if sub1
-	  (append
-	   (check-all-subtypep t1 `(or ,t2 ,t3))
-	   (check-all-subtypep `(and ,t1 ,t3) t2))
-	(or (subtypep `(or ,t1 ,t3) t2)
-	    (subtypep t1 `(and ,t2 ,t3)))))))
+  (catch 'problem
+    (multiple-value-bind (sub1 success1)
+	(subtypep t1 t2)
+      (when success1
+	(if sub1
+	    (append
+	     (check-all-subtypep t1 `(or ,t2 ,t3))
+	     (check-all-subtypep `(and ,t1 ,t3) t2))
+	    (or (subtypep `(or ,t1 ,t3) t2)
+		(subtypep t1 `(and ,t2 ,t3))))))))
 
 (defun test-random-types3 (n size)
   (loop for t1 = (make-random-type (1+ (random size)))
@@ -211,10 +215,11 @@
 	for t3 = (make-random-type (1+ (random size)))
 	for i from 1 to n
 	;; do (print (list t1 t2))
+        do (setf *random-types* (list t1 t2 t3))
 	do (when (and (= (mod i 100) 0) (> i 0))
 	     (format t "~A " i) (finish-output *standard-output*))
 	when (test-type-triple t1 t2 t3)
-	collect (list t1 t2)
+	collect (list t1 t2 t3)
 	finally (terpri)))
 
 (defun prune-type-triple (pair &optional (fn #'test-type-triple))
