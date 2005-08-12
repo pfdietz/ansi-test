@@ -9,7 +9,7 @@
 (load "return.lsp")
 (load "return-from.lsp")
 (load "defsetf.lsp")
-(load "define-setf-expander.lsp")
+;(load "define-setf-expander.lsp")
 
 (load "and.lsp")
 (load "apply.lsp")
