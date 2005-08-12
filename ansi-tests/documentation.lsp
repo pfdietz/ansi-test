@@ -614,23 +614,24 @@
 
 ;;; Defining new methods for DOCUMENTATION
 
-(defgeneric documentation-test-class-1-doc-accessor (obj))
-(defgeneric (setf documentation-test-class-1-doc-accessor) (newdoc obj))
+(ignore-errors
+  (defgeneric documentation-test-class-1-doc-accessor (obj))
+  (defgeneric (setf documentation-test-class-1-doc-accessor) (newdoc obj))
 
-(defclass documentation-test-class-1 () ((my-doc :accessor documentation-test-class-1-doc-accessor
+  (defclass documentation-test-class-1 () ((my-doc :accessor documentation-test-class-1-doc-accessor
 						 :type (or null string)
 						 :initform nil)))
   
-(defmethod documentation-test-class-1-doc-accessor ((obj documentation-test-class-1) )
-  (slot-value obj 'my-doc))
-(defmethod (setf documentation-test-class-1-doc-accessor) ((newdoc string) (obj documentation-test-class-1))
-  (setf (slot-value obj 'my-doc) newdoc))
+  (defmethod documentation-test-class-1-doc-accessor ((obj documentation-test-class-1) )
+    (slot-value obj 'my-doc))
+  (defmethod (setf documentation-test-class-1-doc-accessor) ((newdoc string) (obj documentation-test-class-1))
+    (setf (slot-value obj 'my-doc) newdoc))
+  
+  (defmethod documentation ((obj documentation-test-class-1) (doctype (eql t)))
+    (documentation-test-class-1-doc-accessor obj))
 
-(defmethod documentation ((obj documentation-test-class-1) (doctype (eql t)))
-  (documentation-test-class-1-doc-accessor obj))
-
-(defmethod (setf documentation) ((newdoc string) (obj documentation-test-class-1) (doctype (eql t)))
-  (setf (documentation-test-class-1-doc-accessor obj) newdoc))
+  (defmethod (setf documentation) ((newdoc string) (obj documentation-test-class-1) (doctype (eql t)))
+    (setf (documentation-test-class-1-doc-accessor obj) newdoc)))
 
 (deftest documentation.new-method.1
   (let ((obj (make-instance 'documentation-test-class-1)))
