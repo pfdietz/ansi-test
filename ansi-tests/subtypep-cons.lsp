@@ -319,3 +319,9 @@
 	(t2 `(not (cons t (complex (integer * -500))))))
     (subtypep-and-contrapositive-are-consistent t1 t2))
   t)
+
+;;; From GCL
+
+(deftest subtypep.cons.39
+  (values (subtypep t '(and (not (cons cons (cons cons t))) (not (cons t cons)))))
+  nil)
