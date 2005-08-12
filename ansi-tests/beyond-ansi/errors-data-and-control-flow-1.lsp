@@ -22,6 +22,11 @@
 (def-error-test defun.4 (defun #.(gensym) #.(gensym)))
 (def-error-test defun.5 (defun #.(gensym) () . foo))
 
+(def-error-test defun.6 (defun #.(gensym) () "foo" "bar" (declare)))
+(def-error-test defun.7 (defun #.(gensym) () nil (declare)))
+
+;;; FIXME  Add lambda list tests
+
 ;;; FLET
 
 (def-error-test flet.1 (flet . foo))
@@ -65,6 +70,11 @@
 (def-error-test flet.28 (flet ((foo (&aux (x nil . bar))))))
 (def-error-test flet.29 (flet ((foo (&aux (x nil nil))))))
 
+(def-error-test flet.30 (flet ((foo () "x" "y" (declare))) (foo)))
+(def-error-test flet.31 (flet ((foo () :bad1) (foo () :bad2)) (foo)))
+
+;;; FIXME Add tests for disallowed lambda list keywords
+
 ;;; LABELS
 
 (def-error-test labels.1 (labels . foo))
@@ -107,6 +117,11 @@
 (def-error-test labels.27 (labels ((foo (&aux (x . bar))))))
 (def-error-test labels.28 (labels ((foo (&aux (x nil . bar))))))
 (def-error-test labels.29 (labels ((foo (&aux (x nil nil))))))
+
+(def-error-test labels.30 (labels ((foo () "x" "y" (declare))) (foo)))
+(def-error-test labels.31 (labels ((foo () :bad1) (foo () :bad2)) (foo)))
+
+;;; FIXME Add tests for disallowed lambda list keywords
 
 ;;; MACROLET
 ;;; FIXME: add these

@@ -83,6 +83,7 @@
 (def-all-error-test destructuring-bind.3
   (typef '(or symbol cons))
   #'(lambda (x) `(destructuring-bind ,x nil)))
+(def-error-test destructuring-bind.4 (destructuring-bind (x) '(a) nil (declare) x))
 
 ;;; LET
 
@@ -100,6 +101,8 @@
   #'(lambda (x) `(let (,x) nil)))
 (def-all-error-test let.12 'symbolp
   #'(lambda (x) `(let ((,x)) nil)))
+
+(def-error-test let.13 (let ((x 0) (x 1)) x))
 
 ;;; LET*
 
