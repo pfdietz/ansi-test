@@ -503,13 +503,13 @@
 (def-adjust-array-fp-test adjust-array.string.adjustable.5
   (5 :initial-contents "abcde" :fill-pointer 3 :adjustable t :element-type 'character)
   (4 :element-type 'character :initial-element #\Space)
-  (assert (eq (aref a2 3) #\d))
+  (assert (eql (aref a2 3) #\d))
   3 "abc")
 
 (def-adjust-array-fp-test adjust-array.string.adjustable.6
   (5 :initial-contents "abcde" :fill-pointer 3 :adjustable t :element-type 'character)
   (4 :fill-pointer nil :element-type 'character :initial-element #\?)
-  (assert (eq (aref a2 3) #\d))
+  (assert (eql (aref a2 3) #\d))
   3 "abc")
 
 (def-adjust-array-fp-test adjust-array.string.adjustable.7
@@ -796,13 +796,13 @@
 (def-adjust-array-fp-test adjust-array.bit-vector.adjustable.5
   (5 :initial-contents '(1 1 1 0 0) :fill-pointer 3 :adjustable t :element-type 'bit)
   (4 :element-type 'bit :initial-element 0)
-  (assert (eq (aref a2 3) 0))
+  (assert (eql (aref a2 3) 0))
   3 #*111)
 
 (def-adjust-array-fp-test adjust-array.bit-vector.adjustable.6
   (5 :initial-contents '(0 0 0 1 1) :fill-pointer 3 :adjustable t :element-type 'bit)
   (4 :fill-pointer nil :element-type 'bit :initial-element 1)
-  (assert (eq (aref a2 3) 1))
+  (assert (eql (aref a2 3) 1))
   3 #*000)
 
 (def-adjust-array-fp-test adjust-array.bit-vector.adjustable.7
