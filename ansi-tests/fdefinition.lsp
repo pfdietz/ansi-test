@@ -25,11 +25,11 @@
   (check-type-error #'fdefinition #'(lambda (x) (typep x '(or symbol (cons (eql setf) (cons symbol null))))))
   nil)
 
-(deftest fdefinition.error.5
-  (let ((fn `(setf ,(gensym))))
-    (eval `(signals-error (fdefinition ',fn) undefined-function
-			  :name ,fn)))
-  t)
+;;; (deftest fdefinition.error.5
+;;;  (let ((fn `(setf ,(gensym))))
+;;;    (eval `(signals-error (fdefinition ',fn) undefined-function
+;;;			  :name ,fn)))
+;;;  t)
 
 (deftest fdefinition.error.6
   (signals-error (locally (fdefinition 10) t) type-error)
