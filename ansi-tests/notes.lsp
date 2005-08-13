@@ -42,4 +42,4 @@ If negative zeros are distinct this is probably not good, since it makes (defcon
 
 ;;; Haible disagrees with :result-type-element-type-by-subtype
 #+clisp (rt::disable-note :result-type-element-type-by-subtype)
-#+gcl (rt::disable-note :nil-vectors-are-strings)
+#+(or openmcl gcl) (rt::disable-note :nil-vectors-are-strings)
