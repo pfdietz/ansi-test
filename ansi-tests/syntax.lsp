@@ -1121,7 +1121,7 @@
 	      (list (list name c form vals))))))
   nil)
 
-(def-syntax-test syntax.sharp-greater-than.1
+(def-syntax-test syntax.sharp-less-than.1
   (signals-error (read-from-string "#<" nil nil) reader-error)
   t)
 
