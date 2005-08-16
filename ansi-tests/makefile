@@ -1,10 +1,12 @@
 # LISP=gcl
+# LISP=../unixport/saved_ansi_gcl
 # LISP=sbcl --noinform
 # LISP=~/sbcl/src/runtime/sbcl --core ~/sbcl/output/sbcl.core --noinform
 # LISP=clisp -ansi -q
 # LISP=abcl
 # LISP=ecl
 # LISP=/usr/local/lib/LispWorks/nongraphic-lispworks-4450
+# LISP=acl
 
 MAKE=make
 
@@ -143,4 +145,4 @@ clean:
 	@rm -f gazonk* out.class
 	@rm -rf TMP/
 	@rm -f "CLTEST:file-that-was-renamed.txt" file-that-was-renamed.txt
-
+	@rm -f compile-file-test-lp.lsp compile-file-test-lp.out ldtest.lsp
