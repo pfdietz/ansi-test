@@ -234,26 +234,26 @@
   "12345789")
 
 (deftest merge-string.1a
-  (let ((x "1378")
+  (let ((x (copy-seq "1378"))
 	(y (list #\2 #\4 #\5 #\9)))
     (merge 'string x y #'char<))
   "12345789")
 
 (deftest merge-string.1b
   (let ((x (list #\1 #\3 #\7 #\8))
-	(y "2459"))
+	(y (copy-seq "2459")))
     (merge 'string x y #'char<))
   "12345789")
 
 (deftest merge-string.1c
-  (let ((x "1378")
-	(y "2459"))
+  (let ((x (copy-seq "1378"))
+	(y (copy-seq "2459")))
     (merge 'string x y #'char<))
   "12345789")
 
 (deftest merge-string.1d
-  (let ((x "1378")
-	(y "2459"))
+  (let ((x (copy-seq "1378"))
+	(y (copy-seq "2459")))
     (merge 'string y x #'char<))
   "12345789")
 
