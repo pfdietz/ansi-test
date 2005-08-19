@@ -20,7 +20,7 @@
   nil)
 
 (deftest with-output-to-string.4
-  :notes (:allow-nil-arrays)
+  :notes (:allow-nil-arrays :nil-vectors-are-strings)
   (let ((str (make-array 10 :fill-pointer 0 :element-type 'character)))
     (values
      (with-output-to-string
@@ -53,7 +53,7 @@
   "8")
 
 (deftest with-output-to-string.9
-  :notes (:allow-nil-arrays)
+  :notes (:allow-nil-arrays :nil-vectors-are-strings)
   (with-output-to-string (s nil :element-type nil))
   "")
 
