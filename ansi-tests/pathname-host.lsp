@@ -52,9 +52,7 @@
   (do-special-strings (s "" nil) (pathname-host s))
   nil)
 
-;;; pathname-host returns a valid pathname host, which is defined to be either
-;;; a string, a list of strings, or the symbol :unspecific
-
+#|
 (deftest pathname-host.9
   (loop for p in *pathnames*
 	for host = (pathname-host p)
@@ -63,6 +61,7 @@
 		   (eql host :unspecific))
 	collect (list p host))
   nil)
+|#
 
 ;;; Error cases
 
