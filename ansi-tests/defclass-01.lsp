@@ -391,7 +391,7 @@
 	(c2 (make-instance 'class-13 :s1 'foo)))
     (values
      (slot-value c1 's1)
-     (slot-value c1 's1)))
+     (slot-value c2 's1)))
   foo foo)
 
 ;;;
