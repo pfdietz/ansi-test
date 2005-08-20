@@ -50,7 +50,10 @@
 	     (error (c) (print time) (error c)))
 	  for time2 = (encode-universal-time second minute hour date month year)
 	  repeat 1000
-	  unless (eql time time2)
+	  unless (let ((daylight-p-2 (nth-value 7 (decode-universal-time time2))))
+		   (or (eql time time2)
+		       (and daylight-p (not daylight-p-2) (eql time (- time2 3600)))
+		       (and (not daylight-p) daylight-p-2 (eql time (+ time2 3600)))))
 	  collect (progn (incf count)
 			 (list time (list second minute hour date month year day daylight-p zone) time2))
 	  until (>= count 100)))
