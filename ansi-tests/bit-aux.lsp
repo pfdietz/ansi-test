@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (defun bit-random-test-fn (bit-fn log-fn &key (reps 5000) (maxlen 100))
-  (assert (typep maxlen '(integer (0))))
+  (assert (typep maxlen '(integer 1)))
   (assert (typep reps 'unsigned-byte))
   (loop for len = (random maxlen)
 	for twos = (make-list len :initial-element 2)
