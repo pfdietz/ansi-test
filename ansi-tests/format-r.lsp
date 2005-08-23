@@ -318,7 +318,7 @@
 ;;; Old roman numerals
 
 (defun old-roman-numeral (x)
-  (assert (typep x '(integer (0))))
+  (assert (typep x '(integer 1)))
   (let ((n-m 0)
 	(n-d 0)
 	(n-c 0)

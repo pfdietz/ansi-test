@@ -97,7 +97,7 @@
 		   (is "file-length.lsp" :direction :input)
 		   (file-length is)))))
     (and (= (length results) 1)
-	 (typep (car results) '(integer (0)))
+	 (typep (car results) '(integer 1))
 	 t))
   t)
 
@@ -171,6 +171,6 @@
    (declare (special *foo*))
    (let ((s (make-synonym-stream '*foo*)))
      (unwind-protect
-	 (typep* (file-length s) '(integer (0)))
+	 (typep* (file-length s) '(integer 1))
 	(close s))))
   t)
