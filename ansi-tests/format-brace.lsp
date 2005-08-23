@@ -347,22 +347,22 @@
   (signals-error (format nil "~:{~A~}" '(#(X Y Z))) type-error)
   t)
 
-(deftest format.\:@.error.1
+(deftest format.\:@{.error.1
   (signals-type-error x 'x (format nil "~:@{~A~}" x))
   t)
 
-(deftest format.\:@.error.2
+(deftest format.\:@{.error.2
   (signals-type-error x 0 (format nil "~:@{~A~}" x))
   t)
 
-(deftest format.\:@.error.3
+(deftest format.\:@{.error.3
   (signals-type-error x #*01101 (format nil "~:@{~A~}" x))
   t)
 
-(deftest format.\:@.error.4
+(deftest format.\:@{.error.4
   (signals-type-error x "abc" (format nil "~:@{~A~}" x))
   t)
 
-(deftest format.\:@.error.5
+(deftest format.\:@{.error.5
   (signals-error (format nil "~:@{~A ~A~}" '(x . y)) type-error)
   t)
