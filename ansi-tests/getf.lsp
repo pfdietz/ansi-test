@@ -154,22 +154,14 @@
 		(setf z (incf i)))
 	  (progn (setf w (incf i)) 3))
     ;; Must check that only a, b, c have properties
-    (and
-     (eqlt i 4)
-     (eqlt x 1)
-     (eqlt y 2)
-     (eqlt z 3)
-     (eqlt w 4)
-     (eqlt (getf (car p) 'a) 1)
-     (eqlt (getf (car p) 'b) 2)
-     (eqlt (getf (car p) 'c) 3)
-     (eqlt
-      (loop
-       for ptr on (car p) by #'cddr count
-       (not (member (car ptr) '(a b c))))
-      0)
-     t))
-  t)
+    (values
+     i x y z w
+     (getf (car p) 'a)
+     (getf (car p) 'b)
+     (getf (car p) 'c)
+     (loop for ptr on (car p) by #'cddr count
+	  (not (member (car ptr) '(a b c))))))
+  4 1 2 3 4 1 2 3 0)
 
 (deftest incf-getf.1
   (let ((p (copy-list '(a 1 b 2))))
