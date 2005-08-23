@@ -6,41 +6,41 @@
 (in-package :cl-test)
 
 (eval-when (:load-toplevel :compile-toplevel :execute)
-  (unless #| (fboundp 'class-precedence-list) |# nil
+  (unless #| (fboundp 'class-precedence-list-foo) |# nil
     (report-and-ignore-errors
       (defgeneric class-precedence-list-foo (x)
-	(:method-combination list)
-	.
-	#.(loop for s in *cl-types-that-are-classes-symbols*
-		;; FIXME
-		;; This was added to get gcl to not abort here,
-		;; but it masks ANSI noncompliance
-		#+gcl when #+gcl (ignore-errors (pcl::find-class-from-cell
-						 s (pcl::find-class-cell s)))
-		collect
-		`(:method list ((x ,s)) ',s))))))
+        (:method-combination list)
+        .
+        #.(loop for s in *cl-types-that-are-classes-symbols*
+                ;; FIXME
+                ;; This was added to get gcl to not abort here,
+                ;; but it masks ANSI noncompliance
+                #+gcl when #+gcl (ignore-errors (pcl::find-class-from-cell
+                                                 s (pcl::find-class-cell s)))
+                collect
+                `(:method list ((x ,s)) ',s))))))
 
 (defmacro def-cpl-test (objform expected-cpl &optional name)
   (let* ((ordered (loop for e = expected-cpl then (cdr e)
-			for x = (car e)
-			for y = (cadr e)
-			while y
-			always (subtypep x y))))
+                        for x = (car e)
+                        for y = (cadr e)
+                        while y
+                        always (subtypep x y))))
     `(deftest ,(or name
-		   (intern (concatenate 'string
-					(symbol-name (first expected-cpl))
-					"-CPL")
-			   :cl-test))
+                   (intern (concatenate 'string
+                                        (symbol-name (first expected-cpl))
+                                        "-CPL")
+                           :cl-test))
        (let* ((obj ,objform)
-	      (cpl (class-precedence-list-foo obj)))
-	 (or ,(if ordered
-		  nil
-		`(and (not (eql (class-of obj) (find-class ',(first expected-cpl))))
-		      (progn (format t "~%Note: ~S not a direct instance of ~A~%"
-				     ',objform ',(first expected-cpl))
-			     t)))	       
-	     (and ,(if ordered t `(eql (first cpl) ',(first expected-cpl)))
-		  (is-noncontiguous-sublist-of ',expected-cpl cpl))))
+              (cpl (class-precedence-list-foo obj)))
+         (or ,(if ordered
+                  nil
+                `(and (not (eql (class-of obj) (find-class ',(first expected-cpl))))
+                      (progn (format t "~%Note: ~S not a direct instance of ~A~%"
+                                     ',objform ',(first expected-cpl))
+                             t)))               
+             (and ,(if ordered t `(eql (first cpl) ',(first expected-cpl)))
+                  (is-noncontiguous-sublist-of ',expected-cpl cpl))))
        t)))
 
 ;;; Condition types
@@ -53,30 +53,30 @@
 (def-cond-cpl-test (condition t))
 (def-cond-cpl-test (control-error error serious-condition condition t))
 (def-cond-cpl-test (division-by-zero arithmetic-error error
-				     serious-condition condition t))
+                                     serious-condition condition t))
 (def-cond-cpl-test (end-of-file stream-error error serious-condition condition t))
 (def-cond-cpl-test (error serious-condition condition t))
 (def-cond-cpl-test (file-error error serious-condition condition t))
 (def-cond-cpl-test (floating-point-inexact arithmetic-error error
-					   serious-condition condition t))
+                                           serious-condition condition t))
 (def-cond-cpl-test (floating-point-invalid-operation
-		    arithmetic-error error serious-condition condition t))
+                    arithmetic-error error serious-condition condition t))
 (def-cond-cpl-test (floating-point-overflow arithmetic-error error
-					    serious-condition condition t))
+                                            serious-condition condition t))
 (def-cond-cpl-test (floating-point-underflow arithmetic-error error
-					     serious-condition condition t))
+                                             serious-condition condition t))
 (def-cond-cpl-test (package-error error serious-condition condition t))
 (def-cond-cpl-test (parse-error error serious-condition condition t))
 (def-cond-cpl-test (print-not-readable error serious-condition condition t))
 (def-cond-cpl-test (program-error error serious-condition condition t))
 (def-cond-cpl-test (reader-error parse-error stream-error
-				 error serious-condition condition t))
+                                 error serious-condition condition t))
 (def-cond-cpl-test (serious-condition condition t))
 (def-cond-cpl-test (simple-condition condition t))
 (def-cond-cpl-test (simple-error simple-condition error serious-condition
-				 condition t))
+                                 condition t))
 (def-cond-cpl-test (simple-type-error simple-condition type-error
-				      error serious-condition condition t))
+                                      error serious-condition condition t))
 (def-cond-cpl-test (simple-warning simple-condition warning condition t))
 (def-cond-cpl-test (storage-condition serious-condition condition t))
 (def-cond-cpl-test (stream-error error serious-condition condition t))
@@ -99,7 +99,7 @@
 (def-cpl-test (make-concatenated-stream) (concatenated-stream stream t))
 (def-cpl-test '(a b c) (cons list sequence t))
 (def-cpl-test (let ((out (make-string-output-stream)))
-		(make-echo-stream (make-string-input-stream "foo") out))
+                (make-echo-stream (make-string-input-stream "foo") out))
   (echo-stream stream t))
 
 (def-cpl-test (open "class-precedence-lists.lsp" :direction :probe)
@@ -153,7 +153,7 @@
   (standard-method method standard-object t))
 
 (def-cpl-test (make-array '(10) :element-type 'character :initial-element #\a
-			  :fill-pointer t :adjustable t)
+                          :fill-pointer t :adjustable t)
   (string vector array sequence t) string-cpl.1)
 
 (def-cpl-test "abcd" (string vector array sequence t) string-cpl.2)
