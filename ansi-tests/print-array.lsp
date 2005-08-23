@@ -312,10 +312,14 @@
   "#2A((3 8) (2 67))")
 
 (deftest print.array.2.21
-  (loop for a = (make-array (list (random 4) (random 4))
-			    :initial-element (- (random 1000000) 500000))
-	repeat 100 nconc (randomly-check-readability a :test #'is-similar
-						     :can-fail t))
+  (trim-list
+   (loop
+      for dims = (list (random 4) (random 4))
+      for a = (make-array dims :initial-element (- (random 1000000) 500000))
+      repeat 100
+      nconc (let ((result (randomly-check-readability a :test #'is-similar :can-fail t)))
+	      (and result (list (cons dims (first result))))))
+   10)
   nil)
 
 (deftest print.array.2.22
