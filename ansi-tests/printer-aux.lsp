@@ -313,13 +313,13 @@
 					  &key
 					  (prefix "")
 					  (suffix ""))
-  `(defun ,name (n)
+  `(defun ,name (n &key (size 10))
      (loop
       for args = (make-random-write-args)
       for package = (find-package (random-from-seq #("CL-TEST" "CL-USER" "KEYWORD")))
       for obj = (let ((*random-readable* t))
 		  (declare (special *random-readable*))
-		  (random-thing (random 10)))
+		  (random-thing (random size)))
       for s1 = (let ((*package* package))
 		 (with-output-to-string (s) (apply #'write obj :stream s ,@write-args args)))
       for s2 = (let ((*package* package))
@@ -331,7 +331,7 @@
       ;; if they contain object addresses.
       unless (string= (filter-unreadable-forms (concatenate 'string ,prefix s1 ,suffix))
 		      (filter-unreadable-forms s2))
-      collect (list obj s1 s2))))
+      collect (list obj s1 s2 args))))
 
 (def-random-write-test-fun random-write-test nil #'write)
 (def-random-write-test-fun random-prin1-test (:escape t) #'prin1)
