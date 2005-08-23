@@ -13,3 +13,4 @@
   t)
 
 
+;;; FIXME -- more error tests here

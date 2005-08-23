@@ -114,6 +114,8 @@
      (with-output-to-string (*standard-output*) (pprint-tabular nil '(1 2 3) t nil 1))))
   "(1 2 3)")
 
+;;; FIXME: add test for colon-p argument of NIL
+
 ;;; Test that pprint-tabular returns NIL
 
 (deftest pprint-tabular.return-values.1
