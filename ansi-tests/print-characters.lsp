@@ -78,7 +78,8 @@
 	for c = (code-char i)
 	repeat 1000
 	unless (null c)
-	nconc (randomly-check-readability c))
+	nconc (let ((result (randomly-check-readability c)))
+		(and result (list (cons i (first result))))))
   nil)
 
 (deftest print.char.9
@@ -86,7 +87,8 @@
 	for c = (code-char i)
 	repeat 1000
 	unless (null c)
-	nconc (randomly-check-readability c))
+	nconc (let ((result (randomly-check-readability c)))
+		(and result (list (cons i (first result))))))
   nil)
 
 (deftest print.char.10
