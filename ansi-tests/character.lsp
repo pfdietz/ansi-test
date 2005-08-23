@@ -184,7 +184,7 @@
 
 (deftest digit-char.1
   (digit-char.1.body)
-  t)
+  nil)
 
 (deftest digit-char.2
   (map 'list #'digit-char (loop for i from 0 to 39 collect i))

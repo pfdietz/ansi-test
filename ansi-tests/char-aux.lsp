@@ -132,14 +132,25 @@
 		     t		     
 		     ))))
 
+(defun digit-char.1.body.old ()
+  (loop for r from 2 to 36 always
+       (loop for i from 0 to 36
+	  always (let* ((c (digit-char i r))
+			(result
+			 (if (>= i r) (null c)
+			     (eqlt c (char +extended-digit-chars+ i)))))
+		   (unless result
+		     (format t "~A ~A ~A~%" r i c))
+		   result))))
+		    a
+
 (defun digit-char.1.body ()
-  (loop
-   for r from 2 to 36
-   always
-   (loop for i from 0 to 36
-	 always (let ((c (digit-char i r)))
-		  (if (>= i r) (null c)
-		    (eqlt c (char +extended-digit-chars+ i)))))))
+  (loop for r from 2 to 36 nconc
+       (loop for i from 0 to 36
+	  for c = (digit-char i r)
+	  unless (if (>= i r) (null c)
+		     (eqlt c (char +extended-digit-chars+ i)))
+	  collect (list r i c))))
 
 (defun digit-char-p.1.body ()
   (loop for x in *universe*
