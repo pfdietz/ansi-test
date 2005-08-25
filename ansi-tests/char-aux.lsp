@@ -142,7 +142,6 @@
 		   (unless result
 		     (format t "~A ~A ~A~%" r i c))
 		   result))))
-		    a
 
 (defun digit-char.1.body ()
   (loop for r from 2 to 36 nconc
