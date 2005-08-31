@@ -32,6 +32,12 @@ contain the object, not just to some builtin type that contains the object.")
 
 #+sbcl (rt::disable-note :open-if-exists-new-version-no-error)
 
+(defnote :make-condition-with-compound-name
+  "The spec says MAKE-CONDITION should work on any subtype of CONDITION, but this causes all sorts of problems.  They probably meant only non-compound names.")
+
+(defnote :ansi-spec-problem
+  "A catch-all for tests that illustrate problems in the ANSI spec.")
+
 (defnote :negative-zero-is-similar-to-positive-zero
   "The definition of similarity implies that -0.0 and 0.0 are similar (for each float type.)
 If negative zeros are distinct this is probably not good, since it makes (defconstant x 0.0) be nonportable.")

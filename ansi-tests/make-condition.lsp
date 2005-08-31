@@ -26,6 +26,7 @@
   nil)
 
 (deftest make-condition.3
+  (:notes :make-condition-with-compound-name :ansi-spec-problem)
   (let* ((tp '(or program-error type-error))
 	 (c (make-condition tp)))
     (or (not (and (subtypep tp 'condition)
@@ -35,6 +36,7 @@
   t)
 
 (deftest make-condition.4
+  (:notes :make-condition-with-compound-name :ansi-spec-problem)
   (let* ((tp '(and simple-error type-error))
 	 (c (make-condition tp)))
     (or (not (and (subtypep 'simple-error tp)
