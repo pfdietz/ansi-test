@@ -110,3 +110,15 @@
       (do-all-symbols (s x)
 	(declare (special x)))))
   :good)
+
+;;; Executing a return actually terminates the loop
+
+(deftest do-all-symbols.12
+  (let ((should-have-returned nil))
+    (block done
+      (do-all-symbols (s :bad1)
+	(when should-have-returned
+	  (return-from done :bad2))
+	(setq should-have-returned t)
+	(return :good))))
+  :good)
