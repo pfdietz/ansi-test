@@ -45,7 +45,7 @@
 	   (progn (setf y (incf i)) 'a)
 	   (setf z (incf i)))
      i x y z))
-  b 3 1 2 3)		  
+  b 3 1 2 3)
 
 (deftest setf-getf.1
   (let ((p (copy-list '(a 1 b 2))))
@@ -127,24 +127,23 @@
 
 (deftest setf-getf.order.1
   (let ((p (list (copy-list '(a 1 b 2))))
-	(cnt1 0) (cnt2 0) (cnt3 0))
+        (cnt1 0) (cnt2 0) (cnt3 0))
     (setf (getf (car (progn (incf cnt1) p)) 'c (incf cnt3))
-	  (progn (incf cnt2) 3))
+          (progn (incf cnt2) 3))
     ;; Must check that only a, b, c have properties
-    (and
-     (eqlt cnt1 1)
-     (eqlt cnt2 1)
-     (eqlt cnt3 1)
-     (eqlt (getf (car p) 'a) 1)
-     (eqlt (getf (car p) 'b) 2)
-     (eqlt (getf (car p) 'c) 3)
-     (eqlt
-      (loop
-       for ptr on (car p) by #'cddr count
-       (not (member (car ptr) '(a b c))))
-      0)
-     t))
-  t)
+    (values
+     cnt1 ; (eqlt cnt1 1)
+     cnt2 ; (eqlt cnt2 1)
+     cnt3 ; (eqlt cnt3 1)
+     (getf (car p) 'a)
+     (getf (car p) 'b)
+     (getf (car p) 'c)
+     (loop
+        for ptr on (car p) by #'cddr count
+          (not (member (car ptr) '(a b c))))))
+  1 1 1
+  1 2 3
+  0)
 
 (deftest setf-getf.order.2
   (let ((p (list (copy-list '(a 1 b 2))))
