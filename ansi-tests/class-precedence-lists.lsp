@@ -12,13 +12,8 @@
         (:method-combination list)
         .
         #.(loop for s in *cl-types-that-are-classes-symbols*
-                ;; FIXME
-                ;; This was added to get gcl to not abort here,
-                ;; but it masks ANSI noncompliance
-                #+gcl when #+gcl (ignore-errors (pcl::find-class-from-cell
-                                                 s (pcl::find-class-cell s)))
                 collect
-                `(:method list ((x ,s)) ',s))))))
+                `(:method list ((x ,s))  ',s))))))
 
 (defmacro def-cpl-test (objform expected-cpl &optional name)
   (let* ((ordered (loop for e = expected-cpl then (cdr e)
