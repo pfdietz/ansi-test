@@ -17,11 +17,11 @@
   (simple-string-p 0)
   nil)
 
-(deftest simple-string-p.4
-  (simple-string-p (make-array 4 :element-type 'character
-			       :initial-contents '(#\a #\a #\a #\b)
-			       :fill-pointer t))
-  nil)
+;;; (deftest simple-string-p.4
+;;;  (simple-string-p (make-array 4 :element-type 'character
+;;;			       :initial-contents '(#\a #\a #\a #\b)
+;;;			       :fill-pointer t))
+;;;  nil)
 
 (deftest simple-string-p.5
   (notnot-mv
@@ -37,14 +37,14 @@
 		     :initial-contents '(#\a #\a #\a #\b))))
   t)
 
-(deftest simple-string-p.7
-  (let* ((s (make-array 10 :element-type 'character
-			:initial-element #\a))
-	 (s2 (make-array 4 :element-type 'character
-			 :displaced-to s
-			 :displaced-index-offset 2)))
-    (simple-string-p s2))
-  nil)
+;;; (deftest simple-string-p.7
+;;;  (let* ((s (make-array 10 :element-type 'character
+;;;			:initial-element #\a))
+;;;	 (s2 (make-array 4 :element-type 'character
+;;;			 :displaced-to s
+;;;			 :displaced-index-offset 2)))
+;;;    (simple-string-p s2))
+;;;  nil)
 
 (deftest simple-string-p.8
   :notes (:nil-vectors-are-strings)
