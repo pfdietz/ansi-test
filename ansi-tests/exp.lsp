@@ -40,3 +40,43 @@
 
 ;;; FIXME
 ;;; Add more tests here for floating point accuracy
+
+(deftest exp.error.4
+  (signals-error (exp (+ (log most-positive-short-float) 100))
+		 floating-point-overflow)
+  t)
+
+(deftest exp.error.5
+  (signals-error (exp (+ (log most-positive-single-float) 100))
+		 floating-point-overflow)
+  t)
+
+(deftest exp.error.6
+  (signals-error (exp (+ (log most-positive-double-float) 100))
+		 floating-point-overflow)
+  t)
+
+(deftest exp.error.7
+  (signals-error (exp (+ (log most-positive-long-float) 100))
+		 floating-point-overflow)
+  t)
+
+(deftest exp.error.8
+  (signals-error (exp (- (log least-positive-short-float) 100))
+		 floating-point-underflow)
+  t)
+
+(deftest exp.error.9
+  (signals-error (exp (- (log least-positive-single-float) 100))
+		 floating-point-underflow)
+  t)
+
+(deftest exp.error.10
+  (signals-error (exp (- (log least-positive-double-float) 100))
+		 floating-point-underflow)
+  t)
+
+(deftest exp.error.11
+  (signals-error (exp (- (log least-positive-double-float) 100))
+		 floating-point-underflow)
+  t)
