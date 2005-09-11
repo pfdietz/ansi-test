@@ -438,9 +438,10 @@
 
 (deftest format.d.21
   (loop for x in *mini-universe*
-	for s1 = (format nil "~@:d" x)
-	for s2 = (format nil "~A" x)
-	unless (or (integerp x) (string= s1 s2))
+	for s1 = (format nil "~A" x)
+	for s2 = (format nil "~@:d" x)
+        for s3 = (format nil "~A" x)
+	unless (or (integerp x) (string= s1 s2) (not (string= s1 s3)))
 	collect (list x s1 s2))
   nil)
 

@@ -407,10 +407,13 @@
 (deftest format.x.21
   (let ((fn (formatter "~:@x")))
     (loop for x in *mini-universe*
-	  for s1 = (format nil "~@:x" x)
-	  for s2 = (let ((*print-base* 16)) (format nil "~A" x))
+	  for s1 = (let ((*print-base* 16)) (format nil "~A" x))
+	  for s2 = (format nil "~@:x" x)
 	  for s3 = (formatter-call-to-string fn x)
-	  unless (or (integerp x) (and (string= s1 s2) (string= s2 s3)))
+	  for s4 = (let ((*print-base* 16)) (format nil "~A" x))
+	  unless (or (string/= s1 s4)
+		     (integerp x)
+		     (and (string= s1 s2) (string= s2 s3)))
 	  collect (list x s1 s2 s3)))
   nil)
 
