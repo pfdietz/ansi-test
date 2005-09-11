@@ -45,7 +45,7 @@
 (load "oneplus.lsp")
 (load "oneminus.lsp")
 (load "abs.lsp")
-;;(load "exp.lsp")
+(load "exp.lsp")
 (load "expt.lsp")
 (load "gcd.lsp")
 (load "incf.lsp")
