@@ -48,7 +48,7 @@
   t)
 
 (deftest expt.error.11
-  (signals-error (expt most-positive-long-float 2) floating-point-underflow)
+  (signals-error (expt least-positive-long-float 2) floating-point-underflow)
   t)
 
 
