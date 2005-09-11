@@ -19,6 +19,41 @@
   (signals-error (expt 1 1 nil nil) program-error)
   t)
 
+(deftest expt.error.4
+  (signals-error (expt most-positive-short-float 2) floating-point-overflow)
+  t)
+
+(deftest expt.error.5
+  (signals-error (expt most-positive-single-float 2) floating-point-overflow)
+  t)
+
+(deftest expt.error.6
+  (signals-error (expt most-positive-double-float 2) floating-point-overflow)
+  t)
+
+(deftest expt.error.7
+  (signals-error (expt most-positive-long-float 2) floating-point-overflow)
+  t)
+
+(deftest expt.error.8
+  (signals-error (expt least-positive-short-float 2) floating-point-underflow)
+  t)
+
+(deftest expt.error.9
+  (signals-error (expt least-positive-single-float 2) floating-point-underflow)
+  t)
+
+(deftest expt.error.10
+  (signals-error (expt least-positive-double-float 2) floating-point-underflow)
+  t)
+
+(deftest expt.error.11
+  (signals-error (expt most-positive-long-float 2) floating-point-underflow)
+  t)
+
+
+
+
 ;;; Non-error tests
 
 (deftest expt.1
