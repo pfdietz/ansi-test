@@ -24,6 +24,12 @@
      (assert (string= (directory-namestring ns) ns))))
   nil)
 
+;;; Lispworks makes another assumption about filename normalization
+;;; when using file streams as pathname designators, so this test
+;;; doesn't work there.
+;;; (This is another example of the difficulty of testing a feature
+;;;  in which so much is left up to the implementation.)
+#-lispworks
 (deftest directory-namestring.3
   (let* ((name "directory-namestring.lsp")
 	 (pn (merge-pathnames (pathname name)))
