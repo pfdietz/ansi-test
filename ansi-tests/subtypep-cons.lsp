@@ -333,3 +333,18 @@
      (subtypep* type1 type2)
      (subtypep* `(not ,type2) `(not ,type1))))
   nil nil)
+
+;;; From SBCL
+
+(deftest subtypep.cons.41
+  (let ((type1 '(cons t (complex (real -10 -4))))
+	(type2 '(not (cons t (complex (integer -200 -100))))))
+    (multiple-value-bind (sub1 success1)
+	(subtypep* type1 type2)
+      (multiple-value-bind (sub2 success2)
+	  (subtypep* `(not ,type2) `(not ,type1))
+	(if (and success1 success2 (not (eq sub1 sub2)))
+	    (values sub1 sub2)
+	    nil))))
+  nil)
+
