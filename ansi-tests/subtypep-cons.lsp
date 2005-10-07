@@ -325,3 +325,11 @@
 (deftest subtypep.cons.39
   (values (subtypep t '(and (not (cons cons (cons cons t))) (not (cons t cons)))))
   nil)
+
+(deftest subtypep.cons.40
+  (let ((type1 '(cons (eql 0) cons))
+	(type2 '(cons unsigned-byte symbol)))
+    (values
+     (subtypep* type1 type2)
+     (subtypep* `(not ,type2) `(not ,type1))))
+  nil nil)
