@@ -334,7 +334,7 @@
      (subtypep* `(not ,type2) `(not ,type1))))
   nil nil)
 
-;;; From SBCL
+;;; From sbcl 0.9.5.31
 
 (deftest subtypep.cons.41
   (let ((type1 '(cons t (complex (real -10 -4))))
@@ -348,3 +348,12 @@
 	    nil))))
   nil)
 
+(deftest subtypep.cons.42
+    (let ((t1 '(cons (cons (cons (real -744833699 -744833699) cons) (integer -234496 215373))
+		integer))
+	  (t2 '(cons (cons (cons integer integer) (integer -234496 215373)) t)))
+      (values (subtypep `(not ,t2) `(not ,t1))))
+  nil)
+
+  
+	  

@@ -21,7 +21,6 @@
        (1 (random-from-seq #(integer unsigned-byte ratio rational real float
 			     short-float single-float double-float
 			     long-float complex symbol cons function)))
-       #|
        (1
 	(let* ((len (random *maximum-random-int-bits*))
 	       (r1 (ash 1 len))
@@ -31,9 +30,8 @@
 	       (lo (min x y))
 	       (hi (max x y)))
 	  `(integer ,lo ,hi)))
-       |#
        (1 (make-random-real-type))
-       (1 (make-random-complex-type))
+       ;; (1 (make-random-complex-type))
        )
     (rcase
      (2 (let* ((op (random-from-seq #(cons cons and or)))
@@ -70,6 +68,100 @@
 	 (types (mapcar #'make-random-type sizes)))
     `(function (,(car types)) ,(cadr types))))
 
+(defun size-of-type (type)
+  (if (consp type)
+      (case (car type)
+	(complex (1+ (size-of-type (cadr type))))
+	((array simple-array) (1+ (size-of-type (cadr type))))
+	(vector (1+ (size-of-type (cadr type))))
+	(complex (1+ (size-of-type (cadr type))))
+	((cons or and not) (reduce #'+ (cdr type) :initial-value 1
+				   :key #'size-of-type))
+	(t 1))
+      1))
+
+(defun mutate-type (type)
+  (let* ((size (size-of-type type))
+	 (r (random size)))
+    (flet ((%f ()
+	     (rcase
+	      (6 (make-random-type (random (1+ size))))
+	      (2 `(not ,type))
+	      (1 `(and ,(make-random-type 1) ,type))
+	      (1 `(and ,type ,(make-random-type 1)))
+	      (1 `(or ,(make-random-type 1) ,type))
+	      (1 `(or ,type ,(make-random-type 1)))))
+	   (%random-int ()
+	     (let ((bits (1+ (min (random 20) (random 20)))))
+	       (- (ash 1 bits) (random (ash 1 (1+ bits)))))))
+      (if (or (and (= r 0) (coin)) (not (consp type)))
+	  (%f)
+	  (case (car type)
+	    ((and or not cons complex)
+	     (let ((sizes (mapcar #'size-of-type (cdr type))))
+	       (loop with sum = 0
+		  for e on sizes
+		  for ctype in (cdr type)
+		  for i from 0
+		  do (setf sum (incf (car e) sum))
+		  when (>= sum r)
+		  return (rcase
+			  (1 ctype) ;; replace with component type
+			  (1 (cons (car type)
+				   (append (subseq (cdr type) 0 i)
+					   (list (mutate-type ctype))
+					   (subseq (cdr type) (1+ i)))))))))
+	    ((array simple-array vector)
+	     (let ((ctype (if (cdr type) (cadr type) t)))
+	       (rcase
+		(1 (if (eql ctype *) t ctype))
+		(1 (cons (car type)
+			 (cons (mutate-type ctype)
+			       (cddr type)))))))
+	    ((unsigned-byte)
+	     (if (integerp (cadr type))
+		 (rcase
+		  (1 'unsigned-byte)
+		  (1 `(unsigned-byte (+ (cadr type) (- 10 (random 20))))))
+		 (%f)))
+
+	    ((integer)
+	     (let ((lo-delta (%random-int))
+		   (hi-delta (%random-int))
+		   (old-lo (or (cadr type) '*))
+		   (old-hi (or (caddr type) '*)))
+	       (flet ((%inc (old delta)
+			(if (or (coin) (not (integerp old)))
+			    delta
+			    (+ old delta))))
+		 (rcase
+		  (1 `(integer ,old-lo *))
+		  (1 `(integer * ,old-hi))
+		  (1 (let ((new-lo (%inc old-lo lo-delta)))
+		       (if (or (null (cdr type))
+			       (null (cddr type))
+			       (not (integerp old-hi)))
+			   `(integer ,new-lo ,@(cddr type))
+			   ;; caddr is integer
+			   (if (<= new-lo old-hi)
+			       `(integer ,new-lo ,old-hi)
+			       `(integer ,old-hi ,new-lo)))))
+		  (1 (let ((new-hi (%inc old-hi hi-delta)))
+		       (if (or (null (cdr type))
+			       (null (cddr type))
+			       (not (integerp old-lo)))
+			   `(integer ,old-lo ,new-hi)
+			   (if (<= old-lo new-hi)
+			       `(integer ,old-lo ,new-hi)
+			       `(integer ,new-hi ,old-lo)))))
+		  (1 (let ((new-lo (%inc old-lo lo-delta))
+			   (new-hi (%inc old-hi hi-delta)))
+		       (if (<= new-lo new-hi)
+			   `(integer ,new-lo ,new-hi)
+			   `(integer ,new-hi ,new-lo))))))))
+		       
+	    (t (%f)))))))
+
 (defun test-random-types (n size)
   (loop for t1 = (make-random-type size)
 	for t2 = (make-random-type size)
@@ -81,7 +173,18 @@
 	when (test-types t1 t2)
 	collect (list t1 t2)
 	finally (terpri)))
-  
+
+(defun test-random-mutated-types (n size)
+  (loop for t1 = (make-random-type size)
+	for t2 = (mutate-type t1)
+	for i from 0 below n
+	;; do (print (list t1 t2))
+        do (setf *random-types* (list t1 t2))
+	do (when (and (= (mod i 100) 0) (> i 0))
+	     (format t "~A " i) (finish-output *standard-output*))
+	when (test-types t1 t2)
+	collect (list t1 t2)
+	finally (terpri)))  
 
 (defun test-types (t1 t2)
   (multiple-value-bind (sub success)
