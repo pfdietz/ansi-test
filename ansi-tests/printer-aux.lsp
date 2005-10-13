@@ -116,7 +116,7 @@
 	   (with-standard-io-syntax (format *debug-io* "~%~A~%" params)))
 	 (finish-output *debug-io*))
        
-       #-gcl (setf (readtable-case *readtable*) readcase)
+       (setf (readtable-case *readtable*) readcase)
        (let* ((str (handler-case
 		    (with-output-to-string (s) (write obj :stream s))
 		    (print-not-readable
