@@ -100,6 +100,9 @@
 	(foo () 'also-bad)))))
   nil nil)
 
+;;; This test is disabled until I figure out how to fix
+;;; it.  See sbcl-devel mailing list, Oct 2005
+#|
 (deftest compute-restarts.10
   (let ((c2 (make-condition 'error)))
     (block done
@@ -121,6 +124,7 @@
 	(foo () :test (lambda (c) (or (null c) (not (eq c c2))))
 	     'also-bad)))))
   nil nil)
+|#
 
 
 
