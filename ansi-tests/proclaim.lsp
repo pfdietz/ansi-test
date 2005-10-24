@@ -36,19 +36,19 @@
   t)
 
 (deftest proclaim.error.3
-  (signals-error (proclaim `(optimize . foo)) type-error)
+  (signals-error (proclaim `(optimize . foo)) error)
   t)
 
 (deftest proclaim.error.4
-  (signals-error (proclaim `(inline . foo)) type-error)
+  (signals-error (proclaim `(inline . foo)) error)
   t)
 
 (deftest proclaim.error.5
-  (signals-error (proclaim `(notinline . foo)) type-error)
+  (signals-error (proclaim `(notinline . foo)) error)
   t)
 
 (deftest proclaim.error.6
-  (signals-error (proclaim `(type . foo)) type-error)
+  (signals-error (proclaim `(type . foo)) error)
   t)
 
 (deftest proclaim.error.7
@@ -56,22 +56,17 @@
   t)
 
 (deftest proclaim.error.8
-  (signals-error (proclaim '(type integer . foo)) type-error)
+  (signals-error (proclaim '(type integer . foo)) error)
   t)
 
 (deftest proclaim.error.9
-  (signals-error (proclaim '(integer . foo)) type-error)
+  (signals-error (proclaim '(integer . foo)) error)
   t)
 
 (deftest proclaim.error.10
-  (signals-error (proclaim '(declaration . foo)) type-error)
+  (signals-error (proclaim '(declaration . foo)) error)
   t)
 
 (deftest proclaim.error.11
-  (signals-error (proclaim '(ftype (function (t) t) . foo)) type-error)
+  (signals-error (proclaim '(ftype (function (t) t) . foo)) error)
   t)
-
-
-
-
-

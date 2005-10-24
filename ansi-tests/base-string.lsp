@@ -22,7 +22,7 @@
   t t)
 
 (deftest base-string.5
-  :notes (:allow-nil-arrays)
+  :notes (:allow-nil-arrays :nil-vectors-are-strings)
   (subtypep* '(array nil (*)) 'base-string)
   nil t)
 
@@ -30,4 +30,3 @@
   :notes (:nil-vectors-are-strings)
   (subtypep* 'string 'base-string)
   nil t)
-
