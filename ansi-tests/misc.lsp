@@ -10924,3 +10924,10 @@ Broken at C::WT-MAKE-CLOSURE.
    -3755148485)
   0)
 
+;;; gcl type-prop test failures (10/30/2005)
+
+(deftest misc.615
+  (let* ((x -8183.7625s0)
+	 (form `(lambda (p1) (eql p1 ,x))))
+    (not (not (funcall (compile nil form) x))))
+  t)
