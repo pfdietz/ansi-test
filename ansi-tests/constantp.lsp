@@ -64,6 +64,20 @@
   (notnot-mv (constantp 'pi))
   t)
 
+(defmacro macro-for-constantp.11 (x) x)
+
+(deftest constantp.11
+  (macrolet ((macro-for-constantp.11 (y)
+	       (declare (ignore y))
+	       *standard-input*))
+    (macrolet ((%m (&environment env)
+		 (if (constantp '(macro-for-constantp.11 0) env)
+		     :bad
+		     :good)))
+      (%m)))
+  :good)
+    
+
 (deftest constantp.order.1
   (let ((i 0))
     (values
