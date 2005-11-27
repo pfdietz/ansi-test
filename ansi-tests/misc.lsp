@@ -5259,6 +5259,21 @@ Broken at C::WT-C-INLINE-LOC.
    -237 -1365751422718)
   0)
 
+(deftest misc.293d
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (debug 3) (safety 0) (space 2)
+			  (compilation-speed 2) (speed 2)))
+       (block b4
+	      (multiple-value-prog1
+	       0
+	       (catch 'ct8
+		 (return-from b4 (catch 'ct2 (progn (tagbody) 0)))))))))
+  0)
+   
+
 ;;; failed AVER: "(SUBSETP START START-STACK)"
 
 (deftest misc.294
