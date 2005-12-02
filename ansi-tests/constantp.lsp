@@ -69,7 +69,7 @@
 (deftest constantp.11
   (macrolet ((macro-for-constantp.11 (y)
 	       (declare (ignore y))
-	       *standard-input*))
+	       '*standard-input*))
     (macrolet ((%m (&environment env)
 		 (if (constantp '(macro-for-constantp.11 0) env)
 		     :bad
