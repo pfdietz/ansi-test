@@ -355,5 +355,22 @@
       (values (subtypep `(not ,t2) `(not ,t1))))
   nil)
 
-  
-	  
+;;;; From sbcl 0.9.6.57
+
+(deftest subtypep.cons.43
+  (let* ((n -3.926510009989861d7)
+	 (t1 '(not (cons float t)))
+	 (t2 `(or (not (cons (eql 0) (real ,n ,n)))
+		  (not (cons t (eql 0))))))
+    (multiple-value-bind 
+     (sub1 good1)
+     (subtypep* t1 t2)
+     (multiple-value-bind
+      (sub2 good2)
+      (subtypep* `(not ,t2) `(not ,t1))
+      (or (not good1)
+	  (not good2)
+	  (and sub1 sub2)
+	  (and (not sub1) (not sub2))))))
+  t)
+
