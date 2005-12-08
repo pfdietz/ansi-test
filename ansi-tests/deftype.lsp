@@ -151,6 +151,10 @@
   (t t) (t t)
   t nil nil t t nil)
 
+;;; I've removed this test, because EVAL can cause implicit compilation,
+;;; and the semantic constraints on compilation forbid redefinition of
+;;; of the types produced by DEFTYPE at runtime.
+#|
 (deftest deftype.14
   (let* ((sym (gensym))
 	 (*f* nil)
@@ -165,6 +169,7 @@
      (funcall *f* 2)
      (loop for i from -1 to 3 collect (typep* i sym))))
   t (nil t t nil nil) 2 (nil t t t nil))
+|#
 
 (deftest deftype.15
   (let* ((sym (gensym))
