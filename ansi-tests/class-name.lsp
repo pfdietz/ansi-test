@@ -26,6 +26,22 @@
   (typep* #'(setf class-name) 'standard-generic-function)
   t)
 
+(deftest setf-class-name.2
+  (let ((sym (gensym))
+	(newsym (gensym)))
+    (eval `(defclass ,sym () (a b c)))
+    (let ((class (find-class sym)))
+      (values
+       (eqlt (class-name class) sym)
+       (equalt
+	(multiple-value-list (setf (class-name (find-class sym)) newsym))
+	(list newsym))
+       (eqlt newsym (class-name class)))))
+  t t t)
+     
+
+;;; Error tests
+
 (deftest class-name.error.1
   (signals-error (class-name) program-error)
   t)
