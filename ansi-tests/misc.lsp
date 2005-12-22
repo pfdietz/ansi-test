@@ -10946,3 +10946,93 @@ Broken at C::WT-MAKE-CLOSURE.
 	 (form `(lambda (p1) (eql p1 ,x))))
     (not (not (funcall (compile nil form) x))))
   t)
+
+;;; cmucl 19c
+;;; Wrong return value
+
+(deftest misc.616
+  (funcall
+   (compile
+    nil
+    '(lambda (a b c)
+       (declare (type (integer -153105 -36629) a))
+       (declare (type (integer -7811721705 3704985368) b))
+       (declare (type (integer 0 15) c))
+       (declare (ignorable a b c))
+       (declare (optimize (safety 1) (space 0) (compilation-speed 0) (speed 3)
+			  (debug 3)))
+       (catch 'ct7
+	 (labels ((%f12
+		   (f12-1 f12-2
+			  &optional
+			  &key (key1 0)
+			  (key2
+			   (reduce #'(lambda (lmv2 lmv1) 0)
+				   (vector 0 0)
+				   :end 2
+				   :start 0
+				   :from-end t))
+			  &allow-other-keys)
+		   a))
+		 c))))
+   -134217 -3699719058 10)
+  -134217)
+
+;;; sbcl 0.9.7.33 (x86)
+;;; The value 16561216769 is not of type (INTEGER -2147483648 4294967295).
+;;; On sparc solaris, the error message is:
+;;;   debugger invoked on a SB-KERNEL:CASE-FAILURE:
+;;;  16561216769 fell through ETYPECASE expression.
+;;;  Wanted one of (SB-C:FIXUP (OR (SIGNED-BYTE 32) (UNSIGNED-BYTE 32))
+;;;                            (SIGNED-BYTE 13)).
+
+(deftest misc.617
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+       (declare (optimize (space 3) (safety 2) (debug 1) (speed 3)
+              (compilation-speed 2)))
+       (let* ((v2 16561216769))
+     (lognand (loop for lv3 below 0 sum (setf v2 lv3))
+          (if (typep v2 '(integer -39 7))
+              b
+            0)))))
+   -10298)
+  -1)
+
+;;;  failed AVER: "(EQ POP (CAR END-STACK))"
+;;; (same on sparc solaris)
+
+(deftest misc.618
+  (funcall
+   (compile
+    nil
+    '(lambda (c)
+       (declare (optimize (space 0) (compilation-speed 2) (debug 0)
+              (speed 3) (safety 0)))
+       (block b1
+          (ignore-errors
+           (multiple-value-prog1 0
+                     (apply (constantly 0)
+                        c
+                        (catch 'ct2 (return-from b1 0))
+                        nil))))))
+   -4951)
+  0)
+
+;;; sbcl 0.9.7.33 (sparc solaris)
+;;; Incorrect return value
+
+(deftest misc.619
+  (funcall
+   (compile
+    nil
+    '(lambda (b)
+      (declare (type (integer 75 206) b))
+      (declare (optimize (speed 0) (compilation-speed 2) (debug 2)
+        (space 2) (safety 2)))
+      (mask-field (byte 4 28) (ash b 70))))
+   79)
+  0)
+
