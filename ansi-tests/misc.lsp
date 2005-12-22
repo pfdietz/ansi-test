@@ -11036,3 +11036,11 @@ Broken at C::WT-MAKE-CLOSURE.
    79)
   0)
 
+;;;  The value 64 is not of type (OR SB-C:TN (UNSIGNED-BYTE 6) NULL).
+
+(deftest misc.620
+  (funcall (compile nil '(lambda ()
+                          (declare (optimize (safety 3) (compilation-speed 3)
+                                    (debug 1) (space 3) (speed 1)))
+                          (loop for lv2 below 1 sum (ash lv2 64)))))
+  0)
