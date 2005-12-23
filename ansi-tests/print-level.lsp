@@ -26,12 +26,18 @@
 
 (defclass print-level-test-class nil (a b c))
 
+;;; The CLHS page for PRINT-OBJECT makes it clear that tests
+;;; PRINT-LEVEL.2,6,7,10,11 were testing for implementation-dependent
+;;; behavior. They have been commented out.
+
+#|
 (deftest print-level.2
   (with-standard-io-syntax
    (write-to-string (make-instance 'print-level-test-class)
 		    :level 0
 		    :readably nil))
   "#")
+|#
 
 (deftest print-level.3
   (with-standard-io-syntax
@@ -60,6 +66,7 @@
 
 (define-condition print-level-condition (condition) (a b c))
 
+#|
 (deftest print-level.6
   (with-standard-io-syntax
    (write-to-string (make-condition 'print-level-condition)
@@ -71,6 +78,7 @@
    (write-to-string (make-condition 'print-level-condition)
 		    :level 0 :pretty t :readably nil))
   "#")
+|#
 
 (defstruct print-level-struct)
 
@@ -102,6 +110,7 @@
 
 (defstruct print-level-struct2 a b c)
 
+#|
 (deftest print-level.10
   (with-standard-io-syntax
    (let ((*package* (find-package "CL-TEST")))
@@ -115,6 +124,7 @@
      (write-to-string (make-print-level-struct2)
 		      :level 0 :pretty t :readably nil)))
   "#")
+|#
 
 (deftest print-level.12
   (with-standard-io-syntax
