@@ -431,4 +431,24 @@
     :bad)
   :good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
 
+(deftest loop.13.88
+  (macrolet
+   ((%m (z) z))
+   (loop do (expand-in-current-env (%m (return 10)))))
+  10)
+
+(deftest loop.13.89
+  (macrolet
+   ((%m (z) z))
+   (loop for i from 0 below 100 by 7
+	 when (> i 50) return (expand-in-current-env (%m i))))
+  56)
+
+(deftest loop.13.90
+  (macrolet
+   ((%m (z) z))
+   (loop return (expand-in-current-env (%m 'a))))
+  a)

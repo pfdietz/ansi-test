@@ -56,6 +56,30 @@
      (return-from done 'good)))
   good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest unless.11
+  (macrolet
+   ((%m (z) z))
+   (unless (expand-in-current-env (%m nil)) :good))
+  :good)
+
+(deftest unless.12
+  (macrolet
+   ((%m (z) z))
+   (unless (expand-in-current-env (%m t)) :bad))
+  nil)
+
+(deftest unless.13
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (p nil))
+     (values
+      (unless p (expand-in-current-env (%m (incf x))))
+      x)))
+  2 2)
+
 (deftest unless.error.1
   (signals-error (funcall (macro-function 'unless)) program-error)
   t)

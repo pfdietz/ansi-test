@@ -348,5 +348,24 @@
 	    (eqlt (find-class n2) (find-class n3))))
   t t)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest rotatef.36
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (y 2))
+     (rotatef (expand-in-current-env (%m x)) y)
+     (values x y)))
+  2 1)
+
+(deftest rotatef.37
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (y 2))
+     (rotatef x (expand-in-current-env (%m y)))
+     (values x y)))
+  2 1)
+
 ;;; TODO: macro-function, mask-field, row-major-aref,
 ;;;   logical-pathname-translations, readtable-case

@@ -122,3 +122,12 @@
 	(setq should-have-returned t)
 	(return :good))))
   :good)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest do-all-symbols.13
+  (macrolet
+   ((%m (z) z))
+   (do-all-symbols (s (expand-in-current-env (%m :good)))))
+  :good)

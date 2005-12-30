@@ -1177,3 +1177,11 @@ the condition to go uncaught if it cannot be classified."
 	       ,form))
        (eq (%f) (%f)))
      nil))
+
+;;; Macro used in tests of environments in system macros
+;;; This was inspired by a bug in ACL 8.0 beta where CONSTANTP
+;;; was being called in some system macros without the proper
+;;; environment argument
+
+(defmacro expand-in-current-env (macro-form &environment env)
+  (macroexpand macro-form env))

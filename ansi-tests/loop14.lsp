@@ -331,3 +331,38 @@
   (loop for x in '(1 2 nil 3 4 nil 6 nil)
 	when x summing it)
   16)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.14.46
+  (macrolet
+   ((%m (z) z))
+   (loop for x from 1 to 6
+	 when (expand-in-current-env (%m (evenp x)))
+	 collect x))
+  (2 4 6))
+
+(deftest loop.14.47
+  (macrolet
+   ((%m (z) z))
+   (loop for x from 1 to 6
+	 unless (expand-in-current-env (%m (evenp x)))
+	 collect x))
+  (1 3 5))
+
+(deftest loop.14.48
+  (macrolet
+   ((%m (z) z))
+   (loop for x from 1 to 6
+	 when (expand-in-current-env (%m t))
+	 sum x))
+  21)
+
+(deftest loop.14.49
+  (macrolet
+   ((%m (z) z))
+   (loop for x from 1 to 10
+	 if  (expand-in-current-env (%m (evenp x)))
+	 collect x end))
+  (2 4 6 8 10))

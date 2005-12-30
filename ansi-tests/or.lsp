@@ -41,6 +41,28 @@
   (or (values nil 1 2) (values 1 nil 2))
   1 nil 2)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest or.10
+  (macrolet
+   ((%m (z) z))
+   (or (expand-in-current-env (%m 'x))
+       (expand-in-current-env (%m nil))
+       (expand-in-current-env (%m 'y))
+       t))
+  x)
+
+(deftest or.11
+  (macrolet
+   ((%m (z) z))
+   (or (expand-in-current-env (%m nil))
+       (expand-in-current-env (%m 'a))
+       nil))
+  a)       
+
+;;; Error tests
+
 (deftest or.error.1
   (signals-error (funcall (macro-function 'or)) program-error)
   t)

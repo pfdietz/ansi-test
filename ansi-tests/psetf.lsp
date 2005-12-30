@@ -387,4 +387,27 @@
   #2a((a b u)(d e f))
   #2a((1 2 3 4)(5 v 7 8)(9 10 11 12)))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest psetf.39
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (y 2))
+     (values
+      (psetf (expand-in-current-env (%m x)) y
+	     y x)
+      x y)))
+  nil 2 1)
+
+(deftest psetf.40
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (y 2))
+     (values
+      (psetf x (expand-in-current-env (%m y))
+	     y x)
+      x y)))
+  nil 2 1)
+
 ;;; TODO: logical-pathname-translations, readtable-case

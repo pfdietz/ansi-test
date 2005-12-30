@@ -253,6 +253,24 @@
 	#'symbol<)
   (a b c))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.6.41
+  (macrolet
+   ((%m (z) z))
+   (loop for x being the hash-value of
+	 (expand-in-current-env (%m *loop.6.hash.1*)) sum x))
+  6)
+
+(deftest loop.6.42
+  (macrolet
+   ((%m (z) z))
+   (sort (loop for x being the hash-key of
+	       (expand-in-current-env (%m *loop.6.hash.1*)) collect x)
+	 #'symbol<))
+  (a b c))
+
 ;;; Error tests
 
 (deftest loop.6.error.1

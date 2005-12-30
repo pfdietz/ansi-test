@@ -201,5 +201,24 @@
      bound j))
   nil 0 4)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest dotimes.25
+  (macrolet
+   ((%m (z) z))
+   (let (result)
+     (dotimes (i (expand-in-current-env (%m 4)) result)
+       (push i result))))
+  (3 2 1 0))
+
+(deftest dotimes.26
+  (macrolet
+   ((%m (z) z))
+   (let (result)
+     (dotimes (i 4 (expand-in-current-env (%m result)))
+       (push i result))))
+  (3 2 1 0))
+
 (def-macro-test dotimes.error.1
   (dotimes (i 10)))

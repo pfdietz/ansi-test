@@ -116,6 +116,15 @@
    return 3)
   2)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.8.24
+  (macrolet
+   ((%m (z) z))
+   (loop with x = (expand-in-current-env (%m 1)) do (return x)))
+  1)
+
 ;;; Error cases
 
 ;;; The spec says (in section 6.1.1.7) that:

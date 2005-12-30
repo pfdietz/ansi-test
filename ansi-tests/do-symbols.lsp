@@ -154,5 +154,20 @@
 	(declare (special x)))))
   :good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest do-symbols.18
+  (macrolet
+   ((%m (z) z))
+   (do-symbols (s (expand-in-current-env (%m "CL-TEST")) :good)))
+  :good)
+
+(deftest do-symbols.19
+  (macrolet
+   ((%m (z) z))
+   (do-symbols (s "CL-TEST" (expand-in-current-env (%m :good)))))
+  :good)
+
 (def-macro-test do-symbols.error.1
   (do-symbols (x "CL")))

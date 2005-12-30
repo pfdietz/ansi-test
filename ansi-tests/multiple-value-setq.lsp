@@ -119,6 +119,27 @@
   (multiple-value-setq nil (values 'a 'b))
   a)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest multiple-value-setq.16
+  (macrolet
+   ((%m (z) z))
+   (let ((x :bad))
+     (symbol-macrolet ((z (expand-in-current-env (%m x))))
+		      (multiple-value-setq (z) :good))
+     x))
+  :good)
+
+(deftest multiple-value-setq.17
+  (macrolet
+   ((%m (z) z))
+   (let ((x :bad))
+     (values
+      (multiple-value-setq (x) (expand-in-current-env (%m :good)))
+      x)))
+  :good :good)
+
 ;;; Error tests
 
 (deftest multiple-value-setq.error.1

@@ -31,6 +31,38 @@
       (not (eqt (car ptr) 'a)))))
   t 0)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest remf.5
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values
+      (remf (expand-in-current-env (%m x)) 'a)
+      x)))
+  nil nil)
+
+(deftest remf.6
+  (macrolet
+   ((%m (z) z))
+   (let ((x (list 'a 'b)))
+     (values
+      (notnot (remf (expand-in-current-env (%m x)) 'a))
+      x)))
+  t nil)
+
+(deftest remf.7
+  (macrolet
+   ((%m (z) z))
+   (let ((x (list 'a 'b 'c 'd)))
+     (values
+      (notnot (remf x (expand-in-current-env (%m 'a))))
+      x)))
+  t (c d))
+
+
+
 (deftest remf.order.1
   (let ((i 0) x y
 	(p (make-array 1 :initial-element (copy-list '(a b c d e f)))))

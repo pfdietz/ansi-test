@@ -88,3 +88,18 @@
      (assert (> x 5) () 'type-error)
      x))
   6)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest assert.10
+  (macrolet
+   ((%m (z) z))
+   (assert (expand-in-current-env (%m t))))
+  nil)
+
+(deftest assert.11
+  (macrolet
+   ((%m (z) z))
+   (assert (expand-in-current-env (%m t)) () "Foo!"))
+  nil)

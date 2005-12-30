@@ -62,3 +62,22 @@
 		      (store-value 15))))
      (values (check-type x number) x)))
   nil 15)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest check-type.8
+  (let ((x 10))
+    (macrolet
+     ((%m (z) z))
+     (check-type (expand-in-current-env (%m x))
+		 (integer 8 13))))
+  nil)
+
+(deftest check-type.9
+  (let ((x 10))
+    (macrolet
+     ((%m (z) z))
+     (check-type x (integer 9 12) (expand-in-current-env (%m "Foo!")))))
+  nil)
+

@@ -48,6 +48,35 @@
   #(0 1 2 3)
   0
   #(1 2 3 foo))
-    
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest shiftf.4
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (y 2))
+     (values
+      (shiftf (expand-in-current-env (%m x)) y 'foo)
+      x y)))
+  1 2 foo)
+
+(deftest shiftf.5
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (y 2))
+     (values
+      (shiftf x (expand-in-current-env (%m y)) 'foo)
+      x y)))
+  1 2 foo)
+
+(deftest shiftf.6
+  (macrolet
+   ((%m (z) z))
+   (let ((x 1) (y 2))
+     (values
+      (shiftf x y (expand-in-current-env (%m 'foo)))
+      x y)))
+  1 2 foo)
 
 ;;; Need to add more shiftf tests here

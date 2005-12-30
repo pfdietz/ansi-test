@@ -27,6 +27,23 @@
   (nth-value 100 'a)
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest nth-value.6
+  (macrolet
+   ((%m (z) z))
+   (nth-value (expand-in-current-env (%m 1)) (values 'a 'b 'c)))
+  b)
+
+(deftest nth-value.7
+  (macrolet
+   ((%m (z) z))
+   (nth-value 1 (expand-in-current-env (%m (values 'a 'b 'c)))))
+  b)
+
+;;; Order of evaluation test
+
 (deftest nth-value.order.1
   (let ((i 0) x y)
     (values
@@ -34,6 +51,8 @@
 		(progn (setf y (incf i)) (values 'a 'b 'c 'd 'e 'f 'g)))
      i x y))
   d 2 1 2)
+
+;;; Error tests
 
 (deftest nth-value.error.1
   (signals-error (funcall (macro-function 'nth-value))

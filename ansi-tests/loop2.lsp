@@ -140,3 +140,24 @@
   1 2 2)
 
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.2.24
+  (macrolet
+   ((%m (z) z))
+   (loop for x in (expand-in-current-env (%m '(1 2 3))) sum x))
+  6)
+
+(deftest loop.2.25
+  (macrolet
+   ((%m (z) z))
+   (loop for (x . y) in (expand-in-current-env (%m '((a . b) (c . d) (e . f))))
+	 collect (list x y)))
+  ((a b) (c d) (e f)))
+
+(deftest loop.2.26
+  (macrolet
+   ((%m (z) z))
+   (loop as x in (expand-in-current-env (%m '(1 2 3))) sum x))
+  6)

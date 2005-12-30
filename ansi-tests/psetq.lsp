@@ -78,7 +78,18 @@
      *x* *y*))
   0 10 nil 10 0)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
 
+(deftest psetq.10
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil) (y nil))
+     (values
+      (psetq x (expand-in-current-env (%m 1))
+	     y (expand-in-current-env (%m 2)))
+      x y)))
+  nil 1 2)
 
 (deftest psetq.error.1
   (signals-error (funcall (macro-function 'psetq)) program-error)

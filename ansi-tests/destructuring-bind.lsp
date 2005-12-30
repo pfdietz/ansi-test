@@ -161,6 +161,15 @@
   (destructuring-bind (x &aux (y (list x))) '(:foo) (values x y))
   :foo (:foo))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest destructuring-bind.31
+  (macrolet
+   ((%m (z) z))
+   (destructuring-bind (a b c) (expand-in-current-env (%m '(1 2 3))) (values a b c)))
+  1 2 3)
+
 ;;; Error cases
 
 #|

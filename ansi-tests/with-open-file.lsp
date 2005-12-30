@@ -84,3 +84,15 @@
 	(with-open-file (s "with-open-file.lsp" :direction (return-from done x))
 			(declare (special x))))))
   :good)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest with-open-file.10
+  (macrolet
+   ((%m (z) z))
+   (let ((pn #p"tmp.dat"))
+    (delete-all-versions pn)
+    (with-open-file (s (expand-in-current-env (%m pn)) 
+		       :direction :output))))
+  nil)

@@ -37,11 +37,29 @@
     always (equal x (multiple-value-list (values-list x)))))
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest multiple-value-list.8
+  (macrolet
+   ((%m (z) z))
+   (multiple-value-list (expand-in-current-env (%m 1))))
+  (1))
+
+(deftest multiple-value-list.9
+  (macrolet
+   ((%m (z) z))
+   (multiple-value-list (expand-in-current-env (%m (values 1 2 3)))))
+  (1 2 3))
+
+;;; Test that the argument is evaluated just once
 
 (deftest multiple-value-list.order.1
   (let ((i 0))
     (values (multiple-value-list (incf i)) i))
   (1) 1)
+
+;;; Error tests
 
 (deftest multiple-value-list.error.1
   (signals-error (funcall (macro-function 'multiple-value-list))

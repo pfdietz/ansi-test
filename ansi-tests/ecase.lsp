@@ -159,6 +159,18 @@
      (return-from done 'good)))
   good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest ecase.34
+  (macrolet
+   ((%m (z) z))
+   (ecase (expand-in-current-env (%m :b))
+	  (:a :bad1)
+	  (:b :good)
+	  (:c :bad2)))
+  :good)
+
 (deftest ecase.error.1
   (signals-error (funcall (macro-function 'ecase)) program-error)
   t)

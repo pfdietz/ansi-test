@@ -36,4 +36,13 @@
      (return 'good)))
   good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest prog1.7
+  (macrolet
+   ((%m (z) z))
+   (prog1 (expand-in-current-env (%m 'good))))
+  good)
+
 (def-macro-test prog1.error.1 (prog1 nil))

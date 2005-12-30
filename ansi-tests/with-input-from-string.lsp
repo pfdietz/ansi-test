@@ -215,5 +215,31 @@
      i))
   #\a nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest with-input-from-string.23
+  (macrolet
+   ((%m (z) z))
+   (with-input-from-string (s (expand-in-current-env (%m "123")))
+			  (read-char s)))
+  #\1)
+
+(deftest with-input-from-string.24
+  (macrolet
+   ((%m (z) z))
+   (with-input-from-string (s "123" :start (expand-in-current-env (%m 1)))
+			   (read-char s)))
+  #\2)
+
+(deftest with-input-from-string.25
+  (macrolet
+   ((%m (z) z))
+   (with-input-from-string (s "123" :start 0
+			      :end (expand-in-current-env (%m 0)))
+			   (read-char s nil nil)))
+  nil)
+
+
 ;;; FIXME: Add more tests on specialized strings.
 

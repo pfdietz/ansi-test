@@ -131,6 +131,27 @@
 	(declare (special x)))))
   :good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest dolist.18
+  (let ((result nil))
+    (macrolet
+     ((%m (z) z))
+     (dolist (x (expand-in-current-env (%m '(a b c))) result)
+       (push x result))))
+  (c b a))
+
+(deftest dolist.19
+  (let ((result nil))
+    (macrolet
+     ((%m (z) z))
+     (dolist (x '(a b c) (expand-in-current-env (%m result)))
+       (push x result))))
+  (c b a))
+
+;;; Error tests
+
 (def-macro-test dolist.error.1
   (dolist (x nil)))
 

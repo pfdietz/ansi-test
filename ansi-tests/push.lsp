@@ -28,6 +28,27 @@
      x))
   ((a) a))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest push.4
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values
+      (push (expand-in-current-env (%m 1)) x)
+      x)))
+  (1) (1))
+
+(deftest push.5
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values
+      (push 1 (expand-in-current-env (%m x)))
+      x)))
+  (1) (1))
+
 (deftest push.order.1
   (let ((x (list nil)) (i 0) a b)
     (values

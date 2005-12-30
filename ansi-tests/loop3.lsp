@@ -135,3 +135,33 @@
      a b i))
   (a c e g)
   1 2 2)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.3.24
+  (macrolet
+   ((%m (z) z))
+   (loop for x on (expand-in-current-env (%m '(1 2 3))) sum (car x)))
+  6)
+
+(deftest loop.3.25
+  (macrolet
+   ((%m (z) z))
+   (loop for e on (expand-in-current-env (%m '(a b c d e f))) by #'cddr
+	 collect (car e)))
+  (a c e))
+
+(deftest loop.3.26
+  (macrolet
+   ((%m (z) z))
+   (loop for e on '(a b c d e f)
+	 by (expand-in-current-env (%m #'cddr))
+	 collect (car e)))
+  (a c e))
+
+(deftest loop.3.27
+  (macrolet
+   ((%m (z) z))
+   (loop as x on (expand-in-current-env (%m '(1 2 3))) sum (car x)))
+  6)

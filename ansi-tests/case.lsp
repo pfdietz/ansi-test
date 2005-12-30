@@ -189,7 +189,18 @@
      (return-from done 'good)))
   good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
 
+(deftest case.37
+  (macrolet
+   ((%m (z) z))
+   (case (expand-in-current-env (%m :b))
+	 (:a :bad1)
+	 (:b :good)
+	 (:c :bad2)
+	 (t :bad3)))
+  :good)
 
 ;;; (deftest case.error.1
 ;;;  (signals-error (case) program-error)

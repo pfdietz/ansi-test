@@ -124,3 +124,15 @@
 			(declare (special x))))))
   :good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest with-accessors.15
+  (macrolet
+   ((%m (z) z))
+   (let ((obj (make-with-accessors-struct-02 :a 'x :b 'y :c 'z)))
+     (with-accessors ((a wa-2-a) (b wa-2-b) (c wa-2-c))
+		     (expand-in-current-env (%m obj))
+		     (values a b c))))
+  x y z)
+

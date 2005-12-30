@@ -39,6 +39,19 @@
   (and (values nil t) t)
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest and.10
+  (macrolet
+   ((%m (z) z))
+   (and (expand-in-current-env (%m :a))
+	(expand-in-current-env (%m :b))
+	(expand-in-current-env (%m :c))))
+  :c)
+
+;;; Error tests
+
 (deftest and.order.1
   (let ((x 0))
     (values (and nil (incf x))

@@ -32,3 +32,11 @@
   (block nil (return :good) :bad)
   :good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest return.3
+  (macrolet
+   ((%m (z) z))
+   (block nil (return (expand-in-current-env (%m :good))) :bad))
+  :good)

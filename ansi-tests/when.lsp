@@ -46,6 +46,28 @@
      (return-from done 'good)))
   good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest when.9
+  (macrolet
+   ((%m (z) z))
+   (when (expand-in-current-env (%m t)) :good))
+  :good)
+
+(deftest when.10
+  (macrolet
+   ((%m (z) z))
+   (when (expand-in-current-env (%m nil)) :bad))
+  nil)
+
+(deftest when.11
+  (macrolet
+   ((%m (z) z))
+   (let ((x t))
+     (values (when x (expand-in-current-env (%m (setf x 'foo)))) x)))
+  foo foo)
+
 ;;; Error tests
 
 (deftest when.error.1

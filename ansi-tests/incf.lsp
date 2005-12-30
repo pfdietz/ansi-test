@@ -142,6 +142,27 @@
     (values (incf x #c(0.0l0 -2.0l0)) x))
   #c(1.0l0 -2.0l0) #c(1.0l0 -2.0l0))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest incf.22
+  (macrolet
+   ((%m (z) z))
+   (let ((x 2))
+     (values
+      (incf (expand-in-current-env (%m x)))
+      x)))
+  3 3)
+
+(deftest incf.23
+  (macrolet
+   ((%m (z) z))
+   (let ((x 2))
+     (values
+      (incf x (expand-in-current-env (%m 4)))
+      x)))
+  6 6)
+
 (deftest incf.order.2
   (let ((a (vector 1 2 3 4))
 	(i 0) x y z)

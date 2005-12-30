@@ -19,6 +19,18 @@
       (list x y)))
   (nil nil))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest pop.3
+  (macrolet
+   ((%m (z) z))
+   (let ((x (list 'a 'b 'c)))
+     (values
+      (pop (expand-in-current-env (%m x)))
+      x)))
+  a (b c))
+
 ;;; Confirm argument is executed just once.
 (deftest pop.order.1
   (let ((i 0)

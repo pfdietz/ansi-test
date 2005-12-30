@@ -58,3 +58,51 @@
 		       for x = 1 count x until t))
    program-error)
   t)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.4.9
+  (macrolet
+   ((%m (z) z))
+   (loop
+    for x = (expand-in-current-env (%m 1)) then (1+ x)
+    until (> x 5)
+    collect x))
+  (1 2 3 4 5))
+
+(deftest loop.4.10
+  (macrolet
+   ((%m (z) z))
+   (loop
+    for x = 1 then (expand-in-current-env (%m (1+ x)))
+    until (> x 5)
+    collect x))
+  (1 2 3 4 5))
+
+(deftest loop.4.11
+  (macrolet
+   ((%m (z) z))
+   (loop
+    for x = 1 then (1+ x)
+    until (expand-in-current-env (%m (> x 5)))
+    collect x))
+  (1 2 3 4 5))
+
+(deftest loop.4.12
+  (macrolet
+   ((%m (z) z))
+   (loop
+    for x = 1 then (1+ x)
+    while (expand-in-current-env (%m (<= x 5)))
+    collect x))
+  (1 2 3 4 5))
+
+(deftest loop.4.13
+  (macrolet
+   ((%m (z) z))
+   (loop
+    for x = 1 then (1+ x)
+    until (> x 5)
+    collect (expand-in-current-env (%m x))))
+  (1 2 3 4 5))

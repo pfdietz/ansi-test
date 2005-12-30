@@ -293,4 +293,69 @@
     (loop for nil from 5 above 0 collect (incf i)))
   (1 2 3 4 5))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
 
+(deftest loop.1.57
+  (macrolet
+   ((%m (z) z))
+   (loop for i from (expand-in-current-env (%m 1)) to 5 collect i))
+  (1 2 3 4 5))
+
+(deftest loop.1.58
+  (macrolet
+   ((%m (z) z))
+   (loop for i from 1 to (expand-in-current-env (%m 5)) collect i))
+  (1 2 3 4 5))
+
+(deftest loop.1.59
+  (macrolet
+   ((%m (z) z))
+   (loop for i from 1 to 5 by (expand-in-current-env (%m 2)) collect i))
+  (1 3 5))
+
+(deftest loop.1.60
+  (macrolet
+   ((%m (z) z))
+   (loop for i downfrom (expand-in-current-env (%m 10))
+	 to 3
+	 collect i))
+  (10 9 8 7 6 5 4 3))
+
+(deftest loop.1.61
+  (macrolet
+   ((%m (z) z))
+   (loop for i downfrom 10
+	 to (expand-in-current-env (%m 3))
+	 collect i))
+  (10 9 8 7 6 5 4 3))
+
+(deftest loop.1.62
+  (macrolet
+   ((%m (z) z))
+   (loop for i from (expand-in-current-env (%m 10))
+	 downto 3
+	 collect i))
+  (10 9 8 7 6 5 4 3))
+
+(deftest loop.1.63
+  (macrolet
+   ((%m (z) z))
+   (loop for i from 10
+	 downto (expand-in-current-env (%m 3))
+	 collect i))
+  (10 9 8 7 6 5 4 3))
+
+(deftest loop.1.64
+  (macrolet
+   ((%m (z) z))
+   (loop for i from (expand-in-current-env (%m 1)) below 5 collect i))
+  (1 2 3 4))
+  
+(deftest loop.1.65
+  (macrolet
+   ((%m (z) z))
+   (loop for i from 1 below (expand-in-current-env (%m 5)) collect i))
+  (1 2 3 4))
+
+  

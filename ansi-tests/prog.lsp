@@ -80,6 +80,15 @@
 	    (return y))))
   :good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest prog.12
+  (macrolet
+   ((%m (z) z))
+   (prog ((x (expand-in-current-env (%m :good)))) (return x)))
+  :good)
+
 (def-macro-test prog.error.1 (prog nil))
 
 ;;; Tests of PROG*
@@ -157,6 +166,15 @@
       (prog* ((y x))
 	     (declare (special x))
 	     (return y))))
+  :good)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest prog*.12
+  (macrolet
+   ((%m (z) z))
+   (prog* ((x (expand-in-current-env (%m :good)))) (return x)))
   :good)
 
 (def-macro-test prog*.error.1 (prog* nil))

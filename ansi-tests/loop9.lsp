@@ -226,3 +226,40 @@
 (deftest loop.9.42
   (loop for x in '(a b c d e) nconc (cons x 'foo))
   (a b c d e . foo))
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.9.43
+  (macrolet
+   ((%m (z) z))
+   (loop for x in '(1 2 3) collect (expand-in-current-env (%m (- x)))))
+  (-1 -2 -3))
+
+(deftest loop.9.44
+  (macrolet
+   ((%m (z) z))
+   (loop for x in '(1 2 3) collecting (expand-in-current-env (%m (list x)))))
+  ((1) (2) (3)))
+
+(deftest loop.9.45
+  (macrolet
+   ((%m (z) z))
+   (loop for x in '(a b c)
+	 collect (expand-in-current-env (%m (list x))) into foo
+	 finally (return (reverse foo))))
+  ((c) (b) (a)))
+
+(deftest loop.9.46
+  (macrolet
+   ((%m (z) z))
+   (loop for x in '((a b) (c d) (e f g) () (i))
+	 append (expand-in-current-env (%m x))))
+  (a b c d e f g i))
+
+(deftest loop.9.47
+  (macrolet
+   ((%m (z) z))
+   (loop for x in '((a b) (c d) (e f g) () (i))
+	 nconc (expand-in-current-env (%m (copy-seq x)))))
+  (a b c d e f g i))

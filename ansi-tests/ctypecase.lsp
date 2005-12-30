@@ -99,6 +99,28 @@
      (return-from done 'good)))
   good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest ctypecase.15
+  (macrolet
+   ((%m (z) z))
+   (ctypecase
+    (expand-in-current-env (%m :foo))
+    (integer :bad1)
+    (keyword :good)
+    (symbol :bad2)))
+  :good)
+
+(deftest ctypecase.16
+  (macrolet
+   ((%m (z) z))
+   (ctypecase :foo
+    (integer (expand-in-current-env (%m :bad1)))
+    (keyword (expand-in-current-env (%m :good)))
+    (symbol (expand-in-current-env (%m :bad2)))))
+  :good)
+
 (deftest ctypecase.error.1
   (signals-error (funcall (macro-function 'ctypecase))
 		 program-error)

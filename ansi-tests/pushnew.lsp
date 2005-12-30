@@ -187,6 +187,54 @@
   (1 2 3)
   (1 2 3))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest pushnew.20
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values
+      (pushnew (expand-in-current-env (%m 1)) x)
+      x)))
+  (1) (1))
+
+(deftest pushnew.21
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values
+      (pushnew 1 (expand-in-current-env (%m x)))
+      x)))
+  (1) (1))
+
+(deftest pushnew.22
+  (macrolet
+   ((%m (z) z))
+   (let ((x '(a b)))
+     (values
+      (pushnew 1 x :test (expand-in-current-env (%m #'eql)))
+      x)))
+  (1 a b) (1 a b))
+
+(deftest pushnew.23
+  (macrolet
+   ((%m (z) z))
+   (let ((x '(1)))
+     (values
+      (pushnew 1 x :test-not (expand-in-current-env (%m #'eql)))
+      x)))
+  (1 1) (1 1))
+
+(deftest pushnew.24
+  (macrolet
+   ((%m (z) z))
+   (let ((x '(3)))
+     (values
+      (pushnew 1 x :key (expand-in-current-env (%m #'evenp)))
+      x)))
+  (3) (3))
+
 (defharmless pushnew.test-and-test-not.1
   (let ((x '(b c))) (pushnew 'a x :test #'eql :test-not #'eql)))
   

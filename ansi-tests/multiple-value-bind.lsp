@@ -84,6 +84,17 @@
   (multiple-value-bind () (values 1 2 3 4 5))
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest multiple-value-bind.14
+  (macrolet
+   ((%m (z) z))
+   (multiple-value-bind (x y z)
+			(expand-in-current-env (%m (values 1 2 3)))
+			(list x y z)))
+  (1 2 3))
+
 ;;; Error cases
 
 (deftest multiple-value-bind.error.1

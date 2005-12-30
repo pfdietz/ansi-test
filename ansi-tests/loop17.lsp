@@ -131,3 +131,15 @@
    and j = 0 then (+ j i)
    collect j)
   (0 1 3 6 10))
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.17.22
+  (macrolet
+   ((%m (z) z))
+   (loop with x = 0
+	 initially (expand-in-current-env (%m (incf x)))
+	 until t
+	 finally (expand-in-current-env (%m (return x)))))
+  1)

@@ -209,3 +209,35 @@
 	#'string<)
   ("A" "B" "BAR" "BAZ" "C" "FOO"))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest loop.7.33
+  (macrolet
+   ((%m (z) z))
+   (sort (mapcar #'symbol-name
+		 (loop for x being the symbols of
+		       (expand-in-current-env (%m "LOOP.CL-TEST.1"))
+		       collect x))
+	 #'string<))
+  ("A" "B" "BAR" "BAZ" "C" "FOO"))
+
+(deftest loop.7.34
+  (macrolet
+   ((%m (z) z))
+   (sort (mapcar #'symbol-name
+		 (loop for x being the external-symbols of
+		       (expand-in-current-env (%m "LOOP.CL-TEST.1"))
+		       collect x))
+	 #'string<))
+  ("A" "B" "C"))
+
+(deftest loop.7.35
+  (macrolet
+   ((%m (z) z))
+   (sort (mapcar #'symbol-name
+		 (loop for x being the present-symbols of
+		       (expand-in-current-env (%m "LOOP.CL-TEST.2"))
+		       collect x))
+	 #'string<))
+  ("X" "Y" "Z"))

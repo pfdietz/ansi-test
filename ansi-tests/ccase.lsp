@@ -174,6 +174,20 @@
      (return-from done 'good)))
   good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest ccase.33
+  (let ((x :b))
+    (macrolet
+     ((%m (z) z))
+     (ccase (expand-in-current-env (%m x))
+	    (:a :bad1)
+	    (:b :good)
+	    (:c :bad2))))
+  :good)
+
+
 
 ;;; (deftest ccase.error.1
 ;;;  (signals-error (ccase) program-error)

@@ -161,5 +161,44 @@
 	(declare (special x)))))
   :good)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest do.20
+  (let ((result nil))
+    (macrolet
+     ((%m (z) z))
+     (do ((x (expand-in-current-env (%m 0)) (+ x 2)))
+	 ((> x 10) result)
+	 (push x result))))
+  (10 8 6 4 2 0))
+
+(deftest do.21
+  (let ((result nil))
+    (macrolet
+     ((%m (z) z))
+     (do ((x 0 (expand-in-current-env (%m (+ x 2)))))
+	 ((> x 10) result)
+	 (push x result))))
+  (10 8 6 4 2 0))
+
+(deftest do.22
+  (let ((result nil))
+    (macrolet
+     ((%m (z) z))
+     (do ((x 0 (+ x 2)))
+	 ((expand-in-current-env (%m (> x 10))) result)
+	 (push x result))))
+  (10 8 6 4 2 0))
+
+(deftest do.23
+  (let ((result nil))
+    (macrolet
+     ((%m (z) z))
+     (do ((x 0 (+ x 2)))
+	 ((> x 10) (expand-in-current-env (%m result)))
+	 (push x result))))
+  (10 8 6 4 2 0))
+
 (def-macro-test do.error.1
   (do ((i 0 (1+ i))) ((= i 5) 'a)))

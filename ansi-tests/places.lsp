@@ -269,3 +269,20 @@
     (declare (special *x*))
     (setf *x* 1))
   1)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest setf.7
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values x (setf (expand-in-current-env (%m x)) t) x)))
+  nil t t)
+
+(deftest setf.8
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values x (setf x (expand-in-current-env (%m t))) x)))
+  nil t t)

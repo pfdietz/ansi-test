@@ -121,6 +121,27 @@
      collect (list n my-types val i form j)))
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest typecase.20
+  (macrolet
+   ((%m (z) z))
+   (typecase (expand-in-current-env (%m 2))
+	     ((integer 0 1) :bad1)
+	     ((integer 2 10) :good)
+	     (t :bad2)))
+  :good)
+
+(deftest typecase.21
+  (macrolet
+   ((%m (z) z))
+   (typecase 2
+	     ((integer 0 1) (expand-in-current-env (%m :bad1)))
+	     ((integer 2 10) (expand-in-current-env (%m :good)))
+	     (t (expand-in-current-env (%m :bad2)))))
+  :good)
+
 ;;; Error cases
 
 (deftest typecase.error.1
