@@ -11044,3 +11044,20 @@ Broken at C::WT-MAKE-CLOSURE.
                                     (debug 1) (space 3) (speed 1)))
                           (loop for lv2 below 1 sum (ash lv2 64)))))
   0)
+
+;;; sbcl 0.9.8.17, x86 linux
+;;;   The value 32 is not of type (OR (INTEGER -67 -67) (INTEGER -63 -63)).
+
+(deftest misc.621
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (debug 1) (space 0) (compilation-speed 3)
+			  (speed 1) (safety 3)))
+       (loop for lv1 below 2 sum
+	     (dotimes (iv2 2 0)
+	       (mod (dotimes (iv4 2 0) (progn (count lv1 #*0) 0))
+		    (min -63 (rem 0 (min -67 0)))))))))
+  
+  0)
