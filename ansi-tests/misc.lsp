@@ -10976,7 +10976,7 @@ Broken at C::WT-MAKE-CLOSURE.
 		   a))
 		 c))))
    -134217 -3699719058 10)
-  -134217)
+  10)
 
 ;;; sbcl 0.9.7.33 (x86)
 ;;; The value 16561216769 is not of type (INTEGER -2147483648 4294967295).
