@@ -188,18 +188,25 @@
 (defmacro def-read-sequence-bv-test (name init args &rest expected)
   `(deftest ,name
      ;; Create output file
-     (let ((os (open "temp.dat" :direction :output
-		     :element-type '(unsigned-byte 8)
-		     :if-exists :supersede)))
-       (loop for i in '(0 1 1 0 0 1 1 0 1 0 1 1 1 0)
-	     do (write-byte i os))
-       (close os)
-       (let ((is (open "temp.dat" :direction :input
-		       :element-type '(unsigned-byte 8)))
-	     (bv (copy-seq ,init)))
-	 (values
-	  (read-sequence bv is ,@args)
-	  bv)))
+     (progn
+       (let (os)
+	 (unwind-protect
+	     (progn
+	       (setq os (open "temp.dat" :direction :output
+			      :element-type '(unsigned-byte 8)
+			      :if-exists :supersede))
+	       (loop for i in '(0 1 1 0 0 1 1 0 1 0 1 1 1 0)
+		     do (write-byte i os)))
+	   (when os (close os))))
+       (let (is (bv (copy-seq ,init)))
+	 (unwind-protect
+	     (progn
+	       (setq is (open "temp.dat" :direction :input
+			      :element-type '(unsigned-byte 8)))
+	       (values
+		(read-sequence bv is ,@args)
+		bv))
+	   (when is (close is)))))
      ,@expected))
      
 (def-read-sequence-bv-test read-sequence.bv.1 #*00000000000000 ()
