@@ -93,3 +93,43 @@
 	      x
 	      (boundp 'y))))
   1 nil)
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest progv.13
+  (macrolet
+   ((%m (z) z))
+   (progv (expand-in-current-env (%m '(x)))
+	  '(:good)
+	  (locally (declare (special x)) x)))
+  :good)
+
+(deftest progv.14
+  (macrolet
+   ((%m (z) z))
+   (progv (list (expand-in-current-env (%m 'x)))
+	  '(:good)
+	  (locally (declare (special x)) x)))
+  :good)
+
+(deftest progv.15
+  (macrolet
+   ((%m (z) z))
+   (progv '(x)
+	  (expand-in-current-env (%m '(:good)))
+	  (locally (declare (special x)) x)))
+  :good)
+
+(deftest progv.16
+  (macrolet
+   ((%m (z) z))
+   (progv '(x)
+	  (list (expand-in-current-env (%m :good)))
+	  (locally (declare (special x)) x)))
+  :good)
+
+(deftest progv.17
+  (macrolet
+   ((%m (z) z))
+   (progv nil nil (expand-in-current-env (%m :good))))
+  :good)

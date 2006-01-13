@@ -48,3 +48,20 @@
      10
      (return 'good)))
   good)
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest progn.9
+  (macrolet
+   ((%m (z) z))
+   (progn (expand-in-current-env (%m :good))))
+  :good)
+
+(deftest progn.10
+  (macrolet
+   ((%m (z) z))
+   (progn (expand-in-current-env (%m :bad))
+	  (expand-in-current-env (%m :good))))
+  :good)
+
+

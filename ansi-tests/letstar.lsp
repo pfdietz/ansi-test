@@ -161,3 +161,25 @@
 	unless (eql (eval `(let* ((,k :foo)) ,k)) :foo)
 	collect k)
   nil)
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest let*.21
+  (macrolet ((%m (z) z))
+	    (let* () (expand-in-current-env (%m :good))))
+  :good)
+
+(deftest let*.22
+  (macrolet ((%m (z) z))
+	    (let* ((x (expand-in-current-env (%m 1)))) (+ x x x)))
+  3)
+
+(deftest let*.23
+  (macrolet ((%m (z) z))
+	    (let* ((x (expand-in-current-env (%m 1)))
+		   (y (expand-in-current-env (%m 2))))
+	      (+ x y)))
+  3)
+
+
+

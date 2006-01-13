@@ -76,6 +76,13 @@
      (return-from done 'good)))
   good)
 
+;;; Macros are expanded in the appropriate environment
+
+(deftest block.12
+  (macrolet ((%m (z) z))
+	    (block foo (expand-in-current-env (%m :good))))
+  :good)
+
 #|
 (deftest return.error.1
   (signals-error

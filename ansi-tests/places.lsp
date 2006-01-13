@@ -238,7 +238,19 @@
     (declare (special *x*))
     (setq *x* 1))
   1)
-    
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest setq.7
+  (macrolet
+   ((%m (z) z))
+   (let ((x nil))
+     (values (setq x (expand-in-current-env (%m :good)))
+	     x)))
+  :good :good)
+
+;;; Tests of SETF    
 
 (deftest setf.1
   (setf)

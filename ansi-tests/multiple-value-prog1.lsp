@@ -83,3 +83,16 @@
      (return 'good)))
   good)
 
+;;; Macros are expanded in the appropriate environment
+
+(deftest multiple-value-prog1.11
+  (macrolet
+   ((%m (z) z))
+   (multiple-value-prog1 (expand-in-current-env (%m :good))))
+  :good)
+
+(deftest multiple-value-prog1.12
+  (macrolet
+   ((%m (z) z))
+   (multiple-value-prog1 :good (expand-in-current-env (%m :foo))))
+  :good)

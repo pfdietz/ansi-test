@@ -161,6 +161,7 @@
 
 ;;; Check that macros are not expanded before finding tags
 ;;; Test for issue TAGBODY-TAG-EXPANSION
+
 (deftest tagbody.17
   (block done
     (tagbody
@@ -174,4 +175,11 @@
      (return-from done :good)))
   :good)
 
-    
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest tagbody.18
+  (macrolet ((%m (z) z))
+    (tagbody
+      (expand-in-current-env (%m :foo))))
+  nil)

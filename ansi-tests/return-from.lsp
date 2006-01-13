@@ -15,4 +15,10 @@
   (block nil (return-from nil :good) :bad)
   :good)
 
+;;; Macros are expanded in the appropriate environment
 
+(deftest return-from.3
+  (macrolet
+   ((%m (z) z))
+   (block foo (return-from foo (expand-in-current-env (%m :good)))))
+  :good)

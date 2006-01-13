@@ -545,3 +545,18 @@
        (mapcar (%f 2) '(a b c)))))
   (1 2 3)
   (5 7 9))
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest flet.70
+  (macrolet ((%m (z) z))
+	    (flet () (expand-in-current-env (%m :good))))
+  :good)
+
+(deftest flet.71
+  (macrolet ((%m (z) z))
+	    (flet ((%f () (expand-in-current-env (%m :good))))
+		  (%f)))
+  :good)
+
+

@@ -37,3 +37,10 @@
 (deftest locally.7
   (locally (declare))
   nil)
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest locally.8
+  (macrolet ((%m (z) z))
+	    (locally (expand-in-current-env (%m :good))))
+  :good)

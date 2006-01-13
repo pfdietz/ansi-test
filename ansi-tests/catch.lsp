@@ -82,6 +82,23 @@
      (return-from done 'good)))
   good)
 
+;;; Macros are expanded in the appropriate environment
+
+(deftest catch.14
+  (macrolet ((%m (z) z))
+	    (catch 'foo (expand-in-current-env (%m :good))))
+  :good)
+
+(deftest catch.15
+  (macrolet ((%m (z) z))
+	    (catch 'foo (throw (expand-in-current-env (%m 'foo)) :good) :bad))
+  :good)
+
+(deftest catch.16
+  (macrolet ((%m (z) z))
+	    (catch 'foo (throw 'foo (expand-in-current-env (%m :good))) :bad))
+  :good)
+
 (deftest throw-error
   (signals-error (throw (gensym) nil) control-error)
   t)

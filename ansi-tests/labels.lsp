@@ -391,3 +391,16 @@
 	(declare (special x))
 	(%f))))
   :good)
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest labels.48
+  (macrolet ((%m (z) z))
+	    (labels () (expand-in-current-env (%m :good))))
+  :good)
+
+(deftest labels.49
+  (macrolet ((%m (z) z))
+	    (labels ((%f () (expand-in-current-env (%m :good))))
+		    (%f)))
+  :good)

@@ -16,3 +16,19 @@
 (deftest multiple-value-call.3
   (multiple-value-call 'list (floor 13 4))
   (3 1))
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest multiple-value-call.4
+  (macrolet
+   ((%m (z) z))
+   (multiple-value-call (expand-in-current-env (%m #'list)) (values 1 2)))
+  (1 2))
+
+(deftest multiple-value-call.5
+  (macrolet
+   ((%m (z) z))
+   (multiple-value-call 'list (expand-in-current-env (%m (values 1 2)))))
+  (1 2))
+
+

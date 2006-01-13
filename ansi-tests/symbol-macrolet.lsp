@@ -74,3 +74,12 @@
   (signals-error (symbol-macrolet ((*pathnames* 19)) *pathnames*)
 		 program-error)
   t)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest symbol-macrolet.9
+  (macrolet
+   ((%m (z) z))
+   (symbol-macrolet () (expand-in-current-env (%m :good))))
+  :good)

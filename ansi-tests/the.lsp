@@ -126,4 +126,18 @@
    (the (values symbol integer &optional fixnum) (eval '(values 'a 1))))
   (a 1))
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest the.24
+  (macrolet
+   ((%m (z) z))
+   (the (integer 0 10) (expand-in-current-env (%m 4))))
+  4)
+
+(deftest the.25
+  (macrolet
+   ((%m (z) z))
+   (the (values t t) (expand-in-current-env (%m (values 1 2)))))
+  1 2)
 

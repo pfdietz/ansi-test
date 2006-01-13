@@ -22,7 +22,6 @@
 	 y z))))
   6 a (6 2) (a 4))
 
-
 ;;; Inner definitions shadow outer ones
 (deftest macrolet.3
   (macrolet ((%m (w) `(cadr ,w)))
@@ -413,5 +412,13 @@
 			    (funcall *f*)))
 	       (%m (t))))))
   t)
+
+;;; Macros are expanded in the appropriate environment
+
+(deftest macrolet.46
+  (macrolet ((%m (z) z))
+	    (macrolet () (expand-in-current-env (%m :good))))
+  :good)
+
 
 ;;; TODO: more special declarations for other macrolet arguments
