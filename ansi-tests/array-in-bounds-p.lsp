@@ -132,6 +132,17 @@
   (array-in-bounds-p #(a b c) -1000000000000000000)
   nil)
 
+;;; Macro expansion
+
+(deftest array-in-bounds-p.24
+  (macrolet ((%m (z) z)) (array-in-bounds-p (expand-in-current-env (%m #(a b))) 3))
+  nil)
+
+(deftest array-in-bounds-p.25
+  (macrolet ((%m (z) z))
+	    (array-in-bounds-p #(a b) (expand-in-current-env (%m 2))))
+  nil)
+
 ;;; Order of evaluation tests
 
 (deftest array-in-bounds-p.order.1

@@ -95,6 +95,13 @@
      collect x))
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest minus.9
+  (macrolet ((%m (z) z)) (- (expand-in-current-env (%m 1))))
+  -1)
+
 ;;; Binary minus tests
 
 (deftest subtract.1
@@ -173,3 +180,15 @@
 	unless (eql diff (complex (- i j) (+ (- i j) 300)))
 	collect (list i ci j cj (- ci cj)))
   nil)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest subtract.6
+  (macrolet ((%m (z) z))
+	    (values
+	     (- (expand-in-current-env (%m 2)) 1)
+	     (- 17 (expand-in-current-env (%m 5)))
+	     (- 1/2 (expand-in-current-env (%m 1/6))
+		(expand-in-current-env (%m 0)))))
+  1 12 1/3)

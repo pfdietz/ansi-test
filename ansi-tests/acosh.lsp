@@ -68,6 +68,10 @@
 	 collect (list x1 x2 rlist)))
   nil)
 
+(deftest acosh.7
+  (macrolet ((%m (z) z)) (not (not (complexp (acosh (expand-in-current-env (%m 0)))))))
+  t)
+
 ;;; FIXME
 ;;; Add accuracy tests here
 

@@ -78,6 +78,10 @@
 	collect type)
   nil)
 
+(deftest acos.9
+  (macrolet ((%m (z) z)) (not (not (> (acos (expand-in-current-env (%m 0))) 0))))
+  t)
+
 ;;; FIXME
 ;;; Add accuracy tests
 

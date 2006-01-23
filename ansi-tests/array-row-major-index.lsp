@@ -22,6 +22,18 @@
 	  collect (array-row-major-index a i)))
   (0 1 2 3 4))
 
+(deftest array-row-major-index.4
+  (macrolet
+   ((%m (z) z))
+   (array-row-major-index (expand-in-current-env (%m #(a b c))) 1))
+  1)
+
+(deftest array-row-major-index.5
+  (macrolet
+   ((%m (z) z))
+   (array-row-major-index #(a b c) (expand-in-current-env (%m 1))))
+  1)
+
 (deftest array-row-major-index.order.1
   (let ((x 0) y z
 	(a #(a b c d e f)))

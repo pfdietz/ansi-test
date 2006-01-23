@@ -28,17 +28,17 @@
   (6 . c))
 
 (deftest assoc-if-not.3
-    (let* ((x (copy-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (assoc-if-not #'oddp x)))
-      (and
-       (check-scaffold-copy x xcopy)
-       (eqt result (fourth x))
-       result))
+  (let* ((x (copy-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
+	 (xcopy (make-scaffold-copy x))
+	 (result (assoc-if-not #'oddp x)))
+    (and
+     (check-scaffold-copy x xcopy)
+     (eqt result (fourth x))
+     result))
   (6 . c))
 
 (deftest assoc-if-not.4
-    (assoc-if-not #'identity '((a . b) nil (c . d) (nil . e) (f . g)))
+  (assoc-if-not #'identity '((a . b) nil (c . d) (nil . e) (f . g)))
   (nil . e))
 
 ;;; Order of argument evaluation tests
@@ -96,6 +96,29 @@
   (assoc-if-not #'identity '((a . 1) (nil . 2) (c . 3)) :key nil :key #'null)
   (nil . 2))
 
+;;; Macro env tests
+
+(deftest assoc-if-not.env.1
+  (macrolet
+   ((%m (z) z))
+   (let ((alist '((1 . a) (3 . b) (4 . c) (6 . d))))
+     (values
+      (assoc-if-not (expand-in-current-env (%m 'oddp)) alist)
+      (assoc-if-not (expand-in-current-env (%m #'oddp)) alist)
+      (assoc-if-not 'oddp (expand-in-current-env (%m alist))))))
+  (4 . c)
+  (4 . c)
+  (4 . c))
+
+(deftest assoc-if-not.env.2
+  (macrolet
+   ((%m (z) z))
+   (let ((alist '((1 . a) (3 . b) (4 . c) (6 . d))))
+     (values
+      (assoc-if-not 'evenp alist (expand-in-current-env (%m :key)) #'1+)
+      (assoc-if-not #'evenp alist :key (expand-in-current-env (%m '1+)))
+      
+      
 ;;; Error tests
 
 (deftest assoc-if-not.error.1

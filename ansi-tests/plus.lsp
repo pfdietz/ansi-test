@@ -347,8 +347,21 @@
    -0.0l0)
   0.0l0)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest plus.28
+  (macrolet ((%m (z) z))
+	    (values
+	     (+ (expand-in-current-env (%m 1)))
+	     (+ (expand-in-current-env (%m 2)) 3)
+	     (+ 4 (expand-in-current-env (%m 5)))
+	     (+ 1/2 (expand-in-current-env (%m 6)) 2/3)))
+  1 5 9 43/6)
+
 ;;; Must test combinations of reals and complex arguments.
 
+;;; Order of evaluation tests
 
 (deftest plus.order.1
   (let ((i 0) x y)

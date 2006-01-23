@@ -14,6 +14,7 @@
 (load "array-displacement.lsp")
 (load "array-dimension.lsp")
 (load "array-dimensions.lsp")
+(load "array-element-type.lsp")
 (load "array-in-bounds-p.lsp")
 (load "array-misc.lsp")
 (load "array-rank.lsp")

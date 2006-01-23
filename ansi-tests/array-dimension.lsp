@@ -37,6 +37,17 @@
        (array-dimension a 0))))
   10 20)
 
+(deftest array-dimension.7
+  (macrolet ((%m (z) z))
+	    (array-dimension (expand-in-current-env (%m "abc")) 0))
+  3)
+
+(deftest array-dimension.8
+  (macrolet ((%m (z) z))
+	    (array-dimension #2a((a b)(c d)(e f))
+			     (expand-in-current-env (%m 0))))
+  3)
+
 (deftest array-dimension.order.1
   (let ((i 0) a b)
     (values

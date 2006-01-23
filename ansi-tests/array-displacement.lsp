@@ -94,6 +94,20 @@
 	   (eqlt disp 0))))
   t)
 
+(deftest array-displacement.15
+  (let* ((a (make-array '(10) :initial-contents '(a b c d e f g h i j)))
+	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2)))
+    (macrolet
+     ((%m (z) z))
+     (multiple-value-bind
+      (x y)
+      (array-displacement (expand-in-current-env (%m b)))
+      (values (eqlt x a) y))))
+  t 2)
+
+;;; FIXME: Add tests for other kinds of specialized arrays
+;;;  (character, other integer types, float types, complex types)
+
 (deftest array-displacement.order.1
   (let* ((a (make-array '(10)))
 	 (b (make-array '(10) :displaced-to a))

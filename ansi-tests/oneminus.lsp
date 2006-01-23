@@ -168,3 +168,7 @@
 	  unless (eql xc1 (complex (-  xr 1) xi))
 	  collect (list xr xi xc xc1)))
   nil)
+
+(deftest 1-.15
+  (macrolet ((%m (z) z)) (1- (expand-in-current-env (%m 2))))
+  1)

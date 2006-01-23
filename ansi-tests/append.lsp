@@ -47,6 +47,23 @@
     (eq (append x nil) x))
   nil)
 
+;;; Compiler macro expansion in correct env
+
+(deftest append.8
+  (macrolet ((%m (z) z))
+	    (append (expand-in-current-env (%m '(a b c)))))
+  (a b c))
+
+(deftest append.9
+  (macrolet ((%m (z) z))
+	    (append (expand-in-current-env (%m (list 1 2 3))) (list 4 5 6)))
+  (1 2 3 4 5 6))
+
+(deftest append.10
+  (macrolet ((%m (z) z))
+	    (append (list 1 2 3) (expand-in-current-env (%m (list 4 5 6)))))
+  (1 2 3 4 5 6))
+
 ;;; Order of evaluation tests
 
 (deftest append.order.1

@@ -111,3 +111,6 @@
 (load "real.lsp")
 
 (load "upgraded-complex-part-type.lsp")
+
+(load "arithmetic-error.lsp")
+

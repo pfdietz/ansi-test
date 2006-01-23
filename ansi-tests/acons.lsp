@@ -37,6 +37,18 @@
   (acons #\R :foo :bar)
   ((#\R . :foo) . :bar))
 
+(deftest acons.7
+  (macrolet ((%m (z) z)) (acons (expand-in-current-env (%m 'a)) 'b '(c)))
+  ((a . b) c))
+
+(deftest acons.8
+  (macrolet ((%m (z) z)) (acons 'a (expand-in-current-env (%m 'b)) '(c)))
+  ((a . b) c))
+
+(deftest acons.9
+  (macrolet ((%m (z) z)) (acons 'a 'b (expand-in-current-env (%m '(c)))))
+  ((a . b) c))
+
 (deftest acons.order.1
   (let ((i 0) x y z)
     (values

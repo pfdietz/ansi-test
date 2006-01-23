@@ -78,6 +78,10 @@
 	collect type)
   nil)
 
+(deftest asin.9
+  (macrolet ((%m (z) z)) (asin (expand-in-current-env (%m 0.0))))
+  0.0)
+
 ;;; FIXME
 ;;; Add accuracy tests
 

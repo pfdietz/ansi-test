@@ -231,6 +231,116 @@
     a2)
   #2a((#\1 #\2 #\3)(#\3 #\4 #\5)))
 
+;;; Macro expansion tests
+
+(deftest adjust-array.24
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array (expand-in-current-env (%m a)) '(4))))
+  #(a b c d))
+
+(deftest adjust-array.25
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a (expand-in-current-env (%m '(4))))))
+  #(a b c d))
+
+(deftest adjust-array.26
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(4) (expand-in-current-env (%m :element-type)) t)))
+  #(a b c d))
+
+(deftest adjust-array.27
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(4) :element-type
+		   (expand-in-current-env (%m t)))))
+  #(a b c d))
+
+(deftest adjust-array.28
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(6) (expand-in-current-env (%m :initial-element)) 17)))
+  #(a b c d 17 17))
+
+(deftest adjust-array.29
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(7) :initial-element (expand-in-current-env (%m 5)))))
+  #(a b c d 5 5 5))
+
+(deftest adjust-array.30
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(6) (expand-in-current-env (%m :initial-contents))
+		   '(1 2 3 4 5 6))))
+  #(1 2 3 4 5 6))
+
+(deftest adjust-array.31
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(3) :initial-contents
+		   (expand-in-current-env (%m "ABC")))))
+  #(#\A #\B #\C))
+
+(deftest adjust-array.32
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(4) (expand-in-current-env (%m :fill-pointer)) nil)))
+  #(a b c d))
+
+(deftest adjust-array.33
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(4) :fill-pointer (expand-in-current-env (%m nil)))))
+  #(a b c d))
+
+(deftest adjust-array.34
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(4) (expand-in-current-env (%m :displaced-to)) nil)))
+  #(a b c d))
+
+(deftest adjust-array.35
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d))))
+     (adjust-array a '(4) :displaced-to
+		   (expand-in-current-env (%m nil)))))
+  #(a b c d))
+
+(deftest adjust-array.36
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d)))
+	 (c (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8))))
+     (adjust-array a '(3) :displaced-to c
+		   (expand-in-current-env (%m :displaced-index-offset))
+		   2)))
+  #(3 4 5))
+
+(deftest adjust-array.37
+  (macrolet
+   ((%m (z) z))
+   (let ((a (make-array '(4) :initial-contents '(a b c d)))
+	 (c (make-array '(8) :initial-contents '(1 2 3 4 5 6 7 8))))
+     (adjust-array a '(5) :displaced-to c
+		   :displaced-index-offset
+		   (expand-in-current-env (%m 1)))))
+  #(2 3 4 5 6))
+
 ;;; Adjust an adjustable array
 
 (def-adjust-array-test adjust-array.adjustable.1

@@ -125,6 +125,10 @@
   (char-type-error-check #'alpha-char-p)
   t)
 
+(deftest alpha-char-p.4
+  (macrolet ((%m (z) z)) (alpha-char-p (expand-in-current-env (%m #\?))))
+  nil)
+
 (deftest alpha-char-p.order.1
   (let ((i 0))
     (values
@@ -164,6 +168,10 @@
 (deftest alphanumericp.5
   (alphanumericp.5.body)
   t)
+
+(deftest alphanumbericp.6
+  (macrolet ((%m (z) z)) (alphanumericp (expand-in-current-env (%m #\=))))
+  nil)
 
 (deftest alphanumericp.order.1
   (let ((i 0))

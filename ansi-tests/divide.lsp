@@ -204,3 +204,14 @@
 		(eql (/ frneg) frpos)))
 	 collect (list i rpos rneg (float rpos one) (float rneg one))))
   nil)
+
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest /.13
+  (macrolet ((%m (z) z))
+	    (values
+	     (/ (expand-in-current-env (%m 1/2)))
+	     (/ (expand-in-current-env (%m 2)) 3)
+	     (/ 5 (expand-in-current-env (%m 7)))))
+  2 2/3 5/7)

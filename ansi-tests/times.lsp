@@ -359,6 +359,19 @@
 	 collect (list type i j x y (* cx cy))))
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest *.28
+  (macrolet ((%m (z) z))
+	    (values
+	     (* (expand-in-current-env (%m 2)))
+	     (* (expand-in-current-env (%m 3)) 4)
+	     (* 5 (expand-in-current-env (%m 3)))))
+  2 12 15)
+
+;;; Order of evaluation tests
+
 (deftest times.order.1
   (let ((i 0) x y)
     (values

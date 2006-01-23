@@ -69,6 +69,27 @@
     (notnot (search "CAR" s :test #'string-equal)))
   t)
 
+(deftest apropos.9
+  (macrolet
+   ((%m (z) z))
+   (let ((s (with-output-to-string
+	      (*standard-output*)
+	      (assert (null (multiple-value-list
+			     (apropos (expand-in-current-env (%m "CAR")))))))))
+     (notnot (search "CAR" s :test #'string-equal))))
+  t)
+
+(deftest apropos.10
+  (macrolet
+   ((%m (z) z))
+   (let ((s (with-output-to-string
+	      (*standard-output*)
+	      (assert (null (multiple-value-list
+			     (apropos "CAR"
+				      (expand-in-current-env (%m nil)))))))))
+     (notnot (search "CAR" s :test #'string-equal))))
+  t)
+
 ;;; Error tests
 
 (deftest apropos.error.1

@@ -31,6 +31,10 @@
   (check-type-predicate #'arrayp 'array)
   nil)
 
+(deftest arrayp.7
+  (macrolet ((%m (z) z)) (arrayp (expand-in-current-env (%m 0))))
+  nil)
+
 (deftest arrayp.order.1
   (let ((i 0) a)
     (values

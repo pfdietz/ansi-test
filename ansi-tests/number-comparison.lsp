@@ -1633,17 +1633,131 @@
 		collect (list r p q x fr cr))))
   nil)
 
+;;; Test that explicit calls to macroexpand in subforms
+;;; are done in the correct environment
+
+(deftest =.env.1
+  (macrolet ((%m (z) z))
+	    (mapcar 'notnot
+		    (list (= (expand-in-current-env (%m 0)))
+			  (= 1 (expand-in-current-env (%m 1)))
+			  (= (expand-in-current-env (%m 2)) 2)
+			  (= (expand-in-current-env (%m 3))
+			     (expand-in-current-env (%m 3)))
+			  (= (expand-in-current-env (%m #c(1 2)))
+			     (expand-in-current-env (%m #c(1 2))))
+
+			  (= 1 (expand-in-current-env (%m 2.0)))
+			  (= (expand-in-current-env (%m 2)) 2/3)
+			  (= (expand-in-current-env (%m 4))
+			     (expand-in-current-env (%m 5)))
+
+			  (= (expand-in-current-env (%m 0)) 0 0)
+			  (= 0 (expand-in-current-env (%m 0)) 0)
+			  (= 0 0 (expand-in-current-env (%m 0)))
+			  )))
+  (t t t t t nil nil nil t t t))
 
 
+(deftest /=.env.1
+  (macrolet ((%m (z) z))
+	    (mapcar 'notnot
+		    (list (/= (expand-in-current-env (%m 0)))
+			  (/= 1 (expand-in-current-env (%m 1)))
+			  (/= (expand-in-current-env (%m 2)) 2)
+			  (/= (expand-in-current-env (%m 3))
+			      (expand-in-current-env (%m 3)))
+			  (/= (expand-in-current-env (%m #c(1 2)))
+			      (expand-in-current-env (%m #c(1 2))))
+
+			  (/= 1 (expand-in-current-env (%m 2.0)))
+			  (/= (expand-in-current-env (%m 2)) 2/3)
+			  (/= (expand-in-current-env (%m 4))
+			      (expand-in-current-env (%m 5)))
+
+			  (/= (expand-in-current-env (%m 2)) 0 1)
+			  (/= 0 (expand-in-current-env (%m 2)) 1)
+			  (/= 0 1 (expand-in-current-env (%m 2)))
+			  )))
+  (t nil nil nil nil t t t t t t))
+
+(deftest <.env.1
+  (macrolet ((%m (z) z))
+	    (mapcar 'notnot
+		    (list (< (expand-in-current-env (%m 0)))
+			  (< 0 (expand-in-current-env (%m 1)))
+			  (< (expand-in-current-env (%m 2)) 3)
+			  (< (expand-in-current-env (%m 5))
+			     (expand-in-current-env (%m 7)))
+
+			  (< 3 (expand-in-current-env (%m 2.0)))
+			  (< (expand-in-current-env (%m 2)) 2/3)
+			  (< (expand-in-current-env (%m 6))
+			     (expand-in-current-env (%m 5)))
+
+			  (< (expand-in-current-env (%m 1)) 2 3)
+			  (< 1 (expand-in-current-env (%m 2)) 3)
+			  (< 1 2 (expand-in-current-env (%m 3)))
+			  )))
+  (t t t t nil nil nil t t t))
+
+(deftest <=.env.1
+  (macrolet ((%m (z) z))
+	    (mapcar 'notnot
+		    (list (<= (expand-in-current-env (%m 0)))
+			  (<= 0 (expand-in-current-env (%m 1)))
+			  (<= (expand-in-current-env (%m 2)) 3)
+			  (<= (expand-in-current-env (%m 5))
+			     (expand-in-current-env (%m 7)))
+
+			  (<= 3 (expand-in-current-env (%m 2.0)))
+			  (<= (expand-in-current-env (%m 2)) 2/3)
+			  (<= (expand-in-current-env (%m 6))
+			     (expand-in-current-env (%m 5)))
+
+			  (<= (expand-in-current-env (%m 2)) 2 3)
+			  (<= 1 (expand-in-current-env (%m 1)) 3)
+			  (<= 1 2 (expand-in-current-env (%m 2)))
+			  )))
+  (t t t t nil nil nil t t t))
+
+(deftest >.env.1
+  (macrolet ((%m (z) z))
+	    (mapcar 'notnot
+		    (list (> (expand-in-current-env (%m 0)))
+			  (> 2 (expand-in-current-env (%m 1)))
+			  (> (expand-in-current-env (%m 4)) 3)
+			  (> (expand-in-current-env (%m 10))
+			     (expand-in-current-env (%m 7)))
+
+			  (> 1 (expand-in-current-env (%m 2.0)))
+			  (> (expand-in-current-env (%m -1)) 2/3)
+			  (> (expand-in-current-env (%m 4))
+			     (expand-in-current-env (%m 5)))
+
+			  (> (expand-in-current-env (%m 2)) 1 0)
+			  (> 2 (expand-in-current-env (%m 1)) 0)
+			  (> 2 1 (expand-in-current-env (%m 0)))
+			  )))
+  (t t t t nil nil nil t t t))
 
 
+(deftest >=.env.1
+  (macrolet ((%m (z) z))
+	    (mapcar 'notnot
+		    (list (>= (expand-in-current-env (%m 0)))
+			  (>= 2 (expand-in-current-env (%m 1)))
+			  (>= (expand-in-current-env (%m 4)) 3)
+			  (>= (expand-in-current-env (%m 7))
+			      (expand-in-current-env (%m 7)))
 
+			  (>= 1 (expand-in-current-env (%m 2.0)))
+			  (>= (expand-in-current-env (%m -1)) 2/3)
+			  (>= (expand-in-current-env (%m 4))
+			     (expand-in-current-env (%m 5)))
 
-
-
-
-
-
-
-
-			    
+			  (>= (expand-in-current-env (%m 2)) 1 1)
+			  (>= 1 (expand-in-current-env (%m 1)) 0)
+			  (>= 2 2 (expand-in-current-env (%m 0)))
+			  )))
+  (t t t t nil nil nil t t t))

@@ -48,6 +48,21 @@
   (apply 'cons '(a b))
   (a . b))
 
+(deftest apply.6
+  (macrolet ((%m (z) z))
+	    (apply (expand-in-current-env (%m 'cons)) 1 2 nil))
+  (1 . 2))
+
+(deftest apply.7
+  (macrolet ((%m (z) z))
+	    (apply #'cons (expand-in-current-env (%m 1)) '(2)))
+  (1 . 2))
+
+(deftest apply.8
+  (macrolet ((%m (z) z))
+	    (apply #'cons (expand-in-current-env (%m '(1 2)))))
+  (1 . 2))
+
 (deftest apply.order.1
   (let ((i 0) x y z)
     (values

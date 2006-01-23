@@ -25,6 +25,12 @@
   (notnot (adjustable-array-p (make-array '(2 2 2 2) :adjustable t)))
   t)
 
+(deftest adjustable-array-p.6
+  (macrolet ((%m (z) z))
+	    (let ((a (make-array '(5) :adjustable t)))
+	      (notnot (adjustable-array-p (expand-in-current-env (%m a))))))
+  t)
+
 (deftest adjustable-array-p.order.1
   (let ((i 0) x)
     (values

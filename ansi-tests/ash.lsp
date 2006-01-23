@@ -63,6 +63,14 @@
 	always (eql (ash j j) -1))
   t)
 
+(deftest ash.6
+  (macrolet
+   ((%m (z) z))
+   (values
+    (ash (expand-in-current-env (%m 3)) 1)
+    (ash 1 (expand-in-current-env (%m 3)))))
+  6 8)
+
 (deftest ash.order.1
   (let ((i 0) x y)
     (values (ash (progn (setf x (incf i)) 1)

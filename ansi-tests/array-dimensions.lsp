@@ -39,6 +39,11 @@
     (array-dimension a 0))
   10)
 
+(deftest array-dimensions.8
+  (macrolet ((%m (z) z)) (array-dimensions
+			  (expand-in-current-env (%m #2a((a b)(c d)(e f))))))
+  (3 2))
+
 ;;; Error tests
 
 (deftest array-dimensions.error.1

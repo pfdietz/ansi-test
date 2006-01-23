@@ -27,6 +27,11 @@
   (array-total-size #2a((1 2 3)(4 5 6)(7 8 9)(a b c)))
   12)
 
+(deftest array-total-size.6
+  (macrolet ((%m (z) z))
+	    (array-total-size (expand-in-current-env (%m #(a b c)))))
+  3)
+
 (deftest array-total-size.order.1
   (let ((i 0) a)
     (values

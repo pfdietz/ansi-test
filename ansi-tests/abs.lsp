@@ -172,3 +172,8 @@
 (deftest abs.21
   (abs #c(-3.0l0 4.0l0))
   5.0l0)
+
+(deftest abs.22
+  (macrolet ((%m (z) z))
+	    (abs (expand-in-current-env (%m -4))))
+  4)

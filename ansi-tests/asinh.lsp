@@ -66,6 +66,10 @@
 	 collect (list x1 x2 rlist)))
   nil)
 
+(deftest asinh.7
+  (macrolet ((%m (z) z)) (asinh (expand-in-current-env (%m 0.0))))
+  0.0)
+
 ;;; FIXME
 ;;; Add accuracy tests here
 

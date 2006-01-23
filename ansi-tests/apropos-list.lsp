@@ -74,6 +74,22 @@
     (notnot (member sym symbols)))
   t)
 
+(deftest apropos-list.8
+  (let ((*package* (find-package "COMMON-LISP")))
+    (macrolet
+     ((%m (z) z))
+     (intersection '(car)
+		   (apropos-list (expand-in-current-env (%m "CAR"))))))
+  (car))
+
+(deftest apropos-list.9
+  (macrolet
+   ((%m (z) z))
+   (intersection '(car)
+		 (apropos-list "CAR" (expand-in-current-env
+				      (%m (find-package "COMMON-LISP"))))))
+  (car))
+
 ;;; Error tests
 
 (deftest apropos-list.error.1

@@ -104,6 +104,32 @@
   (adjoin 10 '(1 2 3) :test-not #'<)
   (1 2 3))
 
+;;; Test that :key satisfies the description in 17.2.1
+;;; This contradicts other parts of the spec, particularly
+;;; PUSHNEW, so the test is commented out.
+;;; (deftest adjoin.23
+;;;  (adjoin 1 '(1 2 3) :key '1+)
+;;;  (1 1 2 3))
+
+(deftest adjoin.24
+  (macrolet ((%m (z) z))
+	    (values
+	     (adjoin (expand-in-current-env (%m 'a)) '(b c))
+	     (adjoin 'a (expand-in-current-env (%m '(b c))))
+	     (adjoin 'a '(b c) (expand-in-current-env (%m :test)) 'eql)
+	     (adjoin 'a '(a a) (expand-in-current-env (%m :test-not)) 'eql)
+	     (adjoin 'a '(b c) :test (expand-in-current-env (%m 'eql)))
+	     (adjoin 'a '(b c) :test (expand-in-current-env (%m #'eql)))
+	     (adjoin 1 '(1 2 3) :key (expand-in-current-env (%m 'identity)))
+	     ))
+  (a b c)
+  (a b c)
+  (a b c)
+  (a a a)
+  (a b c)
+  (a b c)
+  (1 2 3))
+
 (defharmless adjoin.test-and-test-not.1
   (adjoin 'a '(b c) :test #'eql :test-not #'eql))
 

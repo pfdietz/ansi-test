@@ -16,6 +16,10 @@
 				     (eql (array-rank e) 1))))
   nil)
 
+(deftest array-rank.3
+  (macrolet ((%m (z) z)) (array-rank (expand-in-current-env (%m "abc"))))
+  1)
+
 (deftest array-rank.order.1
   (let ((i 0) a)
     (values
