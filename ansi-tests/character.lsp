@@ -487,6 +487,10 @@
   (char-type-error-check #'both-case-p)
   t)
 
+(deftest both-case-p.4
+  (notnot (macrolet ((%m (z) z)) (both-case-p (expand-in-current-env (%m #\a)))))
+  t)
+
 (deftest both-case-p.order.1
   (let ((i 0))
     (values

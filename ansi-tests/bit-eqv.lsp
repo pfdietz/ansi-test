@@ -221,6 +221,19 @@
   #2a((0 0)(1 1))
   #2a((1 0)(0 1)))
 
+(deftest bit-eqv.20
+  (macrolet ((%m (z) z)) (bit-eqv (expand-in-current-env (%m #*0011)) #*0101))
+  #*1001)
+
+(deftest bit-eqv.21
+  (macrolet ((%m (z) z)) (bit-eqv #*1010 (expand-in-current-env (%m #*1100))))
+  #*1001)
+
+(deftest bit-eqv.22
+  (macrolet ((%m (z) z)) (bit-eqv #*10100011 #*01101010
+				  (expand-in-current-env (%m nil))))
+  #*00110110)
+
 (deftest bit-eqv.order.1
   (let* ((s1 (make-array 1 :initial-element 0 :element-type 'bit))
 	 (s2 (make-array 1 :initial-element 0 :element-type 'bit))

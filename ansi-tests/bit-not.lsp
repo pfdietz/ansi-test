@@ -119,6 +119,22 @@
   #2a((0 1)(1 0))
   #2a((1 0)(0 1)))
 
+;;; Macro env tests
+
+(deftest bit-not.16
+  (macrolet
+   ((%m (z) z))
+   (bit-not (expand-in-current-env (%m #*10010011))))
+  #*01101100)
+
+(deftest bit-not.17
+  (macrolet
+   ((%m (z) z))
+   (bit-not #*1101011010 (expand-in-current-env (%m nil))))
+  #*0010100101)
+
+;;;
+
 (deftest bit-not.order.1
   (let ((a (copy-seq #*001101))
 	(i 0) x)

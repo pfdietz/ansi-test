@@ -35,6 +35,28 @@
 		     (eql j (byte-position bspec))))))
   t)
 
+(deftest byte.4
+  (macrolet
+   ((%m (z) z))
+   (let ((b (byte (expand-in-current-env (%m 2)) 5)))
+     (values (byte-size b) (byte-position b))))
+  2 5)
+
+(deftest byte.5
+  (macrolet
+   ((%m (z) z))
+   (let ((b (byte 31 (expand-in-current-env (%m 7)))))
+     (values (byte-size b) (byte-position b))))
+  31 7)
+
+(deftest byte-size.1
+  (macrolet ((%m (z) z)) (byte-size (expand-in-current-env (%m (byte 3 7)))))
+  3)
+
+(deftest byte-position.1
+  (macrolet ((%m (z) z)) (byte-position (expand-in-current-env (%m (byte 3 7)))))
+  7)
+
 (deftest byte-position.error.1
   (signals-error (byte-position) program-error)
   t)

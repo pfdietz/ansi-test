@@ -50,6 +50,13 @@
   (check-type-predicate #'bit-vector-p 'bit-vector)
   nil)
 
+(deftest bit-vector-p.13
+  (macrolet
+   ((%m (z) z))
+   (values (notnot (bit-vector-p (expand-in-current-env (%m #*110101))))
+	   (bit-vector-p (expand-in-current-env (%m nil)))))
+  t nil)
+
 (deftest bit-vector-p.order.1
   (let ((i 0) x)
     (values

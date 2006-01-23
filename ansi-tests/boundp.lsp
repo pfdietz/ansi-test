@@ -54,6 +54,10 @@
 	collect x)
   nil)
 
+(deftest boundp.6
+  (macrolet ((%m (z) z)) (boundp (expand-in-current-env (%m '#:foo))))
+  nil)
+
 (deftest boundp.order.1
   (let ((i 0) x)
     (values

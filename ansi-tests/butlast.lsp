@@ -59,6 +59,13 @@
   (butlast '(a b c d e) (1- most-positive-fixnum))
   nil)
 
+(deftest butlast.9
+  (macrolet ((%m (z) z))
+	    (values (butlast (expand-in-current-env (%m (list 'a 'b 'c))))
+		    (butlast (list 'a 'b 'c 'd 'e) (expand-in-current-env (%m 2)))))
+  (a b)
+  (a b c))		    
+
 (deftest butlast.order.1
   (let ((i 0) x y)
     (values

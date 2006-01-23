@@ -114,6 +114,15 @@
 	      collect (list n x y result1 result2)))
   nil)
 
+(deftest boole.4
+  (macrolet ((%m (z) z))
+	    (values (boole (expand-in-current-env (%m boole-and)) #b11001100 #b01011010)
+		    (boole boole-and (expand-in-current-env (%m #b11001100)) #b01011010)
+		    (boole boole-and #b11001100 (expand-in-current-env (%m #b01011010)))))
+  #b01001000
+  #b01001000
+  #b01001000)
+
 ;;; Order of evaluation
 (deftest boole.order.1
   (let ((i 0) a b c)

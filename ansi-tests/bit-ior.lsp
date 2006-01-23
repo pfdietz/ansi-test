@@ -220,6 +220,19 @@
   #2a((0 0)(1 1))
   #2a((0 1)(1 1)))
 
+(deftest bit-ior.20
+  (macrolet ((%m (z) z)) (bit-ior (expand-in-current-env (%m #*0011)) #*0101))
+  #*0111)
+
+(deftest bit-ior.21
+  (macrolet ((%m (z) z)) (bit-ior #*1010 (expand-in-current-env (%m #*1100))))
+  #*1110)
+
+(deftest bit-ior.22
+  (macrolet ((%m (z) z)) (bit-ior #*10100011 #*01101010
+				  (expand-in-current-env (%m nil))))
+  #*11101011)
+
 (deftest bit-ior.order.1
   (let* ((s1 (make-array 1 :initial-element 0 :element-type 'bit))
 	 (s2 (make-array 1 :initial-element 0 :element-type 'bit))
