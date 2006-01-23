@@ -93,6 +93,9 @@
 	 collect (list x1 rlist)))
   nil)
 
+(deftest atanh.8
+  (macrolet ((%m (z) z)) (atanh (expand-in-current-env (%m 0.0))))
+  0.0)
 
 
 ;;; FIXME

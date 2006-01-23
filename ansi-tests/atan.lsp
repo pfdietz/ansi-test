@@ -119,6 +119,10 @@
 	collect (approx= (atan (coerce -1 type)) (coerce (/ pi -4) type)))
   (t t t t))
 
+(deftest atan.14
+  (macrolet ((%m (z) z)) (atan (expand-in-current-env (%m 0.0))))
+  0.0)
+
 ;;; FIXME
 ;;; More accuracy tests here
 

@@ -99,6 +99,25 @@
   (assoc-if #'null '((a . 1) (nil . 2) (c . 3)) :key nil :key #'null)
   (nil . 2))
 
+;;; Macro env tests
+
+(deftest assoc-if.env.1
+  (macrolet
+   ((%m (z) z))
+   (let ((alist '((1 . a) (3 . b) (6 . c) (8 . d) (-1 . e))))
+     (values
+      (assoc-if (expand-in-current-env (%m 'evenp)) alist)
+      (assoc-if (expand-in-current-env (%m #'evenp)) alist)
+      (assoc-if #'evenp (expand-in-current-env (%m alist)))
+      (assoc-if 'oddp alist (expand-in-current-env (%m :key)) '1+)
+      (assoc-if 'oddp alist :key (expand-in-current-env (%m #'1+)))
+      )))
+  (6 . c)
+  (6 . c)
+  (6 . c)
+  (6 . c)
+  (6 . c))      
+
 ;;; Error cases
 
 (deftest assoc-if.error.1
