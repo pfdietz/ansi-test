@@ -117,7 +117,9 @@
      (values
       (assoc-if-not 'evenp alist (expand-in-current-env (%m :key)) #'1+)
       (assoc-if-not #'evenp alist :key (expand-in-current-env (%m '1+)))
-      
+      )))
+  (4 . c)
+  (4 . c))      
       
 ;;; Error tests
 
