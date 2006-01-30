@@ -42,6 +42,26 @@
 		collect `((< ,r ,cw) ,@(cdr case)))
 	(t ,@(cdar (last cases)))))))
 
+(defmacro rselect (cumulative-frequency-array &rest cases)
+  (let ((len (length cases))
+	(a (gensym "A"))
+	(max (gensym "MAX"))
+	(r (gensym "R"))
+	(p (gensym "P"))
+	(done (gensym "DONE")))
+    (assert (> len 0))
+    `(let ((,a ,cumulative-frequency-array))
+       (assert (eql ,len (length ,a)))
+       (let* ((,max (aref ,a ,(1- len)))
+	      (,r (random ,max)))
+	 (block ,done
+	  ,@(loop for i from 0
+		  for c in cases
+		  collect 
+		  `(let ((,p (aref ,a ,i)))
+		     (when (< ,r ,p) (return-from ,done ,c))))
+	  (error "Should not happen!"))))))
+
 (defun make-random-integer-range (&optional var)
   "Generate a list (LO HI) of integers, LO <= HI.  This is used
    for generating integer types."

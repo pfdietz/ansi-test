@@ -187,12 +187,10 @@
 		      bit-vector-p simple-bit-vector-p)))
 	  `(member ,@funs ,@(mapcar #'symbol-function funs)))
 	'(or list vector)
-	'(eql :test)
-	(let ((test-funs '(eq eql equal equalp)))
-	  `(member ,@test-funs ,@(mapcar #'symbol-function test-funs))))
+	'(eql :key)
+	(let ((key-funs '(identity not null))) 
+	  `(member ,@key-funs ,@(mapcar #'symbol-function key-funs))))
   4)
-
-
 
 
 ;;; Put count-if-not tests here
@@ -270,4 +268,3 @@
 	(vector long-float))
     (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
   2 :replicate '(t nil))
-

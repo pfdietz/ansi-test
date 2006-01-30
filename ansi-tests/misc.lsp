@@ -11061,3 +11061,18 @@ Broken at C::WT-MAKE-CLOSURE.
 		    (min -63 (rem 0 (min -67 0)))))))))
   
   0)
+
+;;; sbcl 0.9.9.8, x86 linux
+;;; TYPE-ERROR: The value 17549.955 is not of type REAL.
+
+(deftest misc.622
+  (funcall
+   (compile
+    nil
+    '(lambda (p2)
+       (declare (optimize (speed 3) (safety 2) (debug 3) (space 0))
+		(type real p2))
+       (+ 81535869 (the (member 17549.955 #:g35917) p2))))
+   17549.955)
+  #.(+ 81535869 17549.955))
+

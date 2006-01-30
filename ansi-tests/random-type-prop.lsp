@@ -12,11 +12,8 @@
 (defvar *print-random-type-prop-input* nil)
 (defparameter *random-type-prop-result* nil)
 
-(defgeneric make-random-type-containing (val)
-  (:method-combination randomized)
-  (:documentation "Given a value, generate a random type that contains that value."))
-
 (declaim (special *param-types* *params* *is-var?* *form*))
+(declaim (special *replicate-type*))
 
 (defparameter *default-reps* 1000)
 (defparameter *default-cell* nil)
@@ -105,7 +102,7 @@
 	    (cell *default-cell*)
 	    (ignore *default-ignore*)
 	    (test #'regression-test::equalp-with-case)
-	    (replicate nil))
+	    (replicate nil replicate-p))
   (assert (<= 1 minargs maxargs 20))
 (prog1
   (dotimes (i reps)
@@ -122,6 +119,8 @@
 			  (make-list (max 0 (- nargs (length arg-types)))
 				     :initial-element rest-type))
 		  0 nargs))
+	  (replicate (if replicate-p replicate
+		       (mapcar (constantly nil) types)))
 	  ; (vals (mapcar #'make-random-element-of-type types))
 	  (vals (setq *params*
 		      (or (make-random-arguments types) (go again))))
@@ -138,7 +137,7 @@
 	  (params (loop for x in is-var?
 			for p in param-names
 			when x collect p))
-	  (param-types (mapcar #'make-random-type-containing vals))
+	  (param-types (mapcar #'make-random-type-containing vals replicate))
 	  (*param-types* param-types)
 	  (type-decls (loop for x in is-var?
 			    for p in param-names
@@ -159,10 +158,11 @@
 			 t))
 	  (expr `(,operator ,@(loop for x in is-var?
 				    for v in vals
+				    for r in replicate
 				    for p in param-names
 				    collect (if x
 						(if (and arg-the (coin))
-						    (let ((tp (make-random-type-containing v)))
+						    (let ((tp (make-random-type-containing v r)))
 						      `(the ,tp ,p))
 						  p)
 					      (if (or (consp v)
@@ -239,19 +239,33 @@
 	#'(lambda (body) `(defmethod ,name ,@body))
 	bodies)))
 
-(defmethods make-random-type-containing 
+(defgeneric make-random-type-containing* (val)
+  (:method-combination randomized)
+  (:documentation "Produce a random type containing VAL.  If the special
+variable *REPLICATE-TYPE* is true, and the value is mutable, then do not
+use the value in MEMBER or EQL type specifiers."))
+
+(defun make-random-type-containing (type &optional *replicate-type*)
+  (declare (special *replicate-type*))
+  (make-random-type-containing* type))
+
+(defmethods make-random-type-containing*
   (4 ((val t))
+     (declare (special *replicate-type*))
      (rcase
       (1 t)
       (1 (if (consp val) 'cons 'atom))
-      (1 `(eql ,val))
-      (1 (let* ((n1 (random 4))
+      (1 (if *replicate-type* (make-random-type-containing* val)
+	   `(eql ,val)))
+      (1 
+       (if *replicate-type* (make-random-type-containing* val)
+	 (let* ((n1 (random 4))
 		(n2 (random 4))
 		;; Replace these calls with (make-random-element-of-type t)
 		;; at some point
 		(l1 (loop repeat n1 collect (random-leaf)))
 		(l2 (loop repeat n2 collect (random-leaf))))
-	   `(member ,@l1 ,val ,@l2)))))
+	   `(member ,@l1 ,val ,@l2))))))
 
   (1 ((val standard-object)) 'standard-object)
   (1 ((val class)) 'class)
@@ -349,7 +363,7 @@
     (rcase (1 '*) (1 dim))))
 
 ;;; More methods
-(defmethods make-random-type-containing
+(defmethods make-random-type-containing*
   (3 ((val bit-vector))
      (let ((root (if (and (coin)
 			  (typep val 'simple-bit-vector))
@@ -406,13 +420,13 @@
   (1 ((val cons))
      (rcase
       (1 'cons)
-      (2 `(cons ,(make-random-type-containing (car val))
-		,(make-random-type-containing (cdr val))))
-      (1 `(cons ,(make-random-type-containing (car val))
+      (2 `(cons ,(make-random-type-containing* (car val))
+		,(make-random-type-containing* (cdr val))))
+      (1 `(cons ,(make-random-type-containing* (car val))
 		,(random-from-seq #(t *))))
-      (1 `(cons ,(make-random-type-containing (car val))))
+      (1 `(cons ,(make-random-type-containing* (car val))))
       (1 `(cons ,(random-from-seq #(t *))
-		,(make-random-type-containing (cdr val))
+		,(make-random-type-containing* (cdr val))
 		))))
 
   (1 ((val complex))
@@ -465,8 +479,8 @@
    (1 `(vector ,element-type ,length))
    (1 (make-list-type length 'null element-type))))
 
-(defun make-random-sequence-type-containing (element)
-  (make-sequence-type (random 10) (make-random-type-containing element)))
+(defun make-random-sequence-type-containing (element &optional *replicate-type*)
+  (make-sequence-type (random 10) (make-random-type-containing* element)))
 
 (defun same-set-p (set1 set2 &rest args &key key test test-not)
   (declare (ignorable key test test-not))

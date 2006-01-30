@@ -111,3 +111,7 @@ Got:      0
   (partially done)
 
 45. Sweep files for missing order-of-execution tests
+
+46. Add tests that class objects are valid class specifiers in method definitions.
+
+47. Test that :import-from in DEFPACKAGE can take a package object.

@@ -174,9 +174,10 @@
 	collect (list t1 t2)
 	finally (terpri)))
 
-(defun test-random-mutated-types (n size)
+(defun test-random-mutated-types (n size &key (reps 1))
   (loop for t1 = (make-random-type size)
-	for t2 = (mutate-type t1)
+	for t2 = (let ((x t1)) (loop repeat reps
+				     do (setq x (mutate-type x))) x)
 	for i from 0 below n
 	;; do (print (list t1 t2))
         do (setf *random-types* (list t1 t2))
@@ -184,7 +185,7 @@
 	     (format t "~A " i) (finish-output *standard-output*))
 	when (test-types t1 t2)
 	collect (list t1 t2)
-	finally (terpri)))  
+	finally (terpri)))
 
 (defun test-types (t1 t2)
   (multiple-value-bind (sub success)
