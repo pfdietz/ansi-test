@@ -11093,3 +11093,25 @@ Broken at C::WT-MAKE-CLOSURE.
 				       (bit #*1001101001001
 					    (min 12 (max 0 lv3))))))))))
   0)
+
+;;;     failed AVER: "(< Y 29)"
+
+(deftest misc.624
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer 21 28) a))
+       (declare	(optimize (compilation-speed 1) (safety 2)
+			  (speed 0) (debug 0) (space 1)))
+       (let* ((v7 (flet ((%f3 (f3-1 f3-2)
+			      (loop for lv2 below 1
+				    count
+				    (logbitp 29
+					     (sbit #*10101111
+						   (min 7 (max 0 (eval '0))))))))
+                     (%f3 0 a))))
+	 0)))
+   22)
+  0)
+
