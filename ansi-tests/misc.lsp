@@ -11076,3 +11076,20 @@ Broken at C::WT-MAKE-CLOSURE.
    17549.955)
   #.(+ 81535869 17549.955))
 
+;;; sbcl 0.9.9.19
+;;;   The function SB-VM::%LOGBITP is undefined.
+
+(deftest misc.623
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (space 2) (speed 0) (debug 2)
+			  (compilation-speed 3) (safety 0)))
+       (loop for lv3 below 1
+	     count (minusp
+		    (loop for lv2 below 2
+                        count (logbitp 0
+				       (bit #*1001101001001
+					    (min 12 (max 0 lv3))))))))))
+  0)
