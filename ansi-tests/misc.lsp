@@ -11160,3 +11160,17 @@ Broken at C::WT-MAKE-CLOSURE.
        (prog2 (if (logbitp 30 a) 0 (block b3 0)) a)))
    -829253)
   -829253)
+
+;;; Wrong return value
+
+(deftest misc.627
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (notinline logbitp))
+       (declare (optimize (safety 0) (debug 1) (compilation-speed 2)
+			  (speed 0) (space 2)))
+       (loop for lv1 below 1
+	     count (logbitp 7 (loop for lv1 below 0 count t))))))
+  1)
