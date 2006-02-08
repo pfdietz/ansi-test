@@ -11115,3 +11115,35 @@ Broken at C::WT-MAKE-CLOSURE.
    22)
   0)
 
+;;; sbcl 0.9.9.22 (x86 linux)
+;;; TYPE-ERROR: The value 0 is not of type (INTEGER 3 3).
+
+(deftest misc.625
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -2 -1) a))
+       (declare (optimize (speed 0) (space 0) (safety 1)
+                      #+sbcl (sb-c:insert-step-conditions 0)
+                      (debug 3) (compilation-speed 1)))
+       (elt '(47119 39679 57498 35248 23784 40597 53473 29454)
+	    (min 7
+		 (max 0
+		      (flet ((%f7
+			      (f7-1 f7-2
+				    &optional
+				    &key
+				    (key1
+				     (elt '(0 25 30 12 27 5)
+					  (min 5 (max 0 3)))))
+			      0))
+                            (flet ((%f6
+				    (&optional
+				     &key (key1 (progn (%f7 0 a) a))
+				     (key2 0))
+				    0))
+				  (%f7 a a))))))))
+   -2)
+  47119)
+
