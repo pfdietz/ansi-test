@@ -11147,3 +11147,16 @@ Broken at C::WT-MAKE-CLOSURE.
    -2)
   47119)
 
+;;; failed AVER: "(<= Y 29)"
+
+(deftest misc.626
+  (funcall
+   (compile
+    nil
+    '(lambda (a)
+       (declare (type (integer -902970 2) a))
+       (declare (optimize (space 2) (debug 0) (compilation-speed 1)
+			  (speed 0) (safety 3)))
+       (prog2 (if (logbitp 30 a) 0 (block b3 0)) a)))
+   -829253)
+  -829253)
