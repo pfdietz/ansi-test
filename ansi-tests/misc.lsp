@@ -11174,3 +11174,17 @@ Broken at C::WT-MAKE-CLOSURE.
        (loop for lv1 below 1
 	     count (logbitp 7 (loop for lv1 below 0 count t))))))
   1)
+
+;;; The value -93368855 is not of type UNSIGNED-BYTE.
+;;; [...]
+;;; (LOGBITP -93368855 0)
+
+(deftest misc.628
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (safety 3) (space 3) (compilation-speed 3)
+			  (speed 0) (debug 1)))
+       (not (not (logbitp 0 (floor 2147483651 (min -23 0))))))))
+  t)
