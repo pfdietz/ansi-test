@@ -11161,20 +11161,6 @@ Broken at C::WT-MAKE-CLOSURE.
    -829253)
   -829253)
 
-;;; Wrong return value
-
-(deftest misc.627
-  (funcall
-   (compile
-    nil
-    '(lambda ()
-       (declare (notinline logbitp))
-       (declare (optimize (safety 0) (debug 1) (compilation-speed 2)
-			  (speed 0) (space 2)))
-       (loop for lv1 below 1
-	     count (logbitp 7 (loop for lv1 below 0 count t))))))
-  1)
-
 ;;; The value -93368855 is not of type UNSIGNED-BYTE.
 ;;; [...]
 ;;; (LOGBITP -93368855 0)
