@@ -11116,6 +11116,11 @@ Broken at C::WT-MAKE-CLOSURE.
   0)
 
 ;;; sbcl 0.9.9.22 (x86 linux)
+
+;;; The following two errors appear to require the presence
+;;; of two ELT forms.  Somehow, the type check for one is
+;;; misplaced into the other.
+
 ;;; TYPE-ERROR: The value 0 is not of type (INTEGER 3 3).
 
 (deftest misc.625
@@ -11147,6 +11152,27 @@ Broken at C::WT-MAKE-CLOSURE.
    -2)
   47119)
 
+;;; TYPE-ERROR: The value 2 is not of type (INTEGER 12 12)
+
+(deftest misc.625a
+  (funcall
+   (compile
+    nil
+    '(lambda (a b)
+       (declare (type (integer 1 5) b))
+       (declare (optimize (safety 2) (speed 2)
+			  (space 0) (compilation-speed 3) (debug 3)))
+       (progn
+	 (flet ((%f3
+		 (f3-1 f3-2 &optional (f3-3 b) f3-4
+		       (f3-5 (prog1 0 (elt '(a b c d e f g h i j k l m) 12))))
+		 f3-1))
+	       (%f3 0 (%f3 0 a 0 a) a 0 a))
+	 (elt '(a b c d) (min 3 b))
+	 )))
+   0 2)
+  c)
+
 ;;; failed AVER: "(<= Y 29)"
 
 (deftest misc.626
@@ -11174,3 +11200,4 @@ Broken at C::WT-MAKE-CLOSURE.
 			  (speed 0) (debug 1)))
        (not (not (logbitp 0 (floor 2147483651 (min -23 0))))))))
   t)
+
