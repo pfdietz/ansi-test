@@ -1002,6 +1002,14 @@
 (defparameter *cl-symbols-vector*
   (make-array (length *cl-symbols*) :initial-contents *cl-symbols*))
 
+;;; Symbols that name unary predicate that can be safely applied to any object
+(defparameter *cl-safe-predicates*
+  '(arrayp atom bit-vector-p characterp compiled-function-p complexp
+    consp floatp functionp hash-table-p keywordp listp not null
+    numberp packagep pathnamep random-state-p rationalp readtablep
+    realp simple-bit-vector-p simple-string-p simple-vector-p
+    streamp stringp symbolp vectorp))
+
 ;;; Symbols classified by their kind in the spec
 (defparameter *cl-function-symbols*
   '(
