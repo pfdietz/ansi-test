@@ -11201,3 +11201,19 @@ Broken at C::WT-MAKE-CLOSURE.
        (not (not (logbitp 0 (floor 2147483651 (min -23 0))))))))
   t)
 
+;;; sbcl 0.9.9.35
+;;; The value #S(MISC-629 :A 1 :B 3) is not of type SB-KERNEL:INSTANCE.
+
+(defstruct misc-629 a b)
+
+(deftest misc.629
+  (let* ((s (make-misc-629 :a 1 :b 3))
+	 (form  `(lambda (x)
+		   (declare (optimize (speed 1) (safety 3) (debug 0) (space 2))
+			    (type (member 0 2 ,s) x))
+		   (misc-629-a x))))
+    (funcall (compile nil form) s))
+  1)
+
+
+  
