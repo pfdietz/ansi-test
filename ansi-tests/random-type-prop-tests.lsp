@@ -18,3 +18,5 @@
 (load "random-type-prop-tests-09.lsp")
 (load "random-type-prop-tests-10.lsp")
 
+(load "random-type-prop-tests-structs.lsp")
+

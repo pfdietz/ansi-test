@@ -1078,44 +1078,325 @@
          (sform (1+ (random 33))))
     `(byte ,sform ,pform)))
 
-(defun make-random-element-of-type (type)
-  "Create a random element of a lisp type."
-  (cond
-   ((consp type)
-    (let ((type-op (first type)))
-      (ecase type-op
-        (or
-         (assert (cdr type))
-         (make-random-element-of-type (random-from-seq (cdr type))))
-        (and
-         (assert (cdr type))
-         (loop for x = (make-random-element-of-type (cadr type))
-               repeat 100
-               when (typep x (cons 'and (cddr type)))
-               return x
-               finally (error "Cannot generate random element of ~A" type)))
-        (not
-         (assert (cdr type))
-         (assert (not (cddr type)))
-         (make-random-element-of-type `(and t ,type)))
-        (integer
-         (let ((lo (let ((lo (cadr type)))
-                     (cond
-                      ((consp lo) (1+ (car lo)))
-                      ((eq lo nil) '*)
-                      (t lo))))
-               (hi (let ((hi (caddr type)))
-                     (cond
-                      ((consp hi) (1- (car hi)))
-                      ((eq hi nil) '*)
-                      (t hi)))))
+(defgeneric make-random-element-of-type (type)
+  (:documentation "Create a random element of a lisp type."))
+
+(defgeneric make-random-element-of-compound-type (type-op type-args)
+  (:documentation "Create a random element of type `(,TYPE-OP ,@TYPE-ARGS)")
+  (:method ((type-op (eql 'or)) type-args)
+	   (assert type-args)
+	   (make-random-element-of-type (random-from-seq type-args)))
+  (:method ((type-op (eql 'and)) type-args)
+	   (assert type-args)
+	   (loop for x = (make-random-element-of-type (car type-args))
+	     repeat 100
+	     when (typep x (cons 'and (cdr type-args)))
+	     return x
+	     finally (error "Cannot generate random element of ~A"
+			    (cons type-op type-args))))
+  (:method ((type-op (eql 'not)) type-args)
+	   (assert (eql (length type-args) 1))
+	   (make-random-element-of-type `(and t (not ,(car type-args)))))
+  (:method ((type-op (eql 'integer)) type-args)
+	   (let ((lo (let ((lo (car type-args)))
+		       (cond
+			((consp lo) (1+ (car lo)))
+			((eq lo nil) '*)
+			(t lo))))
+		 (hi (let ((hi (cadr type-args)))
+		       (cond
+			((consp hi) (1- (car hi)))
+			((eq hi nil) '*)
+			(t hi)))))
+	     (if (eq lo '*)
+		 (if (eq hi '*)
+		     (let ((x (ash 1 (random *maximum-random-int-bits*))))
+		       (random-from-interval x (- x)))
+		   (random-from-interval (1+ hi)
+					 (- hi (random (ash 1 *maximum-random-int-bits*)))))
+	   
+	       (if (eq hi '*)
+		   (random-from-interval (+ lo (random (ash 1 *maximum-random-int-bits*)) 1)
+					 lo)
+		 ;; May generalize the next case to increase odds
+		 ;; of certain integers (near 0, near endpoints, near
+		 ;; powers of 2...)
+		 (random-from-interval (1+ hi) lo)))))
+  (:method ((type-op (eql 'rational)) type-args)
+	   (let ((type (cons type-op type-args)))
+	     (or
+	      (let ((r (make-random-element-of-type 'rational)))
+		(and (typep r type) r))
+	      (let ((lo (car type-args))
+		    (hi (cadr type-args))
+		    lo= hi=)
+		(cond
+		 ((consp lo) nil)
+		 ((member lo '(* nil))
+		  (setq lo nil)
+		  (setq lo= nil))
+		 (t
+		  (assert (typep lo 'rational))
+		  (setq lo= t)))
+		(cond
+		 ((consp hi) nil)
+		 ((member hi '(* nil))
+		  (setq hi nil)
+		  (setq hi= nil))
+		 (t
+		  (assert (typep hi 'rational))
+		  (setq hi= t)))
+		(assert (or (null lo) (null hi) (<= lo hi)))
+		(assert (or (null lo) (null hi) (< lo hi) (and lo= hi=)))
+		(cond
+		 ((null lo)
+		  (cond
+		   ((null hi) (make-random-rational))
+		   (hi= (- hi (make-random-nonnegative-rational)))
+		   (t (- hi (make-random-positive-rational)))))
+		 ((null hi)
+		  (cond
+		   (lo= (+ lo (make-random-nonnegative-rational)))
+		   (t (+ lo (make-random-positive-rational)))))
+		 (t
+		  (+ lo (make-random-bounded-rational (- hi lo) lo= hi=))))))))
+  
+  (:method ((type-op (eql 'ratio)) type-args)
+	   (let ((r 0))
+	     (loop
+	      do (setq r (make-random-element-of-compound-type 'rational type-args))
+	      while (integerp r))
+	     r))
+  
+  (:method ((type-op (eql 'real)) type-args)
+	   (rcase
+	    (1 (let ((lo (and (numberp (car type-args))
+			      (rational (car type-args))))
+		     (hi (and (numberp (cadr type-args))
+			      (rational (cadr type-args)))))
+		 (make-random-element-of-compound-type 'rational
+						       `(,(or lo '*)
+							 ,(or hi '*)))))
+	    (1 (make-random-element-of-compound-type 'float
+						     `(,(or (car type-args) '*)
+						       ,(or (cadr type-args) '*))))))
+  
+  (:method ((type-op (eql 'float)) type-args)
+	   (let* ((new-type-op (random-from-seq #(single-float double-float long-float short-float)))
+		  (lo (car type-args))
+		  (hi (cadr type-args))
+		  (most-neg (most-negative-float new-type-op))
+		  (most-pos (most-positive-float new-type-op)))
+	     (cond
+	      ((or (and (realp lo) (< lo most-neg))
+		   (and (realp hi) (> hi most-pos)))
+	       ;; try again
+	       (make-random-element-of-compound-type type-op type-args))
+	      (t
+	       (when (and (realp lo) (not (typep lo new-type-op)))
+		 (cond
+		  ((< lo most-neg) (setq lo '*))
+		  (t (setq lo (coerce lo new-type-op)))))
+	       (when (and (realp hi) (not (typep hi new-type-op)))
+		 (cond
+		  ((> hi most-pos) (setq hi '*))
+		  (t (setq hi (coerce hi new-type-op)))))
+	       (make-random-element-of-compound-type new-type-op `(,(or lo '*) ,(or hi '*)))))))
+  
+  (:method ((type-op (eql 'short-float)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (apply #'make-random-element-of-float-type type-op type-args))
+  (:method ((type-op (eql 'single-float)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (apply #'make-random-element-of-float-type type-op type-args))
+  (:method ((type-op (eql 'double-float)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (apply #'make-random-element-of-float-type type-op type-args))
+  (:method ((type-op (eql 'long-float)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (apply #'make-random-element-of-float-type type-op type-args))
+  
+  (:method ((type-op (eql 'mod)) type-args)
+	   (let ((modulus (second type-args)))
+	     (assert (integerp modulus))
+	     (assert (plusp modulus))
+	     (make-random-element-of-compound-type 'integer `(0 (,modulus)))))
+  
+  (:method ((type-op (eql 'unsigned-byte)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (if (null type-args)
+	       (make-random-element-of-type '(integer 0 *))
+	     (let ((bits (first type-args)))
+	       (if (eq bits '*)
+		   (make-random-element-of-type '(integer 0 *))
+		 (progn
+		   (assert (and (integerp bits) (>= bits 1)))
+		   (make-random-element-of-type
+		    `(integer 0 ,(1- (ash 1 bits)))))))))
+  
+  (:method ((type-op (eql 'signed-byte)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (if (null type-args)
+	       (make-random-element-of-type 'integer)
+	     (let ((bits (car type-args)))
+	       (if (eq bits'*)
+		   (make-random-element-of-type 'integer)
+		 (progn
+		   (assert (and (integerp bits) (>= bits 1)))
+		   (make-random-element-of-type
+		    `(integer ,(- (ash 1 (1- bits))) ,(1- (ash 1 (1- bits))))))))))
+
+  (:method ((type-op (eql 'eql)) type-args)
+	   (assert (= (length type-args) 1))
+	   (car type-args))
+
+  (:method ((type-op (eql 'member)) type-args)
+	   (assert type-args)
+	   (random-from-seq type-args))
+  
+  (:method ((type-op (eql 'vector)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (let ((etype-spec (if type-args (car type-args) '*))
+		 (size-spec (if (cdr type-args) (cadr type-args) '*)))
+	     (make-random-vector etype-spec size-spec)))
+  
+  (:method ((type-op (eql 'aimple-vector)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (let ((size-spec (if type-args (car type-args) '*)))
+	     (make-random-vector t size-spec :simple t)))
+  
+  (:method ((type-op (eql 'array)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (let ((etype-spec (if type-args (car type-args) '*))
+		 (size-spec (if (cdr type-args) (cadr type-args) '*)))
+	     (make-random-array etype-spec size-spec)))
+  
+  (:method ((type-op (eql 'simple-array)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (let ((etype-spec (if type-args (car type-args) '*))
+		 (size-spec (if (cdr type-args) (cadr type-args) '*)))
+	     (make-random-array etype-spec size-spec :simple t)))
+
+  (:method ((type-op (eql 'string)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (let ((size-spec (if type-args (car type-args) '*)))
+	     (make-random-string size-spec)))
+
+  (:method ((type-op (eql 'simple-string)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (let ((size-spec (if type-args (car type-args) '*)))
+	     (make-random-string size-spec :simple t)))
+  
+  (:method ((type-op (eql 'base-string)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (let ((size-spec (if type-args (car type-args) '*)))
+	     (make-random-vector 'base-char size-spec)))
+  
+  (:method ((type-op (eql 'simple-base-string)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (let ((size-spec (if type-args (car type-args) '*)))
+	     (make-random-vector 'base-char size-spec :simple t)))
+  
+  (:method ((type-op (eql 'bit-vector)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (let ((size-spec (if type-args (car type-args) '*)))
+	     (make-random-vector 'bit size-spec)))
+  
+  (:method ((type-op (eql 'simple-bit-vector)) type-args)
+	   (assert (<= (length type-args) 1))
+	   (let ((size-spec (if type-args (car type-args) '*)))
+	     (make-random-vector 'bit size-spec :simple t)))
+  
+  (:method ((type-op (eql 'cons)) type-args)
+	   (assert (<= (length type-args) 2))
+	   (cons (make-random-element-of-type (if type-args (car type-args) t))
+		 (make-random-element-of-type (if (cdr type-args) (cadr type-args) t))))
+  
+  (:method ((type-op (eql 'complex)) type-args)
+	   (cond
+	    ((null type-args)
+	     (make-random-element-of-type 'complex))
+	    (t
+	     (assert (null (cdr type-args)))
+	     (let ((etype (car type-args)))
+	       (loop for v1 = (make-random-element-of-type etype)
+		     for v2 = (make-random-element-of-type etype)
+		     for c = (complex v1 v2)
+		     when (typep c (cons 'complex type-args))
+		     return c)))))
+  )
+
+(defmethod make-random-element-of-type ((type cons))
+  (make-random-element-of-compound-type (car type) (cdr type)))
+
+(defun make-random-element-of-float-type (type-op &optional lo hi)
+  (let (lo= hi=)
+    (cond
+     ((consp lo) nil)
+     ((member lo '(* nil))
+      (setq lo (most-negative-float type-op))
+      (setq lo= t))
+     (t
+      (assert (typep lo type-op))
+      (setq lo= t)))
+    (cond
+     ((consp hi) nil)
+     ((member hi '(* nil))
+      (setq hi (most-positive-float type-op))
+      (setq hi= t))
+     (t
+      (assert (typep hi type-op))
+      (setq hi= t)))
+    (assert (<= lo hi))
+    (assert (or (< lo hi) (and lo= hi=)))
+    (let ((limit 100000))
+      (cond
+       ((or (<= hi 0)
+	    (>= lo 0)
+	    (and (<= (- limit) hi limit) (<= (- limit) lo limit)))
+	(loop for x = (+ (random (- hi lo)) lo)
+	      do (when (or lo= (/= x lo)) (return x))))
+       (t
+	(rcase
+	 (1 (random (min hi (float limit hi))))
+	 (1 (- (random (min (float limit lo) (- lo)))))))))))
+ 
+#|
+(defmethod make-random-element-of-type ((type cons))
+  (let ((type-op (first type)))
+    (ecase type-op
+      (or
+       (assert (cdr type))
+       (make-random-element-of-type (random-from-seq (cdr type))))
+      (and
+       (assert (cdr type))
+       (loop for x = (make-random-element-of-type (cadr type))
+	     repeat 100
+	     when (typep x (cons 'and (cddr type)))
+	     return x
+	     finally (error "Cannot generate random element of ~A" type)))
+      (not
+       (assert (cdr type))
+       (assert (not (cddr type)))
+       (make-random-element-of-type `(and t ,type)))
+      (integer
+       (let ((lo (let ((lo (cadr type)))
+		   (cond
+		    ((consp lo) (1+ (car lo)))
+		    ((eq lo nil) '*)
+		    (t lo))))
+	     (hi (let ((hi (caddr type)))
+		   (cond
+		    ((consp hi) (1- (car hi)))
+		    ((eq hi nil) '*)
+		    (t hi)))))
          (if (eq lo '*)
              (if (eq hi '*)
                  (let ((x (ash 1 (random *maximum-random-int-bits*))))
                    (random-from-interval x (- x)))
                (random-from-interval (1+ hi)
                                      (- hi (random (ash 1 *maximum-random-int-bits*)))))
-
+	   
            (if (eq hi '*)
                (random-from-interval (+ lo (random (ash 1 *maximum-random-int-bits*)) 1)
                                      lo)
@@ -1123,247 +1404,281 @@
              ;; of certain integers (near 0, near endpoints, near
              ;; powers of 2...)
              (random-from-interval (1+ hi) lo)))))
-
-        (rational
-         (or
-          (let ((r (make-random-element-of-type 'rational)))
-            (and (typep r type) r))
-          (let ((lo (cadr type))
-                (hi (caddr type))
-                lo= hi=)
-            (cond
-             ((consp lo) nil)
-             ((member lo '(* nil))
-              (setq lo nil)
-              (setq lo= nil))
-             (t
-              (assert (typep lo 'rational))
-              (setq lo= t)))
-            (cond
-             ((consp hi) nil)
-             ((member hi '(* nil))
-              (setq hi nil)
-              (setq hi= nil))
-             (t
-              (assert (typep hi 'rational))
-              (setq hi= t)))
-            (assert (or (null lo) (null hi) (<= lo hi)))
-            (assert (or (null lo) (null hi) (< lo hi) (and lo= hi=)))
-            (cond
-             ((null lo)
-              (cond
-               ((null hi) (make-random-rational))
-               (hi= (- hi (make-random-nonnegative-rational)))
-               (t (- hi (make-random-positive-rational)))))
-             ((null hi)
-              (cond
-               (lo= (+ lo (make-random-nonnegative-rational)))
-               (t (+ lo (make-random-positive-rational)))))
-             (t
-              (+ lo (make-random-bounded-rational (- hi lo) lo= hi=)))))))
-
-	(ratio
-	 (let ((r 0))
-	   (loop
-	    do (setq r (make-random-element-of-type `(rational ,@(cdr type))))
-	    while (integerp r))
-	   r))
-
-	(real
-	 (rcase
-	  (1 (let ((lo (and (numberp (cadr type))
-			    (rational (cadr type))))
-		   (hi (and (numberp (caddr type))
-			    (rational (caddr type)))))
-	       (make-random-element-of-type `(rational ,(or lo '*)
-						       ,(or hi '*)))))
-	  (1 (make-random-element-of-type `(float ,(or (cadr type) '*)
-						  ,(or (caddr type) '*))))))
-
-	((float)
-	 (let* ((new-type-op (random-from-seq #(single-float double-float
-						long-float short-float)))
-		(lo (cadr type))
-		(hi (caddr type))
-		(most-neg (most-negative-float new-type-op))
-		(most-pos (most-positive-float new-type-op)))
-	   (cond
-	    ((or (and (realp lo) (< lo most-neg))
-		 (and (realp hi) (> hi most-pos)))
-	     ;; try again
-	     (make-random-element-of-type type))
-	    (t
-	     (when (and (realp lo) (not (typep lo new-type-op)))
-	       (cond
-		((< lo most-neg) (setq lo '*))
-		(t (setq lo (coerce lo new-type-op)))))
-	     (when (and (realp hi) (not (typep hi new-type-op)))
-	       (cond
-		((> hi most-pos) (setq hi '*))
-		(t (setq hi (coerce hi new-type-op)))))
-	     (make-random-element-of-type
-	      `(,new-type-op ,(or lo '*) ,(or hi '*)))))))
-	    
-        ((single-float double-float long-float short-float)
-         (let ((lo (cadr type))
-               (hi (caddr type))
-               lo= hi=)
-           (cond
-            ((consp lo) nil)
-            ((member lo '(* nil))
-             (setq lo (most-negative-float type-op))
-             (setq lo= t))
-            (t
-             (assert (typep lo type-op))
-             (setq lo= t)))
-           (cond
-            ((consp hi) nil)
-            ((member hi '(* nil))
-             (setq hi (most-positive-float type-op))
-             (setq hi= t))
-            (t
-             (assert (typep hi type-op))
-             (setq hi= t)))
-           (assert (<= lo hi))
-           (assert (or (< lo hi) (and lo= hi=)))
-           (let ((limit 100000))
-             (cond
-              ((or (<= hi 0)
-                   (>= lo 0)
-                   (and (<= (- limit) hi limit) (<= (- limit) lo limit)))
-               (loop for x = (+ (random (- hi lo)) lo)
-                     do (when (or lo= (/= x lo)) (return x))))
-              (t
-               (rcase
-                (1 (random (min hi (float limit hi))))
-                (1 (- (random (min (float limit lo) (- lo)))))))))))
-            
-        (mod
-         (let ((modulus (second type)))
-           (assert (and (integerp modulus)
-                        (plusp modulus)))
-           (make-random-element-of-type `(integer 0 (,modulus)))))
-        (unsigned-byte
-         (if (null (cdr type))
-           (make-random-element-of-type '(integer 0 *))
-           (let ((bits (second type)))
-             (if (eq bits'*)
-                 (make-random-element-of-type '(integer 0 *))
-               (progn
-                 (assert (and (integerp bits) (>= bits 1)))
-                 (make-random-element-of-type
-                  `(integer 0 ,(1- (ash 1 bits)))))))))
-        (signed-byte
-         (if (null (cdr type))
-           (make-random-element-of-type 'integer)
-           (let ((bits (second type)))
-             (if (eq bits'*)
-                 (make-random-element-of-type 'integer)
-               (progn
-                 (assert (and (integerp bits) (>= bits 1)))
-                 (make-random-element-of-type
-                  `(integer ,(- (ash 1 (1- bits))) ,(1- (ash 1 (1- bits))))))))))
-        (eql
-         (assert (= (length type) 2))
-         (cadr type))
-        (member
-         (assert (cdr type))
-         (random-from-seq (cdr type)))
-        ((vector)
-         (let ((etype-spec (if (cdr type) (cadr type) '*))
-               (size-spec (if (cddr type) (caddr type) '*)))
-           (make-random-vector etype-spec size-spec)))
-        ((simple-vector)
-         (let ((size-spec (if (cdr type) (cadr type) '*)))
-           (make-random-vector t size-spec :simple t)))
-        ((array simple-array)
-         (let ((etype-spec (if (cdr type) (cadr type) '*))
-               (size-spec (if (cddr type) (caddr type) '*)))
-           (make-random-array etype-spec size-spec :simple (eql (car type) 'simple-array))))
-        ((string simple-string)
-         (let ((size-spec (if (cdr type) (cadr type) '*)))
-           (make-random-string size-spec :simple (eql (car type) 'simple-string))))
-        ((base-string simple-base-string)
-         (let ((size-spec (if (cdr type) (cadr type) '*)))
-           (make-random-vector 'base-char size-spec :simple (eql (car type) 'simple-base-string))))
-        ((bit-vector simple-bit-vector)
-         (let ((size-spec (if (cdr type) (cadr type) '*)))
-           (make-random-vector 'bit size-spec :simple (eql (car type) 'simple-bit-vector))))
-        ((cons)
-         (cons (make-random-element-of-type (if (cdr type) (cadr type) t))
-               (make-random-element-of-type (if (cddr type) (caddr type) t))))
-        ((complex)
-         (cond
-          ((null (cdr type))
-           (make-random-element-of-type 'complex))
-          (t
-           (assert (null (cddr type)))
-           (let ((etype (cadr type)))
-             (loop for v1 = (make-random-element-of-type etype)
-                   for v2 = (make-random-element-of-type etype)
-                   for c = (complex v1 v2)
-                   when (typep c type)
-                   return c)))))
-        )))
-   ((typep type 'class)
-    (make-random-element-of-type (class-name type)))
-   (t
-    (ecase type
-      (bit (random 2))
-      (boolean (random-from-seq #(nil t)))
-      (symbol (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| car)))
-      (keyword (random-from-seq #(:a :b :c :d :e :f :g :h :i :j)))
-      (unsigned-byte (random-from-interval
-                      (1+ (ash 1 (random *maximum-random-int-bits*))) 0))
-      (signed-byte (random-from-interval
-                    (1+ (ash 1 (random *maximum-random-int-bits*)))
-                    (- (ash 1 (random *maximum-random-int-bits*)))))
-      (rational (locally (declare (notinline make-random-rational)) (make-random-rational)))
-      (ratio (let ((r 0))
-	       (loop do (setq r (make-random-element-of-type 'rational))
-		     while (integerp r))
-	       r))
-      (integer (let ((x (ash 1 (random *maximum-random-int-bits*))))
-                 (random-from-interval (1+ x) (- x))))
-      ((single-float short-float double-float long-float)
-       (make-random-element-of-type (list type)))
+      
+      (rational
+       (or
+	(let ((r (make-random-element-of-type 'rational)))
+	  (and (typep r type) r))
+	(let ((lo (cadr type))
+	      (hi (caddr type))
+	      lo= hi=)
+	  (cond
+	   ((consp lo) nil)
+	   ((member lo '(* nil))
+	    (setq lo nil)
+	    (setq lo= nil))
+	   (t
+	    (assert (typep lo 'rational))
+	    (setq lo= t)))
+	  (cond
+	   ((consp hi) nil)
+	   ((member hi '(* nil))
+	    (setq hi nil)
+	    (setq hi= nil))
+	   (t
+	    (assert (typep hi 'rational))
+	    (setq hi= t)))
+	  (assert (or (null lo) (null hi) (<= lo hi)))
+	  (assert (or (null lo) (null hi) (< lo hi) (and lo= hi=)))
+	  (cond
+	   ((null lo)
+	    (cond
+	     ((null hi) (make-random-rational))
+	     (hi= (- hi (make-random-nonnegative-rational)))
+	     (t (- hi (make-random-positive-rational)))))
+	   ((null hi)
+	    (cond
+	     (lo= (+ lo (make-random-nonnegative-rational)))
+	     (t (+ lo (make-random-positive-rational)))))
+	   (t
+	    (+ lo (make-random-bounded-rational (- hi lo) lo= hi=)))))))
+      
+      (ratio
+       (let ((r 0))
+	 (loop
+	  do (setq r (make-random-element-of-type `(rational ,@(cdr type))))
+	  while (integerp r))
+	 r))
+      
+      (real
+       (rcase
+	(1 (let ((lo (and (numberp (cadr type))
+			  (rational (cadr type))))
+		 (hi (and (numberp (caddr type))
+			  (rational (caddr type)))))
+	     (make-random-element-of-type `(rational ,(or lo '*)
+						     ,(or hi '*)))))
+	(1 (make-random-element-of-type `(float ,(or (cadr type) '*)
+						,(or (caddr type) '*))))))
+      
       ((float)
-       (make-random-element-of-type (random-from-seq #(short-float single-float double-float long-float))))
-      ((real) (make-random-element-of-type (random-from-seq #(integer rational float))))
-      ((number) (make-random-element-of-type (random-from-seq #(integer rational float #-ecl complex))))
-      ((bit-vector) (make-random-vector 'bit '*))
-      ((simple-bit-vector) (make-random-vector 'bit '* :simple t))
-      ((vector) (make-random-vector '* '*))
-      ((simple-vector) (make-random-vector 't '* :simple t))
-      ((array) (make-random-array '* '*))
-      ((simple-array) (make-random-array '* '* :simple t))
-      ((string) (make-random-string '*))
-      ((simple-string) (make-random-string '* :simple t))
-      ((simple-array) (make-random-string '* :simple t))
-      ((base-string) (make-random-vector 'base-char '*))
-      ((simple-base-string) (make-random-vector 'base-char '* :simple t))
-      ((base-char standard-char)
-       (random-from-seq +standard-chars+))
-      ((character) (make-random-character))
-      ((extended-char) (loop for x = (make-random-character) when (typep x 'extended-char) return x))
-      ;; Default
-      ((atom t *) (make-random-element-of-type
-                   (random-from-seq #(real symbol boolean integer unsigned-byte
-                                           #-ecl complex character
-                                           (string 1) (bit-vector 1)))))
-      ((null) nil)
-      ((fixnum)
-       (random-from-interval (1+ most-positive-fixnum) most-negative-fixnum))
-      ((complex)
-       (make-random-element-of-type '(complex real)))
+       (let* ((new-type-op (random-from-seq #(single-float double-float
+							   long-float short-float)))
+	      (lo (cadr type))
+	      (hi (caddr type))
+	      (most-neg (most-negative-float new-type-op))
+	      (most-pos (most-positive-float new-type-op)))
+	 (cond
+	  ((or (and (realp lo) (< lo most-neg))
+	       (and (realp hi) (> hi most-pos)))
+	   ;; try again
+	   (make-random-element-of-type type))
+	  (t
+	   (when (and (realp lo) (not (typep lo new-type-op)))
+	     (cond
+	      ((< lo most-neg) (setq lo '*))
+	      (t (setq lo (coerce lo new-type-op)))))
+	   (when (and (realp hi) (not (typep hi new-type-op)))
+	     (cond
+	      ((> hi most-pos) (setq hi '*))
+	      (t (setq hi (coerce hi new-type-op)))))
+	   (make-random-element-of-type
+	    `(,new-type-op ,(or lo '*) ,(or hi '*)))))))
+      
+      ((single-float double-float long-float short-float)
+       (let ((lo (cadr type))
+	     (hi (caddr type))
+	     lo= hi=)
+	 (cond
+	  ((consp lo) nil)
+	  ((member lo '(* nil))
+	   (setq lo (most-negative-float type-op))
+	   (setq lo= t))
+	  (t
+	   (assert (typep lo type-op))
+	   (setq lo= t)))
+	 (cond
+	  ((consp hi) nil)
+	  ((member hi '(* nil))
+	   (setq hi (most-positive-float type-op))
+	   (setq hi= t))
+	  (t
+	   (assert (typep hi type-op))
+	   (setq hi= t)))
+	 (assert (<= lo hi))
+	 (assert (or (< lo hi) (and lo= hi=)))
+	 (let ((limit 100000))
+	   (cond
+	    ((or (<= hi 0)
+		 (>= lo 0)
+		 (and (<= (- limit) hi limit) (<= (- limit) lo limit)))
+	     (loop for x = (+ (random (- hi lo)) lo)
+		   do (when (or lo= (/= x lo)) (return x))))
+	    (t
+	     (rcase
+	      (1 (random (min hi (float limit hi))))
+	      (1 (- (random (min (float limit lo) (- lo)))))))))))
+      
+      (mod
+       (let ((modulus (second type)))
+	 (assert (and (integerp modulus)
+		      (plusp modulus)))
+	 (make-random-element-of-type `(integer 0 (,modulus)))))
+      (unsigned-byte
+       (if (null (cdr type))
+           (make-random-element-of-type '(integer 0 *))
+	 (let ((bits (second type)))
+	   (if (eq bits'*)
+	       (make-random-element-of-type '(integer 0 *))
+	     (progn
+	       (assert (and (integerp bits) (>= bits 1)))
+	       (make-random-element-of-type
+		`(integer 0 ,(1- (ash 1 bits)))))))))
+      (signed-byte
+       (if (null (cdr type))
+           (make-random-element-of-type 'integer)
+	 (let ((bits (second type)))
+	   (if (eq bits'*)
+	       (make-random-element-of-type 'integer)
+	     (progn
+	       (assert (and (integerp bits) (>= bits 1)))
+	       (make-random-element-of-type
+		`(integer ,(- (ash 1 (1- bits))) ,(1- (ash 1 (1- bits))))))))))
+      (eql
+       (assert (= (length type) 2))
+       (cadr type))
+      (member
+       (assert (cdr type))
+       (random-from-seq (cdr type)))
+      ((vector)
+       (let ((etype-spec (if (cdr type) (cadr type) '*))
+	     (size-spec (if (cddr type) (caddr type) '*)))
+	 (make-random-vector etype-spec size-spec)))
+      ((simple-vector)
+       (let ((size-spec (if (cdr type) (cadr type) '*)))
+	 (make-random-vector t size-spec :simple t)))
+      ((array simple-array)
+       (let ((etype-spec (if (cdr type) (cadr type) '*))
+	     (size-spec (if (cddr type) (caddr type) '*)))
+	 (make-random-array etype-spec size-spec :simple (eql (car type) 'simple-array))))
+      ((string simple-string)
+       (let ((size-spec (if (cdr type) (cadr type) '*)))
+	 (make-random-string size-spec :simple (eql (car type) 'simple-string))))
+      ((base-string simple-base-string)
+       (let ((size-spec (if (cdr type) (cadr type) '*)))
+	 (make-random-vector 'base-char size-spec :simple (eql (car type) 'simple-base-string))))
+      ((bit-vector simple-bit-vector)
+       (let ((size-spec (if (cdr type) (cadr type) '*)))
+	 (make-random-vector 'bit size-spec :simple (eql (car type) 'simple-bit-vector))))
       ((cons)
-       (make-random-element-of-type '(cons t t)))
-      ((list)
-       (let ((len (min (random 10) (random 10))))
-         (loop repeat len collect (make-random-element-of-type t))))
-      ((sequence)
-       (make-random-element-of-type '(or list vector)))
-      ))))
+       (cons (make-random-element-of-type (if (cdr type) (cadr type) t))
+	     (make-random-element-of-type (if (cddr type) (caddr type) t))))
+      ((complex)
+       (cond
+	((null (cdr type))
+	 (make-random-element-of-type 'complex))
+	(t
+	 (assert (null (cddr type)))
+	 (let ((etype (cadr type)))
+	   (loop for v1 = (make-random-element-of-type etype)
+		 for v2 = (make-random-element-of-type etype)
+		 for c = (complex v1 v2)
+		 when (typep c type)
+		 return c)))))
+      )))
+|#
+
+(defmethod make-random-element-of-type ((type class))
+  (make-random-element-of-type (class-name type)))
+
+(defmethod make-random-element-of-type ((type (eql 'bit))) (random 2))
+(defmethod make-random-element-of-type ((type (eql 'boolean)))
+  (random-from-seq #(nil t)))
+(defmethod make-random-element-of-type ((type (eql 'symbol)))
+  (random-from-seq #(nil t a b c :a :b :c |z| foo |foo| car)))
+(defmethod make-random-element-of-type ((type (eql 'keyword)))
+  (random-from-seq #(:a :b :c :d :e :f :g :h :i :j)))
+(defmethod make-random-element-of-type ((type (eql 'unsigned-byte)))
+  (random-from-interval (1+ (ash 1 (random *maximum-random-int-bits*))) 0))
+(defmethod make-random-element-of-type ((type (eql 'signed-byte)))
+  (random-from-interval
+   (1+ (ash 1 (random *maximum-random-int-bits*)))
+   (- (ash 1 (random *maximum-random-int-bits*)))))
+(defmethod make-random-element-of-type ((type (eql 'rational)))
+  (make-random-rational))
+(defmethod make-random-element-of-type ((type (eql 'ratio)))
+  (let ((r 0))
+    (loop do (setq r (make-random-element-of-type 'rational))
+	  while (integerp r))
+    r))
+(defmethod make-random-element-of-type ((type (eql 'integer)))
+  (let ((x (ash 1 (random *maximum-random-int-bits*))))
+    (random-from-interval (1+ x) (- x))))
+(defmethod make-random-element-of-type ((type (eql 'float)))
+  (make-random-element-of-type
+   (random-from-seq #(short-float single-float double-float long-float))))
+(defmethod make-random-element-of-type ((type (eql 'real)))
+  (make-random-element-of-type (random-from-seq #(integer rational float))))
+(defmethod make-random-element-of-type ((type (eql 'number)))
+  (make-random-element-of-type (random-from-seq #(integer rational float #-ecl complex))))
+(defmethod make-random-element-of-type ((type (eql 'bit-vector)))
+  (make-random-vector 'bit '*))
+(defmethod make-random-element-of-type ((type (eql 'simple-bit-vector)))
+  (make-random-vector 'bit '* :simple t))
+(defmethod make-random-element-of-type ((type (eql 'vector)))
+  (make-random-vector '* '*))
+(defmethod make-random-element-of-type ((type (eql 'simple-vector)))
+  (make-random-vector 't '* :simple t))
+(defmethod make-random-element-of-type ((type (eql 'array)))
+  (make-random-array '* '*))
+(defmethod make-random-element-of-type ((type (eql 'simple-array)))
+  (make-random-array '* '* :simple t))
+(defmethod make-random-element-of-type ((type (eql 'string)))
+  (make-random-string '*))
+(defmethod make-random-element-of-type ((type (eql 'simple-string)))
+  (make-random-string '* :simple t))
+(defmethod make-random-element-of-type ((type (eql 'base-string)))
+  (make-random-vector 'base-char '*))
+(defmethod make-random-element-of-type ((type (eql 'simple-base-string)))
+  (make-random-vector 'base-char '* :simple t))
+(defmethod make-random-element-of-type ((type (eql 'character)))
+  (make-random-character))
+(defmethod make-random-element-of-type ((type (eql 'extended-char)))
+  (loop for x = (make-random-character)
+	when (typep x 'extended-char) return x))
+(defmethod make-random-element-of-type ((type (eql 'null))) nil)
+(defmethod make-random-element-of-type ((type (eql 'fixnum)))
+  (random-from-interval (1+ most-positive-fixnum) most-negative-fixnum))
+(defmethod make-random-element-of-type ((type (eql 'complex)))
+  (make-random-element-of-type '(complex real)))
+(defmethod make-random-element-of-type ((type (eql 'cons)))
+  (make-random-element-of-type '(cons t t)))
+(defmethod make-random-element-of-type ((type (eql 'list)))
+  ;; Should modify this to allow non-proper lists?
+  (let ((len (min (random 10) (random 10))))
+    (loop repeat len collect (make-random-element-of-type t))))
+(defmethod make-random-element-of-type ((type (eql 'sequence)))
+  (make-random-element-of-type '(or list vector)))
+(defmethod make-random-element-of-type ((type (eql 'function)))
+  (rcase
+   (5 (symbol-function (random-from-seq *cl-function-symbols*)))
+   (5 (symbol-function (random-from-seq *cl-accessor-symbols*)))
+   (1 #'(lambda (x) (cons x x)))
+   (1 (eval '#'(lambda (x) (cons x x))))))
+
+(defmethod make-random-element-of-type ((type symbol))
+  (case type
+   ((single-float short-float double-float long-float)
+    (make-random-element-of-type (list type)))
+   ((base-char standard-char)
+    (random-from-seq +standard-chars+))
+   ;; Default
+   ((atom t *) (make-random-element-of-type
+		(random-from-seq #(real symbol boolean integer unsigned-byte
+					#-ecl complex character
+					(string 1) (bit-vector 1)))))
+   (t (call-next-method type))
+   ))
 
 (defun make-random-character ()
   (loop

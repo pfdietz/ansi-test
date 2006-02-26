@@ -201,17 +201,20 @@
 	  (setf (char s i) (elt #(#\a #\b #\A #\B) (random 4))))
       (dotimes (i size)
 	(setf (char s i)
-	      (or (and use-random-byte (or (code-char (random (min char-code-limit (ash 1 16))))
-					   (code-char (random 256))))
+	      (or (and (eql etype 'character)
+		       use-random-byte
+		       (or (code-char (random (min char-code-limit (ash 1 16))))
+			   (code-char (random 256))))
 		  (elt "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 		       (random 62))))))
     (when (and (not simple) (not *random-readable*) (coin 5))
-      (let* ((len (length s))
-	     (len2 (random (1+ len))))
-	(setf s (make-array len2
+      (let ((len (+ (random (1+ size)) size)))
+	(setq s (make-random-string len))
+	(setq etype (array-element-type s))
+	(setq s (make-array size
 			    :element-type etype
 			    :displaced-to s
-			    :displaced-index-offset (random (1+ (- len len2)))))))
+			    :displaced-index-offset (random (1+ (- len size)))))))
       
     s))
 

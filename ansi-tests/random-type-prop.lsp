@@ -268,6 +268,7 @@ use the value in MEMBER or EQL type specifiers."))
 	   `(member ,@l1 ,val ,@l2))))))
 
   (1 ((val standard-object)) 'standard-object)
+  (1 ((val structure-object)) 'structure-object)
   (1 ((val class)) 'class)
   (1 ((val standard-class)) 'standard-class)
   (1 ((val structure-class)) 'structure-class)
@@ -477,7 +478,9 @@ use the value in MEMBER or EQL type specifiers."))
 (defun make-sequence-type (length &optional (element-type t))
   (rcase
    (1 `(vector ,element-type ,length))
-   (1 (make-list-type length 'null element-type))))
+   (1 `(array ,element-type (,length)))
+   (1 `(simple-array ,element-type (,length)))
+   (2 (make-list-type length 'null element-type))))
 
 (defun make-random-sequence-type-containing (element &optional *replicate-type*)
   (make-sequence-type (random 10) (make-random-type-containing* element)))
@@ -647,4 +650,8 @@ use the value in MEMBER or EQL type specifiers."))
 		       always (isomorphic-p* (row-major-aref obj1 i)
 					     (row-major-aref obj2 i)))))))))))
 
+;;; Test that sequences have identical elements
 
+(defun equalp-and-eql-elements (s1 s2)
+  (and (equalp s1 s2)
+       (every #'eql s1 s2)))
