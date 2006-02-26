@@ -268,3 +268,81 @@
 	(vector long-float))
     (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
   2 :replicate '(t nil))
+
+;;; Stable sort
+
+(def-type-prop-test stable-sort.1 'stable-sort
+  `((vector bit) (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=)) 2
+  :replicate '(t nil))
+
+(def-type-prop-test stable-sort.2 'stable-sort
+  `((or (vector (unsigned-byte 2))
+	(vector (unsigned-byte 3))
+	(vector (unsigned-byte 4))
+	(vector (unsigned-byte 5))
+	(vector (unsigned-byte 6))
+	(vector (unsigned-byte 7))
+	(vector (unsigned-byte 8)))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
+  2 :replicate '(t nil))
+    
+(def-type-prop-test stable-sort.3 'stable-sort
+  `((or (vector (unsigned-byte 10))
+	(vector (unsigned-byte 13))
+	(vector (unsigned-byte 15))
+	(vector (unsigned-byte 16)))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
+  2 :replicate '(t nil))
+
+(def-type-prop-test stable-sort.4 'stable-sort
+  `((or (vector (unsigned-byte 20))
+	(vector (unsigned-byte 24))
+	(vector (unsigned-byte 28))
+	(vector (unsigned-byte 31))
+	(vector (unsigned-byte 32)))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
+  2 :replicate '(t nil))
+
+(def-type-prop-test stable-sort.5 'stable-sort
+  `((or (vector (signed-byte 2))
+	(vector (signed-byte 3))
+	(vector (signed-byte 4))
+	(vector (signed-byte 5))
+	(vector (signed-byte 6))
+	(vector (signed-byte 7))
+	(vector (signed-byte 8)))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
+  2 :replicate '(t nil))
+
+(def-type-prop-test stable-sort.6 'stable-sort
+  `((or (vector (signed-byte 10))
+	(vector (signed-byte 13))
+	(vector (signed-byte 15))
+	(vector (signed-byte 16)))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
+  2 :replicate '(t nil))
+
+(def-type-prop-test stable-sort.7 'stable-sort
+  `((or (vector (signed-byte 20))
+	(vector (signed-byte 24))
+	(vector (signed-byte 28))
+	(vector (signed-byte 31))
+	(vector (signed-byte 32)))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
+  2 :replicate '(t nil))
+
+(def-type-prop-test stable-sort.8 'stable-sort
+  `((or (vector short-float)
+	(vector single-float)
+	(vector double-float)
+	(vector long-float))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=))
+  2 :replicate '(t nil))
+
+(def-type-prop-test stable-sort.9 'stable-sort
+  `((vector (cons (integer 0 4) (eql nil)))
+    (member < <= > >= ,#'< ,#'<= ,#'> ,#'>=)
+    (eql :key)
+    (member car ,#'car))
+  4 :replicate '(t nil nil nil)
+  :test #'equalp-and-eql-elements)
