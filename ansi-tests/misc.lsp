@@ -11215,5 +11215,32 @@ Broken at C::WT-MAKE-CLOSURE.
     (funcall (compile nil form) s))
   1)
 
+;;; sbcl 0.9.10.11
+;;; Failures associated with MULTIPLE-VALUE-PROG1
+;;; Argument X is not a NUMBER: NIL
+;;; (SB-KERNEL:TWO-ARG-/ NIL 1)
 
-  
+(deftest misc.630
+  (funcall
+   (compile
+    nil
+    '(lambda ()
+       (declare (optimize (speed 1) (debug 0)
+			  (space 2) (safety 0) (compilation-speed 0)))
+       (unwind-protect 0
+	 (* (/ (multiple-value-prog1 -29457482 -5602513511) 1))))))
+  0)
+
+;;; Argument X is not a INTEGER: NIL
+;;; (SB-KERNEL:TWO-ARG-AND NIL 1)
+
+(deftest misc.631
+  (if (flet ((%f17 (f17-1 f17-2 f17-3
+                          &optional
+                          &key (key1 0)
+                          (key2 (if (evenp (multiple-value-prog1 0)) 0 0)))
+		   0))
+	    0)
+      0 0)
+  0)
+
