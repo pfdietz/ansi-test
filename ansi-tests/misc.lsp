@@ -11235,12 +11235,10 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;; (SB-KERNEL:TWO-ARG-AND NIL 1)
 
 (deftest misc.631
-  (if (flet ((%f17 (f17-1 f17-2 f17-3
-                          &optional
-                          &key (key1 0)
-                          (key2 (if (evenp (multiple-value-prog1 0)) 0 0)))
+  (if (flet ((%f17 (&key (key2 (if (evenp (multiple-value-prog1 0)) 0 0)))
 		   0))
 	    0)
-      0 0)
-  0)
+      :a :b)
+  :a)
+
 
