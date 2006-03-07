@@ -21,6 +21,9 @@
 	   (null (cddr x))
 	   (function-name-p (cadr x)))))
 
+(defun symbol-or-list-p (x)
+  (or (symbolp x) (listp x)))
+
 (defun function-designator-p (x)
   (or (functionp x)
       (and (symbolp x) (not (macro-function x)) (not (special-operator-p x)))))
