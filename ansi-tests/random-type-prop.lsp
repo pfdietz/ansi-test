@@ -527,6 +527,13 @@ use the value in MEMBER or EQL type specifiers."))
 (defgeneric replicate (obj)
   (:documentation "Copies the structure of a lisp object recursively, preserving sharing."))
 
+(defmacro replicate-with ((source-obj dest-obj copy-form) &body body)
+  `(or (gethash ,source-obj *replicate-table*)
+       (let ((,dest-obj ,copy-form))
+	 (setf (gethash ,source-obj *replicate-table*) ,dest-obj)
+	 ,@body
+	 ,dest-obj)))
+
 (declaim (special *replicate-table*))
 
 (defmethod replicate :around ((obj t))
