@@ -11242,3 +11242,9 @@ Broken at C::WT-MAKE-CLOSURE.
   :a)
 
 
+;;; gcl 2.7.0 (7 Mar 2006)
+;;; Wrong value -- NIL
+
+(deftest misc.632
+  (funcall (compile nil '(lambda () (let (b) (multiple-value-setq (b) 10)))))
+  10)
