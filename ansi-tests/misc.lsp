@@ -11248,3 +11248,27 @@ Broken at C::WT-MAKE-CLOSURE.
 (deftest misc.632
   (funcall (compile nil '(lambda () (let (b) (multiple-value-setq (b) 10)))))
   10)
+
+;;; sbcl (x86 linux) 0.9.10.43
+;;;  The value -17045.0
+;;;  is not of type
+;;;    (OR (MEMBER #:|u4m7k0jz6o| 1+)
+;;;        (MEMBER #\b)
+;;;        (SINGLE-FLOAT -17045.0 -17045.0)).
+
+(deftest misc.633
+  (let* ((x -17045.0)
+	 (form `(lambda (p3 p4)
+		  (declare (optimize (speed 1) (safety 3) (debug 0) (space 1))
+			   (type number p3)
+			   (type (member -1451.1257 47889 #:|3| ,x #:|aabbaaaaaababa|)
+				 p4))
+		  (min 1
+		       -251.2455
+		       (the number p3)
+		       (the (member 1+ ,x #\b #:|u4m7k0jz6o|) p4)
+		       -1506/1283
+		       65681158/19740963))))
+    (funcall (compile nil form) 1861 x))
+  -17045.0)
+
