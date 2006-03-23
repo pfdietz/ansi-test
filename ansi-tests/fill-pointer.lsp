@@ -56,8 +56,10 @@
   t)
 
 (deftest fill-pointer.error.3
-  (signals-error (fill-pointer (make-array '(10) :fill-pointer nil))
-		 type-error)
+  (let ((a (make-array '(10) :fill-pointer nil)))
+    (if (array-has-fill-pointer-p a)
+	t
+      (eval `(signals-error (fill-pointer ',a) type-error))))
   t)
 
 (deftest fill-pointer.error.4
