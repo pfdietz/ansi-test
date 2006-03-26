@@ -11272,3 +11272,13 @@ Broken at C::WT-MAKE-CLOSURE.
     (funcall (compile nil form) 1861 x))
   -17045.0)
 
+;;; sbcl (x86 linux) 0.9.10.48
+;;;  The value 35182846 is not of type (INTEGER 35182846 35182846).
+
+(deftest misc.634
+  (let ((form '(lambda (p2)
+		 (declare (optimize (speed 0) (safety 3) (debug 3) (space 2))
+			  (type number p2))
+		 (- -83659.0 (the (member 35182846) p2)))))
+    (funcall (compile nil form) 35182846))
+  #.(- -83659.0 35182846))
