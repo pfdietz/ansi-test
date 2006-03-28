@@ -11282,3 +11282,17 @@ Broken at C::WT-MAKE-CLOSURE.
 		 (- -83659.0 (the (member 35182846) p2)))))
     (funcall (compile nil form) 35182846))
   #.(- -83659.0 35182846))
+
+;;; sbcl (x86 linux) 0.9.11.4
+;;; Different results
+
+(deftest misc.635
+  (let* ((form '(lambda (p2)
+		 (declare (optimize (speed 0) (safety 1)
+				    (debug 2) (space 2))
+			  (type (member -19261719) p2))
+		 (ceiling -46022.094 p2))))
+    (values (funcall (compile nil form) -19261719)))
+  1)
+
+  
