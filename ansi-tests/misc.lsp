@@ -11295,4 +11295,30 @@ Broken at C::WT-MAKE-CLOSURE.
     (values (funcall (compile nil form) -19261719)))
   1)
 
-  
+;;; TYPE-ERROR: The value 26899.875 is not of type NUMBER.
+
+(deftest misc.636
+  (let* ((x 26899.875)
+	 (form `(lambda (p2)
+		  (declare (optimize (speed 3) (safety 1) (debug 3) (space 1))
+			   (type (member ,x #:g5437 char-code #:g5438) p2))
+		  (* 104102267 p2))))
+    (not (not (floatp (funcall (compile nil form) x)))))
+  t)
+
+;;;   attempt to THROW to a tag that does not exist: SB-C::LOCALL-ALREADY-LET-CONVERTED
+
+(deftest misc.637
+ (labels ((%f11 (f11-2 &key (key1 0) (key2 0))
+		(progn
+		  (labels ((%f8 (f8-2 f8-3
+				      &optional
+				      (f8-4 0)
+				      (f8-5 (if nil (return-from %f11 0)
+					      0)))
+				0))
+			  (%f8 (%f8 0 0 0) f11-2 key1 key2))
+		  0)))
+	 :good)
+  :good)
+
