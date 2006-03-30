@@ -11309,16 +11309,10 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;;   attempt to THROW to a tag that does not exist: SB-C::LOCALL-ALREADY-LET-CONVERTED
 
 (deftest misc.637
- (labels ((%f11 (f11-2 &key (key1 0) (key2 0))
-		(progn
-		  (labels ((%f8 (f8-2 f8-3
-				      &optional
-				      (f8-4 0)
-				      (f8-5 (if nil (return-from %f11 0)
-					      0)))
-				0))
-			  (%f8 (%f8 0 0 0) f11-2 key1 key2))
-		  0)))
+ (labels ((%f11 (f11-2 &key key1)
+		(labels ((%f8 (f8-2 &optional (f8-5 (if nil (return-from %f11 0) 0)))
+			      :bad1))
+			(%f8 (%f8 0)))
+		:bad2))
 	 :good)
   :good)
-
