@@ -11316,3 +11316,26 @@ Broken at C::WT-MAKE-CLOSURE.
 		:bad2))
 	 :good)
   :good)
+
+;;;  full call to SB-KERNEL:DATA-VECTOR-REF
+
+(deftest misc.638
+  (let* ((codes '(32779 60674 33150 60033 41146 23916 28908 58886 12776 21282 37346 25537 56184
+			40736 4845 41954 6663 44378 23466 46903 13661 36445 18784 6114 6266))
+	 (chars (loop for code in codes collect (or (code-char code) #\x)))
+	 (c (elt chars 21))
+	 (s (make-array '(25) :element-type 'character
+			:initial-contents chars)))
+    (let ((form `(lambda (p1)
+		   (declare (optimize (speed 2) (safety 0) (debug 3) (space 1))
+			    (type (simple-string 25) p1))
+		   (char
+		    (the
+		     (member ,(let ((s2 "abbbabbaaabbaba"))
+				(make-array (length s2) :element-type 'base-char
+					    :initial-contents s2))
+			     ,s)
+		     p1)
+		    21))))
+      (not (not (eql c (funcall (compile nil form) s))))))
+  t)
