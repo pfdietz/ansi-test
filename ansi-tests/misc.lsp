@@ -11339,3 +11339,17 @@ Broken at C::WT-MAKE-CLOSURE.
 		    21))))
       (not (not (eql c (funcall (compile nil form) s))))))
   t)
+
+;;; sbcl 0.9.11.24 (x86 linux)
+;;; failed AVER: "(EQ PHYSENV (LAMBDA-PHYSENV (LAMBDA-VAR-HOME THING)))"
+
+(deftest misc.639
+  (let ((form '(lambda (a b d)
+		 (declare (notinline >= eql))
+		 (declare (optimize (debug 2) (speed 3) (safety 0)
+				    (compilation-speed 3) (space 0)))
+		 (labels ((%f8 (f8-1 &optional (f8-4 (if (if (eql 0 -16) (>= d) nil) 0 0)))
+			       a))
+			 (%f8 b)))))
+    (funcall (compile nil form) :good 18 0))
+  :good)
