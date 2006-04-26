@@ -11353,3 +11353,19 @@ Broken at C::WT-MAKE-CLOSURE.
 			 (%f8 b)))))
     (funcall (compile nil form) :good 18 0))
   :good)
+
+;;; sbcl 0.9.11.45 (x86 linux)
+;;; Incorrect value: -32377322164
+
+(deftest misc.640
+  (let ((form '(lambda (b g)
+		 (declare (type (integer 303184 791836) b))
+		 (declare (optimize (compilation-speed 2) (debug 0) (space 1)
+				    (speed 1) (safety 2)))
+		 (loop for lv1 below 2
+		       sum (if (<= g lv1)
+			       (labels ((%f7 () (prog1 b 0))) (%f7))
+			     (setf g -16188661082))))))
+    (funcall (compile nil form) 335562 4655131896))
+  -16188325520)
+
