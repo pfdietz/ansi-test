@@ -114,12 +114,16 @@
     (notnot (every #'(lambda (c) (eql c #\a)) s)))
   t)
 
+(deftest dynamic-extent.15
+  (flet (((setf %f) (x y) (setf (car y) x)))
+	(declare (dynamic-extent #'(setf %f)))
+	:good)
+  :good)
 
-
-
-
-
-
-
+(deftest dynamic-extent.16
+  (labels (((setf %f) (x y) (setf (car y) x)))
+	  (declare (dynamic-extent #'(setf %f)))
+	  :good)
+  :good)
 
 
