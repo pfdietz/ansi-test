@@ -33,7 +33,7 @@
 
 (defvar *test* nil "Current test name")
 (defvar *do-tests-when-defined* nil)
-(defvar *entries* '(nil) "Test database.  Has a leading dummy cell that does not contain an entry.")
+(defvar *entries* (list nil) "Test database.  Has a leading dummy cell that does not contain an entry.")
 (defvar *entries-tail* *entries* "Tail of the *entries* list")
 (defvar *entries-table* (make-hash-table :test #'equal)
     "Map the names of entries to the cons cell in *entries* that precedes the one whose car is the entry.")
