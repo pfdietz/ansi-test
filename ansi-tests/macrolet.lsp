@@ -420,5 +420,26 @@
 	    (macrolet () (expand-in-current-env (%m :good))))
   :good)
 
+;;; Free declarations in macrolet
+
+(deftest macrolet.47
+  (let ((x :good))
+    (declare (special x))
+    (let ((x :bad))
+      (macrolet () (declare (special x)) x)))
+  :good)
+
+(deftest macrolet.48
+  (let ((x :good))
+    (let ((y :bad))
+      (macrolet () (declare (ignore y)) x)))
+  :good)
+
+(deftest macrolet.49
+  (let ((x :good))
+    (let ((y :bad))
+      (macrolet () (declare (ignorable y)) x)))
+  :good)
+
 
 ;;; TODO: more special declarations for other macrolet arguments
