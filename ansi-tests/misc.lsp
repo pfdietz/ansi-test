@@ -11373,11 +11373,223 @@ Broken at C::WT-MAKE-CLOSURE.
 ;;;   The value NIL is not of type SB-C::IR2-NLX-INFO.
 
 (deftest misc.641
-  (let ((form '(lambda () ; c)
+  (let ((form '(lambda ()
 		 (declare (optimize (speed 1) (space 0) (debug 2)
 				    (compilation-speed 0) (safety 1)))
 		 (flet ((%f3 (f3-1 &key (key1 (count (floor 0 (min -74 0)) #())))
 			     0))
 		       (apply #'%f3 0 nil)))))
     (funcall (compile nil form)))
+  0)
+
+;;; cmucl 19c (x86 linux)
+;;; The assertion (NOT (MEMBER C::KIND '(:DELETED :OPTIONAL))) failed.
+
+(deftest misc.642
+  (let ((form '   (lambda (a b c d e f g h i j)
+		    (declare (type (integer 174130 60165950) a))
+		    (declare (type (integer -4076 6783) b))
+		    (declare (type (integer -178481569 -1) c))
+		    (declare (type (integer 236 954963169) d))
+		    (declare (type (integer -1334 407047) e))
+		    (declare (type (integer -507 -426) f))
+		    (declare (type (integer -1164301 148213922) g))
+		    (declare (type (integer -184324 14515) h))
+		    (declare (type (integer 258 323) i))
+		    (declare (type (integer -11825 109247) j))
+		    (declare (ignorable a b c d e f g h i j))
+		    #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+		    (declare (optimize (compilation-speed 2) (debug 0) (space 1) (speed 3)
+				       (safety 2)))
+		    (labels ((%f4 (f4-1)
+				  (flet ((%f2 (f2-1 f2-2 f2-3 &key)
+					      (progn
+						(return-from %f4 0)
+						f2-2)))
+					(common-lisp:handler-bind nil
+					  (/
+					   (coerce
+					    (unwind-protect
+						(reduce
+						 #'(lambda (lmv2 lmv4)
+						     (reduce #'*
+							     (vector
+							      (let ()
+								h)
+							      c
+							      (reduce
+							       #'(lambda (lmv4 lmv3)
+								   (return-from %f4
+										(deposit-field lmv4
+											       (byte 23 16)
+											       (mask-field
+												(byte 3 27)
+												(elt '(5309746)
+												     (min 0
+													  (max 0
+													       j)))))))
+							       (vector
+								(%f2 (%f2 12762 f4-1 6646240924) 1501
+								     -15)
+								277
+								(multiple-value-call #'%f2
+										     (values -1486981
+											     i
+											     (%f2 a 16777222 j)))
+								1033)
+							       :end 4
+							       :start 3)
+							      (/ 823 -1))
+							     :end 3
+							     :start 1))
+						 (vector
+						  (common-lisp:handler-bind nil
+									    (- 0 h j b -2539837 28596 d 8161548 h -61))
+						  -183768642
+						  -1
+						  31404552
+						  81593)
+						 :start 3)
+					      (dpb i (byte 14 16) e)
+					      (dpb
+					       (count f4-1
+						      #(524279 8388596 1021351 101986)
+						      :test '/=)
+					       (byte 4 4)
+					       131064)
+					      (if (= 524287 f)
+						  (prog2
+						      (denominator
+						       (elt '(1663 120) (min 1 (max 0 -17745))))
+						      f
+						    (deposit-field e (byte 31 31) 0)
+						    (labels ((%f7
+							      (f7-1 f7-2 f7-3
+								    &optional
+								    (f7-4
+								     (coerce
+								      (coerce
+								       (the integer (+ -11045 114))
+								       'integer)
+								      'integer))
+								    (f7-5 h))
+							      -2286515))
+							    j))
+						(macrolet ()
+							  (prog2 -2195 1921675 h -183085 a))))
+					    'integer)
+					   1)))))
+			    0))))
+    (funcall (compile nil form) 58162926 -3652 -63561386 935157597 63716 -504 108893677 -146677 308 99009))
+  0)
+
+;;; Wrong return value
+
+(deftest misc.643
+  (let ((form '(lambda (a)
+		 (declare (type (integer 6 1273) a))
+		 (declare (optimize (space 0) (safety 0) (debug 3) (compilation-speed 2) (speed 3)))
+		 (logorc2 0 (restart-bind nil (shiftf a 522))))))
+    (funcall (compile nil form) 807))
+  -808)
+
+;;;   -1520586839 is not of type INTEGER
+
+(deftest misc.644
+  (let ((form '(lambda (a)
+		 (declare (type (integer -6568333536 -12667) a))
+		 (declare (ignorable a))
+		 #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+		 (declare (optimize (compilation-speed 1) (safety 3) (speed 1) (debug 1)
+				    (space 3)))
+		 (unwind-protect 0
+		   (the integer
+			(locally
+			 (declare (special *s3* *s4*))
+			 (progv '(*s4* *s3*) (list a a) (expt *s3* 0))))))))
+    (let ((*s3* 0))
+      (declare (special *s3*))
+      (funcall (compile nil form) -1520586839)))
+  0)
+
+;;;    NIL is not of type C::CBLOCK
+
+(deftest misc.645
+  (let ((form '(lambda (a)
+		 (declare (notinline abs isqrt))
+		 #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+		 (declare (optimize (debug 3) (safety 1) (space 2) (compilation-speed 1)
+				    (speed 0)))
+		 (progn
+		   (tagbody
+		    (prog2
+			a
+			0
+		      (labels ((%f9 (&key &allow-other-keys)
+				    (go 3)))
+			      (%f9)))
+		    (isqrt (abs (unwind-protect 0)))
+		    3)
+		   a))))
+    (eval `(,form 0)))
+  0)
+
+;;; Segmentation violation
+
+(deftest misc.646
+  (let ((form '(lambda (a)
+		 (declare (type (integer -125 -44) a))
+		 (declare (ignorable a))
+		 #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+		 (declare (optimize (speed 0) (debug 0) (space 2) (compilation-speed 3)
+				    (safety 3)))
+		 (mask-field (byte 0 0)
+			     (block b3 (isqrt (abs (catch 'ct2 (return-from b3 0)))))))))
+    (funcall (compile nil form) -50))
+  0)
+
+;;; 1928431123 is not of type (MOD 536870911)
+
+(deftest misc.647
+  (let ((form '(lambda (a)
+		 (declare (type (integer -2494 534) a))
+		 (declare (ignorable a))
+		 #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+		 (declare (optimize (speed 0) (space 0) (compilation-speed 3) (safety 1)
+				    (debug 1)))
+		 (dotimes (iv3 1 0)
+		   (block b1
+			  (loop for lv1 below 1
+				count (logbitp 0
+					       (reduce
+						#'(lambda (lmv6 lmv2)
+						    (if (> 2208446653 lmv6)
+							(return-from b1 lmv2)
+						      lv1))
+						(list 0 0 0 1928431123 iv3 iv3 a a)
+						:end 5
+						:from-end t))))))))
+    (funcall (compile nil form) 1))
+  0)
+
+;;;  The assertion (AND C::SUCC (NULL (CDR C::SUCC))) failed.
+
+(deftest misc.648
+  (let ((form '(lambda (a)
+		 (declare (type (integer -8 11754838336) a))
+		 (declare (ignorable a))
+		 #+cmu (declare (optimize (extensions:inhibit-warnings 3)))
+		 (declare (optimize (space 0) (compilation-speed 0) (speed 3) (debug 3)
+				    (safety 0)))
+		 (labels ((%f13 ()
+				(logorc1 (unwind-protect 0)
+					 (prog1 0
+					   (prog2
+					       (max 0 a)
+					       0
+					     (progn
+					       (return-from %f13 a)
+					       a))))))
+			 0))))
+    (funcall (compile nil form) 2582756596))
   0)
