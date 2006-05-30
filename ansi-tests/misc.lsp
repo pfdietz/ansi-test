@@ -11605,4 +11605,34 @@ Broken at C::WT-MAKE-CLOSURE.
     (funcall (compile nil form) 'integer))
   523242)
 
+;;; The symbol AND is not valid as a type specifier
+
+(deftest misc.650
+  (let ((form '(lambda (p2)
+		 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+			  (type (member integer and) p2))
+		 (coerce -12 (the atom p2)))))
+    (funcall (compile nil form) 'integer))
+  -12)
+
+;;; The symbol OR is not valid as a type specifier
+
+(deftest misc.651
+  (let ((form '(lambda (p2)
+		 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+			  (type (member integer or) p2))
+		 (coerce 1 (the atom p2)))))
+    (funcall (compile nil form) 'integer))
+  1)
+
+;;; The symbol NOT is not valid as a type specifier.
+
+(deftest misc.652
+  (let ((form '(lambda (p2)
+		 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+			  (type (member integer not) p2))
+		 (coerce 2 (the atom p2)))))
+    (funcall (compile nil form) 'integer))
+  2)
+
 
