@@ -11602,7 +11602,7 @@ Broken at C::WT-MAKE-CLOSURE.
 		 (declare (optimize (speed 0) (safety 0) (debug 2) (space 2))
 			  (type (member integer *) p2))
 		 (coerce 523242 p2))))
-    (funcall (compile nil form) 523242))
+    (funcall (compile nil form) 'integer))
   523242)
 
 
