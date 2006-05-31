@@ -11599,9 +11599,9 @@ Broken at C::WT-MAKE-CLOSURE.
 
 (deftest misc.649
   (let ((form '(lambda (p2)
-		 (declare (optimize (speed 0) (safety 0) (debug 2) (space 2))
-			  (type (member integer *) p2))
-		 (coerce 523242 p2))))
+                 (declare (optimize (speed 0) (safety 0) (debug 2) (space 2))
+                          (type (member integer *) p2))
+                 (coerce 523242 p2))))
     (funcall (compile nil form) 'integer))
   523242)
 
@@ -11609,9 +11609,9 @@ Broken at C::WT-MAKE-CLOSURE.
 
 (deftest misc.650
   (let ((form '(lambda (p2)
-		 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
-			  (type (member integer and) p2))
-		 (coerce -12 (the atom p2)))))
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer and) p2))
+                 (coerce -12 p2))))
     (funcall (compile nil form) 'integer))
   -12)
 
@@ -11619,9 +11619,9 @@ Broken at C::WT-MAKE-CLOSURE.
 
 (deftest misc.651
   (let ((form '(lambda (p2)
-		 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
-			  (type (member integer or) p2))
-		 (coerce 1 (the atom p2)))))
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer or) p2))
+                 (coerce 1 p2))))
     (funcall (compile nil form) 'integer))
   1)
 
@@ -11629,10 +11629,44 @@ Broken at C::WT-MAKE-CLOSURE.
 
 (deftest misc.652
   (let ((form '(lambda (p2)
-		 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
-			  (type (member integer not) p2))
-		 (coerce 2 (the atom p2)))))
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer not) p2))
+                 (coerce 2 p2))))
     (funcall (compile nil form) 'integer))
   2)
 
+;;;   The symbol SATISFIES is not valid as a type specifier.
+
+(deftest misc.653
+  (let ((form '(lambda (p2)
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer satisfies) p2))
+                 (coerce 2 p2))))
+    (funcall (compile nil form) 'integer))
+  2)
+
+;;;  error while parsing arguments to DEFTYPE EQL:
+;;;    invalid number of elements in
+;;;      ()
+;;;    to satisfy lambda list
+;;;      (SB-KERNEL::N):
+;;;    exactly 1 expected, but 0 found
+
+(deftest misc.654
+  (let ((form '(lambda (p2)
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer eql) p2))
+                 (coerce 2 p2))))
+    (funcall (compile nil form) 'integer))
+  2)
+
+;;;  The symbol MEMBER is not valid as a type specifier.
+
+(deftest misc.655
+  (let ((form '(lambda (p2)
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer member) p2))
+                 (coerce 2 p2))))
+    (funcall (compile nil form) 'integer))
+  2)
 
