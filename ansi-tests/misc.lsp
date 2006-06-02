@@ -11670,3 +11670,28 @@ Broken at C::WT-MAKE-CLOSURE.
     (funcall (compile nil form) 'integer))
   2)
 
+;;;  error while parsing arguments to DEFTYPE MOD:
+;;;    invalid number of elements in
+;;;      ()
+;;;    to satisfy lambda list
+;;;      (SB-KERNEL::N):
+;;;    exactly 1 expected, but 0 found
+
+(deftest misc.656
+  (let ((form '(lambda (p2)
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer mod) p2))
+                 (coerce 2 p2))))
+    (funcall (compile nil form) 'integer))
+  2)
+
+;;; The symbol VALUES is not valid as a type specifier.
+
+(deftest misc.657
+  (let ((form '(lambda (p2)
+                 (declare (optimize (speed 0) (safety 2) (debug 0) (space 2))
+                          (type (member integer values) p2))
+                 (coerce 2 p2))))
+    (funcall (compile nil form) 'integer))
+  2)
+
