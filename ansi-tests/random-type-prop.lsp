@@ -91,6 +91,11 @@
 ;;;
 ;;;
                              
+
+(defvar *fn* nil)
+(defvar *pms* nil)
+(defvar *fm* nil)
+
 (defun do-random-type-prop-tests
   (operator arg-types minargs
 	    &key
@@ -198,16 +203,16 @@
      (let* ((param-vals (loop for x in is-var?
 			      for v in vals
 			      when x collect v))
-	    (fn (cl:handler-bind
+	    (fn (setq *fn* (cl:handler-bind
 		 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
 			 (warning #'muffle-warning))
-		 (compile nil form)))
+		 (compile nil (setq *fm* form)))))
 	    (result
 	     (if store-into-cell?
 		 (let ((r (make-array nil :element-type upgraded-result-type)))
-		   (apply fn r param-vals)
+		   (apply fn r (setq *pms* param-vals))
 		   (aref r))
-	       (apply fn param-vals))))
+	       (apply fn (setq *pms* param-vals)))))
        (setq *random-type-prop-result*
 	     (list :upgraded-result-type upgraded-result-type
 		   :form form

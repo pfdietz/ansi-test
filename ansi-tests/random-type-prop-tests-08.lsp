@@ -196,6 +196,88 @@
 ;;; Put count-if-not tests here
 	
 
+;;position CM
+
+(def-type-prop-test position.1 'position '(t sequence) 2)
+(def-type-prop-test position.2 'position
+  (list t #'make-random-sequence-type-containing)
+  2)
+(def-type-prop-test position.3 'position
+  (list t #'make-random-sequence-type-containing
+	'(eql :start)
+	#'(lambda (x s k1) (declare (ignore x k1))
+	    `(integer 0 ,(length s))))
+  4)
+(def-type-prop-test position.4 'position
+  (list t #'make-random-sequence-type-containing
+	'(eql :end)
+	#'(lambda (x s k1) (declare (ignore x k1))
+	    `(integer 0 ,(length s))))
+  4)
+(def-type-prop-test position.5 'position
+  (list t #'make-random-sequence-type-containing
+	'(eql :start)
+	#'(lambda (x s k1) (declare (ignore x k1))
+	    `(integer 0 ,(length s)))
+	'(eql :end)
+	#'(lambda (x s k1 start k2) (declare (ignore x k1 k2))
+	    `(integer ,start ,(length s))))
+  6)
+
+(def-type-prop-test position.6 'position
+  (list '(or short-float single-float double-float long-float)
+	#'(lambda (f) `(vector (or ,(typecase f
+				      (short-float 'short-float)
+				      (single-float 'single-float)
+				      (double-float 'double-float)
+				      (long-float 'long-float)
+				      (t 'float))
+				   (eql ,f)))))
+  2)
+
+(def-type-prop-test position.7 'position '(bit (vector bit)) 2)
+(def-type-prop-test position.8 'position '((unsigned-byte 2) (vector (unsigned-byte 2))) 2)
+(def-type-prop-test position.9 'position '((unsigned-byte 4) (vector (unsigned-byte 4))) 2)
+(def-type-prop-test position.10 'position '((unsigned-byte 8) (vector (unsigned-byte 8))) 2)
+  
+
+;;; position-if tests
+
+(def-type-prop-test position-if.1 'position-if
+  (list (let ((funs '(numberp rationalp realp floatp complexp
+		      symbolp identity null functionp listp consp
+                      arrayp vectorp simple-vector-p
+		      stringp simple-string-p
+		      bit-vector-p simple-bit-vector-p)))
+	  `(member ,@funs ,@(mapcar #'symbol-function funs)))
+	'(or list vector))
+  2)
+
+(def-type-prop-test position-if.2 'position-if
+  (list (let ((funs '(numberp rationalp realp floatp complexp
+		      symbolp identity null functionp listp consp
+                      arrayp vectorp simple-vector-p
+		      stringp simple-string-p
+		      bit-vector-p simple-bit-vector-p)))
+	  `(member ,@funs ,@(mapcar #'symbol-function funs)))
+	'(or list vector)
+	'(eql :test)
+	(let ((test-funs '(eq eql equal equalp)))
+	  `(member ,@test-funs ,@(mapcar #'symbol-function test-funs))))
+  4)
+
+
+
+
+;;; Put position-if-not tests here
+	
+
+
+
+
+
+
+
 (def-type-prop-test length.1 'length '(sequence) 1)
 
 (def-type-prop-test reverse.1 'reverse '(sequence) 1)
