@@ -4,6 +4,7 @@
 ;;;; Contains: Tests of DEFINE-METHOD-COMBINATION
 
 (in-package :cl-test)
+
 (defclass dmc-class-01a () ())
 (defclass dmc-class-01b (dmc-class-01a) ())
 (defclass dmc-class-01c (dmc-class-01a) ())
@@ -113,6 +114,7 @@
     (dolist (meth (compute-applicable-methods #'dmc-gf-03 (list 'a)))
       (remove-method #'dmc-gf-03 meth)))
   :good)
+
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (report-and-ignore-errors
    (define-method-combination times2
