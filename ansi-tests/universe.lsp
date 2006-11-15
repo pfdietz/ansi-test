@@ -370,7 +370,7 @@
    (make-hash-table :test #'eq)
    (make-hash-table :test #'eql)
    (make-hash-table :test #'equal)
-   #-(or GCL CMU ECL) (make-hash-table :test #'equalp)
+   #-(or CMU ECL) (make-hash-table :test #'equalp)
    ))
 
 (defparameter *pathnames*
