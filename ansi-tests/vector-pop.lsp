@@ -21,7 +21,7 @@
 (deftest vector-pop.error.1
   (signals-error (let ((v (vector 1 2 3)))
 		   (if (array-has-fill-pointer-p v)
-		       (error 'type-error :datum v :type nil)
+		       (error 'type-error :datum v :expected-type nil)
 		     (vector-pop v)))
 		 type-error)
   t)
