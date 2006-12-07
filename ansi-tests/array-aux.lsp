@@ -49,7 +49,7 @@
      ((not (typep a `(array ,element-type *)))
       :fail-not-array6)
      
-     #-gcl
+;     #-gcl
      ((not (typep a `(array ,element-type ,rank)))
       :fail-not-array7)
 
