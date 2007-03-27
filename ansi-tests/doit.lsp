@@ -31,6 +31,8 @@
   (rtest:disable-note :allow-nil-arrays)
   (rtest:disable-note :nil-vectors-are-strings))
 
+#+gcl(si::use-fast-links nil)
+
 (in-package :cl-test)
 
 ;;; These two tests will misbehave if the tests are being

@@ -26,6 +26,8 @@
   (rt:disable-note :assume-no-simple-streams)
   (rt:disable-note :assume-no-gray-streams))
 
+#+gcl(si::use-fast-links nil)
+
 (in-package :cl-test)
 
 ;;; These two tests will misbehave if the tests are being
