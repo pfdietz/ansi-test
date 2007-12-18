@@ -25,29 +25,38 @@
 ;RT regression tester to test itself.  See the documentation of RT for
 ;a discusion of how to use this file.
 
-(in-package :user)
+(cl:defpackage :rt-tests
+  (:use :cl :regression-test))
+
+(in-package :rt-tests)
 ;; (require "RT")
-(use-package :regression-test)
+;;(use-package :regression-test)
 
 (defmacro setup (&rest body)
   `(do-setup '(progn ., body)))
 
+(defmacro with-blank-tests (&body body)
+  `(let ((regression-test::*entries* (list nil))
+	 (regression-test::*entries-table* (make-hash-table :test #'equal))
+	 (*test* nil)
+	 (regression-test::*in-test* nil))
+    (let ((regression-test::*entries-tail* regression-test::*entries*))
+      ,@body)))
+
 (defun do-setup (form)
-  (let ((*test* nil)
-	(*do-tests-when-defined* nil)
-	(regression-test::*entries* (list nil))
-	(regression-test::*in-test* nil)
-	(regression-test::*debug* t)
-	result)
-    (deftest t1 4 4)
-    (deftest (t 2) 4 3)
-    (values-list
-      (cons (normalize
+  (with-blank-tests
+      (let ((*do-tests-when-defined* nil)
+	    (regression-test::*debug* t)
+	    result)
+	(deftest t1 4 4)
+	(deftest (t 2) 4 3)
+	(values-list
+	 (cons (normalize
 	      (with-output-to-string (*standard-output*)
 		(setq result
 		      (multiple-value-list
 			(catch 'regression-test::*debug* (eval form))))))
-	    result))))
+	    result)))))
 
 (defun normalize (string)
   (with-input-from-string (s string)
@@ -86,7 +95,7 @@
 
 (deftest deftest-1
   (setup (deftest t1 3 3) (values (get-test 't1) *test* (pending-tests)))
-  ("Redefining test T1") (t1 3 3) t1 (t1 (t 2)))
+  ("Redefining test RT-TESTS::T1") (t1 3 3) t1 (t1 (t 2)))
 (deftest deftest-2
   (setup (deftest (t 2) 3 3) (get-test '(t 2)))
   ("Redefining test (T 2)") ((t 2) 3 3))
@@ -95,7 +104,7 @@
   () (2 3 3) 2 (t1 (t 2) 2))
 (deftest deftest-4
   (setup (let ((*do-tests-when-defined* t)) (deftest (temp) 4 3)))
-  ("Test (TEMP) failed"
+  ("Test (RT-TESTS::TEMP) failed"
    "Form: 4"
    "Expected value: 3"
    "Actual value: 4.")
@@ -128,7 +137,7 @@
   () (t3 1 1))
 (deftest get-test-5 
   (setup (get-test 't0))
-  ("No test with name T0.") nil)
+  ("No test with name RT-TESTS::T0.") nil)
 
 (deftest rem-test-1
   (setup (values (rem-test 't1) (pending-tests)))
@@ -157,7 +166,7 @@
   (setup (let ((*print-case* :downcase))
 	   (values (do-tests) (continue-testing) (do-tests))))
   ("Doing 2 pending tests of 2 tests total."
-   " T1"
+   " RT-TESTS::T1"
    "Test (T 2) failed"
    "Form: 4"
    "Expected value: 3"
@@ -170,7 +179,7 @@
    "Actual value: 4."
    "1 out of 2 total tests failed: (T 2)."
    "Doing 2 pending tests of 2 tests total."
-   " T1"
+   " RT-TESTS::T1"
    "Test (T 2) failed"
    "Form: 4"
    "Expected value: 3"
@@ -185,12 +194,12 @@
 	 (deftest (t 2) 3 3)
 	 (values (do-tests) (continue-testing) (do-tests)))
   ("Doing 2 pending tests of 2 tests total."
-   " T1 (T 2)"
+   " RT-TESTS::T1 (T 2)"
    "No tests failed."
    "Doing 0 pending tests of 2 tests total."
    "No tests failed."
    "Doing 2 pending tests of 2 tests total."
-   " T1 (T 2)"
+   " RT-TESTS::T1 (T 2)"
    "No tests failed.")
   t
   t
@@ -204,20 +213,20 @@
   t
   t)
 (deftest do-tests-4
-  (setup (normalize (with-output-to-string (s) (do-tests s))))
+  (setup (normalize (with-output-to-string (s) (do-tests :out s))))
   ()
   ("Doing 2 pending tests of 2 tests total."
-   " T1"
+   " RT-TESTS::T1"
    "Test (T 2) failed"
    "Form: 4"
    "Expected value: 3"
    "Actual value: 4."
    "1 out of 2 total tests failed: (T 2)."))
 (deftest do-tests-5
-  (setup (with-temporary-file s (do-tests s)))
+  (setup (with-temporary-file s (do-tests :out s)))
   ()
   ("Doing 2 pending tests of 2 tests total."
-   " T1"
+   " RT-TESTS::T1"
    "Test (T 2) failed"
    "Form: 4"
    "Expected value: 3"

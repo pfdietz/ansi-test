@@ -36,6 +36,7 @@
      (export (mapcar #'intern
 		     (mapcar #'symbol-name
 			     '(#:*compile-tests*
+			       #:*do-tests-when-defined*
 			       #:*test*
 			       #:continue-testing
 			       #:deftest
