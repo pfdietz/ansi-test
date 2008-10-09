@@ -376,10 +376,7 @@
       (if (null pending)
 	  (format s "~&No tests failed.")
 	(progn
-	  (format s "~&~A out of ~A ~
-                   total tests failed: ~
-                   ~:@(~{~<~%   ~1:;~S~>~
-                         ~^, ~}~)."
+	  (format t "~&~A out of ~A total tests failed: ~%(~{~a~^~%~})"
 		  (length pending)
 		  (length (cdr *entries*))
 		  pending)
