@@ -57,20 +57,20 @@
   (let ((x 1))
     (declare (special x))
     (let ((x 2))
-      (defun defun-test-fun-5 (&optional (y x))
+      (defun defun-test-fun-6 (&optional (y x))
 	(declare (special x))
 	(values y x))
-      (defun-test-fun-5)))
+      (defun-test-fun-6)))
   2 1)
 
 (deftest defun.7
   (let ((x 1))
     (declare (special x))
     (let ((x 2))
-      (defun defun-test-fun-5 (&key (y x))
+      (defun defun-test-fun-7 (&key (y x))
 	(declare (special x))
 	(values y x))
-      (defun-test-fun-5)))
+      (defun-test-fun-7)))
   2 1)
 
 ;; Documentation
