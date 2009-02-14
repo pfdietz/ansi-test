@@ -304,4 +304,4 @@
   `(loop (catch 'fail (return (rcase ,@clauses))))))
 
 #+armedbear
-(warn ";; WARNING: ABCL doesn't support the long form of DEFINE-METHOD-COMBINATION; randomized testing disabled.")
+(warn "ABCL doesn't support the long form of DEFINE-METHOD-COMBINATION; randomized testing disabled.")
