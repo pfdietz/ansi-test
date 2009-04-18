@@ -24,15 +24,20 @@
   (catch 'foo 'a (throw 'foo 'b) 'c)
   b)
 
-(deftest catch.6
-  (let ((tag1 (1+ most-positive-fixnum))
-	(tag2 (1+ most-positive-fixnum)))
-    (if (eqt tag1 tag2)
-	'good
-      (catch tag1
-	(catch tag2 (throw tag1 'good))
-	'bad)))
-  good)
+;;
+;; The test below is wrong:
+;;   Numbers can't be assumed to be EQ at
+;;   any time by conforming programs.
+;;
+;; (deftest catch.6
+;;   (let ((tag1 (1+ most-positive-fixnum))
+;; 	(tag2 (1+ most-positive-fixnum)))
+;;     (if (eqt tag1 tag2)
+;; 	'good
+;;       (catch tag1
+;; 	(catch tag2 (throw tag1 'good))
+;; 	'bad)))
+;;   good)
 
 (deftest catch.7
   (catch 'foo 'a (throw 'foo (values)) 'c))
