@@ -279,19 +279,16 @@
 
       (when (pend entry)
         (let ((*print-circle* *print-circle-on-failure*))
-          (format s "~&Test ~:@(~S~) failed~
-                   ~%Form: ~S~
-                   ~%Expected value~P: ~
-                      ~{~S~^~%~17t~}~%"
-                  *test* (form entry)
-                  (length (vals entry))
-                  (vals entry))
+          (format s "~&Test ~:@(~S~) failed~%Form: ~S~%Expected value~P:~%"
+                  *test* (form entry) (length (vals entry)))
+          (dolist (v (vals entry)) (format s "~10t~S~%" v))
           (handler-case
-           (let ((st (format nil "Actual value~P: ~
-                      ~{~S~^~%~15t~}.~%"
-                             (length r) r)))
-             (format s "~A" st))
-           (error () (format s "Actual value: #<error during printing>~%")))
+              (progn
+                (format s "Actual value~P:~%" (length r))
+                (dolist (v r)
+                  (format s "~10t~S~:[~; [~2:*~A]~]~%"
+                          v (typep v 'condition))))
+            (error () (format s "Actual value: #<error during printing>~%")))
           (finish-output s)))))
   (when (not (pend entry)) *test*))
 
