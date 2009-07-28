@@ -385,6 +385,20 @@
                          ~^, ~}~)."
                     (length new-failures)
                     new-failures)))
+          (when *expected-failures*
+            (let ((pending-table (make-hash-table :test #'equal)))
+              (dolist (ex pending)
+                (setf (gethash ex pending-table) t))
+              (let ((unexpected-successes
+                     (loop :for ex :in *expected-failures*
+                       :unless (gethash ex pending-table) :collect ex)))
+                (if unexpected-successes
+                    (format t "~&~:D unexpected successes: ~
+                   ~:@(~{~<~%   ~1:;~S~>~
+                         ~^, ~}~)."
+                            (length unexpected-successes)
+                            unexpected-successes)
+                    (format t "~&No unexpected successes.")))))
           ))
       (finish-output s)
       (null pending))))
