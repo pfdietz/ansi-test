@@ -13,9 +13,9 @@
   (progn
     (eval
      '(defgeneric sgf-cpl-gf.1 (x)
-	(:method ((x generic-function)) 1)
-	(:method ((x function)) 2)
-	(:method ((x t)) 3)))
+        (:method ((x generic-function)) 1)
+        (:method ((x function)) 2)
+        (:method ((x t)) 3)))
     (values
      (sgf-cpl-gf.1 #'make-instance)
      (sgf-cpl-gf.1 #'cons)
@@ -26,9 +26,9 @@
   (progn
     (eval
      '(defgeneric sgf-cpl-gf.2 (x)
-	(:method ((x standard-generic-function)) 1)
-	(:method ((x function)) 2)
-	(:method ((x t)) 3)))
+        (:method ((x standard-generic-function)) 1)
+        (:method ((x function)) 2)
+        (:method ((x t)) 3)))
     (values
      (sgf-cpl-gf.2 #'make-instance)
      (sgf-cpl-gf.2 #'cons)
@@ -41,5 +41,5 @@
 
 
 
-      
-  
+
+

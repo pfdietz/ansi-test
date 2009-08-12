@@ -15,10 +15,10 @@
   (let ((x nil))
     (flet ((%f () x))
       (let ((ret-vals
-	     (multiple-value-list
-	      (function-lambda-expression #'%f))))
-	(values (length ret-vals)
-		(notnot (second ret-vals))))))
+             (multiple-value-list
+              (function-lambda-expression #'%f))))
+        (values (length ret-vals)
+                (notnot (second ret-vals))))))
   3 t)
 
 ;;; Verify that it doesn't barf on generic functions

@@ -70,7 +70,7 @@
 
 (def-error-test multiple-value-bind.1 (multiple-value-bind))
 (def-error-test multiple-value-bind.2 (multiple-value-bind .
-					  #.(1+ most-positive-fixnum)))
+                                          #.(1+ most-positive-fixnum)))
 (def-error-test multiple-value-bind.3 (multiple-value-bind (x)))
 (def-error-test multiple-value-bind.4 (multiple-value-bind (x . y) 1 x))
 (def-error-test multiple-value-bind.5 (multiple-value-bind (x) . :foo))

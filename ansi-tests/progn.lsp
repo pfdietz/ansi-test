@@ -31,10 +31,10 @@
 (deftest progn.7
   (let ((x 0))
     (prog ()
-	  (progn (go x) x 'a)
-	  (return 'bad)
-	  x
-	  (return 'good)))
+          (progn (go x) x 'a)
+          (return 'bad)
+          x
+          (return 'good)))
   good)
 
 ;;; No implicit tagbody
@@ -61,7 +61,7 @@
   (macrolet
    ((%m (z) z))
    (progn (expand-in-current-env (%m :bad))
-	  (expand-in-current-env (%m :good))))
+          (expand-in-current-env (%m :good))))
   :good)
 
 

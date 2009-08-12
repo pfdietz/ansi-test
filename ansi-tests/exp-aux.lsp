@@ -10,7 +10,7 @@
    the first n terms of the Taylor series."
   (assert (realp x))
   (let ((result 1)
-	(xrat (rational x)))
+        (xrat (rational x)))
     (loop
      for i from (1- n) downto 1
      do (setq result (+ 1 (/ (* xrat result) i))))
@@ -19,6 +19,6 @@
       (float result 1.0f0))))
 
 
-    
+
 
 

@@ -30,7 +30,7 @@
 #|
 (deftest keyword.4
   (let ((name "SYMBOL-NAME-FOR-KEYWORD.4")
-	(kwp (find-package "KEYWORD")))
+        (kwp (find-package "KEYWORD")))
     (let ((s (find-symbol name kwp)))
       (when s (unintern s kwp))
       ;; Now, create a symbol with this name
@@ -49,11 +49,11 @@
 
 (deftest keyword.5
   (let* ((name "SYMBOL-NAME-FOR-KEYWORD.5")
-	 (pkg-name "PACKAGE-FOR-KEYWORD.5")
-	 (kwp (find-package "KEYWORD")))
+         (pkg-name "PACKAGE-FOR-KEYWORD.5")
+         (kwp (find-package "KEYWORD")))
     (safely-delete-package pkg-name)
     (let* ((pkg (make-package pkg-name :use nil))
-	   (s (find-symbol name kwp)))
+           (s (find-symbol name kwp)))
       (when s (unintern s kwp))
       ;; Now, create a symbol with this name
       ;; and import it into the keyword package
@@ -71,12 +71,12 @@
 
 (deftest keyword.6
   (let* ((name "SYMBOL-NAME-FOR-KEYWORD.6")
-	 (pkg-name "PACKAGE-FOR-KEYWORD.6")
-	 (kwp (find-package "KEYWORD")))
+         (pkg-name "PACKAGE-FOR-KEYWORD.6")
+         (kwp (find-package "KEYWORD")))
     (safely-delete-package pkg-name)
     (let* ((pkg (make-package pkg-name :use nil))
-	   (s (find-symbol name kwp))
-	   s2)
+           (s (find-symbol name kwp))
+           s2)
       (when s (unintern s kwp))
       ;; Recreate a symbol with this name in the keyword package
       ;; shadowing-import will displace this symbol
@@ -107,10 +107,10 @@
 (deftest keyword.2
   (do-symbols (s "KEYWORD" t)
     (multiple-value-bind (s2 access)
-	(find-symbol (symbol-name s) "KEYWORD")
+        (find-symbol (symbol-name s) "KEYWORD")
       (unless (and (eqt s s2)
-		   (eqt access :external))
-	(return (list s2 access)))))
+                   (eqt access :external))
+        (return (list s2 access)))))
   t)
 
 ;; Every keyword evaluates to itself
@@ -123,5 +123,5 @@
       (return (list s (eval s))))))
   t)
 
-    
+
 

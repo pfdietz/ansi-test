@@ -13,13 +13,13 @@
 
 (deftest array-row-major-index.2
   (loop for i from 0 to 4
-	collect (array-row-major-index #(a b c d e) i))
+        collect (array-row-major-index #(a b c d e) i))
   (0 1 2 3 4))
 
 (deftest array-row-major-index.3
   (let ((a (make-array '(5) :fill-pointer 1)))
     (loop for i from 0 to 4
-	  collect (array-row-major-index a i)))
+          collect (array-row-major-index a i)))
   (0 1 2 3 4))
 
 (deftest array-row-major-index.4
@@ -36,7 +36,7 @@
 
 (deftest array-row-major-index.order.1
   (let ((x 0) y z
-	(a #(a b c d e f)))
+        (a #(a b c d e f)))
     (values
      (array-row-major-index
       (progn (setf y (incf x)) a)

@@ -37,26 +37,26 @@
 
 (defmacro with-blank-tests (&body body)
   `(let ((regression-test::*entries* (list nil))
-	 (regression-test::*entries-table* (make-hash-table :test #'equal))
-	 (*test* nil)
-	 (regression-test::*in-test* nil))
+         (regression-test::*entries-table* (make-hash-table :test #'equal))
+         (*test* nil)
+         (regression-test::*in-test* nil))
     (let ((regression-test::*entries-tail* regression-test::*entries*))
       ,@body)))
 
 (defun do-setup (form)
   (with-blank-tests
       (let ((*do-tests-when-defined* nil)
-	    (regression-test::*debug* t)
-	    result)
-	(deftest t1 4 4)
-	(deftest (t 2) 4 3)
-	(values-list
-	 (cons (normalize
-	      (with-output-to-string (*standard-output*)
-		(setq result
-		      (multiple-value-list
-			(catch 'regression-test::*debug* (eval form))))))
-	    result)))))
+            (regression-test::*debug* t)
+            result)
+        (deftest t1 4 4)
+        (deftest (t 2) 4 3)
+        (values-list
+         (cons (normalize
+              (with-output-to-string (*standard-output*)
+                (setq result
+                      (multiple-value-list
+                        (catch 'regression-test::*debug* (eval form))))))
+            result)))))
 
 (defun normalize (string)
   (with-input-from-string (s string)
@@ -66,10 +66,10 @@
 
 (defun get-file-name ()
   (loop (if *file-name* (return *file-name*))
-	(format *error-output*
-		"~%Type a string representing naming of a scratch disk file: ")
-	(setq *file-name* (read))
-	(if (not (stringp *file-name*)) (setq *file-name* nil))))
+        (format *error-output*
+                "~%Type a string representing naming of a scratch disk file: ")
+        (setq *file-name* (read))
+        (if (not (stringp *file-name*)) (setq *file-name* nil))))
 
 (get-file-name)
 
@@ -80,15 +80,15 @@
 
 (defun get-file-output (f)
   (prog1 (with-open-file (in f)
-	   (normalize-stream in))
-	 (delete-file f)))
+           (normalize-stream in))
+         (delete-file f)))
 
 (defun normalize-stream (s)
   (let ((l nil))
     (loop (push (read-line s nil s) l)
-	  (when (eq (car l) s)
-	    (setq l (nreverse (cdr l)))
-	    (return nil)))
+          (when (eq (car l) s)
+            (setq l (nreverse (cdr l)))
+            (return nil)))
     (delete "" l :test #'equal)))
 
 (rem-all-tests)
@@ -135,7 +135,7 @@
 (deftest get-test-4
   (setup (deftest t3 1 1) (get-test))
   () (t3 1 1))
-(deftest get-test-5 
+(deftest get-test-5
   (setup (get-test 't0))
   ("No test with name RT-TESTS::T0.") nil)
 
@@ -146,7 +146,7 @@
   (setup (values (rem-test '(t 2)) (pending-tests)))
   () (t 2) (t1))
 (deftest rem-test-3
-  (setup (let ((*test* '(t 2))) (rem-test)) (pending-tests)) 
+  (setup (let ((*test* '(t 2))) (rem-test)) (pending-tests))
   () (t1))
 (deftest rem-test-4
   (setup (values (rem-test 't0) (pending-tests)))
@@ -160,11 +160,11 @@
   () nil nil)
 (deftest rem-all-tests-2
   (setup (rem-all-tests) (rem-all-tests) (pending-tests))
-  () nil) 
+  () nil)
 
 (deftest do-tests-1
   (setup (let ((*print-case* :downcase))
-	   (values (do-tests) (continue-testing) (do-tests))))
+           (values (do-tests) (continue-testing) (do-tests))))
   ("Doing 2 pending tests of 2 tests total."
    " RT-TESTS::T1"
    "Test (T 2) failed"
@@ -191,8 +191,8 @@
 
 (deftest do-tests-2
   (setup (rem-test '(t 2))
-	 (deftest (t 2) 3 3)
-	 (values (do-tests) (continue-testing) (do-tests)))
+         (deftest (t 2) 3 3)
+         (values (do-tests) (continue-testing) (do-tests)))
   ("Doing 2 pending tests of 2 tests total."
    " RT-TESTS::T1 (T 2)"
    "No tests failed."

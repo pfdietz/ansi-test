@@ -11,7 +11,7 @@
     (values
      (hash-table-count table)
      (equalt (multiple-value-list (clrhash table))
-	     (list table))
+             (list table))
      (hash-table-count table)))
   1 t 0)
 
@@ -21,7 +21,7 @@
     (values
      (hash-table-count table)
      (equalt (multiple-value-list (clrhash table))
-	     (list table))
+             (list table))
      (hash-table-count table)))
   1 t 0)
 
@@ -31,7 +31,7 @@
     (values
      (hash-table-count table)
      (equalt (multiple-value-list (clrhash table))
-	     (list table))
+             (list table))
      (hash-table-count table)))
   1 t 0)
 
@@ -41,7 +41,7 @@
     (values
      (hash-table-count table)
      (equalt (multiple-value-list (clrhash table))
-	     (list table))
+             (list table))
      (hash-table-count table)))
   1 t 0)
 
@@ -51,7 +51,7 @@
     (values
      (hash-table-count table)
      (equalt (multiple-value-list (clrhash table))
-	     (list table))
+             (list table))
      (hash-table-count table)))
   1 t 0)
 
@@ -63,7 +63,7 @@
 
 (deftest clrhash.error.2
   (signals-error (clrhash (make-hash-table) nil)
-		 program-error)
+                 program-error)
   t)
 
 

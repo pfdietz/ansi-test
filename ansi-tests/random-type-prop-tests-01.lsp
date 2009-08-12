@@ -10,8 +10,8 @@
 (def-type-prop-test typep.1 '(lambda (x y) (typep x (type-of y))) '(t t) 2)
 (def-type-prop-test typep.2 'typep
   (list t #'(lambda (x)
-	      (let ((type (make-random-type-containing x)))
-		`(eql ,type))))
+              (let ((type (make-random-type-containing x)))
+                `(eql ,type))))
   2)
 (def-type-prop-test subtypep
   '(lambda (x y) (subtypep (type-of x) (type-of y))) '(t t) 2)
@@ -21,10 +21,10 @@
 (def-type-prop-test compiled-function-p 'compiled-function-p '(t) 1)
 (def-type-prop-test not 'not '(t) 1)
 (def-type-prop-test eq 'eq (list
-			    '(and t (not number) (not character))
-			    #'(lambda (x) (rcase
-					   (1 `(eql ,x))
-					   (1 '(and t (not number) (not character))))))
+                            '(and t (not number) (not character))
+                            #'(lambda (x) (rcase
+                                           (1 `(eql ,x))
+                                           (1 '(and t (not number) (not character))))))
   2)
 (def-type-prop-test eql.1 'eql '(t t) 2)
 (def-type-prop-test eql.2 'eql (list t #'(lambda (x) `(eql ,x))) 2)

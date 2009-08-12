@@ -80,7 +80,7 @@
 
 (deftest block.12
   (macrolet ((%m (z) z))
-	    (block foo (expand-in-current-env (%m :good))))
+            (block foo (expand-in-current-env (%m :good))))
   :good)
 
 #|

@@ -10,8 +10,8 @@
 
 (deftest clear-input.1
   (loop for s in (list *debug-io* *query-io*
-		       *standard-input* *terminal-io*)
-	always (eq (clear-input s) nil))
+                       *standard-input* *terminal-io*)
+        always (eq (clear-input s) nil))
   t)
 
 (deftest clear-input.2

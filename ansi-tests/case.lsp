@@ -19,9 +19,9 @@
 
 (deftest case.4
   (case 'z ((a b c) 1)
-	   ((d e) 2)
-	   ((f z g) 3)
-	   (t 4))
+           ((d e) 2)
+           ((f z g) 3)
+           (t 4))
   3)
 
 (deftest case.5
@@ -171,8 +171,8 @@
   (block done
     (tagbody
      (case 'a (a (go 10)
-		 10
-		 (return-from done 'bad)))
+                 10
+                 (return-from done 'bad)))
      10
      (return-from done 'good)))
   good)
@@ -183,8 +183,8 @@
      (case 'b
        (a 'bad)
        (otherwise (go 10)
-		  10
-		  (return-from done 'bad)))
+                  10
+                  (return-from done 'bad)))
      10
      (return-from done 'good)))
   good)
@@ -196,10 +196,10 @@
   (macrolet
    ((%m (z) z))
    (case (expand-in-current-env (%m :b))
-	 (:a :bad1)
-	 (:b :good)
-	 (:c :bad2)
-	 (t :bad3)))
+         (:a :bad1)
+         (:b :good)
+         (:c :bad2)
+         (t :bad3)))
   :good)
 
 ;;; (deftest case.error.1
@@ -208,15 +208,15 @@
 
 (deftest case.error.1
   (signals-error (funcall (macro-function 'case))
-		 program-error)
+                 program-error)
   t)
 
 (deftest case.error.2
   (signals-error (funcall (macro-function 'case) '(case t))
-		 program-error)
+                 program-error)
   t)
 
 (deftest case.error.3
   (signals-error (funcall (macro-function 'case) '(case t) nil nil)
-		 program-error)
+                 program-error)
   t)

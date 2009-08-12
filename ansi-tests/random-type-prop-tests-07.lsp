@@ -16,11 +16,11 @@
 
 (def-type-prop-test string-trim.1 'string-trim '(string string) 2)
 (def-type-prop-test string-trim.2 'string-trim (list #'(lambda () (make-list-type (random 10) 'null 'character))
-						     'string)
+                                                     'string)
   2)
 (def-type-prop-test string-left-trim.1 'string-left-trim '(string string) 2)
 (def-type-prop-test string-left-trim.2 'string-left-trim (list #'(lambda () (make-list-type (random 10) 'null 'character))
-							       'string)
+                                                               'string)
   2)
 (def-type-prop-test string-right-trim.1 'string-right-trim '(string string) 2)
 (def-type-prop-test string-right-trim.2 'string-right-trim
@@ -31,71 +31,71 @@
   (flet ((%makename (n) (intern (format nil "~A.~A" op n) :cl-test)))
     `(progn
        (def-type-prop-test ,(%makename 1) ',op '(string string) 2)
-       (def-type-prop-test ,(%makename 2) ',op 
-	 `(string string (eql :start1) ,#'index-type-for-v1)
-	 4)
-       (def-type-prop-test ,(%makename 3) ',op 
-	 `(string string (eql :start2) ,#'index-type-for-v2)
-	 4)
-       (def-type-prop-test ,(%makename 4) ',op 
-	 `(string string (eql :end1) ,#'end-type-for-v1)
-	 4)
-       (def-type-prop-test ,(%makename 5) ',op 
-	 `(string string (eql :end2) ,#'end-type-for-v2)
-	 4)
-       (def-type-prop-test ,(%makename 6) ',op 
-	 `(string string
-		  (eql :start1) ,#'index-type-for-v1
-		  (eql :end1) ,#'end-type-for-v1)
-	 6)
-       (def-type-prop-test ,(%makename 7) ',op 
-	 `(string string
-		  (eql :start1) ,#'index-type-for-v1
-		  (eql :end2) ,#'end-type-for-v2)
-	 6)
-       (def-type-prop-test ,(%makename 8) ',op 
-	 `(string string
-		  (eql :start2) ,#'index-type-for-v2
-		  (eql :end1) ,#'end-type-for-v1)
-	 6)
-       (def-type-prop-test ,(%makename 9) ',op 
-	 `(string string
-		  (eql :start2) ,#'index-type-for-v2
-		  (eql :end2) ,#'end-type-for-v2)
-	 6)
-       (def-type-prop-test ,(%makename 10) ',op 
-	 `(string string
-		  (eql :start1) ,#'index-type-for-v1
-		  (eql :start2) ,#'index-type-for-v2
-		  (eql :end1) ,#'end-type-for-v1)
-	 8)
-       (def-type-prop-test ,(%makename 11) ',op 
-	 `(string string
-		  (eql :start1) ,#'index-type-for-v1
-		  (eql :start2) ,#'index-type-for-v2
-		  (eql :end2) ,#'end-type-for-v2)
-	 8)
-       (def-type-prop-test ,(%makename 12) ',op 
-	 `(string string
-		  (eql :start1) ,#'index-type-for-v1
-		  (eql :end2) ,#'end-type-for-v2
-		  (eql :end1) ,#'end-type-for-v1)
-	 8)
-       (def-type-prop-test ,(%makename 13) ',op 
-	 `(string string
-		  (eql :start2) ,#'index-type-for-v2
-		  (eql :end2) ,#'end-type-for-v2
-		  (eql :end1) ,#'end-type-for-v1)
-	 8)
-       (def-type-prop-test ,(%makename 14) ',op 
-	 `(string string
-		  (eql :start1) ,#'index-type-for-v1
-		  (eql :start2) ,#'index-type-for-v2
-		  (eql :end2) ,#'end-type-for-v2
-		  (eql :end1) ,#'end-type-for-v1)
-	 10)
+       (def-type-prop-test ,(%makename 2) ',op
+         `(string string (eql :start1) ,#'index-type-for-v1)
+         4)
+       (def-type-prop-test ,(%makename 3) ',op
+         `(string string (eql :start2) ,#'index-type-for-v2)
+         4)
+       (def-type-prop-test ,(%makename 4) ',op
+         `(string string (eql :end1) ,#'end-type-for-v1)
+         4)
+       (def-type-prop-test ,(%makename 5) ',op
+         `(string string (eql :end2) ,#'end-type-for-v2)
+         4)
+       (def-type-prop-test ,(%makename 6) ',op
+         `(string string
+                  (eql :start1) ,#'index-type-for-v1
+                  (eql :end1) ,#'end-type-for-v1)
+         6)
+       (def-type-prop-test ,(%makename 7) ',op
+         `(string string
+                  (eql :start1) ,#'index-type-for-v1
+                  (eql :end2) ,#'end-type-for-v2)
+         6)
+       (def-type-prop-test ,(%makename 8) ',op
+         `(string string
+                  (eql :start2) ,#'index-type-for-v2
+                  (eql :end1) ,#'end-type-for-v1)
+         6)
+       (def-type-prop-test ,(%makename 9) ',op
+         `(string string
+                  (eql :start2) ,#'index-type-for-v2
+                  (eql :end2) ,#'end-type-for-v2)
+         6)
+       (def-type-prop-test ,(%makename 10) ',op
+         `(string string
+                  (eql :start1) ,#'index-type-for-v1
+                  (eql :start2) ,#'index-type-for-v2
+                  (eql :end1) ,#'end-type-for-v1)
+         8)
+       (def-type-prop-test ,(%makename 11) ',op
+         `(string string
+                  (eql :start1) ,#'index-type-for-v1
+                  (eql :start2) ,#'index-type-for-v2
+                  (eql :end2) ,#'end-type-for-v2)
+         8)
+       (def-type-prop-test ,(%makename 12) ',op
+         `(string string
+                  (eql :start1) ,#'index-type-for-v1
+                  (eql :end2) ,#'end-type-for-v2
+                  (eql :end1) ,#'end-type-for-v1)
+         8)
+       (def-type-prop-test ,(%makename 13) ',op
+         `(string string
+                  (eql :start2) ,#'index-type-for-v2
+                  (eql :end2) ,#'end-type-for-v2
+                  (eql :end1) ,#'end-type-for-v1)
+         8)
+       (def-type-prop-test ,(%makename 14) ',op
+         `(string string
+                  (eql :start1) ,#'index-type-for-v1
+                  (eql :start2) ,#'index-type-for-v2
+                  (eql :end2) ,#'end-type-for-v2
+                  (eql :end1) ,#'end-type-for-v1)
+         10)
        )))
-     
+
 (def-string-comparison-type-prop-test string=)
 (def-string-comparison-type-prop-test string/=)
 (def-string-comparison-type-prop-test string<)
@@ -114,8 +114,8 @@
 
 (def-type-prop-test make-string.1 'make-string '((integer 0 100) (eql :initial-element) character) 3)
 (def-type-prop-test make-string.2 'make-string `((integer 0 100) (eql :initial-element) character
-						 (eql :element-type)
-						 ,#'(lambda (&rest args)
-						      `(eql (and character
-								 ,(make-random-type-containing (third args))))))
+                                                 (eql :element-type)
+                                                 ,#'(lambda (&rest args)
+                                                      `(eql (and character
+                                                                 ,(make-random-type-containing (third args))))))
   5)

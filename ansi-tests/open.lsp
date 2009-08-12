@@ -15,84 +15,84 @@
     #'(lambda (i) (logand i 1)))
    (cons
     (let ((op (car type))
-	  (arg1 (cadr type))
-	  (arg2 (caddr type)))
+          (arg1 (cadr type))
+          (arg2 (caddr type)))
       (ecase op
-	(unsigned-byte
-	 (let ((mask (1- (ash 1 arg1))))
-	   #'(lambda (i) (logand i mask))))
-	(signed-byte
-	 (let ((mask (1- (ash 1 (1- arg1)))))
-	   #'(lambda (i) (logand i mask))))
-	(integer
-	 (let* ((lo arg1)
-		(hi arg2)
-	       (lower-bound
-		(etypecase lo
-		  (integer lo)
-		  (cons (1+ (car lo)))))
-	       (upper-bound
-		(etypecase hi
-		  (integer hi)
-		  (cons (1- (car hi)))))
-	       (range (1+ (- upper-bound lower-bound))))
-	   #'(lambda (i) (+ lower-bound (mod i range))))))))))
+        (unsigned-byte
+         (let ((mask (1- (ash 1 arg1))))
+           #'(lambda (i) (logand i mask))))
+        (signed-byte
+         (let ((mask (1- (ash 1 (1- arg1)))))
+           #'(lambda (i) (logand i mask))))
+        (integer
+         (let* ((lo arg1)
+                (hi arg2)
+               (lower-bound
+                (etypecase lo
+                  (integer lo)
+                  (cons (1+ (car lo)))))
+               (upper-bound
+                (etypecase hi
+                  (integer hi)
+                  (cons (1- (car hi)))))
+               (range (1+ (- upper-bound lower-bound))))
+           #'(lambda (i) (+ lower-bound (mod i range))))))))))
 
 (compile 'generator-for-element-type)
 
 (defmacro def-open-test (name args form expected
-			      &key
-			      (notes nil notes-p)
-			      (build-form nil build-form-p)
-			      (element-type 'character element-type-p)
-			      (pathname #p"tmp.dat"))
-	  
+                              &key
+                              (notes nil notes-p)
+                              (build-form nil build-form-p)
+                              (element-type 'character element-type-p)
+                              (pathname #p"tmp.dat"))
+
   (when element-type-p
     (setf args (append args (list :element-type `',element-type))))
 
   (unless build-form-p
     (let ((write-element-form
-	   (cond
-	    ((subtypep element-type 'integer)
-	     `(write-byte
-	       (funcall (the function
-			  (generator-for-element-type ',element-type)) i)
-	       os))
-	    ((subtypep element-type 'character)
-	     `(write-char
-	       (funcall (the function
-			  (generator-for-element-type ',element-type)) i)
-	       os)))))
+           (cond
+            ((subtypep element-type 'integer)
+             `(write-byte
+               (funcall (the function
+                          (generator-for-element-type ',element-type)) i)
+               os))
+            ((subtypep element-type 'character)
+             `(write-char
+               (funcall (the function
+                          (generator-for-element-type ',element-type)) i)
+               os)))))
       (setq build-form
-	    `(with-open-file
-	      (os pn :direction :output
-		  ,@(if element-type-p
-			`(:element-type ',element-type))
-		  :if-exists :supersede)
-	      (assert (open-stream-p os))
-	      (dotimes (i 10) ,write-element-form)
-	      (finish-output os)
-	    ))))
-			      
+            `(with-open-file
+              (os pn :direction :output
+                  ,@(if element-type-p
+                        `(:element-type ',element-type))
+                  :if-exists :supersede)
+              (assert (open-stream-p os))
+              (dotimes (i 10) ,write-element-form)
+              (finish-output os)
+            ))))
+
   `(deftest ,name
      ,@(when notes-p `(:notes ,notes))
      (let ((pn ,pathname))
        (delete-all-versions pn)
        ,build-form
        (let ((s (open pn ,@args)))
-	 (unwind-protect
-	     (progn
-	       (assert (open-stream-p s))
-	       (assert (typep s 'file-stream))
-	       ,@
-	       (unless (member element-type '(signed-byte unsigned-byte))
-		 #-allegro
-		 `((assert (subtypep ',element-type
-				     (stream-element-type s))))
-		 #+allegro nil
-		 )
-	       ,form)
-	   (close s))))
+         (unwind-protect
+             (progn
+               (assert (open-stream-p s))
+               (assert (typep s 'file-stream))
+               ,@
+               (unless (member element-type '(signed-byte unsigned-byte))
+                 #-allegro
+                 `((assert (subtypep ',element-type
+                                     (stream-element-type s))))
+                 #+allegro nil
+                 )
+               ,form)
+           (close s))))
      ,@expected))
 
 ;; (compile 'def-open-test)
@@ -286,23 +286,23 @@
 ;;; It works on recognizable subtypes.
 (deftest open.65
   (let ((type '(or (integer 0 1) (integer 100 200)))
-	(pn #p"tmp.dat")
-	(vals '(0 1 100 120 130 190 200 1 0 150)))
+        (pn #p"tmp.dat")
+        (vals '(0 1 100 120 130 190 200 1 0 150)))
     (or
      (not (subtypep type 'integer))
      (progn
        (with-open-file
-	(os pn :direction :output
-	    :element-type type
-	    :if-exists :supersede)
-	(dolist (e vals) (write-byte e os)))
+        (os pn :direction :output
+            :element-type type
+            :if-exists :supersede)
+        (dolist (e vals) (write-byte e os)))
        (let ((s (open pn :direction :input
-		      :element-type type))
-	     (seq (make-array 10)))
-	 (unwind-protect
-	     (progn (read-sequence seq s) seq)
-	   (close s))
-	 (notnot (every #'eql seq vals))))))
+                      :element-type type))
+             (seq (make-array 10)))
+         (unwind-protect
+             (progn (read-sequence seq s) seq)
+           (close s))
+         (notnot (every #'eql seq vals))))))
   t)
 
 ;;; FIXME: Add -- tests for when the filespec is a stream
@@ -312,17 +312,17 @@
     (delete-all-versions pn)
     (with-open-file
      (s pn :direction :io :if-exists :rename-and-delete
-	:if-does-not-exist :create)
+        :if-does-not-exist :create)
      (format s "some stuff~%")
      (finish-output s)
      (let ((is (open s :direction :input)))
        (unwind-protect
-	   (values
-	    (read-char is)
-	    (notnot (file-position s :start))
-	    (read-line is)
-	    (read-line s))
-	 (close is)))))
+           (values
+            (read-char is)
+            (notnot (file-position s :start))
+            (read-line is)
+            (read-line s))
+         (close is)))))
   #\s
   t
   "ome stuff"
@@ -333,15 +333,15 @@
     (delete-all-versions pn)
     (let ((s (open pn :direction :output)))
       (unwind-protect
-	  (progn
-	    (format s "some stuff~%")
-	    (finish-output s)
-	    (close s)
-	    (let ((is (open s :direction :input)))
-	      (unwind-protect
-		  (values (read-line is))
-		(close is))))
-	(when (open-stream-p s) (close s)))))
+          (progn
+            (format s "some stuff~%")
+            (finish-output s)
+            (close s)
+            (let ((is (open s :direction :input)))
+              (unwind-protect
+                  (values (read-line is))
+                (close is))))
+        (when (open-stream-p s) (close s)))))
   "some stuff")
 
 ;;; FIXME: Add -- tests for when element-type is :default
@@ -350,23 +350,23 @@
 
 (defmacro def-open-output-test
   (name args form expected
-	&rest keyargs
-	&key
-	(element-type 'character)
-	(build-form
-	 `(dotimes (i 10)
-	    ,(cond
-	      ((subtypep element-type 'integer)
-	       `(write-byte
-		 (funcall (the function
-			    (generator-for-element-type ',element-type)) i)
-		 s))
-	      ((subtypep element-type 'character)
-	       `(write-char
-		 (funcall (the function
-			    (generator-for-element-type ',element-type)) i)
-		 s)))))
-	&allow-other-keys)
+        &rest keyargs
+        &key
+        (element-type 'character)
+        (build-form
+         `(dotimes (i 10)
+            ,(cond
+              ((subtypep element-type 'integer)
+               `(write-byte
+                 (funcall (the function
+                            (generator-for-element-type ',element-type)) i)
+                 s))
+              ((subtypep element-type 'character)
+               `(write-char
+                 (funcall (the function
+                            (generator-for-element-type ',element-type)) i)
+                 s)))))
+        &allow-other-keys)
   `(def-open-test ,name (:direction :output ,@args)
      (progn
        ,build-form
@@ -380,161 +380,161 @@
 
 (def-open-output-test open.output.1 ()
   (progn (close s)
-	 (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
+         (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
   ("abcdefghij"))
 
 (def-open-output-test open.output.2 ()
   (progn (close s)
-	 (with-open-file (is "tmp.dat") (values (read-line is nil))))
+         (with-open-file (is "tmp.dat") (values (read-line is nil))))
   ("abcdefghij")
   :pathname "tmp.dat")
 
 (def-open-output-test open.output.3
   ()
   (progn (close s)
-	 (with-open-file (is (logical-pathname "CLTEST:TMP.DAT"))
-			 (values (read-line is nil))))
+         (with-open-file (is (logical-pathname "CLTEST:TMP.DAT"))
+                         (values (read-line is nil))))
   ("abcdefghij")
   :pathname (logical-pathname "CLTEST:TMP.DAT"))
 
 (def-open-output-test open.output.4 ()
   (progn (close s)
-	 (with-open-file (is #p"tmp.dat" :element-type 'character)
-			 (values (read-line is nil))))
+         (with-open-file (is #p"tmp.dat" :element-type 'character)
+                         (values (read-line is nil))))
   ("abcdefghij")
   :element-type character)
 
 (def-open-output-test open.output.5 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type 'base-char)
-				   (values (read-line is nil))))
+                                       :element-type 'base-char)
+                                   (values (read-line is nil))))
   ("abcdefghij")
   :element-type base-char)
 
 (def-open-output-test open.output.6 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(integer 0 1))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(integer 0 1))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 0 1 0 1 0 1 0 1))
   :element-type (integer 0 1))
 
 (def-open-output-test open.output.7 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type 'bit)
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type 'bit)
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 0 1 0 1 0 1 0 1))
   :element-type bit)
 
 (def-open-output-test open.output.8 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 1))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 1))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 0 1 0 1 0 1 0 1))
   :element-type (unsigned-byte 1))
 
 (def-open-output-test open.output.9 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 2))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 2))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 0 1 2 3 0 1))
   :element-type (unsigned-byte 2))
 
 (def-open-output-test open.output.10 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 3))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 3))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 0 1))
   :element-type (unsigned-byte 3))
 
 (def-open-output-test open.output.11 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 4))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 4))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 4))
 
 
 (def-open-output-test open.output.12 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 6))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 6))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 6))
 
 (def-open-output-test open.output.13 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 8))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 8))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 8))
 
 (def-open-output-test open.output.14 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 12))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 12))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 12))
 
 (def-open-output-test open.output.15 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 16))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 16))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 16))
 
 (def-open-output-test open.output.16 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 24))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 24))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 24))
 
 (def-open-output-test open.output.17 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 32))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 32))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 32))
 
 (def-open-output-test open.output.18 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 64))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 64))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 64))
 
 (def-open-output-test open.output.19 ()
   (progn (close s) (with-open-file (is #p"tmp.dat"
-				       :element-type '(unsigned-byte 100))
-				   (let ((seq (make-array 10)))
-				     (read-sequence seq is)
-				     seq)))
+                                       :element-type '(unsigned-byte 100))
+                                   (let ((seq (make-array 10)))
+                                     (read-sequence seq is)
+                                     seq)))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 100))
 
@@ -546,64 +546,64 @@
 
 (def-open-test open.output.21 (:if-exists :new-version :direction :output)
   (progn (write-sequence "wxyz" s)
-	 (close s)
-	 (with-open-file
-	  (s pn :direction :input)
-	  (values (read-line s nil))))
+         (close s)
+         (with-open-file
+          (s pn :direction :input)
+          (values (read-line s nil))))
   ("wxyz")
   :notes (:open-if-exists-new-version-no-error)
   )
 
 (def-open-test open.output.22 (:if-exists :rename :direction :output)
   (progn (write-sequence "wxyz" s)
-	 (close s)
-	 (with-open-file
-	  (s pn :direction :input)
-	  (values (read-line s nil))))
+         (close s)
+         (with-open-file
+          (s pn :direction :input)
+          (values (read-line s nil))))
   ("wxyz"))
 
 (def-open-test open.output.23 (:if-exists :rename-and-delete
-					  :direction :output)
+                                          :direction :output)
   (progn (write-sequence "wxyz" s)
-	 (close s)
-	 (with-open-file
-	  (s pn :direction :input)
-	  (values (read-line s nil))))
+         (close s)
+         (with-open-file
+          (s pn :direction :input)
+          (values (read-line s nil))))
   ("wxyz"))
 
 (def-open-test open.output.24 (:if-exists :overwrite
-					  :direction :output)
+                                          :direction :output)
   (progn (write-sequence "wxyz" s)
-	 (close s)
-	 (with-open-file
-	  (s pn :direction :input)
-	  (values (read-line s nil))))
+         (close s)
+         (with-open-file
+          (s pn :direction :input)
+          (values (read-line s nil))))
   ("wxyzefghij"))
 
 (def-open-test open.output.25 (:if-exists :append
-					  :direction :output)
+                                          :direction :output)
   (progn (write-sequence "wxyz" s)
-	 (close s)
-	 (with-open-file
-	  (s pn :direction :input)
-	  (values (read-line s nil))))
+         (close s)
+         (with-open-file
+          (s pn :direction :input)
+          (values (read-line s nil))))
   ("abcdefghijwxyz"))
 
 (def-open-test open.output.26 (:if-exists :supersede
-					  :direction :output)
+                                          :direction :output)
   (progn (write-sequence "wxyz" s)
-	 (close s)
-	 (with-open-file
-	  (s pn :direction :input)
-	  (values (read-line s nil))))
+         (close s)
+         (with-open-file
+          (s pn :direction :input)
+          (values (read-line s nil))))
   ("wxyz"))
 
 (def-open-output-test open.output.27 (:if-does-not-exist :create
-							 :direction :output)
+                                                         :direction :output)
   (progn (close s)
-	 (with-open-file
-	  (is pn :direction :input)
-	  (values (read-line is nil))))
+         (with-open-file
+          (is pn :direction :input)
+          (values (read-line is nil))))
   ("abcdefghij"))
 
 (deftest open.output.28
@@ -614,18 +614,18 @@
 
 (def-open-output-test open.output.28a (:external-format :default)
   (progn (close s)
-	 (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
+         (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
   ("abcdefghij"))
 
 (def-open-output-test open.output.29
   (:external-format (prog1
-		      (with-open-file (s "foo.dat" :direction :output
-					 :if-exists :supersede)
-				      (stream-external-format s))
-		      (delete-all-versions "foo.dat")
-		      ))
+                      (with-open-file (s "foo.dat" :direction :output
+                                         :if-exists :supersede)
+                                      (stream-external-format s))
+                      (delete-all-versions "foo.dat")
+                      ))
   (progn (close s)
-	 (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
+         (with-open-file (is #p"tmp.dat") (values (read-line is nil))))
   ("abcdefghij"))
 
 ;;; Default behavior of open :if-exists is :create when the version
@@ -635,65 +635,65 @@
   :notes (:open-if-exists-new-version-no-error)
   (let ((pn (make-pathname :name "tmp" :type "dat" :version :newest)))
     (or (not (eql (pathname-version pn) :newest))
-	(progn
-	  ;; Create file
-	  (let ((s1 (open pn :direction :output :if-exists :overwrite
-			  :if-does-not-exist :create)))
-	    (unwind-protect
-		;; Now try again
-		(let ((s2 (open pn :direction :output)))
-		  (unwind-protect
-		      (write-line "abcdef" s2)
-		    (close s2))
-		  (unwind-protect
-		      (progn
-			(setq s2 (open s1 :direction :input))
-			(equalt (read-line s2 nil) "abcdef"))
-		    (close s2)))
-	      (close s1)
-	      (delete-all-versions pn)
-	      )))))
+        (progn
+          ;; Create file
+          (let ((s1 (open pn :direction :output :if-exists :overwrite
+                          :if-does-not-exist :create)))
+            (unwind-protect
+                ;; Now try again
+                (let ((s2 (open pn :direction :output)))
+                  (unwind-protect
+                      (write-line "abcdef" s2)
+                    (close s2))
+                  (unwind-protect
+                      (progn
+                        (setq s2 (open s1 :direction :input))
+                        (equalt (read-line s2 nil) "abcdef"))
+                    (close s2)))
+              (close s1)
+              (delete-all-versions pn)
+              )))))
   t)
 
 (def-open-output-test open.output.31 (:if-exists :rename
-				      :direction :output)
+                                      :direction :output)
   (progn (close s)
-	 (with-open-file
-	  (is pn :direction :input)
-	  (values (read-line is nil))))
+         (with-open-file
+          (is pn :direction :input)
+          (values (read-line is nil))))
   ("abcdefghij"))
 
 (def-open-output-test open.output.32 (:if-exists :rename-and-delete
-				      :direction :output)
+                                      :direction :output)
   (progn (close s)
-	 (with-open-file
-	  (is pn :direction :input)
-	  (values (read-line is nil))))
+         (with-open-file
+          (is pn :direction :input)
+          (values (read-line is nil))))
   ("abcdefghij"))
 
 (def-open-output-test open.output.33 (:if-exists :new-version
-				      :direction :output)
+                                      :direction :output)
   (progn (close s)
-	 (with-open-file
-	  (is pn :direction :input)
-	  (values (read-line is nil))))
+         (with-open-file
+          (is pn :direction :input)
+          (values (read-line is nil))))
   ("abcdefghij"))
 
 (def-open-output-test open.output.34 (:if-exists :supersede
-				      :direction :output)
+                                      :direction :output)
   (progn (close s)
-	 (with-open-file
-	  (is pn :direction :input)
-	  (values (read-line is nil))))
+         (with-open-file
+          (is pn :direction :input)
+          (values (read-line is nil))))
   ("abcdefghij"))
 
 (def-open-output-test open.output.35 (:if-exists nil
-				      :direction :output)
+                                      :direction :output)
   (progn (close s)
-	 (with-open-file
-	  (is pn :direction :input)
-	  (values (read-line is nil))))
-  ("abcdefghij"))	    
+         (with-open-file
+          (is pn :direction :input)
+          (values (read-line is nil))))
+  ("abcdefghij"))
 
 ;;; Add -- tests for when the filespec is a stream
 
@@ -702,23 +702,23 @@
 
 (defmacro def-open-io-test
   (name args form expected
-	&rest keyargs
-	&key
-	(element-type 'character)
-	(build-form
-	 `(dotimes (i 10)
-	    ,(cond
-	      ((subtypep element-type 'integer)
-	       `(write-byte
-		 (funcall (the function
-			    (generator-for-element-type ',element-type)) i)
-		 s))
-	      ((subtypep element-type 'character)
-	       `(write-char
-		 (funcall (the function
-			    (generator-for-element-type ',element-type)) i)
-		 s)))))
-	&allow-other-keys)
+        &rest keyargs
+        &key
+        (element-type 'character)
+        (build-form
+         `(dotimes (i 10)
+            ,(cond
+              ((subtypep element-type 'integer)
+               `(write-byte
+                 (funcall (the function
+                            (generator-for-element-type ',element-type)) i)
+                 s))
+              ((subtypep element-type 'character)
+               `(write-char
+                 (funcall (the function
+                            (generator-for-element-type ',element-type)) i)
+                 s)))))
+        &allow-other-keys)
   `(def-open-test ,name (:direction :io ,@args)
      (progn
        ,build-form
@@ -733,144 +733,144 @@
 
 (def-open-io-test open.io.1 ()
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 (def-open-io-test open.io.2 ()
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij")
   :pathname "tmp.dat")
 
 (def-open-io-test open.io.3
   ()
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij")
   :pathname (logical-pathname "CLTEST:TMP.DAT"))
 
 (def-open-io-test open.io.4 ()
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij")
   :element-type character)
 
 (def-open-io-test open.io.5 ()
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij")
   :element-type base-char)
 
 (def-open-io-test open.io.6 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 0 1 0 1 0 1 0 1))
   :element-type (integer 0 1))
 
 (def-open-io-test open.io.7 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 0 1 0 1 0 1 0 1))
   :element-type bit)
 
 (def-open-io-test open.io.8 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 0 1 0 1 0 1 0 1))
   :element-type (unsigned-byte 1))
 
 (def-open-io-test open.io.9 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 0 1 2 3 0 1))
   :element-type (unsigned-byte 2))
 
 (def-open-io-test open.io.10 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 0 1))
   :element-type (unsigned-byte 3))
 
 (def-open-io-test open.io.11 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 4))
 
 
 (def-open-io-test open.io.12 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 6))
 
 (def-open-io-test open.io.13 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 8))
 
 (def-open-io-test open.io.14 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 12))
 
 (def-open-io-test open.io.15 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 16))
 
 (def-open-io-test open.io.16 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 24))
 
 (def-open-io-test open.io.17 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 32))
 
 (def-open-io-test open.io.18 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 64))
 
 (def-open-io-test open.io.19 ()
   (progn (file-position s :start)
-	 (let ((seq (make-array 10)))
-	   (read-sequence seq s)
-	   seq))
+         (let ((seq (make-array 10)))
+           (read-sequence seq s)
+           seq))
   (#(0 1 2 3 4 5 6 7 8 9))
   :element-type (unsigned-byte 100))
 
@@ -882,50 +882,50 @@
 
 (def-open-test open.io.21 (:if-exists :new-version :direction :io)
   (progn (write-sequence "wxyz" s)
-	 (file-position s :start)
-	 (values (read-line s nil)))
+         (file-position s :start)
+         (values (read-line s nil)))
   ("wxyz")
   :notes (:open-if-exists-new-version-no-error)
   )
 
 (def-open-test open.io.22 (:if-exists :rename :direction :io)
   (progn (write-sequence "wxyz" s)
-	 (file-position s :start)
-	 (values (read-line s nil)))
+         (file-position s :start)
+         (values (read-line s nil)))
   ("wxyz"))
 
 (def-open-test open.io.23 (:if-exists :rename-and-delete
-			   :direction :io)
+                           :direction :io)
   (progn (write-sequence "wxyz" s)
-	 (file-position s :start)
-	 (values (read-line s nil)))
+         (file-position s :start)
+         (values (read-line s nil)))
   ("wxyz"))
 
 (def-open-test open.io.24 (:if-exists :overwrite
-			   :direction :io)
+                           :direction :io)
   (progn (write-sequence "wxyz" s)
-	 (file-position s :start)
-	 (values (read-line s nil)))
+         (file-position s :start)
+         (values (read-line s nil)))
   ("wxyzefghij"))
 
 (def-open-test open.io.25 (:if-exists :append
-			   :direction :io)
+                           :direction :io)
   (progn (write-sequence "wxyz" s)
-	 (file-position s :start)
-	 (values (read-line s nil)))
+         (file-position s :start)
+         (values (read-line s nil)))
   ("abcdefghijwxyz"))
 
 (def-open-test open.io.26 (:if-exists :supersede
-			   :direction :io)
+                           :direction :io)
   (progn (write-sequence "wxyz" s)
-	 (file-position s :start)
-	 (values (read-line s nil)))
+         (file-position s :start)
+         (values (read-line s nil)))
   ("wxyz"))
 
 (def-open-io-test open.io.27 (:if-does-not-exist :create
-			      :direction :io)
+                              :direction :io)
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 (deftest open.io.28
@@ -936,18 +936,18 @@
 
 (def-open-io-test open.io.28a (:external-format :default)
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 (def-open-io-test open.io.29
   (:external-format (prog1
-		      (with-open-file (s "foo.dat" :direction :io
-					 :if-exists :supersede)
-				      (stream-external-format s))
-		      (delete-all-versions "foo.dat")
-		      ))
+                      (with-open-file (s "foo.dat" :direction :io
+                                         :if-exists :supersede)
+                                      (stream-external-format s))
+                      (delete-all-versions "foo.dat")
+                      ))
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 ;;; Default behavior of open :if-exists is :create when the version
@@ -957,79 +957,79 @@
   :notes (:open-if-exists-new-version-no-error)
   (let ((pn (make-pathname :name "tmp" :type "dat" :version :newest)))
     (or (not (eql (pathname-version pn) :newest))
-	(progn
-	  ;; Create file
-	  (let ((s1 (open pn :direction :io :if-exists :overwrite
-			  :if-does-not-exist :create)))
-	    (unwind-protect
-		;; Now try again
-		(let ((s2 (open pn :direction :io)))
-		  (unwind-protect
-		      (write-line "abcdef" s2)
-		    (close s2))
-		  (unwind-protect
-		      (progn
-			(setq s2 (open s1 :direction :input))
-			(equalt (read-line s2 nil) "abcdef"))
-		    (close s2)))
-	      (close s1)
-	      (delete-all-versions pn)
-	      )))))
+        (progn
+          ;; Create file
+          (let ((s1 (open pn :direction :io :if-exists :overwrite
+                          :if-does-not-exist :create)))
+            (unwind-protect
+                ;; Now try again
+                (let ((s2 (open pn :direction :io)))
+                  (unwind-protect
+                      (write-line "abcdef" s2)
+                    (close s2))
+                  (unwind-protect
+                      (progn
+                        (setq s2 (open s1 :direction :input))
+                        (equalt (read-line s2 nil) "abcdef"))
+                    (close s2)))
+              (close s1)
+              (delete-all-versions pn)
+              )))))
   t)
 
 (def-open-io-test open.io.31 (:if-exists :rename
-			      :direction :io)
+                              :direction :io)
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 (def-open-io-test open.io.32 (:if-exists :rename-and-delete
-			      :direction :io)
+                              :direction :io)
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 (def-open-io-test open.io.33 (:if-exists :new-version
-			      :direction :io)
+                              :direction :io)
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 (def-open-io-test open.io.34 (:if-exists :supersede
-			      :direction :io)
+                              :direction :io)
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 (def-open-io-test open.io.35 (:if-exists nil
-			      :direction :io)
+                              :direction :io)
   (progn (file-position s :start)
-	 (values (read-line s nil)))
+         (values (read-line s nil)))
   ("abcdefghij"))
 
 ;;;; :PROBE tests
 
 (defmacro def-open-probe-test
   (name args form
-	&key (build-form nil build-form-p)
-	(pathname #p"tmp.dat"))
+        &key (build-form nil build-form-p)
+        (pathname #p"tmp.dat"))
   (unless build-form-p
     (setf build-form
-	  `(with-open-file (s pn :direction :output
-			      :if-exists :supersede))))
+          `(with-open-file (s pn :direction :output
+                              :if-exists :supersede))))
   `(deftest ,name
      (let ((pn ,pathname))
        (delete-all-versions pn)
        ,build-form
        (let ((s (open pn :direction :probe ,@args)))
-	 (values
-	  ,(if build-form
-	       `(and
-		 (typep s 'file-stream)
-		 (not (open-stream-p s))
-		 )
-	     `(not s))
-	  ,form)))
+         (values
+          ,(if build-form
+               `(and
+                 (typep s 'file-stream)
+                 (not (open-stream-p s))
+                 )
+             `(not s))
+          ,form)))
      t t))
 
 (def-open-probe-test open.probe.1 () t)
@@ -1074,7 +1074,7 @@
   (let ((pn #p"tmp.dat"))
     (delete-all-versions pn)
     (let ((s (open pn :direction :probe :if-does-not-exist :create
-		   :if-exists :error)))
+                   :if-exists :error)))
       (values
        (notnot s)
        (notnot (probe-file pn)))))
@@ -1228,7 +1228,7 @@
 (deftest open.error.18
   (signals-error-always
    (open #p"tmp.dat" :direction :output :if-exists :supersede
-	 :external-form (gensym))
+         :external-form (gensym))
    error)
   t t)
 

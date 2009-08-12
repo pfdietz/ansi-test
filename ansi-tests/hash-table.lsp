@@ -11,19 +11,19 @@
 
 (deftest hash-table.2
   (loop for e in '(nil t 1 10.0 (a b c) #(a b c) #*1011
-		       #0aNIL #2a((a b)(c d)) #p"foo"
-		       "bar" #\a 3/5 #c(1.0 2.0))
-	when (typep e 'hash-table)
-	collect e)
+                       #0aNIL #2a((a b)(c d)) #p"foo"
+                       "bar" #\a 3/5 #c(1.0 2.0))
+        when (typep e 'hash-table)
+        collect e)
   nil)
 
 (deftest hash-table.3
   (let ((c (find-class 'hash-table)))
     (loop for e in '(nil t 1 10.0 (a b c) #(a b c) #*1011
-			 #0aNIL #2a((a b)(c d)) #p"foo"
-			 "bar" #\a 3/5 #c(1.0 2.0))
-	  when (typep e c)
-	  collect e))
+                         #0aNIL #2a((a b)(c d)) #p"foo"
+                         "bar" #\a 3/5 #c(1.0 2.0))
+          when (typep e c)
+          collect e))
   nil)
 
 (deftest hash-table.4
@@ -36,6 +36,6 @@
 
 
 
-	     
+
 
 

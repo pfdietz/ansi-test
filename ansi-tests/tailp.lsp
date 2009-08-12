@@ -31,7 +31,7 @@
 
 (deftest tailp.4
   (notnot-mv (tailp 10203040506070
-		    (list* 'a 'b (1- 10203040506071))))
+                    (list* 'a 'b (1- 10203040506071))))
   t)
 
 (deftest tailp.5
@@ -54,13 +54,13 @@
 
 (deftest tailp.6
     (let* ((x (copy-list '(a b c d e)))
-	   (y (cddr x)))
+           (y (cddr x)))
       (let ((xcopy (make-scaffold-copy x))
-	    (ycopy (make-scaffold-copy y)))
-	(and
-	 (tailp y x)
-	 (check-scaffold-copy x xcopy)
-	 (check-scaffold-copy y ycopy))))
+            (ycopy (make-scaffold-copy y)))
+        (and
+         (tailp y x)
+         (check-scaffold-copy x xcopy)
+         (check-scaffold-copy y ycopy))))
   t)
 
 ;; Note!  The spec is ambiguous on whether this next test
@@ -78,20 +78,20 @@
   (loop
       for x in *universe*
       count (and (not (listp x))
-		 (eqt 'type-error
-		     (catch-type-error (tailp x x))))))
+                 (eqt 'type-error
+                     (catch-type-error (tailp x x))))))
 
 (deftest tailp.7
     (tailp.7-body)
   0)
 |#
-    
+
 (deftest tailp.order.1
   (let ((i 0) x y)
     (values
      (notnot
       (tailp (progn (setf x (incf i)) 'd)
-	     (progn (setf y (incf i)) '(a b c . d))))
+             (progn (setf y (incf i)) '(a b c . d))))
      i x y))
   t 2 1 2)
 

@@ -33,13 +33,13 @@
       (assert (open-stream-p s))
       (assert (streamp s))
       (assert (eql (stream-element-type s)
-		   (stream-element-type s1)))
+                   (stream-element-type s1)))
       (write-char #\x s)))
   "x")
 
 (deftest make-broadcast-stream.3
   (let ((s1 (make-string-output-stream))
-	(s2 (make-string-output-stream)))
+        (s2 (make-string-output-stream)))
     (let ((s (make-broadcast-stream s1 s2)))
       (assert (typep s 'stream))
       (assert (typep s 'broadcast-stream))
@@ -48,7 +48,7 @@
       (assert (open-stream-p s))
       (assert (streamp s))
       (assert (eql (stream-element-type s)
-		   (stream-element-type s2)))
+                   (stream-element-type s2)))
       (format s "This is a test"))
     (values
      (get-output-stream-string s1)
@@ -89,11 +89,11 @@
 
 (deftest make-broadcast-stream.error.1
   (check-type-error #'make-broadcast-stream
-		    #'(lambda (x) (and (streamp x) (output-stream-p x))))
+                    #'(lambda (x) (and (streamp x) (output-stream-p x))))
   nil)
 
 (deftest make-broadcast-stream.error.2
   (check-type-error #'make-broadcast-stream
-		    #'(lambda (x) (and (streamp x) (output-stream-p x)))
-		    *streams*)
+                    #'(lambda (x) (and (streamp x) (output-stream-p x)))
+                    *streams*)
   nil)

@@ -14,46 +14,46 @@
 
 (deftest the.3
   (check-predicate #'(lambda (e)
-		       (let ((x (multiple-value-list (eval `(the (values) (quote ,e))))))
-			 (and x (not (cdr x)) (eql (car x) e)))))
+                       (let ((x (multiple-value-list (eval `(the (values) (quote ,e))))))
+                         (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.4
   (check-predicate #'(lambda (e)
-		       (let ((x (multiple-value-list (eval `(the ,(type-of e) (quote ,e))))))
-			 (and x (not (cdr x)) (eql (car x) e)))))
+                       (let ((x (multiple-value-list (eval `(the ,(type-of e) (quote ,e))))))
+                         (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.5
   (check-predicate #'(lambda (e)
-		       (let ((x (multiple-value-list (eval `(the (values ,(type-of e)) (quote ,e))))))
-			 (and x (not (cdr x)) (eql (car x) e)))))
+                       (let ((x (multiple-value-list (eval `(the (values ,(type-of e)) (quote ,e))))))
+                         (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.6
   (check-predicate #'(lambda (e)
-		       (let ((x (multiple-value-list (eval `(the (values ,(type-of e) t) (quote ,e))))))
-			 (and x (not (cdr x)) (eql (car x) e)))))
+                       (let ((x (multiple-value-list (eval `(the (values ,(type-of e) t) (quote ,e))))))
+                         (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.7
   (check-predicate
    #'(lambda (e)
        (let ((x (multiple-value-list (eval `(the (values ,(type-of e))
-					      (values (quote ,e) :ignored))))))
-	 (and (eql (length x) 2)
-	      (eql (car x) e)
-	      (eql (cadr x) :ignored)))))
+                                              (values (quote ,e) :ignored))))))
+         (and (eql (length x) 2)
+              (eql (car x) e)
+              (eql (cadr x) :ignored)))))
   nil)
 
 (deftest the.8
   (check-predicate #'(lambda (e) (or (not (constantp e))
-				     (eql (eval `(the ,(type-of e) ,e)) e))))
+                                     (eql (eval `(the ,(type-of e) ,e)) e))))
   nil)
 
 (deftest the.9
   (check-predicate #'(lambda (e) (or (not (constantp e))
-				     (eql (eval `(the ,(class-of e) ,e)) e))))
+                                     (eql (eval `(the ,(class-of e) ,e)) e))))
   nil)
 
 (deftest the.10
@@ -64,17 +64,17 @@
   (check-predicate
    #'(lambda (e)
        (let* ((type (type-of e))
-	      (x (multiple-value-list (eval `(the ,type (the ,type (quote ,e)))))))
-	 (and x (not (cdr x)) (eql (car x) e)))))
+              (x (multiple-value-list (eval `(the ,type (the ,type (quote ,e)))))))
+         (and x (not (cdr x)) (eql (car x) e)))))
   nil)
 
 (deftest the.12
   (let ((lexpr
-	 `(lambda ()
-	    (and
-	     ,@(loop for e in *mini-universe*
-		     for type = (type-of e)
-		     collect `(eqlt (quote ,e) (the ,type (quote ,e))))))))
+         `(lambda ()
+            (and
+             ,@(loop for e in *mini-universe*
+                     for type = (type-of e)
+                     collect `(eqlt (quote ,e) (the ,type (quote ,e))))))))
     (funcall (compile nil lexpr)))
   t)
 

@@ -23,7 +23,7 @@
 (deftest multiple-value-prog1.5
   (let ((x 0) (y 0))
     (multiple-value-prog1 (values x y)
-			  (incf x) (incf y 2)))
+                          (incf x) (incf y 2)))
   0 0)
 
 (deftest multiple-value-prog1.6
@@ -31,7 +31,7 @@
     (multiple-value-call
      #'list
      (multiple-value-prog1 (values x y)
-			   (incf x) (incf y 2))
+                           (incf x) (incf y 2))
      x y))
   (0 0 1 2))
 
@@ -40,8 +40,8 @@
     (multiple-value-call
      #'list
      (multiple-value-prog1 (values (incf x) y)
-			   (incf x x)
-			   (incf y 10))
+                           (incf x x)
+                           (incf y 10))
      x y))
   (1 0 2 10))
 
@@ -50,13 +50,13 @@
   (let* ((n (min 100 multiple-values-limit)))
     (not-mv
      (loop for i from 0 below n
-	   for x = (make-int-list i)
-	   always
-	   (equalt
-	    (multiple-value-list
-	     (eval `(multiple-value-prog1 (values-list (quote ,(copy-seq x)))
-					  nil)))
-	    x))))
+           for x = (make-int-list i)
+           always
+           (equalt
+            (multiple-value-list
+             (eval `(multiple-value-prog1 (values-list (quote ,(copy-seq x)))
+                                          nil)))
+            x))))
   nil)
 
 
@@ -65,8 +65,8 @@
     (values
      (block foo
        (multiple-value-prog1
-	(values (incf x) (incf y 2))
-	(return-from foo 'a)))
+        (values (incf x) (incf y 2))
+        (return-from foo 'a)))
      x y))
   a 1 2)
 

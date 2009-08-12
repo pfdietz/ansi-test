@@ -10,10 +10,10 @@
 (defclass slot-missing-class-01 () (a b c))
 
 (defmethod slot-missing ((class t) (obj slot-missing-class-01)
-			 (slot-name t) (operation t)
-			 &optional (new-value nil new-value-p))
+                         (slot-name t) (operation t)
+                         &optional (new-value nil new-value-p))
   (setf *slot-missing-class-01-var*
-	(list slot-name operation new-value (notnot new-value-p))))
+        (list slot-name operation new-value (notnot new-value-p))))
 
 (deftest slot-missing.1
   (let ((obj (make-instance 'slot-missing-class-01)))
@@ -59,16 +59,16 @@
 
 (deftest slot-missing.7
   (let* ((obj (make-instance 'slot-missing-class-01))
-	 (val (slot-makunbound obj 'd)))
+         (val (slot-makunbound obj 'd)))
     (if (eq val obj)
-	:good
+        :good
       val))
   :good)
 
 (defmethod slot-missing ((class t) (obj slot-missing-class-01)
-			 (slot-name (eql 'not-there))
-			 (operation (eql 'slot-boundp))
-			 &optional new-value)
+                         (slot-name (eql 'not-there))
+                         (operation (eql 'slot-boundp))
+                         &optional new-value)
   (declare (ignore new-value))
   (values nil :ignore-this))
 

@@ -44,7 +44,7 @@
     (notnot (listen s))
     (handler-case
      (locally (declare (optimize safety))
-	      (loop (read-char s)))
+              (loop (read-char s)))
      (end-of-file () (listen s)))))
   t nil)
 

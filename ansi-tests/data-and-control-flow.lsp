@@ -8,9 +8,9 @@
 ;;; Functions from section 5
 (defparameter *dcf-fns*
   '(apply fboundp fmakunbound funcall function-lambda-expression
-	  functionp compiled-function-p not eq eql equal equalp identity
-	  complement constantly every some notevery notany
-	  values-list get-setf-expansion))
+          functionp compiled-function-p not eq eql equal equalp identity
+          complement constantly every some notevery notany
+          values-list get-setf-expansion))
 
 ;;; Macros from section 5
 (defparameter *dcf-macros*
@@ -30,5 +30,5 @@
 
 
 
-  
-  
+
+

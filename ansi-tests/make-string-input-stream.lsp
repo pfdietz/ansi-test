@@ -42,35 +42,35 @@
 
 (deftest make-string-input-stream.6
   (let ((str1 (make-array 6 :element-type 'character
-			  :initial-contents "abcdef"
-			  :fill-pointer 4)))
+                          :initial-contents "abcdef"
+                          :fill-pointer 4)))
     (let ((s (make-string-input-stream str1)))
       (values (read-line s) (read-char s nil :eof))))
   "abcd" :eof)
 
 (deftest make-string-input-stream.7
   (let* ((str1 (make-array 6 :element-type 'character
-			   :initial-contents "abcdef"))
-	 (str2 (make-array 4 :element-type 'character
-			   :displaced-to str1)))
+                           :initial-contents "abcdef"))
+         (str2 (make-array 4 :element-type 'character
+                           :displaced-to str1)))
     (let ((s (make-string-input-stream str2)))
       (values (read-line s) (read-char s nil :eof))))
   "abcd" :eof)
 
 (deftest make-string-input-stream.8
   (let* ((str1 (make-array 6 :element-type 'character
-			   :initial-contents "abcdef"))
-	 (str2 (make-array 4 :element-type 'character
-			   :displaced-to str1
-			   :displaced-index-offset 1)))
+                           :initial-contents "abcdef"))
+         (str2 (make-array 4 :element-type 'character
+                           :displaced-to str1
+                           :displaced-index-offset 1)))
     (let ((s (make-string-input-stream str2)))
       (values (read-line s) (read-char s nil :eof))))
   "bcde" :eof)
 
 (deftest make-string-input-stream.9
   (let ((str1 (make-array 6 :element-type 'character
-			  :initial-contents "abcdef"
-			  :adjustable t)))
+                          :initial-contents "abcdef"
+                          :adjustable t)))
     (let ((s (make-string-input-stream str1)))
       (values (read-line s) (read-char s nil :eof))))
   "abcdef" :eof)
@@ -78,7 +78,7 @@
 (deftest make-string-input-stream.10
   :notes (:allow-nil-arrays :nil-vectors-are-strings)
   (let ((s (make-string-input-stream
-	    (make-array 0 :element-type nil))))
+            (make-array 0 :element-type nil))))
     (read-char s nil :eof))
   :eof)
 

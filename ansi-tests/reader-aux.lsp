@@ -32,8 +32,8 @@
   `(deftest ,name
      (let ((s (read-from-string ,(concatenate 'string "#:" string))))
        (values
-	(symbol-package s)
-	(symbol-name s)))
+        (symbol-package s)
+        (symbol-name s)))
      nil ,(string-upcase string)))
 
 (defmacro def-syntax-array-test (name form expected-result)
@@ -42,7 +42,7 @@
        (assert (typep v 'simple-array))
        (assert (not (array-has-fill-pointer-p v)))
        (assert (eql (array-element-type v)
-		    (upgraded-array-element-type t)))
+                    (upgraded-array-element-type t)))
        v)
      ,(eval expected-result)))
 

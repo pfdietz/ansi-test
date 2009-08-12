@@ -41,8 +41,8 @@
 ;;; See 11.1.2.1.1
 (deftest fboundp.8
   (loop for x in *cl-non-function-macro-special-operator-symbols*
-	when (and (fboundp x) (not (eq x 'ed)))
-	collect x)
+        when (and (fboundp x) (not (eq x 'ed)))
+        collect x)
   nil)
 
 (deftest fboundp.order.1
@@ -88,14 +88,14 @@
 
 (deftest fboundp.error.10
   (loop for x in *mini-universe*
-	unless (symbolp x)
-	nconc
-	(handler-case
-	 (list x (fboundp `(setf ,x)))
-	 (type-error (c)
-		     (assert (not (typep (type-error-datum c)
-					 (type-error-expected-type c))))
-		     nil)
-	 (error (c) (list (list x c)))))
+        unless (symbolp x)
+        nconc
+        (handler-case
+         (list x (fboundp `(setf ,x)))
+         (type-error (c)
+                     (assert (not (typep (type-error-datum c)
+                                         (type-error-expected-type c))))
+                     nil)
+         (error (c) (list (list x c)))))
   nil)
 

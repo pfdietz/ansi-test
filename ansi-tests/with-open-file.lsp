@@ -63,8 +63,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-open-file (s (return-from done x))
-			(declare (special x))))))
+        (with-open-file (s (return-from done x))
+                        (declare (special x))))))
   :good)
 
 (deftest with-open-file.8
@@ -72,8 +72,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-open-file (s "with-open-file.lsp" (return-from done x) :input)
-			(declare (special x))))))
+        (with-open-file (s "with-open-file.lsp" (return-from done x) :input)
+                        (declare (special x))))))
   :good)
 
 (deftest with-open-file.9
@@ -81,8 +81,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-open-file (s "with-open-file.lsp" :direction (return-from done x))
-			(declare (special x))))))
+        (with-open-file (s "with-open-file.lsp" :direction (return-from done x))
+                        (declare (special x))))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms
@@ -93,6 +93,6 @@
    ((%m (z) z))
    (let ((pn #p"tmp.dat"))
     (delete-all-versions pn)
-    (with-open-file (s (expand-in-current-env (%m pn)) 
-		       :direction :output))))
+    (with-open-file (s (expand-in-current-env (%m pn))
+                       :direction :output))))
   nil)

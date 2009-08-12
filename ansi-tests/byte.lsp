@@ -27,12 +27,12 @@
 
 (deftest byte.3
   (loop for i from 0 to 100
-	always
-	(loop for j from 0 to 100
-	      always
-	      (let ((bspec (byte i j)))
-		(and (eql i (byte-size bspec))
-		     (eql j (byte-position bspec))))))
+        always
+        (loop for j from 0 to 100
+              always
+              (let ((bspec (byte i j)))
+                (and (eql i (byte-size bspec))
+                     (eql j (byte-position bspec))))))
   t)
 
 (deftest byte.4
@@ -63,7 +63,7 @@
 
 (deftest byte-position.error.2
   (signals-error (byte-position (byte 1 1) nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest byte-size.error.1

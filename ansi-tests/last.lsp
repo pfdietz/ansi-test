@@ -71,7 +71,7 @@
   (let ((i 0) x y)
     (values
      (last (progn (setf x (incf i)) (list 'a 'b 'c 'd))
-	   (setf y (incf i)))
+           (setf y (incf i)))
      i x y))
   (c d) 2 1 2)
 
@@ -110,6 +110,6 @@
 
 (deftest last.error.8
   (signals-error (locally (last (list 'a 'b 'c) 'a) t)
-		 type-error)
+                 type-error)
   t)
 

@@ -61,9 +61,9 @@
     (set-up-packages)
     (let ((vals (multiple-value-list (find-symbol "FOO" #\A))))
       (values (length vals)
-	      (package-name (symbol-package (first vals)))
-	      (symbol-name (first vals))
-	      (second vals))))
+              (package-name (symbol-package (first vals)))
+              (symbol-name (first vals))
+              (second vals))))
   2 "A" "FOO" :external)
 
 (deftest find-symbol.13
@@ -72,9 +72,9 @@
     (intern "X" (find-package "A"))
     (let ((vals (multiple-value-list (find-symbol "X" #\A))))
       (values (length vals)
-	      (package-name (symbol-package (first vals)))
-	      (symbol-name (first vals))
-	      (second vals))))
+              (package-name (symbol-package (first vals)))
+              (symbol-name (first vals))
+              (second vals))))
   2 "A" "X" :internal)
 
 (deftest find-symbol.14
@@ -82,9 +82,9 @@
     (set-up-packages)
     (let ((vals (multiple-value-list (find-symbol "FOO" #\B))))
       (values (length vals)
-	      (package-name (symbol-package (first vals)))
-	      (symbol-name (first vals))
-	      (second vals))))
+              (package-name (symbol-package (first vals)))
+              (symbol-name (first vals))
+              (second vals))))
   2 "A" "FOO" :inherited)
 
 (deftest find-symbol.15
@@ -97,39 +97,39 @@
 
 (deftest find-symbol.17
   (let ((name (make-array '(3) :initial-contents "FOO"
-			  :element-type 'base-char)))
+                          :element-type 'base-char)))
     (find-symbol name "FS-B"))
   FS-A::FOO :inherited)
 
 (deftest find-symbol.18
   (let ((name (make-array '(4) :initial-contents "FOOD"
-			  :element-type 'character
-			  :fill-pointer 3)))
+                          :element-type 'character
+                          :fill-pointer 3)))
     (find-symbol name "FS-B"))
   FS-A::FOO :inherited)
 
 (deftest find-symbol.19
   (let ((name (make-array '(4) :initial-contents "FOOD"
-			  :element-type 'base-char
-			  :fill-pointer 3)))
+                          :element-type 'base-char
+                          :fill-pointer 3)))
     (find-symbol name "FS-B"))
   FS-A::FOO :inherited)
 
 (deftest find-symbol.20
   (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
-			    :element-type 'character))
-	 (name (make-array '(3) :element-type 'character
-			   :displaced-to name0
-			   :displaced-index-offset 1)))
+                            :element-type 'character))
+         (name (make-array '(3) :element-type 'character
+                           :displaced-to name0
+                           :displaced-index-offset 1)))
     (find-symbol name "FS-B"))
   FS-A::FOO :inherited)
 
 (deftest find-symbol.21
   (let* ((name0 (make-array '(5) :initial-contents "XFOOY"
-			    :element-type 'base-char))
-	 (name (make-array '(3) :element-type 'base-char
-			   :displaced-to name0
-			   :displaced-index-offset 1)))
+                            :element-type 'base-char))
+         (name (make-array '(3) :element-type 'base-char
+                           :displaced-to name0
+                           :displaced-index-offset 1)))
     (find-symbol name "FS-B"))
   FS-A::FOO :inherited)
 
@@ -139,8 +139,8 @@
 
 (deftest find-symbol.23
   (find-symbol "FOO" (make-array '(5) :initial-contents "FS-BX"
-				 :fill-pointer 4
-				 :element-type 'base-char))
+                                 :fill-pointer 4
+                                 :element-type 'base-char))
   FS-A::FOO :inherited)
 
 
@@ -149,7 +149,7 @@
   (let ((i 0) x y)
     (values
      (find-symbol (progn (setf x (incf i)) (string '#:car))
-		  (progn (setf y (incf i)) "COMMON-LISP"))
+                  (progn (setf y (incf i)) "COMMON-LISP"))
      i x y))
   car 2 1 2)
 

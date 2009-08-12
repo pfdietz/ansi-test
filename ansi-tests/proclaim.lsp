@@ -9,7 +9,7 @@
   (let ((sym (gensym)))
     (proclaim `(special ,sym))
     (eval `(flet ((%f () ,sym))
-	     (let ((,sym :good)) (%f)))))
+             (let ((,sym :good)) (%f)))))
   :good)
 
 (deftest proclaim.2

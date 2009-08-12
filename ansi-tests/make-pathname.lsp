@@ -10,39 +10,39 @@
 
 (defun make-pathname-test
   (&rest args &key (defaults nil)
-	 (host (if defaults (pathname-host defaults)
-		 (pathname-host *default-pathname-defaults*)))
-	 (device (if defaults (pathname-device defaults)
-		   (pathname-device *null-pathname*)))
-	 (directory (if defaults (pathname-directory defaults)
-		      (pathname-directory *null-pathname*)))
-	 (name (if defaults (pathname-name defaults)
-		 (pathname-name  *null-pathname*)))
-	 (type (if defaults (pathname-type defaults)
-		 (pathname-type *null-pathname*)))
-	 (version (if defaults (pathname-version defaults)
-		    (pathname-version *null-pathname*)))
-	 case)
+         (host (if defaults (pathname-host defaults)
+                 (pathname-host *default-pathname-defaults*)))
+         (device (if defaults (pathname-device defaults)
+                   (pathname-device *null-pathname*)))
+         (directory (if defaults (pathname-directory defaults)
+                      (pathname-directory *null-pathname*)))
+         (name (if defaults (pathname-name defaults)
+                 (pathname-name  *null-pathname*)))
+         (type (if defaults (pathname-type defaults)
+                 (pathname-type *null-pathname*)))
+         (version (if defaults (pathname-version defaults)
+                    (pathname-version *null-pathname*)))
+         case)
   (declare (ignorable case))
   (let* ((vals (multiple-value-list (apply #'make-pathname args)))
-	 (pn (first vals)))
+         (pn (first vals)))
     (and (= (length vals) 1)
-	 (typep pn 'pathname)
-	 (equalp (pathname-host pn) host)
-	 (equalp (pathname-device pn) device)
-	 ;; (equalp (pathname-directory pn) directory)
-	 (let ((pnd (pathname-directory pn)))
-	   (if (eq directory :wild)
-	       (member pnd '((:absolute :wild-inferiors)
-			     (:absolute :wild))
-		       :test #'equal)
-	     (equalp pnd directory)))	     
-	 (equalp (pathname-name pn) name)
-	 (equalp (pathname-type pn) type)
-	 (equalp (pathname-version pn) version)
-	 t)))
-  
-  
+         (typep pn 'pathname)
+         (equalp (pathname-host pn) host)
+         (equalp (pathname-device pn) device)
+         ;; (equalp (pathname-directory pn) directory)
+         (let ((pnd (pathname-directory pn)))
+           (if (eq directory :wild)
+               (member pnd '((:absolute :wild-inferiors)
+                             (:absolute :wild))
+                       :test #'equal)
+             (equalp pnd directory)))
+         (equalp (pathname-name pn) name)
+         (equalp (pathname-type pn) type)
+         (equalp (pathname-version pn) version)
+         t)))
+
+
 
 (deftest make-pathname.1
   (make-pathname-test)
@@ -110,40 +110,40 @@
 
 (deftest make-pathname.14
   (let ((*default-pathname-defaults*
-	 (make-pathname :name "foo" :type "lsp" :version :newest)))
+         (make-pathname :name "foo" :type "lsp" :version :newest)))
     (make-pathname-test))
   t)
 
 ;;; Works on the components of actual pathnames
 (deftest make-pathname.rebuild
   (loop for p in *pathnames*
-	for host = (pathname-host p)
-	for device = (pathname-device p)
-	for directory = (pathname-directory p)
-	for name = (pathname-name p)
-	for type = (pathname-type p)
-	for version = (pathname-version p)
-	for p2 = (make-pathname
-		  :host host
-		  :device device
-		  :directory directory
-		  :name name
-		  :type type
-		  :version version)
-	unless (equal p p2)
-	collect (list p p2))
+        for host = (pathname-host p)
+        for device = (pathname-device p)
+        for directory = (pathname-directory p)
+        for name = (pathname-name p)
+        for type = (pathname-type p)
+        for version = (pathname-version p)
+        for p2 = (make-pathname
+                  :host host
+                  :device device
+                  :directory directory
+                  :name name
+                  :type type
+                  :version version)
+        unless (equal p p2)
+        collect (list p p2))
   nil)
 
 ;;; Various constraints on :directory
 
 (deftest make-pathname-error-absolute-up
   (signals-error (directory (make-pathname :directory '(:absolute :up)))
-		 file-error)
+                 file-error)
   t)
 
 (deftest make-pathname-error-absolute-back
   (signals-error (directory (make-pathname :directory '(:absolute :back)))
-		 file-error)
+                 file-error)
   t)
 
 ;; The next test is correct, but was causing very large amounts of time to be spent
@@ -151,21 +151,21 @@
 #|
 (deftest make-pathname-error-absolute-wild-inferiors-up
   (signals-error (directory (make-pathname :directory '(:absolute :wild-inferiors :up)))
-		 file-error)
+                 file-error)
   t)
 |#
 
 (deftest make-pathname-error-relative-wild-inferiors-up
   (signals-error (length (directory (make-pathname :directory '(:relative :wild-inferiors :up))))
-		 file-error)
+                 file-error)
   t)
 
 (deftest make-pathname-error-absolute-wild-inferiors-back
   (signals-error (directory (make-pathname :directory '(:absolute :wild-inferiors :back)))
-		 file-error)
+                 file-error)
   t)
 
 (deftest make-pathname-error-relative-wild-inferiors-back
   (signals-error (directory (make-pathname :directory '(:relative :wild-inferiors :back)))
-		 file-error)
+                 file-error)
   t)

@@ -11,17 +11,17 @@
   (let ((x (cons 'a 'b)))
     (let ((y x))
       (and (eqt (rplacd x 'd) y)
-	   (eqt x y)
-	   (eqt (car x) 'a)
-	   (eqt (cdr x) 'd))))
+           (eqt x y)
+           (eqt (car x) 'a)
+           (eqt (cdr x) 'd))))
   t)
 
 (deftest rplacd.order.1
   (let ((x (cons 'a 'b))
-	(i 0) a b)
+        (i 0) a b)
     (values
      (rplacd (progn (setf a (incf i)) x)
-	     (progn (setf b (incf i)) 'c))
+             (progn (setf b (incf i)) 'c))
      i a b))
   (a . c) 2 1 2)
 

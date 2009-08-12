@@ -33,39 +33,39 @@
 
 (deftest if.8
   (macrolet ((%m (z) z))
-	    (if (expand-in-current-env (%m t)) :good :bad))
+            (if (expand-in-current-env (%m t)) :good :bad))
   :good)
 
 (deftest if.9
   (macrolet ((%m (z) z))
-	    (if (expand-in-current-env (%m nil)) :bad))
+            (if (expand-in-current-env (%m nil)) :bad))
   nil)
 
 (deftest if.10
   (macrolet ((%m (z) z))
-	    (if (expand-in-current-env (%m t)) :good))
+            (if (expand-in-current-env (%m t)) :good))
   :good)
 
 (deftest if.11
   (macrolet ((%m (z) z))
-	    (if (expand-in-current-env (%m nil)) :bad :good))
+            (if (expand-in-current-env (%m nil)) :bad :good))
   :good)
 
 (deftest if.12
   (macrolet
    ((%m (z) z))
    (flet ((%f (x y) (if x (expand-in-current-env (%m y)))))
-	 (declare (notinline %f))
-	 (values (%f t :good) (%f nil :bad))))
+         (declare (notinline %f))
+         (values (%f t :good) (%f nil :bad))))
   :good nil)
-	    
+
 (deftest if.13
   (macrolet
    ((%m (z) z))
    (flet ((%f (x y z) (if x y (expand-in-current-env (%m z)))))
-	 (declare (notinline %f))
-	 (values (%f t :good :bad) (%f nil :bad :good))))
-  :good :good)	    
+         (declare (notinline %f))
+         (values (%f t :good :bad) (%f nil :bad :good))))
+  :good :good)
 
 (deftest if.order.1
   (let ((i 0))

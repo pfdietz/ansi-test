@@ -28,9 +28,9 @@
      (with-output-to-string
        (os)
        (with-input-from-string
-	(is "")
-	(with-open-stream (*terminal-io* (make-two-way-stream is os))
-			  (write 3 :stream t))))))
+        (is "")
+        (with-open-stream (*terminal-io* (make-two-way-stream is os))
+                          (write 3 :stream t))))))
   "3")
 
 (deftest write.4

@@ -52,5 +52,5 @@
   (let ((sym (gensym)))
     (eval `(declaim (optimize) (special ,sym) (inline) (special)))
     (eval `(flet ((%f () ,sym))
-	     (let ((,sym :good)) (%f)))))
+             (let ((,sym :good)) (%f)))))
   :good)

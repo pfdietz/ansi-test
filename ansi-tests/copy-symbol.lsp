@@ -9,15 +9,15 @@
   (notnot-mv
    (every
     #'(lambda (x)
-	(let ((y (copy-symbol x)))
-	  (and (null (symbol-plist y))
-	       (symbolp y)
-	       (not (boundp y))
-	       (not (fboundp y))
-	       (null (symbol-package y))
-	       (string= (symbol-name x) (symbol-name y))
-	       (symbolp (copy-symbol y))
-	       )))
+        (let ((y (copy-symbol x)))
+          (and (null (symbol-plist y))
+               (symbolp y)
+               (not (boundp y))
+               (not (fboundp y))
+               (null (symbol-package y))
+               (string= (symbol-name x) (symbol-name y))
+               (symbolp (copy-symbol y))
+               )))
     '(nil t a b |a| |123|)))
   t)
 
@@ -28,17 +28,17 @@
     (notnot-mv
      (every
       #'(lambda (x)
-	  (let ((y (copy-symbol x t)))
-	    (and
-	     (equal (symbol-plist y) (symbol-plist x))
-	     (symbolp y)
-	     (if (boundp x)
-		 (boundp y)
-	       (not (boundp y)))
-	     (if (fboundp x) (fboundp y) (not (fboundp y)))
-	     (null (symbol-package y))
-	     (string= (symbol-name x) (symbol-name y))
-	     )))
+          (let ((y (copy-symbol x t)))
+            (and
+             (equal (symbol-plist y) (symbol-plist x))
+             (symbolp y)
+             (if (boundp x)
+                 (boundp y)
+               (not (boundp y)))
+             (if (fboundp x) (fboundp y) (not (fboundp y)))
+             (null (symbol-package y))
+             (string= (symbol-name x) (symbol-name y))
+             )))
       '(nil t a b |foo| |a| |123|))))
   t)
 
@@ -49,23 +49,23 @@
     (notnot-mv
      (every
       #'(lambda (x)
-	  (let ((y (copy-symbol x t)))
-	    (and
-	     (eql (length (symbol-plist y))
-		  (length (symbol-plist x)))
-	     ;; Is a list copy
-	     (every #'eq (symbol-plist y) (symbol-plist x))
-	     (symbolp y)
-	     (if (boundp x)
-		 (eqt (symbol-value x)
-		      (symbol-value y))
-	       (not (boundp y)))
-	     (if (fboundp x) (fboundp y) (not (fboundp y)))
-	     (null (symbol-package y))
-	     (string= (symbol-name x) (symbol-name y))
-	     (eql (length (symbol-plist x))
-		  (length (symbol-plist y)))
-	     )))
+          (let ((y (copy-symbol x t)))
+            (and
+             (eql (length (symbol-plist y))
+                  (length (symbol-plist x)))
+             ;; Is a list copy
+             (every #'eq (symbol-plist y) (symbol-plist x))
+             (symbolp y)
+             (if (boundp x)
+                 (eqt (symbol-value x)
+                      (symbol-value y))
+               (not (boundp y)))
+             (if (fboundp x) (fboundp y) (not (fboundp y)))
+             (null (symbol-package y))
+             (string= (symbol-name x) (symbol-name y))
+             (eql (length (symbol-plist x))
+                  (length (symbol-plist y)))
+             )))
       '(nil t a b |foo| |a| |123|))))
   t)
 
@@ -76,8 +76,8 @@
 (deftest copy-symbol.5
   (let ((i 0) x y (s '#:|x|))
     (let ((s2 (copy-symbol
-	       (progn (setf x (incf i)) s)
-	       (progn (setf y (incf i)) nil))))
+               (progn (setf x (incf i)) s)
+               (progn (setf y (incf i)) nil))))
       (values
        (symbol-name s2)
        (eq s s2)

@@ -9,71 +9,71 @@
 
 (deftest pathname-directory.1
   (loop for p in *pathnames*
-	for directory = (pathname-directory p)
-	unless (or (stringp directory)
-		   (member directory '(nil :wild :unspecific))
-		   (and (consp directory)
-			(member (car directory) '(:absolute :relative))))
-	collect (list p directory))
+        for directory = (pathname-directory p)
+        unless (or (stringp directory)
+                   (member directory '(nil :wild :unspecific))
+                   (and (consp directory)
+                        (member (car directory) '(:absolute :relative))))
+        collect (list p directory))
   nil)
 
 (deftest pathname-directory.2
   (loop for p in *pathnames*
-	for directory = (pathname-directory p :case :local)
-	unless (or (stringp directory)
-		   (member directory '(nil :wild :unspecific))
-		   (and (consp directory)
-			(member (car directory) '(:absolute :relative))))
-	collect (list p directory))
+        for directory = (pathname-directory p :case :local)
+        unless (or (stringp directory)
+                   (member directory '(nil :wild :unspecific))
+                   (and (consp directory)
+                        (member (car directory) '(:absolute :relative))))
+        collect (list p directory))
   nil)
 
 (deftest pathname-directory.3
   (loop for p in *pathnames*
-	for directory = (pathname-directory p :case :common)
-	unless (or (stringp directory)
-		   (member directory '(nil :wild :unspecific))
-		   (and (consp directory)
-			(member (car directory) '(:absolute :relative))))
-	collect (list p directory))
+        for directory = (pathname-directory p :case :common)
+        unless (or (stringp directory)
+                   (member directory '(nil :wild :unspecific))
+                   (and (consp directory)
+                        (member (car directory) '(:absolute :relative))))
+        collect (list p directory))
   nil)
 
 (deftest pathname-directory.4
   (loop for p in *pathnames*
-	for directory = (pathname-directory p :allow-other-keys nil)
-	unless (or (stringp directory)
-		   (member directory '(nil :wild :unspecific))
-		   (and (consp directory)
-			(member (car directory) '(:absolute :relative))))
-	collect (list p directory))
+        for directory = (pathname-directory p :allow-other-keys nil)
+        unless (or (stringp directory)
+                   (member directory '(nil :wild :unspecific))
+                   (and (consp directory)
+                        (member (car directory) '(:absolute :relative))))
+        collect (list p directory))
   nil)
 
 (deftest pathname-directory.5
   (loop for p in *pathnames*
-	for directory = (pathname-directory p :foo 'bar :allow-other-keys t)
-	unless (or (stringp directory)
-		   (member directory '(nil :wild :unspecific))
-		   (and (consp directory)
-			(member (car directory) '(:absolute :relative))))
-	collect (list p directory))
+        for directory = (pathname-directory p :foo 'bar :allow-other-keys t)
+        unless (or (stringp directory)
+                   (member directory '(nil :wild :unspecific))
+                   (and (consp directory)
+                        (member (car directory) '(:absolute :relative))))
+        collect (list p directory))
   nil)
 
 (deftest pathname-directory.6
   (loop for p in *pathnames*
-	for directory = (pathname-directory p :allow-other-keys t
-					    :allow-other-keys nil
-					    'foo 'bar)
-	unless (or (stringp directory)
-		   (member directory '(nil :wild :unspecific))
-		   (and (consp directory)
-			(member (car directory) '(:absolute :relative))))
-	collect (list p directory))
+        for directory = (pathname-directory p :allow-other-keys t
+                                            :allow-other-keys nil
+                                            'foo 'bar)
+        unless (or (stringp directory)
+                   (member directory '(nil :wild :unspecific))
+                   (and (consp directory)
+                        (member (car directory) '(:absolute :relative))))
+        collect (list p directory))
   nil)
 
 ;;; section 19.3.2.1
 (deftest pathname-directory.7
   (loop for p in *logical-pathnames*
-	when (eq (pathname-directory p) :unspecific)
-	collect p)
+        when (eq (pathname-directory p) :unspecific)
+        collect p)
   nil)
 
 (deftest pathname-directory.8

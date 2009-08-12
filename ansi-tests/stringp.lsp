@@ -15,17 +15,17 @@
 
 (deftest stringp.3
   (notnot (stringp (make-array 4 :element-type 'character
-			       :initial-contents '(#\a #\b #\c #\d))))
+                               :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.4
   (notnot (stringp (make-array 4 :element-type 'base-char
-			       :initial-contents '(#\a #\b #\c #\d))))
+                               :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.5
   (notnot (stringp (make-array 4 :element-type 'standard-char
-			       :initial-contents '(#\a #\b #\c #\d))))
+                               :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.6
@@ -38,10 +38,10 @@
 
 (deftest stringp.8
   (let* ((s (make-array 10 :element-type 'character
-			:initial-element #\a))
-	 (s2 (make-array 4 :element-type 'character
-			 :displaced-to s
-			 :displaced-index-offset 2)))
+                        :initial-element #\a))
+         (s2 (make-array 4 :element-type 'character
+                         :displaced-to s
+                         :displaced-index-offset 2)))
     (notnot (stringp s2)))
   t)
 
@@ -57,26 +57,26 @@
 
 (deftest stringp.11
   (notnot (stringp (make-array 4 :element-type 'base-char
-			       :fill-pointer 2
-			       :initial-contents '(#\a #\b #\c #\d))))
+                               :fill-pointer 2
+                               :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.12
   (notnot (stringp (make-array 4 :element-type 'base-char
-			       :adjustable t
-			       :initial-contents '(#\a #\b #\c #\d))))
+                               :adjustable t
+                               :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.13
   (notnot (stringp (make-array 4 :element-type 'character
-			       :fill-pointer 2
-			       :initial-contents '(#\a #\b #\c #\d))))
+                               :fill-pointer 2
+                               :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.14
   (notnot (stringp (make-array 4 :element-type 'character
-			       :adjustable t
-			       :initial-contents '(#\a #\b #\c #\d))))
+                               :adjustable t
+                               :initial-contents '(#\a #\b #\c #\d))))
   t)
 
 (deftest stringp.15

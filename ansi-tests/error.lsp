@@ -14,7 +14,7 @@
 
 (deftest error.2
   (let* ((fmt "Error")
-	 (cnd (make-condition 'simple-error :format-control fmt)))
+         (cnd (make-condition 'simple-error :format-control fmt)))
     (handler-case
      (error cnd)
      (simple-error (c) (frob-simple-error c fmt))))
@@ -86,7 +86,7 @@
 
 (deftest error.12
   (let* ((fmt (formatter "Error"))
-	 (cnd (make-condition 'simple-error :format-control fmt)))
+         (cnd (make-condition 'simple-error :format-control fmt)))
     (handler-case
      (error cnd)
      (simple-error (c) (frob-simple-error c fmt))))

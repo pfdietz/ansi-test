@@ -28,15 +28,15 @@
 (deftest make-random-state.1
   (let ((rs (make-random-state)))
     (and (not (eq rs *random-state*))
-	 (random-state-p rs)
-	 (eqlt (random 1000000) (random 1000000 rs))))
+         (random-state-p rs)
+         (eqlt (random 1000000) (random 1000000 rs))))
   t)
 
 (deftest make-random-state.2
   (let ((rs (make-random-state *random-state*)))
     (and (not (eq rs *random-state*))
-	 (random-state-p rs)
-	 (eqlt (random 1000000) (random 1000000 rs))))
+         (random-state-p rs)
+         (eqlt (random 1000000) (random 1000000 rs))))
   t)
 
 (deftest make-random-state.3
@@ -44,24 +44,24 @@
     (random 10)
     (let ((rs2 (make-random-state rs)))
       (and (not (eq rs *random-state*))
-	   (not (eq rs rs2))
-	   (not (eq rs2 *random-state*))
-	   (random-state-p rs)
-	   (random-state-p rs2)
-	   (eqlt (random 1.0 rs) (random 1.0 rs2)))))
+           (not (eq rs rs2))
+           (not (eq rs2 *random-state*))
+           (random-state-p rs)
+           (random-state-p rs2)
+           (eqlt (random 1.0 rs) (random 1.0 rs2)))))
   t)
 
 (deftest make-random-state.4
   (let ((rs (make-random-state t))
-	(rs2 (make-random-state t)))
+        (rs2 (make-random-state t)))
     (and (random-state-p rs)
-	 (not (eq rs *random-state*))
-	 (random-state-p rs2)
-	 (not (eq rs2 *random-state*))
-	 (not (eq rs rs2))
-	 (integerp (random 10 rs))
-	 (floatp (random 1.0 rs2))
-	 t))
+         (not (eq rs *random-state*))
+         (random-state-p rs2)
+         (not (eq rs2 *random-state*))
+         (not (eq rs rs2))
+         (integerp (random 10 rs))
+         (floatp (random 1.0 rs2))
+         t))
   t)
 
-  
+

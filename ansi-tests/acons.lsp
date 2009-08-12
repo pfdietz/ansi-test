@@ -9,8 +9,8 @@
 
 (deftest acons.1
   (let* ((x (copy-tree '((c . d) (e . f))))
-	 (xcopy (make-scaffold-copy x))
-	 (result (acons 'a 'b x)))
+         (xcopy (make-scaffold-copy x))
+         (result (acons 'a 'b x)))
     (and
      (check-scaffold-copy x xcopy)
      (eqt (cdr result) x)
@@ -53,8 +53,8 @@
   (let ((i 0) x y z)
     (values
      (acons (progn (setf x (incf i)) 'a)
-	    (progn (setf y (incf i)) 'b)
-	    (progn (setf z (incf i)) '((c . d))))
+            (progn (setf y (incf i)) 'b)
+            (progn (setf z (incf i)) '((c . d))))
      i x y z))
   ((a . b)(c . d))
   3 1 2 3)

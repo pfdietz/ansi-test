@@ -13,10 +13,10 @@
     (handler-case
      (slot-value obj 'a)
      (unbound-slot (c)
-		   (values
-		    (typep* c 'cell-error)
-		    (eqt (unbound-slot-instance c) obj)
-		    (cell-error-name c)))))
+                   (values
+                    (typep* c 'cell-error)
+                    (eqt (unbound-slot-instance c) obj)
+                    (cell-error-name c)))))
   t t a)
 
 (defclass ubs-class-02 ()
@@ -27,10 +27,10 @@
     (handler-case
      (slot-value obj 'b)
      (unbound-slot (c)
-		   (values
-		    (typep* c 'cell-error)
-		    (eqt (unbound-slot-instance c) obj)
-		    (cell-error-name c)))))
+                   (values
+                    (typep* c 'cell-error)
+                    (eqt (unbound-slot-instance c) obj)
+                    (cell-error-name c)))))
   t t b)
 
 

@@ -7,23 +7,23 @@
 
 (deftest macro-function.1
   (loop for n in *cl-macro-symbols*
-	unless (macro-function n)
-	collect n)
+        unless (macro-function n)
+        collect n)
   nil)
 
 (deftest macro-function.2
   (loop for n in *cl-macro-symbols*
-	unless (macro-function n nil)
-	collect n)
+        unless (macro-function n nil)
+        collect n)
   nil)
 
 (deftest macro-function.3
   (loop for n in *cl-macro-symbols*
-	unless (eval `(macrolet ((%m (s &environment env)
-				     (list 'quote
-					   (macro-function s env))))
-			(%m ,n)))
-	collect n)
+        unless (eval `(macrolet ((%m (s &environment env)
+                                     (list 'quote
+                                           (macro-function s env))))
+                        (%m ,n)))
+        collect n)
   nil)
 
 (deftest macro-function.4
@@ -40,10 +40,10 @@
 
 (deftest macro-function.7
   (let ((fn
-	 (macrolet ((%m () 16))
-	   (macrolet ((%n (&environment env)
-			  (list 'quote (macro-function '%m env))))
-	     (%n)))))
+         (macrolet ((%m () 16))
+           (macrolet ((%n (&environment env)
+                          (list 'quote (macro-function '%m env))))
+             (%n)))))
     (values
      (notnot (functionp fn))
      (funcall fn '(%m) nil)))
@@ -53,18 +53,18 @@
   (let ((sym (gensym)))
     (setf (macro-function sym) (macro-function 'pop))
     (eval `(let ((x '(a b c)))
-	     (values 
-	      (,sym x)
-	      x))))
+             (values
+              (,sym x)
+              x))))
   a (b c))
 
 (deftest macro-function.9
   (let ((sym (gensym)))
     (setf (macro-function sym nil) (macro-function 'pop))
     (eval `(let ((x '(a b c)))
-	     (values 
-	      (,sym x)
-	      x))))
+             (values
+              (,sym x)
+              x))))
   a (b c))
 
 (deftest macro-function.10
@@ -72,17 +72,17 @@
     (eval `(defun ,sym (x) :bad))
     (setf (macro-function sym) (macro-function 'pop))
     (eval `(let ((x '(a b c)))
-	     (values 
-	      (,sym x)
-	      x))))
+             (values
+              (,sym x)
+              x))))
   a (b c))
 
 (deftest macro-function.11
   (let ((fn
-	 (flet ((%m () 16))
-	   (macrolet ((%n (&environment env)
-			  (list 'quote (macro-function '%m env))))
-	     (%n)))))
+         (flet ((%m () 16))
+           (macrolet ((%n (&environment env)
+                          (list 'quote (macro-function '%m env))))
+             (%n)))))
      fn)
   nil)
 
@@ -101,34 +101,34 @@
     (let ((i 0) a b)
       (values
        (funcall (macro-function (progn (setf a (incf i)) sym)
-				(progn (setf b (incf i)) nil))
-		(list sym) nil)
+                                (progn (setf b (incf i)) nil))
+                (list sym) nil)
        i a b)))
   t 2 1 2)
 
 (deftest macro-function.14
   (let ((sym (gensym))
-	(i 0))
+        (i 0))
     (setf (macro-function (progn (incf i) sym)) (macro-function 'pop))
-    (values 
+    (values
      (eval `(let ((x '(a b c)))
-	      (list
-	       (,sym x)
-	       x)))
+              (list
+               (,sym x)
+               x)))
      i))
   (a (b c)) 1)
 
 (deftest macro-function.15
   (let ((sym (gensym))
-	(i 0) a b)
+        (i 0) a b)
     (setf (macro-function (progn (setf a (incf i)) sym)
-			  (progn (setf b (incf i)) nil))
-	  (macro-function 'pop))
-    (values 
+                          (progn (setf b (incf i)) nil))
+          (macro-function 'pop))
+    (values
      (eval `(let ((x '(a b c)))
-	      (list
-	       (,sym x)
-	       x)))
+              (list
+               (,sym x)
+               x)))
      i a b))
   (a (b c)) 2 1 2)
 

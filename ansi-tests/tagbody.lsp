@@ -53,9 +53,9 @@
     (macrolet ((%m () 'a))
       (tagbody
        (tagbody
-	(go a)
-	(%m)
-	(setq x 1))
+        (go a)
+        (%m)
+        (setq x 1))
        a ))
     x)
   0)
@@ -148,14 +148,14 @@
 
 (deftest tagbody.16
   (let* ((t1 (1+ most-positive-fixnum))
-	 (t2 (1+ most-positive-fixnum))
-	 (form `(block done
-		  (tagbody
-		   (go around)
-		   ,t1
-		   (return-from done 'good)
-		   around
-		   (go ,t2)))))
+         (t2 (1+ most-positive-fixnum))
+         (form `(block done
+                  (tagbody
+                   (go around)
+                   ,t1
+                   (return-from done 'good)
+                   around
+                   (go ,t2)))))
     (eval form))
   good)
 
@@ -167,10 +167,10 @@
     (tagbody
      (macrolet ((foo () 'tag))
        (let (tag)
-	 (tagbody
-	  (go tag)
-	  (foo)
-	  (return-from done :bad))))
+         (tagbody
+          (go tag)
+          (foo)
+          (return-from done :bad))))
      tag
      (return-from done :good)))
   :good)

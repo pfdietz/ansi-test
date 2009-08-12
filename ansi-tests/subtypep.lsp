@@ -13,7 +13,7 @@
   (let ((i 0) x y)
     (values
      (notnot (subtypep (progn (setf x (incf i)) t)
-		       (progn (setf y (incf i)) t)))
+                       (progn (setf y (incf i)) t)))
      i x y))
   t 2 1 2)
 
@@ -23,43 +23,43 @@
 
 (deftest subtype.env.1
   (mapcar #'notnot
-	  (multiple-value-list (subtypep 'bit 'integer nil)))
+          (multiple-value-list (subtypep 'bit 'integer nil)))
   (t t))
 
 (deftest subtype.env.2
   (macrolet
       ((%foo (&environment env)
-	     (list 'quote
-		   (mapcar #'notnot
-			   (multiple-value-list
-			    (subtypep 'bit 'integer env))))))
+             (list 'quote
+                   (mapcar #'notnot
+                           (multiple-value-list
+                            (subtypep 'bit 'integer env))))))
     (%foo))
   (t t))
 
 (deftest subtype.env.3
   (macrolet
       ((%foo (&environment env)
-	     (multiple-value-bind (sub good)
-		 (subtypep nil (type-of env))
-	       (or (not good) (notnot sub)))))
+             (multiple-value-bind (sub good)
+                 (subtypep nil (type-of env))
+               (or (not good) (notnot sub)))))
     (%foo))
   t)
 
 (deftest subtype.env.4
   (macrolet
       ((%foo (&environment env)
-	     (multiple-value-bind (sub good)
-		 (subtypep (type-of env) (type-of env))
-	       (or (not good) (notnot sub)))))
+             (multiple-value-bind (sub good)
+                 (subtypep (type-of env) (type-of env))
+               (or (not good) (notnot sub)))))
     (%foo))
   t)
 
 (deftest subtype.env.5
   (macrolet
       ((%foo (&environment env)
-	     (multiple-value-bind (sub good)
-		 (subtypep (type-of env) t)
-	       (or (not good) (notnot sub)))))
+             (multiple-value-bind (sub good)
+                 (subtypep (type-of env) t)
+               (or (not good) (notnot sub)))))
     (%foo))
   t)
 
@@ -137,25 +137,25 @@
 (deftest subtypep.and/or.1
   (check-equivalence
    '(and (or symbol (integer 0 15))
-	 (or symbol (integer 10 25)))
+         (or symbol (integer 10 25)))
    '(or symbol (integer 10 15)))
   nil)
 
 (deftest subtypep.and/or.2
   (check-equivalence
    '(and (or (not symbol) (integer 0 10))
-	 (or symbol (integer 11 25)))
+         (or symbol (integer 11 25)))
    '(integer 11 25))
   nil)
 
 (deftest subtypep.and.1
   (loop for type in *types-list3*
-	append (check-equivalence `(and ,type ,type) type))
+        append (check-equivalence `(and ,type ,type) type))
   nil)
 
 (deftest subtypep.or.1
   (loop for type in *types-list3*
-	append (check-equivalence `(or ,type ,type) type))
+        append (check-equivalence `(or ,type ,type) type))
   nil)
 
 (deftest subtypep.and.2
@@ -168,35 +168,35 @@
 
 (deftest subtypep.and.3
   (loop for type in *types-list3*
-	append (check-equivalence `(and ,type) type))
+        append (check-equivalence `(and ,type) type))
   nil)
 
 (deftest subtypep.or.3
   (loop for type in *types-list3*
-	append (check-equivalence `(or ,type) type))
+        append (check-equivalence `(or ,type) type))
   nil)
 
 (deftest subtypep.and.4
   (let* ((n (length *types-list3*))
-	 (a (make-array n :initial-contents *types-list3*)))
+         (a (make-array n :initial-contents *types-list3*)))
     (trim-list
      (loop for i below 1000
-	   for tp1 = (aref a (random n))
-	   for tp2 = (aref a (random n))
-	   append (check-equivalence `(and ,tp1 ,tp2)
-				     `(and ,tp2 ,tp1)))
+           for tp1 = (aref a (random n))
+           for tp2 = (aref a (random n))
+           append (check-equivalence `(and ,tp1 ,tp2)
+                                     `(and ,tp2 ,tp1)))
      100))
   nil)
 
 (deftest subtypep.or.4
   (let* ((n (length *types-list3*))
-	 (a (make-array n :initial-contents *types-list3*)))
+         (a (make-array n :initial-contents *types-list3*)))
     (trim-list
      (loop for i below 1000
-	   for tp1 = (aref a (random n))
-	   for tp2 = (aref a (random n))
-	   append (check-equivalence `(or ,tp1 ,tp2)
-				     `(or ,tp2 ,tp1)))
+           for tp1 = (aref a (random n))
+           for tp2 = (aref a (random n))
+           append (check-equivalence `(or ,tp1 ,tp2)
+                                     `(or ,tp2 ,tp1)))
      100))
   nil)
 
@@ -205,13 +205,13 @@
 
 (deftest subtypep.nil.1
   (loop for (type) in *subtype-table*
-	unless (member type '(nil extended-char))
-	append (check-all-not-subtypep type nil))
+        unless (member type '(nil extended-char))
+        append (check-all-not-subtypep type nil))
   nil)
 
 (deftest subtypep.nil.2
   (loop for (type) in *subtype-table*
-	for class = (find-class type nil)
-	unless (or (not class) (member type '(nil extended-char)))
-	append (check-all-not-subtypep class nil))
+        for class = (find-class type nil)
+        unless (or (not class) (member type '(nil extended-char)))
+        append (check-all-not-subtypep class nil))
   nil)

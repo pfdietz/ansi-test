@@ -18,10 +18,10 @@
 ;;; The standard keywords are present in the list
 (deftest lambda-list-keywords.3
   (and (consp lambda-list-keywords)
-       (not-mv (set-difference '(&allow-other-keys 
-				 &aux &body &environment
-				 &key &optional &rest &whole)
-			       lambda-list-keywords)))
+       (not-mv (set-difference '(&allow-other-keys
+                                 &aux &body &environment
+                                 &key &optional &rest &whole)
+                               lambda-list-keywords)))
   t)
 
 ;;; No lambda list keywords are in the keyword package
@@ -32,9 +32,9 @@
 ;;; Every keyword starts with an ampersand
 (deftest lambda-list-keywords.5
   (notevery #'(lambda (sym)
-		(and (symbolp sym)
-		     (let ((name (symbol-name sym)))
-		       (and (> (length name) 0)
-			    (eql (aref name 0) #\&)))))
-	    lambda-list-keywords)
+                (and (symbolp sym)
+                     (let ((name (symbol-name sym)))
+                       (and (> (length name) 0)
+                            (eql (aref name 0) #\&)))))
+            lambda-list-keywords)
   nil)

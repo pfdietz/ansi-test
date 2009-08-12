@@ -32,36 +32,36 @@
 (declaim (type simple-base-string *non-macro-chars*))
 
 (defmacro def-random-suppress-test (name &key
-					 (chars '*non-macro-chars*)
-					 (reps 1000)
-					 (maxlen 8)
-					 (count 10)
-					 (prefix "")
-					 (suffix ""))
+                                         (chars '*non-macro-chars*)
+                                         (reps 1000)
+                                         (maxlen 8)
+                                         (count 10)
+                                         (prefix "")
+                                         (suffix ""))
   `(def-syntax-test ,name
      (let* ((chars ,chars)
-	    (prefix ,prefix)
-	    (suffix ,suffix)
-	    (*read-suppress* t)
-	    (count 0)
-	    (maxlen ,maxlen)
-	    (reps ,reps)
-	    (maxcount ,count))
+            (prefix ,prefix)
+            (suffix ,suffix)
+            (*read-suppress* t)
+            (count 0)
+            (maxlen ,maxlen)
+            (reps ,reps)
+            (maxcount ,count))
        (loop for n = (1+ (random maxlen))
-	     for s = (concatenate 'string
-				  prefix
-				  (loop repeat n
-					collect (random-from-seq chars))
-				  suffix)
-	     for vals = (multiple-value-list
-			 (handler-case (read-from-string s)
-				       (reader-error (rc) rc)))
-	     repeat reps
-	     unless (equal vals (list nil (length s)))
-	     collect (progn (when (> (incf count) maxcount)
-			      (loop-finish))
-			    (list n s vals))))
-     nil))					 
+             for s = (concatenate 'string
+                                  prefix
+                                  (loop repeat n
+                                        collect (random-from-seq chars))
+                                  suffix)
+             for vals = (multiple-value-list
+                         (handler-case (read-from-string s)
+                                       (reader-error (rc) rc)))
+             repeat reps
+             unless (equal vals (list nil (length s)))
+             collect (progn (when (> (incf count) maxcount)
+                              (loop-finish))
+                            (list n s vals))))
+     nil))
 
 (def-random-suppress-test read-suppress.13)
 (def-random-suppress-test read-suppress.14 :prefix "(" :suffix ")")
@@ -232,20 +232,20 @@
 
 (def-syntax-test read-suppress.error.1
   (signals-error (let ((*read-suppress* t)) (read-from-string "')"))
-		 reader-error)
+                 reader-error)
   t)
 
 (def-syntax-test read-suppress.error.2
   (signals-error (let ((*read-suppress* t)) (read-from-string "#<"))
-		 reader-error)
+                 reader-error)
   t)
 
 (def-syntax-test read-suppress.error.3
   (signals-error (let ((*read-suppress* t)) (read-from-string "# "))
-		 reader-error)
+                 reader-error)
   t)
 
 (def-syntax-test read-suppress.error.4
   (signals-error (let ((*read-suppress* t)) (read-from-string "#)"))
-		 reader-error)
+                 reader-error)
   t)

@@ -11,24 +11,24 @@
 (defvar *eval-when.1-collector*)
 
 (deftest eval-when.1
-  
+
   (let ((forms nil) all (ff "generated-eval-when-test-file.lisp"))
     (dolist (c '(nil (:compile-toplevel)))
       (dolist (l '(nil (:load-toplevel)))
-	(dolist (x '(nil (:execute)))
-	  (push `(eval-when (,@c ,@l ,@x)
-		   (push '(,@c ,@l ,@x) *eval-when.1-collector*))
-		forms))))
+        (dolist (x '(nil (:execute)))
+          (push `(eval-when (,@c ,@l ,@x)
+                   (push '(,@c ,@l ,@x) *eval-when.1-collector*))
+                forms))))
     (dolist (c '(nil (:compile-toplevel)))
       (dolist (l '(nil (:load-toplevel)))
-	(dolist (x '(nil (:execute)))
-	  (push `(let () (eval-when (,@c ,@l ,@x)
-			   (push '(let ,@c ,@l ,@x) *eval-when.1-collector*)))
-		forms))))
+        (dolist (x '(nil (:execute)))
+          (push `(let () (eval-when (,@c ,@l ,@x)
+                           (push '(let ,@c ,@l ,@x) *eval-when.1-collector*)))
+                forms))))
     (with-open-file (o ff :direction :output :if-exists :supersede)
-		    (dolist (f forms)
-		      (prin1 f o)
-		      (terpri o)))
+                    (dolist (f forms)
+                      (prin1 f o)
+                      (terpri o)))
     (let ((*eval-when.1-collector* nil))
       (load ff)
       (push (cons "load source" *eval-when.1-collector*) all))
@@ -42,7 +42,7 @@
     (delete-file (compile-file-pathname ff))
     #+clisp (delete-file (make-pathname :type "lib" :defaults ff))
     (nreverse all))
-  
+
   (("load source"
     (:execute) (:load-toplevel :execute) (:compile-toplevel :execute)
     (:compile-toplevel :load-toplevel :execute)
@@ -137,5 +137,5 @@
 
 (deftest eval-when.18
   (macrolet ((%m (z) z))
-	    (eval-when (:execute) (expand-in-current-env (%m :good))))
+            (eval-when (:execute) (expand-in-current-env (%m :good))))
   :good)

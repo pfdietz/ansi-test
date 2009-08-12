@@ -222,7 +222,7 @@
 (deftest array.8.1
   (typep #() '(array * (1)))
   nil)
-	 
+
 (deftest array.8.2
   (notnot-mv (typep #() '(array * (0))))
   t)
@@ -234,7 +234,7 @@
 (deftest array.8.4
   (typep #(a b c) '(array * (2)))
   nil)
-	 
+
 (deftest array.8.5
   (notnot-mv (typep #(a b c) '(array * (3))))
   t)
@@ -262,7 +262,7 @@
 (deftest array.8.11
   (typep "abc" '(array * (2)))
   nil)
-	 
+
 (deftest array.8.12
   (notnot-mv (typep "abc" '(array * (3))))
   t)

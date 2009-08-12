@@ -9,13 +9,13 @@
   (let ((*package* pkg))
     (shadow '(#:handler-case #:handler-bind))
     (import '(common-lisp-user::compile-and-load)
-	    pkg)
+            pkg)
     (export (mapcar #'intern
-		    (mapcar #'symbol-name
-			    '(#:random-from-seq #:random-case #:coin
-			      #:random-permute #:*universe* #:*mini-universe*
-			      #:*cl-symbols*
-			      #:signals-error #:typef)))))
+                    (mapcar #'symbol-name
+                            '(#:random-from-seq #:random-case #:coin
+                              #:random-permute #:*universe* #:*mini-universe*
+                              #:*cl-symbols*
+                              #:signals-error #:typef)))))
   (let ((s (find-symbol "QUIT" "CL-USER")))
     (when s (import s :cl-test))))
 

@@ -9,17 +9,17 @@
   (let ((z (list 3 4)))
     (macrolet ((%m (x) `(car ,x)))
       (let ((y (list 1 2)))
-	(values (%m y) (%m z)))))
+        (values (%m y) (%m z)))))
   1 3)
 
 (deftest macrolet.2
   (let ((z (list 3 4)))
     (macrolet ((%m (x) `(car ,x)))
       (let ((y (list 1 2)))
-	(values 
-	 (setf (%m y) 6)
-	 (setf (%m z) 'a)
-	 y z))))
+        (values
+         (setf (%m y) 6)
+         (setf (%m z) 'a)
+         y z))))
   6 a (6 2) (a 4))
 
 ;;; Inner definitions shadow outer ones
@@ -27,20 +27,20 @@
   (macrolet ((%m (w) `(cadr ,w)))
     (let ((z (list 3 4)))
       (macrolet ((%m (x) `(car ,x)))
-	(let ((y (list 1 2)))
-	  (values 
-	   (%m y) (%m z)
-	   (setf (%m y) 6)
-	   (setf (%m z) 'a)
-	   y z)))))
+        (let ((y (list 1 2)))
+          (values
+           (%m y) (%m z)
+           (setf (%m y) 6)
+           (setf (%m z) 'a)
+           y z)))))
   1 3 6 a (6 2) (a 4))
 
 ;;; &whole parameter
 (deftest macrolet.4
   (let ((x nil))
     (macrolet ((%m (&whole w arg)
-		   `(progn (setq x (quote ,w))
-			   ,arg)))
+                   `(progn (setq x (quote ,w))
+                           ,arg)))
       (values (%m 1) x)))
   1 (%m 1))
 
@@ -48,8 +48,8 @@
 (deftest macrolet.5
   (let ((x nil))
     (macrolet ((%m ((&whole w arg))
-		   `(progn (setq x (quote ,w))
-			   ,arg)))
+                   `(progn (setq x (quote ,w))
+                           ,arg)))
       (values (%m (1)) x)))
   1 (1))
 
@@ -57,40 +57,40 @@
 (deftest macrolet.6
   (let ((x nil))
     (macrolet ((%m (&key (a 'xxx) b)
-		   `(setq x (quote ,a))))
-			   
+                   `(setq x (quote ,a))))
+
       (values (%m :a foo) x
-	      (%m :b bar) x)))
+              (%m :b bar) x)))
   foo foo xxx xxx)
 
 ;;; nested key parameters
 (deftest macrolet.7
   (let ((x nil))
     (macrolet ((%m ((&key a b))
-		   `(setq x (quote ,a))))
-			   
+                   `(setq x (quote ,a))))
+
       (values (%m (:a foo)) x
-	      (%m (:b bar)) x)))
+              (%m (:b bar)) x)))
   foo foo nil nil)
 
 ;;; nested key parameters
 (deftest macrolet.8
   (let ((x nil))
     (macrolet ((%m ((&key (a 10) b))
-		   `(setq x (quote ,a))))
-			   
+                   `(setq x (quote ,a))))
+
       (values (%m (:a foo)) x
-	      (%m (:b bar)) x)))
+              (%m (:b bar)) x)))
   foo foo 10 10)
 
 ;;; keyword parameter with supplied-p parameter
 (deftest macrolet.9
   (let ((x nil))
     (macrolet ((%m (&key (a 'xxx a-p) b)
-		   `(setq x (quote ,(list a (not (not a-p)))))))
-			   
+                   `(setq x (quote ,(list a (not (not a-p)))))))
+
       (values (%m :a foo) x
-	      (%m :b bar) x)))
+              (%m :b bar) x)))
   (foo t) (foo t) (xxx nil) (xxx nil))
 
 
@@ -98,7 +98,7 @@
 (deftest macrolet.10
   (let ((x nil))
     (macrolet ((%m (b &rest a)
-		   `(setq x (quote ,a))))
+                   `(setq x (quote ,a))))
       (values (%m a1 a2) x)))
   (a2) (a2))
 
@@ -106,7 +106,7 @@
 (deftest macrolet.11
   (let ((x nil))
     (macrolet ((%m ((b &rest a))
-		   `(setq x (quote ,a))))
+                   `(setq x (quote ,a))))
       (values (%m (a1 a2)) x)))
   (a2) (a2))
 
@@ -114,7 +114,7 @@
 (deftest macrolet.12
   (let ((x nil))
     (macrolet ((%m (&whole w b &rest a)
-		   `(setq x (quote ,(list a w)))))
+                   `(setq x (quote ,(list a w)))))
       (values (%m a1 a2) x)))
   ((a2) (%m a1 a2))
   ((a2) (%m a1 a2)))
@@ -124,16 +124,16 @@
 (deftest macrolet.13
   (symbol-macrolet ((a b))
     (macrolet ((foo (x &environment env)
-		    (let ((y (macroexpand x env)))
-		      (if (eq y 'a) 1 2))))
+                    (let ((y (macroexpand x env)))
+                      (if (eq y 'a) 1 2))))
       (foo a)))
   2)
 
 (deftest macrolet.14
   (symbol-macrolet ((a b))
     (macrolet ((foo (x &environment env)
-		    (let ((y (macroexpand-1 x env)))
-		      (if (eq y 'a) 1 2))))
+                    (let ((y (macroexpand-1 x env)))
+                      (if (eq y 'a) 1 2))))
       (foo a)))
   2)
 
@@ -144,9 +144,9 @@
 
 (deftest macrolet.16
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(ignore-errors (macrolet ((,s () ''a)) (,s)))
-	unless (eq (eval form) 'a)
-	collect s)
+        for form = `(ignore-errors (macrolet ((,s () ''a)) (,s)))
+        unless (eq (eval form) 'a)
+        collect s)
   nil)
 
 (deftest macrolet.17
@@ -190,7 +190,7 @@
 
 (deftest macrolet.22a
   (macrolet ((%m (x &optional ((y z) '(2 3) y-z-p))
-		 `(quote (,x ,y ,z ,y-z-p))))
+                 `(quote (,x ,y ,z ,y-z-p))))
     (values
      (%m a)
      (%m a (b c))))
@@ -220,7 +220,7 @@
 (deftest macrolet.26
   (macrolet ((%m (&key ((:a b))) `(quote ,b)))
     (values (%m)
-	    (%m :a x)))
+            (%m :a x)))
   nil
   x)
 
@@ -232,8 +232,8 @@
 (deftest macrolet.28
   (macrolet ((%m (&key ((:a (b c)) '(3 4))) `(quote (,c ,b))))
     (values (%m :a (1 2))
-	    (%m :a (1 2) :a (10 11))
-	    (%m)))
+            (%m :a (1 2) :a (10 11))
+            (%m)))
   (2 1)
   (2 1)
   (4 3))
@@ -241,13 +241,13 @@
 (deftest macrolet.29
   (macrolet ((%m (&key a (b a)) `(quote (,a ,b))))
     (values (%m)
-	    (%m :a 1)
-	    (%m :b 2)
-	    (%m :a 3 :b 4)
-	    (%m :b 5 :a 6)
-	    (%m :a 7 :a 8)
-	    (%m :a 9 :b nil)
-	    (%m :a 10 :b nil :b 11)))
+            (%m :a 1)
+            (%m :b 2)
+            (%m :a 3 :b 4)
+            (%m :b 5 :a 6)
+            (%m :a 7 :a 8)
+            (%m :a 9 :b nil)
+            (%m :a 10 :b nil :b 11)))
   (nil nil)
   (1 1)
   (nil 2)
@@ -260,12 +260,12 @@
 (deftest macrolet.30
   (macrolet ((%m ((&key a) &key (b a)) `(quote (,a ,b))))
     (values (%m ())
-	    (%m (:a 1))
-	    (%m () :b 2)
-	    (%m (:a 3) :b 4)
-	    (%m (:a 7 :a 8))
-	    (%m (:a 9) :b nil)
-	    (%m (:a 10) :b nil :b 11)))
+            (%m (:a 1))
+            (%m () :b 2)
+            (%m (:a 3) :b 4)
+            (%m (:a 7 :a 8))
+            (%m (:a 9) :b nil)
+            (%m (:a 10) :b nil :b 11)))
   (nil nil)
   (1 1)
   (nil 2)
@@ -276,10 +276,10 @@
 
 (deftest macrolet.31
   (macrolet ((%m (&key ((:a (b c)) '(3 4) a-p))
-		 `(quote (,(notnot a-p) ,c ,b))))
+                 `(quote (,(notnot a-p) ,c ,b))))
     (values (%m :a (1 2))
-	    (%m :a (1 2) :a (10 11))
-	    (%m)))
+            (%m :a (1 2) :a (10 11))
+            (%m)))
   (t 2 1)
   (t 2 1)
   (nil 4 3))
@@ -351,7 +351,7 @@
 (deftest macrolet.38
   (macrolet ((foo () 1))
     (macrolet ((%f (&optional (x (macroexpand '(foo) env)) &environment env)
-		   x))
+                   x))
       (%f)))
   1)
 
@@ -386,9 +386,9 @@
     (let ((*f* #'(lambda () *x-in-macrolet.43*)))
       (declare (special *f*))
       (eval `(macrolet ((%m (*x-in-macrolet.43*)
-			    (declare (special *f*))
-			    (funcall *f*)))
-	       (%m t)))))
+                            (declare (special *f*))
+                            (funcall *f*)))
+               (%m t)))))
   nil)
 
 (deftest macrolet.44
@@ -397,9 +397,9 @@
     (let ((*f* #'(lambda () *x-in-macrolet.44*)))
       (declare (special *f*))
       (eval `(macrolet ((%m (*x-in-macrolet.44*)
-			    (declare (special *f* *x-in-macrolet.44*))
-			    (funcall *f*)))
-	       (%m t)))))
+                            (declare (special *f* *x-in-macrolet.44*))
+                            (funcall *f*)))
+               (%m t)))))
   t)
 
 (deftest macrolet.45
@@ -408,16 +408,16 @@
     (let ((*f* #'(lambda () *x-in-macrolet.45*)))
       (declare (special *f*))
       (eval `(macrolet ((%m ((*x-in-macrolet.45*))
-			    (declare (special *f* *x-in-macrolet.45*))
-			    (funcall *f*)))
-	       (%m (t))))))
+                            (declare (special *f* *x-in-macrolet.45*))
+                            (funcall *f*)))
+               (%m (t))))))
   t)
 
 ;;; Macros are expanded in the appropriate environment
 
 (deftest macrolet.46
   (macrolet ((%m (z) z))
-	    (macrolet () (expand-in-current-env (%m :good))))
+            (macrolet () (expand-in-current-env (%m :good))))
   :good)
 
 ;;; Free declarations in macrolet

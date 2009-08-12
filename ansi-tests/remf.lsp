@@ -65,20 +65,20 @@
 
 (deftest remf.order.1
   (let ((i 0) x y
-	(p (make-array 1 :initial-element (copy-list '(a b c d e f)))))
+        (p (make-array 1 :initial-element (copy-list '(a b c d e f)))))
     (values
      (notnot
       (remf (aref p (progn (setf x (incf i)) 0))
-	    (progn (setf y (incf i))
-		   'c)))
+            (progn (setf y (incf i))
+                   'c)))
      (aref p 0)
      i x y))
   t (a b e f) 2 1 2)
 
 (deftest remf.order.2
   (let ((x  (copy-seq #(nil :a :b)))
-	(pa (vector (list :a 1) (list :b 2) (list :c 3) (list :d 4)))
-	(i 0))
+        (pa (vector (list :a 1) (list :b 2) (list :c 3) (list :d 4)))
+        (i 0))
     (values
      (not (remf (aref pa (incf i)) (aref x (incf i))))
      pa))

@@ -75,8 +75,8 @@
   (block done
     (tagbody
      (typecase 'a (symbol (go 10)
-			  10
-			  (return-from done 'bad)))
+                          10
+                          (return-from done 'bad)))
      10
      (return-from done 'good)))
   good)
@@ -87,34 +87,34 @@
      (typecase 'a
        (integer 'bad)
        (t (go 10)
-	  10
-	  (return-from done 'bad)))
+          10
+          (return-from done 'bad)))
      10
      (return-from done 'good)))
   good)
 
 (deftest typecase.18
   (loop for x in '(a 1 1.4 "c")
-	collect (typecase x
-		  (t :good)
-		  (otherwise :bad)))
+        collect (typecase x
+                  (t :good)
+                  (otherwise :bad)))
   (:good :good :good :good))
 
 ;;; A randomized test
 
 (deftest typecase.19
   (let* ((u (coerce *universe* 'vector))
-	 (len1 (length u))
-	 (types (coerce *cl-all-type-symbols* 'vector))
-	 (len2 (length types)))
+         (len1 (length u))
+         (types (coerce *cl-all-type-symbols* 'vector))
+         (len2 (length types)))
     (loop
      for n = (random 10)
      for my-types = (loop repeat n collect (elt types (random len2)))
      for val = (elt u (random len1))
      for i = (position val my-types :test #'typep)
      for form = `(typecase ',val
-		   ,@(loop for i from 0 for type in my-types collect `(,type ,i))
-		   (otherwise nil))
+                   ,@(loop for i from 0 for type in my-types collect `(,type ,i))
+                   (otherwise nil))
      for j = (eval form)
      repeat 1000
      unless (eql i j)
@@ -128,18 +128,18 @@
   (macrolet
    ((%m (z) z))
    (typecase (expand-in-current-env (%m 2))
-	     ((integer 0 1) :bad1)
-	     ((integer 2 10) :good)
-	     (t :bad2)))
+             ((integer 0 1) :bad1)
+             ((integer 2 10) :good)
+             (t :bad2)))
   :good)
 
 (deftest typecase.21
   (macrolet
    ((%m (z) z))
    (typecase 2
-	     ((integer 0 1) (expand-in-current-env (%m :bad1)))
-	     ((integer 2 10) (expand-in-current-env (%m :good)))
-	     (t (expand-in-current-env (%m :bad2)))))
+             ((integer 0 1) (expand-in-current-env (%m :bad1)))
+             ((integer 2 10) (expand-in-current-env (%m :good)))
+             (t (expand-in-current-env (%m :bad2)))))
   :good)
 
 ;;; Error cases
@@ -150,13 +150,13 @@
 
 (deftest typecase.error.2
   (signals-error (funcall (macro-function 'typecase)
-			   '(typecase t)) program-error)
+                           '(typecase t)) program-error)
   t)
 
 (deftest typecase.error.3
   (signals-error (funcall (macro-function 'typecase)
-			   '(typecase t)
-			   nil nil) program-error)
+                           '(typecase t)
+                           nil nil) program-error)
   t)
 
 

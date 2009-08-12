@@ -20,7 +20,7 @@
      (with-input-from-string
       (is "")
       (with-open-stream (*terminal-io* (make-two-way-stream is os))
-			(princ 2 t)))))
+                        (princ 2 t)))))
   "2")
 
 (deftest princ.3

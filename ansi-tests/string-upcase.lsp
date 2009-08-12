@@ -33,14 +33,14 @@
 
 (deftest string-upcase.6
   (let ((s (make-array 6 :element-type 'character
-		       :initial-contents '(#\a #\b #\c #\d #\e #\f))))
+                       :initial-contents '(#\a #\b #\c #\d #\e #\f))))
     (values (string-upcase s) s))
   "ABCDEF"
   "abcdef")
 
 (deftest string-upcase.7
   (let ((s (make-array 6 :element-type 'standard-char
-		       :initial-contents '(#\a #\b #\7 #\d #\e #\f))))
+                       :initial-contents '(#\a #\b #\7 #\d #\e #\f))))
     (values (string-upcase s) s))
   "AB7DEF"
   "ab7def")
@@ -51,7 +51,7 @@
   (let ((s "abcdef"))
     (values
      (loop for i from 0 to 6
-	   collect (string-upcase s :start i))
+           collect (string-upcase s :start i))
      s))
   ("ABCDEF" "aBCDEF" "abCDEF" "abcDEF" "abcdEF" "abcdeF" "abcdef")
   "abcdef")
@@ -60,8 +60,8 @@
   (let ((s "abcdef"))
     (values
       (loop for i from 0 to 6
-	    collect 
-	    (string-upcase s :start i :end nil))
+            collect
+            (string-upcase s :start i :end nil))
       s))
   ("ABCDEF" "aBCDEF" "abCDEF" "abcDEF" "abcdEF" "abcdeF" "abcdef")
   "abcdef")
@@ -70,8 +70,8 @@
   (let ((s "abcde"))
     (values
      (loop for i from 0 to 4
-	   collect (loop for j from i to 5
-			 collect (string-upcase s :start i :end j)))
+           collect (loop for j from i to 5
+                         collect (string-upcase s :start i :end j)))
      s))
   (("abcde" "Abcde" "ABcde" "ABCde" "ABCDe" "ABCDE")
    ("abcde" "aBcde" "aBCde" "aBCDe" "aBCDE")
@@ -87,29 +87,29 @@
 
 (deftest string-upcase.12
   (loop for type in '(standard-char base-char character)
-	for s = (make-array '(10) :element-type type
-			    :fill-pointer 5
-			    :initial-contents "aB0cDefGHi")
-	collect (list s (string-upcase s)))
+        for s = (make-array '(10) :element-type type
+                            :fill-pointer 5
+                            :initial-contents "aB0cDefGHi")
+        collect (list s (string-upcase s)))
   (("aB0cD" "AB0CD") ("aB0cD" "AB0CD") ("aB0cD" "AB0CD")))
 
 
 (deftest string-upcase.13
   (loop for type in '(standard-char base-char character)
-	for s0 = (make-array '(10) :element-type type
-			     :initial-contents "zZaB0cDefG")
-	for s = (make-array '(5) :element-type type
-			    :displaced-to s0
-			    :displaced-index-offset 2)
-	collect (list s (string-upcase s)))
+        for s0 = (make-array '(10) :element-type type
+                             :initial-contents "zZaB0cDefG")
+        for s = (make-array '(5) :element-type type
+                            :displaced-to s0
+                            :displaced-index-offset 2)
+        collect (list s (string-upcase s)))
   (("aB0cD" "AB0CD") ("aB0cD" "AB0CD") ("aB0cD" "AB0CD")))
 
 (deftest string-upcase.14
   (loop for type in '(standard-char base-char character)
-	for s = (make-array '(5) :element-type type
-			    :adjustable t
-			    :initial-contents "aB0cD")
-	collect (list s (string-upcase s)))
+        for s = (make-array '(5) :element-type type
+                            :adjustable t
+                            :initial-contents "aB0cD")
+        collect (list s (string-upcase s)))
   (("aB0cD" "AB0CD") ("aB0cD" "AB0CD") ("aB0cD" "AB0CD")))
 
 ;;; Order of evaluation tests
@@ -137,7 +137,7 @@
 ;;; Const fold tests
 
 (def-fold-test string-upcase.fold.1 (string-upcase "abcde"))
-  
+
 ;;; Error tests
 
 (deftest string-upcase.error.1
@@ -154,7 +154,7 @@
 
 (deftest string-upcase.error.4
   (signals-error (string-upcase (copy-seq "abc") :bad t
-				      :allow-other-keys nil) program-error)
+                                      :allow-other-keys nil) program-error)
   t)
 
 (deftest string-upcase.error.5

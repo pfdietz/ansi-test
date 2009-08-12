@@ -13,19 +13,19 @@
 
 (deftest maplist.2
   (let* ((x (copy-list '(a b c)))
-	 (xcopy (make-scaffold-copy x))
-	 (result (maplist #'identity x)))
+         (xcopy (make-scaffold-copy x))
+         (result (maplist #'identity x)))
     (and (check-scaffold-copy x xcopy)
-	 result))
+         result))
   ((a b c) (b c) (c)))
 
 (deftest maplist.3
   (let* ((x (copy-list '(a b c d)))
-	 (y (copy-list '(1 2 3 4)))
-	 (xcopy (make-scaffold-copy x))
-	 (ycopy (make-scaffold-copy y))
-	 (result
-	  (maplist #'append x y)))
+         (y (copy-list '(1 2 3 4)))
+         (xcopy (make-scaffold-copy x))
+         (ycopy (make-scaffold-copy y))
+         (result
+          (maplist #'append x y)))
     (and
      (check-scaffold-copy x xcopy)
      (check-scaffold-copy y ycopy)
@@ -37,11 +37,11 @@
 
 (deftest maplist.4
   (let* ((x (copy-list '(a b c d)))
-	 (y (copy-list '(1 2 3 4 5)))
-	 (xcopy (make-scaffold-copy x))
-	 (ycopy (make-scaffold-copy y))
-	 (result
-	  (maplist #'append x y)))
+         (y (copy-list '(1 2 3 4 5)))
+         (xcopy (make-scaffold-copy x))
+         (ycopy (make-scaffold-copy y))
+         (result
+          (maplist #'append x y)))
     (and
      (check-scaffold-copy x xcopy)
      (check-scaffold-copy y ycopy)
@@ -53,11 +53,11 @@
 
 (deftest maplist.5
   (let* ((x (copy-list '(a b c d e)))
-	 (y (copy-list '(1 2 3 4)))
-	 (xcopy (make-scaffold-copy x))
-	 (ycopy (make-scaffold-copy y))
-	 (result
-	  (maplist #'append x y)))
+         (y (copy-list '(1 2 3 4)))
+         (xcopy (make-scaffold-copy x))
+         (ycopy (make-scaffold-copy y))
+         (result
+          (maplist #'append x y)))
     (and
      (check-scaffold-copy x xcopy)
      (check-scaffold-copy y ycopy)
@@ -73,9 +73,9 @@
 
 (deftest maplist.7
   (maplist #'(lambda (x y) (nth (car x) y))
-	   '(0 1 0 1 0 1 0)
-	   '(a b c d e f g)
-	   )
+           '(0 1 0 1 0 1 0)
+           '(a b c d e f g)
+           )
   (a c c e e g g))
 
 (deftest maplist.order.1
@@ -83,14 +83,14 @@
     (values
      (maplist
       (progn
-	(setf x (incf i))
-	#'(lambda (x y) (declare (ignore x)) (car y)))
+        (setf x (incf i))
+        #'(lambda (x y) (declare (ignore x)) (car y)))
       (progn
-	(setf y (incf i))
-	'(a b c))
+        (setf y (incf i))
+        '(a b c))
       (progn
-	(setf z (incf i))
-	     '(1 2 3)))
+        (setf z (incf i))
+             '(1 2 3)))
      i x y z))
   (1 2 3) 3 1 2 3)
 
@@ -137,12 +137,12 @@
 
 (deftest maplist.error.10
   (signals-error (maplist #'cons '(a b c) '(1 2 3) '(4 5 6))
-		 program-error)
+                 program-error)
   t)
 
 (deftest maplist.error.11
   (signals-error (maplist #'identity (list* (list 1) (list 2) 3))
-		 type-error)
+                 type-error)
   t)
 
 

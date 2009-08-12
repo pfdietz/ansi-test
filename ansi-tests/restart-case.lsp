@@ -18,12 +18,12 @@
 
 (deftest restart-case.4
   (restart-case (progn (invoke-restart 'foo) 'bad)
-		(foo () 'good))
+                (foo () 'good))
   good)
 
 (deftest restart-case.5
   (restart-case (progn (invoke-restart 'foo) 'bad)
-		(foo ()))
+                (foo ()))
   nil)
 
 (deftest restart-case.6
@@ -67,7 +67,7 @@
 (deftest restart-case.12
   (restart-case
    (restart-case (invoke-restart 'foo 1)
-		 (foo (x) (invoke-restart 'foo (1+ x))))
+                 (foo (x) (invoke-restart 'foo (1+ x))))
    (foo (y) (+ 4 y)))
   6)
 
@@ -75,7 +75,7 @@
   (let ((i 10))
     (values
      (restart-case (progn (invoke-restart 'foo) 'bad)
-		   (foo () (incf i 100) 'good))
+                   (foo () (incf i 100) 'good))
      i))
   good 110)
 
@@ -83,18 +83,18 @@
   (restart-case
    (invoke-restart 'foo 1 2)
    (foo (x y)
-	(declare (type fixnum x))
-	(declare (type fixnum y))
-	(+ x y)))
+        (declare (type fixnum x))
+        (declare (type fixnum y))
+        (+ x y)))
   3)
 
 (deftest restart-case.15
   (restart-case
    (invoke-restart 'foo 1 2)
    (foo (x y)
-	(declare (ignore x y))
-	(declare (type fixnum x))
-	(declare (type fixnum y))))
+        (declare (ignore x y))
+        (declare (type fixnum x))
+        (declare (type fixnum y))))
   nil)
 
 (deftest restart-case.16
@@ -126,7 +126,7 @@
     (s)
     (restart-case
      (let ((restart (find-restart 'foo))
-	   (*print-escape* nil))
+           (*print-escape* nil))
        (format s "~A" restart))
      (foo () :report "A report")))
   "A report")
@@ -137,8 +137,8 @@
     (flet ((%f (s2) (format s2 "A report")))
       (restart-case
        (let ((restart (find-restart 'foo))
-	     (*print-escape* nil))
-	 (format s "~A" restart))
+             (*print-escape* nil))
+         (format s "~A" restart))
        (foo () :report %f))))
   "A report")
 
@@ -147,7 +147,7 @@
     (s)
     (restart-case
      (let ((restart (find-restart 'foo))
-	   (*print-escape* nil))
+           (*print-escape* nil))
        (format s "~A" restart))
      (foo () :report (lambda (s2) (format s2 "A report")))))
   "A report")
@@ -231,8 +231,8 @@
       ((error #'(lambda (c) (declare (ignore c)) (error "Blah"))))
       (restart-case
        (restart-case
-	(%m "Boo!")
-	(foo () 'bad))
+        (%m "Boo!")
+        (foo () 'bad))
        (foo () 'good)))))
   good)
 
@@ -244,24 +244,24 @@
       ((error #'(lambda (c) (declare (ignore c)) (error "Blah"))))
       (restart-case
        (restart-case
-	%s
-	(foo () 'bad))
+        %s
+        (foo () 'bad))
        (foo () 'good)))))
   good)
 
 (deftest restart-case.31
   (macrolet ((%m2 (&rest args) (cons 'error args)))
     (macrolet ((%m (&rest args &environment env)
-		   (macroexpand (cons '%m2 args) env)))
+                   (macroexpand (cons '%m2 args) env)))
       (handler-bind
        ((error #'(lambda (c2) (invoke-restart (find-restart 'foo c2)))))
        (handler-bind
-	((error #'(lambda (c) (declare (ignore c)) (error "Blah"))))
-	(restart-case
-	 (restart-case
-	  (%m "Boo!")
-	  (foo () 'bad))
-	 (foo () 'good))))))
+        ((error #'(lambda (c) (declare (ignore c)) (error "Blah"))))
+        (restart-case
+         (restart-case
+          (%m "Boo!")
+          (foo () 'bad))
+         (foo () 'good))))))
   good)
 
 (deftest restart-case.32
@@ -274,8 +274,8 @@
   (restart-case
    (invoke-restart-interactively 'foo)
    (foo (w x y z)
-	:interactive (lambda () (list 'a 'b 'c 'd))
-	(list x w z y)))
+        :interactive (lambda () (list 'a 'b 'c 'd))
+        (list x w z y)))
   (b a d c))
 
 (deftest restart-case.34
@@ -283,15 +283,15 @@
     (restart-case
      (invoke-restart-interactively 'foo)
      (foo (w x y z)
-	  :interactive %f
-	  (list x w z y))))
+          :interactive %f
+          (list x w z y))))
   (b a d c))
 
 (deftest restart-case.35
   (restart-case
    (loop for i from 1 to 4
-	 for r in (compute-restarts)
-	 collect (restart-name r))
+         for r in (compute-restarts)
+         collect (restart-name r))
    (foo () t)
    (bar () t)
    (foo () 'a)
@@ -305,6 +305,6 @@
       (restart-case
        (invoke-restart 'foo)
        (foo (&aux (y x))
-	    (declare (special x))
-	    y))))
+            (declare (special x))
+            y))))
   :good)

@@ -17,8 +17,8 @@
 
 (deftest nsubst-if.3
   (check-nsubst-if '(z)
-		   (complement #'consp)
-		   '(a (a b) (c d e) (f g h i)))
+                   (complement #'consp)
+                   '(a (a b) (c d e) (f g h i)))
   ((z)
    ((z) (z) z)
    ((z) (z) (z) z)
@@ -27,21 +27,21 @@
 
 (deftest nsubst-if.4
   (check-nsubst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
-		   :key #'listp)
+                   :key #'listp)
   b)
 
 (deftest nsubst-if.5
   (check-nsubst-if 4 #'(lambda (x) (eql x 1))
-		   '((1 3) (1) (1 10 20 30) (1 3 x y))
-		   :key #'(lambda (x)
-			    (and (consp x)
-				 (car x))))
+                   '((1 3) (1) (1 10 20 30) (1 3 x y))
+                   :key #'(lambda (x)
+                            (and (consp x)
+                                 (car x))))
   (4 4 4 4))
 
 (deftest nsubst-if.6
   (check-nsubst-if 'a  #'(lambda (x) (eql x 'b))
-		   '((a) (b) (c) (d))
-		   :key nil)
+                   '((a) (b) (c) (d))
+                   :key nil)
   ((a) (a) (c) (d)))
 
 (deftest nsubst-if.7
@@ -114,10 +114,10 @@
 
 (deftest nsubst-if.error.7
   (signals-error (nsubst-if 'a #'null nil :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest nsubst-if.error.8
   (signals-error (nsubst-if 'a #'null (list 'a nil 'c) :key #'cons)
-		 program-error)
+                 program-error)
   t)

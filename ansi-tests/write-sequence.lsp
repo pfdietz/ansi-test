@@ -9,8 +9,8 @@
   `(deftest ,name
      (let ((s ,input))
        (with-output-to-string
-	 (os)
-	 (assert (eq (write-sequence s os ,@args) s))))
+         (os)
+         (assert (eq (write-sequence s os ,@args) s))))
      ,@expected))
 
 ;;; on strings
@@ -39,13 +39,13 @@
 (defmacro def-write-sequence-special-test (name string args expected)
   `(deftest ,name
      (let ((str ,string)
-	   (expected ,expected))
+           (expected ,expected))
        (do-special-strings
-	(s str nil)
-	(let ((out (with-output-to-string
-		     (os)
-		     (assert (eq (write-sequence s os ,@args) s)))))
-	  (assert (equal out expected)))))
+        (s str nil)
+        (let ((out (with-output-to-string
+                     (os)
+                     (assert (eq (write-sequence s os ,@args) s)))))
+          (assert (equal out expected)))))
      nil))
 
 (def-write-sequence-special-test write-sequence.string.14 "12345" () "12345")
@@ -116,18 +116,18 @@
 (defmacro def-write-sequence-bv-test (name input args expected)
   `(deftest ,name
      (let ((s ,input)
-	   (expected ,expected))
+           (expected ,expected))
        (with-open-file
-	(os "tmp.dat" :direction :output
-	    :element-type '(unsigned-byte 8)
-	    :if-exists :supersede)
-	 (assert (eq (write-sequence s os ,@args) s)))
+        (os "tmp.dat" :direction :output
+            :element-type '(unsigned-byte 8)
+            :if-exists :supersede)
+         (assert (eq (write-sequence s os ,@args) s)))
        (with-open-file
-	(is "tmp.dat" :direction :input
-	    :element-type '(unsigned-byte 8))
-	 (loop for i from 0 below (length expected)
-	       for e = (elt expected i)
-	       always (eql (read-byte is) e))))
+        (is "tmp.dat" :direction :input
+            :element-type '(unsigned-byte 8))
+         (loop for i from 0 below (length expected)
+               for e = (elt expected i)
+               always (eql (read-byte is) e))))
      t))
 
 (def-write-sequence-bv-test write-sequence.bv.1 #*00111010
@@ -172,54 +172,54 @@
 
 (deftest write-sequence.error.7
   (signals-error (write-sequence "ABC" *standard-output* :start 0.0)
-		 type-error)
+                 type-error)
   t)
 
 (deftest write-sequence.error.8
   (signals-error (write-sequence "ABC" *standard-output* :end -1)
-		 type-error)
+                 type-error)
   t)
 
 (deftest write-sequence.error.9
   (signals-error (write-sequence "ABC" *standard-output* :end 'x)
-		 type-error)
+                 type-error)
   t)
 
 (deftest write-sequence.error.10
   (signals-error (write-sequence "ABC" *standard-output* :end 2.0)
-		 type-error)
+                 type-error)
   t)
 
 (deftest write-sequence.error.11
   (signals-error (write-sequence "abcde" *standard-output*
-				 :foo nil) program-error)
+                                 :foo nil) program-error)
   t)
-	 
+
 (deftest write-sequence.error.12
   (signals-error (write-sequence "abcde" *standard-output*
-				 :allow-other-keys nil :foo t)
-		 program-error)
+                                 :allow-other-keys nil :foo t)
+                 program-error)
   t)
 
 (deftest write-sequence.error.13
   (signals-error (write-sequence "abcde" *standard-output* :start)
-		 program-error)
+                 program-error)
   t)
 
 (deftest write-sequence.error.14
   (check-type-error #'(lambda (x) (write-sequence x *standard-output*))
-		    #'sequencep)
+                    #'sequencep)
   nil)
 
 (deftest write-sequence.error.15
   (check-type-error #'(lambda (x) (write-sequence "abcde" *standard-output*
-						  :start x))
-		    (typef 'unsigned-byte))
+                                                  :start x))
+                    (typef 'unsigned-byte))
   nil)
 
 (deftest write-sequence.error.16
   (check-type-error #'(lambda (x) (write-sequence "abcde" *standard-output*
-						  :end x))
-		    (typef '(or null unsigned-byte)))
+                                                  :end x))
+                    (typef '(or null unsigned-byte)))
   nil)
 

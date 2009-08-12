@@ -66,13 +66,13 @@
 
 (defvar *cons-test-4*
   (cons (cons (cons (cons 'a 'b)
-		    (cons 'c 'd))
-	      (cons (cons 'e 'f)
-		    (cons 'g 'h)))
-	(cons (cons (cons 'i 'j)
-		    (cons 'k 'l))
-	      (cons (cons 'm 'n)
-		    (cons 'o 'p)))))
+                    (cons 'c 'd))
+              (cons (cons 'e 'f)
+                    (cons 'g 'h)))
+        (cons (cons (cons 'i 'j)
+                    (cons 'k 'l))
+              (cons (cons 'm 'n)
+                    (cons 'o 'p)))))
 
 (deftest cons.38
   (caaaar *cons-test-4*)
@@ -577,45 +577,45 @@
 
 (loop
     for fn in '(car cdr caar cadr cdar cddr
-		caaar caadr cadar caddr cdaar cdadr cddar cdddr
-		caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
-		cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr)
+                caaar caadr cadar caddr cdaar cdadr cddar cdddr
+                caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
+                cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr)
     do
       (let ((level (- (length (symbol-name fn)) 2)))
-	(eval `(deftest ,(intern
-			  (concatenate 'string
-			    (symbol-name fn)
-			    "-SET-ALT")
-			  :cl-test)
-		   (let ((x (create-c*r-test ,level)))
-		     (and
-		      (setf (,fn x) 'a)
-		      (eql (,fn x) 'a)
-		      (setf (,fn x) 'none)
-		      (equalt x (create-c*r-test ,level))
-		      ))
-		 t))))
+        (eval `(deftest ,(intern
+                          (concatenate 'string
+                            (symbol-name fn)
+                            "-SET-ALT")
+                          :cl-test)
+                   (let ((x (create-c*r-test ,level)))
+                     (and
+                      (setf (,fn x) 'a)
+                      (eql (,fn x) 'a)
+                      (setf (,fn x) 'none)
+                      (equalt x (create-c*r-test ,level))
+                      ))
+                 t))))
 
 (loop
     for (fn len) in '((first 1) (second 2) (third 3) (fourth 4)
-		      (fifth 5) (sixth 6) (seventh 7) (eighth 8)
-		      (ninth 9) (tenth 10))
+                      (fifth 5) (sixth 6) (seventh 7) (eighth 8)
+                      (ninth 9) (tenth 10))
     do
       (eval
        `(deftest ,(intern
-		   (concatenate 'string
-		     (symbol-name fn)
-		     "-SET-ALT")
-		   :cl-test)
-	    (let ((x (make-list 20 :initial-element nil)))
-	      (and
-	       (setf (,fn x) 'a)
-	       (loop
-		   for i from 1 to 20
-		   do (when (and (not (eql i ,len))
-				 (nth (1- i) x))
-			(return nil))
-		   finally (return t))
-	       (eql (,fn x) 'a)
-	       (nth ,(1- len) x)))
-	  a)))
+                   (concatenate 'string
+                     (symbol-name fn)
+                     "-SET-ALT")
+                   :cl-test)
+            (let ((x (make-list 20 :initial-element nil)))
+              (and
+               (setf (,fn x) 'a)
+               (loop
+                   for i from 1 to 20
+                   do (when (and (not (eql i ,len))
+                                 (nth (1- i) x))
+                        (return nil))
+                   finally (return t))
+               (eql (,fn x) 'a)
+               (nth ,(1- len) x)))
+          a)))

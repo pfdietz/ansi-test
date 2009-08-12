@@ -7,29 +7,29 @@
 
 (deftest package-error-package.1
   (eqt (find-package (package-error-package
-		      (make-condition 'package-error
-				      :package "CL")))
+                      (make-condition 'package-error
+                                      :package "CL")))
        (find-package "CL"))
   t)
 
 (deftest package-error-package.2
   (eqt (find-package (package-error-package
-		      (make-condition 'package-error
-				      :package (find-package "CL"))))
+                      (make-condition 'package-error
+                                      :package (find-package "CL"))))
        (find-package "CL"))
   t)
 
 (deftest package-error-package.3
   (eqt (find-package (package-error-package
-		      (make-condition 'package-error
-				      :package '#:|CL|)))
+                      (make-condition 'package-error
+                                      :package '#:|CL|)))
        (find-package "CL"))
   t)
 
 (deftest package-error-package.4
   (eqt (find-package (package-error-package
-		      (make-condition 'package-error
-				      :package #\A)))
+                      (make-condition 'package-error
+                                      :package #\A)))
        (find-package "A"))
   t)
 

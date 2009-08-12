@@ -221,7 +221,7 @@
 (deftest simple-array.8.1
   (typep #() '(simple-array * (1)))
   nil)
-	 
+
 (deftest simple-array.8.2
   (notnot-mv (typep #() '(simple-array * (0))))
   t)
@@ -233,7 +233,7 @@
 (deftest simple-array.8.4
   (typep #(a b c) '(simple-array * (2)))
   nil)
-	 
+
 (deftest simple-array.8.5
   (notnot-mv (typep #(a b c) '(simple-array * (3))))
   t)
@@ -261,7 +261,7 @@
 (deftest simple-array.8.11
   (typep "abc" '(simple-array * (2)))
   nil)
-	 
+
 (deftest simple-array.8.12
   (notnot-mv (typep "abc" '(simple-array * (3))))
   t)

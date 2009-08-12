@@ -9,41 +9,41 @@
 (deftest pprint-tabular.1
   (my-with-standard-io-syntax
    (let ((*print-pretty* t)
-	 (*print-readably* nil))
+         (*print-readably* nil))
      (loop for obj in *mini-universe*
-	   nconc
-	   (and (not (listp obj))
-		(let ((s1 (write-to-string obj))
-		      (s2 (with-output-to-string (s) (pprint-tabular s obj))))
-		  (unless (equal s1 s2)
-		    (list (list obj s1 s2))))))))
+           nconc
+           (and (not (listp obj))
+                (let ((s1 (write-to-string obj))
+                      (s2 (with-output-to-string (s) (pprint-tabular s obj))))
+                  (unless (equal s1 s2)
+                    (list (list obj s1 s2))))))))
   nil)
 
 (deftest pprint-tabular.2
   (my-with-standard-io-syntax
    (let ((*print-pretty* nil)
-	 (*print-readably* nil))
+         (*print-readably* nil))
      (loop for obj in *mini-universe*
-	   nconc
-	   (and (not (listp obj))
-		(let ((s1 (write-to-string obj))
-		      (s2 (with-output-to-string (s) (pprint-tabular s obj))))
-		  (unless (equal s1 s2)
-		    (list (list obj s1 s2))))))))
+           nconc
+           (and (not (listp obj))
+                (let ((s1 (write-to-string obj))
+                      (s2 (with-output-to-string (s) (pprint-tabular s obj))))
+                  (unless (equal s1 s2)
+                    (list (list obj s1 s2))))))))
   nil)
 
 (defmacro def-pprint-tabular-test (name args expected-value &key (margin 100) (circle nil) (pre nil))
   `(deftest ,name
      (my-with-standard-io-syntax
       (let ((*print-pretty* t)
-	    (*print-readably* nil)
-	    (*print-right-margin* ,margin)
-	    (*package* (find-package :cl-test))
-	    (*print-circle* ,circle))
-	(with-output-to-string
-	  (s)
-	  ,@(when pre (list pre))
-	  (pprint-tabular s ,@args))))
+            (*print-readably* nil)
+            (*print-right-margin* ,margin)
+            (*package* (find-package :cl-test))
+            (*print-circle* ,circle))
+        (with-output-to-string
+          (s)
+          ,@(when pre (list pre))
+          (pprint-tabular s ,@args))))
      ,expected-value))
 
 ;;;
@@ -96,21 +96,21 @@
 (deftest pprint-tabular.23
   (my-with-standard-io-syntax
    (let ((*print-pretty* nil)
-	 (*print-readably* nil)
-	 (*print-right-margin* 100))
+         (*print-readably* nil)
+         (*print-right-margin* 100))
      (with-output-to-string
        (os)
        (with-input-from-string
-	(is "")
-	(with-open-stream (*terminal-io* (make-two-way-stream is os))
-			  (pprint-tabular t '(1 2 3) t nil 1))))))
+        (is "")
+        (with-open-stream (*terminal-io* (make-two-way-stream is os))
+                          (pprint-tabular t '(1 2 3) t nil 1))))))
   "(1 2 3)")
 
 (deftest pprint-tabular.24
   (my-with-standard-io-syntax
    (let ((*print-pretty* t)
-	 (*print-readably* nil)
-	 (*print-right-margin* 100))
+         (*print-readably* nil)
+         (*print-right-margin* 100))
      (with-output-to-string (*standard-output*) (pprint-tabular nil '(1 2 3) t nil 1))))
   "(1 2 3)")
 
@@ -121,17 +121,17 @@
 (deftest pprint-tabular.return-values.1
   (my-with-standard-io-syntax
    (let ((*print-pretty* nil)
-	 (*package* (find-package :cl-test)))
+         (*package* (find-package :cl-test)))
      (with-open-stream (s (make-broadcast-stream))
-		       (pprint-tabular s '(a b)))))
+                       (pprint-tabular s '(a b)))))
   nil)
 
 (deftest pprint-tabular.return-values.2
   (my-with-standard-io-syntax
    (let ((*print-pretty* nil)
-	 (*package* (find-package :cl-test)))
+         (*package* (find-package :cl-test)))
      (with-open-stream (s (make-broadcast-stream))
-		       (pprint-tabular s 10 nil nil 100))))
+                       (pprint-tabular s 10 nil nil 100))))
   nil)
 
 ;;; Error tests

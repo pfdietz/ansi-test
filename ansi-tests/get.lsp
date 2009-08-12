@@ -25,9 +25,9 @@
 
 (deftest get.5
   (let ((evaluated nil)
-	(sym (gensym)))
+        (sym (gensym)))
     (assert (equal (multiple-value-list (setf (get sym :foo) 1))
-		   '(1)))
+                   '(1)))
     (values
      (get sym :foo (progn (setf evaluated t) nil))
      evaluated))
@@ -35,12 +35,12 @@
 
 (deftest get.6
   (let ((evaluated nil)
-	(sym (gensym)))
+        (sym (gensym)))
     (assert (equal (multiple-value-list
-		    (setf (get sym :foo
-			       (progn (setf evaluated t) nil))
-			  1))
-		   '(1)))
+                    (setf (get sym :foo
+                               (progn (setf evaluated t) nil))
+                          1))
+                   '(1)))
     (values
      (get sym :foo)
      evaluated))
@@ -53,7 +53,7 @@
     (setf (get sym :foo) t)
     (values
      (get (progn (setf a (incf i)) sym)
-	  (progn (setf b (incf i)) :foo))
+          (progn (setf b (incf i)) :foo))
      a b i))
   t 1 2 2)
 
@@ -61,8 +61,8 @@
   (let (a b (i 0) (sym (gensym)))
     (values
      (setf (get (progn (setf a (incf i)) sym)
-		(progn (setf b (incf i)) :foo))
-	   t)
+                (progn (setf b (incf i)) :foo))
+           t)
      a b i
      (get sym :foo)
      ))
@@ -73,8 +73,8 @@
     (setf (get sym :foo) t)
     (values
      (get (progn (setf a (incf i)) sym)
-	  (progn (setf b (incf i)) :foo)
-	  (progn (setf c (incf i)) nil))
+          (progn (setf b (incf i)) :foo)
+          (progn (setf c (incf i)) nil))
      a b c i))
   t 1 2 3 3)
 
@@ -82,9 +82,9 @@
   (let (a b c (i 0) (sym (gensym)))
     (values
      (setf (get (progn (setf a (incf i)) sym)
-		(progn (setf b (incf i)) :foo)
-		(progn (setf c (incf i)) nil))
-	   t)
+                (progn (setf b (incf i)) :foo)
+                (progn (setf c (incf i)) nil))
+           t)
      a b c i
      (get sym :foo)
      ))

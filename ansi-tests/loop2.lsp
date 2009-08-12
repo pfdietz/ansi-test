@@ -12,12 +12,12 @@
 
 (deftest loop.2.2
   (loop for x in '(1 2 3 4)
-	do (when (evenp x) (return x)))
+        do (when (evenp x) (return x)))
   2)
 
 (deftest loop.2.3
   (signals-error (loop for x in '(a . b) collect x)
-		 type-error)
+                 type-error)
   t)
 
 (deftest loop.2.4
@@ -28,55 +28,55 @@
 
 (deftest loop.2.5
   (loop for e in '(a b c d e f) by #'cddr
-	collect e)
+        collect e)
   (a c e))
 
 (deftest loop.2.6
   (loop for e in '(a b c d e f g) by #'cddr
-	collect e)
+        collect e)
   (a c e g))
 
 (deftest loop.2.7
   (loop for e in '(a b c d e f)
-	by #'(lambda (l) (and (cdr l) (cons (car l) (cddr l))))
-	collect e)
+        by #'(lambda (l) (and (cdr l) (cons (car l) (cddr l))))
+        collect e)
   (a a a a a a))
 
 (deftest loop.2.8
   (loop for (x . y) in '((a . b) (c . d) (e . f))
-	collect (list x y))
+        collect (list x y))
   ((a b) (c d) (e f)))
 
 (deftest loop.2.9
   (loop for (x nil y) in '((a b c) (d e f) (g h i))
-	collect (list x y))
+        collect (list x y))
   ((a c) (d f) (g i)))
 
 (deftest loop.2.10
   (loop for (x y) of-type fixnum in '((1 2) (3 4) (5 6))
-	collect (+ x y))
+        collect (+ x y))
   (3 7 11))
 
 (deftest loop.2.11
   (loop for (x y) of-type fixnum in '((1 2) (3 4) (5 6))
-	collect (+ x y))
+        collect (+ x y))
   (3 7 11))
 
 (deftest loop.2.12
   (loop for (x y) of-type (fixnum fixnum) in '((1 2) (3 4) (5 6))
-	collect (+ x y))
+        collect (+ x y))
   (3 7 11))
 
 
 (deftest loop.2.13
   (loop for (x . y) of-type (fixnum . fixnum) in '((1 . 2) (3 . 4) (5 . 6))
-	collect (+ x y))
+        collect (+ x y))
   (3 7 11))
 
 (deftest loop.2.14
   (signals-error
    (loop for x in '(a b c)
-	 for x in '(d e f) collect x)
+         for x in '(d e f) collect x)
    program-error)
   t)
 
@@ -103,7 +103,7 @@
 (deftest loop.2.18
   (loop for x of-type (integer 0 10) in '(2 4 6 7) sum x)
   19)
-  
+
 ;;; Tests of the 'AS' form
 
 (deftest loop.2.19
@@ -112,29 +112,29 @@
 
 (deftest loop.2.20
   (loop as x in '(a b c)
-	as y in '(1 2 3)
-	collect (list x y))
+        as y in '(1 2 3)
+        collect (list x y))
   ((a 1) (b 2) (c 3)))
 
 (deftest loop.2.21
   (loop as x in '(a b c)
-	for y in '(1 2 3)
-	collect (list x y))
+        for y in '(1 2 3)
+        collect (list x y))
   ((a 1) (b 2) (c 3)))
 
 (deftest loop.2.22
   (loop for x in '(a b c)
-	as y in '(1 2 3)
-	collect (list x y))
+        as y in '(1 2 3)
+        collect (list x y))
   ((a 1) (b 2) (c 3)))
 
 (deftest loop.2.23
   (let (a b (i 0))
     (values
      (loop for e in (progn (setf a (incf i))
-			   '(a b c d e f g))
-	   by (progn (setf b (incf i)) #'cddr)
-	   collect e)
+                           '(a b c d e f g))
+           by (progn (setf b (incf i)) #'cddr)
+           collect e)
      a b i))
   (a c e g)
   1 2 2)
@@ -153,7 +153,7 @@
   (macrolet
    ((%m (z) z))
    (loop for (x . y) in (expand-in-current-env (%m '((a . b) (c . d) (e . f))))
-	 collect (list x y)))
+         collect (list x y)))
   ((a b) (c d) (e f)))
 
 (deftest loop.2.26

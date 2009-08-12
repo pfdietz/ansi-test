@@ -51,8 +51,8 @@
   (let ((i 0) x y)
     (values
      (make-list (progn (setf x (incf i)) 5)
-		:initial-element
-		(progn (setf y (incf i)) 'a))
+                :initial-element
+                (progn (setf y (incf i)) 'a))
      i x y))
   (a a a a a)
   2 1 2)
@@ -61,10 +61,10 @@
   (let ((i 0) x y z)
     (values
      (make-list (progn (setf x (incf i)) 5)
-		:initial-element
-		(progn (setf y (incf i)) 'a)
-		:initial-element
-		(progn (setf z (incf i)) 'b))
+                :initial-element
+                (progn (setf y (incf i)) 'a)
+                :initial-element
+                (progn (setf z (incf i)) 'b))
      i x y z))
   (a a a a a)
   3 1 2 3)
@@ -96,7 +96,7 @@
 
 (deftest make-list.error.7
   (signals-error (make-list 5 :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest make-list.error.8

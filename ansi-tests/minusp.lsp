@@ -35,8 +35,8 @@
 
 (deftest minusp.4
   (loop for x in *reals*
-	when (if (minusp x) (>= x 0) (< x 0))
-	collect x)
+        when (if (minusp x) (>= x 0) (< x 0))
+        collect x)
   nil)
 
 (deftest minusp.5
@@ -45,16 +45,16 @@
 
 (deftest minusp.6
   (remove-if #'minusp
-	     (list least-negative-short-float
-		   least-negative-normalized-short-float
-		   least-negative-single-float
-		   least-negative-normalized-single-float
-		   least-negative-double-float
-		   least-negative-normalized-double-float
-		   least-negative-long-float
-		   least-negative-normalized-long-float
-		   most-negative-short-float
-		   most-negative-single-float
-		   most-negative-double-float
-		   most-negative-long-float))
+             (list least-negative-short-float
+                   least-negative-normalized-short-float
+                   least-negative-single-float
+                   least-negative-normalized-single-float
+                   least-negative-double-float
+                   least-negative-normalized-double-float
+                   least-negative-long-float
+                   least-negative-normalized-long-float
+                   most-negative-short-float
+                   most-negative-single-float
+                   most-negative-double-float
+                   most-negative-long-float))
   nil)

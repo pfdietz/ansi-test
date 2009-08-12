@@ -8,7 +8,7 @@
 (deftest bit-vector-p.2
   (notnot-mv (bit-vector-p #*))
   t)
-  
+
 (deftest bit-vector-p.3
   (notnot-mv (bit-vector-p #*00101))
   t)
@@ -43,7 +43,7 @@
 
 (deftest bit-vector-p.11
   (bit-vector-p (make-array '(2 2) :element-type 'bit
-			    :initial-element 0))
+                            :initial-element 0))
   nil)
 
 (deftest bit-vector-p.12
@@ -54,7 +54,7 @@
   (macrolet
    ((%m (z) z))
    (values (notnot (bit-vector-p (expand-in-current-env (%m #*110101))))
-	   (bit-vector-p (expand-in-current-env (%m nil)))))
+           (bit-vector-p (expand-in-current-env (%m nil)))))
   t nil)
 
 (deftest bit-vector-p.order.1

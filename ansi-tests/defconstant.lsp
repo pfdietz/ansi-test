@@ -33,32 +33,32 @@
 ;;; (deftest defconstant.error.1
 ;;;   (signals-error (defconstant)  program-error)
 ;;;   t)
-;;; 
+;;;
 ;;; (deftest defconstant.error.2
 ;;;   (signals-error (defconstant +ignorable-constant-name+) program-error)
 ;;;   t)
-;;; 
+;;;
 ;;; (deftest defconstant.error.3
 ;;;   (signals-error (defconstant +ignorable-constant-name2+ nil
-;;; 		    "This is a docstring"
-;;; 		    "This is an unnecessary extra argument.")
+;;;                 "This is a docstring"
+;;;                 "This is an unnecessary extra argument.")
 ;;;                  program-error)
 ;;;  t)
 
 (deftest defconstant.error.1
   (signals-error (funcall (macro-function 'defconstant))
-		 program-error)
+                 program-error)
   t)
 
 (deftest defconstant.error.2
   (signals-error (funcall (macro-function 'defconstant)
-			   '(defconstant +nonexistent-constant+ 0))
-		 program-error)
+                           '(defconstant +nonexistent-constant+ 0))
+                 program-error)
   t)
 
 (deftest defconstant.error.3
   (signals-error (funcall (macro-function 'defconstant)
-			   '(defconstant +nonexistent-constant+ 0)
-			   nil nil)
-		 program-error)
+                           '(defconstant +nonexistent-constant+ 0)
+                           nil nil)
+                 program-error)
   t)

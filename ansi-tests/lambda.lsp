@@ -154,22 +154,22 @@
 
 (deftest lambda.34
   ((lambda (&key (a 1 a-p) (b 2 b-p) (c 3 c-p)) (list a (notnot a-p)
-						      b (notnot b-p)
-						      c (notnot c-p)))
+                                                      b (notnot b-p)
+                                                      c (notnot c-p)))
    :c 5 :a 0)
   (0 t 2 nil 5 t))
 
 (deftest lambda.35
   ((lambda (&key (a 1 a-p) (b 2 b-p) (c 3 c-p)) (list a (notnot a-p)
-						      b (notnot b-p)
-						      c (notnot c-p)))
+                                                      b (notnot b-p)
+                                                      c (notnot c-p)))
    :c 5 :a nil :a 17 :c 100)
   (nil t 2 nil 5 t))
 
 (deftest lambda.36
   ((lambda (&key (a 1 a-p) (b 2 b-p) (c 3 c-p)) (list a (notnot a-p)
-						      b (notnot b-p)
-						      c (notnot c-p)))
+                                                      b (notnot b-p)
+                                                      c (notnot c-p)))
    :c 5 :a 0 :allow-other-keys t 'b 100)
   (0 t 2 nil 5 t))
 
@@ -188,7 +188,7 @@
     (declare (ignorable a-p))
     ((lambda (&key (a nil a-p) (b a-p)) (list a (notnot a-p) (notnot b)))))
   (nil nil nil))
-     
+
 (deftest lambda.40
   (let ((a-p :bad))
     (declare (ignorable a-p))
@@ -278,8 +278,8 @@
 
 (deftest lambda.55
   (let* ((doc "LMB55")
-	 (fn (eval `#'(lambda () ,doc nil)))
-	 (cfn (compile nil fn)))
+         (fn (eval `#'(lambda () ,doc nil)))
+         (cfn (compile nil fn)))
     (values
      (or (documentation fn t) doc)
      (or (documentation cfn t) doc)))
@@ -288,8 +288,8 @@
 
 (deftest lambda.56
   (let* ((doc "LMB56")
-	 (fn (eval `#'(lambda () ,doc nil)))
-	 (cfn (compile nil fn)))
+         (fn (eval `#'(lambda () ,doc nil)))
+         (cfn (compile nil fn)))
     (values
      (or (documentation fn 'function) doc)
      (or (documentation cfn 'function) doc)))
@@ -330,10 +330,10 @@
     (let ((y :bad2))
       (declare (special y))
       (flet ((%f () y))
-	((lambda (x &aux (y :good))
-	   (declare (special y) (ignore x))
-	   (%f))
-	 nil))))
+        ((lambda (x &aux (y :good))
+           (declare (special y) (ignore x))
+           (%f))
+         nil))))
   :good)
 
 (deftest lambda.64
@@ -341,8 +341,8 @@
     (declare (special x))
     (flet ((%f () x))
       ((lambda (x &aux (y (%f)))
-	 (declare (type t y) (special x))
-	 y)
+         (declare (type t y) (special x))
+         y)
        :good)))
   :good)
 
@@ -360,15 +360,15 @@
 
 (deftest lambda.error.1
   (signals-error (funcall (macro-function 'lambda))
-		 program-error)
+                 program-error)
   t)
 
 (deftest lambda.error.2
   (signals-error (funcall (macro-function 'lambda) '(lambda ()))
-		 program-error)
+                 program-error)
   t)
 
 (deftest lambda.error.3
   (signals-error (funcall (macro-function 'lambda) '(lambda ()) nil nil)
-		 program-error)
+                 program-error)
   t)

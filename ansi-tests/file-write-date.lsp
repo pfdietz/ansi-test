@@ -7,43 +7,43 @@
 
 (deftest file-write-date.1
   (let* ((pn "file-write-date.lsp")
-	 (date (file-write-date pn))
-	 (time (get-universal-time)))
+         (date (file-write-date pn))
+         (time (get-universal-time)))
     (or (null date)
-	(and (integerp date)
-	     (<= 0 date time)
-	     t)))
+        (and (integerp date)
+             (<= 0 date time)
+             t)))
   t)
 
 (deftest file-write-date.2
   (let* ((pn #p"file-write-date.lsp")
-	 (date (file-write-date pn))
-	 (time (get-universal-time)))
+         (date (file-write-date pn))
+         (time (get-universal-time)))
     (or (null date)
-	(and (integerp date)
-	     (<= 0 date time)
-	     t)))
+        (and (integerp date)
+             (<= 0 date time)
+             t)))
   t)
-	     
+
 (deftest file-write-date.3
   (let* ((pn (truename "file-write-date.lsp"))
-	 (date (file-write-date pn))
-	 (time (get-universal-time)))
+         (date (file-write-date pn))
+         (time (get-universal-time)))
     (or (null date)
-	(and (integerp date)
-	     (<= 0 date time)
-	     t)))
+        (and (integerp date)
+             (<= 0 date time)
+             t)))
   t)
 
 (deftest file-write-date.4
   (loop for pn in (directory
-		   (make-pathname :name :wild :type :wild
-				  :defaults *default-pathname-defaults*))
-	for date = (file-write-date pn)
-	for time = (get-universal-time)
-	unless (or (null date)
-		   (<= 0 date time))
-	collect (list pn date time))
+                   (make-pathname :name :wild :type :wild
+                                  :defaults *default-pathname-defaults*))
+        for date = (file-write-date pn)
+        for time = (get-universal-time)
+        unless (or (null date)
+                   (<= 0 date time))
+        collect (list pn date time))
   nil)
 
 (deftest file-write-date.5
@@ -54,7 +54,7 @@
 
 (deftest file-write-date.6
   (let* ((str "file-write-date.lsp")
-	 (date (file-write-date str)))
+         (date (file-write-date str)))
     (do-special-strings
      (s str nil)
      (assert (equal (file-write-date s) date))))
@@ -71,19 +71,19 @@
 
 (deftest file-write-date.error.2
   (signals-error (file-write-date "file-write-date.lsp" nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest file-write-date.error.3
   (signals-error-always
    (file-write-date (make-pathname :name :wild :type "lsp"
-				   :defaults *default-pathname-defaults*))
+                                   :defaults *default-pathname-defaults*))
    file-error)
   t t)
 
 (deftest file-write-date.error.4
   (signals-error-always
    (file-write-date (make-pathname :name "file-write-date" :type :wild
-				   :defaults *default-pathname-defaults*))
+                                   :defaults *default-pathname-defaults*))
    file-error)
   t t)

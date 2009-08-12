@@ -12,36 +12,36 @@
      append
      (let ((failures nil))
        (do-symbols (sym package failures)
-	 (when (eql (symbol-package sym) package)
-	   (let* ((name (symbol-name sym))
-		  (similar (find-all-symbols name))
-		  (similar2 (find-all-symbols sym)))
-	     (unless (and (member sym similar)
-			  (subsetp similar similar2)
-			  (subsetp similar2 similar)
-			  (loop for sym2 in similar
-				always (string= name (symbol-name sym2))))
-	       (push sym failures))))))))
+         (when (eql (symbol-package sym) package)
+           (let* ((name (symbol-name sym))
+                  (similar (find-all-symbols name))
+                  (similar2 (find-all-symbols sym)))
+             (unless (and (member sym similar)
+                          (subsetp similar similar2)
+                          (subsetp similar2 similar)
+                          (loop for sym2 in similar
+                                always (string= name (symbol-name sym2))))
+               (push sym failures))))))))
   nil)
 
 ;;; FIXME -- test that each symbol found is accessible in some package
 
 (deftest find-all-symbols.2
   (loop for i from 0 to 255
-	for c = (code-char i)
-	when (and (characterp c)
-		  (loop for sym in (find-all-symbols c)
-			thereis (not (string= (symbol-name sym)
-					      (string c)))))
-	collect c)
+        for c = (code-char i)
+        when (and (characterp c)
+                  (loop for sym in (find-all-symbols c)
+                        thereis (not (string= (symbol-name sym)
+                                              (string c)))))
+        collect c)
   nil)
 
 ;;; Unusual strings
 
 (deftest find-all-symbols.3
   (let* ((name (make-array '(3) :initial-contents "NIL"
-			   :element-type 'base-char))
-	 (symbols (find-all-symbols name)))
+                           :element-type 'base-char))
+         (symbols (find-all-symbols name)))
     (values
      (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
      (some #'not symbols)))
@@ -49,9 +49,9 @@
 
 (deftest find-all-symbols.4
   (let* ((name (make-array '(5) :initial-contents "NILXY"
-			   :fill-pointer 3
-			   :element-type 'character))
-	 (symbols (find-all-symbols name)))
+                           :fill-pointer 3
+                           :element-type 'character))
+         (symbols (find-all-symbols name)))
     (values
      (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
      (some #'not symbols)))
@@ -59,9 +59,9 @@
 
 (deftest find-all-symbols.5
   (let* ((name (make-array '(5) :initial-contents "NILXY"
-			   :fill-pointer 3
-			   :element-type 'base-char))
-	 (symbols (find-all-symbols name)))
+                           :fill-pointer 3
+                           :element-type 'base-char))
+         (symbols (find-all-symbols name)))
     (values
      (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
      (some #'not symbols)))
@@ -69,9 +69,9 @@
 
 (deftest find-all-symbols.6
   (let* ((name (make-array '(3) :initial-contents "NIL"
-			   :adjustable t
-			   :element-type 'base-char))
-	 (symbols (find-all-symbols name)))
+                           :adjustable t
+                           :element-type 'base-char))
+         (symbols (find-all-symbols name)))
     (values
      (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
      (some #'not symbols)))
@@ -79,9 +79,9 @@
 
 (deftest find-all-symbols.7
   (let* ((name (make-array '(3) :initial-contents "NIL"
-			   :adjustable t
-			   :element-type 'character))
-	 (symbols (find-all-symbols name)))
+                           :adjustable t
+                           :element-type 'character))
+         (symbols (find-all-symbols name)))
     (values
      (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
      (some #'not symbols)))
@@ -89,12 +89,12 @@
 
 (deftest find-all-symbols.8
   (let* ((type 'character)
-	 (name0 (make-array '(9) :initial-contents "XYZNILABC"
-			    :element-type type))
-	 (name (make-array '(3) :element-type type
-			   :displaced-to name0
-			   :displaced-index-offset 3))
-	 (symbols (find-all-symbols name)))
+         (name0 (make-array '(9) :initial-contents "XYZNILABC"
+                            :element-type type))
+         (name (make-array '(3) :element-type type
+                           :displaced-to name0
+                           :displaced-index-offset 3))
+         (symbols (find-all-symbols name)))
     (values
      (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
      (some #'not symbols)))
@@ -102,16 +102,16 @@
 
 (deftest find-all-symbols.9
   (let* ((type 'base-char)
-	 (name0 (make-array '(9) :initial-contents "XYZNILABC"
-			    :element-type type))
-	 (name (make-array '(3) :element-type type
-			   :displaced-to name0
-			   :displaced-index-offset 3))
-	 (symbols (find-all-symbols name)))
+         (name0 (make-array '(9) :initial-contents "XYZNILABC"
+                            :element-type type))
+         (name (make-array '(3) :element-type type
+                           :displaced-to name0
+                           :displaced-index-offset 3))
+         (symbols (find-all-symbols name)))
     (values
      (notnot (every #'(lambda (s) (string= (symbol-name s) "NIL")) symbols))
      (some #'not symbols)))
-  t t)  
+  t t)
 
 ;;; Error tests
 

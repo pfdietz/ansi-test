@@ -27,13 +27,13 @@
 
 (deftest format.cond.7
   (loop for i from -1 to 10
-	collect (format nil "~[a~;b~;c~;d~;e~;f~;g~;h~;i~]" i))
+        collect (format nil "~[a~;b~;c~;d~;e~;f~;g~;h~;i~]" i))
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (deftest formatter.cond.7
   (let ((fn (formatter "~[a~;b~;c~;d~;e~;f~;g~;h~;i~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn i)))
+          collect (formatter-call-to-string fn i)))
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (def-format-test format.cond.8
@@ -53,24 +53,24 @@
 
 (deftest format.cond.13
   (loop for i from -1 to 10
-	collect (format nil "~v[a~;b~;c~;d~;e~;f~;g~;h~;i~]" i nil))
+        collect (format nil "~v[a~;b~;c~;d~;e~;f~;g~;h~;i~]" i nil))
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (deftest formatter.cond.13
   (let ((fn (formatter "~V[a~;b~;c~;d~;e~;f~;g~;h~;i~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn i)))
+          collect (formatter-call-to-string fn i)))
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (deftest format.cond.14
   (loop for i from -1 to 10
-	collect (format nil "~v[a~;b~;c~;d~;e~;f~;g~;h~;i~]" nil i))
+        collect (format nil "~v[a~;b~;c~;d~;e~;f~;g~;h~;i~]" nil i))
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (deftest formatter.cond.14
   (let ((fn (formatter "~v[a~;b~;c~;d~;e~;f~;g~;h~;i~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn nil i)))
+          collect (formatter-call-to-string fn nil i)))
   ("" "a" "b" "c" "d" "e" "f" "g" "h" "i" "" ""))
 
 (def-format-test format.cond.15
@@ -83,17 +83,17 @@
 
 (deftest format.cond\:.1
   (loop for i from -100 to 100
-	for s = (format nil "~[~:;a~]" i)
-	unless (or (zerop i) (string= s "a"))
-	collect (list i s))
+        for s = (format nil "~[~:;a~]" i)
+        unless (or (zerop i) (string= s "a"))
+        collect (list i s))
   nil)
 
 (deftest formatter.cond\:.1
   (let ((fn (formatter "~[~:;a~]")))
     (loop for i from -100 to 100
-	  for s = (formatter-call-to-string fn i)
-	  unless (or (zerop i) (string= s "a"))
-	  collect (list i s)))
+          for s = (formatter-call-to-string fn i)
+          unless (or (zerop i) (string= s "a"))
+          collect (list i s)))
   nil)
 
 (def-format-test format.cond\:.2
@@ -107,35 +107,35 @@
 
 (deftest format.cond\:.5
   (loop for i from -1 to 10
-	collect (format nil "~[a~;b~;c~;d~:;e~]" i))
+        collect (format nil "~[a~;b~;c~;d~:;e~]" i))
   ("e" "a" "b" "c" "d" "e" "e" "e" "e" "e" "e" "e"))
 
 (deftest formatter.cond\:.5
   (let ((fn (formatter "~[a~;b~;c~;d~:;e~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn i)))
+          collect (formatter-call-to-string fn i)))
   ("e" "a" "b" "c" "d" "e" "e" "e" "e" "e" "e" "e"))
 
 (deftest format.cond\:.6
   (loop for i from -1 to 10
-	collect (format nil "~v[a~;b~;c~;d~:;e~]" i nil))
+        collect (format nil "~v[a~;b~;c~;d~:;e~]" i nil))
   ("e" "a" "b" "c" "d" "e" "e" "e" "e" "e" "e" "e"))
 
 (deftest formatter.cond\:.6
   (let ((fn (formatter "~v[a~;b~;c~;d~:;e~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn i)))
+          collect (formatter-call-to-string fn i)))
   ("e" "a" "b" "c" "d" "e" "e" "e" "e" "e" "e" "e"))
 
 (deftest format.cond\:.7
   (loop for i from -1 to 10
-	collect (format nil "~v[a~;b~;c~;d~:;e~]" nil i))
+        collect (format nil "~v[a~;b~;c~;d~:;e~]" nil i))
   ("e" "a" "b" "c" "d" "e" "e" "e" "e" "e" "e" "e"))
 
 (deftest formatter.cond\:.7
   (let ((fn (formatter "~v[a~;b~;c~;d~:;e~]")))
     (loop for i from -1 to 10
-	  collect (formatter-call-to-string fn nil i)))
+          collect (formatter-call-to-string fn nil i)))
   ("e" "a" "b" "c" "d" "e" "e" "e" "e" "e" "e" "e"))
 
 (def-format-test format.cond\:.8
@@ -151,17 +151,17 @@
 
 (deftest format.\:cond.2
   (loop for x in *mini-universe*
-	for s = (format nil "~:[a~;b~]" x)
-	when (and x (not (string= s "b")))
-	collect (list x s))
+        for s = (format nil "~:[a~;b~]" x)
+        when (and x (not (string= s "b")))
+        collect (list x s))
   nil)
 
 (deftest formatter.\:cond.2
   (let ((fn (formatter "~:[a~;b~]")))
     (loop for x in *mini-universe*
-	  for s = (formatter-call-to-string fn x)
-	  when (and x (not (string= s "b")))
-	  collect (list x s)))
+          for s = (formatter-call-to-string fn x)
+          when (and x (not (string= s "b")))
+          collect (list x s)))
   nil)
 
 ;;; ~@[ ... ~]

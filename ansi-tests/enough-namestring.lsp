@@ -7,11 +7,11 @@
 
 (deftest enough-namestring.1
   (let* ((vals (multiple-value-list (enough-namestring "enough-namestring.lsp")))
-	 (s (first vals)))
+         (s (first vals)))
     (if (and (null (cdr vals))
-	     (stringp s)
-	     (equal (enough-namestring s) s))
-	:good
+             (stringp s)
+             (equal (enough-namestring s) s))
+        :good
       vals))
   :good)
 
@@ -25,39 +25,39 @@
 
 (deftest enough-namestring.3
   (let* ((name "enough-namestring.lsp")
-	 (pn (merge-pathnames (pathname name)))
-	 (name2 (enough-namestring pn))
-	 (name3 (enough-namestring name)))
+         (pn (merge-pathnames (pathname name)))
+         (name2 (enough-namestring pn))
+         (name3 (enough-namestring name)))
     (or (equalt name2 name3) (list name2 name3)))
   t)
 
 (deftest enough-namestring.4
   (let* ((name "enough-namestring.lsp")
-	 (pn (merge-pathnames (pathname name)))
-	 (name2 (with-open-file (s pn :direction :input) (enough-namestring s)))
-	 (name3 (enough-namestring name)))
+         (pn (merge-pathnames (pathname name)))
+         (name2 (with-open-file (s pn :direction :input) (enough-namestring s)))
+         (name3 (enough-namestring name)))
     (or (equalt name2 name3) (list name2 name3)))
   t)
 
 (deftest enough-namestring.5
   (let* ((vals (multiple-value-list (enough-namestring "enough-namestring.lsp"
-						       *default-pathname-defaults*)))
-	 (s (first vals)))
+                                                       *default-pathname-defaults*)))
+         (s (first vals)))
     (if (and (null (cdr vals))
-	     (stringp s)
-	     (equal (enough-namestring s) s))
-	:good
+             (stringp s)
+             (equal (enough-namestring s) s))
+        :good
       vals))
   :good)
 
 (deftest enough-namestring.6
   (let* ((vals (multiple-value-list (enough-namestring "enough-namestring.lsp"
-						       (namestring *default-pathname-defaults*))))
-	 (s (first vals)))
+                                                       (namestring *default-pathname-defaults*))))
+         (s (first vals)))
     (if (and (null (cdr vals))
-	     (stringp s)
-	     (equal (enough-namestring s) s))
-	:good
+             (stringp s)
+             (equal (enough-namestring s) s))
+        :good
       vals))
   :good)
 
@@ -65,7 +65,7 @@
   (do-special-strings
    (s (namestring *default-pathname-defaults*) nil)
    (let* ((vals (multiple-value-list (enough-namestring "enough-namestring.lsp" s)))
-	 (s2 (first vals)))
+         (s2 (first vals)))
      (assert (null (cdr vals)))
      (assert (stringp s2))
      (assert (equal (enough-namestring s2) s2))))

@@ -8,13 +8,13 @@
 (deftest features.1
   (let ((f *features*))
     (or (not (member :draft-ansi-cl f))
-	(not (intersection '(:draft-ansi-cl-2 :ansi-cl) f))))
+        (not (intersection '(:draft-ansi-cl-2 :ansi-cl) f))))
   t)
 
 (deftest features.2
   (let ((f *features*))
     (or (not (intersection '(:x3j13 :draft-ansi-cl :ansi-cl) f))
-	(notnot (member :common-lisp f))))
+        (notnot (member :common-lisp f))))
   t)
 
 (deftest features.3

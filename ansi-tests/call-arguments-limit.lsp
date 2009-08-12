@@ -19,7 +19,7 @@
 
 (deftest call-arguments-limit.4
   (let* ((m (min 65536 (1- call-arguments-limit)))
-	 (args (make-list m :initial-element 'a)))
+         (args (make-list m :initial-element 'a)))
     (equalt (apply #'list args) args))
   t)
 

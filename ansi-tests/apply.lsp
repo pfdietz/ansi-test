@@ -21,7 +21,7 @@
 
 (deftest apply.error.4
   (signals-error (apply #'cons (list 1 2 3))
-		 program-error)
+                 program-error)
   t)
 
 ;;; Non-error cases
@@ -40,7 +40,7 @@
 
 (deftest apply.4
   (let ((zeros (make-list (min 10000 (1- call-arguments-limit))
-			  :initial-element 1)))
+                          :initial-element 1)))
     (apply #'+ zeros))
   #.(min 10000 (1- call-arguments-limit)))
 
@@ -50,28 +50,28 @@
 
 (deftest apply.6
   (macrolet ((%m (z) z))
-	    (apply (expand-in-current-env (%m 'cons)) 1 2 nil))
+            (apply (expand-in-current-env (%m 'cons)) 1 2 nil))
   (1 . 2))
 
 (deftest apply.7
   (macrolet ((%m (z) z))
-	    (apply #'cons (expand-in-current-env (%m 1)) '(2)))
+            (apply #'cons (expand-in-current-env (%m 1)) '(2)))
   (1 . 2))
 
 (deftest apply.8
   (macrolet ((%m (z) z))
-	    (apply #'cons (expand-in-current-env (%m '(1 2)))))
+            (apply #'cons (expand-in-current-env (%m '(1 2)))))
   (1 . 2))
 
 (deftest apply.order.1
   (let ((i 0) x y z)
     (values
      (apply (progn (setf x (incf i))
-		   #'list)
-	    (progn (setf y (incf i))
-		   'b)
-	    (progn (setf z (incf i))
-		   (list 'a)))
+                   #'list)
+            (progn (setf y (incf i))
+                   'b)
+            (progn (setf z (incf i))
+                   (list 'a)))
      i x y z))
   (b a) 3 1 2 3)
 

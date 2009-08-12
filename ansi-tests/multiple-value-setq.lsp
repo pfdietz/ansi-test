@@ -52,7 +52,7 @@
 (deftest multiple-value-setq.7
   (let ((x (list nil)) (z (list nil)))
     (symbol-macrolet ((y (car x))
-		      (w (car z)))
+                      (w (car z)))
       (multiple-value-setq (y w) (values 1 2)))
     (values x z))
   (1) (2))
@@ -62,7 +62,7 @@
 (deftest multiple-value-setq.8
   (let ((x (list nil)) (z (list nil)) (i 0))
     (symbol-macrolet ((y (car (progn (incf i 3) x)))
-		      (w (car (progn (incf i i) z))))
+                      (w (car (progn (incf i i) z))))
       (multiple-value-setq (y w) (values i 10)))
     (values x z))
   (6) (10))
@@ -90,8 +90,8 @@
 
 (deftest multiple-value-setq.12
   (let ((n (min 100 multiple-values-limit))
-	(vars nil)
-	(result nil))
+        (vars nil)
+        (result nil))
     (loop
      for i from 1 below n
      for form =
@@ -99,10 +99,10 @@
        (push (gensym) vars)
        (push i result)
        `(let ,vars
-	  (and (eql (multiple-value-setq ,vars (values-list (quote ,result)))
-		    ,(car result))
-	       (equal ,(make-list-expr vars)
-		      (quote ,result)))))
+          (and (eql (multiple-value-setq ,vars (values-list (quote ,result)))
+                    ,(car result))
+               (equal ,(make-list-expr vars)
+                      (quote ,result)))))
      unless (eval form)
      collect (list i form)))
   nil)
@@ -127,7 +127,7 @@
    ((%m (z) z))
    (let ((x :bad))
      (symbol-macrolet ((z (expand-in-current-env (%m x))))
-		      (multiple-value-setq (z) :good))
+                      (multiple-value-setq (z) :good))
      x))
   :good)
 
@@ -144,20 +144,20 @@
 
 (deftest multiple-value-setq.error.1
   (signals-error (funcall (macro-function 'multiple-value-setq))
-		 program-error)
+                 program-error)
   t)
-  
+
 (deftest multiple-value-setq.error.2
   (signals-error (funcall (macro-function 'multiple-value-setq)
-			   '(multiple-value-setq nil nil))
-		 program-error)
+                           '(multiple-value-setq nil nil))
+                 program-error)
   t)
 
 (deftest multiple-value-setq.error.3
   (signals-error (funcall (macro-function 'multiple-value-setq)
-			   '(multiple-value-setq nil nil)
-			   nil nil)
-		 program-error)
+                           '(multiple-value-setq nil nil)
+                           nil nil)
+                 program-error)
   t)
 
-  
+

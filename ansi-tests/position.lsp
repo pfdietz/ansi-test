@@ -15,39 +15,39 @@
 
 (deftest position-list.3
   (loop for i from 0 to 7 collect
-	(position 'c '(a b c d e c a) :start i))
+        (position 'c '(a b c d e c a) :start i))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-list.4
   (loop for i from 0 to 7 collect
-	(position 'c '(a b c d e c a) :start i :end nil))
+        (position 'c '(a b c d e c a) :start i :end nil))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-list.5
   (loop for i from 7 downto 0 collect
-	(position 'c '(a b c d e c a) :end i))
+        (position 'c '(a b c d e c a) :end i))
   (2 2 2 2 2 nil nil nil))
 
 (deftest position-list.6
   (loop for i from 0 to 7 collect
-	(position 'c '(a b c d e c a) :start i :from-end t))
+        (position 'c '(a b c d e c a) :start i :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-list.7
   (loop for i from 0 to 7 collect
-	(position 'c '(a b c d e c a) :start i :end nil :from-end t))
+        (position 'c '(a b c d e c a) :start i :end nil :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-list.8
   (loop for i from 7 downto 0 collect
-	(position 'c '(a b c d e c a) :end i :from-end t))
+        (position 'c '(a b c d e c a) :end i :from-end t))
   (5 5 2 2 2 nil nil nil))
 
 (deftest position-list.9
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position 'c '(a b c d e c a) :start i :end j)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position 'c '(a b c d e c a) :start i :end j)))
   ((nil nil 2 2 2 2 2)
    (nil 2 2 2 2 2)
    (2 2 2 2 2)
@@ -58,9 +58,9 @@
 
 (deftest position-list.10
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position 'c '(a b c d e c a) :start i :end j :from-end t)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position 'c '(a b c d e c a) :start i :end j :from-end t)))
   ((nil nil 2 2 2 5 5)
    (nil 2 2 2 5 5)
    (2 2 2 5 5)
@@ -87,7 +87,7 @@
 
 (deftest position-list.15
   (position 'a '(a a b a c e d a f a) :test (complement #'eql)
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-list.16
@@ -96,7 +96,7 @@
 
 (deftest position-list.17
   (position 'a '(a a b a c e d a f a) :test-not 'eql
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-list.18
@@ -105,7 +105,7 @@
 
 (deftest position-list.19
   (position 'a '(a a b a c e d a f a) :test-not #'eql
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-list.20
@@ -114,22 +114,22 @@
 
 (deftest position-list.21
   (position 'a '(a a b a c e d a f a) :test #'eql
-	    :start 2)
+            :start 2)
   3)
 
 (deftest position-list.22
   (position 'a '(a a b a c e d a f a) :test #'eql
-	    :start 2 :end nil)
+            :start 2 :end nil)
   3)
 
 (deftest position-list.23
   (position 'a '(a a b a c e d a f a) :test-not #'eql
-	    :start 0 :end 5)
+            :start 0 :end 5)
   2)
 
 (deftest position-list.24
   (position 'a '(a a b a c e d a f a) :test-not #'eql
-	    :start 0 :end 5 :from-end t)
+            :start 0 :end 5 :from-end t)
   4)
 
 (deftest position-list.25
@@ -142,12 +142,12 @@
 
 (deftest position-list.27
   (position 'a '((c) (b a) (a b c) (z) (a b) (d e) f) :key #'car
-	    :start 3)
+            :start 3)
   4)
 
 (deftest position-list.28
   (position 'a '((c) (b a) (a b c) (z) (a b) (d e) (f)) :key #'car
-	    :start 2 :from-end t)
+            :start 2 :from-end t)
   4)
 
 (deftest position-list.29
@@ -170,39 +170,39 @@
 
 (deftest position-vector.3
   (loop for i from 0 to 7 collect
-	(position 'c #(a b c d e c a) :start i))
+        (position 'c #(a b c d e c a) :start i))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-vector.4
   (loop for i from 0 to 7 collect
-	(position 'c #(a b c d e c a) :start i :end nil))
+        (position 'c #(a b c d e c a) :start i :end nil))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-vector.5
   (loop for i from 7 downto 0 collect
-	(position 'c #(a b c d e c a) :end i))
+        (position 'c #(a b c d e c a) :end i))
   (2 2 2 2 2 nil nil nil))
 
 (deftest position-vector.6
   (loop for i from 0 to 7 collect
-	(position 'c #(a b c d e c a) :start i :from-end t))
+        (position 'c #(a b c d e c a) :start i :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-vector.7
   (loop for i from 0 to 7 collect
-	(position 'c #(a b c d e c a) :start i :end nil :from-end t))
+        (position 'c #(a b c d e c a) :start i :end nil :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-vector.8
   (loop for i from 7 downto 0 collect
-	(position 'c #(a b c d e c a) :end i :from-end t))
+        (position 'c #(a b c d e c a) :end i :from-end t))
   (5 5 2 2 2 nil nil nil))
 
 (deftest position-vector.9
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position 'c #(a b c d e c a) :start i :end j)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position 'c #(a b c d e c a) :start i :end j)))
   ((nil nil 2 2 2 2 2)
    (nil 2 2 2 2 2)
    (2 2 2 2 2)
@@ -213,9 +213,9 @@
 
 (deftest position-vector.10
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position 'c #(a b c d e c a) :start i :end j :from-end t)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position 'c #(a b c d e c a) :start i :end j :from-end t)))
   ((nil nil 2 2 2 5 5)
    (nil 2 2 2 5 5)
    (2 2 2 5 5)
@@ -242,7 +242,7 @@
 
 (deftest position-vector.15
   (position 'a #(a a b a c e d a f a) :test (complement #'eql)
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-vector.16
@@ -251,7 +251,7 @@
 
 (deftest position-vector.17
   (position 'a #(a a b a c e d a f a) :test-not 'eql
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-vector.18
@@ -260,7 +260,7 @@
 
 (deftest position-vector.19
   (position 'a #(a a b a c e d a f a) :test-not #'eql
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-vector.20
@@ -269,22 +269,22 @@
 
 (deftest position-vector.21
   (position 'a #(a a b a c e d a f a) :test #'eql
-	    :start 2)
+            :start 2)
   3)
 
 (deftest position-vector.22
   (position 'a #(a a b a c e d a f a) :test #'eql
-	    :start 2 :end nil)
+            :start 2 :end nil)
   3)
 
 (deftest position-vector.23
   (position 'a #(a a b a c e d a f a) :test-not #'eql
-	    :start 0 :end 5)
+            :start 0 :end 5)
   2)
 
 (deftest position-vector.24
   (position 'a #(a a b a c e d a f a) :test-not #'eql
-	    :start 0 :end 5 :from-end t)
+            :start 0 :end 5 :from-end t)
   4)
 
 (deftest position-vector.25
@@ -297,28 +297,28 @@
 
 (deftest position-vector.27
   (position 'a #((c) (b a) (a b c) (z) (a b) (d e) f) :key #'car
-	    :start 3)
+            :start 3)
   4)
 
 (deftest position-vector.28
   (position 'a #((c) (b a) (a b c) (z) (a b) (d e) (f)) :key #'car
-	    :start 2 :from-end t)
+            :start 2 :from-end t)
   4)
 
 (deftest position-vector.29
   (position 'a (make-array '(10) :initial-contents '(b b b b b a a a a a)
-			   :fill-pointer 5))
+                           :fill-pointer 5))
   nil)
 
 (deftest position-vector.30
   (position 'a (make-array '(10) :initial-contents '(b b b b a a a a a a)
-			   :fill-pointer 5))
+                           :fill-pointer 5))
   4)
 
 (deftest position-vector.31
   (position 'a (make-array '(10) :initial-contents '(b a b b a a a a a a)
-			   :fill-pointer 5)
-	    :from-end t)
+                           :fill-pointer 5)
+            :from-end t)
   4)
 
 (deftest position-vector.32
@@ -331,11 +331,11 @@
 
 (deftest position-vector.34
   (let* ((v1 #(x x x a b c d a b c d y y y y y))
-	 (v2 (make-array '(8) :displaced-to v1
-			 :displaced-index-offset 3)))
+         (v2 (make-array '(8) :displaced-to v1
+                         :displaced-index-offset 3)))
     (values (position 'c v2)
-	    (position 'c v2 :from-end t)))
-  2 6)			 
+            (position 'c v2 :from-end t)))
+  2 6)
 
 ;;; tests on bit vectors
 
@@ -349,39 +349,39 @@
 
 (deftest position-bit-vector.3
   (loop for i from 0 to 7 collect
-	(position 1 #*0010010 :start i))
+        (position 1 #*0010010 :start i))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-bit-vector.4
   (loop for i from 0 to 7 collect
-	(position 1 #*0010010 :start i :end nil))
+        (position 1 #*0010010 :start i :end nil))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-bit-vector.5
   (loop for i from 7 downto 0 collect
-	(position 1 #*0010010 :end i))
+        (position 1 #*0010010 :end i))
   (2 2 2 2 2 nil nil nil))
 
 (deftest position-bit-vector.6
   (loop for i from 0 to 7 collect
-	(position 1 #*0010010 :start i :from-end t))
+        (position 1 #*0010010 :start i :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-bit-vector.7
   (loop for i from 0 to 7 collect
-	(position 0 #*1101101 :start i :end nil :from-end t))
+        (position 0 #*1101101 :start i :end nil :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-bit-vector.8
   (loop for i from 7 downto 0 collect
-	(position 0 #*1101101 :end i :from-end t))
+        (position 0 #*1101101 :end i :from-end t))
   (5 5 2 2 2 nil nil nil))
 
 (deftest position-bit-vector.9
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position 1 #*0010010 :start i :end j)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position 1 #*0010010 :start i :end j)))
   ((nil nil 2 2 2 2 2)
    (nil 2 2 2 2 2)
    (2 2 2 2 2)
@@ -392,9 +392,9 @@
 
 (deftest position-bit-vector.10
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position 1 #*0010010 :start i :end j :from-end t)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position 1 #*0010010 :start i :end j :from-end t)))
   ((nil nil 2 2 2 5 5)
    (nil 2 2 2 5 5)
    (2 2 2 5 5)
@@ -421,7 +421,7 @@
 
 (deftest position-bit-vector.15
   (position 0 #*0010111010 :test (complement #'eql)
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-bit-vector.16
@@ -430,7 +430,7 @@
 
 (deftest position-bit-vector.17
   (position 0 #*001011101 :test-not 'eql
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-bit-vector.18
@@ -439,7 +439,7 @@
 
 (deftest position-bit-vector.19
   (position 0 #*00101110 :test-not #'eql
-	    :from-end t)
+            :from-end t)
   6)
 
 (deftest position-bit-vector.20
@@ -448,64 +448,64 @@
 
 (deftest position-bit-vector.21
   (position 0 #*00101110 :test #'eql
-	    :start 2)
+            :start 2)
   3)
 
 (deftest position-bit-vector.22
   (position 0 #*00101110 :test #'eql
-	    :start 2 :end nil)
+            :start 2 :end nil)
   3)
 
 (deftest position-bit-vector.23
   (position 0 #*00101110 :test-not #'eql
-	    :start 0 :end 5)
+            :start 0 :end 5)
   2)
 
 (deftest position-bit-vector.24
   (position 0 #*00101110 :test-not #'eql
-	    :start 0 :end 5 :from-end t)
+            :start 0 :end 5 :from-end t)
   4)
 
 (deftest position-bit-vector.25
   (position 2 #*1100001010 :key #'1+
-	    :start 3)
+            :start 3)
   6)
 
 (deftest position-bit-vector.27
   (position 2 #*1100001010 :key #'1+
-	    :start 2 :from-end t)
+            :start 2 :from-end t)
   8)
 
 (deftest position-bit-vector.28
   (position 0 (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
-			  :element-type 'bit
-			  :fill-pointer 5))
+                          :element-type 'bit
+                          :fill-pointer 5))
   nil)
 
 (deftest position-bit-vector.29
   (position 0 (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
-			  :element-type 'bit
-			  :fill-pointer 5)
-	    :from-end t)
+                          :element-type 'bit
+                          :fill-pointer 5)
+            :from-end t)
   nil)
 
 (deftest position-bit-vector.30
   (position 0 (make-array '(10) :initial-contents '(1 1 1 1 0 0 0 0 0 0)
-			  :element-type 'bit
-			  :fill-pointer 5))
+                          :element-type 'bit
+                          :fill-pointer 5))
   4)
 
 (deftest position-bit-vector.31
   (position 0 (make-array '(10) :initial-contents '(0 1 0 1 0 0 0 0 0 0)
-			  :element-type 'bit
-			  :fill-pointer 5)
-	    :from-end t)
+                          :element-type 'bit
+                          :fill-pointer 5)
+            :from-end t)
   4)
 
 (deftest position-bit-vector.32
   (position 0 (make-array '(10) :initial-contents '(1 0 1 1 0 0 0 0 0 0)
-			  :element-type 'bit
-			  :fill-pointer 5))
+                          :element-type 'bit
+                          :fill-pointer 5))
   1)
 
 (deftest position-bit-vector.33
@@ -528,39 +528,39 @@
 
 (deftest position-string.3
   (loop for i from 0 to 7 collect
-	(position #\c "abcdeca" :start i))
+        (position #\c "abcdeca" :start i))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-string.4
   (loop for i from 0 to 7 collect
-	(position #\c "abcdeca" :start i :end nil))
+        (position #\c "abcdeca" :start i :end nil))
   (2 2 2 5 5 5 nil nil))
 
 (deftest position-string.5
   (loop for i from 7 downto 0 collect
-	(position #\c "abcdeca" :end i))
+        (position #\c "abcdeca" :end i))
   (2 2 2 2 2 nil nil nil))
 
 (deftest position-string.6
   (loop for i from 0 to 7 collect
-	(position #\c "abcdeca" :start i :from-end t))
+        (position #\c "abcdeca" :start i :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-string.7
   (loop for i from 0 to 7 collect
-	(position #\c "abcdeca" :start i :end nil :from-end t))
+        (position #\c "abcdeca" :start i :end nil :from-end t))
   (5 5 5 5 5 5 nil nil))
 
 (deftest position-string.8
   (loop for i from 7 downto 0 collect
-	(position #\c "abcdeca" :end i :from-end t))
+        (position #\c "abcdeca" :end i :from-end t))
   (5 5 2 2 2 nil nil nil))
 
 (deftest position-string.9
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position #\c "abcdeca" :start i :end j)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position #\c "abcdeca" :start i :end j)))
   ((nil nil 2 2 2 2 2)
    (nil 2 2 2 2 2)
    (2 2 2 2 2)
@@ -571,9 +571,9 @@
 
 (deftest position-string.10
   (loop for i from 0 to 6 collect
-	(loop for j from (1+ i) to 7
-	      collect
-	      (position #\c "abcdeca" :start i :end j :from-end t)))
+        (loop for j from (1+ i) to 7
+              collect
+              (position #\c "abcdeca" :start i :end j :from-end t)))
   ((nil nil 2 2 2 5 5)
    (nil 2 2 2 5 5)
    (2 2 2 5 5)
@@ -584,13 +584,13 @@
 
 (deftest position-string.11
   (position 5 "12345648" :key #'(lambda (c)
-				  (1+ (read-from-string (string c)))))
+                                  (1+ (read-from-string (string c)))))
   3)
 
 (deftest position-string.13
   (position 5 "12345648" :key #'(lambda (c)
-				  (1+ (read-from-string (string c))))
-	    :from-end t)
+                                  (1+ (read-from-string (string c))))
+            :from-end t)
   6)
 
 (deftest position-string.14
@@ -599,7 +599,7 @@
 
 (deftest position-string.15
   (position #\a "aabacedafa" :test (complement #'eql)
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-string.16
@@ -608,7 +608,7 @@
 
 (deftest position-string.17
   (position #\a "aabacedafa" :test-not 'eql
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-string.18
@@ -617,7 +617,7 @@
 
 (deftest position-string.19
   (position #\a "aabacedafa" :test-not #'eql
-	    :from-end t)
+            :from-end t)
   8)
 
 (deftest position-string.20
@@ -626,48 +626,48 @@
 
 (deftest position-string.21
   (position #\a "aabacedafa" :test #'eql
-	    :start 2)
+            :start 2)
   3)
 
 (deftest position-string.22
   (position #\a "aabacedafa" :test #'eql
-	    :start 2 :end nil)
+            :start 2 :end nil)
   3)
 
 (deftest position-string.23
   (position #\a "aabacedafa" :test-not #'eql
-	    :start 0 :end 5)
+            :start 0 :end 5)
   2)
 
 (deftest position-string.24
   (position #\a "aabacedafa" :test-not #'eql
-	    :start 0 :end 5 :from-end t)
+            :start 0 :end 5 :from-end t)
   4)
 
 (deftest position-string.25
   (position #\a (make-array '(10) :initial-contents "bbbbbaaaaa"
-			    :element-type 'character
-			    :fill-pointer 5))
+                            :element-type 'character
+                            :fill-pointer 5))
   nil)
 
 (deftest position-string.26
   (position #\a (make-array '(10) :initial-contents "bbbbbaaaaa"
-			    :element-type 'character
-			    :fill-pointer 5)
-	    :from-end t)
+                            :element-type 'character
+                            :fill-pointer 5)
+            :from-end t)
   nil)
 
 (deftest position-string.27
   (position #\a (make-array '(10) :initial-contents "bbbbaaaaaa"
-			    :element-type 'character
-			    :fill-pointer 5))
+                            :element-type 'character
+                            :fill-pointer 5))
   4)
 
 (deftest position-string.28
   (position #\a (make-array '(10) :initial-contents "babbaaaaaa"
-			    :element-type 'character
-			    :fill-pointer 5)
-	    :from-end t)
+                            :element-type 'character
+                            :fill-pointer 5)
+            :from-end t)
   4)
 
 (deftest position-string.29
@@ -680,17 +680,17 @@
 
 (deftest position-string.31
   (let* ((s1 (copy-seq "xxxabcdyyyyy"))
-	 (s2 (make-array '(4) :displaced-to s1
-			 :displaced-index-offset 3
-			 :element-type (array-element-type s1))))
+         (s2 (make-array '(4) :displaced-to s1
+                         :displaced-index-offset 3
+                         :element-type (array-element-type s1))))
     (position #\c s2))
   2)
 
 (deftest position-string.32
   (let* ((s1 (copy-seq "xxxabcdabcdyyyyyyyy"))
-	 (s2 (make-array '(8) :displaced-to s1
-			 :displaced-index-offset 3
-			 :element-type (array-element-type s1))))
+         (s2 (make-array '(8) :displaced-to s1
+                         :displaced-index-offset 3
+                         :element-type (array-element-type s1))))
     (position #\c s2 :from-end t))
   6)
 
@@ -698,7 +698,7 @@
   (do-special-strings
    (s "abcdabcdabcd" nil)
    (let* ((c #\c)
-	  (pos (position c s)))
+          (pos (position c s)))
      (assert (eql pos 2) () "First position of ~A in ~A is ~A" c s pos)))
   nil)
 
@@ -706,7 +706,7 @@
   (do-special-strings
    (s "abcdabcdabcd" nil)
    (let* ((c #\c)
-	  (pos (position c s :from-end t)))
+          (pos (position c s :from-end t)))
      (assert (eql pos 10) () "Last position of ~A in ~A is ~A" c s pos)))
   nil)
 
@@ -792,17 +792,17 @@
 
 (deftest position.allow-other-keys.7
   (position 0 '(1 2 0 3 2 1) :bad t :allow-other-keys t
-	       :allow-other-keys nil)
+               :allow-other-keys nil)
   2)
 
 (deftest position.allow-other-keys.8
   (position 0 '(1 2 0 3 2 1) :allow-other-keys t :bad t
-	       :allow-other-keys nil)
+               :allow-other-keys nil)
   2)
 
 (deftest position.allow-other-keys.9
   (position 0 '(1 2 0 3 2 1) :allow-other-keys t
-	       :allow-other-keys nil :bad t)
+               :allow-other-keys nil :bad t)
   2)
 
 ;;; Error tests

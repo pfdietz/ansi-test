@@ -9,8 +9,8 @@
 
 (deftest rassoc-if-not.1
     (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (rassoc-if-not #'oddp x)))
+           (xcopy (make-scaffold-copy x))
+           (result (rassoc-if-not #'oddp x)))
       (and
        (check-scaffold-copy x xcopy)
        (eqt result (third x))
@@ -19,8 +19,8 @@
 
 (deftest rassoc-if-not.2
   (let* ((x (rev-assoc-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	 (xcopy (make-scaffold-copy x))
-	 (result (rassoc-if-not #'evenp x :key #'1+)))
+         (xcopy (make-scaffold-copy x))
+         (result (rassoc-if-not #'evenp x :key #'1+)))
     (and
      (check-scaffold-copy x xcopy)
      (eqt result (third x))
@@ -29,8 +29,8 @@
 
 (deftest rassoc-if-not.3
     (let* ((x (rev-assoc-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (rassoc-if-not #'oddp x)))
+           (xcopy (make-scaffold-copy x))
+           (result (rassoc-if-not #'oddp x)))
       (and
        (check-scaffold-copy x xcopy)
        (eqt result (fourth x))
@@ -38,8 +38,8 @@
   (c . 6))
 
 (deftest rassoc-if-not.4
-    (rassoc-if-not #'identity 
-		   (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
+    (rassoc-if-not #'identity
+                   (rev-assoc-list '((a . b) nil (c . d) (nil . e) (f . g))))
   (e))
 
 ;;; Order of argument evaluation
@@ -48,8 +48,8 @@
   (let ((i 0) x y)
     (values
      (rassoc-if-not (progn (setf x (incf i)) #'identity)
-		    (progn (setf y (incf i))
-			   '((1 . a) (2 . b) (17) (4 . d))))
+                    (progn (setf y (incf i))
+                           '((1 . a) (2 . b) (17) (4 . d))))
      i x y))
   (17) 2 1 2)
 
@@ -57,9 +57,9 @@
   (let ((i 0) x y z)
     (values
      (rassoc-if-not (progn (setf x (incf i)) #'identity)
-		    (progn (setf y (incf i))
-			   '((1 . a) (2 . b) (17) (4 . d)))
-		    :key (progn (setf z (incf i)) #'null))
+                    (progn (setf y (incf i))
+                           '((1 . a) (2 . b) (17) (4 . d)))
+                    :key (progn (setf z (incf i)) #'null))
      i x y z))
   (1 . a) 3 1 2 3)
 
@@ -75,7 +75,7 @@
 
 (deftest rassoc-if-not.allow-other-keys.3
   (rassoc-if-not #'not '((1 . a) (2) (3 . c)) :allow-other-keys t :bad t
-	  :key 'not)
+          :key 'not)
   (2))
 
 (deftest rassoc-if-not.allow-other-keys.4
@@ -88,7 +88,7 @@
 
 (deftest rassoc-if-not.allow-other-keys.6
   (rassoc-if-not #'identity '((1 . a) (2) (3 . c)) :allow-other-keys t
-		 :allow-other-keys nil :bad t)
+                 :allow-other-keys nil :bad t)
   (2))
 
 (deftest rassoc-if-not.keywords.7

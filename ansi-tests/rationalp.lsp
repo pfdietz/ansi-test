@@ -19,18 +19,18 @@
 
 (deftest rationalp.1
   (loop for x in *rationals*
-	for vals = (multiple-value-list (rationalp x))
-	unless (and (= (length vals) 1)
-		    (first vals))
-	collect (cons x vals))
+        for vals = (multiple-value-list (rationalp x))
+        unless (and (= (length vals) 1)
+                    (first vals))
+        collect (cons x vals))
   nil)
 
 (deftest rationalp.2
   (loop for x in (set-difference *universe* *rationals*)
-	for vals = (multiple-value-list (rationalp x))
-	unless (and (= (length vals) 1)
-		    (null (first vals)))
-	collect (cons x vals))
+        for vals = (multiple-value-list (rationalp x))
+        unless (and (= (length vals) 1)
+                    (null (first vals)))
+        collect (cons x vals))
   nil)
 
 (deftest rationalp.3

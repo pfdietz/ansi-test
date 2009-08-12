@@ -9,43 +9,43 @@
 
 (deftest pathname-host.1
   (loop for p in *pathnames*
-	always (eql (length (multiple-value-list (pathname-host p))) 1))
+        always (eql (length (multiple-value-list (pathname-host p))) 1))
   t)
 
 (deftest pathname-host.2
   (loop for p in *pathnames*
-	always (eql (length (multiple-value-list (pathname-host p :case :local))) 1))
+        always (eql (length (multiple-value-list (pathname-host p :case :local))) 1))
   t)
 
 (deftest pathname-host.3
   (loop for p in *pathnames*
-	always (eql (length (multiple-value-list (pathname-host p :case :common))) 1))
+        always (eql (length (multiple-value-list (pathname-host p :case :common))) 1))
   t)
 
 (deftest pathname-host.4
   (loop for p in *pathnames*
-	always (eql (length (multiple-value-list (pathname-host p :allow-other-keys nil))) 1))
+        always (eql (length (multiple-value-list (pathname-host p :allow-other-keys nil))) 1))
   t)
 
 (deftest pathname-host.5
   (loop for p in *pathnames*
-	always (eql (length (multiple-value-list
-			     (pathname-host p :foo t :allow-other-keys t))) 1))
+        always (eql (length (multiple-value-list
+                             (pathname-host p :foo t :allow-other-keys t))) 1))
   t)
 
 (deftest pathname-host.6
   (loop for p in *pathnames*
-	always (eql (length (multiple-value-list
-			     (pathname-host p :allow-other-keys t
-					    :allow-other-keys nil
-					    'foo t))) 1))
+        always (eql (length (multiple-value-list
+                             (pathname-host p :allow-other-keys t
+                                            :allow-other-keys nil
+                                            'foo t))) 1))
   t)
 
 ;;; section 19.3.2.1
 (deftest pathname-host.7
   (loop for p in *logical-pathnames*
-	when (eq (pathname-host p) :unspecific)
-	collect p)
+        when (eq (pathname-host p) :unspecific)
+        collect p)
   nil)
 
 (deftest pathname-host.8
@@ -55,11 +55,11 @@
 #|
 (deftest pathname-host.9
   (loop for p in *pathnames*
-	for host = (pathname-host p)
-	unless (or (stringp host)
-		   (and (listp host) (every #'stringp host))
-		   (eql host :unspecific))
-	collect (list p host))
+        for host = (pathname-host p)
+        unless (or (stringp host)
+                   (and (listp host) (every #'stringp host))
+                   (eql host :unspecific))
+        collect (list p host))
   nil)
 |#
 
@@ -75,5 +75,5 @@
 
 (deftest pathname-host.error.3
   (signals-error (pathname-host *default-pathname-defaults* '#:bogus t)
-		 program-error)
+                 program-error)
   t)

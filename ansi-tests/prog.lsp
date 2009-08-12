@@ -24,8 +24,8 @@
 (deftest prog.5
   (let ((x 'a))
     (prog ((x 'b) (y x))
-	  (declare (type symbol x y))
-	  (return (values x y))))
+          (declare (type symbol x y))
+          (return (values x y))))
   b a)
 
 (deftest prog.6
@@ -36,39 +36,39 @@
 
 (deftest prog.7
   (prog ((i 1) (s 0))
-	(declare (type fixnum i s))
-	again
-	(when (> i 10) (return s))
-	(incf s i)
-	(incf i)
-	(go again))
+        (declare (type fixnum i s))
+        again
+        (when (> i 10) (return s))
+        (incf s i)
+        (incf i)
+        (go again))
   55)
 
 (deftest prog.8
   (let ((x 0))
     (prog ((y (incf x)) (z (incf x)))
-	  (return (values x y z))))
+          (return (values x y z))))
   2 1 2)
 
 (deftest prog.9
   (flet ((%f () (locally (declare (special z)) z)))
     (prog ((z 10))
-	  (declare (special z))
-	  (return (%f))))
+          (declare (special z))
+          (return (%f))))
   10)
 
 (deftest prog.10
   (prog ()
-	(return
-	 (1+
-	  (prog ()
-		(go end)
-		done
-		(return 1)
-		end
-		(go done))))
-	done
-	(return 'bad))
+        (return
+         (1+
+          (prog ()
+                (go end)
+                done
+                (return 1)
+                end
+                (go done))))
+        done
+        (return 'bad))
   2)
 
 (deftest prog.11
@@ -76,8 +76,8 @@
     (declare (special x))
     (let ((x :good))
       (prog ((y x))
-	    (declare (special x))
-	    (return y))))
+            (declare (special x))
+            (return y))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms
@@ -112,8 +112,8 @@
 (deftest prog*.5
   (let ((x 'a))
     (prog* ((z x) (x 'b) (y x))
-	  (declare (type symbol x y))
-	  (return (values x y z))))
+          (declare (type symbol x y))
+          (return (values x y z))))
   b b a)
 
 (deftest prog*.6
@@ -124,39 +124,39 @@
 
 (deftest prog*.7
   (prog* ((i 1) (s 0))
-	(declare (type fixnum i s))
-	again
-	(when (> i 10) (return s))
-	(incf s i)
-	(incf i)
-	(go again))
+        (declare (type fixnum i s))
+        again
+        (when (> i 10) (return s))
+        (incf s i)
+        (incf i)
+        (go again))
   55)
 
 (deftest prog*.8
   (let ((x 0))
     (prog* ((y (incf x)) (z (incf x)))
-	  (return (values x y z))))
+          (return (values x y z))))
   2 1 2)
 
 (deftest prog*.9
   (flet ((%f () (locally (declare (special z)) z)))
     (prog* ((z 10))
-	  (declare (special z))
-	  (return (%f))))
+          (declare (special z))
+          (return (%f))))
   10)
 
 (deftest prog*.10
   (prog* ()
-	(return
-	 (1+
-	  (prog* ()
-		(go end)
-		done
-		(return 1)
-		end
-		(go done))))
-	done
-	(return 'bad))
+        (return
+         (1+
+          (prog* ()
+                (go end)
+                done
+                (return 1)
+                end
+                (go done))))
+        done
+        (return 'bad))
   2)
 
 (deftest prog*.11
@@ -164,8 +164,8 @@
     (declare (special x))
     (let ((x :good))
       (prog* ((y x))
-	     (declare (special x))
-	     (return y))))
+             (declare (special x))
+             (return y))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms

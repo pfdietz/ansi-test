@@ -20,9 +20,9 @@
   (let ((x nil))
     (handler-bind
      ((error #'(lambda (c)
-		 (setq x 17)
-		 (let ((r (find-restart 'continue c)))
-		   (when r (invoke-restart r))))))
+                 (setq x 17)
+                 (let ((r (find-restart 'continue c)))
+                   (when r (invoke-restart r))))))
      (assert x)
      x))
   17)
@@ -31,8 +31,8 @@
   (let ((x nil))
     (handler-bind
      ((error #'(lambda (c)
-		 (setq x 17)
-		 (continue c))))
+                 (setq x 17)
+                 (continue c))))
      (assert x)
      x))
   17)
@@ -56,15 +56,15 @@
 (deftest assert.6
   (let ((x (vector 'a 'b 'c)))
     (assert t ((aref x 0) (aref x 1) (aref x 2))
-	    "Vector x has value: ~A." x))
+            "Vector x has value: ~A." x))
   nil)
 
 (deftest assert.7
   (let ((x nil))
     (handler-bind
      ((simple-error #'(lambda (c)
-			(setq x 17)
-			(continue c))))
+                        (setq x 17)
+                        (continue c))))
      (assert x () 'simple-error)
      x))
   17)
@@ -73,8 +73,8 @@
   (let ((x 0))
     (handler-bind
      ((type-error #'(lambda (c)
-			(incf x)
-			(continue c))))
+                        (incf x)
+                        (continue c))))
      (assert (> x 5) () 'type-error)
      x))
   6)
@@ -83,8 +83,8 @@
   (let ((x 0))
     (handler-bind
      ((type-error #'(lambda (c) (declare (ignore c))
-			(incf x)
-			(continue))))
+                        (incf x)
+                        (continue))))
      (assert (> x 5) () 'type-error)
      x))
   6)

@@ -23,8 +23,8 @@
 
 (deftest zerop.1
   (loop for x in *numbers*
-	when (if (zerop x) (/= x 0) (= x 0))
-	collect x)
+        when (if (zerop x) (/= x 0) (= x 0))
+        collect x)
   nil)
 
 (deftest zerop.2
@@ -57,34 +57,34 @@
 
 (deftest zerop.8
   (remove-if-not #'zerop
-		 (list least-negative-short-float
-		       least-negative-normalized-short-float
-		       least-negative-single-float
-		       least-negative-normalized-single-float
-		       least-negative-double-float
-		       least-negative-normalized-double-float
-		       least-negative-long-float
-		       least-negative-normalized-long-float
-		       most-negative-short-float
-		       most-negative-single-float
-		       most-negative-double-float
-		       most-negative-long-float))
+                 (list least-negative-short-float
+                       least-negative-normalized-short-float
+                       least-negative-single-float
+                       least-negative-normalized-single-float
+                       least-negative-double-float
+                       least-negative-normalized-double-float
+                       least-negative-long-float
+                       least-negative-normalized-long-float
+                       most-negative-short-float
+                       most-negative-single-float
+                       most-negative-double-float
+                       most-negative-long-float))
   nil)
 
 (deftest zerop.9
   (remove-if-not #'zerop
-		 (list least-positive-short-float
-		       least-positive-normalized-short-float
-		       least-positive-single-float
-		       least-positive-normalized-single-float
-		       least-positive-double-float
-		       least-positive-normalized-double-float
-		       least-positive-long-float
-		       least-positive-normalized-long-float
-		       most-positive-short-float
-		       most-positive-single-float
-		       most-positive-double-float
-		       most-positive-long-float))
+                 (list least-positive-short-float
+                       least-positive-normalized-short-float
+                       least-positive-single-float
+                       least-positive-normalized-single-float
+                       least-positive-double-float
+                       least-positive-normalized-double-float
+                       least-positive-long-float
+                       least-positive-normalized-long-float
+                       most-positive-short-float
+                       most-positive-single-float
+                       most-positive-double-float
+                       most-positive-long-float))
   nil)
 
 (deftest zerop.10

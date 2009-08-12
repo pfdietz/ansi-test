@@ -11,28 +11,28 @@
   ;; Check that various standard or semistandard characters are whitespace[2]
   (let ((names '("Tab" "Newline" "Linefeed" "Space" "Return" "Page")))
     (loop for name in names
-	  for c = (name-char name)
-	  nconc
-	  (when c
-	    (let* ((s (concatenate 'string (string c) "123"))
-		   (val (read-from-string s)))
-	      (unless (eql val 123)
-		(list (list name c s val)))))))
+          for c = (name-char name)
+          nconc
+          (when c
+            (let* ((s (concatenate 'string (string c) "123"))
+                   (val (read-from-string s)))
+              (unless (eql val 123)
+                (list (list name c s val)))))))
   nil)
 
 (def-syntax-test syntax.constituent.1
   ;; Tests of various characters that they are constituent characters,
   ;; and parse to symbols
   (let ((chars (concatenate
-		'string
-		"!$%&*<=>?@[]^_-{}+/"
-		"abcdefghijklmnopqrstuvwxyz"
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ")))
+                'string
+                "!$%&*<=>?@[]^_-{}+/"
+                "abcdefghijklmnopqrstuvwxyz"
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ")))
     (loop for c across chars
-	  for s = (string c)
-	  for sym = (read-from-string s)
-	  unless (string= (symbol-name sym) (string-upcase s))
-	  collect (list c sym)))
+          for s = (string c)
+          for sym = (read-from-string s)
+          unless (string= (symbol-name sym) (string-upcase s))
+          collect (list c sym)))
   nil)
 
 ;;; Backspace is an invalid constituent character
@@ -55,110 +55,110 @@
 
 (def-syntax-test syntax.digits.alphabetic.1
   (loop for base from 2 to 9
-	nconc
-	(let ((*read-base* base))
-	  (loop for digit-val from base to 9
-		for c = (elt "0123456789" digit-val)
-		for s = (string c)
-		for val = (read-from-string s)
-		unless (and (symbolp val)
-			    (string= s (symbol-name val)))
-		collect (list base digit-val c s val))))
+        nconc
+        (let ((*read-base* base))
+          (loop for digit-val from base to 9
+                for c = (elt "0123456789" digit-val)
+                for s = (string c)
+                for val = (read-from-string s)
+                unless (and (symbolp val)
+                            (string= s (symbol-name val)))
+                collect (list base digit-val c s val))))
   nil)
 
 ;;; Reading escaped characters
 
 (def-syntax-test syntax.escaped.1
   (loop for c across +standard-chars+
-	for s0 = (string c)
-	for s = (concatenate 'string "\\" s0)
-	for sym = (read-from-string s)
-	unless (and (symbolp sym)
-		    (string= (symbol-name sym) s0))
-	collect (list c s0 s sym))
+        for s0 = (string c)
+        for s = (concatenate 'string "\\" s0)
+        for sym = (read-from-string s)
+        unless (and (symbolp sym)
+                    (string= (symbol-name sym) s0))
+        collect (list c s0 s sym))
   nil)
 
 (def-syntax-test syntax.escaped.2
   (let ((count 0))
     (loop for i from 0 below (min 65536 char-code-limit)
-	  for c = (code-char i)
-	  for s0 = (and c (string c))
-	  for s = (and c (concatenate 'string "\\" s0))
-	  for sym = (and c (read-from-string s))
-	  unless (or (not c)
-		     (and (symbolp sym)
-			  (string= (symbol-name sym) s0)))
-	  collect (progn
-		    (when (> (incf count) 100) (loop-finish))
-		    (list i c s0 s sym))))
+          for c = (code-char i)
+          for s0 = (and c (string c))
+          for s = (and c (concatenate 'string "\\" s0))
+          for sym = (and c (read-from-string s))
+          unless (or (not c)
+                     (and (symbolp sym)
+                          (string= (symbol-name sym) s0)))
+          collect (progn
+                    (when (> (incf count) 100) (loop-finish))
+                    (list i c s0 s sym))))
   nil)
 
 (def-syntax-test syntax.escaped.3
   (loop for i = (random (min char-code-limit (ash 1 24)))
-	for c = (code-char i)
-	for s0 = (and c (string c))
-	for s = (and c (concatenate 'string "\\" s0))
-	for sym = (and c (read-from-string s))
-	repeat 1000
-	unless (or (not c)
-		   (and (symbolp sym)
-			(string= (symbol-name sym) s0)))
-	collect (list i c s0 s sym))
+        for c = (code-char i)
+        for s0 = (and c (string c))
+        for s = (and c (concatenate 'string "\\" s0))
+        for sym = (and c (read-from-string s))
+        repeat 1000
+        unless (or (not c)
+                   (and (symbolp sym)
+                        (string= (symbol-name sym) s0)))
+        collect (list i c s0 s sym))
   nil)
 
 (def-syntax-test syntax.escaped.4
   (loop for c across +standard-chars+
-	for bad = (find c "\\|")
-	for s0 = (string c)
-	for s = (concatenate 'string "|" s0 "|")
-	for sym = (and (not bad) (read-from-string s))
-	unless (or bad
-		   (and (symbolp sym)
-			(string= (symbol-name sym) s0)))
-	collect (list c s0 s sym))
+        for bad = (find c "\\|")
+        for s0 = (string c)
+        for s = (concatenate 'string "|" s0 "|")
+        for sym = (and (not bad) (read-from-string s))
+        unless (or bad
+                   (and (symbolp sym)
+                        (string= (symbol-name sym) s0)))
+        collect (list c s0 s sym))
   nil)
 
 (def-syntax-test syntax.escaped.5
   (let ((count 0))
     (loop for i from 0 below (min 65536 char-code-limit)
-	  for c = (code-char i)
-	  for bad = (or (not c) (find c "\\|"))
-	  for s0 = (and c (string c))
-	  for s = (and c (concatenate 'string "|" s0 "|"))
-	  for sym = (and c (not bad) (read-from-string s))
-	  unless (or bad
-		     (and (symbolp sym)
-			  (string= (symbol-name sym) s0)))
-	  collect (progn
-		    (when (> (incf count) 100) (loop-finish))
-		    (list c s0 s sym))))
+          for c = (code-char i)
+          for bad = (or (not c) (find c "\\|"))
+          for s0 = (and c (string c))
+          for s = (and c (concatenate 'string "|" s0 "|"))
+          for sym = (and c (not bad) (read-from-string s))
+          unless (or bad
+                     (and (symbolp sym)
+                          (string= (symbol-name sym) s0)))
+          collect (progn
+                    (when (> (incf count) 100) (loop-finish))
+                    (list c s0 s sym))))
   nil)
 
 (def-syntax-test syntax.escaped.6
   (loop for i = (random (min char-code-limit (ash 1 24)))
-	for c = (code-char i)
-	for bad = (or (not c) (find c "\\|"))
-	for s0 = (and c (string c))
-	for s = (and c (concatenate 'string "|" s0 "|"))
-	for sym = (and (not bad) (read-from-string s))
-	repeat 1000
-	unless (or bad
-		   (and (symbolp sym)
-			(string= (symbol-name sym) s0)))
-	collect (list c s0 s sym))
+        for c = (code-char i)
+        for bad = (or (not c) (find c "\\|"))
+        for s0 = (and c (string c))
+        for s = (and c (concatenate 'string "|" s0 "|"))
+        for sym = (and (not bad) (read-from-string s))
+        repeat 1000
+        unless (or bad
+                   (and (symbolp sym)
+                        (string= (symbol-name sym) s0)))
+        collect (list c s0 s sym))
   nil)
 
 (def-syntax-test syntax.escape.whitespace.1
   (let ((names '("Tab" "Newline" "Linefeed" "Space" "Return" "Page"
-		 "Rubout" "Backspace")))
+                 "Rubout" "Backspace")))
     (loop for name in names
-	  for c = (name-char name)
-	  nconc
-	  (when c
-	    (let* ((s (concatenate 'string "\\" (string c)))
-		   (val (read-from-string s)))
-	      (unless (eql val (intern (string c)))
-		(list (list name c s val)))))))
+          for c = (name-char name)
+          nconc
+          (when c
+            (let* ((s (concatenate 'string "\\" (string c)))
+                   (val (read-from-string s)))
+              (unless (eql val (intern (string c)))
+                (list (list name c s val)))))))
   nil)
 
 ;;;
@@ -169,28 +169,28 @@
 (def-syntax-test syntax.escape.whitespace.2
   (let ((names '("Tab" "Newline" "Linefeed" "Space" "Return" "Page")))
     (loop for name in names
-	  for c = (name-char name)
-	  nconc
-	  (when c
-	    (let* ((s (concatenate 'string "|" (string c) "|"))
-		   (val (read-from-string s)))
-	      (unless (eql val (intern (string c)))
-		(list (list name c s val)))))))
+          for c = (name-char name)
+          nconc
+          (when c
+            (let* ((s (concatenate 'string "|" (string c) "|"))
+                   (val (read-from-string s)))
+              (unless (eql val (intern (string c)))
+                (list (list name c s val)))))))
   nil)
 
 #|
 (def-syntax-test syntax.multiple-escape.invalid.backspace
   (let ((c (name-char "Backspace")))
     (or (not c)
-	(let ((s (concatenate 'string "|" (string c) "|")))
-	  (eval `(signals-error (read-from-string ',s) reader-error)))))
+        (let ((s (concatenate 'string "|" (string c) "|")))
+          (eval `(signals-error (read-from-string ',s) reader-error)))))
   t)
 
 (def-syntax-test syntax.multiple-escape.invalid.rubout
   (let ((c (name-char "Rubout")))
     (or (not c)
-	(let ((s (concatenate 'string "|" (string c) "|")))
-	  (eval `(signals-error (read-from-string ',s) reader-error)))))
+        (let ((s (concatenate 'string "|" (string c) "|")))
+          (eval `(signals-error (read-from-string ',s) reader-error)))))
   t)
 |#
 
@@ -199,90 +199,90 @@
 
 (def-syntax-test syntax.sharp-backslash.1
   (loop for c across +standard-chars+
-	for s = (concatenate 'string "#\\" (string c))
-	for c2 = (read-from-string s)
-	unless (eql c c2)
-	collect (list c s c2))
+        for s = (concatenate 'string "#\\" (string c))
+        for c2 = (read-from-string s)
+        unless (eql c c2)
+        collect (list c s c2))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.2
   (let ((count 0))
     (loop for i below (min 65536 char-code-limit)
-	  for c = (code-char i)
-	  for s = (and c (concatenate 'string "#\\" (string c)))
-	  for c2 = (and c (read-from-string s))
-	  unless (eql c c2)
-	  collect (progn (when (> (incf count) 100) (loop-finish))
-			 (list c s c2))))
+          for c = (code-char i)
+          for s = (and c (concatenate 'string "#\\" (string c)))
+          for c2 = (and c (read-from-string s))
+          unless (eql c c2)
+          collect (progn (when (> (incf count) 100) (loop-finish))
+                         (list c s c2))))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.3
   (loop for i = (random (min (ash 1 24) char-code-limit))
-	for c = (code-char i)
-	for s = (and c (concatenate 'string "#\\" (string c)))
-	for c2 = (and c (read-from-string s))
-	repeat 1000
-	unless (eql c c2)
-	collect (list i c s c2))
+        for c = (code-char i)
+        for s = (and c (concatenate 'string "#\\" (string c)))
+        for c2 = (and c (read-from-string s))
+        repeat 1000
+        unless (eql c c2)
+        collect (list i c s c2))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.4
   (flet ((%f (s) (read-from-string (concatenate 'string "#\\" s))))
     (loop for s in '("SPACE" "NEWLINE" "TAB" "RUBOUT" "BACKSPACE" "PAGE" "LINEFEED" "RETURN")
-	  for c = (name-char s)
-	  unless (or (null c)
-		     (and (eql (%f s) c)
-			  (eql (%f (string-downcase s)) c)
-			  (eql (%f (string-capitalize s)) c)))
-	  collect (list s c)))
+          for c = (name-char s)
+          unless (or (null c)
+                     (and (eql (%f s) c)
+                          (eql (%f (string-downcase s)) c)
+                          (eql (%f (string-capitalize s)) c)))
+          collect (list s c)))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.5
   (flet ((%f (s) (read-from-string (concatenate 'string "#\\" s))))
     (let ((good-chars (concatenate 'string +alphanumeric-chars+
-				   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
+                                   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
       (loop for c across +standard-chars+
-	    for name = (char-name c)
-	    unless (or (null name)
-		       (string/= "" (string-trim good-chars name))
-		       (and (eql (%f name) c)
-			    (eql (%f (string-downcase name)) c)
-			    (eql (%f (string-upcase name)) c)
-			    (eql (%f (string-capitalize name)) c)))
-	    collect (list c name))))
+            for name = (char-name c)
+            unless (or (null name)
+                       (string/= "" (string-trim good-chars name))
+                       (and (eql (%f name) c)
+                            (eql (%f (string-downcase name)) c)
+                            (eql (%f (string-upcase name)) c)
+                            (eql (%f (string-capitalize name)) c)))
+            collect (list c name))))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.6
   (flet ((%f (s) (read-from-string (concatenate 'string "#\\" s))))
     (let ((good-chars (concatenate 'string +alphanumeric-chars+
-				   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
+                                   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
       (loop for i below (min 65536 char-code-limit)
-	    for c = (code-char i)
-	    for name = (and c (char-name c))
-	    unless (or (null name)
-		       (string/= "" (string-trim good-chars name))
-		       (and (eql (%f name) c)
-			    (eql (%f (string-downcase name)) c)
-			    (eql (%f (string-upcase name)) c)
-			    (eql (%f (string-capitalize name)) c)))
-	    collect (list i c name))))
+            for c = (code-char i)
+            for name = (and c (char-name c))
+            unless (or (null name)
+                       (string/= "" (string-trim good-chars name))
+                       (and (eql (%f name) c)
+                            (eql (%f (string-downcase name)) c)
+                            (eql (%f (string-upcase name)) c)
+                            (eql (%f (string-capitalize name)) c)))
+            collect (list i c name))))
   nil)
 
 (def-syntax-test syntax.sharp-backslash.7
   (flet ((%f (s) (read-from-string (concatenate 'string "#\\" s))))
     (let ((good-chars (concatenate 'string +alphanumeric-chars+
-				   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
+                                   "<,.>\"':/?[]{}~`!@#$%^&*_-+=")))
       (loop for i = (random (min (ash 1 24) char-code-limit))
-	    for c = (code-char i)
-	    for name = (and c (char-name c))
-	    repeat 1000
-	    unless (or (null name)
-		       (string/= "" (string-trim good-chars name))
-		       (and (eql (%f name) c)
-			    (eql (%f (string-downcase name)) c)
-			    (eql (%f (string-upcase name)) c)
-			    (eql (%f (string-capitalize name)) c)))
-	    collect (list i c name))))
+            for c = (code-char i)
+            for name = (and c (char-name c))
+            repeat 1000
+            unless (or (null name)
+                       (string/= "" (string-trim good-chars name))
+                       (and (eql (%f name) c)
+                            (eql (%f (string-downcase name)) c)
+                            (eql (%f (string-upcase name)) c)
+                            (eql (%f (string-capitalize name)) c)))
+            collect (list i c name))))
   nil)
 
 
@@ -596,21 +596,21 @@
 
 (def-syntax-test syntax.sharp-r.1
   (loop for i = (random (ash 1 (+ 2 (random 32))))
-	for base = (+ 2 (random 35))
-	for s = (write-to-string i :radix nil :base base :readably nil)
-	for c = (random-from-seq "rR")
-	for s2 = (format nil "#~d~c~a" base c s)
-	for s3 = (rcase (1 (string-upcase s2))
-			(1 (string-downcase s2))
-			(1 (string-capitalize s2))
-			(1 s2))
-	for base2 = (+ 2 (random 35))
-	for vals = (let ((*read-base* base2))
-		     (multiple-value-list
-		      (read-from-string s3)))
-	repeat 1000
-	unless (equal vals (list i (length s3) ))
-	collect (list i base s c s2 s3 base2 vals))
+        for base = (+ 2 (random 35))
+        for s = (write-to-string i :radix nil :base base :readably nil)
+        for c = (random-from-seq "rR")
+        for s2 = (format nil "#~d~c~a" base c s)
+        for s3 = (rcase (1 (string-upcase s2))
+                        (1 (string-downcase s2))
+                        (1 (string-capitalize s2))
+                        (1 s2))
+        for base2 = (+ 2 (random 35))
+        for vals = (let ((*read-base* base2))
+                     (multiple-value-list
+                      (read-from-string s3)))
+        repeat 1000
+        unless (equal vals (list i (length s3) ))
+        collect (list i base s c s2 s3 base2 vals))
   nil)
 
 (def-syntax-test syntax.sharp-r.2
@@ -665,20 +665,20 @@
 
 (def-syntax-test syntax.sharp-c.6
   (loop for format in '(short-float single-float double-float long-float)
-	for c = (let ((*read-default-float-format* format))
-		  (read-from-string "#c(1.0 0.0)"))
-	unless (eql c (complex (coerce 1 format)
-			       (coerce 0 format)))
-	collect (list format c))
+        for c = (let ((*read-default-float-format* format))
+                  (read-from-string "#c(1.0 0.0)"))
+        unless (eql c (complex (coerce 1 format)
+                               (coerce 0 format)))
+        collect (list format c))
   nil)
 
 (def-syntax-test syntax.sharp-c.7
   (loop for format in '(short-float single-float double-float long-float)
-	for c = (let ((*read-default-float-format* format))
-		  (read-from-string "#C(0.0 1.0)"))
-	unless (eql c (complex (coerce 0 format)
-			       (coerce 1 format)))
-	collect (list format c))
+        for c = (let ((*read-default-float-format* format))
+                  (read-from-string "#C(0.0 1.0)"))
+        unless (eql c (complex (coerce 0 format)
+                               (coerce 1 format)))
+        collect (list format c))
   nil)
 
 ;;; Tests of #a
@@ -1080,29 +1080,29 @@
 
 (def-syntax-test syntax.sharp-bar.8
   (loop for c across +standard-chars+
-	for s = (concatenate 'string "\#| " (string c) " |\#1")
-	for vals = (multiple-value-list (read-from-string s))
-	unless (equal vals '(1 8))
-	collect (list c s vals))
+        for s = (concatenate 'string "\#| " (string c) " |\#1")
+        for vals = (multiple-value-list (read-from-string s))
+        unless (equal vals '(1 8))
+        collect (list c s vals))
   nil)
 
 (def-syntax-test syntax.sharp-bar.9
   (loop for i below (min (ash 1 16) char-code-limit)
-	for c = (code-char i)
-	for s = (and c (concatenate 'string "\#| " (string c) " |\#1"))
-	for vals = (and c (multiple-value-list (read-from-string s)))
-	unless (or (not c) (equal vals '(1 8)))
-	collect (list i c s vals))
+        for c = (code-char i)
+        for s = (and c (concatenate 'string "\#| " (string c) " |\#1"))
+        for vals = (and c (multiple-value-list (read-from-string s)))
+        unless (or (not c) (equal vals '(1 8)))
+        collect (list i c s vals))
   nil)
 
 (def-syntax-test syntax.sharp-bar.10
   (loop for i = (random (min (ash 1 24) char-code-limit))
-	for c = (code-char i)
-	for s = (and c (concatenate 'string "\#| " (string c) " |\#1"))
-	for vals = (and c (multiple-value-list (read-from-string s)))
-	repeat 1000
-	unless (or (not c) (equal vals '(1 8)))
-	collect (list i c s vals))
+        for c = (code-char i)
+        for s = (and c (concatenate 'string "\#| " (string c) " |\#1"))
+        for vals = (and c (multiple-value-list (read-from-string s)))
+        repeat 1000
+        unless (or (not c) (equal vals '(1 8)))
+        collect (list i c s vals))
   nil)
 
 ;;;; Various error cases
@@ -1110,15 +1110,15 @@
 (def-syntax-test syntax.sharp-whitespace.1
   (let ((names '("Tab" "Newline" "Linefeed" "Space" "Return" "Page")))
     (loop for name in names
-	  for c = (name-char name)
-	  when c
-	  nconc
-	  (let* ((form `(signals-error
-			 (read-from-string ,(concatenate 'string "#" (string c)))
-			 reader-error))
-		 (vals (multiple-value-list (eval form))))
-	    (unless (equal vals '(t))
-	      (list (list name c form vals))))))
+          for c = (name-char name)
+          when c
+          nconc
+          (let* ((form `(signals-error
+                         (read-from-string ,(concatenate 'string "#" (string c)))
+                         reader-error))
+                 (vals (multiple-value-list (eval form))))
+            (unless (equal vals '(t))
+              (list (list name c form vals))))))
   nil)
 
 (def-syntax-test syntax.sharp-less-than.1

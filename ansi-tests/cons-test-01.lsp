@@ -58,51 +58,51 @@
 
 (defvar *cons-fns*
   (list 'cons 'consp 'atom 'rplaca 'rplacd
-	'car 'cdr 'caar 'cadr 'cdar 'cddr
-	'caaar 'caadr 'cadar 'caddr
-	'cdaar 'cdadr 'cddar 'cdddr
-	'caaaar 'caaadr 'caadar 'caaddr
-	'cadaar 'cadadr 'caddar 'cadddr
-	'cdaaar 'cdaadr 'cdadar 'cdaddr
-	'cddaar 'cddadr 'cdddar 'cddddr
-	'copy-tree 'sublis 'nsublis
-	'subst 'subst-if 'subst-if-not
-	'nsubst 'nsubst-if 'nsubst-if-not
-	'tree-equal
-	'copy-list
-	'list
-	'list*
-	'list-length
-	'listp
-	'make-list
-	'first 'second 'third 'fourth
-	'fifth 'sixth 'seventh 'eighth 'ninth 'tenth
-	'nth
-	'endp
-	'null
-	'nconc
-	'append
-	'revappend 'nreconc
-	'butlast 'nbutlast
-	'last 'ldiff 'tailp
-	'nthcdr 'rest
-	'member 'member-if 'member-if-not
-	'mapc 'mapcar 'mapcan 'mapl 'maplist 'mapcon
-	'acons
-	'assoc 'assoc-if 'assoc-if-not
-	'copy-alist
-	'pairlis
-	'rassoc 'rassoc-if 'rassoc-if-not
-	'get-properties
-	'getf
-	'intersection
-	'nintersection
-	'adjoin
-	'set-difference 'nset-difference
-	'set-exclusive-or 'nset-exclusive-or
-	'subsetp
-	'union 'nunion
-	))
+        'car 'cdr 'caar 'cadr 'cdar 'cddr
+        'caaar 'caadr 'cadar 'caddr
+        'cdaar 'cdadr 'cddar 'cdddr
+        'caaaar 'caaadr 'caadar 'caaddr
+        'cadaar 'cadadr 'caddar 'cadddr
+        'cdaaar 'cdaadr 'cdadar 'cdaddr
+        'cddaar 'cddadr 'cdddar 'cddddr
+        'copy-tree 'sublis 'nsublis
+        'subst 'subst-if 'subst-if-not
+        'nsubst 'nsubst-if 'nsubst-if-not
+        'tree-equal
+        'copy-list
+        'list
+        'list*
+        'list-length
+        'listp
+        'make-list
+        'first 'second 'third 'fourth
+        'fifth 'sixth 'seventh 'eighth 'ninth 'tenth
+        'nth
+        'endp
+        'null
+        'nconc
+        'append
+        'revappend 'nreconc
+        'butlast 'nbutlast
+        'last 'ldiff 'tailp
+        'nthcdr 'rest
+        'member 'member-if 'member-if-not
+        'mapc 'mapcar 'mapcan 'mapl 'maplist 'mapcon
+        'acons
+        'assoc 'assoc-if 'assoc-if-not
+        'copy-alist
+        'pairlis
+        'rassoc 'rassoc-if 'rassoc-if-not
+        'get-properties
+        'getf
+        'intersection
+        'nintersection
+        'adjoin
+        'set-difference 'nset-difference
+        'set-exclusive-or 'nset-exclusive-or
+        'subsetp
+        'union 'nunion
+        ))
 
 ;; All the cons functions have a function binding
 
@@ -110,7 +110,7 @@
   (loop
    for x in *cons-fns* count
    (when (or (not (fboundp x))
-	     (not (functionp (symbol-function x))))
+             (not (functionp (symbol-function x))))
      (format t "~%~S not bound to a function" x)
      t))
   0)
@@ -118,7 +118,7 @@
 ;; All the cons-related macros have a macro binding
 (deftest macro-bound-cons-macros
   (notnot-mv (every #'macro-function
-		    (list 'push 'pop 'pushnew 'remf)))
+                    (list 'push 'pop 'pushnew 'remf)))
   t)
 
 ;; None of the cons-related functions have macro bindings

@@ -52,13 +52,13 @@
 
 (deftest typep.env.2
   (macrolet ((%foo (&environment env)
-		   (notnot-mv (typep 0 'bit env))))
+                   (notnot-mv (typep 0 'bit env))))
     (%foo))
   t)
 
 (deftest typep.env.3
   (macrolet ((%foo (&environment env)
-		   (notnot-mv (typep env (type-of env)))))
+                   (notnot-mv (typep env (type-of env)))))
     (%foo))
   t)
 
@@ -130,13 +130,13 @@
 
 (deftest typep.16
   (let ((c1 (find-class 'number))
-	(c2 (find-class 'symbol)))
+        (c2 (find-class 'symbol)))
     (notnot-mv (typep 'a `(or ,c1 ,c2))))
   t)
 
 (deftest typep.17
   (let ((c1 (find-class 'number))
-	(c2 (find-class 'symbol)))
+        (c2 (find-class 'symbol)))
     (notnot-mv (typep 'a `(or ,c2 ,c1))))
   t)
 
@@ -150,19 +150,19 @@
 (defun typep.19-fn (reps &optional (prob .5))
   (let* ((vec "abcdefghijklmnopqrstuvwxyz"))
     (flet ((%make-random-type
-	    ()
-	    `(and character (member ,@(loop for e across vec
-					    when (< (random 1.0) prob)
-					    collect e)))))
-      (loop 
+            ()
+            `(and character (member ,@(loop for e across vec
+                                            when (< (random 1.0) prob)
+                                            collect e)))))
+      (loop
        for t1 = (%make-random-type)
        for t2 = (%make-random-type)
        for t3 = `(and ,t1 ,t2)
        for result1 = (loop for e across vec
-			   when (if (typep e t3)
-				    (or (not (typep e t1)) (not (typep e t2)))
-				  (and (typep e t1) (typep e t2)))
-			   collect e)
+                           when (if (typep e t3)
+                                    (or (not (typep e t1)) (not (typep e t2)))
+                                  (and (typep e t1) (typep e t2)))
+                           collect e)
        repeat reps
        when result1
        nconc (list result1 t1 t2 t3)))))
@@ -171,5 +171,5 @@
 
 (deftest typep.19 (typep.19-fn 1000) nil)
 
-	    
-			     
+
+

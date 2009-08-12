@@ -11,10 +11,10 @@
   `(deftest ,name
      (let ((s ,init))
        (with-input-from-string
-	(is ,input)
-	(values
-	 (read-sequence s is ,@args)
-	 s)))
+        (is ,input)
+        (values
+         (read-sequence s is ,@args)
+         s)))
      ,@expected))
 
 (def-read-sequence-test read-sequence.string.1 (copy-seq "     ")
@@ -190,40 +190,40 @@
      ;; Create output file
      (progn
        (let (os)
-	 (unwind-protect
-	     (progn
-	       (setq os (open "temp.dat" :direction :output
-			      :element-type '(unsigned-byte 8)
-			      :if-exists :supersede))
-	       (loop for i in '(0 1 1 0 0 1 1 0 1 0 1 1 1 0)
-		     do (write-byte i os)))
-	   (when os (close os))))
+         (unwind-protect
+             (progn
+               (setq os (open "temp.dat" :direction :output
+                              :element-type '(unsigned-byte 8)
+                              :if-exists :supersede))
+               (loop for i in '(0 1 1 0 0 1 1 0 1 0 1 1 1 0)
+                     do (write-byte i os)))
+           (when os (close os))))
        (let (is (bv (copy-seq ,init)))
-	 (unwind-protect
-	     (progn
-	       (setq is (open "temp.dat" :direction :input
-			      :element-type '(unsigned-byte 8)))
-	       (values
-		(read-sequence bv is ,@args)
-		bv))
-	   (when is (close is)))))
+         (unwind-protect
+             (progn
+               (setq is (open "temp.dat" :direction :input
+                              :element-type '(unsigned-byte 8)))
+               (values
+                (read-sequence bv is ,@args)
+                bv))
+           (when is (close is)))))
      ,@expected))
-     
+
 (def-read-sequence-bv-test read-sequence.bv.1 #*00000000000000 ()
   14 #*01100110101110)
-  
+
 (def-read-sequence-bv-test read-sequence.bv.2 #*00000000000000 (:start 0)
   14 #*01100110101110)
-  
+
 (def-read-sequence-bv-test read-sequence.bv.3 #*00000000000000 (:end 14)
   14 #*01100110101110)
-  
+
 (def-read-sequence-bv-test read-sequence.bv.4 #*00000000000000 (:end nil)
   14 #*01100110101110)
-  
+
 (def-read-sequence-bv-test read-sequence.bv.5 #*00000000000000 (:start 2)
   14 #*00011001101011)
-  
+
 (def-read-sequence-bv-test read-sequence.bv.6 #*00000000000000
   (:start 2 :end 13)
   13 #*00011001101010)
@@ -256,13 +256,13 @@
 (deftest read-sequence.error.5
   (signals-error
    (read-sequence (make-string 5) (make-string-input-stream "abc")
-		  :allow-other-keys nil :bar 2)
+                  :allow-other-keys nil :bar 2)
    program-error)
   t)
 
 (deftest read-sequence.error.6
   (check-type-error #'(lambda (x) (read-sequence x (make-string-input-stream "abc")))
-		    #'sequencep)
+                    #'sequencep)
   nil)
 
 (deftest read-sequence.error.7
@@ -274,27 +274,27 @@
 ;;; This test appears to cause Allegro CL to crash
 (deftest read-sequence.error.8
   (signals-type-error x -1
-		      (read-sequence (make-string 3)
-				     (make-string-input-stream "abc")
-				     :start x))
+                      (read-sequence (make-string 3)
+                                     (make-string-input-stream "abc")
+                                     :start x))
   t)
 
 (deftest read-sequence.error.9
   (check-type-error #'(lambda (s)
-			(read-sequence (make-string 3) (make-string-input-stream "abc")
-				       :start s))
-		    (typef 'unsigned-byte))
+                        (read-sequence (make-string 3) (make-string-input-stream "abc")
+                                       :start s))
+                    (typef 'unsigned-byte))
   nil)
 
 (deftest read-sequence.error.10
   (signals-type-error x -1
-		      (read-sequence (make-string 3) (make-string-input-stream "abc")
-				     :end x))
+                      (read-sequence (make-string 3) (make-string-input-stream "abc")
+                                     :end x))
   t)
 
 (deftest read-sequence.error.11
   (check-type-error #'(lambda (e)
-			(read-sequence (make-string 3) (make-string-input-stream "abc")
-				       :end e))
-		    (typef '(or unsigned-byte null)))
+                        (read-sequence (make-string 3) (make-string-input-stream "abc")
+                                       :end e))
+                    (typef '(or unsigned-byte null)))
   nil)

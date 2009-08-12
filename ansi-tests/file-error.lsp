@@ -7,17 +7,17 @@
 
 (deftest file-error.1
   (let ((pn (make-pathname :name :wild
-			   :type "txt"
-			   :version :newest
-			   :defaults *default-pathname-defaults*)))
+                           :type "txt"
+                           :version :newest
+                           :defaults *default-pathname-defaults*)))
     (handler-case
      (probe-file pn)
      (error (c)
-	    (values
-	     (notnot (typep c 'file-error))
-	     (if (equalp (file-error-pathname c) pn)
-		 t
-	       (list (file-error-pathname c) pn))))))
+            (values
+             (notnot (typep c 'file-error))
+             (if (equalp (file-error-pathname c) pn)
+                 t
+               (list (file-error-pathname c) pn))))))
   t t)
 
 (deftest file-error-pathname.1
@@ -42,7 +42,7 @@
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
      (equalpt "CLTEST:foo.txt"
-	      (file-error-pathname c))))
+              (file-error-pathname c))))
   t t t)
 
 (deftest file-error-pathname.4
@@ -51,16 +51,16 @@
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
      (equalpt (logical-pathname "CLTEST:foo.txt")
-	      (file-error-pathname c))))
+              (file-error-pathname c))))
   t t t)
 
 (deftest file-error-pathname.5
   (with-open-file (s "file-error.lsp" :direction :input)
-		  (let ((c (make-condition 'file-error :pathname s)))
-		    (values
-		     (notnot (typep c 'file-error))
-		     (eqlt (class-of c) (find-class 'file-error))
-		     (equalpt s (file-error-pathname c)))))
+                  (let ((c (make-condition 'file-error :pathname s)))
+                    (values
+                     (notnot (typep c 'file-error))
+                     (eqlt (class-of c) (find-class 'file-error))
+                     (equalpt s (file-error-pathname c)))))
   t t t)
 
 (deftest file-error-pathname.6

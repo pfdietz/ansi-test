@@ -19,16 +19,16 @@
 
 (deftest force-output.4
   (loop for s in (list *debug-io* *error-output* *query-io*
-		       *standard-output* *trace-output* *terminal-io*)
-	for results = (multiple-value-list (force-output s))
-	unless (equal results '(nil))
-	collect s)
+                       *standard-output* *trace-output* *terminal-io*)
+        for results = (multiple-value-list (force-output s))
+        unless (equal results '(nil))
+        collect s)
   nil)
 
 (deftest force-output.5
   (let ((os (make-string-output-stream)))
     (let ((*terminal-io* (make-two-way-stream (make-string-input-stream "")
-					      os)))
+                                              os)))
       (force-output t)))
   nil)
 
@@ -50,7 +50,7 @@
 
 (deftest force-output.error.3
   (check-type-error #'force-output
-		    #'(lambda (x) (typep x '(or stream (member nil t)))))
+                    #'(lambda (x) (typep x '(or stream (member nil t)))))
   nil)
 
 

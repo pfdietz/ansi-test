@@ -57,17 +57,17 @@
 
 (deftest values.C
   (let ((x (loop for i from 1 to (min 1000
-				      (1- call-arguments-limit)
-				      (1- multiple-values-limit))
-		 collect i)))
+                                      (1- call-arguments-limit)
+                                      (1- multiple-values-limit))
+                 collect i)))
     (equalt x
-	    (multiple-value-list (apply #'values x))))
+            (multiple-value-list (apply #'values x))))
   t)
 
 (deftest values.order.1
   (let ((i 0) a b c)
     (values (multiple-value-list
-	     (values (setf a (incf i)) (setf b (incf i)) (setf c (incf i))))
-	    i a b c))
+             (values (setf a (incf i)) (setf b (incf i)) (setf c (incf i))))
+            i a b c))
   (1 2 3) 3 1 2 3)
-  
+

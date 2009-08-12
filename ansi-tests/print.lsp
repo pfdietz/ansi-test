@@ -20,7 +20,7 @@
      (with-input-from-string
       (is "")
       (with-open-stream (*terminal-io* (make-two-way-stream is os))
-			(print 2 t)))))
+                        (print 2 t)))))
   "
 2 ")
 

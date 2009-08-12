@@ -63,7 +63,7 @@
   (let ((i 0) x y)
     (values
      (nthcdr (setf x (incf i))
-	     (progn (setf y (incf i)) '(a b c d)))
+             (progn (setf y (incf i)) '(a b c d)))
      i x y))
   (b c d) 2 1 2)
 

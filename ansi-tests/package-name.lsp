@@ -36,8 +36,8 @@
 (deftest package-name.5
   (handler-case
    (locally (declare (optimize safety))
-	    (eval '(package-name "NOT-THERE"))
-	    nil)
+            (eval '(package-name "NOT-THERE"))
+            nil)
    (type-error () t)
    (package-error () t))
   t)
@@ -45,8 +45,8 @@
 (deftest package-name.6
   (handler-case
    (locally (declare (optimize safety))
-	    (eval '(package-name #\*))
-	    nil)
+            (eval '(package-name #\*))
+            nil)
    (type-error () t)
    (package-error () t))
   t)
@@ -54,8 +54,8 @@
 (deftest package-name.6a
   (handler-case
    (locally (declare (optimize safety))
-	    (eval '(locally (package-name #\*) t))
-	    nil)
+            (eval '(locally (package-name #\*) t))
+            nil)
    (type-error () t)
    (package-error () t))
   t)
@@ -86,7 +86,7 @@
 
 (deftest package-name.13
   (let* ((p (make-package "TEMP1"))
-	 (pname1 (package-name p)))
+         (pname1 (package-name p)))
     (rename-package "TEMP1" "TEMP2")
     (let ((pname2 (package-name p)))
       (safely-delete-package p)
@@ -100,7 +100,7 @@
    (not
     (let ((name (package-name p)))
       (and (stringp name)
-	   (eqt (find-package name) p)))))
+           (eqt (find-package name) p)))))
   0)
 
 ;; package-name applied to a package's name
@@ -109,7 +109,7 @@
   (loop
    for p in (list-all-packages) count
    (not (equal (package-name p)
-	       (package-name (package-name p)))))
+               (package-name (package-name p)))))
   0)
 
 ;;; Specialized sequence tests
@@ -117,11 +117,11 @@
 (defmacro def-package-name-test (test-name name-form expected-name-form)
   `(deftest ,test-name
      (let ((name ,name-form)
-	   (expected-name ,expected-name-form))
+           (expected-name ,expected-name-form))
        (assert (string= name expected-name))
        (safely-delete-package name)
        (let ((p (make-package name :use nil)))
-	 (equalt (package-name p) expected-name)))
+         (equalt (package-name p) expected-name)))
      t))
 
 (def-package-name-test package-name.16
@@ -130,40 +130,40 @@
 
 (def-package-name-test package-name.17
   (make-array 10 :element-type 'base-char
-	      :fill-pointer 5
-	      :initial-contents "TEST1?????")
+              :fill-pointer 5
+              :initial-contents "TEST1?????")
   "TEST1")
 
 (def-package-name-test package-name.18
   (make-array 10 :element-type 'character
-	      :fill-pointer 5
-	      :initial-contents "TEST1?????")
+              :fill-pointer 5
+              :initial-contents "TEST1?????")
   "TEST1")
 
 (def-package-name-test package-name.19
   (make-array 5 :element-type 'base-char :adjustable t
-	      :initial-contents "TEST1")
+              :initial-contents "TEST1")
   "TEST1")
 
 (def-package-name-test package-name.20
   (make-array 5 :element-type 'character :adjustable t
-	      :initial-contents "TEST1")
+              :initial-contents "TEST1")
   "TEST1")
 
 (def-package-name-test package-name.21
   (let* ((etype 'base-char)
-	 (name0 (make-array 10 :element-type etype
-			    :initial-contents "XXTEST1XXX")))
+         (name0 (make-array 10 :element-type etype
+                            :initial-contents "XXTEST1XXX")))
     (make-array 5 :element-type etype :displaced-to name0
-		:displaced-index-offset 2))
+                :displaced-index-offset 2))
   "TEST1")
 
 (def-package-name-test package-name.22
   (let* ((etype 'character)
-	 (name0 (make-array 10 :element-type etype
-			    :initial-contents "XXTEST1XXX")))
+         (name0 (make-array 10 :element-type etype
+                            :initial-contents "XXTEST1XXX")))
     (make-array 5 :element-type etype :displaced-to name0
-		:displaced-index-offset 2))
+                :displaced-index-offset 2))
   "TEST1")
 
 

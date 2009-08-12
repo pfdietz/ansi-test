@@ -24,9 +24,9 @@
   (deftest read-char-no-hang.3
     (with-input-from-string
      (*standard-input* (concatenate 'string
-				    "a"
-				    (string (code-char 0))
-				    "b"))
+                                    "a"
+                                    (string (code-char 0))
+                                    "b"))
      (values
       (read-char-no-hang)
       (read-char-no-hang)

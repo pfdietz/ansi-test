@@ -24,18 +24,18 @@
 (deftest dolist.4
   (let ((y nil))
     (flet ((%f () (locally (declare (special e))
-			   (push e y))))
+                           (push e y))))
       (dolist (e '(a b c) (reverse y))
-	(declare (special e))
-	(%f))))
+        (declare (special e))
+        (%f))))
   (a b c))
 
 ;;; Tests that it's a tagbody
 (deftest dolist.5
   (let ((even nil)
-	(odd nil))
+        (odd nil))
     (dolist (i '(1 2 3 4 5 6 7 8) (values (reverse even)
-					  (reverse odd)))
+                                          (reverse odd)))
       (when (evenp i) (go even))
       (push i odd)
       (go done)
@@ -51,7 +51,7 @@
     (declare (special i))
     (flet ((%f () i))
       (dolist (i '(1 2 3 4))
-	(push (%f) y)))
+        (push (%f) y)))
     y)
   (0 0 0 0))
 
@@ -71,15 +71,15 @@
 (deftest dolist.9
   (block nil
     (eqlt (dolist (x '(a b c))
-	    (return 1))
-	  1))
+            (return 1))
+          1))
   t)
 
 (deftest dolist.10
   (block nil
     (eqlt (dolist (x '(a b c))
-	    (return-from nil 1))
-	  1))
+            (return-from nil 1))
+          1))
   t)
 
 (deftest dolist.11
@@ -119,8 +119,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(dolist (e (return-from done x))
-	  (declare (special x))))))
+        (dolist (e (return-from done x))
+          (declare (special x))))))
   :good)
 
 (deftest dolist.17
@@ -128,7 +128,7 @@
     (declare (special x))
     (let ((x :bad))
       (dolist (e nil x)
-	(declare (special x)))))
+        (declare (special x)))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms

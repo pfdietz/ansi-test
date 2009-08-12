@@ -7,50 +7,50 @@
 
 (deftest acos.1
   (loop for i from -1000 to 1000
-	for rlist = (multiple-value-list (acos i))
-	for y = (car rlist)
-	always (and (null (cdr rlist))
-		    (numberp y)))
+        for rlist = (multiple-value-list (acos i))
+        for y = (car rlist)
+        always (and (null (cdr rlist))
+                    (numberp y)))
   t)
 
 (deftest acos.2
   (loop for type in '(short-float single-float double-float long-float)
-	collect
-	(let ((a (coerce 2000 type))
-	      (b (coerce -1000 type)))
-	  (loop for x = (- (random a) b)
-		for rlist = (multiple-value-list (acos x))
-		for y = (car rlist)
-		repeat 1000
-		always (and (null (cdr rlist))
-			    (numberp y)))))
+        collect
+        (let ((a (coerce 2000 type))
+              (b (coerce -1000 type)))
+          (loop for x = (- (random a) b)
+                for rlist = (multiple-value-list (acos x))
+                for y = (car rlist)
+                repeat 1000
+                always (and (null (cdr rlist))
+                            (numberp y)))))
   (t t t t))
 
 (deftest acos.3
   (loop for type in '(integer short-float single-float double-float long-float)
-	collect
-	(let ((a (coerce 2000 type))
-	      (b (coerce -1000 type)))
-	  (loop for x = (- (random a) b)
-		for rlist = (multiple-value-list (acos (complex 0 x)))
-		for y = (car rlist)
-		repeat 1000
-		always (and (null (cdr rlist))
-			    (numberp y)))))
+        collect
+        (let ((a (coerce 2000 type))
+              (b (coerce -1000 type)))
+          (loop for x = (- (random a) b)
+                for rlist = (multiple-value-list (acos (complex 0 x)))
+                for y = (car rlist)
+                repeat 1000
+                always (and (null (cdr rlist))
+                            (numberp y)))))
   (t t t t t))
 
 (deftest acos.4
   (loop for type in '(integer short-float single-float double-float long-float)
-	collect
-	(let ((a (coerce 2000 type))
-	      (b (coerce -1000 type)))
-	  (loop for x1 = (- (random a) b)
-		for x2 = (- (random a) b)
-		for rlist = (multiple-value-list (acos (complex x1 x2)))
-		for y = (car rlist)
-		repeat 1000
-		always (and (null (cdr rlist))
-			    (numberp y)))))
+        collect
+        (let ((a (coerce 2000 type))
+              (b (coerce -1000 type)))
+          (loop for x1 = (- (random a) b)
+                for x2 = (- (random a) b)
+                for rlist = (multiple-value-list (acos (complex x1 x2)))
+                for y = (car rlist)
+                repeat 1000
+                always (and (null (cdr rlist))
+                            (numberp y)))))
   (t t t t t))
 
 (deftest acos.5
@@ -59,23 +59,23 @@
 
 (deftest acos.6
   (loop for type in '(single-float short-float double-float long-float)
-	unless (approx= (acos (coerce 0 type))
-			(coerce (/ pi 2) type))
-	collect type)
+        unless (approx= (acos (coerce 0 type))
+                        (coerce (/ pi 2) type))
+        collect type)
   nil)
 
 (deftest acos.7
   (loop for type in '(single-float short-float double-float long-float)
-	unless (approx= (acos (coerce 1 type))
-			(coerce 0 type))
-	collect type)
+        unless (approx= (acos (coerce 1 type))
+                        (coerce 0 type))
+        collect type)
   nil)
 
 (deftest acos.8
   (loop for type in '(single-float short-float double-float long-float)
-	unless (approx= (acos (coerce -1 type))
-			(coerce pi type))
-	collect type)
+        unless (approx= (acos (coerce -1 type))
+                        (coerce pi type))
+        collect type)
   nil)
 
 (deftest acos.9

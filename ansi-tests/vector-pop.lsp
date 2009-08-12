@@ -7,7 +7,7 @@
 
 (deftest vector-pop.1
   (let ((v (make-array '(5) :initial-contents '(a b c d e)
-		       :fill-pointer 3)))
+                       :fill-pointer 3)))
     (values
      (length v)
      (check-values (vector-pop v))
@@ -20,17 +20,17 @@
 
 (deftest vector-pop.error.1
   (signals-error (let ((v (vector 1 2 3)))
-		   (if (array-has-fill-pointer-p v)
-		       (error 'type-error :datum v :expected-type nil)
-		     (vector-pop v)))
-		 type-error)
+                   (if (array-has-fill-pointer-p v)
+                       (error 'type-error :datum v :expected-type nil)
+                     (vector-pop v)))
+                 type-error)
   t)
 
 (deftest vector-pop.error.2
   (let ((v (make-array '(5) :initial-element 'x
-		       :fill-pointer 0)))
+                       :fill-pointer 0)))
     (handler-case (vector-pop v)
-		  (error () 'error)))
+                  (error () 'error)))
   error)
 
 (deftest vector-pop.error.3
@@ -39,7 +39,7 @@
 
 (deftest vector-pop.error.4
   (signals-error (let ((v (make-array '(5) :fill-pointer t
-				       :initial-element 'x)))
-		    (vector-pop v nil))
-		 program-error)
+                                       :initial-element 'x)))
+                    (vector-pop v nil))
+                 program-error)
   t)

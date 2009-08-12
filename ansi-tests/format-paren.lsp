@@ -13,39 +13,39 @@
 ;;; Conversion of simple characters to downcase
 (deftest format.paren.2
   (loop for i from 0 below (min char-code-limit (ash 1 16))
-	for c = (code-char i)
-	when (and c
-		  (eql (char-code c) (char-int c))
-		  (upper-case-p c)
-		  (let ((s1 (format nil "~(~c~)" c))
-			(s2 (string (char-downcase c))))
-		    (if
-			(or (not (eql (length s1) 1))
-			    (not (eql (length s2) 1))
-			    (not (eql (elt s1 0)
-				      (elt s2 0))))
-			(list i c s1 s2)
-		      nil)))
-	collect it)
+        for c = (code-char i)
+        when (and c
+                  (eql (char-code c) (char-int c))
+                  (upper-case-p c)
+                  (let ((s1 (format nil "~(~c~)" c))
+                        (s2 (string (char-downcase c))))
+                    (if
+                        (or (not (eql (length s1) 1))
+                            (not (eql (length s2) 1))
+                            (not (eql (elt s1 0)
+                                      (elt s2 0))))
+                        (list i c s1 s2)
+                      nil)))
+        collect it)
   nil)
 
 (deftest formatter.paren.2
   (let ((fn (formatter "~(~c~)")))
     (loop for i from 0 below (min char-code-limit (ash 1 16))
-	  for c = (code-char i)
-	  when (and c
-		    (eql (char-code c) (char-int c))
-		    (upper-case-p c)
-		    (let ((s1 (formatter-call-to-string fn c))
-			  (s2 (string (char-downcase c))))
-		      (if
-			  (or (not (eql (length s1) 1))
-			      (not (eql (length s2) 1))
-			      (not (eql (elt s1 0)
-					(elt s2 0))))
-			  (list i c s1 s2)
-			nil)))
-	  collect it))
+          for c = (code-char i)
+          when (and c
+                    (eql (char-code c) (char-int c))
+                    (upper-case-p c)
+                    (let ((s1 (formatter-call-to-string fn c))
+                          (s2 (string (char-downcase c))))
+                      (if
+                          (or (not (eql (length s1) 1))
+                              (not (eql (length s2) 1))
+                              (not (eql (elt s1 0)
+                                        (elt s2 0))))
+                          (list i c s1 s2)
+                        nil)))
+          collect it))
   nil)
 
 
@@ -57,7 +57,7 @@
 
 (def-format-test format.paren.5
   "~:(this is a TEST.~)" nil "This Is A Test.")
-			
+
 (def-format-test format.paren.6
   "~:(this is7a TEST.~)" nil "This Is7a Test.")
 
@@ -66,39 +66,39 @@
 
 (deftest format.paren.8
   (loop for i from 0 below (min char-code-limit (ash 1 16))
-	for c = (code-char i)
-	when (and c
-		  (eql (char-code c) (char-int c))
-		  (lower-case-p c)
-		  (let ((s1 (format nil "~@:(~c~)" c))
-			(s2 (string (char-upcase c))))
-		    (if
-			(or (not (eql (length s1) 1))
-			    (not (eql (length s2) 1))
-			    (not (eql (elt s1 0)
-				      (elt s2 0))))
-			(list i c s1 s2)
-		      nil)))
-	collect it)
+        for c = (code-char i)
+        when (and c
+                  (eql (char-code c) (char-int c))
+                  (lower-case-p c)
+                  (let ((s1 (format nil "~@:(~c~)" c))
+                        (s2 (string (char-upcase c))))
+                    (if
+                        (or (not (eql (length s1) 1))
+                            (not (eql (length s2) 1))
+                            (not (eql (elt s1 0)
+                                      (elt s2 0))))
+                        (list i c s1 s2)
+                      nil)))
+        collect it)
   nil)
 
 (deftest formatter.paren.8
   (let ((fn (formatter "~@:(~c~)")))
     (loop for i from 0 below (min char-code-limit (ash 1 16))
-	  for c = (code-char i)
-	  when (and c
-		    (eql (char-code c) (char-int c))
-		    (lower-case-p c)
-		    (let ((s1 (formatter-call-to-string fn c))
-			  (s2 (string (char-upcase c))))
-		      (if
-			  (or (not (eql (length s1) 1))
-			      (not (eql (length s2) 1))
-			      (not (eql (elt s1 0)
-					(elt s2 0))))
-			  (list i c s1 s2)
-			nil)))
-	  collect it))
+          for c = (code-char i)
+          when (and c
+                    (eql (char-code c) (char-int c))
+                    (lower-case-p c)
+                    (let ((s1 (formatter-call-to-string fn c))
+                          (s2 (string (char-upcase c))))
+                      (if
+                          (or (not (eql (length s1) 1))
+                              (not (eql (length s2) 1))
+                              (not (eql (elt s1 0)
+                                        (elt s2 0))))
+                          (list i c s1 s2)
+                        nil)))
+          collect it))
   nil)
 
 ;;; Nested conversion

@@ -19,7 +19,7 @@
   (if (= x 0)
       0
     (let ((lo (if (oddp x) y 0))
-	  (hi (nat-times (ash x -1) y)))
+          (hi (nat-times (ash x -1) y)))
       (+ lo (+ hi hi)))))
 
 (defun rat-times (x y)

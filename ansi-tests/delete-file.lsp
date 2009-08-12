@@ -9,7 +9,7 @@
   (let ((pn "scratchfile.txt"))
     (unless (probe-file pn)
       (with-open-file (s pn :direction :output)
-		      (format s "Contents~%")))
+                      (format s "Contents~%")))
     (values
      (notnot (probe-file pn))
      (multiple-value-list (delete-file pn))
@@ -20,7 +20,7 @@
   (let ((pn #p"scratchfile.txt"))
     (unless (probe-file pn)
       (with-open-file (s pn :direction :output)
-		      (format s "Contents~%")))
+                      (format s "Contents~%")))
     (values
      (notnot (probe-file pn))
      (multiple-value-list (delete-file pn))
@@ -32,7 +32,7 @@
     (assert (typep (pathname pn) 'logical-pathname))
     (unless (probe-file pn)
       (with-open-file (s pn :direction :output)
-		      (format s "Contents~%")))
+                      (format s "Contents~%")))
     (values
      (notnot (probe-file pn))
      (multiple-value-list (delete-file pn))
@@ -44,7 +44,7 @@
     (assert (typep (pathname pn) 'logical-pathname))
     (unless (probe-file pn)
       (with-open-file (s pn :direction :output)
-		      (format s "Contents~%")))
+                      (format s "Contents~%")))
     (let ((s (open pn :direction :input)))
       (close s)
       (values
@@ -60,7 +60,7 @@
    (pn "scratchfile.txt" nil)
    (unless (probe-file pn)
      (with-open-file (s pn :direction :output)
-		     (format s "Contents~%")))
+                     (format s "Contents~%")))
    (assert (probe-file pn))
    (assert (equal (multiple-value-list (delete-file pn)) '(t)))
    (assert (not (probe-file pn))))
@@ -76,7 +76,7 @@
   (let ((pn "scratch.txt"))
     (unless (probe-file pn)
       (with-open-file (s pn :direction :output)
-		      (format s "Contents~%")))
+                      (format s "Contents~%")))
     (values
      (notnot (probe-file pn))
      (signals-error (delete-file "scratch.txt" nil) program-error)

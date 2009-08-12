@@ -25,42 +25,42 @@
 
 (deftest oddp.1
   (loop for x in *numbers*
-	when (integerp x)
-	do (oddp x))
+        when (integerp x)
+        do (oddp x))
   nil)
 
 (deftest oddp.3
   (loop for x = (random-fixnum)
-	repeat 10000
-	when (or
-	      (oddp (+ x x))
-	      (not (oddp (+ x x 1)))
-	      (if (oddp x)
-		  (or (oddp (1+ x))
-		      (oddp (1- x))
-		      (/= (mod x 2) 1))
-		(or (not (oddp (1+ x)))
-		    (not (oddp (1- x)))
-		    (/= (mod x 2) 0))))
-	collect x)
+        repeat 10000
+        when (or
+              (oddp (+ x x))
+              (not (oddp (+ x x 1)))
+              (if (oddp x)
+                  (or (oddp (1+ x))
+                      (oddp (1- x))
+                      (/= (mod x 2) 1))
+                (or (not (oddp (1+ x)))
+                    (not (oddp (1- x)))
+                    (/= (mod x 2) 0))))
+        collect x)
   nil)
 
 (deftest oddp.4
   (let ((upper-bound 1000000000000000)
-	(lower-bound -1000000000000000))
+        (lower-bound -1000000000000000))
     (loop for x = (random-from-interval upper-bound lower-bound)
-	  repeat 10000
-	  when (or
-		(oddp (+ x x))
-		(not (oddp (+ x x 1)))
-		(if (oddp x)
-		    (or (oddp (1+ x))
-			(oddp (1- x))
-			(/= (mod x 2) 1))
-		  (or (not (oddp (1+ x)))
-		      (not (oddp (1- x)))
-		      (/= (mod x 2) 0))))
-	  collect x))
+          repeat 10000
+          when (or
+                (oddp (+ x x))
+                (not (oddp (+ x x 1)))
+                (if (oddp x)
+                    (or (oddp (1+ x))
+                        (oddp (1- x))
+                        (/= (mod x 2) 1))
+                  (or (not (oddp (1+ x)))
+                      (not (oddp (1- x)))
+                      (/= (mod x 2) 0))))
+          collect x))
   nil)
 
 (deftest oddp.5
@@ -79,4 +79,4 @@
   (oddp 100000000000000000000000000000000)
   nil)
 
-			
+

@@ -43,7 +43,7 @@
 
 (deftest subtypep.member.9
   (let ((b1 (1+ most-positive-fixnum))
-	(b2 (1+ most-positive-fixnum)))
+        (b2 (1+ most-positive-fixnum)))
     (check-all-subtypep `(member 10 ,b1 20) `(member 10 20 ,b2)))
   nil)
 
@@ -53,7 +53,7 @@
 
 (deftest subtypep.member.11
   (let ((b1 (copy-list '(a)))
-	(b2 (copy-list '(a))))
+        (b2 (copy-list '(a))))
     (check-all-not-subtypep `(member 10 ,b1 20) `(member 10 20 ,b2)))
   nil)
 
@@ -80,9 +80,9 @@
 
 (deftest subtypep.member.17
   (let ((s1 (copy-seq "abc"))
-	(s2 (copy-seq "abc")))
+        (s2 (copy-seq "abc")))
     (let ((t1 `(member ,s1))
-	  (t2 `(member ,s2)))
+          (t2 `(member ,s2)))
       (cond
        ((subtypep t1 t2) "T1 is subtype of T2")
        ((subtypep t2 t1) "T2 is subtype of T1")
@@ -91,9 +91,9 @@
 
 (deftest subtypep.member.18
   (let ((s1 (copy-seq '(a b c)))
-	(s2 (copy-seq '(a b c))))
+        (s2 (copy-seq '(a b c))))
     (let ((t1 `(member ,s1))
-	  (t2 `(member ,s2)))
+          (t2 `(member ,s2)))
       (cond
        ((subtypep t1 t2) "T1 is subtype of T2")
        ((subtypep t2 t1) "T2 is subtype of T1")
@@ -102,33 +102,33 @@
 
 (deftest subtypep.member.19
   (let ((i1 (1+ most-positive-fixnum))
-	(i2 (1+ most-positive-fixnum)))
+        (i2 (1+ most-positive-fixnum)))
     (check-equivalence `(member 0 ,i1) `(member 0 ,i2)))
   nil)
 
 (deftest subtypep.member.20
   (check-equivalence '(and (member a b c d) (member e d b f g))
-		     '(member b d))
+                     '(member b d))
   nil)
 
 (deftest subtypep.member.21
   (check-equivalence '(and (member a b c d) (member e d f g))
-		     '(eql d))
+                     '(eql d))
   nil)
 
 (deftest subtypep.member.22
   (check-equivalence '(and (member a b c d) (member e f g))
-		     nil)
+                     nil)
   nil)
 
 (deftest subtypep.member.23
   (check-equivalence '(or (member a b c) (member z b w))
-		     '(member z a b w c))
+                     '(member z a b w c))
   nil)
 
 (deftest subtypep.member.24
   (check-equivalence '(or (member a b c) (eql d))
-		     '(member d c b a))
+                     '(member d c b a))
   nil)
 
 (deftest subtypep.member.25
@@ -137,7 +137,7 @@
 
 (deftest subtypep.member.26
   (check-equivalence '(or (eql a) (eql b))
-		     '(member a b))
+                     '(member a b))
   nil)
 
 (deftest subtypep.member.27
@@ -189,14 +189,14 @@
 (deftest subtypep.member.38
   (check-equivalence
    '(and (member a b c d e f g)
-	 (not (member b f)))
+         (not (member b f)))
    '(member a c d e g))
   nil)
 
 (deftest subtypep.member.39
   (check-equivalence
    '(and (not (member b d e f g))
-	 (not (member x y b z d)))
+         (not (member x y b z d)))
    '(not (member b d e f g x y z)))
   nil)
 

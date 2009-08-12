@@ -23,7 +23,7 @@
 
 (deftest fill.error.5
   (signals-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest fill.error.6
@@ -40,8 +40,8 @@
 
 (deftest fill.error.10
   (signals-error (fill (list 'a 'b) 'c :bad t :allow-other-keys nil
-			:allow-other-keys t)
-		 program-error)
+                        :allow-other-keys t)
+                 program-error)
   t)
 
 (deftest fill.error.11
@@ -52,44 +52,44 @@
 
 (deftest array-fill-1
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
-	 (b (fill a 'x)))
+         (b (fill a 'x)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (x x x x x))
 
 (deftest array-fill-2
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
-	 (b (fill a 'x :start 2)))
+         (b (fill a 'x :start 2)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (a b x x x))
 
 (deftest array-fill-3
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
-	 (b (fill a 'x :end 2)))
+         (b (fill a 'x :end 2)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (x x c d e))
 
 (deftest array-fill-4
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
-	 (b (fill a 'x :start 1 :end 3)))
+         (b (fill a 'x :start 1 :end 3)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (a x x d e))
 
 (deftest array-fill-5
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
-	 (b (fill a 'x :start 1 :end nil)))
+         (b (fill a 'x :start 1 :end nil)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (a x x x x))
 
 (deftest array-fill-6
   (let* ((a (make-array '(5) :initial-contents '(a b c d e)))
-	 (b (fill a 'x :end nil)))
+         (b (fill a 'x :end nil)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (x x x x x))
 
 (deftest array-fill-7
@@ -124,44 +124,44 @@
 
 (deftest array-fixnum-fill-1
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
-	 (b (fill a 6)))
+         (b (fill a 6)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (6 6 6 6 6))
 
 (deftest array-fixnum-fill-2
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
-	 (b (fill a 6 :start 2)))
+         (b (fill a 6 :start 2)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (1 2 6 6 6))
 
 (deftest array-fixnum-fill-3
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
-	 (b (fill a 7 :end 2)))
+         (b (fill a 7 :end 2)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (7 7 3 4 5))
 
 (deftest array-fixnum-fill-4
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
-	 (b (fill a 8 :start 1 :end 3)))
+         (b (fill a 8 :start 1 :end 3)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (1 8 8 4 5))
 
 (deftest array-fixnum-fill-5
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
-	 (b (fill a 0 :start 1 :end nil)))
+         (b (fill a 0 :start 1 :end nil)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (1 0 0 0 0))
 
 (deftest array-fixnum-fill-6
   (let* ((a (make-array '(5) :element-type 'fixnum :initial-contents '(1 2 3 4 5)))
-	 (b (fill a -1 :end nil)))
+         (b (fill a -1 :end nil)))
     (values (eqt a b)
-	    (map 'list #'identity a)))
+            (map 'list #'identity a)))
   t (-1 -1 -1 -1 -1))
 
 (deftest array-fixnum-fill-7
@@ -220,22 +220,22 @@
 
 (deftest array-unsigned-byte8-fill-7
   (signals-error (array-unsigned-byte-fill-test-fn 8 0 :start -1)
-		 type-error)
+                 type-error)
   t)
 
 (deftest array-unsigned-byte8-fill-8
   (signals-error (array-unsigned-byte-fill-test-fn 8 100 :start 'a)
-		 type-error)
+                 type-error)
   t)
 
 (deftest array-unsigned-byte8-fill-9
   (signals-error (array-unsigned-byte-fill-test-fn 8 19 :end -1)
-		 type-error)
+                 type-error)
   t)
 
 (deftest array-unsigned-byte8-fill-10
   (signals-error (array-unsigned-byte-fill-test-fn 8 17 :end 'a)
-		 type-error)
+                 type-error)
   t)
 
 ;;; Tests on arrays with fill pointers
@@ -256,206 +256,206 @@
 
 (deftest fill.string.1
   (let* ((s1 (copy-seq "abcde"))
-	 (s2 (fill s1 #\z)))
+         (s2 (fill s1 #\z)))
     (values (eqt s1 s2) s2))
   t
   "zzzzz")
 
 (deftest fill.string.2
   (let* ((s1 (copy-seq "abcde"))
-	 (s2 (fill s1 #\z :start 0 :end 1)))
+         (s2 (fill s1 #\z :start 0 :end 1)))
     (values (eqt s1 s2) s2))
   t
   "zbcde")
 
 (deftest fill.string.3
   (let* ((s1 (copy-seq "abcde"))
-	 (s2 (fill s1 #\z :end 2)))
+         (s2 (fill s1 #\z :end 2)))
     (values (eqt s1 s2) s2))
   t
   "zzcde")
 
 (deftest fill.string.4
   (let* ((s1 (copy-seq "abcde"))
-	 (s2 (fill s1 #\z :end nil)))
+         (s2 (fill s1 #\z :end nil)))
     (values (eqt s1 s2) s2))
   t
   "zzzzz")
 
 (deftest fill.string.5
   (let* ((s1 "aaaaaaaa")
-	 (len (length s1)))
+         (len (length s1)))
     (loop for start from 0 to (1- len)
-	  always
-	  (loop for end from (1+ start) to len
-		always
-		(let* ((s2 (copy-seq s1))
-		       (s3 (fill s2 #\z :start start :end end)))
-		  (and (eqt s2 s3)
-		       (string= s3
-				(substitute-if #\z (constantly t) s1
-					       :start start :end end))
-		       t)))))
+          always
+          (loop for end from (1+ start) to len
+                always
+                (let* ((s2 (copy-seq s1))
+                       (s3 (fill s2 #\z :start start :end end)))
+                  (and (eqt s2 s3)
+                       (string= s3
+                                (substitute-if #\z (constantly t) s1
+                                               :start start :end end))
+                       t)))))
   t)
 
 (deftest fill.string.6
   (let* ((s1 "aaaaaaaa")
-	 (len (length s1)))
+         (len (length s1)))
     (loop for start from 0 to (1- len)
-	  always
-	  (let* ((s2 (copy-seq s1))
-		 (s3 (fill s2 #\z :start start)))
-	    (and (eqt s2 s3)
-		 (string= s3
-			  (substitute-if #\z (constantly t) s1
-					 :start start))
-		 t))))
+          always
+          (let* ((s2 (copy-seq s1))
+                 (s3 (fill s2 #\z :start start)))
+            (and (eqt s2 s3)
+                 (string= s3
+                          (substitute-if #\z (constantly t) s1
+                                         :start start))
+                 t))))
   t)
 
 (deftest fill.string.7
   (let* ((s1 "aaaaaaaa")
-	 (len (length s1)))
+         (len (length s1)))
     (loop for start from 0 to (1- len)
-	  always
-	  (let* ((s2 (copy-seq s1))
-		 (s3 (fill s2 #\z :end nil :start start)))
-	    (and (eqt s2 s3)
-		 (string= s3
-			  (substitute-if #\z (constantly t) s1
-					 :end nil :start start))
-		 t))))
+          always
+          (let* ((s2 (copy-seq s1))
+                 (s3 (fill s2 #\z :end nil :start start)))
+            (and (eqt s2 s3)
+                 (string= s3
+                          (substitute-if #\z (constantly t) s1
+                                         :end nil :start start))
+                 t))))
   t)
 
 (deftest fill.string.8
   (let* ((s1 "aaaaaaaa")
-	 (len (length s1)))
+         (len (length s1)))
     (loop for end from 1 to len
-	  always
-	  (let* ((s2 (copy-seq s1))
-		 (s3 (fill s2 #\z :end end)))
-	    (and (eqt s2 s3)
-		 (string= s3
-			  (substitute-if #\z (constantly t) s1
-					 :end end))
-		 t))))
+          always
+          (let* ((s2 (copy-seq s1))
+                 (s3 (fill s2 #\z :end end)))
+            (and (eqt s2 s3)
+                 (string= s3
+                          (substitute-if #\z (constantly t) s1
+                                         :end end))
+                 t))))
   t)
 
 (deftest fill.string.9
   (let* ((s1 (make-array '(8) :element-type 'character
-			 :initial-element #\z
-			 :fill-pointer 4))
-	 (s2 (fill s1 #\a)))
+                         :initial-element #\z
+                         :fill-pointer 4))
+         (s2 (fill s1 #\a)))
     (and (eqt s1 s2)
-	 (coerce (loop for i from 0 to 7 collect (aref s2 i))
-		 'string)))
+         (coerce (loop for i from 0 to 7 collect (aref s2 i))
+                 'string)))
   "aaaazzzz")
 
 (deftest fill.string.10
   (let* ((s1 (make-array '(8) :element-type 'base-char
-			 :initial-element #\z
-			 :fill-pointer 4))
-	 (s2 (fill s1 #\a)))
+                         :initial-element #\z
+                         :fill-pointer 4))
+         (s2 (fill s1 #\a)))
     (and (eqt s1 s2)
-	 (coerce (loop for i from 0 to 7 collect (aref s2 i))
-		 'base-string)))
+         (coerce (loop for i from 0 to 7 collect (aref s2 i))
+                 'base-string)))
   "aaaazzzz")
 
 ;;; Tests for bit vectors
 
 (deftest fill.bit-vector.1
   (let* ((s1 (copy-seq #*01100))
-	 (s2 (fill s1 0)))
+         (s2 (fill s1 0)))
     (values (eqt s1 s2) s2))
   t
   #*00000)
 
 (deftest fill.bit-vector.2
   (let* ((s1 (copy-seq #*00100))
-	 (s2 (fill s1 1 :start 0 :end 1)))
+         (s2 (fill s1 1 :start 0 :end 1)))
     (values (eqt s1 s2) s2))
   t
   #*10100)
 
 (deftest fill.bit-vector.3
   (let* ((s1 (copy-seq #*00010))
-	 (s2 (fill s1 1 :end 2)))
+         (s2 (fill s1 1 :end 2)))
     (values (eqt s1 s2) s2))
   t
   #*11010)
 
 (deftest fill.bit-vector.4
   (let* ((s1 (copy-seq #*00111))
-	 (s2 (fill s1 0 :end nil)))
+         (s2 (fill s1 0 :end nil)))
     (values (eqt s1 s2) s2))
   t
   #*00000)
 
 (deftest fill.bit-vector.5
   (let* ((s1 #*00000000)
-	 (len (length s1)))
+         (len (length s1)))
     (loop for start from 0 to (1- len)
-	  always
-	  (loop for end from (1+ start) to len
-		always
-		(let* ((s2 (copy-seq s1))
-		       (s3 (fill s2 1 :start start :end end)))
-		  (and (eqt s2 s3)
-		       (equalp s3
-			       (substitute-if 1 (constantly t) s1
-					      :start start :end end))
-		       t)))))
+          always
+          (loop for end from (1+ start) to len
+                always
+                (let* ((s2 (copy-seq s1))
+                       (s3 (fill s2 1 :start start :end end)))
+                  (and (eqt s2 s3)
+                       (equalp s3
+                               (substitute-if 1 (constantly t) s1
+                                              :start start :end end))
+                       t)))))
   t)
 
 (deftest fill.bit-vector.6
   (let* ((s1 #*11111111)
-	 (len (length s1)))
+         (len (length s1)))
     (loop for start from 0 to (1- len)
-	  always
-	  (let* ((s2 (copy-seq s1))
-		 (s3 (fill s2 0 :start start)))
-	    (and (eqt s2 s3)
-		 (equalp s3
-			 (substitute-if 0 (constantly t) s1
-					:start start))
-		 t))))
+          always
+          (let* ((s2 (copy-seq s1))
+                 (s3 (fill s2 0 :start start)))
+            (and (eqt s2 s3)
+                 (equalp s3
+                         (substitute-if 0 (constantly t) s1
+                                        :start start))
+                 t))))
   t)
 
 (deftest fill.bit-vector.7
   (let* ((s1 #*00000000)
-	 (len (length s1)))
+         (len (length s1)))
     (loop for start from 0 to (1- len)
-	  always
-	  (let* ((s2 (copy-seq s1))
-		 (s3 (fill s2 1 :end nil :start start)))
-	    (and (eqt s2 s3)
-		 (equalp s3
-			 (substitute-if 1 (constantly t) s1
-					:end nil :start start))
-		 t))))
+          always
+          (let* ((s2 (copy-seq s1))
+                 (s3 (fill s2 1 :end nil :start start)))
+            (and (eqt s2 s3)
+                 (equalp s3
+                         (substitute-if 1 (constantly t) s1
+                                        :end nil :start start))
+                 t))))
   t)
 
 (deftest fill.bit-vector.8
   (let* ((s1 #*11111111)
-	 (len (length s1)))
+         (len (length s1)))
     (loop for end from 1 to len
-	  always
-	  (let* ((s2 (copy-seq s1))
-		 (s3 (fill s2 0 :end end)))
-	    (and (eqt s2 s3)
-		 (equalp s3
-			 (substitute-if 0 (constantly t) s1
-					:end end))
-		 t))))
+          always
+          (let* ((s2 (copy-seq s1))
+                 (s3 (fill s2 0 :end end)))
+            (and (eqt s2 s3)
+                 (equalp s3
+                         (substitute-if 0 (constantly t) s1
+                                        :end end))
+                 t))))
   t)
 
 (deftest fill.bit-vector.9
   (let* ((s1 (make-array '(8) :element-type 'bit
-			 :initial-element 0
-			 :fill-pointer 4))
-	 (s2 (fill s1 1)))
+                         :initial-element 0
+                         :fill-pointer 4))
+         (s2 (fill s1 1)))
     (and (eqt s1 s2)
-	 (coerce (loop for i from 0 to 7 collect (aref s2 i))
-		 'bit-vector)))
+         (coerce (loop for i from 0 to 7 collect (aref s2 i))
+                 'bit-vector)))
   #*11110000)
 
 ;;; Test of :allow-other-keys
@@ -482,12 +482,12 @@
 
 (deftest fill.allow-other-keys.6
   (fill (list 'a 'b 'c 'd 'e) 'a  :bad t :allow-other-keys t
-	:allow-other-keys nil)
+        :allow-other-keys nil)
   (a a a a a))
 
 (deftest fill.allow-other-keys.7
   (fill (list 'a 'b 'c 'd 'e) 'a  :allow-other-keys t :allow-other-keys nil
-	:bad t)
+        :bad t)
   (a a a a a))
 
 
@@ -497,7 +497,7 @@
   (let ((i 0) x y (a (copy-seq #(a a a a))))
     (values
      (fill (progn (setf x (incf i)) a)
-	   (progn (setf y (incf i)) 'z))
+           (progn (setf y (incf i)) 'z))
      i x y))
   #(z z z z) 2 1 2)
 
@@ -505,9 +505,9 @@
   (let ((i 0) x y z w (a (copy-seq #(a a a a))))
     (values
      (fill (progn (setf x (incf i)) a)
-	   (progn (setf y (incf i)) 'z)
-	   :start (progn (setf z (incf i)) 1)
-	   :end   (progn (setf w (incf i)) 3))
+           (progn (setf y (incf i)) 'z)
+           :start (progn (setf z (incf i)) 1)
+           :end   (progn (setf w (incf i)) 3))
      i x y z w))
   #(a z z a) 4 1 2 3 4)
 
@@ -515,9 +515,9 @@
   (let ((i 0) x y z w (a (copy-seq #(a a a a))))
     (values
      (fill (progn (setf x (incf i)) a)
-	   (progn (setf y (incf i)) 'z)
-	   :end   (progn (setf z (incf i)) 3)
-	   :start (progn (setf w (incf i)) 1))
+           (progn (setf y (incf i)) 'z)
+           :end   (progn (setf z (incf i)) 3)
+           :start (progn (setf w (incf i)) 1))
      i x y z w))
   #(a z z a) 4 1 2 3 4)
 
@@ -525,13 +525,13 @@
   (let ((i 0) x y z p q r s w (a (copy-seq #(a a a a))))
     (values
      (fill (progn (setf x (incf i)) a)
-	   (progn (setf y (incf i)) 'z)
-	   :end   (progn (setf z (incf i)) 3)
-	   :end   (progn (setf p (incf i)) 1)
-	   :end   (progn (setf q (incf i)) 1)
-	   :end   (progn (setf r (incf i)) 1)
-	   :start (progn (setf s (incf i)) 1)
-	   :start (progn (setf w (incf i)) 0))
+           (progn (setf y (incf i)) 'z)
+           :end   (progn (setf z (incf i)) 3)
+           :end   (progn (setf p (incf i)) 1)
+           :end   (progn (setf q (incf i)) 1)
+           :end   (progn (setf r (incf i)) 1)
+           :start (progn (setf s (incf i)) 1)
+           :start (progn (setf w (incf i)) 0))
      i x y z p q r s w))
   #(a z z a) 8 1 2 3 4 5 6 7 8)
 

@@ -7,48 +7,48 @@
 
 (deftest file-author.1
   (loop for pn in
-	(directory (make-pathname :name :wild :type :wild
-				  :defaults *default-pathname-defaults*))
-	for author = (file-author pn)
-	unless (or (null author) (stringp author))
-	collect (list pn author))
+        (directory (make-pathname :name :wild :type :wild
+                                  :defaults *default-pathname-defaults*))
+        for author = (file-author pn)
+        unless (or (null author) (stringp author))
+        collect (list pn author))
   nil)
 
 (deftest file-author.2
   (let ((author (file-author "file-author.lsp")))
     (if (or (null author) (stringp author))
-	nil
+        nil
       author))
   nil)
 
 (deftest file-author.3
   (let ((author (file-author #p"file-author.lsp")))
     (if (or (null author) (stringp author))
-	nil
+        nil
       author))
   nil)
 
 (deftest file-author.4
   (let ((author (file-author (truename "file-author.lsp"))))
     (if (or (null author) (stringp author))
-	nil
+        nil
       author))
   nil)
 
 (deftest file-author.5
   (let ((author (with-open-file (s "file-author.lsp" :direction :input)
-				(file-author s))))
+                                (file-author s))))
     (if (or (null author) (stringp author))
-	nil
+        nil
       author))
   nil)
 
 (deftest file-author.6
   (let ((author (let ((s (open "file-author.lsp" :direction :input)))
-		  (close s)
-		  (file-author s))))
+                  (close s)
+                  (file-author s))))
     (if (or (null author) (stringp author))
-	nil
+        nil
       author))
   nil)
 
@@ -76,13 +76,13 @@
 (deftest file-author.error.3
   (signals-error-always
    (file-author (make-pathname :name :wild :type "lsp"
-			       :defaults *default-pathname-defaults*))
+                               :defaults *default-pathname-defaults*))
    file-error)
   t t)
 
 (deftest file-author.error.4
   (signals-error-always
    (file-author (make-pathname :name "file-author" :type :wild
-			       :defaults *default-pathname-defaults*))
+                               :defaults *default-pathname-defaults*))
    file-error)
   t t)

@@ -12,7 +12,7 @@
 (deftest bit-vector.2
   (notnot-mv (typep #* 'bit-vector))
   t)
-  
+
 (deftest bit-vector.3
   (notnot-mv (typep #*00101 'bit-vector))
   t)
@@ -47,8 +47,8 @@
 
 (deftest bit-vector.11
   (typep (make-array '(2 2) :element-type 'bit
-		     :initial-element 0)
-	 'bit-vector)
+                     :initial-element 0)
+         'bit-vector)
   nil)
 
 (deftest bit-vector.12
@@ -81,7 +81,7 @@
 (deftest bit-vector.class.2
   (notnot-mv (typep #* (find-class 'bit-vector)))
   t)
-  
+
 (deftest bit-vector.class.3
   (notnot-mv (typep #*00101 (find-class 'bit-vector)))
   t)
@@ -116,6 +116,6 @@
 
 (deftest bit-vector.class.11
   (typep (make-array '(2 2) :element-type 'bit
-		     :initial-element 0)
-	 (find-class 'bit-vector))
+                     :initial-element 0)
+         (find-class 'bit-vector))
   nil)

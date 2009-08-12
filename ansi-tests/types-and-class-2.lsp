@@ -11,11 +11,11 @@
 
 (deftest type-or-not-type-is-everything
   (loop for l in *disjoint-types-list2*
-	append
-	(loop
-	 for type in l
-	 append (check-subtypep t `(or ,type (not ,type)) t)
-	 append (check-subtypep t `(or (not ,type) ,type) t)))
+        append
+        (loop
+         for type in l
+         append (check-subtypep t `(or ,type (not ,type)) t)
+         append (check-subtypep t `(or (not ,type) ,type) t)))
   nil)
 
 (defclass tac-1-class () (a b c))
@@ -24,10 +24,10 @@
 
 (deftest user-class-disjointness
   (loop for l in *disjoint-types-list2*
-	append
-	(loop
-	 for type in l
-	 append (classes-are-disjoint type 'tac-1-class)))
+        append
+        (loop
+         for type in l
+         append (classes-are-disjoint type 'tac-1-class)))
   nil)
 
 (deftest user-class-disjointness-2
@@ -40,10 +40,10 @@
 
 (deftest user-struct-disjointness
   (loop for l in *disjoint-types-list2*
-	append
-	(loop
-	 for type in l
-	 append (check-disjointness type 'tac-2-struct)))
+        append
+        (loop
+         for type in l
+         append (check-disjointness type 'tac-2-struct)))
   nil)
 
 (deftest user-struct-disjointness-2
@@ -126,12 +126,12 @@
 
 (deftest tac-3.17
   (check-equivalence '(and (or tac-3-a tac-3-b)
-			   (or (not tac-3-a) (not tac-3-b))
-			   (or tac-3-a tac-3-c)
-			   (or (not tac-3-a) (not tac-3-c))
-			   (or tac-3-b tac-3-c)
-			   (or (not tac-3-b) (not tac-3-c)))
-		     nil)
+                           (or (not tac-3-a) (not tac-3-b))
+                           (or tac-3-a tac-3-c)
+                           (or (not tac-3-a) (not tac-3-c))
+                           (or tac-3-b tac-3-c)
+                           (or (not tac-3-b) (not tac-3-c)))
+                     nil)
   nil)
 
 ;;;
@@ -140,10 +140,10 @@
 ;;;
 (deftest universe-elements-in-at-most-one-disjoint-type
   (loop for e in *universe*
-	for types = (remove-if-not #'(lambda (x) (typep e x))
-				   *disjoint-types-list*)
-	when (> (length types) 1)
-	collect (list e types))
+        for types = (remove-if-not #'(lambda (x) (typep e x))
+                                   *disjoint-types-list*)
+        when (> (length types) 1)
+        collect (list e types))
   nil)
 
 

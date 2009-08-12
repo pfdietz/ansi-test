@@ -9,8 +9,8 @@
 
 (deftest atom.1
   (loop for x in *universe*
-	unless (if (atom x) (not (consp x)) (consp x))
-	collect x)
+        unless (if (atom x) (not (consp x)) (consp x))
+        collect x)
   nil)
 
 (deftest atom.2

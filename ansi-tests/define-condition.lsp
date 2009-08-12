@@ -20,8 +20,8 @@
 (deftest condition-4-slots.1
   (let ((c (make-condition 'condition-4 :slot1 'a :slot2 'b)))
     (and (typep c 'condition-4)
-	 (eqlt (condition-4/slot-1 c) 'a)
-	 (eqlt (condition-4/slot-2 c) 'b)))
+         (eqlt (condition-4/slot-1 c) 'a)
+         (eqlt (condition-4/slot-2 c) 'b)))
   t)
 
 (define-condition-with-tests condition-5 nil
@@ -31,70 +31,70 @@
 (deftest condition-5-slots.1
   (let ((c (make-condition 'condition-5 :slot1 'a :slot2 'b)))
     (and (typep c 'condition-5)
-	 (eqlt (condition-5/slot-1 c) 'a)
-	 (eqlt (condition-5/slot-2 c) 'b)))
+         (eqlt (condition-5/slot-1 c) 'a)
+         (eqlt (condition-5/slot-2 c) 'b)))
   t)
 
 (deftest condition-5-slots.2
   (let ((c (make-condition 'condition-5 :slot1 'a)))
     (and (typep c 'condition-5)
-	 (eqlt (condition-5/slot-1 c) 'a)
-	 (eqlt (condition-5/slot-2 c) 'y)))
+         (eqlt (condition-5/slot-1 c) 'a)
+         (eqlt (condition-5/slot-2 c) 'y)))
   t)
 
 (deftest condition-5-slots.3
   (let ((c (make-condition 'condition-5 :slot2 'b)))
     (and (typep c 'condition-5)
-	 (eqlt (condition-5/slot-1 c) 'x)
-	 (eqlt (condition-5/slot-2 c) 'b)))
+         (eqlt (condition-5/slot-1 c) 'x)
+         (eqlt (condition-5/slot-2 c) 'b)))
   t)
 
 (deftest condition-5-slots.4
   (let ((c (make-condition 'condition-5)))
     (and (typep c 'condition-5)
-	 (eqlt (condition-5/slot-1 c) 'x)
-	 (eqlt (condition-5/slot-2 c) 'y)))
+         (eqlt (condition-5/slot-1 c) 'x)
+         (eqlt (condition-5/slot-2 c) 'y)))
   t)
 
 (define-condition-with-tests condition-6 nil
   ((slot1 :initarg :slot1 :initarg :both-slots
-	  :initform 'x :reader condition-6/slot-1)
+          :initform 'x :reader condition-6/slot-1)
    (slot2 :initarg :slot2 :initarg :both-slots
-	  :initform 'y :reader condition-6/slot-2)))
+          :initform 'y :reader condition-6/slot-2)))
 
 (deftest condition-6-slots.1
   (let ((c (make-condition 'condition-6 :both-slots 'a)))
     (and (typep c 'condition-6)
-	 (eqlt (condition-6/slot-1 c) 'a)
-	 (eqlt (condition-6/slot-2 c) 'a)))
+         (eqlt (condition-6/slot-1 c) 'a)
+         (eqlt (condition-6/slot-2 c) 'a)))
   t)
 
 (deftest condition-6-slots.2
   (let ((c (make-condition 'condition-6)))
     (and (typep c 'condition-6)
-	 (eqlt (condition-6/slot-1 c) 'x)
-	 (eqlt (condition-6/slot-2 c) 'y)))
+         (eqlt (condition-6/slot-1 c) 'x)
+         (eqlt (condition-6/slot-2 c) 'y)))
   t)
 
 (deftest condition-6-slots.3
   (let ((c (make-condition 'condition-6 :slot1 'a :both-slots 'b)))
     (and (typep c 'condition-6)
-	 (eqlt (condition-6/slot-1 c) 'a)
-	 (eqlt (condition-6/slot-2 c) 'b)))
+         (eqlt (condition-6/slot-1 c) 'a)
+         (eqlt (condition-6/slot-2 c) 'b)))
   t)
 
 (deftest condition-6-slots.4
   (let ((c (make-condition 'condition-6 :slot2 'b :both-slots 'a)))
     (and (typep c 'condition-6)
-	 (eqlt (condition-6/slot-1 c) 'a)
-	 (eqlt (condition-6/slot-2 c) 'b)))
+         (eqlt (condition-6/slot-1 c) 'a)
+         (eqlt (condition-6/slot-2 c) 'b)))
   t)
 
 (deftest condition-6-slots.5
   (let ((c (make-condition 'condition-6 :both-slots 'a :slot1 'c :slot2 'd)))
     (and (typep c 'condition-6)
-	 (eqlt (condition-6/slot-1 c) 'a)
-	 (eqlt (condition-6/slot-2 c) 'a)))
+         (eqlt (condition-6/slot-1 c) 'a)
+         (eqlt (condition-6/slot-2 c) 'a)))
   t)
 
 (define-condition-with-tests condition-7 nil
@@ -103,25 +103,25 @@
 (deftest condition-7-slots.1
   (let ((c (make-condition 'condition-7 :i1 'a)))
     (and (typep c 'condition-7)
-	 (eqlt (condition-7/s c) 'a)))
+         (eqlt (condition-7/s c) 'a)))
   t)
 
 (deftest condition-7-slots.2
   (let ((c (make-condition 'condition-7 :i2 'a)))
     (and (typep c 'condition-7)
-	 (eqlt (condition-7/s c) 'a)))
+         (eqlt (condition-7/s c) 'a)))
   t)
 
 (deftest condition-7-slots.3
   (let ((c (make-condition 'condition-7 :i1 'a :i2 'b)))
     (and (typep c 'condition-7)
-	 (eqlt (condition-7/s c) 'a)))
+         (eqlt (condition-7/s c) 'a)))
   t)
 
 (deftest condition-7-slots.4
   (let ((c (make-condition 'condition-7 :i2 'a :i1 'b)))
     (and (typep c 'condition-7)
-	 (eqlt (condition-7/s c) 'a)))
+         (eqlt (condition-7/s c) 'a)))
   t)
 
 (defparameter *condition-8-counter* 0)
@@ -144,83 +144,83 @@
 (deftest condition-9-slots.1
   (let ((c (make-condition 'condition-9)))
     (values (notnot (typep c 'condition-9))
-	    (condition-9/s1 c)
-	    (condition-9/s2 c)))
+            (condition-9/s1 c)
+            (condition-9/s2 c)))
   t 15 37)
 
 (deftest condition-9-slots.2
   (let ((c (make-condition 'condition-9 :i1 3)))
     (values (notnot (typep c 'condition-9))
-	    (condition-9/s1 c)
-	    (condition-9/s2 c)))
+            (condition-9/s1 c)
+            (condition-9/s2 c)))
   t 3 37)
 
 (deftest condition-9-slots.3
   (let ((c (make-condition 'condition-9 :i2 3)))
     (values (notnot (typep c 'condition-9))
-	    (condition-9/s1 c)
-	    (condition-9/s2 c)))
+            (condition-9/s1 c)
+            (condition-9/s2 c)))
   t 15 3)
 
 (deftest condition-9-slots.4
   (let ((c (make-condition 'condition-9 :i2 3 :i2 8)))
     (values (notnot (typep c 'condition-9))
-	    (condition-9/s1 c)
-	    (condition-9/s2 c)))
+            (condition-9/s1 c)
+            (condition-9/s2 c)))
   t 15 3)
 
 (deftest condition-9-slots.5
   (let ((c (make-condition 'condition-9 :i1 3 :i2 8)))
     (values (notnot (typep c 'condition-9))
-	    (condition-9/s1 c)
-	    (condition-9/s2 c)))
+            (condition-9/s1 c)
+            (condition-9/s2 c)))
   t 3 8)
 
 (deftest condition-9-slots.6
   (let ((c (make-condition 'condition-9 :i1 3 :i2 8 :i1 100 :i2 500)))
     (values (notnot (typep c 'condition-9))
-	    (condition-9/s1 c)
-	    (condition-9/s2 c)))
+            (condition-9/s1 c)
+            (condition-9/s2 c)))
   t 3 8)
 
 ;;; (define-condition-with-tests condition-10 nil
 ;;;   ((s1 :initarg :i1 :writer condition-10/s1-w :reader condition-10/s1-r)))
-;;; 
+;;;
 ;;; (deftest condition-10-slots.1
 ;;;   (let ((c (make-condition 'condition-10 :i1 11)))
 ;;;      (condition-10/s1-r c))
 ;;;   11)
-;;; 
+;;;
 ;;; (deftest condition-10-slots.2
 ;;;   (let ((c (make-condition 'condition-10 :i1 11)))
 ;;;      (condition-10/s1-w 17 c))
 ;;;   17)
-;;; 
+;;;
 ;;; (deftest condition-10-slots.3
 ;;;   (let ((c (make-condition 'condition-10 :i1 11)))
 ;;;      (condition-10/s1-w 107 c)
 ;;;      (condition-10/s1-r c))
 ;;;   107)
-;;; 
+;;;
 ;;; (define-condition-with-tests condition-11 nil
 ;;;   ((s1 :initarg :i1 :writer (setf condition-11/w) :reader condition-11/r)))
-;;; 
+;;;
 ;;; (deftest condition-11-slots.1
 ;;;   (let ((c (make-condition 'condition-11 :i1 11)))
 ;;;      (condition-11/r c))
 ;;;   11)
-;;; 
+;;;
 ;;; (deftest condition-11-slots.2
 ;;;   (let ((c (make-condition 'condition-11 :i1 11)))
 ;;;      (setf (condition-11/w c) 17))
 ;;;   17)
-;;; 
+;;;
 ;;; (deftest condition-11-slots.3
 ;;;   (let ((c (make-condition 'condition-11 :i1 11)))
 ;;;      (setf (condition-11/w c) 117)
 ;;;      (condition-11/r c))
 ;;;   117)
-;;; 
+;;;
 ;;; (deftest condition-11-slots.4
 ;;;   (let ((c (make-condition 'condition-11 :i1 11)))
 ;;;     (values
@@ -235,23 +235,23 @@
 ;;; (define-condition-with-tests condition-12 nil
 ;;;   (((slot1) :initarg :slot1 :reader condition-12/slot-1)
 ;;;    ((slot2) :initarg :slot2 :reader condition-12/slot-2)))
-;;; 
+;;;
 ;;; (deftest condition-12-slots.1
 ;;;   (let ((c (make-condition 'condition-12 :slot1 'a :slot2 'b)))
 ;;;     (and (typep c 'condition-12)
-;;; 	 (eqlt (condition-12/slot-1 c) 'a)
-;;; 	 (eqlt (condition-12/slot-2 c) 'b)))
+;;;      (eqlt (condition-12/slot-1 c) 'a)
+;;;      (eqlt (condition-12/slot-2 c) 'b)))
 ;;;   t)
-;;; 
+;;;
 ;;; (define-condition-with-tests condition-13 nil
 ;;;   (((slot1 10) :initarg :slot1 :reader condition-13/slot-1)))
-;;; 
+;;;
 ;;; (deftest condition-13-slots.1
 ;;;   (let ((c (make-condition 'condition-13)))
 ;;;     (and (typep c 'condition-13)
-;;; 	 (condition-13/slot-1 c)))
+;;;      (condition-13/slot-1 c)))
 ;;;   10)
- 
+
 (define-condition-with-tests condition-14 nil
   ((s1 :initarg :i1 :type fixnum :reader condition-14/s1)
    (s2 :initarg :i2 :type t :reader condition-14/s2)))
@@ -259,20 +259,20 @@
 (deftest condition-14-slots.1
   (let ((c (make-condition 'condition-14 :i1 10)))
     (and (typep c 'condition-14)
-	 (condition-14/s1 c)))
+         (condition-14/s1 c)))
   10)
 
 (deftest condition-14-slots.2
   (let ((c (make-condition 'condition-14 :i2 'a)))
     (and (typep c 'condition-14)
-	 (condition-14/s2 c)))
+         (condition-14/s2 c)))
   a)
 
 (deftest condition-14-slots.3
   (let ((c (make-condition 'condition-14 :i1 10 :i2 'h)))
     (and (typep c 'condition-14)
-	 (eqlt (condition-14/s1 c) 10)
-	 (condition-14/s2 c)))
+         (eqlt (condition-14/s1 c) 10)
+         (condition-14/s2 c)))
   h)
 
 (define-condition-with-tests condition-15 nil
@@ -284,7 +284,7 @@
 
 (deftest condition-16-report.1
   (let ((*print-escape* nil)
-	(c (make-condition 'condition-16)))
+        (c (make-condition 'condition-16)))
     (with-output-to-string (s) (print-object c s)))
   "The report for condition-16")
 
@@ -297,7 +297,7 @@
 
 (deftest condition-17-report.1
   (let ((*print-escape* nil)
-	(c (make-condition 'condition-17 :i1 1234)))
+        (c (make-condition 'condition-17 :i1 1234)))
     (with-output-to-string (s) (print-object c s)))
   "condition-17: 1234")
 
@@ -307,7 +307,7 @@
 
 (deftest condition-18-report.1
   (let ((*print-escape* nil)
-	(c (make-condition 'condition-18 :i1 4321)))
+        (c (make-condition 'condition-18 :i1 4321)))
     (with-output-to-string (s) (print-object c s)))
   "condition-18: 4321")
 
@@ -324,7 +324,7 @@
   ((s1 :reader condition-19/s1 :initarg :i1)
    (s2 :reader condition-19/s2 :initarg :i2))
   (:default-initargs :i1 10
-		     :i2 20))
+                     :i2 20))
 
 (deftest condition-19-slots.1
   (let ((c (make-condition 'condition-19)))
@@ -373,11 +373,11 @@
   ((s1 :reader condition-20/s1 :initarg :i1)
    (s2 :reader condition-20/s2 :initarg :i2))
   (:default-initargs :i1 (incf *condition-20/s1-val*)
-		     :i2 (incf *condition-20/s2-val*)))
+                     :i2 (incf *condition-20/s2-val*)))
 
 (deftest condition-20-slots.1
   (let ((*condition-20/s1-val* 0)
-	(*condition-20/s2-val* 10))
+        (*condition-20/s2-val* 10))
     (declare (special *condition-20/s1-val* *condition-20/s2-val*))
     (let ((c (make-condition 'condition-20)))
       (values
@@ -390,7 +390,7 @@
 
 (deftest condition-20-slots.2
   (let ((*condition-20/s1-val* 0)
-	(*condition-20/s2-val* 10))
+        (*condition-20/s2-val* 10))
     (declare (special *condition-20/s1-val* *condition-20/s2-val*))
     (let ((c (make-condition 'condition-20 :i1 'x)))
       (values
@@ -403,7 +403,7 @@
 
 (deftest condition-20-slots.3
   (let ((*condition-20/s1-val* 0)
-	(*condition-20/s2-val* 10))
+        (*condition-20/s2-val* 10))
     (declare (special *condition-20/s1-val* *condition-20/s2-val*))
     (let ((c (make-condition 'condition-20 :i2 'y)))
       (values
@@ -416,7 +416,7 @@
 
 (deftest condition-20-slots.4
   (let ((*condition-20/s1-val* 0)
-	(*condition-20/s2-val* 10))
+        (*condition-20/s2-val* 10))
     (declare (special *condition-20/s1-val* *condition-20/s2-val*))
     (let ((c (make-condition 'condition-20 :i2 'y :i1 'x)))
       (values
@@ -435,9 +435,9 @@
 (deftest condition-21-slots.1
   (let ((c (make-condition 'condition-21 :slot1 'a :slot2 'b)))
     (and (typep c 'condition-4)
-	 (typep c 'condition-21)
-	 (eqlt (condition-4/slot-1 c) 'a)
-	 (eqlt (condition-4/slot-2 c) 'b)))
+         (typep c 'condition-21)
+         (eqlt (condition-4/slot-1 c) 'a)
+         (eqlt (condition-4/slot-2 c) 'b)))
   t)
 
 (define-condition-with-tests condition-22 (condition-4)
@@ -446,14 +446,14 @@
 
 (deftest condition-22-slots.1
   (let ((c (make-condition 'condition-22 :slot1 'a :slot2 'b
-			   :slot3 'c :slot4 'd)))
+                           :slot3 'c :slot4 'd)))
     (and (typep c 'condition-4)
-	 (typep c 'condition-22)
-	 (eqlt (condition-4/slot-1 c) 'a)
-	 (eqlt (condition-4/slot-2 c) 'b)
-	 (eqlt (condition-22/slot-3 c) 'c)
-	 (eqlt (condition-22/slot-4 c) 'd)
-	 ))
+         (typep c 'condition-22)
+         (eqlt (condition-4/slot-1 c) 'a)
+         (eqlt (condition-4/slot-2 c) 'b)
+         (eqlt (condition-22/slot-3 c) 'c)
+         (eqlt (condition-22/slot-4 c) 'd)
+         ))
   t)
 
 (define-condition-with-tests condition-23 (condition-5) nil)
@@ -461,37 +461,37 @@
 (deftest condition-23-slots.1
   (let ((c (make-condition 'condition-23 :slot1 'a :slot2 'b)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-23)
-	 (eqlt (condition-5/slot-1 c) 'a)
-	 (eqlt (condition-5/slot-2 c) 'b)
-	 ))
+         (typep c 'condition-23)
+         (eqlt (condition-5/slot-1 c) 'a)
+         (eqlt (condition-5/slot-2 c) 'b)
+         ))
   t)
 
 (deftest condition-23-slots.2
   (let ((c (make-condition 'condition-23 :slot1 'a)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-23)
-	 (eqlt (condition-5/slot-1 c) 'a)
-	 (eqlt (condition-5/slot-2 c) 'y)
-	 ))
+         (typep c 'condition-23)
+         (eqlt (condition-5/slot-1 c) 'a)
+         (eqlt (condition-5/slot-2 c) 'y)
+         ))
   t)
 
 (deftest condition-23-slots.3
   (let ((c (make-condition 'condition-23 :slot2 'b)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-23)
-	 (eqlt (condition-5/slot-1 c) 'x)
-	 (eqlt (condition-5/slot-2 c) 'b)
-	 ))
+         (typep c 'condition-23)
+         (eqlt (condition-5/slot-1 c) 'x)
+         (eqlt (condition-5/slot-2 c) 'b)
+         ))
   t)
 
 (deftest condition-23-slots.4
   (let ((c (make-condition 'condition-23)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-23)
-	 (eqlt (condition-5/slot-1 c) 'x)
-	 (eqlt (condition-5/slot-2 c) 'y)
-	 ))
+         (typep c 'condition-23)
+         (eqlt (condition-5/slot-1 c) 'x)
+         (eqlt (condition-5/slot-2 c) 'y)
+         ))
   t)
 
 (define-condition-with-tests condition-24 (condition-5)
@@ -501,37 +501,37 @@
 (deftest condition-24-slots.1
   (let ((c (make-condition 'condition-24)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-24)
-	 (eqlt (condition-5/slot-1 c) 'z)
-	 (eqlt (condition-5/slot-2 c) 'y)
-	 ))
+         (typep c 'condition-24)
+         (eqlt (condition-5/slot-1 c) 'z)
+         (eqlt (condition-5/slot-2 c) 'y)
+         ))
   t)
 
 (deftest condition-24-slots.2
   (let ((c (make-condition 'condition-24 :slot1 'a)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-24)
-	 (eqlt (condition-5/slot-1 c) 'a)
-	 (eqlt (condition-5/slot-2 c) 'y)
-	 ))
+         (typep c 'condition-24)
+         (eqlt (condition-5/slot-1 c) 'a)
+         (eqlt (condition-5/slot-2 c) 'y)
+         ))
   t)
 
 (deftest condition-24-slots.3
   (let ((c (make-condition 'condition-24 :slot2 'a)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-24)
-	 (eqlt (condition-5/slot-1 c) 'z)
-	 (eqlt (condition-5/slot-2 c) 'a)
-	 ))
+         (typep c 'condition-24)
+         (eqlt (condition-5/slot-1 c) 'z)
+         (eqlt (condition-5/slot-2 c) 'a)
+         ))
   t)
 
 (deftest condition-24-slots.4
   (let ((c (make-condition 'condition-24 :slot1 'b :slot2 'a)))
     (and (typep c 'condition-5)
-	 (typep c 'condition-24)
-	 (eqlt (condition-5/slot-1 c) 'b)
-	 (eqlt (condition-5/slot-2 c) 'a)
-	 ))
+         (typep c 'condition-24)
+         (eqlt (condition-5/slot-1 c) 'b)
+         (eqlt (condition-5/slot-2 c) 'a)
+         ))
   t)
 
 ;;; Multiple inheritance
@@ -548,51 +548,51 @@
 (deftest condition-25-slots.1
   (let ((c (make-condition 'condition-25)))
     (and (typep c 'condition-25a)
-	 (typep c 'condition-25b)
-	 (typep c 'condition-25)
-	 (eqlt (condition-25a/s1 c) 'a)
-	 (eqlt (condition-25b/s2 c) 'b)
-	 (eqlt (condition-25/s3 c) 'c)))
+         (typep c 'condition-25b)
+         (typep c 'condition-25)
+         (eqlt (condition-25a/s1 c) 'a)
+         (eqlt (condition-25b/s2 c) 'b)
+         (eqlt (condition-25/s3 c) 'c)))
   t)
 
 (deftest condition-25-slots.2
   (let ((c (make-condition 'condition-25 :s1 'x)))
     (and (typep c 'condition-25a)
-	 (typep c 'condition-25b)
-	 (typep c 'condition-25)
-	 (eqlt (condition-25a/s1 c) 'x)
-	 (eqlt (condition-25b/s2 c) 'b)
-	 (eqlt (condition-25/s3 c) 'c)))
+         (typep c 'condition-25b)
+         (typep c 'condition-25)
+         (eqlt (condition-25a/s1 c) 'x)
+         (eqlt (condition-25b/s2 c) 'b)
+         (eqlt (condition-25/s3 c) 'c)))
   t)
 
 (deftest condition-25-slots.3
   (let ((c (make-condition 'condition-25 :s2 'x)))
     (and (typep c 'condition-25a)
-	 (typep c 'condition-25b)
-	 (typep c 'condition-25)
-	 (eqlt (condition-25a/s1 c) 'a)
-	 (eqlt (condition-25b/s2 c) 'x)
-	 (eqlt (condition-25/s3 c) 'c)))
+         (typep c 'condition-25b)
+         (typep c 'condition-25)
+         (eqlt (condition-25a/s1 c) 'a)
+         (eqlt (condition-25b/s2 c) 'x)
+         (eqlt (condition-25/s3 c) 'c)))
   t)
 
 (deftest condition-25-slots.4
   (let ((c (make-condition 'condition-25 :s3 'x)))
     (and (typep c 'condition-25a)
-	 (typep c 'condition-25b)
-	 (typep c 'condition-25)
-	 (eqlt (condition-25a/s1 c) 'a)
-	 (eqlt (condition-25b/s2 c) 'b)
-	 (eqlt (condition-25/s3 c) 'x)))
+         (typep c 'condition-25b)
+         (typep c 'condition-25)
+         (eqlt (condition-25a/s1 c) 'a)
+         (eqlt (condition-25b/s2 c) 'b)
+         (eqlt (condition-25/s3 c) 'x)))
   t)
 
 (deftest condition-25-slots.5
   (let ((c (make-condition 'condition-25 :s3 'z :s2 'y :s1 'x)))
     (and (typep c 'condition-25a)
-	 (typep c 'condition-25b)
-	 (typep c 'condition-25)
-	 (eqlt (condition-25a/s1 c) 'x)
-	 (eqlt (condition-25b/s2 c) 'y)
-	 (eqlt (condition-25/s3 c) 'z)))
+         (typep c 'condition-25b)
+         (typep c 'condition-25)
+         (eqlt (condition-25a/s1 c) 'x)
+         (eqlt (condition-25b/s2 c) 'y)
+         (eqlt (condition-25/s3 c) 'z)))
   t)
 
 ;;;
@@ -607,19 +607,19 @@
 (deftest condition-26-slots.1
   (let ((c (make-condition 'condition-26)))
     (and (typep c 'condition-26a)
-	 (typep c 'condition-26b)
-	 (typep c 'condition-26c)
-	 (typep c 'condition-26)
-	 (eqlt (condition-26a/s1 c) 'a)))
+         (typep c 'condition-26b)
+         (typep c 'condition-26c)
+         (typep c 'condition-26)
+         (eqlt (condition-26a/s1 c) 'a)))
   t)
 
 (deftest condition-26-slots.2
   (let ((c (make-condition 'condition-26 :s1 'x)))
     (and (typep c 'condition-26a)
-	 (typep c 'condition-26b)
-	 (typep c 'condition-26c)
-	 (typep c 'condition-26)
-	 (eqlt (condition-26a/s1 c) 'x)))
+         (typep c 'condition-26b)
+         (typep c 'condition-26c)
+         (typep c 'condition-26)
+         (eqlt (condition-26a/s1 c) 'x)))
   t)
 
 
@@ -636,15 +636,15 @@
 (deftest condition-27-slots.1
   (let ((c (make-condition 'condition-27a)))
     (and (typep c 'condition-27a)
-	 (not (typep c 'condition-27b))
-	 (eqlt (condition-27/s1 c) 'a)))
+         (not (typep c 'condition-27b))
+         (eqlt (condition-27/s1 c) 'a)))
   t)
 
 (deftest condition-27-slots.2
   (let ((c (make-condition 'condition-27b)))
     (and (typep c 'condition-27b)
-	 (not (typep c 'condition-27a))
-	 (eqlt (condition-27/s1 c) 'a)))
+         (not (typep c 'condition-27a))
+         (eqlt (condition-27/s1 c) 'a)))
   t)
 
 (deftest condition-27-reader-is-generic
@@ -668,41 +668,41 @@
 (deftest condition-28-slots.1
   (let ((c (make-condition 'condition-28)))
     (and (typep c 'condition-28a)
-	 (typep c 'condition-28)
-	 (eqlt (condition-28a/s1 c) 'x)
-	 (eqlt (condition-28/s1 c) 'x)))
+         (typep c 'condition-28)
+         (eqlt (condition-28a/s1 c) 'x)
+         (eqlt (condition-28/s1 c) 'x)))
   t)
 
 (deftest condition-28-slots.2
   (let ((c (make-condition 'condition-28 :i1 'z)))
     (and (typep c 'condition-28a)
-	 (typep c 'condition-28)
-	 (eqlt (condition-28a/s1 c) 'z)
-	 (eqlt (condition-28/s1 c) 'z)))
+         (typep c 'condition-28)
+         (eqlt (condition-28a/s1 c) 'z)
+         (eqlt (condition-28/s1 c) 'z)))
   t)
 
 (deftest condition-28-slots.3
   (let ((c (make-condition 'condition-28 :i1a 'w)))
     (and (typep c 'condition-28a)
-	 (typep c 'condition-28)
-	 (eqlt (condition-28a/s1 c) 'w)
-	 (eqlt (condition-28/s1 c) 'w)))
+         (typep c 'condition-28)
+         (eqlt (condition-28a/s1 c) 'w)
+         (eqlt (condition-28/s1 c) 'w)))
   t)
 
 (deftest condition-28-slots.4
   (let ((c (make-condition 'condition-28 :i1 'y :i1a 'w)))
     (and (typep c 'condition-28a)
-	 (typep c 'condition-28)
-	 (eqlt (condition-28a/s1 c) 'y)
-	 (eqlt (condition-28/s1 c) 'y)))
+         (typep c 'condition-28)
+         (eqlt (condition-28a/s1 c) 'y)
+         (eqlt (condition-28/s1 c) 'y)))
   t)
 
 (deftest condition-28-slots.5
   (let ((c (make-condition 'condition-28 :i1a 'y :i1 'w)))
     (and (typep c 'condition-28a)
-	 (typep c 'condition-28)
-	 (eqlt (condition-28a/s1 c) 'y)
-	 (eqlt (condition-28/s1 c) 'y)))
+         (typep c 'condition-28)
+         (eqlt (condition-28a/s1 c) 'y)
+         (eqlt (condition-28/s1 c) 'y)))
   t)
 |#
 

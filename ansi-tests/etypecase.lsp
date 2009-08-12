@@ -66,8 +66,8 @@
     (tagbody
      (let ((x 'a))
        (etypecase x (symbol (go 10)
-			    10
-			    (return 'bad))))
+                            10
+                            (return 'bad))))
      10
      (return 'good)))
   good)
@@ -77,31 +77,31 @@
    for x in '(1 a 1.3 "")
    collect
    (etypecase x (t :good) (integer :bad) (symbol :bad)
-	      (float :bad) (string :bad)))
+              (float :bad) (string :bad)))
   (:good :good :good :good))
 
 (deftest etypecase.15
   (let* ((u (coerce *universe* 'vector))
-	 (len1 (length u))
-	 (types (coerce *cl-all-type-symbols* 'vector))
-	 (len2 (length types)))
+         (len1 (length u))
+         (types (coerce *cl-all-type-symbols* 'vector))
+         (len2 (length types)))
     (loop
      for n = (random 10)
      for my-types = (loop repeat n collect (elt types (random len2)))
      for val = (elt u (random len1))
      for i = (position val my-types :test #'typep)
      for form = `(function
-		  (lambda (x)
-		    (handler-case
-		     (etypecase x
-		       ,@(loop for i from 0 for type in my-types collect `(,type ,i)))
-		     (type-error (c)
-				 (assert (eql x (type-error-datum c)))
-				 (let* ((expected (type-error-expected-type c)))
-				   (let ((equiv (check-equivalence expected
-								   ',(cons 'or my-types))))
-				     (assert (null equiv) () "EQUIV = ~A" EQUIV)))
-				 nil))))
+                  (lambda (x)
+                    (handler-case
+                     (etypecase x
+                       ,@(loop for i from 0 for type in my-types collect `(,type ,i)))
+                     (type-error (c)
+                                 (assert (eql x (type-error-datum c)))
+                                 (let* ((expected (type-error-expected-type c)))
+                                   (let ((equiv (check-equivalence expected
+                                                                   ',(cons 'or my-types))))
+                                     (assert (null equiv) () "EQUIV = ~A" EQUIV)))
+                                 nil))))
      for j = (funcall (eval form) val)
      repeat 200
      unless (eql i j)
@@ -134,17 +134,17 @@
 
 (deftest etypecase.error.1
   (signals-error (funcall (macro-function 'etypecase))
-		 program-error)
+                 program-error)
   t)
 
 (deftest etypecase.error.2
   (signals-error (funcall (macro-function 'etypecase)
-			   '(etypecase t))
-		 program-error)
+                           '(etypecase t))
+                 program-error)
   t)
 
 (deftest etypecase.error.3
   (signals-error (funcall (macro-function 'etypecase)
-			   '(etypecase t) nil nil)
-		 program-error)
+                           '(etypecase t) nil nil)
+                 program-error)
   t)

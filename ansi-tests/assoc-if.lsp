@@ -9,8 +9,8 @@
 
 (deftest assoc-if.1
     (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (assoc-if #'evenp x)))
+           (xcopy (make-scaffold-copy x))
+           (result (assoc-if #'evenp x)))
       (and
        (check-scaffold-copy x xcopy)
        (eqt result (third x))
@@ -19,8 +19,8 @@
 
 (deftest assoc-if.2
   (let* ((x (copy-list '((1 . a) (3 . b) (6 . c) (7 . d))))
-	 (xcopy (make-scaffold-copy x))
-	 (result (assoc-if #'oddp x :key #'1+)))
+         (xcopy (make-scaffold-copy x))
+         (result (assoc-if #'oddp x :key #'1+)))
     (and
      (check-scaffold-copy x xcopy)
      (eqt result (third x))
@@ -29,8 +29,8 @@
 
 (deftest assoc-if.3
     (let* ((x (copy-list '((1 . a) nil (3 . b) (6 . c) (7 . d))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (assoc-if #'evenp x)))
+           (xcopy (make-scaffold-copy x))
+           (result (assoc-if #'evenp x)))
       (and
        (check-scaffold-copy x xcopy)
        (eqt result (fourth x))
@@ -52,8 +52,8 @@
   (let ((i 0) x y)
     (values
      (assoc-if (progn (setf x (incf i)) #'null)
-	       (progn (setf y (incf i))
-		      '((a . 1) (b . 2) (nil . 17) (d . 4))))
+               (progn (setf y (incf i))
+                      '((a . 1) (b . 2) (nil . 17) (d . 4))))
      i x y))
   (nil . 17) 2 1 2)
 
@@ -61,9 +61,9 @@
   (let ((i 0) x y z)
     (values
      (assoc-if (progn (setf x (incf i)) #'null)
-	       (progn (setf y (incf i))
-		      '((a . 1) (b . 2) (nil . 17) (d . 4)))
-	       :key (progn (setf z (incf i)) #'null))
+               (progn (setf y (incf i))
+                      '((a . 1) (b . 2) (nil . 17) (d . 4)))
+               :key (progn (setf z (incf i)) #'null))
      i x y z))
   (a . 1) 3 1 2 3)
 
@@ -75,12 +75,12 @@
 
 (deftest assoc-if.allow-other-keys.2
   (assoc-if #'null '((a . 1) (nil . 2) (c . 3))
-	    :allow-other-keys t :also-bad t)
+            :allow-other-keys t :also-bad t)
   (nil . 2))
 
 (deftest assoc-if.allow-other-keys.3
   (assoc-if #'null '((a . 1) (nil . 2) (c . 3))
-	    :allow-other-keys t :also-bad t :key #'not)
+            :allow-other-keys t :also-bad t :key #'not)
   (a . 1))
 
 (deftest assoc-if.allow-other-keys.4
@@ -116,7 +116,7 @@
   (6 . c)
   (6 . c)
   (6 . c)
-  (6 . c))      
+  (6 . c))
 
 ;;; Error cases
 
@@ -130,32 +130,32 @@
 
 (deftest assoc-if.error.3
   (signals-error (assoc-if #'null nil :bad t)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc-if.error.4
   (signals-error (assoc-if #'null nil :key)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc-if.error.5
   (signals-error (assoc-if #'null nil 1 1)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc-if.error.6
   (signals-error (assoc-if #'null nil :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc-if.error.7
   (signals-error (assoc-if #'cons '((a b)(c d)))
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc-if.error.8
   (signals-error (assoc-if #'identity '((a b)(c d)) :key #'cons)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc-if.error.9
@@ -168,12 +168,12 @@
 
 (deftest assoc-if.error.11
   (signals-error (assoc-if #'null '((a . b) . c))
-		 type-error)
+                 type-error)
   t)
 
 (deftest assoc-if.error.12
   (signals-error (assoc-if #'null '((a . b) :bad (c . d)))
-		 type-error)
+                 type-error)
   t)
 
 (deftest assoc-if.error.13

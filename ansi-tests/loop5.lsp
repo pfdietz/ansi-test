@@ -23,12 +23,12 @@
 
 (deftest loop.5.5
   (loop for e across "abcd"
-	for i from 1 to 3 collect e)
+        for i from 1 to 3 collect e)
   (#\a #\b #\c))
 
 (deftest loop.5.6
   (loop for e of-type base-char across "abcd"
-	for i from 1 to 3 collect e)
+        for i from 1 to 3 collect e)
   (#\a #\b #\c))
 
 (deftest loop.5.7
@@ -63,7 +63,7 @@
 (deftest loop.5.14
   (let ((x #*00010110))
     (loop for e of-type bit across x
-	  for i from 1 to 4 collect e))
+          for i from 1 to 4 collect e))
   (0 0 0 1))
 
 
@@ -90,14 +90,14 @@
 
 (deftest loop.5.30
   (let ((x (make-array '(5) :initial-contents '(a b c d e)
-		  :adjustable t)))
+                  :adjustable t)))
     (loop for e across x collect e))
   (a b c d e))
 
 (deftest loop.5.32
   (let* ((x (make-array '(5) :initial-contents '(a b c d e)))
-	 (y (make-array '(3) :displaced-to x
-		   :displaced-index-offset 1)))
+         (y (make-array '(3) :displaced-to x
+                   :displaced-index-offset 1)))
     (loop for e across y collect e))
   (b c d))
 
@@ -113,81 +113,81 @@
 
 (deftest loop.5.35
   (loop as e of-type integer across (the simple-vector (coerce '(1 2 3) 'simple-vector))
-	sum e)
+        sum e)
   6)
 
 ;;; Loop across displaced vectors
 
 (deftest loop.5.36
   (let* ((a (make-array '(10) :initial-contents '(a b c d e f g h i j)))
-	 (da (make-array '(5) :displaced-to a
-			 :displaced-index-offset 2)))
+         (da (make-array '(5) :displaced-to a
+                         :displaced-index-offset 2)))
     (loop for e across da collect e))
   (c d e f g))
 
 (deftest loop.5.37
   (let* ((a (make-array '(10) :element-type 'base-char
-			:initial-contents "abcdefghij"))
-	 (da (make-array '(5) :element-type 'base-char
-			 :displaced-to a
-			 :displaced-index-offset 2)))
+                        :initial-contents "abcdefghij"))
+         (da (make-array '(5) :element-type 'base-char
+                         :displaced-to a
+                         :displaced-index-offset 2)))
     (loop for e across da collect e))
   (#\c #\d #\e #\f #\g))
 
 (deftest loop.5.38
   (let* ((a (make-array '(10) :element-type 'bit
-			:initial-contents '(0 1 1 0 0 1 0 1 1 1)))
-	 (da (make-array '(5) :element-type 'bit
-			 :displaced-to a
-			 :displaced-index-offset 2)))
+                        :initial-contents '(0 1 1 0 0 1 0 1 1 1)))
+         (da (make-array '(5) :element-type 'bit
+                         :displaced-to a
+                         :displaced-index-offset 2)))
     (loop for e across da collect e))
   (1 0 0 1 0))
 
 (deftest loop.5.39
   (let ((v (make-array '(10) :initial-contents '(1 2 3 4 5 6 7 8 9 10)
-		       :fill-pointer 6)))
+                       :fill-pointer 6)))
     (loop for x across v collect x))
   (1 2 3 4 5 6))
 
 (deftest loop.5.40
   (loop for i from 1 to 40
-	for type = `(unsigned-byte ,i)
-	for v = (make-array '(10) :initial-contents '(0 0 1 1 0 1 1 1 0 0)
-			    :element-type type)
-	for r = (loop for x across v collect x)
-	unless (equal r '(0 0 1 1 0 1 1 1 0 0))
-	collect (list i r))
+        for type = `(unsigned-byte ,i)
+        for v = (make-array '(10) :initial-contents '(0 0 1 1 0 1 1 1 0 0)
+                            :element-type type)
+        for r = (loop for x across v collect x)
+        unless (equal r '(0 0 1 1 0 1 1 1 0 0))
+        collect (list i r))
   nil)
 
 (deftest loop.5.41
   (loop for i from 1 to 40
-	for type = `(signed-byte ,i)
-	for v = (make-array '(10) :initial-contents '(0 0 -1 -1 0 -1 -1 -1 0 0)
-			    :element-type type)
-	for r = (loop for x across v collect x)
-	unless (equal r '(0 0 -1 -1 0 -1 -1 -1 0 0))
-	collect (list i r))
+        for type = `(signed-byte ,i)
+        for v = (make-array '(10) :initial-contents '(0 0 -1 -1 0 -1 -1 -1 0 0)
+                            :element-type type)
+        for r = (loop for x across v collect x)
+        unless (equal r '(0 0 -1 -1 0 -1 -1 -1 0 0))
+        collect (list i r))
   nil)
 
 (deftest loop.5.42
   (let ((vals '(0 0 1 1 0 1 1 1 0 0)))
     (loop for type in '(short-float single-float double-float long-float)
-	  for fvals = (loop for v in vals collect (coerce v type))
-	  for v = (make-array '(10) :initial-contents fvals :element-type type)
-	  for r = (loop for x across v collect x)
-	  unless (equal r fvals)
-	  collect (list fvals r)))
+          for fvals = (loop for v in vals collect (coerce v type))
+          for v = (make-array '(10) :initial-contents fvals :element-type type)
+          for r = (loop for x across v collect x)
+          unless (equal r fvals)
+          collect (list fvals r)))
   nil)
 
 (deftest loop.5.43
   (let ((vals '(0 0 1 1 0 1 1 1 0 0)))
     (loop for etype in '(short-float single-float double-float long-float)
-	  for type = `(complex ,etype)
-	  for fvals = (loop for v in vals collect (coerce v type))
-	  for v = (make-array '(10) :initial-contents fvals :element-type type)
-	  for r = (loop for x across v collect x)
-	  unless (equal r fvals)
-	  collect (list fvals r)))
+          for type = `(complex ,etype)
+          for fvals = (loop for v in vals collect (coerce v type))
+          for v = (make-array '(10) :initial-contents fvals :element-type type)
+          for r = (loop for x across v collect x)
+          unless (equal r fvals)
+          collect (list fvals r)))
   nil)
 
 ;;; Test that explicit calls to macroexpand in subforms
@@ -219,7 +219,7 @@
 (deftest loop.5.error.2
   (signals-error
    (loop for e across (vector '(x . y) '(u . v))
-	 for e from 1 to 5 collect e)
+         for e from 1 to 5 collect e)
    program-error)
   t)
 
@@ -234,6 +234,6 @@
   (signals-error
    (macroexpand
     '(loop for e across (vector '(x . y) '(u . v))
-	   for e from 1 to 5 collect e))
+           for e from 1 to 5 collect e))
    program-error)
   t)

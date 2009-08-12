@@ -13,7 +13,7 @@
 
 (deftest abort.2
   (let ((c1 (make-condition 'error))
-	(c2 (make-condition 'error)))
+        (c2 (make-condition 'error)))
     (restart-case
      (with-condition-restarts
       c1
@@ -31,7 +31,7 @@
 
 (deftest abort.4
   (let ((c1 (make-condition 'error))
-	(c2 (make-condition 'error)))
+        (c2 (make-condition 'error)))
     (restart-case
      (with-condition-restarts
       c1
@@ -44,7 +44,7 @@
 (deftest abort.5
   (signals-error
    (let ((c1 (make-condition 'error))
-	 (c2 (make-condition 'error)))
+         (c2 (make-condition 'error)))
      (with-condition-restarts
       c1
       (compute-restarts)

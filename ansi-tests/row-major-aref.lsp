@@ -51,7 +51,7 @@
 
 (deftest row-major-aref.8
   (let ((a (make-array '(4) :element-type 'base-char
-		       :initial-element #\x)))
+                       :initial-element #\x)))
     (values
      (aref a 0)
      (aref a 1)
@@ -65,7 +65,7 @@
 
 (deftest row-major-aref.9
   (let ((a (make-array '(4) :initial-element 0
-		       :element-type 'bit)))
+                       :element-type 'bit)))
     (values
      (aref a 0)
      (aref a 1)
@@ -79,8 +79,8 @@
 
 (deftest row-major-aref.10
   (let ((a (make-array '(2 3 4)
-		       :initial-contents '(((a b c d)(e f g h)(i j k l))
-					   ((m n o p)(q r s t)(u v w x))))))
+                       :initial-contents '(((a b c d)(e f g h)(i j k l))
+                                           ((m n o p)(q r s t)(u v w x))))))
     (loop for i from 0 to 23 collect (row-major-aref a i)))
   (a b c d e f g h i j k l m n o p q r s t u v w x))
 
@@ -95,7 +95,7 @@
 
 (deftest row-major-aref.order.2
   (let ((i 0) x y z
-	(a (copy-seq #(a b c d e f))))
+        (a (copy-seq #(a b c d e f))))
     (values
      (setf
       (row-major-aref

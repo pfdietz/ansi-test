@@ -8,7 +8,7 @@
 (let* ((name :ba-test)
        (pkg (find-package name)))
   (unless pkg (setq pkg (make-package name :use '(:cl :regression-test
-						      :cl-test))))
+                                                      :cl-test))))
   (let ((*package* pkg))
     (shadow '(#:handler-case #:handler-bind))
     (import '(common-lisp-user::compile-and-load) pkg)

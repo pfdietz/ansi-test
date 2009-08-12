@@ -11,36 +11,36 @@
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((xcopy (make-scaffold-copy x)))
       (let ((result (butlast x 2)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 result))))
+        (and
+         (check-scaffold-copy x xcopy)
+         result))))
   (a b c))
 
 (deftest butlast.2
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((xcopy (make-scaffold-copy x)))
       (let ((result (butlast x 0)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 result))))
+        (and
+         (check-scaffold-copy x xcopy)
+         result))))
   (a b c d e))
 
 (deftest butlast.3
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((xcopy (make-scaffold-copy x)))
       (let ((result (butlast x 5)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 result))))
+        (and
+         (check-scaffold-copy x xcopy)
+         result))))
   nil)
 
 (deftest butlast.4
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((xcopy (make-scaffold-copy x)))
       (let ((result (butlast x 6)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 result))))
+        (and
+         (check-scaffold-copy x xcopy)
+         result))))
   nil)
 
 (deftest butlast.5
@@ -61,18 +61,18 @@
 
 (deftest butlast.9
   (macrolet ((%m (z) z))
-	    (values (butlast (expand-in-current-env (%m (list 'a 'b 'c))))
-		    (butlast (list 'a 'b 'c 'd 'e) (expand-in-current-env (%m 2)))))
+            (values (butlast (expand-in-current-env (%m (list 'a 'b 'c))))
+                    (butlast (list 'a 'b 'c 'd 'e) (expand-in-current-env (%m 2)))))
   (a b)
-  (a b c))		    
+  (a b c))
 
 (deftest butlast.order.1
   (let ((i 0) x y)
     (values
      (butlast (progn (setf x (incf i))
-		     (list 'a 'b 'c 'd 'e))
-	      (progn (setf y (incf i))
-		     2))
+                     (list 'a 'b 'c 'd 'e))
+              (progn (setf y (incf i))
+                     2))
      i x y))
   (a b c) 2 1 2)
 
@@ -91,7 +91,7 @@
 
 (deftest butlast.error.1
   (signals-error (butlast (copy-tree '(a b c d)) 'a)
-		 type-error)
+                 type-error)
   t)
 
 (deftest butlast.error.2

@@ -33,7 +33,7 @@
 ;;;;
 
 (defclass class-02 () ((s1) (s2) (s3)))
-  
+
 (deftest class-02.1
   (notnot-mv (typep (make-instance 'class-02) 'class-02))
   t)
@@ -55,7 +55,7 @@
 ;;;;
 
 (defclass class-03 () ((s1 :type integer) (s2 :type t) (s3 :type fixnum)))
-  
+
 (deftest class-03.1
   (notnot-mv (typep (make-instance 'class-03) 'class-03))
   t)
@@ -115,10 +115,10 @@
 ;;;;
 
 (defclass class-05 () (s1 (s2 :allocation :instance) (s3 :allocation :class)))
-  
+
 (deftest class-05.1
   (let ((c1 (make-instance 'class-05))
-	(c2 (make-instance 'class-05)))
+        (c2 (make-instance 'class-05)))
     (values
      (not (eql c1 c2))
      (list
@@ -172,7 +172,7 @@
 
 (deftest class-06.2
   (let ((c1 (make-instance 'class-06))
-	(c2 (make-instance 'class-06a)))
+        (c2 (make-instance 'class-06a)))
     (values
      (setf (slot-value c1 's1) 'x)
      (setf (slot-value c2 's1) 'y)
@@ -182,7 +182,7 @@
 ;;;;
 
 (defclass class-07 () ((s1 :initarg :s1a :initarg :s1b :reader s1)
-		       (s2 :initarg :s2 :reader s2)))
+                       (s2 :initarg :s2 :reader s2)))
 
 (deftest class-07.1
   (let ((c (make-instance 'class-07)))
@@ -265,14 +265,14 @@
 
 (deftest class-07.11
   (let ((c (make-instance 'class-07 :s1a 'a :s2 'b :garbage 'z
-			  :allow-other-keys t)))
+                          :allow-other-keys t)))
     (values (s1 c) (s2 c)))
   a b)
 
 (deftest class-07.12
   (let ((c (make-instance 'class-07 :s1a 'd :s2 'c :garbage 'z
-			  :allow-other-keys t
-			  :allow-other-keys nil)))
+                          :allow-other-keys t
+                          :allow-other-keys nil)))
     (values (s1 c) (s2 c)))
   d c)
 
@@ -286,7 +286,7 @@
 
 (deftest class-08.1
   (let* ((*class-08-s2-initvar* 'x)
-	 (c (make-instance 'class-08)))
+         (c (make-instance 'class-08)))
     (values
      (slot-value c 's1)
      (slot-value c 's2)))
@@ -302,7 +302,7 @@
 
 (deftest class-09.1
   (let* ((*class-09-s2-initvar* 'x)
-	 (c (make-instance 'class-09)))
+         (c (make-instance 'class-09)))
     (values
      (slot-value c 's1)
      (slot-value c 's2)))
@@ -310,7 +310,7 @@
 
 (deftest class-09.2
   (let* ((*class-09-s2-initvar* 'x)
-	 (c (make-instance 'class-09 :s1 1)))
+         (c (make-instance 'class-09 :s1 1)))
     (values
      (slot-value c 's1)
      (slot-value c 's2)))
@@ -339,7 +339,7 @@
 
 (deftest class-10.1
   (let* ((*class-10-s1-initvar* 0)
-	 (c (make-instance 'class-10)))
+         (c (make-instance 'class-10)))
     (values
      *class-10-s1-initvar*
      (slot-value c 's1)))
@@ -347,7 +347,7 @@
 
 (deftest class-10.2
   (let* ((*class-10-s1-initvar* 0)
-	 (c (make-instance 'class-10 :s1 10)))
+         (c (make-instance 'class-10 :s1 10)))
     (values
      *class-10-s1-initvar*
      (slot-value c 's1)))
@@ -388,7 +388,7 @@
 
 (deftest class-13.1
   (let ((c1 (make-instance 'class-13))
-	(c2 (make-instance 'class-13 :s1 'foo)))
+        (c2 (make-instance 'class-13 :s1 'foo)))
     (values
      (slot-value c1 's1)
      (slot-value c2 's1)))
@@ -431,26 +431,26 @@
 
 (deftest class-15.4
   (let ((c (make-instance 'class-15 :allow-other-keys t
-			  :allow-other-keys nil)))
+                          :allow-other-keys nil)))
     (s1 c))
   t)
 
 (deftest class-15.5
   (let ((c (make-instance 'class-15 :allow-other-keys nil
-			  :allow-other-keys t)))
+                          :allow-other-keys t)))
     (s1 c))
   nil)
 
 (deftest class-15.6
   (let ((c (make-instance 'class-15 :allow-other-keys t
-			  :foo 'bar)))
+                          :foo 'bar)))
     (s1 c))
   t)
 
 (deftest class-15.7
   (let ((c (make-instance 'class-15 :allow-other-keys t
-			  :allow-other-keys nil
-			  :foo 'bar)))
+                          :allow-other-keys nil
+                          :foo 'bar)))
     (s1 c))
   t)
 
@@ -537,7 +537,7 @@
 
 (deftest class-19.1
   (let* ((*class-19-s1-initvar* nil)
-	 (c (make-instance 'class-19)))
+         (c (make-instance 'class-19)))
     (declare (special *class-19-s1-initvar*))
     (values
      (slot-value c 's1)
@@ -546,7 +546,7 @@
 
 (deftest class-19.2
   (let* ((*class-19-s1-initvar* nil)
-	 (c (make-instance 'class-19 :s1 nil)))
+         (c (make-instance 'class-19 :s1 nil)))
     (declare (special *class-19-s1-initvar*))
     (values
      (slot-value c 's1)
@@ -555,7 +555,7 @@
 
 (deftest class-19.3
   (let* ((*class-19-s1-initvar* nil)
-	 (c (make-instance 'class-19 :s1 'x)))
+         (c (make-instance 'class-19 :s1 'x)))
     (declare (special *class-19-s1-initvar*))
     (values
      (slot-value c 's1)
@@ -569,14 +569,14 @@
 (defclass class-20 ()
   ((s1 :initarg :s1 :initarg :s1b))
   (:default-initargs :s1 (setf *class-20-s1-initvar-1* 'a)
-		     :s1b (setf *class-20-s1-initvar-2* 'b)))
+                     :s1b (setf *class-20-s1-initvar-2* 'b)))
 
 (deftest class-20.1
   (let* (*class-20-s1-initvar-1*
-	 *class-20-s1-initvar-2*
-	 (c (make-instance 'class-20)))
+         *class-20-s1-initvar-2*
+         (c (make-instance 'class-20)))
     (declare (special *class-20-s1-initvar-1*
-		      *class-20-s1-initvar-2*))
+                      *class-20-s1-initvar-2*))
     (values
      (slot-value c 's1)
      *class-20-s1-initvar-1*
@@ -585,10 +585,10 @@
 
 (deftest class-20.2
   (let* (*class-20-s1-initvar-1*
-	 *class-20-s1-initvar-2*
-	 (c (make-instance 'class-20 :s1 'x)))
+         *class-20-s1-initvar-2*
+         (c (make-instance 'class-20 :s1 'x)))
     (declare (special *class-20-s1-initvar-1*
-		      *class-20-s1-initvar-2*))
+                      *class-20-s1-initvar-2*))
     (values
      (slot-value c 's1)
      *class-20-s1-initvar-1*
@@ -597,10 +597,10 @@
 
 (deftest class-20.3
   (let* (*class-20-s1-initvar-1*
-	 *class-20-s1-initvar-2*
-	 (c (make-instance 'class-20 :s1b 'y)))
+         *class-20-s1-initvar-2*
+         (c (make-instance 'class-20 :s1b 'y)))
     (declare (special *class-20-s1-initvar-1*
-		      *class-20-s1-initvar-2*))
+                      *class-20-s1-initvar-2*))
     (values
      (slot-value c 's1)
      *class-20-s1-initvar-1*
@@ -617,14 +617,14 @@
     ((s1 :initarg :s1  :initarg :s1b)
      (s2 :initarg :s1b :initarg :s2))
     (:default-initargs :s1  (incf *class-21-s1-initvar-1*)
-		       :s1b (incf *class-21-s1-initvar-2*))))
+                       :s1b (incf *class-21-s1-initvar-2*))))
 
 (deftest class-21.1
   (let* ((*class-21-s1-initvar-1* 10)
-	 (*class-21-s1-initvar-2* 20)
-	 (c (make-instance 'class-21)))
+         (*class-21-s1-initvar-2* 20)
+         (c (make-instance 'class-21)))
     (declare (special *class-21-s1-initvar-1*
-		      *class-21-s1-initvar-2*))
+                      *class-21-s1-initvar-2*))
     (values
      (slot-value c 's1)
      (slot-value c 's2)
@@ -634,10 +634,10 @@
 
 (deftest class-21.2
   (let* ((*class-21-s1-initvar-1* 10)
-	 (*class-21-s1-initvar-2* 20)
-	 (c (make-instance 'class-21 :s1 'x)))
+         (*class-21-s1-initvar-2* 20)
+         (c (make-instance 'class-21 :s1 'x)))
     (declare (special *class-21-s1-initvar-1*
-		      *class-21-s1-initvar-2*))
+                      *class-21-s1-initvar-2*))
     (values
      (slot-value c 's1)
      (slot-value c 's2)
@@ -647,10 +647,10 @@
 
 (deftest class-21.3
   (let* ((*class-21-s1-initvar-1* 10)
-	 (*class-21-s1-initvar-2* 20)
-	 (c (make-instance 'class-21 :s1 'x :s1b 'y)))
+         (*class-21-s1-initvar-2* 20)
+         (c (make-instance 'class-21 :s1 'x :s1b 'y)))
     (declare (special *class-21-s1-initvar-1*
-		      *class-21-s1-initvar-2*))
+                      *class-21-s1-initvar-2*))
     (values
      (slot-value c 's1)
      (slot-value c 's2)
@@ -660,10 +660,10 @@
 
 (deftest class-21.4
   (let* ((*class-21-s1-initvar-1* 10)
-	 (*class-21-s1-initvar-2* 20)
-	 (c (make-instance 'class-21 :s1b 'y)))
+         (*class-21-s1-initvar-2* 20)
+         (c (make-instance 'class-21 :s1b 'y)))
     (declare (special *class-21-s1-initvar-1*
-		      *class-21-s1-initvar-2*))
+                      *class-21-s1-initvar-2*))
     (values
      (slot-value c 's1)
      (slot-value c 's2)
@@ -673,10 +673,10 @@
 
 (deftest class-21.5
   (let* ((*class-21-s1-initvar-1* 10)
-	 (*class-21-s1-initvar-2* 20)
-	 (c (make-instance 'class-21 :s2 'y)))
+         (*class-21-s1-initvar-2* 20)
+         (c (make-instance 'class-21 :s2 'y)))
     (declare (special *class-21-s1-initvar-1*
-		      *class-21-s1-initvar-2*))
+                      *class-21-s1-initvar-2*))
     (values
      (slot-value c 's1)
      (slot-value c 's2)
@@ -708,19 +708,19 @@
 (deftest class-23.2
   (let ((doc (documentation 'class-23 'type)))
     (or (null doc)
-	(equalt doc "This is class-23 in ansi-tests")))
+        (equalt doc "This is class-23 in ansi-tests")))
   t)
 
 (deftest class-23.3
   (let ((doc (documentation (find-class 'class-23) 'type)))
     (or (null doc)
-	(equalt doc "This is class-23 in ansi-tests")))
+        (equalt doc "This is class-23 in ansi-tests")))
   t)
 
 (deftest class-23.4
   (let ((doc (documentation (find-class 'class-23) t)))
     (or (null doc)
-	(equalt doc "This is class-23 in ansi-tests")))
+        (equalt doc "This is class-23 in ansi-tests")))
   t)
 
 ;;;
@@ -769,7 +769,7 @@
 
 (deftest class-25.5
   (s1 (make-instance 'class-25 :allow-other-keys t :allow-other-keys nil
-		     :foo t))
+                     :foo t))
   t)
 
 (deftest class-25.6
@@ -831,15 +831,15 @@
 ;;;
 
 (declaim (special *class-28-reset-fn*
-		  *class-28-query-fn*))
+                  *class-28-query-fn*))
 
 (declaim (type function *class-28-reset-fn* *class-28-query-fn*))
 
 (let ((x 0) (y 0))
   (flet ((%reset (a b) (setf x a y b))
-	 (%query () (list x y)))
+         (%query () (list x y)))
     (setf *class-28-reset-fn* #'%reset
-	  *class-28-query-fn* #'%query)
+          *class-28-query-fn* #'%query)
     (defclass class-28 ()
       ((s1 :initform (incf x) :initarg :s1)
        (s2 :initarg :s2))
@@ -852,11 +852,11 @@
      (funcall *class-28-query-fn*)
      (let ((obj (make-instance 'class-28)))
        (list
-	(typep* obj 'class-28)
-	(typep* obj class)
-	(eqt (class-of obj) class)
-	(map-slot-value obj '(s1 s2))
-	(funcall *class-28-query-fn*)))))
+        (typep* obj 'class-28)
+        (typep* obj class)
+        (eqt (class-of obj) class)
+        (map-slot-value obj '(s1 s2))
+        (funcall *class-28-query-fn*)))))
   ((5 10)
    (t t t (6 11) (6 11))))
 
@@ -867,11 +867,11 @@
      (funcall *class-28-query-fn*)
      (let ((obj (make-instance 'class-28 :s1 17)))
        (list
-	(typep* obj 'class-28)
-	(typep* obj class)
-	(eqt (class-of obj) class)
-	(map-slot-value obj '(s1 s2))
-	(funcall *class-28-query-fn*)))))
+        (typep* obj 'class-28)
+        (typep* obj class)
+        (eqt (class-of obj) class)
+        (map-slot-value obj '(s1 s2))
+        (funcall *class-28-query-fn*)))))
   ((5 10)
    (t t t (17 11) (5 11))))
 
@@ -883,14 +883,14 @@
      (funcall *class-28-query-fn*)
      (let ((obj (make-instance 'class-28 :s2 17)))
        (list
-	(typep* obj 'class-28)
-	(typep* obj class)
-	(eqt (class-of obj) class)
-	(map-slot-value obj '(s1 s2))
-	(funcall *class-28-query-fn*)))))
+        (typep* obj 'class-28)
+        (typep* obj class)
+        (eqt (class-of obj) class)
+        (map-slot-value obj '(s1 s2))
+        (funcall *class-28-query-fn*)))))
   ((5 10)
    (t t t (6 17) (6 10))))
 
 
-      
-      
+
+

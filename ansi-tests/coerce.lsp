@@ -7,9 +7,9 @@
 
 (deftest coerce.1
   (check-predicate #'(lambda (x)
-		       (let ((type (type-of x)))
-			 (or (and (consp type) (eqt (car type) 'function))
-			     (eql (coerce x type) x)))))
+                       (let ((type (type-of x)))
+                         (or (and (consp type) (eqt (car type) 'function))
+                             (eql (coerce x type) x)))))
   nil)
 
 (deftest coerce.2
@@ -20,85 +20,85 @@
   (check-predicate
    #'(lambda (x)
        (let ((class (class-of x)))
-	 (eql (coerce x class) x))))
+         (eql (coerce x class) x))))
   nil)
 
 (deftest coerce.4
   (loop for x in '(() #() #*)
-	never (coerce x 'list))
+        never (coerce x 'list))
   t)
 
 (deftest coerce.5
   (loop for x in '((1 0) #(1 0) #*10)
-	always (equal (coerce x 'list) '(1 0)))		   
+        always (equal (coerce x 'list) '(1 0)))
   t)
 
 (deftest coerce.6
   (loop for x in '(() #() #*)
-	always (equalp (coerce x 'vector) #()))
+        always (equalp (coerce x 'vector) #()))
   t)
 
 (deftest coerce.7
   (loop for x in '((1 0) #(1 0) #*10)
-	for y = (coerce x 'vector)
-	always (and (equalp y #(1 0))
-		    (vectorp y)))
+        for y = (coerce x 'vector)
+        always (and (equalp y #(1 0))
+                    (vectorp y)))
   t)
 
 (deftest coerce.8
   (loop for x in '((1 0) #(1 0) #*10)
-	for y = (coerce x '(vector *))
-	always (and (equalp y #(1 0))
-		    (vectorp y)))
+        for y = (coerce x '(vector *))
+        always (and (equalp y #(1 0))
+                    (vectorp y)))
   t)
 
 (deftest coerce.9
   (loop for x in '((1 0) #(1 0) #*10)
-	for y = (coerce x '(vector * 2))
-	always (and (equalp y #(1 0))
-		    (vectorp y)))
+        for y = (coerce x '(vector * 2))
+        always (and (equalp y #(1 0))
+                    (vectorp y)))
   t)
 
 (deftest coerce.10
   (values (coerce #\A 'character)
-	  (coerce '|A| 'character)
-	  (coerce "A" 'character))
+          (coerce '|A| 'character)
+          (coerce "A" 'character))
   #\A #\A #\A)
 
 (deftest coerce.11
   (loop with class = (find-class 'vector)
-	for x in '((1 0) #(1 0) #*10)
-	for y = (coerce x class)
-	always (and (equalp y #(1 0))
-		    (vectorp y)))
+        for x in '((1 0) #(1 0) #*10)
+        for y = (coerce x class)
+        always (and (equalp y #(1 0))
+                    (vectorp y)))
   t)
 
 (deftest coerce.12
   (loop for x in '((1 0) #(1 0) #*10)
-	for y = (coerce x 'bit-vector)
-	always (and (equalp y #*10)
-		    (bit-vector-p y)))
+        for y = (coerce x 'bit-vector)
+        always (and (equalp y #*10)
+                    (bit-vector-p y)))
   t)
 
 (deftest coerce.13
   (loop for x in '((#\a #\b #\c) "abc")
-	for y = (coerce x 'string)
-	always (and (stringp y)
-		    (string= y "abc")))
+        for y = (coerce x 'string)
+        always (and (stringp y)
+                    (string= y "abc")))
   t)
 
 (deftest coerce.14
   (loop for x in '((#\a #\b #\c) "abc")
-	for y = (coerce x 'simple-string)
-	always (and (typep y 'simple-string)
-		    (string= y "abc")))
+        for y = (coerce x 'simple-string)
+        always (and (typep y 'simple-string)
+                    (string= y "abc")))
   t)
 
 (deftest coerce.15
   (loop for x in '((1 0) #(1 0) #*10)
-	for y = (coerce x 'simple-vector)
-	always (and (equalp y #(1 0))
-		    (simple-vector-p y)))
+        for y = (coerce x 'simple-vector)
+        always (and (equalp y #(1 0))
+                    (simple-vector-p y)))
   t)
 
 (deftest coerce.16
@@ -134,7 +134,7 @@
   (let ((i 0) a b)
     (values
      (coerce (progn (setf a (incf i)) 10)
-	     (progn (setf b (incf i)) 'single-float))
+             (progn (setf b (incf i)) 'single-float))
      i a b))
   10.0f0 2 1 2)
 
@@ -189,19 +189,19 @@
 (deftest coerce.error.10
   :notes (:result-type-element-type-by-subtype)
   (let* ((tp1 '(vector character))
-	 (tp2 `(vector t))
-	 (tp3 `(or ,tp1 ,tp2)))
+         (tp2 `(vector t))
+         (tp3 `(or ,tp1 ,tp2)))
     (if (not (subtypep tp3 'vector))
-	t
+        t
       (handler-case
        (eval `(coerce '(#\a #\b #\c) ',tp3))
        (type-error (c)
-	 (cond
-	  ((typep (type-error-datum c)
-		  (type-error-expected-type c))
-	   `((typep ',(type-error-datum c)
-		    ',(type-error-expected-type c))
-	     "==>" true))
-	  (t t)))
+         (cond
+          ((typep (type-error-datum c)
+                  (type-error-expected-type c))
+           `((typep ',(type-error-datum c)
+                    ',(type-error-expected-type c))
+             "==>" true))
+          (t t)))
        (error (c) (declare (ignore c)) t))))
   t)

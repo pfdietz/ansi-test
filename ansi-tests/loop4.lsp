@@ -26,14 +26,14 @@
 
 (deftest loop.4.4
   (loop for e on '(a b c d e)
-	for (x . y) = e
-	collect x)
+        for (x . y) = e
+        collect x)
   (a b c d e))
 
 (deftest loop.4.5
   (loop for (x . y) = '(a b c d e) then y
-	while x
-	collect x)
+        while x
+        collect x)
   (a b c d e))
 
 ;;; Error cases
@@ -41,21 +41,21 @@
 (deftest loop.4.6
   (signals-error
    (loop for (x . x) = '(nil nil nil)
-	 until x count t)
+         until x count t)
    program-error)
   t)
 
 (deftest loop.4.7
   (signals-error
    (macroexpand '(loop for (x . x) = '(nil nil nil)
-		       until x count t))
+                       until x count t))
    program-error)
   t)
 
 (deftest loop.4.8
   (signals-error
    (macroexpand '(loop for x = '(nil nil nil)
-		       for x = 1 count x until t))
+                       for x = 1 count x until t))
    program-error)
   t)
 

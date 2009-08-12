@@ -9,7 +9,7 @@
 
 (deftest reinitialize-instance.1
   (let* ((obj (make-instance 'class-01))
-	 (obj2 (reinitialize-instance obj)))
+         (obj2 (reinitialize-instance obj)))
     (values
      (eqt obj obj2)
      (map-slot-boundp* obj '(s1 s2 s3))))
@@ -18,7 +18,7 @@
 
 (deftest reinitialize-instance.2
   (let* ((obj (make-instance 'class-01))
-	 (obj2 (reinitialize-instance obj :allow-other-keys nil)))
+         (obj2 (reinitialize-instance obj :allow-other-keys nil)))
     (values
      (eqt obj obj2)
      (map-slot-boundp* obj '(s1 s2 s3))))
@@ -26,7 +26,7 @@
 
 (deftest reinitialize-instance.3
   (let* ((obj (make-instance 'class-01))
-	 (obj2 (reinitialize-instance obj :allow-other-keys t)))
+         (obj2 (reinitialize-instance obj :allow-other-keys t)))
     (values
      (eqt obj obj2)
      (map-slot-boundp* obj '(s1 s2 s3))))
@@ -34,8 +34,8 @@
 
 (deftest reinitialize-instance.4
   (let* ((obj (make-instance 'class-01))
-	 (obj2 (reinitialize-instance obj :allow-other-keys t
-				      :allow-other-keys nil)))
+         (obj2 (reinitialize-instance obj :allow-other-keys t
+                                      :allow-other-keys nil)))
     (values
      (eqt obj obj2)
      (map-slot-boundp* obj '(s1 s2 s3))))
@@ -43,8 +43,8 @@
 
 (deftest reinitialize-instance.5
   (let* ((obj (make-instance 'class-07))
-	 (obj2 (reinitialize-instance obj :s1a 'a :s2 'b :s1a 'bad
-				      :s2 'bad2  :s1b 'bad3)))
+         (obj2 (reinitialize-instance obj :s1a 'a :s2 'b :s1a 'bad
+                                      :s2 'bad2  :s1b 'bad3)))
     (values
      (eqt obj obj2)
      (map-slot-value obj '(s1 s2))))
@@ -52,7 +52,7 @@
 
 (deftest reinitialize-instance.6
   (let* ((obj (make-instance 'class-07 :s1a 'a))
-	 (obj2 (reinitialize-instance obj :s1b 'b)))
+         (obj2 (reinitialize-instance obj :s1b 'b)))
     (values
      (eqt obj obj2)
      (slot-value obj 's1)
@@ -61,7 +61,7 @@
 
 (deftest reinitialize-instance.7
   (let* ((obj (make-instance 'class-07 :s1a 'a))
-	 (obj2 (reinitialize-instance obj :s2 'b)))
+         (obj2 (reinitialize-instance obj :s2 'b)))
     (values
      (eqt obj obj2)
      (slot-value obj 's1)
@@ -75,15 +75,15 @@
   ((a :initarg :a) (b :initarg :b)))
 
 (defmethod reinitialize-instance :after ((instance reinit-class-01)
-					 &rest initargs
-					 &key (x nil x-p))
+                                         &rest initargs
+                                         &key (x nil x-p))
   (declare (ignore initargs))
   (when x-p (setf (slot-value instance 'a) x))
   instance)
 
 (deftest reinitialize-instance.8
   (let* ((obj (make-instance 'reinit-class-01))
-	 (obj2 (reinitialize-instance obj :a 1 :b 3)))
+         (obj2 (reinitialize-instance obj :a 1 :b 3)))
     (values
      (eqt obj obj2)
      (map-slot-value obj2 '(a b))))
@@ -91,7 +91,7 @@
 
 (deftest reinitialize-instance.9
   (let* ((obj (make-instance 'reinit-class-01 :a 10 :b 20))
-	 (obj2 (reinitialize-instance obj :x 3)))
+         (obj2 (reinitialize-instance obj :x 3)))
     (values
      (eqt obj obj2)
      (map-slot-value obj2 '(a b))))
@@ -99,7 +99,7 @@
 
 (deftest reinitialize-instance.10
   (let* ((obj (make-instance 'reinit-class-01 :a 10 :b 20))
-	 (obj2 (reinitialize-instance obj :x 3 :x 100)))
+         (obj2 (reinitialize-instance obj :x 3 :x 100)))
     (values
      (eqt obj obj2)
      (map-slot-value obj2 '(a b))))
@@ -109,12 +109,12 @@
 
 (deftest reinitialize-instance.order.1
   (let* ((obj (make-instance 'reinit-class-01))
-	 (i 0) x y z w
-	 (obj2 (reinitialize-instance
-		(progn (setf x (incf i)) obj)
-		:b (setf y (incf i))
-		:a (setf z (incf i))
-		:b (setf w (incf i)))))
+         (i 0) x y z w
+         (obj2 (reinitialize-instance
+                (progn (setf x (incf i)) obj)
+                :b (setf y (incf i))
+                :a (setf z (incf i))
+                :b (setf w (incf i)))))
     (values
      (eqt obj obj2)
      (map-slot-value obj2 '(a b))

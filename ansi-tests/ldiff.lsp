@@ -9,29 +9,29 @@
 
 (deftest ldiff.1
   (let* ((x (copy-tree '(a b c d e f)))
-	 (xcopy (make-scaffold-copy x)))
+         (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x (cdddr x))))
       (and (check-scaffold-copy x xcopy)
-	   result)))
+           result)))
   (a b c))
 
 (deftest ldiff.2
   (let* ((x (copy-tree '(a b c d e f)))
-	 (xcopy (make-scaffold-copy x)))
+         (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x 'a)))
       (and
        (check-scaffold-copy x xcopy)
        (zerop
-	(loop
-	 for a on x and b on result count
-	 (eqt a b)))
+        (loop
+         for a on x and b on result count
+         (eqt a b)))
        result)))
   (a b c d e f))
 
 ;; Works when the end of the dotted list is a symbol
 (deftest ldiff.3
   (let* ((x (copy-tree '(a b c d e . f)))
-	 (xcopy (make-scaffold-copy x)))
+         (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x 'a)))
       (and
        (check-scaffold-copy x xcopy)
@@ -41,8 +41,8 @@
 ;; Works when the end of the dotted list is a fixnum
 (deftest ldiff.4
   (let* ((n 18)
-	 (x (list* 'a 'b 'c 18))
-	 (xcopy (make-scaffold-copy x)))
+         (x (list* 'a 'b 'c 18))
+         (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x n)))
       (and
        (check-scaffold-copy x xcopy)
@@ -53,8 +53,8 @@
 ;; integer (that is eql, but probably not eq).
 (deftest ldiff.5
   (let* ((n 18000000000000)
-	 (x (list* 'a 'b 'c (1- 18000000000001)))
-	 (xcopy (make-scaffold-copy x)))
+         (x (list* 'a 'b 'c (1- 18000000000001)))
+         (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x n)))
       (and
        (check-scaffold-copy x xcopy)
@@ -64,24 +64,24 @@
 ;; Test works when the end of a dotted list is a string
 (deftest ldiff.6
   (let* ((n (copy-seq "abcde"))
-	 (x (list* 'a 'b 'c n))
-	 (xcopy (make-scaffold-copy x)))
+         (x (list* 'a 'b 'c n))
+         (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x n)))
       (if (equal result (list 'a 'b 'c))
-	  (check-scaffold-copy x xcopy)
-	result)))
+          (check-scaffold-copy x xcopy)
+        result)))
   t)
 
 ;; Check that having the cdr of a dotted list be string-equal, but
 ;; not eql, does not result in success
 (deftest ldiff.7
   (let* ((n (copy-seq "abcde"))
-	 (x (list* 'a 'b 'c n))
-	 (xcopy (make-scaffold-copy x)))
+         (x (list* 'a 'b 'c n))
+         (xcopy (make-scaffold-copy x)))
     (let ((result (ldiff x (copy-seq n))))
       (if (equal result x)
-	  (check-scaffold-copy x xcopy)
-	result)))
+          (check-scaffold-copy x xcopy)
+        result)))
   t)
 
 ;; Check that on failure, the list returned by ldiff is
@@ -91,19 +91,19 @@
   (let ((x (list 'a 'b 'c 'd)))
     (let ((result (ldiff x '(e))))
       (and (equal x result)
-	   (loop
-	    for c1 on x
-	    for c2 on result
-	    count (eqt c1 c2)))))
+           (loop
+            for c1 on x
+            for c2 on result
+            count (eqt c1 c2)))))
   0)
 
 (deftest ldiff.order.1
   (let ((i 0) x y)
     (values
      (ldiff (progn (setf x (incf i))
-		   (list* 'a 'b 'c 'd))
-	    (progn (setf y (incf i))
-		   'd))
+                   (list* 'a 'b 'c 'd))
+            (progn (setf y (incf i))
+                   'd))
      i x y))
   (a b c) 2 1 2)
 
@@ -160,8 +160,8 @@
   (loop
    for x in *universe*
    count (and (not (listp x))
-	      (not (eqt 'type-error
-			(catch-type-error (ldiff x x)))))))
+              (not (eqt 'type-error
+                        (catch-type-error (ldiff x x)))))))
 
 (deftest ldiff-12
   (ldiff-12-body)

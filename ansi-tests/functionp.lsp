@@ -26,15 +26,15 @@
 
 (deftest functionp.4
   (loop for x in *cl-symbol-names*
-	for s = (find-symbol x "CL")
-	for f = (and (fboundp s)
-		     (symbol-function s)
-		     (not (special-operator-p s))
-		     (not (macro-function s))
-		     (symbol-function s))
-	unless (or (null f)
-		   (functionp f))
-	collect x)
+        for s = (find-symbol x "CL")
+        for f = (and (fboundp s)
+                     (symbol-function s)
+                     (not (special-operator-p s))
+                     (not (macro-function s))
+                     (symbol-function s))
+        unless (or (null f)
+                   (functionp f))
+        collect x)
   nil)
 
 (deftest functionp.5
@@ -64,10 +64,10 @@
 ;;; In ANSI CL, symbols and cons can no longer be functions
 (deftest functionp.10
   (check-predicate #'(lambda (x)
-		       (not (and (or (numberp x) (characterp x)
-				     (symbolp x) (consp x)
-				     (typep x 'array))
-				 (functionp x)))))
+                       (not (and (or (numberp x) (characterp x)
+                                     (symbolp x) (consp x)
+                                     (typep x 'array))
+                                 (functionp x)))))
   nil)
 
 (deftest functionp.11

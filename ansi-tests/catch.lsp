@@ -31,12 +31,12 @@
 ;;
 ;; (deftest catch.6
 ;;   (let ((tag1 (1+ most-positive-fixnum))
-;; 	(tag2 (1+ most-positive-fixnum)))
+;;      (tag2 (1+ most-positive-fixnum)))
 ;;     (if (eqt tag1 tag2)
-;; 	'good
+;;      'good
 ;;       (catch tag1
-;; 	(catch tag2 (throw tag1 'good))
-;; 	'bad)))
+;;      (catch tag2 (throw tag1 'good))
+;;      'bad)))
 ;;   good)
 
 (deftest catch.7
@@ -91,17 +91,17 @@
 
 (deftest catch.14
   (macrolet ((%m (z) z))
-	    (catch 'foo (expand-in-current-env (%m :good))))
+            (catch 'foo (expand-in-current-env (%m :good))))
   :good)
 
 (deftest catch.15
   (macrolet ((%m (z) z))
-	    (catch 'foo (throw (expand-in-current-env (%m 'foo)) :good) :bad))
+            (catch 'foo (throw (expand-in-current-env (%m 'foo)) :good) :bad))
   :good)
 
 (deftest catch.16
   (macrolet ((%m (z) z))
-	    (catch 'foo (throw 'foo (expand-in-current-env (%m :good))) :bad))
+            (catch 'foo (throw 'foo (expand-in-current-env (%m :good))) :bad))
   :good)
 
 (deftest throw-error

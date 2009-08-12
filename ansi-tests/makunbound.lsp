@@ -25,9 +25,9 @@
      (equalt (multiple-value-list (makunbound sym)) (list sym))
      (boundp sym)
      (handler-case (symbol-value sym)
-		   (unbound-variable (c)
-		     (if (eq (cell-error-name c) sym) :good
-		       (list :bad sym (cell-error-name c)))))))
+                   (unbound-variable (c)
+                     (if (eq (cell-error-name c) sym) :good
+                       (list :bad sym (cell-error-name c)))))))
   nil :foo t nil :good)
 
 ;;; Error cases

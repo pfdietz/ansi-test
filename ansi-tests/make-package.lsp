@@ -17,11 +17,11 @@
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1"))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "TEST1")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "TEST1")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 (deftest make-package.2
@@ -29,11 +29,11 @@
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1|))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "TEST1")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "TEST1")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 (deftest make-package.3
@@ -41,11 +41,11 @@
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "X")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "X")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 ;; Same, but with a null :use list
@@ -55,12 +55,12 @@
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use nil))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "TEST1")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-use-list p) nil)
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "TEST1")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-use-list p) nil)
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 (deftest make-package.5
@@ -68,12 +68,12 @@
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use nil))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "TEST1")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-use-list p) nil)
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "TEST1")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-use-list p) nil)
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 (deftest make-package.6
@@ -81,12 +81,12 @@
     (safely-delete-package #\X)
     (let ((p (make-package #\X)))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "X")
-	       (equalt (package-nicknames p) nil)
-	       ;; (equalt (package-use-list p) nil)
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "X")
+               (equalt (package-nicknames p) nil)
+               ;; (equalt (package-use-list p) nil)
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 ;; Same, but use the A package
@@ -97,12 +97,12 @@
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '("A")))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "TEST1")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-use-list p) (list (find-package "A")))
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "TEST1")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-use-list p) (list (find-package "A")))
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 (deftest make-package.7a
@@ -111,12 +111,12 @@
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '(#:|A|)))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "TEST1")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-use-list p) (list (find-package "A")))
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "TEST1")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-use-list p) (list (find-package "A")))
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 (deftest make-package.7b
@@ -125,12 +125,12 @@
     (safely-delete-package "TEST1")
     (let ((p (ignore-errors (make-package "TEST1" :use '(#\A)))))
       (prog1
-	  (and (packagep p)
-	       (equalt (package-name p) "TEST1")
-	       (equalt (package-nicknames p) nil)
-	       (equalt (package-use-list p) (list (find-package "A")))
-	       (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (and (packagep p)
+               (equalt (package-name p) "TEST1")
+               (equalt (package-nicknames p) nil)
+               (equalt (package-use-list p) (list (find-package "A")))
+               (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t)
 
 (deftest make-package.8
@@ -139,12 +139,12 @@
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '("A")))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "TEST1")
-		  (equalt (package-nicknames p) nil)
-		  (equalt (package-use-list p) (list (find-package "A")))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "TEST1")
+                  (equalt (package-nicknames p) nil)
+                  (equalt (package-use-list p) (list (find-package "A")))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t t)
 
 (deftest make-package.8a
@@ -153,12 +153,12 @@
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '(#:|A|)))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "TEST1")
-		  (equalt (package-nicknames p) nil)
-		  (equalt (package-use-list p) (list (find-package "A")))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "TEST1")
+                  (equalt (package-nicknames p) nil)
+                  (equalt (package-use-list p) (list (find-package "A")))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t t)
 
 (deftest make-package.8b
@@ -167,12 +167,12 @@
     (safely-delete-package '#:|TEST1|)
     (let ((p (ignore-errors (make-package '#:|TEST1| :use '(#\A)))))
       (multiple-value-prog1
-	  (values (packagep p)
-		  (equalt (package-name p) "TEST1")
-		  (equalt (package-nicknames p) nil)
-		  (equalt (package-use-list p) (list (find-package "A")))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (packagep p)
+                  (equalt (package-name p) "TEST1")
+                  (equalt (package-nicknames p) nil)
+                  (equalt (package-use-list p) (list (find-package "A")))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t t)
 
 (deftest make-package.9
@@ -181,12 +181,12 @@
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '("A")))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "X")
-		  (equalt (package-nicknames p) nil)
-		  (equalt (package-use-list p) (list (find-package "A")))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "X")
+                  (equalt (package-nicknames p) nil)
+                  (equalt (package-use-list p) (list (find-package "A")))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t t)
 
 (deftest make-package.9a
@@ -195,12 +195,12 @@
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '(#:|A|)))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "X")
-		  (equalt (package-nicknames p) nil)
-		  (equalt (package-use-list p) (list (find-package "A")))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "X")
+                  (equalt (package-nicknames p) nil)
+                  (equalt (package-use-list p) (list (find-package "A")))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t t)
 
 (deftest make-package.9b
@@ -209,12 +209,12 @@
     (safely-delete-package #\X)
     (let ((p (ignore-errors (make-package #\X :use '(#\A)))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "X")
-		  (equalt (package-nicknames p) nil)
-		  (equalt (package-use-list p) (list (find-package "A")))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "X")
+                  (equalt (package-nicknames p) nil)
+                  (equalt (package-use-list p) (list (find-package "A")))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t t)
 
 ;; make-package with nicknames
@@ -224,11 +224,11 @@
     (mapc #'safely-delete-package '("TEST1" "F"))
     (let ((p (make-package "TEST1" :nicknames '("F"))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "TEST1")
-		  (equalt (package-nicknames p) '("F"))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "TEST1")
+                  (equalt (package-nicknames p) '("F"))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t)
 
 (deftest make-package.11
@@ -236,11 +236,11 @@
     (mapc #'safely-delete-package '("TEST1" "G"))
     (let ((p (make-package '#:|TEST1| :nicknames '(#:|G|))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "TEST1")
-		  (equalt (package-nicknames p) '("G"))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "TEST1")
+                  (equalt (package-nicknames p) '("G"))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t)
 
 (deftest make-package.12
@@ -248,11 +248,11 @@
     (mapc #'safely-delete-package '("TEST1" "G"))
     (let ((p (make-package '#:|TEST1| :nicknames '(#\G))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "TEST1")
-		  (equalt (package-nicknames p) '("G"))
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "TEST1")
+                  (equalt (package-nicknames p) '("G"))
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t t t)
 
 (deftest make-package.13
@@ -260,13 +260,13 @@
     (mapc #'safely-delete-package '(#\X #\F #\G #\H))
     (let ((p (make-package #\X :nicknames '("F" #\G #:|H|))))
       (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "X")
-		  (set-exclusive-or (package-nicknames p)
-				    '("F" "G" "H")
-				    :test #'equal)
-		  (equalt (package-used-by-list p) nil))
-	(safely-delete-package p))))
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "X")
+                  (set-exclusive-or (package-nicknames p)
+                                    '("F" "G" "H")
+                                    :test #'equal)
+                  (equalt (package-used-by-list p) nil))
+        (safely-delete-package p))))
   t t nil t)
 
 ;;; Specialized sequences as designators
@@ -279,110 +279,110 @@
        (assert (string= name "TEST1"))
        (safely-delete-package "TEST1")
        (let ((p (ignore-errors (make-package name))))
-	 (multiple-value-prog1
-	  (values (notnot (packagep p))
-		  (equalt (package-name p) "TEST1")
-		  (equalt (package-nicknames p) nil)
-		  (equalt (package-used-by-list p) nil))
-	  (safely-delete-package p))))
+         (multiple-value-prog1
+          (values (notnot (packagep p))
+                  (equalt (package-name p) "TEST1")
+                  (equalt (package-nicknames p) nil)
+                  (equalt (package-used-by-list p) nil))
+          (safely-delete-package p))))
      t t t t))
 
 (def-make-package-test1 make-package.14
   (make-array 5 :initial-contents "TEST1"
-	      :element-type 'base-char))
+              :element-type 'base-char))
 
 (def-make-package-test1 make-package.15
   (make-array 12 :initial-contents "TEST1xxxyyyz"
-	      :fill-pointer 5
-	      :element-type 'base-char))
+              :fill-pointer 5
+              :element-type 'base-char))
 
 (def-make-package-test1 make-package.16
   (make-array 12 :initial-contents "TEST1xxxyyyz"
-	      :fill-pointer 5
-	      :element-type 'character))
+              :fill-pointer 5
+              :element-type 'character))
 
 (def-make-package-test1 make-package.17
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t
-	      :element-type 'base-char))
+              :adjustable t
+              :element-type 'base-char))
 
 (def-make-package-test1 make-package.18
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t
-	      :element-type 'character))
+              :adjustable t
+              :element-type 'character))
 
 (def-make-package-test1 make-package.19
   (let* ((etype 'base-char)
-	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+                            :element-type etype)))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 2)))
+                :displaced-to name0
+                :displaced-index-offset 2)))
 
 (def-make-package-test1 make-package.20
   (let* ((etype 'character)
-	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+                            :element-type etype)))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 2)))
+                :displaced-to name0
+                :displaced-index-offset 2)))
 
 ;;; Nicknames being specialized sequences
 
 (defmacro def-make-package-test2 (test-name name-form)
   `(deftest ,test-name
      (let ((name ,name-form)
-	   (nickname "TEST1-NICKNAME"))
+           (nickname "TEST1-NICKNAME"))
        (safely-delete-package "TEST1")
        (safely-delete-package nickname)
        (let ((p (make-package name :nicknames (list nickname))))
-	 (multiple-value-prog1
-	     (values (notnot (packagep p))
-		     (equalt (package-name p) "TEST1")
-		     (equalt (package-nicknames p) (list nickname))
-		     (equalt (package-used-by-list p) nil))
-	     (safely-delete-package p))))
+         (multiple-value-prog1
+             (values (notnot (packagep p))
+                     (equalt (package-name p) "TEST1")
+                     (equalt (package-nicknames p) (list nickname))
+                     (equalt (package-used-by-list p) nil))
+             (safely-delete-package p))))
      t t t t))
 
 (def-make-package-test2 make-package.21
   (make-array 5 :initial-contents "TEST1"
-	      :element-type 'base-char))
+              :element-type 'base-char))
 
 (def-make-package-test2 make-package.22
   (make-array 12 :initial-contents "TEST1xxxyyyz"
-	      :fill-pointer 5
-	      :element-type 'base-char))
+              :fill-pointer 5
+              :element-type 'base-char))
 
 (def-make-package-test2 make-package.23
   (make-array 12 :initial-contents "TEST1xxxyyyz"
-	      :fill-pointer 5
-	      :element-type 'character))
+              :fill-pointer 5
+              :element-type 'character))
 
 (def-make-package-test2 make-package.24
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t
-	      :element-type 'base-char))
+              :adjustable t
+              :element-type 'base-char))
 
 (def-make-package-test2 make-package.25
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t
-	      :element-type 'character))
+              :adjustable t
+              :element-type 'character))
 
 (def-make-package-test2 make-package.26
   (let* ((etype 'base-char)
-	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+                            :element-type etype)))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 2)))
+                :displaced-to name0
+                :displaced-index-offset 2)))
 
 (def-make-package-test2 make-package.27
   (let* ((etype 'character)
-	 (name0 (make-array 10 :initial-contents "xxTEST1yyy"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "xxTEST1yyy"
+                            :element-type etype)))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 2)))
+                :displaced-to name0
+                :displaced-index-offset 2)))
 
 ;;; USE names being specialized sequences
 
@@ -393,13 +393,13 @@
        (safely-delete-package "TEST1")
        (assert (find-package name))
        (let ((p (ignore-errors (make-package "TEST1" :use (list name)))))
-	 (multiple-value-prog1
-	     (values (notnot (packagep p))
-		     (equalt (package-name p) "TEST1")
-		     (equalt (package-nicknames p) nil)
-		     (equalt (package-use-list p) (list (find-package name)))
-		     (equalt (package-used-by-list p) nil))
-	     (safely-delete-package p))))
+         (multiple-value-prog1
+             (values (notnot (packagep p))
+                     (equalt (package-name p) "TEST1")
+                     (equalt (package-nicknames p) nil)
+                     (equalt (package-use-list p) (list (find-package name)))
+                     (equalt (package-used-by-list p) nil))
+             (safely-delete-package p))))
      t t t t t))
 
 (def-make-package-test3 make-package.28
@@ -407,39 +407,39 @@
 
 (def-make-package-test3 make-package.29
   (make-array 8 :initial-contents "Axxxyyyz"
-	      :fill-pointer 1
-	      :element-type 'base-char))
+              :fill-pointer 1
+              :element-type 'base-char))
 
 (def-make-package-test3 make-package.30
   (make-array 8 :initial-contents "Axxxyyyz"
-	      :fill-pointer 1
-	      :element-type 'character))
+              :fill-pointer 1
+              :element-type 'character))
 
 (def-make-package-test3 make-package.31
   (make-array 1 :initial-contents "A"
-	      :adjustable t
-	      :element-type 'base-char))
+              :adjustable t
+              :element-type 'base-char))
 
 (def-make-package-test3 make-package.32
   (make-array 1 :initial-contents "A"
-	      :adjustable t
-	      :element-type 'character))
+              :adjustable t
+              :element-type 'character))
 
 (def-make-package-test3 make-package.33
   (let* ((etype 'base-char)
-	 (name0 (make-array 10 :initial-contents "xxAyyy0123"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "xxAyyy0123"
+                            :element-type etype)))
     (make-array 1 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 2)))
+                :displaced-to name0
+                :displaced-index-offset 2)))
 
 (def-make-package-test3 make-package.34
   (let* ((etype 'character)
-	 (name0 (make-array 10 :initial-contents "xxAzzzzyyy"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "xxAzzzzyyy"
+                            :element-type etype)))
     (make-array 1 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 2)))
+                :displaced-to name0
+                :displaced-index-offset 2)))
 
 ;; Signal a continuable error if the package or any nicknames
 ;; exist as packages or nicknames of packages
@@ -448,7 +448,7 @@
   (progn
     (set-up-packages)
     (handle-non-abort-restart (make-package "A")))
-  success)  
+  success)
 
 (deftest make-package.error.2
   (progn
@@ -509,5 +509,5 @@
   (progn
     (safely-delete-package "MPE11")
     (signals-error (make-package "MPE11" 'bad t :allow-other-keys nil)
-		   program-error))
+                   program-error))
   t)

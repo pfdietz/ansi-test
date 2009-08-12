@@ -19,8 +19,8 @@
 
 (deftest nth-value.4
   (loop for i from 0 to 19
-	collect (nth-value i (values 'a 'b 'c 'd 'e 'f 'g 'h 'i 'j 'k
-				     'l 'm 'n 'o 'p 'q 'r 's)))
+        collect (nth-value i (values 'a 'b 'c 'd 'e 'f 'g 'h 'i 'j 'k
+                                     'l 'm 'n 'o 'p 'q 'r 's)))
   (a b c d e f g h i j k l m n o p q r s nil))
 
 (deftest nth-value.5
@@ -48,7 +48,7 @@
   (let ((i 0) x y)
     (values
      (nth-value (progn (setf x (incf i)) 3)
-		(progn (setf y (incf i)) (values 'a 'b 'c 'd 'e 'f 'g)))
+                (progn (setf y (incf i)) (values 'a 'b 'c 'd 'e 'f 'g)))
      i x y))
   d 2 1 2)
 
@@ -56,18 +56,18 @@
 
 (deftest nth-value.error.1
   (signals-error (funcall (macro-function 'nth-value))
-		 program-error)
+                 program-error)
   t)
-  
+
 (deftest nth-value.error.2
   (signals-error (funcall (macro-function 'nth-value)
-			   '(nth-value 1 '(a b c)))
-		 program-error)
+                           '(nth-value 1 '(a b c)))
+                 program-error)
   t)
 
 (deftest nth-value.error.3
   (signals-error (funcall (macro-function 'nth-value)
-			   '(nth-value 1 '(a b c))
-			   nil nil)
-		 program-error)
+                           '(nth-value 1 '(a b c))
+                           nil nil)
+                 program-error)
   t)

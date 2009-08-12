@@ -30,8 +30,8 @@
 (deftest array-dimensions.6
   (let ((a (make-array '(2 3 4) :adjustable t)))
     (values (array-dimension a 0)
-	    (array-dimension a 1)
-	    (array-dimension a 2)))
+            (array-dimension a 1)
+            (array-dimension a 2)))
   2 3 4)
 
 (deftest array-dimensions.7
@@ -41,7 +41,7 @@
 
 (deftest array-dimensions.8
   (macrolet ((%m (z) z)) (array-dimensions
-			  (expand-in-current-env (%m #2a((a b)(c d)(e f))))))
+                          (expand-in-current-env (%m #2a((a b)(c d)(e f))))))
   (3 2))
 
 ;;; Error tests
@@ -52,7 +52,7 @@
 
 (deftest array-dimensions.error.2
   (signals-error (array-dimensions #(a b c) nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest array-dimensions.error.3
@@ -65,5 +65,5 @@
 
 (deftest array-dimensions.error.5
   (signals-error (locally (array-dimensions nil))
-		 type-error)
+                 type-error)
   t)

@@ -23,36 +23,36 @@
 
 (deftest integer-length.1
   (loop for len from 0 to 100
-	for i = (1- (ash 1 len))
-	for vals = (multiple-value-list (integer-length i))
-	for len2 = (car vals)
-	always (and (= (length vals) 1)
-		    (eql len len2)))
+        for i = (1- (ash 1 len))
+        for vals = (multiple-value-list (integer-length i))
+        for len2 = (car vals)
+        always (and (= (length vals) 1)
+                    (eql len len2)))
   t)
 
 (deftest integer-length.2
   (loop for len from 0 to 100
-	for i = (ash 1 len)
-	for vals = (multiple-value-list (integer-length i))
-	for len2 = (car vals)
-	always (and (= (length vals) 1)
-		    (eql (1+ len) len2)))
+        for i = (ash 1 len)
+        for vals = (multiple-value-list (integer-length i))
+        for len2 = (car vals)
+        always (and (= (length vals) 1)
+                    (eql (1+ len) len2)))
   t)
 
 (deftest integer-length.3
   (loop for len from 0 to 100
-	for i = (- (ash 1 len))
-	for vals = (multiple-value-list (integer-length i))
-	for len2 = (car vals)
-	always (and (= (length vals) 1)
-		    (eql len len2)))
+        for i = (- (ash 1 len))
+        for vals = (multiple-value-list (integer-length i))
+        for len2 = (car vals)
+        always (and (= (length vals) 1)
+                    (eql len len2)))
   t)
 
 (deftest integer-length.4
   (loop for len from 0 to 100
-	for i = (- -1 (ash 1 len))
-	for vals = (multiple-value-list (integer-length i))
-	for len2 = (car vals)
-	always (and (= (length vals) 1)
-		    (eql (1+ len) len2)))
+        for i = (- -1 (ash 1 len))
+        for vals = (multiple-value-list (integer-length i))
+        for len2 = (car vals)
+        always (and (= (length vals) 1)
+                    (eql (1+ len) len2)))
   t)

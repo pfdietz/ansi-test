@@ -19,17 +19,17 @@
 
 (deftest clear-output.4
   (loop for s in (list *debug-io* *error-output* *query-io*
-		       *standard-output* *trace-output* *terminal-io*)
-	for dummy = (finish-output s)
-	for results = (multiple-value-list (clear-output s))
-	unless (equal results '(nil))
-	collect s)
+                       *standard-output* *trace-output* *terminal-io*)
+        for dummy = (finish-output s)
+        for results = (multiple-value-list (clear-output s))
+        unless (equal results '(nil))
+        collect s)
   nil)
 
 (deftest clear-output.5
   (let ((os (make-string-output-stream)))
     (let ((*terminal-io* (make-two-way-stream (make-string-input-stream "")
-					      os)))
+                                              os)))
       (clear-output t)))
   nil)
 

@@ -49,7 +49,7 @@
 
 (deftest stable-sort-vector.4
   (let ((a (make-array 10 :initial-contents '(10 40 20 50 30 15 45 25 55 35)
-		       :fill-pointer 5)))
+                       :fill-pointer 5)))
     (stable-sort a #'<))
   #(10 20 30 40 50))
 
@@ -78,33 +78,33 @@
 
 (deftest stable-sort-vector.9
   (let* ((ivals '(1 4 7 3 2 6 5))
-	 (sivals '(1 2 3 4 5 6 7))
-	 (len (length ivals)))
+         (sivals '(1 2 3 4 5 6 7))
+         (len (length ivals)))
     (loop for etype in '(short-float single-float double-float long-float rational)
-	  for vals = (loop for i in ivals collect (coerce i etype))
-	  for svals = (loop for i in sivals collect (coerce i etype))
-	  for vec = (make-array len :element-type etype :initial-contents vals)
-	  for svec = (stable-sort vec #'<)
-	  unless (and (eql (length svec) len)
-		      (every #'eql svals svec))
-	  collect (list etype vals svec)))
+          for vals = (loop for i in ivals collect (coerce i etype))
+          for svals = (loop for i in sivals collect (coerce i etype))
+          for vec = (make-array len :element-type etype :initial-contents vals)
+          for svec = (stable-sort vec #'<)
+          unless (and (eql (length svec) len)
+                      (every #'eql svals svec))
+          collect (list etype vals svec)))
   nil)
 
 (deftest stable-sort-vector.10
   (let* ((ivals '(1 4 7 3 2 6 5))
-	 (sivals '(1 2 3 4 5 6 7))
-	 (len (length ivals)))
+         (sivals '(1 2 3 4 5 6 7))
+         (len (length ivals)))
     (loop for cetype in '(short-float single-float double-float long-float rational)
-	  for etype = `(complex ,cetype)
-	  for vals = (loop for i in ivals collect (complex (coerce i cetype)
-							   (coerce (- i) cetype)))
-	  for svals = (loop for i in sivals collect (complex (coerce i cetype)
-							     (coerce (- i) cetype)))
-	  for vec = (make-array len :element-type etype :initial-contents vals)
-	  for svec = (stable-sort vec #'(lambda (x y) (< (abs x) (abs y))))
-	  unless (and (eql (length svec) len)
-		      (every #'eql svals svec))
-	  collect (list etype vals svec)))
+          for etype = `(complex ,cetype)
+          for vals = (loop for i in ivals collect (complex (coerce i cetype)
+                                                           (coerce (- i) cetype)))
+          for svals = (loop for i in sivals collect (complex (coerce i cetype)
+                                                             (coerce (- i) cetype)))
+          for vec = (make-array len :element-type etype :initial-contents vals)
+          for svec = (stable-sort vec #'(lambda (x y) (< (abs x) (abs y))))
+          unless (and (eql (length svec) len)
+                      (every #'eql svals svec))
+          collect (list etype vals svec)))
   nil)
 
 ;;; Bit vectors
@@ -122,8 +122,8 @@
 
 (deftest stable-sort-bit-vector.3
   (let ((a (make-array 10 :initial-contents '(1 0 0 1 1 1 1 0 1 1)
-		       :element-type 'bit
-		       :fill-pointer 5)))
+                       :element-type 'bit
+                       :fill-pointer 5)))
     (stable-sort a #'<))
   #*00111)
 
@@ -136,14 +136,14 @@
 (deftest stable-sort-string.2
   (let ((a (copy-seq "10011101")))
     (values (stable-sort a #'char<
-			 :key #'(lambda (c) (if (eql c #\0) #\1 #\0))) a))
+                         :key #'(lambda (c) (if (eql c #\0) #\1 #\0))) a))
   "11111000"
   "11111000")
 
 (deftest stable-sort-string.3
   (let ((a (make-array 10 :initial-contents "1001111011"
-		       :element-type 'character
-		       :fill-pointer 5)))
+                       :element-type 'character
+                       :fill-pointer 5)))
     (stable-sort a #'char<))
   "00111")
 
@@ -161,7 +161,7 @@
   (let ((i 0) x y)
     (values
      (stable-sort (progn (setf x (incf i)) (list 1 7 3 2))
-		  (progn (setf y (incf i)) #'<))
+                  (progn (setf y (incf i)) #'<))
      i x y))
   (1 2 3 7) 2 1 2)
 
@@ -169,8 +169,8 @@
   (let ((i 0) x y z)
     (values
      (stable-sort (progn (setf x (incf i)) (list 1 7 3 2))
-		  (progn (setf y (incf i)) #'<)
-		  :key (progn (setf z (incf i)) #'-))
+                  (progn (setf y (incf i)) #'<)
+                  :key (progn (setf z (incf i)) #'-))
      i x y z))
   (7 3 2 1) 3 1 2 3)
 

@@ -14,27 +14,27 @@
   (let ((a (vector 1 2 3 4)))
     (values
      (loop for i below 4
-	   collect (setf (svref a i) (+ i 10)))
+           collect (setf (svref a i) (+ i 10)))
      a))
   (10 11 12 13)
   #(10 11 12 13))
 
 (deftest svref.order.1
   (let ((v (vector 'a 'b 'c 'd))
-	(i 0) a b)
+        (i 0) a b)
     (values
      (svref (progn (setf a (incf i)) v)
-	    (progn (setf b (incf i)) 2))
+            (progn (setf b (incf i)) 2))
      i a b))
   c 2 1 2)
 
 (deftest svref.order.2
   (let ((v (vector 'a 'b 'c 'd))
-	(i 0) a b c)
+        (i 0) a b c)
     (values
      (setf
       (svref (progn (setf a (incf i)) v)
-	     (progn (setf b (incf i)) 2))
+             (progn (setf b (incf i)) 2))
       (progn (setf c (incf i)) 'w))
      v i a b c))
   w #(a b w d) 3 1 2 3)

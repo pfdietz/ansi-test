@@ -15,19 +15,19 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((p (make-package "H" :use nil))
-	      (i 0) x y)
-	  (intern "FOO" p)
-	  (multiple-value-bind*
-	   (sym access)
-	   (find-symbol "FOO" p)
-	   (and
-	    (eqt access :internal)
-	    (unintern (progn (setf x (incf i)) sym)
-		      (progn (setf y (incf i)) p))
-	    (eql i 2) (eql x 1) (eql y 2)
-	    (null (symbol-package sym))
-	    (not (find-symbol "FOO" p)))))
+        (let ((p (make-package "H" :use nil))
+              (i 0) x y)
+          (intern "FOO" p)
+          (multiple-value-bind*
+           (sym access)
+           (find-symbol "FOO" p)
+           (and
+            (eqt access :internal)
+            (unintern (progn (setf x (incf i)) sym)
+                      (progn (setf y (incf i)) p))
+            (eql i 2) (eql x 1) (eql y 2)
+            (null (symbol-package sym))
+            (not (find-symbol "FOO" p)))))
       (safely-delete-package "H")))
   t)
 
@@ -37,15 +37,15 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((*PACKAGE* (make-package "H" :use nil)))
-	  (intern "FOO")
-	  (multiple-value-bind* (sym access)
-	      (find-symbol "FOO")
-	    (and
-	     (eqt access :internal)
-	     (unintern sym)
-	     (null (symbol-package sym))
-	     (not (find-symbol "FOO")))))
+        (let ((*PACKAGE* (make-package "H" :use nil)))
+          (intern "FOO")
+          (multiple-value-bind* (sym access)
+              (find-symbol "FOO")
+            (and
+             (eqt access :internal)
+             (unintern sym)
+             (null (symbol-package sym))
+             (not (find-symbol "FOO")))))
       (safely-delete-package "H")))
   t)
 
@@ -54,15 +54,15 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((p (make-package "H" :use nil)))
-	  (intern "FOO" p)
-	  (multiple-value-bind* (sym access)
-	      (find-symbol "FOO" p)
-	    (and
-	     (eqt access :internal)
-	     (unintern sym "H")
-	     (null (symbol-package sym))
-	     (not (find-symbol "FOO" p)))))
+        (let ((p (make-package "H" :use nil)))
+          (intern "FOO" p)
+          (multiple-value-bind* (sym access)
+              (find-symbol "FOO" p)
+            (and
+             (eqt access :internal)
+             (unintern sym "H")
+             (null (symbol-package sym))
+             (not (find-symbol "FOO" p)))))
       (safely-delete-package "H")))
   t)
 
@@ -71,15 +71,15 @@
   (progn
     (safely-delete-package "H")
     (prog1
-	(let ((p (make-package "H" :use nil)))
-	  (intern "FOO" p)
-	  (multiple-value-bind* (sym access)
-	      (find-symbol "FOO" p)
-	    (and
-	     (eqt access :internal)
-	     (unintern sym '#:|H|)
-	     (null (symbol-package sym))
-	     (not (find-symbol "FOO" p)))))
+        (let ((p (make-package "H" :use nil)))
+          (intern "FOO" p)
+          (multiple-value-bind* (sym access)
+              (find-symbol "FOO" p)
+            (and
+             (eqt access :internal)
+             (unintern sym '#:|H|)
+             (null (symbol-package sym))
+             (not (find-symbol "FOO" p)))))
       (safely-delete-package "H")))
   t)
 
@@ -89,15 +89,15 @@
    (progn
      (safely-delete-package "H")
      (prog1
-	 (let ((p (make-package "H" :use nil)))
-	   (intern "FOO" p)
-	   (multiple-value-bind* (sym access)
-	       (find-symbol "FOO" p)
-	     (and
-	      (eqt access :internal)
-	      (unintern sym #\H)
-	      (null (symbol-package sym))
-	      (not (find-symbol "FOO" p)))))
+         (let ((p (make-package "H" :use nil)))
+           (intern "FOO" p)
+           (multiple-value-bind* (sym access)
+               (find-symbol "FOO" p)
+             (and
+              (eqt access :internal)
+              (unintern sym #\H)
+              (null (symbol-package sym))
+              (not (find-symbol "FOO" p)))))
        (safely-delete-package "H")))
    (error (c) c))
   t)
@@ -119,19 +119,19 @@
      ;; At this point, G:FOO is also an external
      ;; symbol of H.
      (multiple-value-bind* (sym1 access1)
-	 (find-symbol "FOO" "H")
+         (find-symbol "FOO" "H")
        (and sym1
-	    (eqt access1 :external)
-	    (equal "FOO" (symbol-name sym1))
-	    (eqt (find-package "G")
-		 (symbol-package sym1))
-	    (unintern sym1 "H")
-	    (multiple-value-bind* (sym2 access2)
-		(find-symbol "FOO" "H")
-	      (and (eqt sym1 sym2)
-		   (eqt (symbol-package sym1)
-			(find-package "G"))
-		   (eqt access2 :inherited))))))
+            (eqt access1 :external)
+            (equal "FOO" (symbol-name sym1))
+            (eqt (find-package "G")
+                 (symbol-package sym1))
+            (unintern sym1 "H")
+            (multiple-value-bind* (sym2 access2)
+                (find-symbol "FOO" "H")
+              (and (eqt sym1 sym2)
+                   (eqt (symbol-package sym1)
+                        (find-package "G"))
+                   (eqt access2 :inherited))))))
    (error (c) c))
   t)
 
@@ -142,26 +142,26 @@
       (safely-delete-package "H")
       (safely-delete-package "G")
       (let* ((pg (make-package "G" :use nil))
-	     (ph (make-package "H" :use (list pg))))
-	(handler-case
-	   (shadow "FOO" ph)
-	   (error (c) (return-from failed (list :shadow-error c))))
-	(export (intern "FOO" pg) pg)
-	;; At this point, H::FOO shadows G:FOO
-	(multiple-value-bind* (sym1 access1)
-	    (find-symbol "FOO" ph)
-	  (and
-	   sym1
-	   (eqt (symbol-package sym1) ph)
-	   (eqt access1 :internal)
-	   (equal (list sym1) (package-shadowing-symbols ph))
-	   (unintern sym1 ph)
-	   (multiple-value-bind* (sym2 access2)
-	       (find-symbol "FOO" ph)
-	     (and (not (eqt sym1 sym2))
-		  (eqt access2 :inherited)
-		  (null (symbol-package sym1))
-		  (eqt (symbol-package sym2) pg)))))))
+             (ph (make-package "H" :use (list pg))))
+        (handler-case
+           (shadow "FOO" ph)
+           (error (c) (return-from failed (list :shadow-error c))))
+        (export (intern "FOO" pg) pg)
+        ;; At this point, H::FOO shadows G:FOO
+        (multiple-value-bind* (sym1 access1)
+            (find-symbol "FOO" ph)
+          (and
+           sym1
+           (eqt (symbol-package sym1) ph)
+           (eqt access1 :internal)
+           (equal (list sym1) (package-shadowing-symbols ph))
+           (unintern sym1 ph)
+           (multiple-value-bind* (sym2 access2)
+               (find-symbol "FOO" ph)
+             (and (not (eqt sym1 sym2))
+                  (eqt access2 :inherited)
+                  (null (symbol-package sym1))
+                  (eqt (symbol-package sym2) pg)))))))
   t)
 
 ;; Error situation: when the symbol is uninterned, creates
@@ -172,31 +172,31 @@
     (safely-delete-package "G1")
     (safely-delete-package "G2")
     (let* ((pg1 (make-package "G1" :use nil))
-	   (pg2 (make-package "G2" :use nil))
-	   (ph (make-package "H" :use (list pg1 pg2))))
+           (pg2 (make-package "G2" :use nil))
+           (ph (make-package "H" :use (list pg1 pg2))))
       (handler-case
        (shadow "FOO" ph)
        (error (c) (return-from failed (list :shadow-error c))))
       (let ((gsym1 (intern "FOO" pg1))
-	    (gsym2 (intern "FOO" pg2)))
-	(export gsym1 pg1)
-	(export gsym2 pg2)
-	(multiple-value-bind* (sym1 access1)
-	    (find-symbol "FOO" ph)
-	  (and
-	   (equal (list sym1) (package-shadowing-symbols ph))
-	   (not (eqt sym1 gsym1))
-	   (not (eqt sym1 gsym2))
-	   (eqt (symbol-package sym1) ph)
-	   (eqt access1 :internal)
-	   (equal (symbol-name sym1) "FOO")
-	   (handler-case
-	    (progn
-	      (unintern sym1 ph)
-	      nil)
-	    (error (c) 
-		   (format t "Properly threw an error: ~S~%" c)
-		   t)))))))
+            (gsym2 (intern "FOO" pg2)))
+        (export gsym1 pg1)
+        (export gsym2 pg2)
+        (multiple-value-bind* (sym1 access1)
+            (find-symbol "FOO" ph)
+          (and
+           (equal (list sym1) (package-shadowing-symbols ph))
+           (not (eqt sym1 gsym1))
+           (not (eqt sym1 gsym2))
+           (eqt (symbol-package sym1) ph)
+           (eqt access1 :internal)
+           (equal (symbol-name sym1) "FOO")
+           (handler-case
+            (progn
+              (unintern sym1 ph)
+              nil)
+            (error (c)
+                   (format t "Properly threw an error: ~S~%" c)
+                   t)))))))
   t)
 
 ;; Now, inherit the same symbol through two intermediate
@@ -209,31 +209,31 @@
     (safely-delete-package "G2")
     (safely-delete-package "G3")
     (let* ((pg3 (make-package "G3" :use nil))
-	   (pg1 (make-package "G1" :use (list pg3)))
-	   (pg2 (make-package "G2" :use (list pg3)))
-	   (ph  (make-package "H"  :use (list pg1 pg2))))
+           (pg1 (make-package "G1" :use (list pg3)))
+           (pg2 (make-package "G2" :use (list pg3)))
+           (ph  (make-package "H"  :use (list pg1 pg2))))
       (handler-case
        (shadow "FOO" ph)
        (error (c) (return-from failed (list :shadow-error c))))
       (let ((gsym (intern "FOO" pg3)))
-	(export gsym pg3)
-	(export gsym pg1)
-	(export gsym pg2)
-	(multiple-value-bind* (sym access)
-	    (find-symbol "FOO" ph)
-	  (and
-	   (equal (list sym) (package-shadowing-symbols ph))
-	   (not (eqt sym gsym))
-	   (equal (symbol-name sym) "FOO")
-	   (equal (symbol-package sym) ph)
-	   (eqt access :internal)
-	   (handler-case
-	    (and (unintern sym ph)
-		 (multiple-value-bind* (sym2 access2)
-		     (find-symbol "FOO" ph)
-		   (and (eqt gsym sym2)
-			(eqt access2 :inherited))))
-	    (error (c) c)))))))
+        (export gsym pg3)
+        (export gsym pg1)
+        (export gsym pg2)
+        (multiple-value-bind* (sym access)
+            (find-symbol "FOO" ph)
+          (and
+           (equal (list sym) (package-shadowing-symbols ph))
+           (not (eqt sym gsym))
+           (equal (symbol-name sym) "FOO")
+           (equal (symbol-package sym) ph)
+           (eqt access :internal)
+           (handler-case
+            (and (unintern sym ph)
+                 (multiple-value-bind* (sym2 access2)
+                     (find-symbol "FOO" ph)
+                   (and (eqt gsym sym2)
+                        (eqt access2 :inherited))))
+            (error (c) c)))))))
   t)
 
 ;;; Specialized sequence tests
@@ -243,17 +243,17 @@
      (let ((name ,name-form))
        (safely-delete-package name)
        (prog1
-	   (let ((p (make-package name :use nil)))
-	     (intern "FOO" p)
-	     (multiple-value-bind*
-	      (sym access)
-	      (find-symbol "FOO" p)
-	      (and
-	       (eqt access :internal)
-	       (unintern sym name)
-	       (null (symbol-package sym))
-	       (not (find-symbol "FOO" p)))))
-	 (safely-delete-package name)))
+           (let ((p (make-package name :use nil)))
+             (intern "FOO" p)
+             (multiple-value-bind*
+              (sym access)
+              (find-symbol "FOO" p)
+              (and
+               (eqt access :internal)
+               (unintern sym name)
+               (null (symbol-package sym))
+               (not (find-symbol "FOO" p)))))
+         (safely-delete-package name)))
      t))
 
 (def-unintern-test unintern.10
@@ -261,35 +261,35 @@
 
 (def-unintern-test unintern.11
   (make-array 10 :initial-contents "TEST1ABCDE"
-	      :fill-pointer 5 :element-type 'base-char))
+              :fill-pointer 5 :element-type 'base-char))
 
 (def-unintern-test unintern.12
   (make-array 10 :initial-contents "TEST1ABCDE"
-	      :fill-pointer 5 :element-type 'character))
+              :fill-pointer 5 :element-type 'character))
 
 (def-unintern-test unintern.13
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t :element-type 'base-char))
+              :adjustable t :element-type 'base-char))
 
 (def-unintern-test unintern.14
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t :element-type 'character))
+              :adjustable t :element-type 'character))
 
 (def-unintern-test unintern.15
   (let* ((etype 'base-char)
-	 (name0 (make-array 10 :element-type etype
-			    :initial-contents "xxxxxTEST1")))
+         (name0 (make-array 10 :element-type etype
+                            :initial-contents "xxxxxTEST1")))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 5)))
+                :displaced-to name0
+                :displaced-index-offset 5)))
 
 (def-unintern-test unintern.16
   (let* ((etype 'character)
-	 (name0 (make-array 10 :element-type etype
-			    :initial-contents "xxxxxTEST1")))
+         (name0 (make-array 10 :element-type etype
+                            :initial-contents "xxxxxTEST1")))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 5)))
+                :displaced-to name0
+                :displaced-index-offset 5)))
 
 
 (deftest unintern.error.1

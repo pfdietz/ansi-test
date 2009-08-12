@@ -29,7 +29,7 @@
 
 (deftest array-total-size.6
   (macrolet ((%m (z) z))
-	    (array-total-size (expand-in-current-env (%m #(a b c)))))
+            (array-total-size (expand-in-current-env (%m #(a b c)))))
   3)
 
 (deftest array-total-size.order.1

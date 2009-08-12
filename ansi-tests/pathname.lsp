@@ -7,7 +7,7 @@
 
 (deftest pathname.1
   (loop for x in *pathnames*
-	always (eq x (pathname x)))
+        always (eq x (pathname x)))
   t)
 
 (deftest pathname.2
@@ -28,53 +28,53 @@
 
 (deftest pathname.5
   (loop for x in *logical-pathnames*
-	always (eq x (pathname x)))
+        always (eq x (pathname x)))
   t)
 
 (deftest pathname.6
   (equalt #p"ansi-aux.lsp"
-	  (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
-				:element-type 'base-char)))
+          (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
+                                :element-type 'base-char)))
   t)
 
 (deftest pathname.7
   (equalt #p"ansi-aux.lsp"
-	  (pathname (make-array 15 :initial-contents "ansi-aux.lspXXX"
-				:element-type 'base-char
-				:fill-pointer 12)))
+          (pathname (make-array 15 :initial-contents "ansi-aux.lspXXX"
+                                :element-type 'base-char
+                                :fill-pointer 12)))
   t)
 
 (deftest pathname.8
   (equalt #p"ansi-aux.lsp"
-	  (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
-				:element-type 'base-char
-				:adjustable t)))
+          (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
+                                :element-type 'base-char
+                                :adjustable t)))
   t)
 
 (deftest pathname.9
   (equalt #p"ansi-aux.lsp"
-	  (pathname (make-array 15 :initial-contents "ansi-aux.lspXXX"
-				:element-type 'character
-				:fill-pointer 12)))
+          (pathname (make-array 15 :initial-contents "ansi-aux.lspXXX"
+                                :element-type 'character
+                                :fill-pointer 12)))
   t)
 
 (deftest pathname.10
   (equalt #p"ansi-aux.lsp"
-	  (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
-				:element-type 'character
-				:adjustable t)))
+          (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
+                                :element-type 'character
+                                :adjustable t)))
   t)
 
 (deftest pathname.11
   (loop for etype in '(standard-char base-char character)
-	collect
-	(equalt #p"ansi-aux.lsp"
-		(pathname
-		 (let* ((s (make-array 15 :initial-contents "XXansi-aux.lspX"
-				       :element-type etype)))
-		   (make-array 12 :element-type etype
-			       :displaced-to s
-			       :displaced-index-offset 2)))))
+        collect
+        (equalt #p"ansi-aux.lsp"
+                (pathname
+                 (let* ((s (make-array 15 :initial-contents "XXansi-aux.lspX"
+                                       :element-type etype)))
+                   (make-array 12 :element-type etype
+                               :displaced-to s
+                               :displaced-index-offset 2)))))
   (t t t))
 
 ;;; Error tests

@@ -10,20 +10,20 @@
 ;; Try copy-tree on a tree containing elements of various kinds
 (deftest copy-tree.1
   (let* ((x (cons 'a (list
-		     (cons 'b 'c)
-		     (cons 1 1.2)
-		     (list (list "abcde"
-				 (make-array '(10) :initial-element
-					     (cons 'e 'f)))
-				'g))))
-	 (y (copy-tree x)))
+                     (cons 'b 'c)
+                     (cons 1 1.2)
+                     (list (list "abcde"
+                                 (make-array '(10) :initial-element
+                                             (cons 'e 'f)))
+                                'g))))
+         (y (copy-tree x)))
     (check-cons-copy x y))
   t)
 
 ;; Try copy-tree on *universe*
 (deftest copy-tree.2
   (let* ((x (copy-list *universe*))
-	 (y (copy-tree x)))
+         (y (copy-tree x)))
     (check-cons-copy x y))
   t)
 

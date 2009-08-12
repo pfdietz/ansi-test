@@ -15,13 +15,13 @@
 
 (deftest input-stream-p.3
   (with-open-file (s "input-stream-p.lsp" :direction :input)
-		  (notnot-mv (input-stream-p s)))
+                  (notnot-mv (input-stream-p s)))
   t)
 
 (deftest input-stream-p.4
   (with-open-file (s "foo.txt" :direction :output
-		     :if-exists :supersede)
-		  (input-stream-p s))
+                     :if-exists :supersede)
+                  (input-stream-p s))
   nil)
 
 ;;; Error tests
@@ -32,7 +32,7 @@
 
 (deftest input-stream-p.error.2
   (signals-error (input-stream-p *standard-input* nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest input-stream-p.error.3

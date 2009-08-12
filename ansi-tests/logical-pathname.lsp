@@ -7,7 +7,7 @@
 
 (deftest logical-pathname.1
   (loop for x in *logical-pathnames*
-	always (eql x (logical-pathname x)))
+        always (eql x (logical-pathname x)))
   t)
 
 (deftest logical-pathname.2
@@ -18,11 +18,11 @@
   (let ((name "CLTEST:TEMP.DAT.NEWEST"))
     (with-open-file
      (s (logical-pathname name)
-	:direction :output
-	:if-exists :supersede
-	:if-does-not-exist :create)
+        :direction :output
+        :if-exists :supersede
+        :if-does-not-exist :create)
      (or (equalt (logical-pathname s) (logical-pathname name))
-	 (list (logical-pathname s) (logical-pathname name)))))
+         (list (logical-pathname s) (logical-pathname name)))))
   t)
 
 
@@ -30,7 +30,7 @@
 
 (deftest logical-pathname.error.1
   (check-type-error #'logical-pathname
-		    (typef '(or string stream logical-pathname)))
+                    (typef '(or string stream logical-pathname)))
   nil)
 
 (deftest logical-pathname.error.2
@@ -41,7 +41,7 @@
 (deftest logical-pathname.error.3
   (signals-error
    (with-open-file (s #p"logical-pathname.lsp" :direction :input)
-		   (logical-pathname s))
+                   (logical-pathname s))
    type-error)
   t)
 
@@ -79,7 +79,7 @@
 
 (deftest logical-pathname.error.8
   (signals-error (with-open-stream (s (make-string-input-stream "foo"))
-				   (logical-pathname s)) type-error)
+                                   (logical-pathname s)) type-error)
   t)
 
 (deftest logical-pathname.error.9

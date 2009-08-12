@@ -44,23 +44,23 @@
 
 (deftest incf.6
   (loop for x from 1 to 5
-	collect (let ((y x))
-		  (list (incf y) y)))
+        collect (let ((y x))
+                  (list (incf y) y)))
   ((2 2) (3 3) (4 4) (5 5) (6 6)))
 
 (deftest incf.7
   (loop for x in '(1.0s0 1.0f0 1.0d0 1.0l0)
-	collect (let ((y x))
-		  (list (incf y) y)))
+        collect (let ((y x))
+                  (list (incf y) y)))
   ((2.0s0 2.0s0) (2.0f0 2.0f0) (2.0d0 2.0d0) (2.0l0 2.0l0)))
 
 (deftest incf.8
   (loop for x in '(1.0s0 1.0f0 1.0d0 1.0f0)
-	for y = (complex x 0)
-	for z = (incf y)
-	for x1c = (complex (1+ x) 0)
-	unless (and (eql y z) (eql x1c y))
-	collect (list x y z x1c))
+        for y = (complex x 0)
+        for z = (incf y)
+        for x1c = (complex (1+ x) 0)
+        unless (and (eql y z) (eql x1c y))
+        collect (list x y z x1c))
   nil)
 
 (deftest incf.9
@@ -75,31 +75,31 @@
 
 (deftest incf.11
   (loop for x in *numbers*
-	unless (let* ((y x)
-		      (z (incf y)))
-		 (and (eql y (1+ x))
-		      (eql y z)))
-	collect x)
+        unless (let* ((y x)
+                      (z (incf y)))
+                 (and (eql y (1+ x))
+                      (eql y z)))
+        collect x)
   nil)
 
 ;;; Increment by other than 1
 
 (deftest incf.12
   (loop for x in *numbers*
-	unless (let* ((y x) (z (incf y 0)))
-		 (and (eql x y) (eql y z)))
-	collect x)
+        unless (let* ((y x) (z (incf y 0)))
+                 (and (eql x y) (eql y z)))
+        collect x)
   nil)
 
 (deftest incf.13
   (loop for x in *numbers*
-	nconc
-	(loop for r = (random-from-interval 1000000)
-	      repeat 100
-	      when (let* ((y x) (z (incf y r)))
-			(and (not (and (eql (+ x r) y) (eql y z)))
-			     (list x y r)))
-	      collect it))
+        nconc
+        (loop for r = (random-from-interval 1000000)
+              repeat 100
+              when (let* ((y x) (z (incf y r)))
+                        (and (not (and (eql (+ x r) y) (eql y z)))
+                             (list x y r)))
+              collect it))
   nil)
 
 (deftest incf.14
@@ -165,20 +165,20 @@
 
 (deftest incf.order.2
   (let ((a (vector 1 2 3 4))
-	(i 0) x y z)
+        (i 0) x y z)
     (values
      (incf (aref (progn (setf x (incf i)) a)
-		 (progn (setf y (incf i)) 0))
-	   (progn (setf z (incf i)) 17))
+                 (progn (setf y (incf i)) 0))
+           (progn (setf z (incf i)) 17))
      i x y z a))
   18 3 1 2 3 #(18 2 3 4))
 
 (deftest incf.order.3
   (let ((a (vector 10 2 3 4))
-	(i 0) x y)
+        (i 0) x y)
     (values
      (incf (aref (progn (setf x (incf i)) a)
-		 (progn (setf y (incf i)) 0)))
+                 (progn (setf y (incf i)) 0)))
      i x y a))
   11 2 1 2 #(11 2 3 4))
 

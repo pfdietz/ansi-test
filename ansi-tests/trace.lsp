@@ -10,8 +10,8 @@
 (defun (setf function-to-trace) (val arg) (setf (car arg) val))
 
 (declaim (notinline function-to-trace
-		    another-function-to-trace
-		    (setf function-to-trace)))
+                    another-function-to-trace
+                    (setf function-to-trace)))
 
 (deftest trace.1
   (progn
@@ -25,8 +25,8 @@
   (progn
     (trace function-to-trace)
     (equal "" (with-output-to-string
-		(*trace-output*)
-		(assert (eql (function-to-trace '(b)) 'b)))))
+                (*trace-output*)
+                (assert (eql (function-to-trace '(b)) 'b)))))
   nil)
 
 (deftest trace.3
@@ -44,7 +44,7 @@
     (untrace)
     (trace function-to-trace)
     (handler-bind ((warning #'muffle-warning))
-		  (trace function-to-trace))
+                  (trace function-to-trace))
     (prog1 (trace)
       (untrace)
       (assert (null (trace)))))
@@ -64,7 +64,7 @@
     (untrace)
     (trace (setf function-to-trace))
     (handler-bind ((warning #'muffle-warning))
-		  (trace (setf function-to-trace)))
+                  (trace (setf function-to-trace)))
     (prog1 (trace)
       (untrace)
       (assert (null (trace)))))
@@ -76,8 +76,8 @@
     (with-output-to-string
       (*trace-output*)
       (let ((x (list nil)))
-	(assert (eql (setf (function-to-trace x) 'a) 'a))
-	(assert (equal x '(a))))))
+        (assert (eql (setf (function-to-trace x) 'a) 'a))
+        (assert (equal x '(a))))))
   "")
 
 (deftest trace.8
@@ -85,11 +85,11 @@
     (untrace)
     (trace (setf function-to-trace))
     (equal ""
-	   (with-output-to-string
-	     (*trace-output*)
-	     (let ((x (list nil)))
-	       (assert (eql (setf (function-to-trace x) 'a) 'a))
-	       (assert (equal x '(a)))))))
+           (with-output-to-string
+             (*trace-output*)
+             (let ((x (list nil)))
+               (assert (eql (setf (function-to-trace x) 'a) 'a))
+               (assert (equal x '(a)))))))
   nil)
 
 (deftest trace.9
@@ -97,16 +97,16 @@
     (untrace)
     (trace function-to-trace another-function-to-trace)
     (assert (not (equal "" (with-output-to-string
-			     (*trace-output*)
-			     (assert (eql (function-to-trace '(b)) 'b))))))
+                             (*trace-output*)
+                             (assert (eql (function-to-trace '(b)) 'b))))))
     (assert (not (equal "" (with-output-to-string
-			     (*trace-output*)
-			     (assert (eql (another-function-to-trace '(c . d))
-					  'd))))))
+                             (*trace-output*)
+                             (assert (eql (another-function-to-trace '(c . d))
+                                          'd))))))
     (prog1
-	(sort (copy-list (trace))
-	      #'(lambda (k1 k2) (string< (symbol-name k1)
-					 (symbol-name k2))))
+        (sort (copy-list (trace))
+              #'(lambda (k1 k2) (string< (symbol-name k1)
+                                         (symbol-name k2))))
       (untrace)))
   (another-function-to-trace function-to-trace))
 
@@ -158,11 +158,11 @@
     (trace generic-function-to-trace)
     (eval '(defmethod generic-function-to-trace ((x t)(y t)) nil))
     (assert (not (equal (with-output-to-string
-			  (*trace-output*)
-			  (assert (null (generic-function-to-trace 'a 'b))))
-			"")))
+                          (*trace-output*)
+                          (assert (null (generic-function-to-trace 'a 'b))))
+                        "")))
     (prog1
-	(trace)
+        (trace)
       (untrace generic-function-to-trace)
       (assert (null (trace)))))
   (generic-function-to-trace))
@@ -173,11 +173,11 @@
   (progn
     (untrace)
     (let* ((gf (eval '(defgeneric generic-function-to-trace2 (x y))))
-	   (m (eval '(defmethod generic-function-to-trace2
-		       ((x integer)(y integer))
-		       :foo))))
+           (m (eval '(defmethod generic-function-to-trace2
+                       ((x integer)(y integer))
+                       :foo))))
       (eval '(defmethod generic-function-to-trace2
-	       ((x symbol)(y symbol)) :bar))
+               ((x symbol)(y symbol)) :bar))
       (assert (eql (generic-function-to-trace2 1 2) :foo))
       (assert (eql (generic-function-to-trace2 'a 'b) :bar))
       (trace generic-function-to-trace2)

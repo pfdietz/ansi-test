@@ -14,25 +14,25 @@
 
 (deftest get-universal-time.2
   (let* ((time1 (get-universal-time))
-	 (vals (multiple-value-list (get-decoded-time)))
-	 (time2 (get-universal-time)))
+         (vals (multiple-value-list (get-decoded-time)))
+         (time2 (get-universal-time)))
     (when (= time1 time2)
       (let ((vals2 (multiple-value-list (decode-universal-time time1))))
-	(assert (= (length vals) 9))
-	(assert (= (length vals2) 9))
-	(assert (equal (subseq vals 0 7)
-		       (subseq vals2 0 7)))
-	(assert (if (elt vals 7) (elt vals2 7) (not (elt vals2 7))))
-	(assert (= (elt vals 8) (elt vals2 8)))))
+        (assert (= (length vals) 9))
+        (assert (= (length vals2) 9))
+        (assert (equal (subseq vals 0 7)
+                       (subseq vals2 0 7)))
+        (assert (if (elt vals 7) (elt vals2 7) (not (elt vals2 7))))
+        (assert (= (elt vals 8) (elt vals2 8)))))
     (values)))
 
 (deftest get-universal-time.3
   (let* ((first (get-universal-time))
-	 (prev first))
+         (prev first))
     (loop for time = (get-universal-time)
-	  do (assert (>= time prev))
-	  do (setf prev time)
-	  until (>= time (+ 5 first))))
+          do (assert (>= time prev))
+          do (setf prev time)
+          until (>= time (+ 5 first))))
   nil)
 
 ;;; Error tests
@@ -55,5 +55,5 @@
 
 
 
-	       
+
 

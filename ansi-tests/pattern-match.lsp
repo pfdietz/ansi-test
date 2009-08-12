@@ -9,22 +9,22 @@
   (cond
    ((consp pattern)
     (let ((pcar (car pattern))
-	  (pcdr (cdr pattern))
-	  (v (gensym)))
+          (pcdr (cdr pattern))
+          (v (gensym)))
       (case pcar
-	((:or)
-	 `(let ((,v ,form)) (or ,@(mapcar (lambda (sub) `(pmatch ,sub ,v))
-					  pcdr))))
-	((:and)
-	 `(let ((,v ,form)) (and ,@(mapcar (lambda (sub) `(pmatch ,sub ,v))
-					   pcdr))))
-	((:not)
-	 (assert (eql (length pcdr) 1))
-	 `(not (pmatch ,(car pcdr) ,form)))
-	(t
-	 `(let ((,v ,form))
-	    (and (pmatch ,pcar (car ,v))
-		 (pmatch ,pcdr (cdr ,v))))))))
+        ((:or)
+         `(let ((,v ,form)) (or ,@(mapcar (lambda (sub) `(pmatch ,sub ,v))
+                                          pcdr))))
+        ((:and)
+         `(let ((,v ,form)) (and ,@(mapcar (lambda (sub) `(pmatch ,sub ,v))
+                                           pcdr))))
+        ((:not)
+         (assert (eql (length pcdr) 1))
+         `(not (pmatch ,(car pcdr) ,form)))
+        (t
+         `(let ((,v ,form))
+            (and (pmatch ,pcar (car ,v))
+                 (pmatch ,pcdr (cdr ,v))))))))
    ((eql pattern '_) t)
    ((null pattern)
     `(null ,form))
@@ -35,34 +35,34 @@
 
 (defmacro matchcase (form &body cases)
   (let* ((v (gensym))
-	 (cond-cases
-	  (mapcar
-	   #'(lambda (case)
-	       (assert (consp case))
-	       (let ((pattern (car case))
-		     (body (cdr case)))
-		 `((pmatch ,pattern ,v) ,@body)))
-	   cases)))
+         (cond-cases
+          (mapcar
+           #'(lambda (case)
+               (assert (consp case))
+               (let ((pattern (car case))
+                     (body (cdr case)))
+                 `((pmatch ,pattern ,v) ,@body)))
+           cases)))
     `(let ((,v ,form))
        (cond ,@cond-cases))))
 
 (defmacro matchcase* (form &body cases)
   (let* ((block-name (gensym "DONE"))
-	 (v (gensym)))
+         (v (gensym)))
     `(block ,block-name
        (let ((,v ,form))
-	 (cond
-	  ,@(mapcar
-	     #'(lambda (case)
-		 (assert (consp case))
-		 (let ((pat (car case))
-		       (forms (cdr case))
-		       (fail-name (gensym "FAIL")))
-		   `((block ,fail-name
-		       (and (pmatch ,pat ,v)
-			    (macrolet ((fail () '(return-from ,fail-name nil)))
-			      (return-from ,block-name
-				(progn ,@forms))))))))
-	     cases))))))
+         (cond
+          ,@(mapcar
+             #'(lambda (case)
+                 (assert (consp case))
+                 (let ((pat (car case))
+                       (forms (cdr case))
+                       (fail-name (gensym "FAIL")))
+                   `((block ,fail-name
+                       (and (pmatch ,pat ,v)
+                            (macrolet ((fail () '(return-from ,fail-name nil)))
+                              (return-from ,block-name
+                                (progn ,@forms))))))))
+             cases))))))
 
-		
+

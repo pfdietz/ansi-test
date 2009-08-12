@@ -22,8 +22,8 @@
      (with-output-to-string
        (*standard-output*)
        (setq result
-	     (multiple-value-list
-	      (write-line (make-array '(0) :element-type nil)))))
+             (multiple-value-list
+              (write-line (make-array '(0) :element-type nil)))))
      result))
   #.(string #\Newline)
   (""))
@@ -54,7 +54,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-line "abcde" s :start 1 :end 3))))
+                     (write-line "abcde" s :start 1 :end 3))))
      result))
   #.(concatenate 'string "bc" (string #\Newline))
   ("abcde"))
@@ -65,7 +65,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-line "abcde" s :start 1 :end nil))))
+                     (write-line "abcde" s :start 1 :end nil))))
      result))
   #.(concatenate 'string "bcde" (string #\Newline))
   ("abcde"))
@@ -86,7 +86,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-line "abcde" s :end 3 :allow-other-keys nil))))
+                     (write-line "abcde" s :end 3 :allow-other-keys nil))))
      result))
   #.(concatenate 'string "abc" (string #\Newline))
   ("abcde"))
@@ -97,8 +97,8 @@
      (with-output-to-string
        (s)
        (setq result
-	     (multiple-value-list
-	      (write-line "abcde" s :end 3 :allow-other-keys t :foo 'bar))))
+             (multiple-value-list
+              (write-line "abcde" s :end 3 :allow-other-keys t :foo 'bar))))
      result))
   #.(concatenate 'string "abc" (string #\Newline))
   ("abcde"))
@@ -109,7 +109,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-line "abcde" s :end 3 :end 2))))
+                     (write-line "abcde" s :end 3 :end 2))))
      result))
   #.(concatenate 'string "abc" (string #\Newline))
   ("abcde"))
@@ -136,10 +136,10 @@
   (do-special-strings
    (s "abcde" nil)
    (assert (equal
-	    (with-output-to-string
-	      (*standard-output*)
-	      (multiple-value-list (write-line "abcde")))
-	    #.(concatenate 'string "abcde" (string #\Newline)))))
+            (with-output-to-string
+              (*standard-output*)
+              (multiple-value-list (write-line "abcde")))
+            #.(concatenate 'string "abcde" (string #\Newline)))))
   nil)
 
 ;;; Error tests
@@ -158,8 +158,8 @@
 
 (deftest write-line.error.4
   (signals-error (write-line "" *standard-output*
-			       :allow-other-keys nil
-			       :foo nil)
-		 program-error)
+                               :allow-other-keys nil
+                               :foo nil)
+                 program-error)
   t)
 

@@ -27,7 +27,7 @@
 
 (deftest position-if-not-list.6
   (position-if-not #'oddp '(1 3 1 4 3 2 1 8 9) :start 4
-	       :from-end t)
+               :from-end t)
   7)
 
 (deftest position-if-not-list.7
@@ -40,10 +40,10 @@
 
 (deftest position-if-not-list.9
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'oddp '(1 3 1 4 3 2 1 8 9) :start i :end j)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'oddp '(1 3 1 4 3 2 1 8 9) :start i :end j)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -56,11 +56,11 @@
 
 (deftest position-if-not-list.10
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'oddp '(1 3 1 4 3 2 1 8 9) :start i :end j
-			   :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'oddp '(1 3 1 4 3 2 1 8 9) :start i :end j
+                           :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -73,11 +73,11 @@
 
 (deftest position-if-not-list.11
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evenp '(1 3 1 4 3 2 1 8 9) :start i :end j
-			   :key '1+)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evenp '(1 3 1 4 3 2 1 8 9) :start i :end j
+                           :key '1+)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -90,11 +90,11 @@
 
 (deftest position-if-not-list.12
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evenp '(1 3 1 4 3 2 1 8 9) :start i :end j
-			   :key #'1+ :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evenp '(1 3 1 4 3 2 1 8 9) :start i :end j
+                           :key #'1+ :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -129,7 +129,7 @@
 
 (deftest position-if-not-vector.6
   (position-if-not #'oddp #(1 3 1 4 3 2 1 8 9) :start 4
-	       :from-end t)
+               :from-end t)
   7)
 
 (deftest position-if-not-vector.7
@@ -142,10 +142,10 @@
 
 (deftest position-if-not-vector.9
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'oddp #(1 3 1 4 3 2 1 8 9) :start i :end j)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'oddp #(1 3 1 4 3 2 1 8 9) :start i :end j)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -158,11 +158,11 @@
 
 (deftest position-if-not-vector.10
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'oddp #(1 3 1 4 3 2 1 8 9) :start i :end j
-			   :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'oddp #(1 3 1 4 3 2 1 8 9) :start i :end j
+                           :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -175,11 +175,11 @@
 
 (deftest position-if-not-vector.11
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evenp #(1 3 1 4 3 2 1 8 9) :start i :end j
-			   :key '1+)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evenp #(1 3 1 4 3 2 1 8 9) :start i :end j
+                           :key '1+)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -192,11 +192,11 @@
 
 (deftest position-if-not-vector.12
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evenp #(1 3 1 4 3 2 1 8 9) :start i :end j
-			   :key #'1+ :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evenp #(1 3 1 4 3 2 1 8 9) :start i :end j
+                           :key #'1+ :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -209,7 +209,7 @@
 
 (deftest position-if-not-vector.13
   (let ((a (make-array '(10) :initial-contents '(1 2 3 4 5 a b c d e)
-		       :fill-pointer 5)))
+                       :fill-pointer 5)))
     (values
      (position-if-not #'numberp a)
      (position-if-not #'symbolp a)
@@ -219,10 +219,10 @@
 
 (deftest position-if-not-vector.14
   (let* ((v1 #(x x x a b 1 d a b 2 d y y y y y))
-	 (v2 (make-array '(8) :displaced-to v1
-			:displaced-index-offset 3)))
+         (v2 (make-array '(8) :displaced-to v1
+                        :displaced-index-offset 3)))
     (values (position-if-not #'symbolp v2)
-	    (position-if-not #'symbolp v2 :from-end t)))
+            (position-if-not #'symbolp v2 :from-end t)))
   2 6)
 
 ;;; Bit vector tests
@@ -249,7 +249,7 @@
 
 (deftest position-if-not-bit-vector.6
   (position-if-not #'oddp #*111010101 :start 4
-	       :from-end t)
+               :from-end t)
   7)
 
 (deftest position-if-not-bit-vector.7
@@ -262,10 +262,10 @@
 
 (deftest position-if-not-bit-vector.9
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'oddp #*111010101 :start i :end j)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'oddp #*111010101 :start i :end j)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -278,11 +278,11 @@
 
 (deftest position-if-not-bit-vector.10
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'oddp #*111010101 :start i :end j
-			   :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'oddp #*111010101 :start i :end j
+                           :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -295,11 +295,11 @@
 
 (deftest position-if-not-bit-vector.11
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evenp #*111010101 :start i :end j
-			   :key #'1+)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evenp #*111010101 :start i :end j
+                           :key #'1+)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -312,11 +312,11 @@
 
 (deftest position-if-not-bit-vector.12
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evenp #*111010101 :start i :end j
-			   :key '1+ :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evenp #*111010101 :start i :end j
+                           :key '1+ :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -329,14 +329,14 @@
 
 (deftest position-if-not-bit-vector.13
   (let ((a (make-array '(10) :initial-contents '(1 1 1 1 1 0 0 0 0 0)
-		       :fill-pointer 5
-		       :element-type 'bit)))
+                       :fill-pointer 5
+                       :element-type 'bit)))
     (values
      (position-if-not #'zerop a)
      (position-if-not (complement #'zerop) a)
      (position-if-not #'zerop a :from-end t)
      (position-if-not (complement #'zerop) a :from-end t)))
-  0 nil 4 nil)  
+  0 nil 4 nil)
 
 ;;; string tests
 
@@ -362,7 +362,7 @@
 
 (deftest position-if-not-string.6
   (position-if-not #'odddigitp "131432189" :start 4
-	       :from-end t)
+               :from-end t)
   7)
 
 (deftest position-if-not-string.7
@@ -375,10 +375,10 @@
 
 (deftest position-if-not-string.9
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'odddigitp "131432189" :start i :end j)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'odddigitp "131432189" :start i :end j)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -391,11 +391,11 @@
 
 (deftest position-if-not-string.10
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'odddigitp "131432189" :start i :end j
-			   :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'odddigitp "131432189" :start i :end j
+                           :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -408,11 +408,11 @@
 
 (deftest position-if-not-string.11
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evendigitp "131432183" :start i :end j
-			   :key #'nextdigit)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evendigitp "131432183" :start i :end j
+                           :key #'nextdigit)))
   ((nil nil nil 3 3 3 3 3 3)
    (nil nil 3 3 3 3 3 3)
    (nil 3 3 3 3 3 3)
@@ -425,11 +425,11 @@
 
 (deftest position-if-not-string.12
   (loop for i from 0 to 8
-	collect
-	(loop for j from (1+ i) to 9
-	      collect
-	      (position-if-not #'evendigitp "131432183" :start i :end j
-			   :key 'nextdigit :from-end t)))
+        collect
+        (loop for j from (1+ i) to 9
+              collect
+              (position-if-not #'evendigitp "131432183" :start i :end j
+                           :key 'nextdigit :from-end t)))
   ((nil nil nil 3 3 5 5 7 7)
    (nil nil 3 3 5 5 7 7)
    (nil 3 3 5 5 7 7)
@@ -442,14 +442,14 @@
 
 (deftest position-if-not-string.13
   (let ((a (make-array '(10) :initial-contents "55555aaaaa"
-		       :fill-pointer 5
-		       :element-type 'character)))
+                       :fill-pointer 5
+                       :element-type 'character)))
     (and (stringp a)
-	 (values
-	  (position-if-not #'digit-char-p a)
-	  (position-if-not (complement #'digit-char-p) a)
-	  (position-if-not #'digit-char-p a :from-end t)
-	  (position-if-not (complement #'digit-char-p) a :from-end t))))
+         (values
+          (position-if-not #'digit-char-p a)
+          (position-if-not (complement #'digit-char-p) a)
+          (position-if-not #'digit-char-p a :from-end t)
+          (position-if-not (complement #'digit-char-p) a :from-end t))))
   nil 0 nil 4)
 
 (deftest position-if-not-string.14
@@ -520,17 +520,17 @@
 
 (deftest position-if-not.allow-other-keys.7
   (position-if-not #'zerop '(0 0 1 2 3 0) :bad t :allow-other-keys t
-	       :allow-other-keys nil)
+               :allow-other-keys nil)
   2)
 
 (deftest position-if-not.allow-other-keys.8
   (position-if-not #'zerop '(0 0 1 2 3 0) :allow-other-keys t :bad t
-	       :allow-other-keys nil)
+               :allow-other-keys nil)
   2)
 
 (deftest position-if-not.allow-other-keys.9
   (position-if-not #'zerop '(0 0 1 2 3 0) :allow-other-keys t
-	       :allow-other-keys nil :bad t)
+               :allow-other-keys nil :bad t)
   2)
 
 

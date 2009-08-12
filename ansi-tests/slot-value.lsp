@@ -34,17 +34,17 @@
 
 (deftest slot-value.1
   (let ((obj (make-instance 'slot-value-class-01))
-	(slot-names *slot-value-test-slot-names*)
-	(slot-values *slot-value-test-slot-values*))
+        (slot-names *slot-value-test-slot-names*)
+        (slot-values *slot-value-test-slot-values*))
     (loop for name in slot-names
-	  for val in slot-values
-	  unless (and (equal (multiple-value-list
-			      (setf (slot-value obj name) val))
-			     (list val))
-		      (equal (multiple-value-list
-			      (slot-value obj name))
-			     (list val)))
-	  collect name))
+          for val in slot-values
+          unless (and (equal (multiple-value-list
+                              (setf (slot-value obj name) val))
+                             (list val))
+                      (equal (multiple-value-list
+                              (slot-value obj name))
+                             (list val)))
+          collect name))
   nil)
 
 (defclass slot-value-class-02 (slot-value-class-01)
@@ -66,38 +66,38 @@
 
 (deftest slot-value.2
   (let ((obj (make-instance 'slot-value-class-02))
-	(slot-names *slot-value-test-slot-names*)
-	(slot-values *slot-value-test-slot-values*))
+        (slot-names *slot-value-test-slot-names*)
+        (slot-values *slot-value-test-slot-values*))
     (loop for name in slot-names
-	  for val in slot-values
-	  unless (and (equal (multiple-value-list
-			      (setf (slot-value obj name) val))
-			     (list val))
-		      (equal (multiple-value-list
-			      (slot-value obj name))
-			     (list val)))
-	  collect name))
+          for val in slot-values
+          unless (and (equal (multiple-value-list
+                              (setf (slot-value obj name) val))
+                             (list val))
+                      (equal (multiple-value-list
+                              (slot-value obj name))
+                             (list val)))
+          collect name))
   nil)
 
 ;;; Order of evaluation test(s)
 
 (deftest slot-value.order.1
   (let ((obj (make-instance 'slot-value-class-01))
-	(i 0) x y)
+        (i 0) x y)
     (values
      (setf (slot-value obj 'a) t)
      (slot-value (progn (setf x (incf i)) obj)
-		 (progn (setf y (incf i)) 'a))
+                 (progn (setf y (incf i)) 'a))
      i x y))
   t t 2 1 2)
 
 (deftest slot-value.order.2
   (let ((obj (make-instance 'slot-value-class-01))
-	(i 0) x y)
+        (i 0) x y)
     (values
      (setf (slot-value (progn (setf x (incf i)) obj)
-		       (progn (setf y (incf i)) 'b))
-	   t)
+                       (progn (setf y (incf i)) 'b))
+           t)
      (slot-value obj 'b)
      i x y))
   t t 2 1 2)
@@ -110,7 +110,7 @@
 
 (deftest slot-value.error.2
   (signals-error (slot-value (make-instance 'slot-value-class-01))
-		 program-error)
+                 program-error)
   t)
 
 (deftest slot-value.error.3
@@ -124,28 +124,28 @@
 (deftest slot-value.error.4
   (handler-case
    (progn (slot-value (make-instance 'slot-value-class-01) (gensym))
-	  :bad)
+          :bad)
    (error () :good))
   :good)
 
 (deftest slot-value.error.5
   (let ((built-in-class (find-class 'built-in-class))
-	(slot-name (gensym)))
+        (slot-name (gensym)))
     (check-predicate
      #'(lambda (e)
-	 (let ((class (class-of e)))
-	   (or (not (eq (class-of class) built-in-class))
-	       (handler-case (progn (slot-value e slot-name) nil)
-			     (error () t)))))))
+         (let ((class (class-of e)))
+           (or (not (eq (class-of class) built-in-class))
+               (handler-case (progn (slot-value e slot-name) nil)
+                             (error () t)))))))
   nil)
 
 (deftest slot-value.error.6
   (let ((built-in-class (find-class 'built-in-class))
-	(slot-name (gensym)))
+        (slot-name (gensym)))
     (check-predicate
      #'(lambda (e)
-	 (let ((class (class-of e)))
-	   (or (not (eq (class-of class) built-in-class))
-	       (handler-case (setf (slot-value e slot-name) nil)
-				  (error () t)))))))
+         (let ((class (class-of e)))
+           (or (not (eq (class-of class) built-in-class))
+               (handler-case (setf (slot-value e slot-name) nil)
+                                  (error () t)))))))
   nil)

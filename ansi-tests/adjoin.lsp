@@ -55,35 +55,35 @@
 
 (deftest adjoin.12
   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	  :test-not (complement #'equal))
+          :test-not (complement #'equal))
   (aaa "AAA" "aaa" #\a))
 
 (deftest adjoin.14
   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	  :test #'equal :key #'identity)
+          :test #'equal :key #'identity)
   (aaa "AAA" "aaa" #\a))
 
 (deftest adjoin.15
   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	  :test 'equal :key #'identity)
+          :test 'equal :key #'identity)
   (aaa "AAA" "aaa" #\a))
 
 ;; Test that a :key of NIL is the same as no key at all
 (deftest adjoin.16
   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	  :test #'equal :key nil)
+          :test #'equal :key nil)
   (aaa "AAA" "aaa" #\a))
 
 ;; Test that a :key of NIL is the same as no key at all
 (deftest adjoin.17
   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	  :test 'equal :key nil)
+          :test 'equal :key nil)
   (aaa "AAA" "aaa" #\a))
 
 ;; Test that a :key of NIL is the same as no key at all
 (deftest adjoin.18
   (adjoin (copy-seq "aaa") '(aaa "AAA" "aaa" #\a)
-	  :test-not (complement #'equal) :key nil)
+          :test-not (complement #'equal) :key nil)
   (aaa "AAA" "aaa" #\a))
 
 ;;; Ordering in comparison function
@@ -113,15 +113,15 @@
 
 (deftest adjoin.24
   (macrolet ((%m (z) z))
-	    (values
-	     (adjoin (expand-in-current-env (%m 'a)) '(b c))
-	     (adjoin 'a (expand-in-current-env (%m '(b c))))
-	     (adjoin 'a '(b c) (expand-in-current-env (%m :test)) 'eql)
-	     (adjoin 'a '(a a) (expand-in-current-env (%m :test-not)) 'eql)
-	     (adjoin 'a '(b c) :test (expand-in-current-env (%m 'eql)))
-	     (adjoin 'a '(b c) :test (expand-in-current-env (%m #'eql)))
-	     (adjoin 1 '(1 2 3) :key (expand-in-current-env (%m 'identity)))
-	     ))
+            (values
+             (adjoin (expand-in-current-env (%m 'a)) '(b c))
+             (adjoin 'a (expand-in-current-env (%m '(b c))))
+             (adjoin 'a '(b c) (expand-in-current-env (%m :test)) 'eql)
+             (adjoin 'a '(a a) (expand-in-current-env (%m :test-not)) 'eql)
+             (adjoin 'a '(b c) :test (expand-in-current-env (%m 'eql)))
+             (adjoin 'a '(b c) :test (expand-in-current-env (%m #'eql)))
+             (adjoin 1 '(1 2 3) :key (expand-in-current-env (%m 'identity)))
+             ))
   (a b c)
   (a b c)
   (a b c)
@@ -140,9 +140,9 @@
   (let ((i 0) w x y z)
     (values
      (adjoin (progn (setf w (incf i)) 'a)
-	     (progn (setf x (incf i)) '(b c d a e))
-	     :key (progn (setf y (incf i)) #'identity)
-	     :test (progn (setf z (incf i)) #'eql))
+             (progn (setf x (incf i)) '(b c d a e))
+             :key (progn (setf y (incf i)) #'identity)
+             :test (progn (setf z (incf i)) #'eql))
      i w x y z))
   (b c d a e)
   4 1 2 3 4)
@@ -151,10 +151,10 @@
   (let ((i 0) w x y z p)
     (values
      (adjoin (progn (setf w (incf i)) 'a)
-	     (progn (setf x (incf i)) '(b c d e))
-	     :test-not (progn (setf y (incf i)) (complement #'eql))
-	     :key (progn (setf z (incf i)) #'identity)
-	     :key (progn (setf p (incf i)) nil))
+             (progn (setf x (incf i)) '(b c d e))
+             :test-not (progn (setf y (incf i)) (complement #'eql))
+             :key (progn (setf z (incf i)) #'identity)
+             :key (progn (setf p (incf i)) nil))
      i w x y z p))
   (a b c d e)
   5 1 2 3 4 5)

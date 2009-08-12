@@ -17,13 +17,13 @@
 
 (deftest subst-if-not.2
   (check-subst-if-not 'a (complement #'listp)
-		      '((100 1) (2 3) (4 3 2 1) (a b c)))
+                      '((100 1) (2 3) (4 3 2 1) (a b c)))
   a)
 
 (deftest subst-if-not.3
   (check-subst-if-not 'c #'identity
-		      '((100 1) (2 3) (4 3 2 1) (a b c))
-		      :key (complement #'listp))
+                      '((100 1) (2 3) (4 3 2 1) (a b c))
+                      :key (complement #'listp))
   c)
 
 (deftest subst-if-not.4
@@ -32,14 +32,14 @@
    #'(lambda (x) (not (eql x 17)))
    '((17) (17 22) (17 22 31) (17 21 34 54))
    :key #'(lambda (x)
-	    (and (consp x)
-		 (car x))))
+            (and (consp x)
+                 (car x))))
   (40 40 40 40))
 
 (deftest subst-if-not.5
   (check-subst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
-		      '((a) (b) (c) (d))
-		      :key nil)
+                      '((a) (b) (c) (d))
+                      :key nil)
   ((a) (a) (c) (d)))
 
 (deftest subst-if-not.7
@@ -55,7 +55,7 @@
   4 1 2 3 4)
 
 (def-fold-test subst-if-not.fold.1 (subst-if-not 'a #'consp '((1 . 2) 3 . 4)))
-  
+
 ;;; Keywords tests for subst-if-not
 
 (deftest subst-if-not.allow-other-keys.1
@@ -76,7 +76,7 @@
 
 (deftest subst-if-not.allow-other-keys.5
   (subst-if-not 'a #'identity nil :allow-other-keys t
-		:allow-other-keys nil :bad t)
+                :allow-other-keys nil :bad t)
   a)
 
 (deftest subst-if-not.keywords.6
@@ -111,7 +111,7 @@
 
 (deftest subst-if-not.error.7
   (signals-error (subst-if-not 'a #'null nil
-				:bad t :allow-other-keys nil) program-error)
+                                :bad t :allow-other-keys nil) program-error)
   t)
 
 (deftest subst-if-not.error.8

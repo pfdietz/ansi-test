@@ -25,30 +25,30 @@
 
 (deftest print.complex.random.1
   (loop for numbits = (random 40)
-	for bound = (ash 1 numbits)
-	for r = (- (random (+ bound bound)) bound)
-	for i = (- (random (+ bound bound)) bound)
-	repeat 1000
-	unless (= i 0)
-	nconc (randomly-check-readability (complex r i)))
+        for bound = (ash 1 numbits)
+        for r = (- (random (+ bound bound)) bound)
+        for i = (- (random (+ bound bound)) bound)
+        repeat 1000
+        unless (= i 0)
+        nconc (randomly-check-readability (complex r i)))
   nil)
 
 (deftest print.complex.random.2
   (loop for numbits = (random 40)
-	for bound = (ash 1 numbits)
-	for num1 = (- (random (+ bound bound)) bound)
-	for num2 = (- (random (+ bound bound)) bound)
-	for denom1 = (1+ (random bound))
-	for denom2 = (1+ (random bound))
-	for r = (/ num1 denom1)
-	for i = (/ num2 denom2)
-	repeat 1000
-	unless (= i 0)
-	nconc (randomly-check-readability (complex r i)))
+        for bound = (ash 1 numbits)
+        for num1 = (- (random (+ bound bound)) bound)
+        for num2 = (- (random (+ bound bound)) bound)
+        for denom1 = (1+ (random bound))
+        for denom2 = (1+ (random bound))
+        for r = (/ num1 denom1)
+        for i = (/ num2 denom2)
+        repeat 1000
+        unless (= i 0)
+        nconc (randomly-check-readability (complex r i)))
   nil)
 
 ;; General floating point complex printing tests will go here
-		
+
 
 
 

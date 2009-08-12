@@ -26,7 +26,7 @@
 (deftest constantp.2
   (notnot-mv (constantp t))
   t)
-  
+
 (deftest constantp.3
   (notnot-mv (constantp nil))
   t)
@@ -47,7 +47,7 @@
 (deftest constantp.6
   (constantp-macro constantp-test-symbol)
   t)
-  
+
 (deftest constantp.7
   (constantp '(incf x))
   nil)
@@ -68,15 +68,15 @@
 
 (deftest constantp.11
   (macrolet ((macro-for-constantp.11 (y)
-	       (declare (ignore y))
-	       '*standard-input*))
+               (declare (ignore y))
+               '*standard-input*))
     (macrolet ((%m (&environment env)
-		 (if (constantp '(macro-for-constantp.11 0) env)
-		     :bad
-		     :good)))
+                 (if (constantp '(macro-for-constantp.11 0) env)
+                     :bad
+                     :good)))
       (%m)))
   :good)
-    
+
 
 (deftest constantp.order.1
   (let ((i 0))
@@ -89,9 +89,9 @@
   (let ((i 0) x y)
     (values
      (notnot (constantp (progn (setf x (incf i)) 1)
-			(progn (setf y (incf i)) nil)))
+                        (progn (setf y (incf i)) nil)))
      i x y))
   t 2 1 2)
 
-  
+
 

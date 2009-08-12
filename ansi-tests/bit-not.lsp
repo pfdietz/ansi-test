@@ -9,7 +9,7 @@
   (let ((a1 (make-array nil :element-type 'bit :initial-element 0)))
     (values (bit-not a1) a1))
   #0a1 #0a0)
-     
+
 (deftest bit-not.2
   (let ((a1 (make-array nil :element-type 'bit :initial-element 1)))
     (values (bit-not a1) a1))
@@ -19,7 +19,7 @@
   (let ((a1 (make-array nil :element-type 'bit :initial-element 0)))
     (values (bit-not a1 t) a1))
   #0a1 #0a1)
-     
+
 (deftest bit-not.4
   (let ((a1 (make-array nil :element-type 'bit :initial-element 1)))
     (values (bit-not a1 t) a1))
@@ -27,8 +27,8 @@
 
 (deftest bit-not.5
   (let* ((a1 (make-array nil :element-type 'bit :initial-element 1))
-	 (a2 (make-array nil :element-type 'bit :initial-element 1))
-	 (result (bit-not a1 a2)))
+         (a2 (make-array nil :element-type 'bit :initial-element 1))
+         (result (bit-not a1 a2)))
     (values a1 a2 (eqt a2 result)))
   #0a1 #0a0 t)
 
@@ -53,7 +53,7 @@
 
 (deftest bit-not.9
   (let ((a1 (copy-seq #*0011010110))
-	(a2 (copy-seq #*0000000000)))
+        (a2 (copy-seq #*0000000000)))
     (values (bit-not a1 a2) a1 a2))
   #*1100101001
   #*0011010110
@@ -63,30 +63,30 @@
 
 (deftest bit-not.10
   (let ((a1 (make-array '(2 2) :element-type 'bit
-			:initial-contents '((0 1)(1 0)))))
+                        :initial-contents '((0 1)(1 0)))))
     (values (bit-not a1) a1))
   #2a((1 0)(0 1))
   #2a((0 1)(1 0)))
 
 (deftest bit-not.11
   (let ((a1 (make-array '(2 2) :element-type 'bit
-			:initial-contents '((0 1)(1 0)))))
+                        :initial-contents '((0 1)(1 0)))))
     (values (bit-not a1 nil) a1))
   #2a((1 0)(0 1))
   #2a((0 1)(1 0)))
 
 (deftest bit-not.12
   (let ((a1 (make-array '(2 2) :element-type 'bit
-			:initial-contents '((0 1)(1 0)))))
+                        :initial-contents '((0 1)(1 0)))))
     (values (bit-not a1 t) a1))
   #2a((1 0)(0 1))
   #2a((1 0)(0 1)))
 
 (deftest bit-not.13
   (let ((a1 (make-array '(2 2) :element-type 'bit
-			:initial-contents '((0 1)(1 0))))
-	(a2 (make-array '(2 2) :element-type 'bit
-			:initial-element 0)))
+                        :initial-contents '((0 1)(1 0))))
+        (a2 (make-array '(2 2) :element-type 'bit
+                        :initial-element 0)))
     (values (bit-not a1 a2) a1 a2))
   #2a((1 0)(0 1))
   #2a((0 1)(1 0))
@@ -96,8 +96,8 @@
 
 (deftest bit-not.14
   (let ((a1 (make-array '(2 2) :element-type 'bit
-			:adjustable t
-			:initial-contents '((0 1)(1 0)))))
+                        :adjustable t
+                        :initial-contents '((0 1)(1 0)))))
     (values (bit-not a1) a1))
   #2a((1 0)(0 1))
   #2a((0 1)(1 0)))
@@ -106,13 +106,13 @@
 
 (deftest bit-not.15
   (let* ((a0 (make-array '(12) :element-type 'bit
-			 :initial-contents '(0 0 0 1 1 0 0 0 0 0 0 0)))
-	 (a1 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 2))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 6)))
+                         :initial-contents '(0 0 0 1 1 0 0 0 0 0 0 0)))
+         (a1 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 2))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 6)))
     (values (bit-not a1 a2) a0 a1 a2))
   #2a((1 0)(0 1))
   #*000110100100
@@ -137,7 +137,7 @@
 
 (deftest bit-not.order.1
   (let ((a (copy-seq #*001101))
-	(i 0) x)
+        (i 0) x)
     (values
      (bit-not (progn (setf x (incf i)) a))
      i x))

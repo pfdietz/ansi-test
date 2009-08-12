@@ -9,17 +9,17 @@
   (let ((pkg "CL-TEST-APROPOS-LIST-PACKAGE"))
     (safely-delete-package pkg)
     (unwind-protect
-	(progn
-	  (eval `(defpackage ,pkg (:use)))
-	  (let* ((sym (intern "FOO" pkg)))
-	    (loop for p in (list pkg (find-package pkg) (make-symbol pkg))
-		  nconc
-		  (loop for string-designator in
-			'("F" "O" #\F #\O "" "FOO" "FO"
-			  "OO" :|F| :|FO| :|FOO| :|O| :|OO|)
-			for result = (apropos-list string-designator p)
-			unless (equal result (list sym))
-			collect (list string-designator result)))))
+        (progn
+          (eval `(defpackage ,pkg (:use)))
+          (let* ((sym (intern "FOO" pkg)))
+            (loop for p in (list pkg (find-package pkg) (make-symbol pkg))
+                  nconc
+                  (loop for string-designator in
+                        '("F" "O" #\F #\O "" "FOO" "FO"
+                          "OO" :|F| :|FO| :|FOO| :|O| :|OO|)
+                        for result = (apropos-list string-designator p)
+                        unless (equal result (list sym))
+                        collect (list string-designator result)))))
       (safely-delete-package pkg)))
   nil)
 
@@ -27,15 +27,15 @@
   (let ((pkg #\A))
     (safely-delete-package pkg)
     (unwind-protect
-	(progn
-	  (eval `(defpackage ,pkg (:use)))
-	  (let* ((sym (intern "FOO" pkg)))
-	    (loop for string-designator in
-		  '("F" "O" #\F #\O "" "FOO" "FO"
-		    "OO" :|F| :|FO| :|FOO| :|O| :|OO|)
-		  for result = (apropos-list string-designator pkg)
-		  unless (equal result (list sym))
-		  collect (list string-designator result))))
+        (progn
+          (eval `(defpackage ,pkg (:use)))
+          (let* ((sym (intern "FOO" pkg)))
+            (loop for string-designator in
+                  '("F" "O" #\F #\O "" "FOO" "FO"
+                    "OO" :|F| :|FO| :|FOO| :|O| :|OO|)
+                  for result = (apropos-list string-designator pkg)
+                  unless (equal result (list sym))
+                  collect (list string-designator result))))
       (safely-delete-package pkg)))
   nil)
 
@@ -43,34 +43,34 @@
   (let ((pkg "CL-TEST-APROPOS-LIST-PACKAGE"))
     (safely-delete-package pkg)
     (unwind-protect
-	(progn
-	  (eval `(defpackage ,pkg (:use)))
-	  (intern "FOO" pkg)
-	  (apropos-list "X" pkg))
+        (progn
+          (eval `(defpackage ,pkg (:use)))
+          (intern "FOO" pkg)
+          (apropos-list "X" pkg))
       (safely-delete-package pkg)))
   nil)
 
 (deftest apropos-list.4
   (let ((sym :|X|)
-	(symbols (apropos-list "X")))
+        (symbols (apropos-list "X")))
     (notnot (member sym symbols)))
   t)
 
 (deftest apropos-list.5
   (let ((sym :|X|)
-	(symbols (apropos-list '#:|X|)))
+        (symbols (apropos-list '#:|X|)))
     (notnot (member sym symbols)))
   t)
 
 (deftest apropos-list.6
   (let ((sym :|X|)
-	(symbols (apropos-list #\X)))
+        (symbols (apropos-list #\X)))
     (notnot (member sym symbols)))
   t)
 
 (deftest apropos-list.7
   (let ((sym :|X|)
-	(symbols (apropos-list "X" nil)))
+        (symbols (apropos-list "X" nil)))
     (notnot (member sym symbols)))
   t)
 
@@ -79,15 +79,15 @@
     (macrolet
      ((%m (z) z))
      (intersection '(car)
-		   (apropos-list (expand-in-current-env (%m "CAR"))))))
+                   (apropos-list (expand-in-current-env (%m "CAR"))))))
   (car))
 
 (deftest apropos-list.9
   (macrolet
    ((%m (z) z))
    (intersection '(car)
-		 (apropos-list "CAR" (expand-in-current-env
-				      (%m (find-package "COMMON-LISP"))))))
+                 (apropos-list "CAR" (expand-in-current-env
+                                      (%m (find-package "COMMON-LISP"))))))
   (car))
 
 ;;; Error tests

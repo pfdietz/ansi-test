@@ -40,9 +40,9 @@
   (let ((x 0))
     (values
      (cond (nil (incf x) 'a)
-	   (nil (incf x 10) 'b)
-	   (t (incf x 2) 'c)
-	   (t (incf x 100) 'd))
+           (nil (incf x 10) 'b)
+           (t (incf x 2) 'c)
+           (t (incf x 100) 'd))
      x))
   c 2)
 
@@ -75,8 +75,8 @@
   (block done
     (tagbody
      (cond (t (go 10)
-	      10
-	      (return-from done 'bad)))
+              10
+              (return-from done 'bad)))
      10
      (return-from done 'good)))
   good)
@@ -88,31 +88,31 @@
   (macrolet
    ((%m (z) z))
    (cond ((expand-in-current-env (%m nil)) :bad)
-	 (t :good)))
+         (t :good)))
   :good)
 
 (deftest cond.17
   (macrolet
    ((%m (z) z))
    (cond (nil :bad1)
-	 ((expand-in-current-env (%m :good)))
-	 (t :bad2)))
+         ((expand-in-current-env (%m :good)))
+         (t :bad2)))
   :good)
 
 ;;; Error tests
 
 (deftest cond.error.1
   (signals-error (funcall (macro-function 'cond))
-		 program-error)
+                 program-error)
   t)
 
 (deftest cond.error.2
   (signals-error (funcall (macro-function 'cond) '(cond))
-		 program-error)
+                 program-error)
   t)
 
 (deftest cond.error.3
   (signals-error (funcall (macro-function 'cond) '(cond) nil nil)
-		 program-error)
+                 program-error)
   t)
 

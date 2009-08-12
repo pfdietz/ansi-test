@@ -7,23 +7,23 @@
 
 (deftest open-stream-p.1
   (loop for s in (list *debug-io* *error-output* *query-io*
-		       *standard-input* *standard-output*
-		       *trace-output* *terminal-io*)
-	for results = (multiple-value-list (open-stream-p s))
-	unless (and (eql (length results) 1)
-		    (car results))
-	collect s)
+                       *standard-input* *standard-output*
+                       *trace-output* *terminal-io*)
+        for results = (multiple-value-list (open-stream-p s))
+        unless (and (eql (length results) 1)
+                    (car results))
+        collect s)
   nil)
 
 (deftest open-stream-p.2
   (with-open-file (s "open-stream-p.lsp" :direction :input)
-		  (notnot-mv (open-stream-p s)))
+                  (notnot-mv (open-stream-p s)))
   t)
 
 (deftest open-stream-p.3
   (with-open-file (s "foo.txt" :direction :output
-		     :if-exists :supersede)
-		  (notnot-mv (open-stream-p s)))
+                     :if-exists :supersede)
+                  (notnot-mv (open-stream-p s)))
   t)
 
 (deftest open-stream-p.4
@@ -34,7 +34,7 @@
 
 (deftest open-stream-p.5
   (let ((s (open "foo.txt" :direction :output
-		 :if-exists :supersede)))
+                 :if-exists :supersede)))
     (close s)
     (open-stream-p s))
   nil)

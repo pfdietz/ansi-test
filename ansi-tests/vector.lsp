@@ -180,15 +180,15 @@
 (deftest vector.type.41
   (notnot-mv (typep (make-array '10 :element-type 'short-float) 'vector))
   t)
-  
+
 (deftest vector.type.42
   (notnot-mv (typep (make-array '10 :element-type 'single-float) 'vector))
   t)
-  
+
 (deftest vector.type.43
   (notnot-mv (typep (make-array '10 :element-type 'double-float) 'vector))
   t)
-  
+
 (deftest vector.type.44
   (notnot-mv (typep (make-array '10 :element-type 'long-float) 'vector))
   t)
@@ -203,23 +203,23 @@
 (deftest vector-as-class.2
   (notnot-mv (typep #() (find-class 'vector)))
   t)
-  
+
 (deftest vector-as-class.3
   (notnot-mv (typep #(a b c) (find-class 'vector)))
   t)
-  
+
 (deftest vector-as-class.4
   (notnot-mv (typep "" (find-class 'vector)))
   t)
-  
+
 (deftest vector-as-class.5
   (notnot-mv (typep "abcd" (find-class 'vector)))
   t)
-  
+
 (deftest vector-as-class.6
   (notnot-mv (typep #* (find-class 'vector)))
   t)
-  
+
 (deftest vector-as-class.7
   (notnot-mv (typep #*01101010100 (find-class 'vector)))
   t)
@@ -280,8 +280,8 @@
 
 (deftest vector.3
   (let* ((len (min 1000 (1- call-arguments-limit)))
-	 (args (make-int-list len))
-	 (v (apply #'vector args)))
+         (args (make-int-list len))
+         (v (apply #'vector args)))
     (and
      (typep v '(vector t))
      (typep v '(vector t *))
@@ -290,27 +290,27 @@
      (typep v `(simple-vector ,len))
      (eql (length v) len)
      (loop for i from 0
-	   for e across v
-	   always (eql i e))
+           for e across v
+           always (eql i e))
      t))
   t)
 
 (deftest vector.4
   (notnot-mv (typep (vector) '(vector t 0)))
   t)
-  
+
 (deftest vector.5
   (notnot-mv (typep (vector) 'simple-vector))
   t)
-  
+
 (deftest vector.6
   (notnot-mv (typep (vector) '(simple-vector 0)))
   t)
-  
+
 (deftest vector.7
   (notnot-mv (typep (vector 1 2 3) 'simple-vector))
   t)
-  
+
 (deftest vector.8
   (notnot-mv (typep (vector 1 2 3) '(simple-vector 3)))
   t)

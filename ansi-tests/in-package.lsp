@@ -15,7 +15,7 @@
     (make-package "H" :use ())
     (let ((p2 (in-package "H")))
       (and (eqt p2 (find-package "H"))
-	   (eqt *package* p2))))
+           (eqt *package* p2))))
   t)
 
 (deftest in-package.2
@@ -24,7 +24,7 @@
     (make-package "H" :use ())
     (let ((p2 (in-package |H|)))
       (and (eqt p2 (find-package "H"))
-	   (eqt *package* p2))))
+           (eqt *package* p2))))
   t)
 
 (deftest in-package.3
@@ -33,7 +33,7 @@
     (make-package "H" :use ())
     (let ((p2 (in-package :|H|)))
       (and (eqt p2 (find-package "H"))
-	   (eqt *package* p2))))
+           (eqt *package* p2))))
   t)
 
 (deftest in-package.4
@@ -42,7 +42,7 @@
     (make-package "H" :use ())
     (let ((p2 (in-package #\H)))
       (and (eqt p2 (find-package "H"))
-	   (eqt *package* p2))))
+           (eqt *package* p2))))
   t)
 
 (deftest in-package.5
@@ -62,12 +62,12 @@
      (let ((name ,name-form))
        (safely-delete-package name)
        (prog1
-	   (let* ((p (make-package name :use nil))
-		  (*package* *package*)
-		  (p2 (eval `(in-package ,name))))
-	     (list (eqt p p2)
-		   (eqt p *package*)))
-	 (safely-delete-package name)))
+           (let* ((p (make-package name :use nil))
+                  (*package* *package*)
+                  (p2 (eval `(in-package ,name))))
+             (list (eqt p p2)
+                   (eqt p *package*)))
+         (safely-delete-package name)))
      (t t)))
 
 (def-in-package-test in-package.7
@@ -75,32 +75,32 @@
 
 (def-in-package-test in-package.8
   (make-array 10 :initial-contents "TEST1ABCDE"
-	      :fill-pointer 5 :element-type 'base-char))
+              :fill-pointer 5 :element-type 'base-char))
 
 (def-in-package-test in-package.9
   (make-array 10 :initial-contents "TEST1ABCDE"
-	      :fill-pointer 5 :element-type 'character))
+              :fill-pointer 5 :element-type 'character))
 
 (def-in-package-test in-package.10
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t :element-type 'base-char))
+              :adjustable t :element-type 'base-char))
 
 (def-in-package-test in-package.11
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t :element-type 'character))
+              :adjustable t :element-type 'character))
 
 (def-in-package-test in-package.12
   (let* ((etype 'base-char)
-	 (name0 (make-array 10 :element-type etype
-			    :initial-contents "xxxxxTEST1")))
+         (name0 (make-array 10 :element-type etype
+                            :initial-contents "xxxxxTEST1")))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 5)))
+                :displaced-to name0
+                :displaced-index-offset 5)))
 
 (def-in-package-test in-package.13
   (let* ((etype 'character)
-	 (name0 (make-array 10 :element-type etype
-			    :initial-contents "xxxxxTEST1")))
+         (name0 (make-array 10 :element-type etype
+                            :initial-contents "xxxxxTEST1")))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 5)))
+                :displaced-to name0
+                :displaced-index-offset 5)))

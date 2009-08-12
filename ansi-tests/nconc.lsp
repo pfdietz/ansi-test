@@ -21,13 +21,13 @@
 
 (deftest nconc.4
   (let ((x (list 'a 'b 'c))
-	(y (list 'd 'e 'f)))
+        (y (list 'd 'e 'f)))
     (let ((ycopy (make-scaffold-copy y)))
       (let ((result (nconc x y)))
-	(and
-	 (check-scaffold-copy y ycopy)
-	 (eqt (cdddr x) y)
-	 result))))
+        (and
+         (check-scaffold-copy y ycopy)
+         (eqt (cdddr x) y)
+         result))))
   (a b c d e f))
 
 (deftest nconc.5
@@ -40,8 +40,8 @@
 
 (deftest nconc.6
   (let ((x (list 'a 'b 'c))
-	(y (list 'd 'e 'f 'g 'h))
-	(z (list 'i 'j 'k)))
+        (y (list 'd 'e 'f 'g 'h))
+        (z (list 'i 'j 'k)))
     (let ((result (nconc x y z 'foo)))
       (and
        (eqt (nthcdr 3 x) y)
@@ -52,17 +52,17 @@
 
 (deftest nconc.7
   (nconc (copy-tree '(a . b))
-	 (copy-tree '(c . d))
-	 (copy-tree '(e . f))
-	 'foo)
+         (copy-tree '(c . d))
+         (copy-tree '(e . f))
+         'foo)
   (a c e . foo))
 
 (deftest nconc.order.1
   (let ((i 0) x y z)
     (values
      (nconc (progn (setf x (incf i)) (copy-list '(a b c)))
-	    (progn (setf y (incf i)) (copy-list '(d e f)))
-	    (progn (setf z (incf i)) (copy-list '(g h i))))
+            (progn (setf y (incf i)) (copy-list '(d e f)))
+            (progn (setf z (incf i)) (copy-list '(g h i))))
      i x y z))
   (a b c d e f g h i) 3 1 2 3)
 

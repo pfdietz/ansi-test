@@ -10,7 +10,7 @@
    (loop
     for p1 in *pathnames*
     for s = (handler-case (write-to-string p1 :readably t)
-			  (print-not-readable () :unreadable-error))
+                          (print-not-readable () :unreadable-error))
     unless (eql s :unreadable-error)
     append
     (let ((p2 (read-from-string s)))

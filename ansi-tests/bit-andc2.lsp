@@ -9,7 +9,7 @@
 
 (deftest bit-andc2.1
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))
-	 (s2 (make-array nil :initial-element 0 :element-type 'bit)))
+         (s2 (make-array nil :initial-element 0 :element-type 'bit)))
     (values (bit-andc2 s1 s2) s1 s2))
   #0a0
   #0a0
@@ -17,7 +17,7 @@
 
 (deftest bit-andc2.2
   (let* ((s1 (make-array nil :initial-element 1 :element-type 'bit))
-	 (s2 (make-array nil :initial-element 0 :element-type 'bit)))
+         (s2 (make-array nil :initial-element 0 :element-type 'bit)))
     (values (bit-andc2 s1 s2) s1 s2))
   #0a1
   #0a1
@@ -25,7 +25,7 @@
 
 (deftest bit-andc2.3
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))
-	 (s2 (make-array nil :initial-element 1 :element-type 'bit)))
+         (s2 (make-array nil :initial-element 1 :element-type 'bit)))
     (values (bit-andc2 s1 s2) s1 s2))
   #0a0
   #0a0
@@ -33,7 +33,7 @@
 
 (deftest bit-andc2.4
   (let* ((s1 (make-array nil :initial-element 1 :element-type 'bit))
-	 (s2 (make-array nil :initial-element 1 :element-type 'bit)))
+         (s2 (make-array nil :initial-element 1 :element-type 'bit)))
     (values (bit-andc2 s1 s2) s1 s2))
   #0a0
   #0a1
@@ -41,9 +41,9 @@
 
 (deftest bit-andc2.5
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))
-	 (s2 (make-array nil :initial-element 0 :element-type 'bit))
-	 (s3 (make-array nil :initial-element 1 :element-type 'bit))
-	 (result (bit-andc2 s1 s2 s3)))
+         (s2 (make-array nil :initial-element 0 :element-type 'bit))
+         (s3 (make-array nil :initial-element 1 :element-type 'bit))
+         (result (bit-andc2 s1 s2 s3)))
     (values s1 s2 s3 result (eqt s3 result)))
   #0a0
   #0a0
@@ -53,9 +53,9 @@
 
 (deftest bit-andc2.6
   (let* ((s1 (make-array nil :initial-element 1 :element-type 'bit))
-	 (s2 (make-array nil :initial-element 0 :element-type 'bit))
-	 (s3 (make-array nil :initial-element 0 :element-type 'bit))
-	 (result (bit-andc2 s1 s2 s3)))
+         (s2 (make-array nil :initial-element 0 :element-type 'bit))
+         (s3 (make-array nil :initial-element 0 :element-type 'bit))
+         (result (bit-andc2 s1 s2 s3)))
     (values s1 s2 s3 result (eqt s3 result)))
   #0a1
   #0a0
@@ -65,8 +65,8 @@
 
 (deftest bit-andc2.7
   (let* ((s1 (make-array nil :initial-element 1 :element-type 'bit))
-	 (s2 (make-array nil :initial-element 1 :element-type 'bit))
-	 (result (bit-andc2 s1 s2 t)))
+         (s2 (make-array nil :initial-element 1 :element-type 'bit))
+         (result (bit-andc2 s1 s2 t)))
     (values s1 s2 result (eqt s1 result)))
   #0a0
   #0a1
@@ -78,28 +78,28 @@
 
 (deftest bit-andc2.8
   (let ((a1 (copy-seq #*0011))
-	(a2 (copy-seq #*0101)))
+        (a2 (copy-seq #*0101)))
     (values (check-values (bit-andc2 a1 a2)) a1 a2))
   #*0010 #*0011 #*0101)
 
 (deftest bit-andc2.9
   (let* ((a1 (copy-seq #*0011))
-	 (a2 (copy-seq #*0101))
-	 (result (check-values (bit-andc2 a1 a2 t))))
+         (a2 (copy-seq #*0101))
+         (result (check-values (bit-andc2 a1 a2 t))))
     (values result a1 a2 (eqt result a1)))
   #*0010 #*0010 #*0101 t)
 
 (deftest bit-andc2.10
   (let* ((a1 (copy-seq #*0011))
-	 (a2 (copy-seq #*0101))
-	 (a3 (copy-seq #*1110))
-	 (result (check-values (bit-andc2 a1 a2 a3))))
+         (a2 (copy-seq #*0101))
+         (a3 (copy-seq #*1110))
+         (result (check-values (bit-andc2 a1 a2 a3))))
     (values result a1 a2 a3 (eqt result a3)))
   #*0010 #*0011 #*0101 #*0010 t)
 
 (deftest bit-andc2.11
   (let ((a1 (copy-seq #*0011))
-	(a2 (copy-seq #*0101)))
+        (a2 (copy-seq #*0101)))
     (values (check-values (bit-andc2 a1 a2 nil)) a1 a2))
   #*0010 #*0011 #*0101)
 
@@ -107,10 +107,10 @@
 
 (deftest bit-andc2.12
   (let* ((a1 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 1)(0 1))))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 0)(1 1))))
-	 (result (bit-andc2 a1 a2)))
+                         :initial-contents '((0 1)(0 1))))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :initial-contents '((0 0)(1 1))))
+         (result (bit-andc2 a1 a2)))
     (values a1 a2 result))
   #2a((0 1)(0 1))
   #2a((0 0)(1 1))
@@ -118,10 +118,10 @@
 
 (deftest bit-andc2.13
   (let* ((a1 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 1)(0 1))))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 0)(1 1))))
-	 (result (bit-andc2 a1 a2 t)))
+                         :initial-contents '((0 1)(0 1))))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :initial-contents '((0 0)(1 1))))
+         (result (bit-andc2 a1 a2 t)))
     (values a1 a2 result))
   #2a((0 1)(0 0))
   #2a((0 0)(1 1))
@@ -129,10 +129,10 @@
 
 (deftest bit-andc2.14
   (let* ((a1 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 1)(0 1))))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 0)(1 1))))
-	 (result (bit-andc2 a1 a2 nil)))
+                         :initial-contents '((0 1)(0 1))))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :initial-contents '((0 0)(1 1))))
+         (result (bit-andc2 a1 a2 nil)))
     (values a1 a2 result))
   #2a((0 1)(0 1))
   #2a((0 0)(1 1))
@@ -140,12 +140,12 @@
 
 (deftest bit-andc2.15
   (let* ((a1 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 1)(0 1))))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 0)(1 1))))
-	 (a3 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 0)(0 0))))
-	 (result (bit-andc2 a1 a2 a3)))
+                         :initial-contents '((0 1)(0 1))))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :initial-contents '((0 0)(1 1))))
+         (a3 (make-array '(2 2) :element-type 'bit
+                         :initial-contents '((0 0)(0 0))))
+         (result (bit-andc2 a1 a2 a3)))
     (values a1 a2 a3 result))
   #2a((0 1)(0 1))
   #2a((0 0)(1 1))
@@ -156,12 +156,12 @@
 
 (deftest bit-andc2.16
   (let* ((a1 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 1)(0 1))
-			 :adjustable t))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :initial-contents '((0 0)(1 1))
-			 :adjustable t))
-	 (result (bit-andc2 a1 a2)))
+                         :initial-contents '((0 1)(0 1))
+                         :adjustable t))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :initial-contents '((0 0)(1 1))
+                         :adjustable t))
+         (result (bit-andc2 a1 a2)))
     (values a1 a2 result))
   #2a((0 1)(0 1))
   #2a((0 0)(1 1))
@@ -171,14 +171,14 @@
 
 (deftest bit-andc2.17
   (let* ((a0 (make-array '(8) :element-type 'bit
-			 :initial-contents '(0 1 0 1 0 0 1 1)))
-	 (a1 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 0))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 4))
-	 (result (bit-andc2 a1 a2)))
+                         :initial-contents '(0 1 0 1 0 0 1 1)))
+         (a1 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 0))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 4))
+         (result (bit-andc2 a1 a2)))
     (values a0 a1 a2 result))
   #*01010011
   #2a((0 1)(0 1))
@@ -187,14 +187,14 @@
 
 (deftest bit-andc2.18
   (let* ((a0 (make-array '(8) :element-type 'bit
-			 :initial-contents '(0 1 0 1 0 0 1 1)))
-	 (a1 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 0))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 4))
-	 (result (bit-andc2 a1 a2 t)))
+                         :initial-contents '(0 1 0 1 0 0 1 1)))
+         (a1 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 0))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 4))
+         (result (bit-andc2 a1 a2 t)))
     (values a0 a1 a2 result))
   #*01000011
   #2a((0 1)(0 0))
@@ -203,17 +203,17 @@
 
 (deftest bit-andc2.19
   (let* ((a0 (make-array '(12) :element-type 'bit
-			 :initial-contents '(0 1 0 1 0 0 1 1 1 1 1 0)))
-	 (a1 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 0))
-	 (a2 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 4))
-	 (a3 (make-array '(2 2) :element-type 'bit
-			 :displaced-to a0
-			 :displaced-index-offset 8))
-	 (result (bit-andc2 a1 a2 a3)))
+                         :initial-contents '(0 1 0 1 0 0 1 1 1 1 1 0)))
+         (a1 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 0))
+         (a2 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 4))
+         (a3 (make-array '(2 2) :element-type 'bit
+                         :displaced-to a0
+                         :displaced-index-offset 8))
+         (result (bit-andc2 a1 a2 a3)))
     (values a0 a1 a2 result))
   #*010100110100
   #2a((0 1)(0 1))
@@ -230,16 +230,16 @@
 
 (deftest bit-andc2.22
   (macrolet ((%m (z) z)) (bit-andc2 #*10100011 #*01101010
-				  (expand-in-current-env (%m nil))))
+                                  (expand-in-current-env (%m nil))))
   #*10000001)
 
 (deftest bit-andc2.order.1
   (let* ((s1 (make-array 1 :initial-element 0 :element-type 'bit))
-	 (s2 (make-array 1 :initial-element 0 :element-type 'bit))
-	 (x 0) y z)
+         (s2 (make-array 1 :initial-element 0 :element-type 'bit))
+         (x 0) y z)
     (values
      (bit-andc2 (progn (setf y (incf x)) s1)
-		(progn (setf z (incf x)) s2))
+                (progn (setf z (incf x)) s2))
      x y z))
   #*0 2 1 2)
 
@@ -263,6 +263,6 @@
 
 (deftest bit-andc2.error.3
   (signals-error (bit-andc2 #*000 #*0100 nil nil)
-		 program-error)
+                 program-error)
   t)
 

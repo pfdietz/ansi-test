@@ -7,12 +7,12 @@
 
 (deftest file-namestring.1
   (let* ((vals (multiple-value-list
-		(file-namestring "file-namestring.lsp")))
-	 (s (first vals)))
+                (file-namestring "file-namestring.lsp")))
+         (s (first vals)))
     (if (and (null (cdr vals))
-	     (stringp s)
-	     (equal (file-namestring s) s))
-	:good
+             (stringp s)
+             (equal (file-namestring s) s))
+        :good
       vals))
   :good)
 
@@ -26,10 +26,10 @@
 
 (deftest file-namestring.3
   (let* ((name "file-namestring.lsp")
-	 (pn (merge-pathnames (pathname name)))
-	 (name2 (with-open-file (s pn :direction :input)
-				(file-namestring s)))
-	 (name3 (file-namestring pn)))
+         (pn (merge-pathnames (pathname name)))
+         (name2 (with-open-file (s pn :direction :input)
+                                (file-namestring s)))
+         (name3 (file-namestring pn)))
     (or (equalt name2 name3) (list name2 name3)))
   t)
 

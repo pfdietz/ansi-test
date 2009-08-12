@@ -33,14 +33,14 @@
 
 (deftest string-downcase.6
   (let ((s (make-array 6 :element-type 'character
-		       :initial-contents '(#\A #\B #\C #\D #\E #\F))))
+                       :initial-contents '(#\A #\B #\C #\D #\E #\F))))
     (values (string-downcase s) s))
   "abcdef"
   "ABCDEF")
 
 (deftest string-downcase.7
   (let ((s (make-array 6 :element-type 'standard-char
-		       :initial-contents '(#\A #\B #\7 #\D #\E #\F))))
+                       :initial-contents '(#\A #\B #\7 #\D #\E #\F))))
     (values (string-downcase s) s))
   "ab7def"
   "AB7DEF")
@@ -51,7 +51,7 @@
   (let ((s "ABCDEF"))
     (values
      (loop for i from 0 to 6
-	   collect (string-downcase s :start i))
+           collect (string-downcase s :start i))
      s))
   ("abcdef" "Abcdef" "ABcdef" "ABCdef" "ABCDef" "ABCDEf" "ABCDEF")
   "ABCDEF")
@@ -60,7 +60,7 @@
   (let ((s "ABCDEF"))
     (values
      (loop for i from 0 to 6
-	   collect (string-downcase s :start i :end nil))
+           collect (string-downcase s :start i :end nil))
      s))
   ("abcdef" "Abcdef" "ABcdef" "ABCdef" "ABCDef" "ABCDEf" "ABCDEF")
   "ABCDEF")
@@ -69,9 +69,9 @@
   (let ((s "ABCDE"))
     (values
      (loop for i from 0 to 4
-	   collect (loop for j from i to 5
-			 collect (string-invertcase
-				  (string-downcase s :start i :end j))))
+           collect (loop for j from i to 5
+                         collect (string-invertcase
+                                  (string-downcase s :start i :end j))))
      s))
   (("abcde" "Abcde" "ABcde" "ABCde" "ABCDe" "ABCDE")
    ("abcde" "aBcde" "aBCde" "aBCDe" "aBCDE")
@@ -87,29 +87,29 @@
 
 (deftest string-downcase.12
   (loop for type in '(standard-char base-char character)
-	for s = (make-array '(10) :element-type type
-			    :fill-pointer 5
-			    :initial-contents "aB0cDefGHi")
-	collect (list s (string-downcase s)))
+        for s = (make-array '(10) :element-type type
+                            :fill-pointer 5
+                            :initial-contents "aB0cDefGHi")
+        collect (list s (string-downcase s)))
   (("aB0cD" "ab0cd") ("aB0cD" "ab0cd") ("aB0cD" "ab0cd")))
 
 
 (deftest string-downcase.13
   (loop for type in '(standard-char base-char character)
-	for s0 = (make-array '(10) :element-type type
-			     :initial-contents "zZaB0cDefG")
-	for s = (make-array '(5) :element-type type
-			    :displaced-to s0
-			    :displaced-index-offset 2)
-	collect (list s (string-downcase s)))
+        for s0 = (make-array '(10) :element-type type
+                             :initial-contents "zZaB0cDefG")
+        for s = (make-array '(5) :element-type type
+                            :displaced-to s0
+                            :displaced-index-offset 2)
+        collect (list s (string-downcase s)))
   (("aB0cD" "ab0cd") ("aB0cD" "ab0cd") ("aB0cD" "ab0cd")))
 
 (deftest string-downcase.14
   (loop for type in '(standard-char base-char character)
-	for s = (make-array '(5) :element-type type
-			    :adjustable t
-			    :initial-contents "aB0cD")
-	collect (list s (string-downcase s)))
+        for s = (make-array '(5) :element-type type
+                            :adjustable t
+                            :initial-contents "aB0cD")
+        collect (list s (string-downcase s)))
   (("aB0cD" "ab0cd") ("aB0cD" "ab0cd") ("aB0cD" "ab0cd")))
 
 ;;; Order of evaluation tests
@@ -152,7 +152,7 @@
 
 (deftest string-downcase.error.4
   (signals-error (string-downcase (copy-seq "abc") :bad t
-				      :allow-other-keys nil) program-error)
+                                      :allow-other-keys nil) program-error)
   t)
 
 (deftest string-downcase.error.5

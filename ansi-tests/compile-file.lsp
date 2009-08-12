@@ -6,62 +6,62 @@
 (in-package :cl-test)
 
 (defun compile-file-test (file funname &rest args &key
-			       expect-warnings 
-			       expect-style-warnings output-file
-			       (print nil print-p)
-			       (verbose nil verbose-p)
-			       (*compile-print* nil)
-			       (*compile-verbose* nil)
-			       external-format)
+                               expect-warnings
+                               expect-style-warnings output-file
+                               (print nil print-p)
+                               (verbose nil verbose-p)
+                               (*compile-print* nil)
+                               (*compile-verbose* nil)
+                               external-format)
   (declare (ignorable external-format))
   (let* ((target-pathname (or output-file
-			      (compile-file-pathname file)))
-	 (actual-warnings-p nil)
-	 (actual-style-warnings-p nil))
+                              (compile-file-pathname file)))
+         (actual-warnings-p nil)
+         (actual-style-warnings-p nil))
     (when (probe-file target-pathname)
       (delete-file target-pathname))
     (fmakunbound funname)
     (let* ((str (make-array '(0) :element-type 'character :adjustable t :fill-pointer 0))
-	   (vals (multiple-value-list
-		  (handler-bind
-		   ((style-warning #'(lambda (c)
-				       (declare (ignore c))
-				       (setf actual-style-warnings-p t)
-				       nil))
-		    ((or error warning)
-		     #'(lambda (c)
-			 (unless (typep c 'style-warning)
-			   (setf actual-warnings-p t))
-			 nil)))
-		   (with-output-to-string
-		     (*standard-output* str)
-		     (apply #'compile-file file :allow-other-keys t args))))))
+           (vals (multiple-value-list
+                  (handler-bind
+                   ((style-warning #'(lambda (c)
+                                       (declare (ignore c))
+                                       (setf actual-style-warnings-p t)
+                                       nil))
+                    ((or error warning)
+                     #'(lambda (c)
+                         (unless (typep c 'style-warning)
+                           (setf actual-warnings-p t))
+                         nil)))
+                   (with-output-to-string
+                     (*standard-output* str)
+                     (apply #'compile-file file :allow-other-keys t args))))))
       (assert (= (length vals) 3))
       (destructuring-bind
-	  (output-truename warnings-p failure-p)
-	  vals
-	(print (namestring (truename target-pathname)))
-	(print (namestring output-truename))
-	(values
-	 (let ((v1 (or print verbose
-		       (and (not print-p) *compile-print*)
-		       (and (not verbose-p) *compile-verbose*)
-		       (string= str "")))
-	       (v2 (or (and verbose-p (not verbose))
-		       (and (not verbose-p) (not *compile-verbose*))
-		       (position #\; str)))
-	       (v3 (if actual-warnings-p failure-p t))
-	       (v4 (if expect-warnings failure-p t))
-	       (v5 (if expect-style-warnings warnings-p t))
-	       (v6 (or (null output-truename) (pathnamep output-truename)))
-	       (v7 (equalpt-or-report (namestring (truename target-pathname))
-				      (namestring output-truename)))
-	       (v8 (not (fboundp funname))))
-	   (if (and v1 v2 v3 v4 v5 v6 (eql v7 t) v8) t
-	     (list v1 v2 v3 v4 v5 v6 v7 v8)))
-	 (progn
-	   (load output-truename)
-	   (funcall funname)))))))
+          (output-truename warnings-p failure-p)
+          vals
+        (print (namestring (truename target-pathname)))
+        (print (namestring output-truename))
+        (values
+         (let ((v1 (or print verbose
+                       (and (not print-p) *compile-print*)
+                       (and (not verbose-p) *compile-verbose*)
+                       (string= str "")))
+               (v2 (or (and verbose-p (not verbose))
+                       (and (not verbose-p) (not *compile-verbose*))
+                       (position #\; str)))
+               (v3 (if actual-warnings-p failure-p t))
+               (v4 (if expect-warnings failure-p t))
+               (v5 (if expect-style-warnings warnings-p t))
+               (v6 (or (null output-truename) (pathnamep output-truename)))
+               (v7 (equalpt-or-report (namestring (truename target-pathname))
+                                      (namestring output-truename)))
+               (v8 (not (fboundp funname))))
+           (if (and v1 v2 v3 v4 v5 v6 (eql v7 t) v8) t
+             (list v1 v2 v3 v4 v5 v6 v7 v8)))
+         (progn
+           (load output-truename)
+           (funcall funname)))))))
 
 (deftest compile-file.1
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1)
@@ -69,12 +69,12 @@
 
 (deftest compile-file.2
   (compile-file-test "compile-file-test-file-2.lsp" 'compile-file-test-fun.2
-		     :expect-style-warnings t)
+                     :expect-style-warnings t)
   t nil)
 
 (deftest compile-file.2a
   (compile-file-test "compile-file-test-file-2a.lsp" 'compile-file-test-fun.2a
-		     :expect-warnings t)
+                     :expect-warnings t)
   t nil)
 
 (deftest compile-file.3
@@ -93,57 +93,57 @@
 
 (deftest compile-file.6
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :output-file "foo.fasl")
+                     :output-file "foo.fasl")
   t nil)
 
 (deftest compile-file.6a
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :output-file "foo.ufsl")
+                     :output-file "foo.ufsl")
   t nil)
 
 (deftest compile-file.7
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :external-format :default)
+                     :external-format :default)
   t nil)
 
 (deftest compile-file.8
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :output-file #p"foo.fasl")
+                     :output-file #p"foo.fasl")
   t nil)
 
 (deftest compile-file.9
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :print t)
+                     :print t)
   t nil)
 
 (deftest compile-file.10
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :verbose t)
+                     :verbose t)
   t nil)
 
 (deftest compile-file.11
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :print nil)
+                     :print nil)
   t nil)
 
 (deftest compile-file.12
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :verbose nil)
+                     :verbose nil)
   t nil)
 
 ;;; A file stream is a pathname designator
 (deftest compile-file.13
   (with-open-file (s "compile-file-test-file.lsp" :direction :input)
-		  (compile-file-test s 'compile-file-test-fun.1))
+                  (compile-file-test s 'compile-file-test-fun.1))
   t nil)
 
 (deftest compile-file.14
   (let ((s (open "foo.fasl" :direction :output :if-exists :supersede
-		 :if-does-not-exist :create)))
+                 :if-does-not-exist :create)))
     (close s)
     (compile-file-test "compile-file-test-file.lsp"
-		       'compile-file-test-fun.1
-		       :output-file s))
+                       'compile-file-test-fun.1
+                       :output-file s))
   t nil)
 
 (deftest compile-file.15
@@ -156,9 +156,9 @@
 
 (deftest compile-file.16
   (let* ((file #p"compile-file-test-file-5.lsp")
-	 (target-pathname (compile-file-pathname file))
-	 (*compile-print* nil)
-	 (*compile-verbose* nil))
+         (target-pathname (compile-file-pathname file))
+         (*compile-print* nil)
+         (*compile-verbose* nil))
     (when (probe-file target-pathname)
       (delete-file target-pathname))
     (compile-file file)
@@ -166,7 +166,7 @@
     (values
      (equalpt-or-report (truename file) (funcall 'compile-file-test-fun.5))
      (equalpt-or-report (pathname (merge-pathnames file))
-			(funcall 'compile-file-test-fun.5a))))
+                        (funcall 'compile-file-test-fun.5a))))
   t t)
 
 ;;; Add tests of logical pathnames
@@ -184,19 +184,19 @@
     (with-open-file
      (s file :direction :output :if-exists :supersede :if-does-not-exist :create))
     (compile-file-test "compile-file-test-file.lsp"
-		       'compile-file-test-fun.1
-		       :output-file file))
+                       'compile-file-test-fun.1
+                       :output-file file))
   t nil)
 
 (deftest compile-file.19
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :*compile-verbose* t)
+                     :*compile-verbose* t)
   t nil)
 
 (deftest compile-file.20
   (compile-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
-		     :*compile-print* t)
-  t nil)  
+                     :*compile-print* t)
+  t nil)
 
 (deftest compile-file-pathname.1
   *compile-file-pathname*

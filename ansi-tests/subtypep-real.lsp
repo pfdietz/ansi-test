@@ -11,83 +11,83 @@
 
 (deftest subtypep.real.1
   (loop for tp1 in '((real 10) (real 10 *)
-		     (real 10 20)
-		     (real (10) 20)
-		     (real 10 (20))
-		     (real (10) (20))
-		     (real 10 1000000000000000)
-		     (real (10)) (real (10) *))
-	append
-	(loop for tp2 in '(real (real) (real *)
-			   (real * *) (real 10) (real 10 *)
-			   (real 0) (real 0 *)
-			   (real 19/2) (real 19/2 *)
-			   (real 9.5) (real 9.5 *)
-			   (real -1000000000000000))
-	      unless (equal (multiple-value-list
-			     (subtypep* tp1 tp2))
-			    '(t t))
-	      collect (list tp1 tp2)))
+                     (real 10 20)
+                     (real (10) 20)
+                     (real 10 (20))
+                     (real (10) (20))
+                     (real 10 1000000000000000)
+                     (real (10)) (real (10) *))
+        append
+        (loop for tp2 in '(real (real) (real *)
+                           (real * *) (real 10) (real 10 *)
+                           (real 0) (real 0 *)
+                           (real 19/2) (real 19/2 *)
+                           (real 9.5) (real 9.5 *)
+                           (real -1000000000000000))
+              unless (equal (multiple-value-list
+                             (subtypep* tp1 tp2))
+                            '(t t))
+              collect (list tp1 tp2)))
   nil)
 
 (deftest subtypep.real.2
   (loop for tp1 in '((real * 10)
-		     (real 0 10)
-		     (real 0 (10))
-		     (real (0) 10)
-		     (real (0) (10))
-		     (real -1000000000000000 10)
-		     (real * (10)))
-	append
-	(loop for tp2 in '(real (real) (real *)
-			   (real * *) (real * 10)
-			   (real * 21/2)
-			   (real * 10.5)
-			   (real * 1000000000000000))
-	      unless (equal (multiple-value-list
-			     (subtypep* tp1 tp2))
-			    '(t t))
-	      collect (list tp1 tp2)))
+                     (real 0 10)
+                     (real 0 (10))
+                     (real (0) 10)
+                     (real (0) (10))
+                     (real -1000000000000000 10)
+                     (real * (10)))
+        append
+        (loop for tp2 in '(real (real) (real *)
+                           (real * *) (real * 10)
+                           (real * 21/2)
+                           (real * 10.5)
+                           (real * 1000000000000000))
+              unless (equal (multiple-value-list
+                             (subtypep* tp1 tp2))
+                            '(t t))
+              collect (list tp1 tp2)))
   nil)
 
 (deftest subtypep.real.3
   (loop for tp1 in '((real 10) (real 10 *)
-		     (real 10 20)
-		     (real 10 (21))
-		     (real 10 1000000000000000))
-	append
-	(loop for tp2 in '((real 11) (real 11 *)
-			   (real (10)) (real (10) *)
-			   (integer 10) (integer 10 *)
-			   (real 11)
-			   (real (10))
-			   (real 11 *)
-			   (real (10) *)
-			   (real * (20))
-			   (real * 19)
-			   (real * (20))
-			   (real * 19))
-	      unless (equal (multiple-value-list
-			     (subtypep* tp1 tp2))
-			    '(nil t))
-	      collect (list tp1 tp2)))
+                     (real 10 20)
+                     (real 10 (21))
+                     (real 10 1000000000000000))
+        append
+        (loop for tp2 in '((real 11) (real 11 *)
+                           (real (10)) (real (10) *)
+                           (integer 10) (integer 10 *)
+                           (real 11)
+                           (real (10))
+                           (real 11 *)
+                           (real (10) *)
+                           (real * (20))
+                           (real * 19)
+                           (real * (20))
+                           (real * 19))
+              unless (equal (multiple-value-list
+                             (subtypep* tp1 tp2))
+                            '(nil t))
+              collect (list tp1 tp2)))
   nil)
 
 (deftest subtypep.real.4
   (loop for tp1 in '((real * 10)
-		     (real 0 10)
-		     (real (0) 10)
-		     (real -1000000000000000 10))
-	append
-	(loop for tp2 in '((real * 9)
-			   (real * (10))
-			   (integer * 10)
-			   (real * 9)
-			   (real * (10)))
-	      unless (equal (multiple-value-list
-			     (subtypep* tp1 tp2))
-			    '(nil t))
-	      collect (list tp1 tp2)))
+                     (real 0 10)
+                     (real (0) 10)
+                     (real -1000000000000000 10))
+        append
+        (loop for tp2 in '((real * 9)
+                           (real * (10))
+                           (integer * 10)
+                           (real * 9)
+                           (real * (10)))
+              unless (equal (multiple-value-list
+                             (subtypep* tp1 tp2))
+                            '(nil t))
+              collect (list tp1 tp2)))
   nil)
 
 (deftest subtypep.real.5
@@ -140,22 +140,22 @@
 
 (deftest subtypep.real.13
   (check-equivalence '(and integer (real -1/2 1/2))
-		     '(integer 0 0))
+                     '(integer 0 0))
   nil)
 
 (deftest subtypep.real.14
   (check-equivalence '(and integer (real -1/2 1/2))
-		     '(eql 0))
+                     '(eql 0))
   nil)
 
 (deftest subtypep.real.15
   (check-equivalence '(and integer (real (-1/2) 1/2))
-		     '(integer 0 0))
+                     '(integer 0 0))
   nil)
 
 (deftest subtypep.real.16
   (check-equivalence '(and integer (real (-1/2) (1/2)))
-		     '(integer 0 0))
+                     '(integer 0 0))
   nil)
 
 (deftest subtypep.real.17
@@ -164,27 +164,27 @@
 
 (deftest subtypep.real.18
   (check-equivalence '(and rational (real 0 10))
-		     '(rational 0 10))
+                     '(rational 0 10))
   nil)
 
 (deftest subtypep.real.19
   (check-equivalence '(and rational (real 0 (10)))
-		     '(rational 0 (10)))
+                     '(rational 0 (10)))
   nil)
 
 (deftest subtypep.real.20
   (check-equivalence '(and rational (real (0) (10)))
-		     '(rational (0) (10)))
+                     '(rational (0) (10)))
   nil)
 
 (deftest subtypep.real.21
   (check-equivalence '(and rational (real 1/2 7/3))
-		     '(rational 1/2 7/3))
+                     '(rational 1/2 7/3))
   nil)
 
 (deftest subtypep.real.22
   (check-equivalence '(and rational (real (1/11) (8/37)))
-		     '(rational (1/11) (8/37)))
+                     '(rational (1/11) (8/37)))
   nil)
 
 (deftest subtypep.real.23

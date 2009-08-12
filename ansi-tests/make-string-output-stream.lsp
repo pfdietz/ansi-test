@@ -68,8 +68,8 @@
 
 (deftest make-string-output-stream.7
   (let ((s (make-string-output-stream :foo 'bar :allow-other-keys t
-				      :allow-other-keys nil
-				      :foo2 'x)))
+                                      :allow-other-keys nil
+                                      :foo2 'x)))
     (values
      (notnot (typep s 'stream))
      (notnot (typep s 'string-stream))
@@ -130,8 +130,8 @@
 
 (deftest make-string-output-stream.error.3
   (signals-error (make-string-output-stream :allow-other-keys nil
-					    :foo 'bar)
-		 program-error)
+                                            :foo 'bar)
+                 program-error)
   t)
 
 

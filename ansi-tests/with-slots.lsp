@@ -32,9 +32,9 @@
   (block done
     (tagbody
      (with-slots () nil
-		 (go 10)
-		 10
-		 (return-from done :bad))
+                 (go 10)
+                 10
+                 (return-from done :bad))
      10
      (return-from done :good)))
   :good)
@@ -50,8 +50,8 @@
 ;;; Tests on standard objects
 
 (defclass with-slots-class-01 () ((a :initarg :a)
-				  (b :initarg :b)
-				  (c :initarg :c)))
+                                  (b :initarg :b)
+                                  (c :initarg :c)))
 
 (deftest with-slots.7
   (let ((obj (make-instance 'with-slots-class-01 :a 'x :b 'y :c 'z)))
@@ -63,7 +63,7 @@
     (with-slots
      (a b c) obj
      (values (setf a 'p) (setf b 'q) (setf c 'r)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   p q r (p q r))
 
 (deftest with-slots.9
@@ -71,7 +71,7 @@
     (with-slots
      (a b c) obj
      (values (setq a 'p) (setq b 'q) (setq c 'r)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   p q r (p q r))
 
 (deftest with-slots.10
@@ -84,7 +84,7 @@
     (with-slots
      ((a2 a) (b2 b) (c2 c)) obj
      (values (setf a2 'p) (setf b2 'q) (setf c2 'r)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   p q r (p q r))
 
 (deftest with-slots.12
@@ -92,7 +92,7 @@
     (with-slots
      ((a2 a) (b2 b) (c2 c)) obj
      (values (setq a2 'p) (setq b2 'q) (setq c2 'r)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   p q r (p q r))
 
 (deftest with-slots.13
@@ -100,52 +100,52 @@
     (with-slots
      (a b c) obj
      (values (setf a 'p) (setf b 'q) (setf c 'r)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   p q r (p q r))
 
 (deftest with-slots.14
   (let ((obj (make-instance 'with-slots-class-01 :a 1 :b 2 :c 3)))
     (with-slots (a b c) obj
-		(let ((obj (make-instance 'with-slots-class-01
-					  :a 'bad :b 'bad :c 'bad)))
-		  (values a b c))))
+                (let ((obj (make-instance 'with-slots-class-01
+                                          :a 'bad :b 'bad :c 'bad)))
+                  (values a b c))))
   1 2 3)
 
 
 (deftest with-slots.15
   (let ((obj (make-instance 'with-slots-class-01 :a 1 :b 2 :c 3)))
     (with-slots (a b c) obj
-		(with-slots
-		 ((a2 a) (b2 b) (c2 c))
-		 (make-instance 'with-slots-class-01
-				:a 'bad :b 'bad :c 'bad)
-		 (values a b c))))
+                (with-slots
+                 ((a2 a) (b2 b) (c2 c))
+                 (make-instance 'with-slots-class-01
+                                :a 'bad :b 'bad :c 'bad)
+                 (values a b c))))
   1 2 3)
 
 (deftest with-slots.16
   (let ((obj (make-instance 'with-slots-class-01 :a 'bad :b 'bad :c 'bad)))
     (with-slots (a b c) obj
-		(with-slots
-		 (a b c)
-		 (make-instance 'with-slots-class-01 :a 1 :b 2 :c 3)
-		 (values a b c))))
+                (with-slots
+                 (a b c)
+                 (make-instance 'with-slots-class-01 :a 1 :b 2 :c 3)
+                 (values a b c))))
   1 2 3)
 
 
 (deftest with-slots.17
   (let ((obj (make-instance 'with-slots-class-01 :a 1 :b 2 :c 'bad)))
     (with-slots (a b) obj
-		(with-slots
-		 (c)
-		 (make-instance 'with-slots-class-01 :a 'bad :b 'bad :c 3)
-		 (values a b c))))
+                (with-slots
+                 (c)
+                 (make-instance 'with-slots-class-01 :a 'bad :b 'bad :c 3)
+                 (values a b c))))
   1 2 3)
 
 ;;; If slot is unbound, act as if slot-value had been called
 
 (defmethod slot-unbound ((class t)
-			 (instance with-slots-class-01)
-			 slot-name)
+                         (instance with-slots-class-01)
+                         slot-name)
   'missing)
 
 (deftest with-slots.18
@@ -156,16 +156,16 @@
 (deftest with-slots.19
   (let ((obj (make-instance 'with-slots-class-01 :a 'x :b 'y :c 'z)))
     (with-slots (a b c) obj
-		(declare (optimize (speed 3) (safety 3)))
-		(values a b c)))
+                (declare (optimize (speed 3) (safety 3)))
+                (values a b c)))
   x y z)
 
 (deftest with-slots.20
   (let ((obj (make-instance 'with-slots-class-01 :a 'x :b 'y :c 'z)))
     (with-slots (a b c) obj
-		(declare (optimize (speed 3) (safety 3)))
-		(declare (special *x*))
-		(values a b c)))
+                (declare (optimize (speed 3) (safety 3)))
+                (declare (special *x*))
+                (values a b c)))
   x y z)
 
 ;;; Free declaration scope test
@@ -175,6 +175,6 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-slots nil (return-from done x)
-		    (declare (special x))))))
+        (with-slots nil (return-from done x)
+                    (declare (special x))))))
   :good)

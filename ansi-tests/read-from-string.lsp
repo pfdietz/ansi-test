@@ -45,7 +45,7 @@
     (do-special-strings
      (s "71235")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :start 1 :end 4))))
+                  (read-from-string s t nil :start 1 :end 4))))
        (assert (equal vals '(123 4))))))
   nil)
 
@@ -54,7 +54,7 @@
     (do-special-strings
      (s "7123  ")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :start 1))))
+                  (read-from-string s t nil :start 1))))
        (assert (equal vals '(123 5))))))
   nil)
 
@@ -64,7 +64,7 @@
     (do-special-strings
      (s "7123  ")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :end 4))))
+                  (read-from-string s t nil :end 4))))
        (assert (equal vals '(7123 4))))))
   nil)
 
@@ -73,7 +73,7 @@
     (do-special-strings
      (s "7123")
      (let ((vals (multiple-value-list
-		  (read-from-string s nil 'foo :start 2 :end 2))))
+                  (read-from-string s nil 'foo :start 2 :end 2))))
        (assert (equal vals '(foo 2))))))
   nil)
 
@@ -82,7 +82,7 @@
     (do-special-strings
      (s "123  ")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :preserve-whitespace t))))
+                  (read-from-string s t nil :preserve-whitespace t))))
        (assert (equal vals '(123 3))))))
   nil)
 
@@ -91,7 +91,7 @@
     (do-special-strings
      (s (concatenate 'string "( )" (string #\Newline)))
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :preserve-whitespace t))))
+                  (read-from-string s t nil :preserve-whitespace t))))
        (assert (equal vals '(nil 3))))))
   nil)
 
@@ -102,7 +102,7 @@
     (do-special-strings
      (s "7123  ")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :start 1 :start 2))))
+                  (read-from-string s t nil :start 1 :start 2))))
        (assert (equal vals '(123 5))))))
   nil)
 
@@ -111,7 +111,7 @@
     (do-special-strings
      (s "7123  ")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :end 4 :end 2))))
+                  (read-from-string s t nil :end 4 :end 2))))
        (assert (equal vals '(7123 4))))))
   nil)
 
@@ -120,8 +120,8 @@
     (do-special-strings
      (s (concatenate 'string "( )" (string #\Newline)))
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :preserve-whitespace t
-				    :preserve-whitespace nil))))
+                  (read-from-string s t nil :preserve-whitespace t
+                                    :preserve-whitespace nil))))
        (assert (equal vals '(nil 3))))))
   nil)
 
@@ -133,8 +133,8 @@
      (do-special-strings
       (s "abc   ")
       (let ((vals (multiple-value-list
-		   (read-from-string s t nil :allow-other-keys nil))))
-	(assert (equal vals '(|ABC| 4)) (vals) "VALS is ~A" vals)))))
+                   (read-from-string s t nil :allow-other-keys nil))))
+        (assert (equal vals '(|ABC| 4)) (vals) "VALS is ~A" vals)))))
   nil)
 
 (deftest read-from-string.15
@@ -142,7 +142,7 @@
     (do-special-strings
      (s "123   ")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :foo 'bar :allow-other-keys t))))
+                  (read-from-string s t nil :foo 'bar :allow-other-keys t))))
        (assert (equal vals '(123 4)) (vals) "VALS is ~A" vals))))
   nil)
 
@@ -151,8 +151,8 @@
     (do-special-strings
      (s "123   ")
      (let ((vals (multiple-value-list
-		  (read-from-string s t nil :allow-other-keys t
-				    :allow-other-keys nil :foo 'bar))))
+                  (read-from-string s t nil :allow-other-keys t
+                                    :allow-other-keys nil :foo 'bar))))
        (assert (equal vals '(123 4)) (vals) "VALS is ~A" vals))))
   nil)
 
@@ -209,30 +209,30 @@
 
 (deftest read-from-string.error.10
   (signals-error (read-from-string "A" nil t
-				   :bad-keyword t
-				   :allow-other-keys nil)
-		 program-error)
+                                   :bad-keyword t
+                                   :allow-other-keys nil)
+                 program-error)
   t)
 
 (deftest read-from-string.error.11
   (signals-error (read-from-string "A" nil t
-				   :bad-keyword t
-				   :allow-other-keys nil
-				   :allow-other-keys t)
-		 program-error)
+                                   :bad-keyword t
+                                   :allow-other-keys nil
+                                   :allow-other-keys t)
+                 program-error)
   t)
 
 (deftest read-from-string.error.12
   (signals-error (read-from-string "A" nil t
-				   :allow-other-keys nil
-				   :allow-other-keys t
-				   :bad-keyword t)
-		 program-error)
+                                   :allow-other-keys nil
+                                   :allow-other-keys t
+                                   :bad-keyword t)
+                 program-error)
   t)
 
 (deftest read-from-string.error.13
   (signals-error (read-from-string "A" nil t :start)
-		 program-error)
+                 program-error)
   t)
 
 

@@ -13,8 +13,8 @@
 
 (deftest wild-pathname-p.2
   (loop for key in '(:host :device :directory :name :type :version nil)
-	when (wild-pathname-p (make-pathname) key)
-	collect key)
+        when (wild-pathname-p (make-pathname) key)
+        collect key)
   nil)
 
 (deftest wild-pathname-p.3
@@ -35,8 +35,8 @@
 (deftest wild-pathname-p.6
   (let ((p (make-pathname :directory :wild)))
     (loop for key in '(:host :device :name :type :version)
-	when (wild-pathname-p p key)
-	collect key))
+        when (wild-pathname-p p key)
+        collect key))
   nil)
 
 
@@ -58,8 +58,8 @@
 (deftest wild-pathname-p.10
   (let ((p (make-pathname :directory '(:absolute :wild))))
     (loop for key in '(:host :device :name :type :version)
-	when (wild-pathname-p p key)
-	collect key))
+        when (wild-pathname-p p key)
+        collect key))
   nil)
 
 
@@ -81,8 +81,8 @@
 (deftest wild-pathname-p.14
   (let ((p (make-pathname :directory '(:relative :wild))))
     (loop for key in '(:host :device :name :type :version)
-	when (wild-pathname-p p key)
-	collect key))
+        when (wild-pathname-p p key)
+        collect key))
   nil)
 
 ;;;
@@ -105,12 +105,12 @@
 (deftest wild-pathname-p.18
   (let ((p (make-pathname :name :wild)))
     (loop for key in '(:host :device :directory :type :version)
-	when (wild-pathname-p p key)
-	collect key))
+        when (wild-pathname-p p key)
+        collect key))
   nil)
 
-;;;    
-  
+;;;
+
 (deftest wild-pathname-p.19
   (let ((p (make-pathname :type :wild)))
     (notnot-mv (wild-pathname-p p)))
@@ -129,8 +129,8 @@
 (deftest wild-pathname-p.22
   (let ((p (make-pathname :type :wild)))
     (loop for key in '(:host :device :directory :name :version)
-	when (wild-pathname-p p key)
-	collect key))
+        when (wild-pathname-p p key)
+        collect key))
   nil)
 
 ;;;
@@ -153,43 +153,43 @@
 (deftest wild-pathname-p.26
   (let ((p (make-pathname :version :wild)))
     (loop for key in '(:host :device :directory :name :type)
-	when (wild-pathname-p p key)
-	collect key))
+        when (wild-pathname-p p key)
+        collect key))
   nil)
 
 ;;;
 
 (deftest wild-pathname-p.27
   (loop for p in (append *pathnames* *logical-pathnames*)
-	unless (if (wild-pathname-p p) (wild-pathname-p p nil)
-		 (not (wild-pathname-p p nil)))
-	collect p)
+        unless (if (wild-pathname-p p) (wild-pathname-p p nil)
+                 (not (wild-pathname-p p nil)))
+        collect p)
   nil)
 
 (deftest wild-pathname-p.28
   (loop for p in (append *pathnames* *logical-pathnames*)
-	when (and (loop for key in '(:host :device :directory
-					   :name :type :version)
-			thereis (wild-pathname-p p key))
-		  (not (wild-pathname-p p)))
-	collect p)
+        when (and (loop for key in '(:host :device :directory
+                                           :name :type :version)
+                        thereis (wild-pathname-p p key))
+                  (not (wild-pathname-p p)))
+        collect p)
   nil)
 
 ;;; On streams associated with files
 
 (deftest wild-pathname-p.29
   (with-open-file (s "foo.lsp"
-		     :direction :output
-		     :if-exists :append
-		     :if-does-not-exist :create)
-		  (wild-pathname-p s))
+                     :direction :output
+                     :if-exists :append
+                     :if-does-not-exist :create)
+                  (wild-pathname-p s))
   nil)
 
 (deftest wild-pathname-p.30
   (let ((s (open "foo.lsp"
-		 :direction :output
-		 :if-exists :append
-		 :if-does-not-exist :create)))
+                 :direction :output
+                 :if-exists :append
+                 :if-does-not-exist :create)))
     (close s)
     (wild-pathname-p s))
   nil)
@@ -217,18 +217,18 @@
 
 (deftest wild-pathname-p.error.2
   (signals-error (wild-pathname-p *default-pathname-defaults* nil nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest wild-pathname-p.error.3
   (check-type-error #'wild-pathname-p
-		    (typef '(or pathname string file-stream
-				synonym-stream)))
+                    (typef '(or pathname string file-stream
+                                synonym-stream)))
   nil)
 
 (deftest wild-pathname-p.error.4
   (check-type-error #'(lambda (x) (declare (optimize (safety 0)))
-			(wild-pathname-p x))
-		    (typef '(or pathname string file-stream
-				synonym-stream)))
+                        (wild-pathname-p x))
+                    (typef '(or pathname string file-stream
+                                synonym-stream)))
   nil)

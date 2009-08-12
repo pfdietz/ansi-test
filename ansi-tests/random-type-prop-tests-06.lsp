@@ -11,7 +11,7 @@
 (def-type-prop-test aref.1 'aref (list '(array * (*)) (index-type-for-dim 0)) 2)
 (def-type-prop-test aref.2 'aref (list '(array * (* *)) (index-type-for-dim 0) (index-type-for-dim 1)) 3)
 (def-type-prop-test aref.3 'aref (list '(array * (* * *))
-				       (index-type-for-dim 0) (index-type-for-dim 1) (index-type-for-dim 2))
+                                       (index-type-for-dim 0) (index-type-for-dim 1) (index-type-for-dim 2))
   4)
 
 (def-type-prop-test array-dimension 'array-dimension
@@ -55,7 +55,7 @@
 
 (def-type-prop-test upgraded-array-element-type 'upgraded-array-element-type
   (list #'(lambda () (let ((x (make-random-element-of-type t)))
-		       `(eql ,(make-random-type-containing x)))))
+                       `(eql ,(make-random-type-containing x)))))
   1)
 
 (def-type-prop-test simple-vector-p.1 'simple-vector-p '(t) 1)
@@ -80,61 +80,61 @@
 
 
 (def-type-prop-test bit-and.1 'bit-and (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-and.2 'bit-and
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-andc1.1 'bit-andc1 (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-andc1.2 'bit-andc1
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-andc2.1 'bit-andc2 (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-andc2.2 'bit-andc2
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-ior.1 'bit-ior (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-ior.2 'bit-ior
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-orc1.1 'bit-orc1 (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-orc1.2 'bit-orc1
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-orc2.1 'bit-orc2 (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-orc2.2 'bit-orc2
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-eqv.1 'bit-eqv (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-eqv.2 'bit-eqv
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-xor.1 'bit-xor (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-xor.2 'bit-xor
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-nand.1 'bit-nand (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-nand.2 'bit-nand
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)
   3)
 (def-type-prop-test bit-nor.1 'bit-nor (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a)))
-									  `(array bit ,dims))))
+                                                                          `(array bit ,dims))))
   2)
 (def-type-prop-test bit-nor.2 'bit-nor
   (list '(array bit) #'(lambda (a) (let ((dims (array-dimensions a))) `(array bit ,dims))) 'null)

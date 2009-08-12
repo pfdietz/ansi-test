@@ -17,8 +17,8 @@
 
 (deftest subst-if.3
   (check-subst-if '(z)
-		  (complement #'consp)
-		  '(a (a b) (c d e) (f g h i)))
+                  (complement #'consp)
+                  '(a (a b) (c d e) (f g h i)))
   ((z)
    ((z) (z) z)
    ((z) (z) (z) z)
@@ -27,21 +27,21 @@
 
 (deftest subst-if.4
   (check-subst-if 'b #'identity '((100 1) (2 3) (4 3 2 1) (a b c))
-		  :key #'listp)
+                  :key #'listp)
   b)
 
 (deftest subst-if.5
   (check-subst-if 4 #'(lambda (x) (eql x 1))
-		  '((1 3) (1) (1 10 20 30) (1 3 x y))
-		  :key #'(lambda (x)
-			   (and (consp x)
-				(car x))))
+                  '((1 3) (1) (1 10 20 30) (1 3 x y))
+                  :key #'(lambda (x)
+                           (and (consp x)
+                                (car x))))
   (4 4 4 4))
 
 (deftest subst-if.6
   (check-subst-if 'a  #'(lambda (x) (eql x 'b))
-		  '((a) (b) (c) (d))
-		  :key nil)
+                  '((a) (b) (c) (d))
+                  :key nil)
   ((a) (a) (c) (d)))
 
 (deftest subst-if.7

@@ -25,7 +25,7 @@
 (deftest flet.4
   (block %f
     (flet ((%f (&optional (x (return-from %f :good)))
-	       nil))
+               nil))
       (%f)
       :bad))
   :good)
@@ -35,7 +35,7 @@
 (deftest flet.4a
   (block %f
     (flet ((%f (&key (x (return-from %f :good)))
-	       nil))
+               nil))
       (%f)
       :bad))
   :good)
@@ -50,7 +50,7 @@
 (deftest flet.6
   (block %f
     (flet ((%f (&aux (x (return-from %f 10)))
-	       20))
+               20))
       (%f)))
   10)
 
@@ -58,7 +58,7 @@
 (deftest flet.7
   (flet ((%f (x) (+ x 5)))
     (flet ((%f (y) (cond ((eql y 20) 30)
-			 (t (%f 20)))))
+                         (t (%f 20)))))
       (%f 15)))
   25)
 
@@ -133,45 +133,45 @@
 ;;; Can handle at least 50 lambda parameters
 (deftest flet.19
   (flet ((%f (a1 a2 a3 a4 a5 a6 a7 a8 a9 a10
-	      b1 b2 b3 b4 b5 b6 b7 b8 b9 b10
-	      c1 c2 c3 c4 c5 c6 c7 c8 c9 c10
-	      d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
-	      e1 e2 e3 e4 e5 e6 e7 e8 e9 e10)
-	     (+ a1 a2 a3 a4 a5 a6 a7 a8 a9 a10
-		b1 b2 b3 b4 b5 b6 b7 b8 b9 b10
-		c1 c2 c3 c4 c5 c6 c7 c8 c9 c10
-		d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
-		e1 e2 e3 e4 e5 e6 e7 e8 e9 e10)))
+              b1 b2 b3 b4 b5 b6 b7 b8 b9 b10
+              c1 c2 c3 c4 c5 c6 c7 c8 c9 c10
+              d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
+              e1 e2 e3 e4 e5 e6 e7 e8 e9 e10)
+             (+ a1 a2 a3 a4 a5 a6 a7 a8 a9 a10
+                b1 b2 b3 b4 b5 b6 b7 b8 b9 b10
+                c1 c2 c3 c4 c5 c6 c7 c8 c9 c10
+                d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
+                e1 e2 e3 e4 e5 e6 e7 e8 e9 e10)))
     (%f 1 2 3 4 5 6 7 8 9 10
-	11 12 13 14 15 16 17 18 19 20
-	21 22 23 24 25 26 27 28 29 30
-	31 32 33 34 35 36 37 38 39 40
-	41 42 43 44 45 46 47 48 49 50))
+        11 12 13 14 15 16 17 18 19 20
+        21 22 23 24 25 26 27 28 29 30
+        31 32 33 34 35 36 37 38 39 40
+        41 42 43 44 45 46 47 48 49 50))
   1275)
 
 ;;; flet works with a large (maximal?) number of arguments
 (deftest flet.20
   (let* ((n (min (1- lambda-parameters-limit) 1024))
-	 (vars (loop repeat n collect (gensym))))
+         (vars (loop repeat n collect (gensym))))
     (eval
      `(eqlt ,n
-	    (flet ((%f ,vars (+ ,@ vars)))
-	      (%f ,@(loop for e in vars collect 1))))))
+            (flet ((%f ,vars (+ ,@ vars)))
+              (%f ,@(loop for e in vars collect 1))))))
   t)
 
 ;;; Declarations and documentation strings are ok
 (deftest flet.21
   (flet ((%f (x)
-	     (declare (type fixnum x))
-	     "Add one to the fixnum x."
-	     (1+ x)))
+             (declare (type fixnum x))
+             "Add one to the fixnum x."
+             (1+ x)))
     (declare (ftype (function (fixnum) integer) %f))
     (%f 10))
   11)
 
 (deftest flet.22
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p))
-	     (list x y (not (not y-p)) z (not (not z-p)))))
+             (list x y (not (not y-p)) z (not (not z-p)))))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c)))
   (10 1 nil 2 nil)
   (20 40 t 2 nil)
@@ -179,7 +179,7 @@
 
 (deftest flet.23
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r)
-	     (list x y (not (not y-p)) z (not (not z-p)) r)))
+             (list x y (not (not y-p)) z (not (not z-p)) r)))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c) (%f 'd 'e 'f 'g 'h)))
   (10 1 nil 2 nil nil)
   (20 40 t 2 nil nil)
@@ -188,10 +188,10 @@
 
 (deftest flet.24
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar)
-	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+             (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
-	    (%f 'd 'e 'f :foo 'h)
-	    (%f 'd 'e 'f :bar 'i) ))
+            (%f 'd 'e 'f :foo 'h)
+            (%f 'd 'e 'f :bar 'i) ))
   (10 1 nil 2 nil nil nil nil)
   (20 40 t 2 nil nil nil nil)
   (a b t c t nil nil nil)
@@ -200,11 +200,11 @@
 
 (deftest flet.25
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar
-		&allow-other-keys)
-	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+                &allow-other-keys)
+             (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
-	    (%f 'd 'e 'f :foo 'h :whatever nil)
-	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z) ))
+            (%f 'd 'e 'f :foo 'h :whatever nil)
+            (%f 'd 'e 'f :bar 'i :illegal t :foo 'z) ))
   (10 1 nil 2 nil nil nil nil)
   (20 40 t 2 nil nil nil nil)
   (a b t c t nil nil nil)
@@ -213,10 +213,10 @@
 
 (deftest flet.26
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar)
-	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+             (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
-	    (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys t)
-	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z :allow-other-keys t) ))
+            (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys t)
+            (%f 'd 'e 'f :bar 'i :illegal t :foo 'z :allow-other-keys t) ))
   (10 1 nil 2 nil nil nil nil)
   (20 40 t 2 nil nil nil nil)
   (a b t c t nil nil nil)
@@ -228,10 +228,10 @@
 ;;; associated value is false."
 (deftest flet.27
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r &key foo bar)
-	     (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
+             (list x y (not (not y-p)) z (not (not z-p)) r foo bar)))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
-	    (%f 'd 'e 'f :foo 'h :allow-other-keys nil)
-	    (%f 'd 'e 'f :bar 'i :allow-other-keys nil) ))
+            (%f 'd 'e 'f :foo 'h :allow-other-keys nil)
+            (%f 'd 'e 'f :bar 'i :allow-other-keys nil) ))
   (10 1 nil 2 nil nil nil nil)
   (20 40 t 2 nil nil nil nil)
   (a b t c t nil nil nil)
@@ -240,12 +240,12 @@
 
 (deftest flet.28
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r
-		&key foo bar allow-other-keys)
-	     (list x y (not (not y-p)) z (not (not z-p)) allow-other-keys
-		   r foo bar)))
+                &key foo bar allow-other-keys)
+             (list x y (not (not y-p)) z (not (not z-p)) allow-other-keys
+                   r foo bar)))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
-	    (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys 100)
-	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z :allow-other-keys 200) ))
+            (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys 100)
+            (%f 'd 'e 'f :bar 'i :illegal t :foo 'z :allow-other-keys 200) ))
   (10 1 nil 2 nil nil nil nil nil)
   (20 40 t 2 nil nil nil nil nil)
   (a b t c t nil nil nil nil)
@@ -254,13 +254,13 @@
 
 (deftest flet.29
   (flet ((%f (x &optional (y 1 y-p) (z 2 z-p) &rest r
-		&key foo bar allow-other-keys &allow-other-keys)
-	     (list x y (not (not y-p)) z (not (not z-p)) allow-other-keys
-		   r foo bar)))
+                &key foo bar allow-other-keys &allow-other-keys)
+             (list x y (not (not y-p)) z (not (not z-p)) allow-other-keys
+                   r foo bar)))
     (values (%f 10) (%f 20 40) (%f 'a 'b 'c)
-	    (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys nil :blah t)
-	    (%f 'd 'e 'f :bar 'i :illegal t :foo 'z
-		:allow-other-keys nil :zzz 10) ))
+            (%f 'd 'e 'f :foo 'h :whatever nil :allow-other-keys nil :blah t)
+            (%f 'd 'e 'f :bar 'i :illegal t :foo 'z
+                :allow-other-keys nil :zzz 10) ))
   (10 1 nil 2 nil nil nil nil nil)
   (20 40 t 2 nil nil nil nil nil)
   (a b t c t nil nil nil nil)
@@ -283,17 +283,17 @@
   (flet ((%f (&key a b c) (list a b c)))
     (%f :a 10 :b 20 :c 30 :a 40 :b 50 :c 60))
   (10 20 30))
-    
+
 ;;; More aux parameters
 (deftest flet.33
   (flet ((%f (x y &aux (a (1+ x)) (b (+ x y a)) (c (list x y a b)))
-	     c))
+             c))
     (%f 5 9))
   (5 9 6 20))
 
 (deftest flet.34
   (flet ((%f (x y &rest r &key foo bar &aux (c (list x y r foo bar)))
-	     c))
+             c))
     (values
      (%f 1 2)
      (%f 1 2 :foo 'a)
@@ -312,9 +312,9 @@
     (declare (special x))
     (flet ((%f () x))
       (flet ((%g (x)
-		 (declare (special x))
-		 (%f)))
-	(%g 'good))))
+                 (declare (special x))
+                 (%f)))
+        (%g 'good))))
   good)
 
 (deftest flet.36
@@ -322,9 +322,9 @@
     (declare (special x))
     (flet ((%f () x))
       (flet ((%g (&aux (x 'good))
-		 (declare (special x))
-		 (%f)))
-	 (%g))))
+                 (declare (special x))
+                 (%f)))
+         (%g))))
   good)
 
 (deftest flet.37
@@ -332,9 +332,9 @@
     (declare (special x))
     (flet ((%f () x))
       (flet ((%g (&rest x)
-		 (declare (special x))
-		 (%f)))
-	 (%g 'good))))
+                 (declare (special x))
+                 (%f)))
+         (%g 'good))))
   (good))
 
 (deftest flet.38
@@ -342,9 +342,9 @@
     (declare (special x))
     (flet ((%f () x))
       (flet ((%g (&key (x 'good))
-		 (declare (special x))
-		 (%f)))
-	 (%g))))
+                 (declare (special x))
+                 (%f)))
+         (%g))))
   good)
 
 (deftest flet.39
@@ -352,9 +352,9 @@
     (declare (special x))
     (flet ((%f () x))
       (flet ((%g (&key (x 'bad))
-		 (declare (special x))
-		 (%f)))
-	 (%g :x 'good))))
+                 (declare (special x))
+                 (%f)))
+         (%g :x 'good))))
   good)
 
 (deftest flet.40
@@ -362,8 +362,8 @@
     (declare (special x))
     (flet ((%f () x))
       (flet ((%g (&key (x 'bad))
-		 (%f)))
-	 (%g :x 'worse))))
+                 (%f)))
+         (%g :x 'worse))))
   good)
 
 
@@ -386,31 +386,31 @@
 
 (deftest flet.49
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(ignore-errors (flet ((,s () 'a)) (,s)))
-	unless (eq (eval form) 'a)
-	collect s)
+        for form = `(ignore-errors (flet ((,s () 'a)) (,s)))
+        unless (eq (eval form) 'a)
+        collect s)
   nil)
 
 (deftest flet.50
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(ignore-errors (flet ((,s () 'a))
-				      (declare (ftype (function () symbol)
-						      ,s))
-				      (,s)))
-	unless (eq (eval form) 'a)
-	collect s)
+        for form = `(ignore-errors (flet ((,s () 'a))
+                                      (declare (ftype (function () symbol)
+                                                      ,s))
+                                      (,s)))
+        unless (eq (eval form) 'a)
+        collect s)
   nil)
 
 ;;; Binding SETF functions of certain COMMON-LISP symbols
 (deftest flet.51
   (loop for s in *cl-non-function-macro-special-operator-symbols*
-	for form = `(ignore-errors
-		     (flet (((setf ,s) (&rest args)
-			     (declare (ignore args))
-			     'a))
-		       (setf (,s) 10)))
-	unless (eq (eval form) 'a)
-	collect s)
+        for form = `(ignore-errors
+                     (flet (((setf ,s) (&rest args)
+                             (declare (ignore args))
+                             'a))
+                       (setf (,s) 10)))
+        unless (eq (eval form) 'a)
+        collect s)
   nil)
 
 ;;; Check that FLET does not have a tagbody
@@ -475,9 +475,9 @@
     (declare (special x))
     (let ((x :good))
       (flet ((%f (&optional (y x))
-		 (declare (special x))
-		 y))
-	(%f))))
+                 (declare (special x))
+                 y))
+        (%f))))
   :good)
 
 (deftest flet.63
@@ -485,9 +485,9 @@
     (declare (special x))
     (let ((x :good))
       (flet ((%f (&key (y x))
-		 (declare (special x))
-		 y))
-	(%f))))
+                 (declare (special x))
+                 y))
+        (%f))))
   :good)
 
 (deftest flet.64
@@ -511,7 +511,7 @@
     (declare (special x))
     (let ((x :good))
       (flet ((%f () (declare (special x))))
-	x)))
+        x)))
   :good)
 
 (deftest flet.67
@@ -519,9 +519,9 @@
     (declare (special x))
     (let ((x :good))
       (flet ((%f (&aux (y x))
-		 (declare (special x))
-		 y))
-	(%f))))
+                 (declare (special x))
+                 y))
+        (%f))))
   :good)
 
 (deftest flet.68
@@ -529,17 +529,17 @@
     (declare (special x))
     (let ((x :good))
       (flet ((%f () x))
-	(declare (special x))
-	(%f))))
+        (declare (special x))
+        (%f))))
   :good)
 
 (deftest flet.69
   (let ((*x* 0))
     (declare (special *x*))
     (flet ((%f (i)
-	       #'(lambda (arg)
-		   (declare (ignore arg))
-		   (incf *x* i))))
+               #'(lambda (arg)
+                   (declare (ignore arg))
+                   (incf *x* i))))
       (values
        (mapcar (%f 1) '(a b c))
        (mapcar (%f 2) '(a b c)))))
@@ -550,13 +550,13 @@
 
 (deftest flet.70
   (macrolet ((%m (z) z))
-	    (flet () (expand-in-current-env (%m :good))))
+            (flet () (expand-in-current-env (%m :good))))
   :good)
 
 (deftest flet.71
   (macrolet ((%m (z) z))
-	    (flet ((%f () (expand-in-current-env (%m :good))))
-		  (%f)))
+            (flet ((%f () (expand-in-current-env (%m :good))))
+                  (%f)))
   :good)
 
 

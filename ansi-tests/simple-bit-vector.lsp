@@ -8,7 +8,7 @@
 (deftest simple-bit-vector.2
   (notnot-mv (typep #* 'simple-bit-vector))
   t)
-  
+
 (deftest simple-bit-vector.3
   (notnot-mv (typep #*00101 'simple-bit-vector))
   t)
@@ -43,8 +43,8 @@
 
 (deftest simple-bit-vector.11
   (typep (make-array '(2 2) :element-type 'bit
-		     :initial-element 0)
-	 'simple-bit-vector)
+                     :initial-element 0)
+         'simple-bit-vector)
   nil)
 
 (deftest simple-bit-vector.12

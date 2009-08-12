@@ -17,9 +17,9 @@
       (with-package-iterator
        (f (list-all-packages) :internal :external :inherited)
        (loop
-	(multiple-value-bind (found sym) (f)
-	  (unless found (return))
-	  (setf (gethash sym hash) t))))
+        (multiple-value-bind (found sym) (f)
+          (unless found (return))
+          (setf (gethash sym hash) t))))
       ;; hash now contains all symbols accessible in any package
       ;; Check that all symbols from DO-ALL-SYMBOLS are in this
       ;; package
@@ -33,8 +33,8 @@
      (f (list-all-packages) :internal :external :inherited)
      (loop
       (multiple-value-bind (found sym) (f)
-	(unless found (return))`
-	(push sym symbols))))
+        (unless found (return))`
+        (push sym symbols))))
     (let ((hash (make-hash-table :test 'eq)))
       (do-all-symbols (s) (setf (gethash s hash) t))
       (loop for s in symbols unless (gethash s hash) collect s)))
@@ -86,7 +86,7 @@
 
 (deftest do-all-symbols.9
   (let ((x 0)
-	(y 1))
+        (y 1))
     (do-all-symbols (z nil)
       (declare (type (integer * 0) x))
       (declare (type (integer 1 *) y))
@@ -108,7 +108,7 @@
     (declare (special x))
     (let ((x :bad))
       (do-all-symbols (s x)
-	(declare (special x)))))
+        (declare (special x)))))
   :good)
 
 ;;; Executing a return actually terminates the loop
@@ -117,10 +117,10 @@
   (let ((should-have-returned nil))
     (block done
       (do-all-symbols (s :bad1)
-	(when should-have-returned
-	  (return-from done :bad2))
-	(setq should-have-returned t)
-	(return :good))))
+        (when should-have-returned
+          (return-from done :bad2))
+        (setq should-have-returned t)
+        (return :good))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms

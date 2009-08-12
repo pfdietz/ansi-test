@@ -29,7 +29,7 @@
 
 (deftest copy-readtable.6
   (let* ((rt (copy-readtable))
-	 (rt2 (copy-readtable *readtable* rt)))
+         (rt2 (copy-readtable *readtable* rt)))
     (notnot (eql rt rt2)))
   t)
 

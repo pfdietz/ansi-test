@@ -21,7 +21,7 @@
 
 (deftest broadcast-stream-streams.error.2
   (signals-error (broadcast-stream-streams (make-broadcast-stream) nil)
-		 program-error)
+                 program-error)
   t)
 
 

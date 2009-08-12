@@ -27,7 +27,7 @@
 
 (deftest make-symbol.6
     (eqt (make-symbol "A")
-	(make-symbol "A"))
+        (make-symbol "A"))
   nil)
 
 (deftest make-symbol.7
@@ -53,9 +53,9 @@
 
 (deftest make-symbol.12
   (let* ((name (make-array '(4) :initial-contents '(#\A #\B #\C #\D)
-			   :element-type 'base-char))
-	 (s (make-symbol name))
-	 (name2 (symbol-name s)))
+                           :element-type 'base-char))
+         (s (make-symbol name))
+         (name2 (symbol-name s)))
     (values
      (symbol-package s)
      (string=t name2 "ABCD")))
@@ -63,10 +63,10 @@
 
 (deftest make-symbol.13
   (let* ((name (make-array '(6) :initial-contents '(#\A #\B #\C #\D #\E #\F)
-			   :element-type 'character
-			   :fill-pointer 4))
-	 (s (make-symbol name))
-	 (name2 (symbol-name s)))
+                           :element-type 'character
+                           :fill-pointer 4))
+         (s (make-symbol name))
+         (name2 (symbol-name s)))
     (values
      (symbol-package s)
      (string=t name2 "ABCD")))
@@ -74,10 +74,10 @@
 
 (deftest make-symbol.14
   (let* ((name (make-array '(4) :initial-contents '(#\A #\B #\C #\D)
-			   :adjustable t
-			   :element-type 'character))
-	 (s (make-symbol name))
-	 (name2 (symbol-name s)))
+                           :adjustable t
+                           :element-type 'character))
+         (s (make-symbol name))
+         (name2 (symbol-name s)))
     (values
      (symbol-package s)
      (string=t name2 "ABCD")))
@@ -85,12 +85,12 @@
 
 (deftest make-symbol.15
   (let* ((name0 (make-array '(6) :initial-contents '(#\0 #\A #\B #\C #\D #\E)
-			    :element-type 'character))
-	 (name (make-array '(4) :element-type 'character
-			   :displaced-to name0
-			   :displaced-index-offset 1))
-	 (s (make-symbol name))
-	 (name2 (symbol-name s)))
+                            :element-type 'character))
+         (name (make-array '(4) :element-type 'character
+                           :displaced-to name0
+                           :displaced-index-offset 1))
+         (s (make-symbol name))
+         (name2 (symbol-name s)))
     (values
      (symbol-package s)
      (string=t name2 "ABCD")))
@@ -98,12 +98,12 @@
 
 (deftest make-symbol.16
   (let* ((name0 (make-array '(6) :initial-contents '(#\0 #\A #\B #\C #\D #\E)
-			    :element-type 'base-char))
-	 (name (make-array '(4) :element-type 'base-char
-			   :displaced-to name0
-			   :displaced-index-offset 1))
-	 (s (make-symbol name))
-	 (name2 (symbol-name s)))
+                            :element-type 'base-char))
+         (name (make-array '(4) :element-type 'base-char
+                           :displaced-to name0
+                           :displaced-index-offset 1))
+         (s (make-symbol name))
+         (name2 (symbol-name s)))
     (values
      (symbol-package s)
      (string=t name2 "ABCD")))

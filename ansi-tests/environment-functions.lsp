@@ -7,16 +7,16 @@
 
 (defmacro def-env-tests (fn-name)
   (flet ((%name (suffix) (intern (concatenate 'string (symbol-name fn-name) suffix)
-				 (find-package :cl-test))))
+                                 (find-package :cl-test))))
     `(progn
        (deftest ,(%name ".1")
-	 (let ((x (,fn-name)))
-	   (or (not x)
-	       (notnot (stringp x))))
-	 t)
+         (let ((x (,fn-name)))
+           (or (not x)
+               (notnot (stringp x))))
+         t)
        (deftest ,(%name ".ERROR.1")
-	 (signals-error (,fn-name nil) program-error)
-	 t))))
+         (signals-error (,fn-name nil) program-error)
+         t))))
 
 (def-env-tests lisp-implementation-type)
 (def-env-tests lisp-implementation-version)

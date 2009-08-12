@@ -10,12 +10,12 @@
 (deftest nbutlast.1
   (let ((x (list 'a 'b 'c 'd 'e)))
     (let ((y (cdr x))
-	  (z (cddr x)))
+          (z (cddr x)))
       (let ((result (nbutlast x 2)))
-	(and (eqt x result)
-	     (eqt (cdr x) y)
-	     (eqt (cddr x) z)
-	     result))))
+        (and (eqt x result)
+             (eqt (cdr x) y)
+             (eqt (cddr x) z)
+             result))))
   (a b c))
 
 (deftest nbutlast.2
@@ -34,7 +34,7 @@
   (let ((x (list* 'a 'b 'c 'd)))
     (let ((result (nbutlast x 1)))
       (and (eqt result x)
-	   result)))
+           result)))
   (a b))
 
 (deftest nbutlast.5
@@ -61,9 +61,9 @@
   (let ((i 0) x y)
     (values
      (nbutlast (progn (setf x (incf i))
-		      (list 'a 'b 'c 'd 'e))
-	       (progn (setf y (incf i))
-		      2))
+                      (list 'a 'b 'c 'd 'e))
+               (progn (setf y (incf i))
+                      2))
      i x y))
   (a b c) 2 1 2)
 
@@ -78,7 +78,7 @@
 
 (deftest nbutlast.error.1
   (signals-error (let ((x (list* 'a 'b 'c 'd))) (nbutlast x 'a))
-		 type-error)
+                 type-error)
   t)
 
 (deftest nbutlast.error.2

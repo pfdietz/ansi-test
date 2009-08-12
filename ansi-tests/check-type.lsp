@@ -18,10 +18,10 @@
   (let ((x 'a))
     (handler-bind
      ((type-error #'(lambda (c)
-		      (assert (eql (type-error-datum c) x))
-		      (assert (not (typep x (type-error-expected-type c))))
-		      ;; Can we assume the expected-type is NUMBER?
-		      (store-value 15 c))))
+                      (assert (eql (type-error-datum c) x))
+                      (assert (not (typep x (type-error-expected-type c))))
+                      ;; Can we assume the expected-type is NUMBER?
+                      (store-value 15 c))))
      (values (check-type x number) x)))
   nil 15)
 
@@ -34,10 +34,10 @@
   (let ((x 'a))
     (handler-bind
      ((type-error #'(lambda (c)
-		      (assert (eql (type-error-datum c) x))
-		      (assert (not (typep x (type-error-expected-type c))))
-		      ;; Can we assume the expected-type is STRING?
-		      (store-value "abc" c))))
+                      (assert (eql (type-error-datum c) x))
+                      (assert (not (typep x (type-error-expected-type c))))
+                      ;; Can we assume the expected-type is STRING?
+                      (store-value "abc" c))))
      (values (check-type x string "a string") x)))
   nil "abc")
 
@@ -45,10 +45,10 @@
   (let ((x 'a))
     (handler-bind
      ((type-error #'(lambda (c)
-		      (assert (eql (type-error-datum c) x))
-		      (assert (not (typep x (type-error-expected-type c))))
-		      ;; Can we assume the expected-type is NUMBER?
-		      (store-value 15 nil))))
+                      (assert (eql (type-error-datum c) x))
+                      (assert (not (typep x (type-error-expected-type c))))
+                      ;; Can we assume the expected-type is NUMBER?
+                      (store-value 15 nil))))
      (values (check-type x number) x)))
   nil 15)
 
@@ -56,10 +56,10 @@
   (let ((x 'a))
     (handler-bind
      ((type-error #'(lambda (c)
-		      (assert (eql (type-error-datum c) x))
-		      (assert (not (typep x (type-error-expected-type c))))
-		      ;; Can we assume the expected-type is NUMBER?
-		      (store-value 15))))
+                      (assert (eql (type-error-datum c) x))
+                      (assert (not (typep x (type-error-expected-type c))))
+                      ;; Can we assume the expected-type is NUMBER?
+                      (store-value 15))))
      (values (check-type x number) x)))
   nil 15)
 
@@ -71,7 +71,7 @@
     (macrolet
      ((%m (z) z))
      (check-type (expand-in-current-env (%m x))
-		 (integer 8 13))))
+                 (integer 8 13))))
   nil)
 
 (deftest check-type.9

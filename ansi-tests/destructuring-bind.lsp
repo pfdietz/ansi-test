@@ -134,8 +134,8 @@
     (declare (special x))
     (let ((x :good))
       (destructuring-bind (y) (list x)
-	(declare (special x))
-	y)))
+        (declare (special x))
+        y)))
   :good)
 
 (deftest destructuring-bind.26
@@ -156,7 +156,7 @@
 (deftest destructuring-bind.29
   (destructuring-bind (x &aux y) '(:foo) (values x y))
   :foo nil)
-  
+
 (deftest destructuring-bind.30
   (destructuring-bind (x &aux (y (list x))) '(:foo) (values x y))
   :foo (:foo))
@@ -175,22 +175,22 @@
 #|
 (deftest destructuring-bind.error.1
   (signals-error (destructuring-bind (a b c) nil (list a b c))
-		 program-error)
+                 program-error)
   t)
 
 (deftest destructuring-bind.error.2
   (signals-error (destructuring-bind ((a b c)) nil (list a b c))
-		 program-error)
+                 program-error)
   t)
 
 (deftest destructuring-bind.error.3
   (signals-error (destructuring-bind (a b) 'x (list a b))
-		 program-error)
+                 program-error)
   t)
 
 (deftest destructuring-bind.error.4
   (signals-error (destructuring-bind (a . b) 'x (list a b))
-		 program-error)
+                 program-error)
   t)
 |#
 
@@ -204,18 +204,18 @@
 
 (deftest destructuring-bind.error.7
   (signals-error (funcall (macro-function 'destructuring-bind))
-		 program-error)
+                 program-error)
   t)
 
 (deftest destructuring-bind.error.8
   (signals-error (funcall (macro-function 'destructuring-bind)
-			   '(destructuring-bind (a . b) '(1 2) nil))
-		 program-error)
+                           '(destructuring-bind (a . b) '(1 2) nil))
+                 program-error)
   t)
 
 (deftest destructuring-bind.error.9
   (signals-error (funcall (macro-function 'destructuring-bind)
-			   '(destructuring-bind (a . b) '(1 2) nil)
-			   nil nil)
-		 program-error)
+                           '(destructuring-bind (a . b) '(1 2) nil)
+                           nil nil)
+                 program-error)
   t)

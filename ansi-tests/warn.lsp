@@ -9,9 +9,9 @@
   (let ((warned nil))
     (handler-bind
      ((warning #'(lambda (c)
-		   (assert (typep c 'simple-warning))
-		   (setf warned t)
-		   (muffle-warning c))))
+                   (assert (typep c 'simple-warning))
+                   (setf warned t)
+                   (muffle-warning c))))
      (values
       (multiple-value-list (warn "This is a warning"))
       warned)))
@@ -21,9 +21,9 @@
   (let ((warned nil))
     (handler-bind
      ((warning #'(lambda (c)
-		   (assert (typep c 'simple-warning))
-		   (setf warned t)
-		   (muffle-warning))))
+                   (assert (typep c 'simple-warning))
+                   (setf warned t)
+                   (muffle-warning))))
      (values
       (multiple-value-list (warn "This is a warning"))
       warned)))
@@ -35,16 +35,16 @@
     (let ((warned nil))
       (handler-bind
        ((warning #'(lambda (c)
-		     (assert (typep c 'simple-warning))
-		     (setf warned t)
-		     (muffle-warning c))))
+                     (assert (typep c 'simple-warning))
+                     (setf warned t)
+                     (muffle-warning c))))
        (warn "Foo!"))))
   "")
 
 (deftest warn.4
   (let ((str (with-output-to-string
-	       (*error-output*)
-	       (warn "Foo!"))))
+               (*error-output*)
+               (warn "Foo!"))))
     (not (string= str "")))
   t)
 
@@ -52,9 +52,9 @@
   (let ((warned nil))
     (handler-bind
      ((simple-warning #'(lambda (c)
-			  (assert (typep c 'simple-warning))
-			  (setf warned t)
-			  (muffle-warning c))))
+                          (assert (typep c 'simple-warning))
+                          (setf warned t)
+                          (muffle-warning c))))
      (values
       (multiple-value-list (warn "This is a warning"))
       warned)))
@@ -64,9 +64,9 @@
   (let ((warned nil))
     (handler-bind
      ((simple-condition #'(lambda (c)
-			    (assert (typep c 'simple-warning))
-			    (setf warned t)
-			    (muffle-warning c))))
+                            (assert (typep c 'simple-warning))
+                            (setf warned t)
+                            (muffle-warning c))))
      (values
       (multiple-value-list (warn "This is a warning"))
       warned)))
@@ -76,9 +76,9 @@
   (let ((warned nil))
     (handler-bind
      ((condition #'(lambda (c)
-		     (assert (typep c 'simple-warning))
-		     (setf warned t)
-		     (muffle-warning c))))
+                     (assert (typep c 'simple-warning))
+                     (setf warned t)
+                     (muffle-warning c))))
      (values
       (multiple-value-list (warn "This is a warning"))
       warned)))
@@ -88,9 +88,9 @@
   (let ((warned nil))
     (handler-bind
      ((warning #'(lambda (c)
-		   (assert (typep c 'simple-warning))
-		   (setf warned t)
-		   (muffle-warning c))))
+                   (assert (typep c 'simple-warning))
+                   (setf warned t)
+                   (muffle-warning c))))
      (values
       (multiple-value-list (warn 'simple-warning :format-control "Foo!"))
       warned)))
@@ -100,9 +100,9 @@
   (let ((warned nil))
     (handler-bind
      ((warning #'(lambda (c)
-		   (assert (typep c 'warning))
-		   (setf warned t)
-		   (muffle-warning c))))
+                   (assert (typep c 'warning))
+                   (setf warned t)
+                   (muffle-warning c))))
      (values
       (multiple-value-list (warn 'warning))
       warned)))
@@ -112,9 +112,9 @@
   (let ((warned nil))
     (handler-bind
      ((warning #'(lambda (c)
-		   (assert (typep c 'simple-warning))
-		   (setf warned t)
-		   (muffle-warning c))))
+                   (assert (typep c 'simple-warning))
+                   (setf warned t)
+                   (muffle-warning c))))
      (values
       (multiple-value-list (warn (make-condition 'simple-warning :format-control "Foo!")))
       warned)))
@@ -124,9 +124,9 @@
   (let ((warned nil))
     (handler-bind
      ((warning #'(lambda (c)
-		   (assert (typep c 'warning))
-		   (setf warned t)
-		   (muffle-warning c))))
+                   (assert (typep c 'warning))
+                   (setf warned t)
+                   (muffle-warning c))))
      (values
       (multiple-value-list (warn (make-condition 'warning)))
       warned)))
@@ -164,12 +164,12 @@
   (let ((warned nil))
     (handler-bind
      ((warning #'(lambda (c)
-		   (assert (typep c 'simple-warning))
-		   (setf warned t)
-		   (muffle-warning c))))
+                   (assert (typep c 'simple-warning))
+                   (setf warned t)
+                   (muffle-warning c))))
      (values
       (multiple-value-list
        (warn (make-condition 'simple-warning
-			     :format-control (formatter "Foo!"))))
+                             :format-control (formatter "Foo!"))))
       warned)))
   (nil) t)

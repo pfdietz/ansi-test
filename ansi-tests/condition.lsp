@@ -47,17 +47,17 @@
 ;;; subtype relationships allowed on condition types
 (deftest condition.2
   (loop for (cnd . supers) in *allowed-condition-inclusions*
-	append (loop for super in supers
-		     unless (subtypep cnd super)
-		     collect (list cnd super)))
+        append (loop for super in supers
+                     unless (subtypep cnd super)
+                     collect (list cnd super)))
   nil)
 
 (deftest condition.3
   ;; Relationships given in *allowed-condition-inclusions* are the only
   ;; subtype relationships allowed on condition types
   (loop for cnds in *allowed-condition-inclusions*
-	for cnd = (first cnds)
-	append (loop for super in (set-difference *condition-types* cnds)
-		     when (subtypep cnd super)
-		     collect (list cnd super)))
+        for cnd = (first cnds)
+        append (loop for super in (set-difference *condition-types* cnds)
+                     when (subtypep cnd super)
+                     collect (list cnd super)))
   nil)

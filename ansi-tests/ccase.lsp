@@ -37,9 +37,9 @@
 (deftest ccase.7
   (let ((x 'z))
     (ccase x
-	   ((a b c) 1)
-	   ((d e) 2)
-	   ((f z g) 3)))
+           ((a b c) 1)
+           ((d e) 2)
+           ((f z g) 3)))
   3)
 
 (deftest ccase.8
@@ -94,10 +94,10 @@
 (deftest ccase.20
   (let ((x #\a))
     (ccase x
-	   ((#\b #\c) 10)
-	   ((#\d #\e #\A) 20)
-	   (() 30)
-	   ((#\z #\a #\y) 40)))
+           ((#\b #\c) 10)
+           ((#\d #\e #\A) 20)
+           (() 30)
+           ((#\z #\a #\y) 40)))
   40)
 
 (deftest ccase.21 (let ((x 1)) (ccase x (1 (values)) (2 'a))))
@@ -108,7 +108,7 @@
 ;;; Show that the key expression is evaluated only once.
 (deftest ccase.25
   (let ((a (vector 'a 'b 'c 'd 'e))
-	(i 1))
+        (i 1))
     (values
      (ccase (aref a (incf i))
        (a 1)
@@ -168,8 +168,8 @@
     (tagbody
      (let ((x 'a))
        (ccase x (a (go 10)
-		   10
-		   (return-from done 'bad))))
+                   10
+                   (return-from done 'bad))))
      10
      (return-from done 'good)))
   good)
@@ -182,9 +182,9 @@
     (macrolet
      ((%m (z) z))
      (ccase (expand-in-current-env (%m x))
-	    (:a :bad1)
-	    (:b :good)
-	    (:c :bad2))))
+            (:a :bad1)
+            (:b :good)
+            (:c :bad2))))
   :good)
 
 
@@ -195,15 +195,15 @@
 
 (deftest ccase.error.1
   (signals-error (funcall (macro-function 'ccase))
-		 program-error)
+                 program-error)
   t)
 
 (deftest ccase.error.2
   (signals-error (funcall (macro-function 'ccase) '(ccase t))
-		 program-error)
+                 program-error)
   t)
 
 (deftest ccase.error.3
   (signals-error (funcall (macro-function 'ccase) '(ccase t) nil nil)
-		 program-error)
+                 program-error)
   t)

@@ -19,34 +19,34 @@
 
 (deftest realpart.1
   (loop for x in *reals*
-	for c = (complex x 0)
-	for rp = (realpart c)
-	unless (eql x rp)
-	collect (list x c rp))
+        for c = (complex x 0)
+        for rp = (realpart c)
+        unless (eql x rp)
+        collect (list x c rp))
   nil)
 
 (deftest realpart.2
   (loop for x in *reals*
-	for c = (complex x 1)
-	for rp = (realpart c)
-	unless (eql x rp)
-	collect (list x c rp))
+        for c = (complex x 1)
+        for rp = (realpart c)
+        unless (eql x rp)
+        collect (list x c rp))
   nil)
 
 (deftest realpart.3
   (loop for x in *reals*
-	for c = (complex x x)
-	for rp = (realpart c)
-	unless (eql x rp)
-	collect (list x c rp))
+        for c = (complex x x)
+        for rp = (realpart c)
+        unless (eql x rp)
+        collect (list x c rp))
   nil)
 
 ;;; Should move this to complex.lsp
 (deftest realpart.4
   (loop for c in *complexes*
-	for rp = (realpart c)
-	for ip = (imagpart c)
-	for c2 = (complex rp ip)
-	unless (eql c c2)
-	collect (list c rp ip c2))
+        for rp = (realpart c)
+        for ip = (imagpart c)
+        for c2 = (complex rp ip)
+        unless (eql c c2)
+        collect (list c rp ip c2))
   nil)

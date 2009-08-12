@@ -7,10 +7,10 @@
 
 (deftest constantly.1
   (let ((fn (cl:constantly 10))
-	(x nil))
+        (x nil))
     (loop for i from 0 to (min 256 (1- call-arguments-limit))
-	  always (prog1 (eql (apply fn x) 10)
-		   (push 'a x))))
+          always (prog1 (eql (apply fn x) 10)
+                   (push 'a x))))
   t)
 
 (deftest constantly.2

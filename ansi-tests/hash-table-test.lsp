@@ -11,24 +11,24 @@
 
 (deftest hash-table-test.2
   (loop for test in '(eq eql equal equalp)
-	unless (eq (hash-table-test (make-hash-table :test test)) test)
-	collect test)
+        unless (eq (hash-table-test (make-hash-table :test test)) test)
+        collect test)
   nil)
 
 (deftest hash-table-test.3
   (loop for test in '(eq eql equal equalp)
-	unless (eq (hash-table-test (make-hash-table
-				     :test (symbol-function test)))
-		   test)
-	collect test)
+        unless (eq (hash-table-test (make-hash-table
+                                     :test (symbol-function test)))
+                   test)
+        collect test)
   nil)
 
 (deftest hash-table-test.4
   (loop for test in '(eq eql equal equalp)
-	unless (eq (hash-table-test (make-hash-table
-				     :test (eval `(function ,test))))
-		   test)
-	collect test)
+        unless (eq (hash-table-test (make-hash-table
+                                     :test (eval `(function ,test))))
+                   test)
+        collect test)
   nil)
 
 ;;; Error cases

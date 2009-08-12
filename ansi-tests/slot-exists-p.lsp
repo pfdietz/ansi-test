@@ -14,12 +14,12 @@
   (let ((obj (allocate-instance (find-class 'slot-exists-p-class-01))))
     (notnot-mv (slot-exists-p obj 'a)))
   t)
-     
+
 (deftest slot-exists-p.2
   (let ((obj (allocate-instance (find-class 'slot-exists-p-class-01))))
     (notnot-mv (slot-exists-p obj 'b)))
   t)
-     
+
 (deftest slot-exists-p.3
   (let ((obj (allocate-instance (find-class 'slot-exists-p-class-01))))
     (notnot-mv (slot-exists-p obj 'c)))
@@ -99,7 +99,7 @@
 
 (defstruct (slot-exists-p-struct-02 (:include slot-exists-p-struct-01))
   d e)
-    
+
 (deftest slot-exists-p.13
   (let ((obj (make-slot-exists-p-struct-02)))
     (map-slot-exists-p* obj '(a b c d e f z nil)))
@@ -110,7 +110,7 @@
     (map-slot-exists-p* obj '(a b c d e f z nil)))
   (t t t t t nil nil nil))
 
-  
+
 ;;; SLOT-EXISTS-P is supposed to work on condition objects, too
 ;;; (after all, they are objects, and they have slots)
 
@@ -136,25 +136,25 @@
   (let ((i 0) x y)
     (values
      (slot-exists-p (progn (setf x (incf i)) 'a)
-		    (progn (setf y (incf i)) (gensym)))
+                    (progn (setf y (incf i)) (gensym)))
      i x y))
   nil 2 1 2)
 
 (deftest slot-exists-p.order.2
   (let ((obj (allocate-instance (find-class 'slot-exists-p-class-01)))
-	(i 0) x y)
+        (i 0) x y)
     (values
      (notnot (slot-exists-p (progn (setf x (incf i)) obj)
-			    (progn (setf y (incf i)) 'a)))
+                            (progn (setf y (incf i)) 'a)))
      i x y))
   t 2 1 2)
 
 (deftest slot-exists-p.order.3
   (let ((obj (allocate-instance (find-class 'slot-exists-p-class-01)))
-	(i 0) x y)
+        (i 0) x y)
     (values
      (notnot (slot-exists-p (progn (setf x (incf i)) obj)
-			    (progn (setf y (incf i)) 'b)))
+                            (progn (setf y (incf i)) 'b)))
      i x y))
   t 2 1 2)
 
@@ -170,12 +170,12 @@
 
 (deftest slot-exists-p.error.3
   (signals-error (slot-exists-p (make-instance 'slot-exists-p-class-01))
-		 program-error)
+                 program-error)
   t)
 
 (deftest slot-exists-p.error.4
   (signals-error (slot-exists-p (make-instance 'slot-exists-p-class-01) 'a nil)
-		 program-error)
+                 program-error)
   t)
 
 

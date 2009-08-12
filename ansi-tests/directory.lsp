@@ -27,32 +27,32 @@
 
 (deftest directory.6
   (let* ((pattern-pathname (make-pathname :name :wild :type :wild
-					  :defaults *default-pathname-defaults*))
-	 (pathnames (directory pattern-pathname)))
+                                          :defaults *default-pathname-defaults*))
+         (pathnames (directory pattern-pathname)))
     (values
      (remove-if #'pathnamep pathnames)
      (loop for pn in pathnames
-	   unless (equal pn (truename pn))
-	   collect pn)
+           unless (equal pn (truename pn))
+           collect pn)
 ;;     (loop for pn in pathnames
-;;	   unless (pathname-match-p pn pattern-pathname)
-;;	   collect pn))
+;;         unless (pathname-match-p pn pattern-pathname)
+;;         collect pn))
      ))
   nil nil ;; nil
   )
 
 (deftest directory.7
   (let* ((pattern-pathname (make-pathname :name :wild :type :wild
-					  :defaults *default-pathname-defaults*))
-	 (pathnames (directory pattern-pathname)))
+                                          :defaults *default-pathname-defaults*))
+         (pathnames (directory pattern-pathname)))
     (loop for pn in pathnames
-	  unless (equal pn (probe-file pn))
-	  collect pn))
+          unless (equal pn (probe-file pn))
+          collect pn))
   nil)
 
 (deftest directory.8
   (let* ((pathname-pattern "CLTEST:*.*")
-	 (len (length (directory pathname-pattern))))
+         (len (length (directory pathname-pattern))))
     (if (< len 500) len nil))
   nil)
 

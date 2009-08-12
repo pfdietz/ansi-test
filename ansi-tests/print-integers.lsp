@@ -269,59 +269,59 @@
 (deftest print.integers.base.various.1
   (with-standard-io-syntax
    (loop for b from 2 to 36
-	 nconc
-	 (let ((*print-base* b) (*read-base* b))
-	   (loop for i from 1 to 100
-		 for n = (expt b i)
-		 for str = (with-output-to-string (s) (prin1 n s))
-		 for result = (read-from-string str)
-		 unless (= n result)
-		 collect (list b i n str result)))))
+         nconc
+         (let ((*print-base* b) (*read-base* b))
+           (loop for i from 1 to 100
+                 for n = (expt b i)
+                 for str = (with-output-to-string (s) (prin1 n s))
+                 for result = (read-from-string str)
+                 unless (= n result)
+                 collect (list b i n str result)))))
   nil)
 
 (deftest print.integers.base.various.2
   (with-standard-io-syntax
    (loop for b from 2 to 36
-	 nconc
-	 (let ((*print-base* b) (*read-base* b))
-	   (loop for i from 1 to 100
-		 for n = (- (expt b i))
-		 for str = (with-output-to-string (s) (prin1 n s))
-		 for result = (read-from-string str)
-		 unless (= n result)
-		 collect (list b i n str result)))))
+         nconc
+         (let ((*print-base* b) (*read-base* b))
+           (loop for i from 1 to 100
+                 for n = (- (expt b i))
+                 for str = (with-output-to-string (s) (prin1 n s))
+                 for result = (read-from-string str)
+                 unless (= n result)
+                 collect (list b i n str result)))))
   nil)
 
 (deftest print.integers.base.various.3
   (with-standard-io-syntax
    (loop for b from 2 to 36
-	 nconc
-	 (let ((*print-base* b) (*read-base* b) (*print-radix* t))
-	   (loop for i from 1 to 100
-		 for n = (expt b i)
-		 for str = (with-output-to-string (s) (prin1 n s))
-		 for result = (read-from-string str)
-		 unless (= n result)
-		 collect (list b i n str result)))))
+         nconc
+         (let ((*print-base* b) (*read-base* b) (*print-radix* t))
+           (loop for i from 1 to 100
+                 for n = (expt b i)
+                 for str = (with-output-to-string (s) (prin1 n s))
+                 for result = (read-from-string str)
+                 unless (= n result)
+                 collect (list b i n str result)))))
   nil)
 
 (deftest print.integers.base.various.4
   (with-standard-io-syntax
    (loop for b from 2 to 36
-	 nconc
-	 (let ((*print-base* b) (*read-base* b) (*print-radix* t))
-	   (loop for i from 1 to 100
-		 for n = (- (expt b i))
-		 for str = (with-output-to-string (s) (prin1 n s))
-		 for result = (read-from-string str)
-		 unless (= n result)
-		 collect (list b i n str result)))))
-  nil)	      
+         nconc
+         (let ((*print-base* b) (*read-base* b) (*print-radix* t))
+           (loop for i from 1 to 100
+                 for n = (- (expt b i))
+                 for str = (with-output-to-string (s) (prin1 n s))
+                 for result = (read-from-string str)
+                 unless (= n result)
+                 collect (list b i n str result)))))
+  nil)
 
 (deftest print.integers.random.1
   (loop for numbits = (random 40)
-	for bound = (ash 1 numbits)
-	for r = (- (random (+ bound bound)) bound)
-	repeat 10000
-	nconc (randomly-check-readability r))
+        for bound = (ash 1 numbits)
+        for r = (- (random (+ bound bound)) bound)
+        repeat 10000
+        nconc (randomly-check-readability r))
   nil)

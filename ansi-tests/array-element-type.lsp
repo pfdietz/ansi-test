@@ -9,7 +9,7 @@
 
 (deftest array-element-type.1
   (macrolet ((%m (z) z))
-	    (notnot (array-element-type (expand-in-current-env (%m #(a b c))))))
+            (notnot (array-element-type (expand-in-current-env (%m #(a b c))))))
   t)
 
 (deftest array-element-type.order.1

@@ -17,15 +17,15 @@
 (deftest loop.8.3
   (let ((y 2))
     (loop with x = y
-	  with y = (1+ x) do (return (list x y))))
+          with y = (1+ x) do (return (list x y))))
   (2 3))
 
 (deftest loop.8.4
   (let (a b)
     (loop with a = 1
-	  and b = (list a)
-	  and c = (list b)
-	  return (list a b c)))
+          and b = (list a)
+          and c = (list b)
+          return (list a b c)))
   (1 (nil) (nil)))
 
 
@@ -99,12 +99,12 @@
 
 (deftest loop.8.21
   (loop with b = 3
-	and (a nil) = '(1 2) return (list a b))
+        and (a nil) = '(1 2) return (list a b))
   (1 3))
 
 (deftest loop.8.22
   (loop with b = 3
-	and (nil a) = '(1 2) return (list a b))
+        and (nil a) = '(1 2) return (list a b))
   (2 3))
 
 ;;; The NIL block of a loop encloses the entire loop.
@@ -140,13 +140,13 @@
 (deftest loop.8.error.1
   (signals-error
    (loop with a = 1
-	 and  a = 2 return a)
+         and  a = 2 return a)
    program-error)
   t)
 
 (deftest loop.8.error.2
   (signals-error
    (loop with a = 1
-	 with a = 2 return a)
+         with a = 2 return a)
    program-error)
   t)

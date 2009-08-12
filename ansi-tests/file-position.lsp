@@ -7,24 +7,24 @@
 
 (deftest file-position.1
   (with-open-file (is "file-position.lsp":direction :input)
-		  (file-position is))
+                  (file-position is))
   0)
 
 (deftest file-position.2
   (with-open-file (is "file-position.lsp":direction :input)
-		  (values
-		   (multiple-value-list
-		    (notnot-mv (file-position is :start)))
-		   (file-position is)))
-			      
+                  (values
+                   (multiple-value-list
+                    (notnot-mv (file-position is :start)))
+                   (file-position is)))
+
   (t) 0)
 
 (deftest file-position.3
   (with-open-file (is "file-position.lsp":direction :input)
-		  (values
-		   (multiple-value-list
-		    (notnot-mv (file-position is :end)))
-		   (notnot (> (file-position is) 0))))
+                  (values
+                   (multiple-value-list
+                    (notnot-mv (file-position is :end)))
+                   (notnot (> (file-position is) 0))))
   (t) t)
 
 (deftest file-position.4
@@ -51,83 +51,83 @@
    (os "tmp.dat":direction :output
        :if-exists :supersede)
    (let ((p1 (file-position os))
-	 (delta (file-string-length os #\x)))
+         (delta (file-string-length os #\x)))
      (write-char #\x os)
      (let ((p2 (file-position os)))
        (or (null p1) (null p2) (null delta)
-	   (=t (+ p1 delta) p2)))))
+           (=t (+ p1 delta) p2)))))
   t)
 
 ;;; Byte streams
 
 (deftest file-position.7
   (loop for len from 1 to 32
-	for n = (ash 1 len)
-	do (with-open-file
-	    (os "tmp.dat" :direction :output
-		:if-exists :supersede
-		:element-type `(unsigned-byte ,len))
-	    (loop for i from 0 below 100
-		  for r = (logand (1- n) i)
-		  for pos = (file-position os)
-		  do (assert (or (not pos) (eql pos i)))
-		  do (write-byte r os)))
-	do (with-open-file
-	    (is "tmp.dat" :direction :input
-		:element-type `(unsigned-byte ,len))
-	    (loop for i from 0 below 100
-		  for pos = (file-position is)
-		  do (assert (or (not pos) (eql pos i)))
-		  do (let ((byte (read-byte is)))
-		       (assert (eql byte (logand (1- n) i)))))))
+        for n = (ash 1 len)
+        do (with-open-file
+            (os "tmp.dat" :direction :output
+                :if-exists :supersede
+                :element-type `(unsigned-byte ,len))
+            (loop for i from 0 below 100
+                  for r = (logand (1- n) i)
+                  for pos = (file-position os)
+                  do (assert (or (not pos) (eql pos i)))
+                  do (write-byte r os)))
+        do (with-open-file
+            (is "tmp.dat" :direction :input
+                :element-type `(unsigned-byte ,len))
+            (loop for i from 0 below 100
+                  for pos = (file-position is)
+                  do (assert (or (not pos) (eql pos i)))
+                  do (let ((byte (read-byte is)))
+                       (assert (eql byte (logand (1- n) i)))))))
   nil)
 
 (deftest file-position.8
   (loop for len from 33 to 100
-	for n = (ash 1 len)
-	do (with-open-file
-	    (os "tmp.dat" :direction :output
-		:if-exists :supersede
-		:element-type `(unsigned-byte ,len))
-	    (loop for i from 0 below 100
-		  for r = (logand (1- n) i)
-		  for pos = (file-position os)
-		  do (assert (or (not pos) (eql pos i)))
-		  do (write-byte r os)))
-	do (with-open-file
-	    (is "tmp.dat" :direction :input
-		:element-type `(unsigned-byte ,len))
-	    (loop for i from 0 below 100
-		  for pos = (file-position is)
-		  do (assert (or (not pos) (eql pos i)))
-		  do (let ((byte (read-byte is)))
-		       (assert (eql byte (logand (1- n) i)))))))
+        for n = (ash 1 len)
+        do (with-open-file
+            (os "tmp.dat" :direction :output
+                :if-exists :supersede
+                :element-type `(unsigned-byte ,len))
+            (loop for i from 0 below 100
+                  for r = (logand (1- n) i)
+                  for pos = (file-position os)
+                  do (assert (or (not pos) (eql pos i)))
+                  do (write-byte r os)))
+        do (with-open-file
+            (is "tmp.dat" :direction :input
+                :element-type `(unsigned-byte ,len))
+            (loop for i from 0 below 100
+                  for pos = (file-position is)
+                  do (assert (or (not pos) (eql pos i)))
+                  do (let ((byte (read-byte is)))
+                       (assert (eql byte (logand (1- n) i)))))))
   nil)
 
 (deftest file-position.9
   (with-input-from-string
    (s "abcdefghijklmnopqrstuvwxyz")
    (loop repeat 26
-	 for p = (file-position s)
-	 unless (or (not p)
-		    (progn
-		      (file-position s p)
-		      (eql (file-position s) p)))
-	 collect p
-	 do (read-char s)))
+         for p = (file-position s)
+         unless (or (not p)
+                    (progn
+                      (file-position s p)
+                      (eql (file-position s) p)))
+         collect p
+         do (read-char s)))
   nil)
 
 (deftest file-position.10
   (with-output-to-string
    (s)
    (loop repeat 26
-	 for p = (file-position s)
-	 unless (or (not p)
-		    (progn
-		      (file-position s p)
-		      (eql (file-position s) p)))
-	 collect p
-	 do (write-char #\x s)))
+         for p = (file-position s)
+         unless (or (not p)
+                    (progn
+                      (file-position s p)
+                      (eql (file-position s) p)))
+         collect p
+         do (write-char #\x s)))
   "xxxxxxxxxxxxxxxxxxxxxxxxxx")
 
 ;;; Error tests
@@ -153,8 +153,8 @@
     (flet ((%fail () (error 'type-error)))
       (unless (file-position is :end) (%fail))
       (let ((fp (file-position is)))
-	(unless fp (%fail))
-	(file-position is (+ 1000000 fp)))))
+        (unless fp (%fail))
+        (file-position is (+ 1000000 fp)))))
    error)
   t)
 
@@ -167,4 +167,4 @@
   t)
 |#
 
-  
+

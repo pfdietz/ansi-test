@@ -33,7 +33,7 @@
 
 (deftest do-external-symbols.5
     (equalt (collect-external-symbols "KEYWORD")
-	    (collect-symbols "KEYWORD"))
+            (collect-symbols "KEYWORD"))
   t)
 
 ;; Test that do-external-symbols works without
@@ -48,7 +48,7 @@
 
 (deftest do-external-symbols.7
   (let ((x nil)
-	(*package* (find-package "DS1")))
+        (*package* (find-package "DS1")))
     (list
      (do-external-symbols (s) (push s x))
      (sort-symbols x)))
@@ -85,31 +85,31 @@
 
 (def-do-external-symbols-test do-external-symbols.10
   (make-array 6 :element-type 'base-char :initial-contents "DS1XXX"
-	      :fill-pointer 3))
+              :fill-pointer 3))
 
 (def-do-external-symbols-test do-external-symbols.11
   (make-array 6 :element-type 'character :initial-contents "DS1XXX"
-	      :fill-pointer 3))
+              :fill-pointer 3))
 
 (def-do-external-symbols-test do-external-symbols.12
   (make-array 3 :element-type 'base-char :initial-contents "DS1"
-	      :adjustable t))
+              :adjustable t))
 
 (def-do-external-symbols-test do-external-symbols.13
   (make-array 3 :element-type 'character :initial-contents "DS1"
-	      :adjustable t))
+              :adjustable t))
 
 (def-do-external-symbols-test do-external-symbols.14
   (let* ((etype 'base-char)
-	 (name0 (make-array 6 :element-type etype :initial-contents "XDS1XX")))
+         (name0 (make-array 6 :element-type etype :initial-contents "XDS1XX")))
     (make-array 3 :element-type etype
-		:displaced-to name0 :displaced-index-offset 1)))
+                :displaced-to name0 :displaced-index-offset 1)))
 
 (def-do-external-symbols-test do-external-symbols.15
   (let* ((etype 'character)
-	 (name0 (make-array 6 :element-type etype :initial-contents "XDS1XX")))
+         (name0 (make-array 6 :element-type etype :initial-contents "XDS1XX")))
     (make-array 3 :element-type etype
-		:displaced-to name0 :displaced-index-offset 1)))
+                :displaced-to name0 :displaced-index-offset 1)))
 
 ;;; Free declaration scope tests
 
@@ -118,8 +118,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(do-external-symbols (s (return-from done x))
-	  (declare (special x))))))
+        (do-external-symbols (s (return-from done x))
+          (declare (special x))))))
   :good)
 
 (deftest do-external-symbols.17
@@ -127,7 +127,7 @@
     (declare (special x))
     (let ((x :bad))
       (do-external-symbols (s "CL-TEST" x)
-	(declare (special x)))))
+        (declare (special x)))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms

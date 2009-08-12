@@ -7,23 +7,23 @@
 
 (deftest apropos.1
   (loop for n from 10
-	for x = (coerce (loop repeat n collect (random-from-seq +standard-chars+)) 'string)
-	unless (apropos-list x)
-	return (with-output-to-string (*standard-output*)
-				      (assert (null (multiple-value-list (apropos x))))))
+        for x = (coerce (loop repeat n collect (random-from-seq +standard-chars+)) 'string)
+        unless (apropos-list x)
+        return (with-output-to-string (*standard-output*)
+                                      (assert (null (multiple-value-list (apropos x))))))
   "")
 
 (deftest apropos.2
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (assert (null (multiple-value-list (apropos "CAR")))))))
+             (*standard-output*)
+             (assert (null (multiple-value-list (apropos "CAR")))))))
     (notnot (search "CAR" s :test #'string-equal)))
   t)
 
 (deftest apropos.3
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (assert (null (multiple-value-list (apropos "CAR" (find-package "CL"))))))))
+             (*standard-output*)
+             (assert (null (multiple-value-list (apropos "CAR" (find-package "CL"))))))))
     (notnot (search "CAR" s :test #'string-equal)))
   t)
 
@@ -32,40 +32,40 @@
     (do-special-strings
      (s "CAR" t)
      (setq result (with-output-to-string
-		    (*standard-output*)
-		    (assert (null (multiple-value-list (apropos s))))))
+                    (*standard-output*)
+                    (assert (null (multiple-value-list (apropos s))))))
      (assert (search "CAR" result :test #'string-equal))))
   t)
 
 (deftest apropos.5
   (let ((result nil)
-	(pkg (find-package "COMMON-LISP")))
+        (pkg (find-package "COMMON-LISP")))
     (do-special-strings
      (s "APROPOS" t)
      (setq result (with-output-to-string
-		    (*standard-output*)
-		    (assert (null (multiple-value-list (apropos s pkg))))))
+                    (*standard-output*)
+                    (assert (null (multiple-value-list (apropos s pkg))))))
      (assert (search "APROPOS" result :test #'string-equal))))
   t)
 
 (deftest apropos.6
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (assert (null (multiple-value-list (apropos "CAR" "CL")))))))
+             (*standard-output*)
+             (assert (null (multiple-value-list (apropos "CAR" "CL")))))))
     (notnot (search "CAR" s :test #'string-equal)))
   t)
 
 (deftest apropos.7
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (assert (null (multiple-value-list (apropos "CAR" :|CL|)))))))
+             (*standard-output*)
+             (assert (null (multiple-value-list (apropos "CAR" :|CL|)))))))
     (notnot (search "CAR" s :test #'string-equal)))
   t)
 
 (deftest apropos.8
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (assert (null (multiple-value-list (apropos "CAR" nil)))))))
+             (*standard-output*)
+             (assert (null (multiple-value-list (apropos "CAR" nil)))))))
     (notnot (search "CAR" s :test #'string-equal)))
   t)
 
@@ -73,9 +73,9 @@
   (macrolet
    ((%m (z) z))
    (let ((s (with-output-to-string
-	      (*standard-output*)
-	      (assert (null (multiple-value-list
-			     (apropos (expand-in-current-env (%m "CAR")))))))))
+              (*standard-output*)
+              (assert (null (multiple-value-list
+                             (apropos (expand-in-current-env (%m "CAR")))))))))
      (notnot (search "CAR" s :test #'string-equal))))
   t)
 
@@ -83,10 +83,10 @@
   (macrolet
    ((%m (z) z))
    (let ((s (with-output-to-string
-	      (*standard-output*)
-	      (assert (null (multiple-value-list
-			     (apropos "CAR"
-				      (expand-in-current-env (%m nil)))))))))
+              (*standard-output*)
+              (assert (null (multiple-value-list
+                             (apropos "CAR"
+                                      (expand-in-current-env (%m nil)))))))))
      (notnot (search "CAR" s :test #'string-equal))))
   t)
 

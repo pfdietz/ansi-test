@@ -70,37 +70,37 @@
 
 (deftest class-0303.1
   (let ((c1 (make-instance 'class-0303a))
-	(c2 (make-instance 'class-0303b))
-	(c3 (make-instance 'class-0303c)))
+        (c2 (make-instance 'class-0303b))
+        (c3 (make-instance 'class-0303c)))
     (slot-makunbound c1 'a)
     (slot-makunbound c2 'b)
     (values
      (loop for c in (list c1 c2 c3)
-	   collect (map-slot-boundp* c '(a b)))
+           collect (map-slot-boundp* c '(a b)))
      (list (setf (slot-value c1 'a) 'x1)
-	   (slot-boundp* c2 'a)
-	   (slot-value c3 'a))
+           (slot-boundp* c2 'a)
+           (slot-value c3 'a))
      (list (setf (slot-value c2 'a) 'x2)
-	   (slot-value c1 'a)
-	   (slot-value c2 'a)
-	   (slot-value c3 'a))
+           (slot-value c1 'a)
+           (slot-value c2 'a)
+           (slot-value c3 'a))
      (list (setf (slot-value c3 'a) 'x3)
-	   (slot-value c1 'a)
-	   (slot-value c2 'a)
-	   (slot-value c3 'a))
+           (slot-value c1 'a)
+           (slot-value c2 'a)
+           (slot-value c3 'a))
      ;;;
      (list (setf (slot-value c1 'b) 'y1)
-	   (slot-value c1 'b)
-	   (slot-boundp* c2 'b)
-	   (slot-boundp* c3 'b))
+           (slot-value c1 'b)
+           (slot-boundp* c2 'b)
+           (slot-boundp* c3 'b))
      (list (setf (slot-value c2 'b) 'y2)
-	   (slot-value c1 'b)
-	   (slot-value c2 'b)
-	   (slot-boundp c3 'b))
+           (slot-value c1 'b)
+           (slot-value c2 'b)
+           (slot-boundp c3 'b))
      (list (setf (slot-value c3 'b) 'y3)
-	   (slot-value c1 'b)
-	   (slot-value c2 'b)
-	   (slot-value c3 'b))))
+           (slot-value c1 'b)
+           (slot-value c2 'b)
+           (slot-value c3 'b))))
   ((nil nil) (nil nil) (nil nil))
   (x1 nil x1)
   (x2 x1 x2 x1)
@@ -164,18 +164,18 @@
 
 (deftest class-0306.1
   (loop for obj in
-	(mapcar #'make-instance
-	     '(class-0306a class-0306b class-0306c class-0306d
-	       class-0306e class-0306f class-0306g class-0306h))
-	collect (slot-value obj 'a))
+        (mapcar #'make-instance
+             '(class-0306a class-0306b class-0306c class-0306d
+               class-0306e class-0306f class-0306g class-0306h))
+        collect (slot-value obj 'a))
   (nil x y x x x x y))
 
 (deftest class-0306.2
   (loop for obj in
-	(mapcar #'make-instance
-	     '(class-0306a class-0306b class-0306c class-0306d
-	       class-0306e class-0306f class-0306g class-0306h))
-	collect (a-slot obj))
+        (mapcar #'make-instance
+             '(class-0306a class-0306b class-0306c class-0306d
+               class-0306e class-0306f class-0306g class-0306h))
+        collect (a-slot obj))
   (nil x y x x x x y))
 
 ;;; A class redefinition test that came up in cmucl
@@ -183,7 +183,7 @@
 (deftest class-0307.1
   (progn
     (setf (find-class 'class-0307a) nil
-	  (find-class 'class-0307b) nil)
+          (find-class 'class-0307b) nil)
     (eval '(defclass class-0307a () ()))
     (eval '(defclass class-0307b (class-0307a) (a)))
     (eval '(defclass class-0307a () ((a :initform nil))))
@@ -194,7 +194,7 @@
 (deftest class-0308.1
   (progn
     (setf (find-class 'class-0308a) nil
-	  (find-class 'class-0308b) nil)
+          (find-class 'class-0308b) nil)
     (eval '(defclass class-0308a () ()))
     (eval '(defclass class-0308b (class-0308a) (a)))
     (eval '(defclass class-0308a () ((a :initarg :a))))
@@ -208,47 +208,47 @@
   (progn
     (setf (find-class 'class-0309) nil)
     (let* ((class1 (eval '(defclass class-0309 () ((a) (b) (c)))))
-	   (obj1 (make-instance 'class-0309)))
+           (obj1 (make-instance 'class-0309)))
       (setf (class-name class1) nil)
       (let ((class2 (eval '(defclass class-0309 () ((a) (b) (c))))))
-	(values
-	 (eqt (class-of obj1) class1)
-	 (eqt class1 class2)
-	 (typep* obj1 class1)
-	 (typep* obj1 class2)))))
+        (values
+         (eqt (class-of obj1) class1)
+         (eqt class1 class2)
+         (typep* obj1 class1)
+         (typep* obj1 class2)))))
   t nil t nil)
 
 (deftest class-0310.1
   (progn
     (setf (find-class 'class-0310a) nil
-	  (find-class 'class-0310b) nil)
+          (find-class 'class-0310b) nil)
     (let* ((class1 (eval '(defclass class-0310a () ((a) (b) (c)))))
-	   (obj1 (make-instance 'class-0310a)))
+           (obj1 (make-instance 'class-0310a)))
       (setf (class-name class1) 'class-0310b)
       (let ((class2 (eval '(defclass class-0310a () ((a) (b) (c))))))
-	(values
-	 (eqt (class-of obj1) class1)
-	 (eqt class1 class2)
-	 (typep* obj1 class1)
-	 (typep* obj1 class2)
-	 (class-name class1)
-	 (class-name class2)))))
+        (values
+         (eqt (class-of obj1) class1)
+         (eqt class1 class2)
+         (typep* obj1 class1)
+         (typep* obj1 class2)
+         (class-name class1)
+         (class-name class2)))))
   t nil t nil class-0310b class-0310a)
 
 (deftest class-0311.1
   (progn
     (setf (find-class 'class-0311) nil)
     (let* ((class1 (eval '(defclass class-0311 () ((a) (b) (c)))))
-	   (obj1 (make-instance 'class-0311)))
+           (obj1 (make-instance 'class-0311)))
       (setf (find-class 'class-0311) nil)
       (let ((class2 (eval '(defclass class-0311 () ((a) (b) (c))))))
-	(values
-	 (eqt (class-of obj1) class1)
-	 (eqt class1 class2)
-	 (typep* obj1 class1)
-	 (typep* obj1 class2)
-	 (class-name class1)
-	 (class-name class2)
-	 (eqt (find-class 'class-0311) class1)
-	 (eqt (find-class 'class-0311) class2)))))
+        (values
+         (eqt (class-of obj1) class1)
+         (eqt class1 class2)
+         (typep* obj1 class1)
+         (typep* obj1 class2)
+         (class-name class1)
+         (class-name class2)
+         (eqt (find-class 'class-0311) class1)
+         (eqt (find-class 'class-0311) class2)))))
   t nil t nil class-0311 class-0311 nil t)

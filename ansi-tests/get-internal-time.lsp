@@ -15,10 +15,10 @@
     nil
     '(lambda ()
        (let ((prev (get-internal-real-time)))
-	 (loop for next = (get-internal-real-time)
-	       repeat 100000
-	       do (assert (>= next prev))
-	       do (setf prev next))))))
+         (loop for next = (get-internal-real-time)
+               repeat 100000
+               do (assert (>= next prev))
+               do (setf prev next))))))
   nil)
 
 (deftest get-internal-real-time.error.1
@@ -41,10 +41,10 @@
     nil
     '(lambda ()
        (let ((prev (get-internal-run-time)))
-	 (loop for next = (get-internal-run-time)
-	       repeat 100000
-	       do (assert (>= next prev))
-	       do (setf prev next))))))
+         (loop for next = (get-internal-run-time)
+               repeat 100000
+               do (assert (>= next prev))
+               do (setf prev next))))))
   nil)
 
 (deftest get-internal-run-time.error.1

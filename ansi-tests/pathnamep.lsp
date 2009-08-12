@@ -27,5 +27,5 @@
 
 (deftest pathnamep.error.3
   (signals-error (pathnamep *default-pathname-defaults* nil)
-		 program-error)
+                 program-error)
   t)

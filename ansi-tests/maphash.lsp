@@ -11,7 +11,7 @@
     (let ((s1 0) (s2 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v) (incf s1 k) (incf s2 v)) table))
+        (maphash #'(lambda (k v) (incf s1 k) (incf s2 v)) table))
        s1 s2)))
   (nil) #.(* 500 1001) #.(* 1000 1001))
 
@@ -21,7 +21,7 @@
     (let ((s1 0) (s2 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v) (incf s1 k) (incf s2 v)) table))
+        (maphash #'(lambda (k v) (incf s1 k) (incf s2 v)) table))
        s1 s2)))
   (nil) #.(* 500 1001) #.(* 1000 1001))
 
@@ -31,7 +31,7 @@
     (let ((s1 0) (s2 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v) (incf s1 k) (incf s2 v)) table))
+        (maphash #'(lambda (k v) (incf s1 k) (incf s2 v)) table))
        s1 s2)))
   (nil) #.(* 500 1001) #.(* 1000 1001))
 
@@ -43,10 +43,10 @@
     (let ((s1 0) (s2 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v)
-		     (incf s1 k) (incf s2 v)
-		     (remhash k table))
-		 table))
+        (maphash #'(lambda (k v)
+                     (incf s1 k) (incf s2 v)
+                     (remhash k table))
+                 table))
        s1 s2 (hash-table-count table))))
   (nil) #.(* 500 1001) #.(* 1000 1001) 0)
 
@@ -56,10 +56,10 @@
     (let ((s1 0) (s2 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v)
-		     (incf s1 k) (incf s2 v)
-		     (remhash k table))
-		 table))
+        (maphash #'(lambda (k v)
+                     (incf s1 k) (incf s2 v)
+                     (remhash k table))
+                 table))
        s1 s2 (hash-table-count table))))
   (nil) #.(* 500 1001) #.(* 1000 1001) 0)
 
@@ -69,10 +69,10 @@
     (let ((s1 0) (s2 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v)
-		     (incf s1 k) (incf s2 v)
-		     (remhash k table))
-		 table))
+        (maphash #'(lambda (k v)
+                     (incf s1 k) (incf s2 v)
+                     (remhash k table))
+                 table))
        s1 s2 (hash-table-count table))))
   (nil) #.(* 500 1001) #.(* 1000 1001) 0)
 
@@ -81,34 +81,34 @@
 
 (deftest maphash.7
   (let ((symbols '(a b c d e f g h i j k l m n o p q r s t u v w x y z))
-	(table (make-hash-table :test #'eq)))
+        (table (make-hash-table :test #'eq)))
     (loop for sym in symbols
-	  for i from 1
-	  do (setf (gethash sym table) i))
+          for i from 1
+          do (setf (gethash sym table) i))
     (let ((sum 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v)
-		     (assert (eq (elt symbols (1- v)) k))
-		     (incf sum v))
-		 table))
+        (maphash #'(lambda (k v)
+                     (assert (eq (elt symbols (1- v)) k))
+                     (incf sum v))
+                 table))
        sum)))
   (nil) #.(* 13 27))
 
 (deftest maphash.8
   (let ((symbols '(a b c d e f g h i j k l m n o p q r s t u v w x y z))
-	(table (make-hash-table :test #'eq)))
+        (table (make-hash-table :test #'eq)))
     (loop for sym in symbols
-	  for i from 1
-	  do (setf (gethash sym table) i))
+          for i from 1
+          do (setf (gethash sym table) i))
     (let ((sum 0))
       (values
        (multiple-value-list
-	(maphash #'(lambda (k v)
-		     (assert (eq (elt symbols (1- v)) k))
-		     (remhash k table)
-		     (incf sum v))
-		 table))
+        (maphash #'(lambda (k v)
+                     (assert (eq (elt symbols (1- v)) k))
+                     (remhash k table)
+                     (incf sum v))
+                 table))
        sum
        (hash-table-count table))))
   (nil) #.(* 13 27) 0)
@@ -117,16 +117,16 @@
 
 (deftest maphash.order.1
   (let ((i 0) x y dummy
-	(table (make-hash-table)))
+        (table (make-hash-table)))
     (values
      (multiple-value-list
       (maphash (progn (setf x (incf i))
-		      #'(lambda (k v) (setf dummy (list k v))))
-	       (progn (setf y (incf i))
-		      table)))
+                      #'(lambda (k v) (setf dummy (list k v))))
+               (progn (setf y (incf i))
+                      table)))
      i x y dummy))
   (nil) 2 1 2 nil)
-    
+
 
 ;;; Error tests
 

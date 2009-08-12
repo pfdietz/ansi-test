@@ -27,7 +27,7 @@
 (deftest exp.1
   (let ((result (exp 0)))
     (or (eqlt result 1)
-	(eqlt result 1.0f0)))
+        (eqlt result 1.0f0)))
   t)
 
 (deftest exp.2
@@ -43,40 +43,40 @@
 
 (deftest exp.error.4
   (signals-error (exp (+ (log most-positive-short-float) 100))
-		 floating-point-overflow)
+                 floating-point-overflow)
   t)
 
 (deftest exp.error.5
   (signals-error (exp (+ (log most-positive-single-float) 100))
-		 floating-point-overflow)
+                 floating-point-overflow)
   t)
 
 (deftest exp.error.6
   (signals-error (exp (+ (log most-positive-double-float) 100))
-		 floating-point-overflow)
+                 floating-point-overflow)
   t)
 
 (deftest exp.error.7
   (signals-error (exp (+ (log most-positive-long-float) 100))
-		 floating-point-overflow)
+                 floating-point-overflow)
   t)
 
 (deftest exp.error.8
   (signals-error (exp (- (log least-positive-short-float) 100))
-		 floating-point-underflow)
+                 floating-point-underflow)
   t)
 
 (deftest exp.error.9
   (signals-error (exp (- (log least-positive-single-float) 100))
-		 floating-point-underflow)
+                 floating-point-underflow)
   t)
 
 (deftest exp.error.10
   (signals-error (exp (- (log least-positive-double-float) 100))
-		 floating-point-underflow)
+                 floating-point-underflow)
   t)
 
 (deftest exp.error.11
   (signals-error (exp (- (log least-positive-double-float) 100))
-		 floating-point-underflow)
+                 floating-point-underflow)
   t)

@@ -8,10 +8,10 @@
 (deftest make-sequence.1
   (let ((x (make-sequence 'list 4)))
     (and (eql (length x) 4)
-	 (listp x)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e in x always (eql (car x) e))
-	 t))
+         (listp x)
+         #+:ansi-tests-strict-initial-element
+         (loop for e in x always (eql (car x) e))
+         t))
   t)
 
 (deftest make-sequence.2
@@ -21,10 +21,10 @@
 (deftest make-sequence.3
   (let ((x (make-sequence 'cons 4)))
     (and (eql (length x) 4)
-	 (listp x)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e in x always (eql (car x) e))
-	 t))
+         (listp x)
+         #+:ansi-tests-strict-initial-element
+         (loop for e in x always (eql (car x) e))
+         t))
   t)
 
 (deftest make-sequence.4
@@ -38,9 +38,9 @@
 (deftest make-sequence.6
   (let ((s (make-sequence 'string 10)))
     (and (eql (length s) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across s always (eql e (aref s 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across s always (eql e (aref s 0)))
+         t))
   t)
 
 (deftest make-sequence.7
@@ -51,9 +51,9 @@
 (deftest make-sequence.8
   (let ((s (make-sequence 'simple-string 10)))
     (and (eql (length s) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across s always (eql e (aref s 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across s always (eql e (aref s 0)))
+         t))
   t)
 
 (deftest make-sequence.9
@@ -63,97 +63,97 @@
 (deftest make-sequence.10
   (let ((x (make-sequence 'vector 10)))
     (and (eql (length x) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across x always (eql e (aref x 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across x always (eql e (aref x 0)))
+         t))
   t)
 
 (deftest make-sequence.11
   (let* ((u (list 'a))
-	 (x (make-sequence 'vector 10 :initial-element u)))
+         (x (make-sequence 'vector 10 :initial-element u)))
     (and (eql (length x) 10)
-	 (loop for e across x always (eql e u))
-	 t))
+         (loop for e across x always (eql e u))
+         t))
   t)
 
 (deftest make-sequence.12
   (let ((x (make-sequence 'simple-vector 10)))
     (and (eql (length x) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across x always (eql e (aref x 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across x always (eql e (aref x 0)))
+         t))
   t)
 
 (deftest make-sequence.13
   (let* ((u (list 'a))
-	 (x (make-sequence 'simple-vector 10 :initial-element u)))
+         (x (make-sequence 'simple-vector 10 :initial-element u)))
     (and (eql (length x) 10)
-	 (loop for e across x always (eql e u))
-	 t))
+         (loop for e across x always (eql e u))
+         t))
   t)
 
 (deftest make-sequence.14
   (let ((x (make-sequence '(vector *) 10)))
     (and (eql (length x) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across x always (eql e (aref x 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across x always (eql e (aref x 0)))
+         t))
   t)
 
 (deftest make-sequence.15
   (let* ((u (list 'a))
-	 (x (make-sequence '(vector *) 10 :initial-element u)))
+         (x (make-sequence '(vector *) 10 :initial-element u)))
     (and (eql (length x) 10)
-	 (loop for e across x always (eql e u))
-	 t))
+         (loop for e across x always (eql e u))
+         t))
   t)
 
 (deftest make-sequence.16
   (let ((x (make-sequence '(simple-vector *)  10)))
     (and (eql (length x) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across x always (eql e (aref x 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across x always (eql e (aref x 0)))
+         t))
   t)
 
 (deftest make-sequence.17
   (let* ((u (list 'a))
-	 (x (make-sequence '(simple-vector *) 10 :initial-element u)))
+         (x (make-sequence '(simple-vector *) 10 :initial-element u)))
     (and (eql (length x) 10)
-	 (loop for e across x always (eql e u))
-	 t))
+         (loop for e across x always (eql e u))
+         t))
   t)
 
 (deftest make-sequence.18
   (let ((x (make-sequence '(string *) 10)))
     (and (eql (length x) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across x always (eql e (aref x 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across x always (eql e (aref x 0)))
+         t))
   t)
 
 (deftest make-sequence.19
   (let* ((u #\a)
-	 (x (make-sequence '(string *) 10 :initial-element u)))
+         (x (make-sequence '(string *) 10 :initial-element u)))
     (and (eql (length x) 10)
-	 (loop for e across x always (eql e u))
-	 t))
+         (loop for e across x always (eql e u))
+         t))
   t)
 
 (deftest make-sequence.20
   (let ((x (make-sequence '(simple-string *)  10)))
     (and (eql (length x) 10)
-	 #+:ansi-tests-strict-initial-element
-	 (loop for e across x always (eql e (aref x 0)))
-	 t))
+         #+:ansi-tests-strict-initial-element
+         (loop for e across x always (eql e (aref x 0)))
+         t))
   t)
 
 (deftest make-sequence.21
   (let* ((u #\a)
-	 (x (make-sequence '(simple-string *) 10 :initial-element u)))
+         (x (make-sequence '(simple-string *) 10 :initial-element u)))
     (and (eql (length x) 10)
-	 (loop for e across x always (eql e u))
-	 t))
+         (loop for e across x always (eql e u))
+         t))
   t)
 
 (deftest make-sequence.22
@@ -180,47 +180,47 @@
 (deftest make-sequence.27
   (let ((len 10))
     (loop for i from 1 to 40
-	  for etype = `(unsigned-byte ,i)
-	  for type = `(vector ,etype)
-	  for vec = (make-sequence type len :initial-element 0)
-	  unless (and (typep vec type)
-		      (loop for i below len always (eql (elt vec i) 0)))
-	  collect (list i etype type vec)))
+          for etype = `(unsigned-byte ,i)
+          for type = `(vector ,etype)
+          for vec = (make-sequence type len :initial-element 0)
+          unless (and (typep vec type)
+                      (loop for i below len always (eql (elt vec i) 0)))
+          collect (list i etype type vec)))
   nil)
 
 (deftest make-sequence.28
   (let ((len 10))
     (loop for i from 1 to 40
-	  for etype = `(signed-byte ,i)
-	  for type = `(vector ,etype)
-	  for vec = (make-sequence type len :initial-element 0)
-	  unless (and (typep vec type)
-		      (loop for i below len always (eql (elt vec i) 0)))
-	  collect (list i etype type vec)))
+          for etype = `(signed-byte ,i)
+          for type = `(vector ,etype)
+          for vec = (make-sequence type len :initial-element 0)
+          unless (and (typep vec type)
+                      (loop for i below len always (eql (elt vec i) 0)))
+          collect (list i etype type vec)))
   nil)
 
 (deftest make-sequence.29
   (let ((len 10))
     (loop for etype in '(short-float single-float double-float long-float)
-	  for type = `(vector ,etype)
-	  for elem = (coerce 1 etype)
-	  for vec = (make-sequence type len :initial-element elem)
-	  unless (and (typep vec type)
-		      (loop for i below len always (eql (elt vec i) elem)))
-	  collect (list etype type vec)))
+          for type = `(vector ,etype)
+          for elem = (coerce 1 etype)
+          for vec = (make-sequence type len :initial-element elem)
+          unless (and (typep vec type)
+                      (loop for i below len always (eql (elt vec i) elem)))
+          collect (list etype type vec)))
   nil)
 
 (deftest make-sequence.30
   (let ((len 10))
     (loop for cetype in '(short-float single-float double-float long-float
-				      integer rational)
-	  for etype = `(complex ,cetype)
-	  for type = `(vector ,etype)
-	  for elem = (complex (coerce 1 cetype) (coerce -1 cetype))
-	  for vec = (make-sequence type len :initial-element elem)
-	  unless (and (typep vec type)
-		      (loop for i below len always (eql (elt vec i) elem)))
-	  collect (list etype type vec)))
+                                      integer rational)
+          for etype = `(complex ,cetype)
+          for type = `(vector ,etype)
+          for elem = (complex (coerce 1 cetype) (coerce -1 cetype))
+          for vec = (make-sequence type len :initial-element elem)
+          unless (and (typep vec type)
+                      (loop for i below len always (eql (elt vec i) elem)))
+          collect (list etype type vec)))
   nil)
 
 ;;; Other type specifiers
@@ -313,64 +313,64 @@
 
 (deftest make-sequence.51
   (loop for i from 1 to 40
-	for vec = (make-array 1 :element-type `(unsigned-byte ,i)
-			      :initial-element 1)
-	for class = (class-of vec)
-	nconc
-	(if (subtypep class 'vector)
-	    (let ((vec2 (make-sequence class 1 :initial-element 1)))
-	      (unless (equalp vec vec)
-		(list (list i vec class vec2))))
-	  nil))
+        for vec = (make-array 1 :element-type `(unsigned-byte ,i)
+                              :initial-element 1)
+        for class = (class-of vec)
+        nconc
+        (if (subtypep class 'vector)
+            (let ((vec2 (make-sequence class 1 :initial-element 1)))
+              (unless (equalp vec vec)
+                (list (list i vec class vec2))))
+          nil))
   nil)
 
 (deftest make-sequence.52
   (let ((class (class-of "aaaa")))
     (if (subtypep class 'vector)
-	(make-sequence class 4 :initial-element #\a)
+        (make-sequence class 4 :initial-element #\a)
       "aaaa"))
   "aaaa")
 
 (deftest make-sequence.53
   (let ((class (class-of (make-array 4 :element-type 'base-char
-				     :fill-pointer 4
-				     :adjustable t
-				     :initial-contents "aaaa"))))
+                                     :fill-pointer 4
+                                     :adjustable t
+                                     :initial-contents "aaaa"))))
     (if (subtypep class 'vector)
-	(make-sequence class 4 :initial-element #\a)
+        (make-sequence class 4 :initial-element #\a)
       "aaaa"))
   "aaaa")
 
 (deftest make-sequence.54
   (let ((class (class-of (make-array 4 :element-type 'character
-				     :fill-pointer 4
-				     :adjustable t
-				     :initial-contents "aaaa"))))
+                                     :fill-pointer 4
+                                     :adjustable t
+                                     :initial-contents "aaaa"))))
     (if (subtypep class 'vector)
-	(make-sequence class 4 :initial-element #\a)
+        (make-sequence class 4 :initial-element #\a)
       "aaaa"))
   "aaaa")
 
 (deftest make-sequence.55
   (let ((class (class-of (make-array 4 :element-type 'character
-				     :initial-contents "aaaa"))))
+                                     :initial-contents "aaaa"))))
     (if (subtypep class 'vector)
-	(make-sequence class 4 :initial-element #\a)
+        (make-sequence class 4 :initial-element #\a)
       "aaaa"))
   "aaaa")
 
 (deftest make-sequence.56
   (loop for i from 1 to 40
-	for vec = (make-array 1 :element-type `(unsigned-byte ,i)
-			      :adjustable t :fill-pointer 1
-			      :initial-element 1)
-	for class = (class-of vec)
-	nconc
-	(if (subtypep class 'vector)
-	    (let ((vec2 (make-sequence class 1 :initial-element 1)))
-	      (unless (equalp vec vec)
-		(list (list i vec class vec2))))
-	  nil))
+        for vec = (make-array 1 :element-type `(unsigned-byte ,i)
+                              :adjustable t :fill-pointer 1
+                              :initial-element 1)
+        for class = (class-of vec)
+        nconc
+        (if (subtypep class 'vector)
+            (let ((vec2 (make-sequence class 1 :initial-element 1)))
+              (unless (equalp vec vec)
+                (list (list i vec class vec2))))
+          nil))
   nil)
 
 (deftest make-sequence.57
@@ -401,7 +401,7 @@
 
 (deftest make-sequence.allow-other-keys.5
   (make-sequence 'list 5 :initial-element 'a :allow-other-keys t
-		 :allow-other-keys nil :bad t)
+                 :allow-other-keys nil :bad t)
   (a a a a a))
 
 (deftest make-sequence.keywords.6
@@ -452,12 +452,12 @@
 
 (deftest make-sequence.error.11
   (signals-error (make-sequence 'list 10 :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest make-sequence.error.12
   (signals-error (make-sequence 'list 10 :initial-element)
-		 program-error)
+                 program-error)
   t)
 
 (deftest make-sequence.error.13
@@ -466,7 +466,7 @@
 
 (deftest make-sequence.error.14
   (signals-error-always (locally (make-sequence 'symbol 10) t)
-			type-error)
+                        type-error)
   t t)
 
 (deftest make-sequence.error.15
@@ -478,7 +478,7 @@
 
 (deftest make-sequence.error.16
   (signals-error-always (make-sequence (find-class 'integer) 0) type-error)
-  t t)  
+  t t)
 
 ;;; Order of execution tests
 
@@ -486,8 +486,8 @@
   (let ((i 0) a b c)
     (values
      (make-sequence (progn (setf a (incf i)) 'list)
-		    (progn (setf b (incf i)) 5)
-		    :initial-element (progn (setf c (incf i)) 'a))
+                    (progn (setf b (incf i)) 5)
+                    :initial-element (progn (setf c (incf i)) 'a))
      i a b c))
   (a a a a a) 3 1 2 3)
 
@@ -495,10 +495,10 @@
   (let ((i 0) a b c d e)
     (values
      (make-sequence (progn (setf a (incf i)) 'list)
-		    (progn (setf b (incf i)) 5)
-		    :allow-other-keys (setf c (incf i))
-		    :initial-element (progn (setf d (incf i)) 'a)
-		    :foo (setf e (incf i)))
+                    (progn (setf b (incf i)) 5)
+                    :allow-other-keys (setf c (incf i))
+                    :initial-element (progn (setf d (incf i)) 'a)
+                    :foo (setf e (incf i)))
      i a b c d e))
   (a a a a a) 5 1 2 3 4 5)
 

@@ -35,5 +35,5 @@ TWO-WAY-STREAM
 STREAM-ERROR
 END-OF-FILE
 PRINT-NOT-READABLE
-		READER-ERROR)
+                READER-ERROR)
       collect (list tp (multiple-value-list (subtypep* tp 'atom)))))

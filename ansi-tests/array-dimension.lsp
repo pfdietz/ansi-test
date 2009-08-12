@@ -39,20 +39,20 @@
 
 (deftest array-dimension.7
   (macrolet ((%m (z) z))
-	    (array-dimension (expand-in-current-env (%m "abc")) 0))
+            (array-dimension (expand-in-current-env (%m "abc")) 0))
   3)
 
 (deftest array-dimension.8
   (macrolet ((%m (z) z))
-	    (array-dimension #2a((a b)(c d)(e f))
-			     (expand-in-current-env (%m 0))))
+            (array-dimension #2a((a b)(c d)(e f))
+                             (expand-in-current-env (%m 0))))
   3)
 
 (deftest array-dimension.order.1
   (let ((i 0) a b)
     (values
      (array-dimension (progn (setf a (incf i)) #(a b c d))
-		      (progn (setf b (incf i)) 0))
+                      (progn (setf b (incf i)) 0))
      i a b))
   4 2 1 2)
 
@@ -68,5 +68,5 @@
 
 (deftest array-dimension.error.3
   (signals-error (array-dimension #(a b c) 0 nil)
-		 program-error)
+                 program-error)
   t)

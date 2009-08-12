@@ -26,7 +26,7 @@
 (deftest handler-bind.5
   (block foo
     (handler-bind ((error #'(lambda (c) (return-from foo 'good))))
-		  (error "an error")))
+                  (error "an error")))
   good)
 
 (deftest handler-bind.6
@@ -34,8 +34,8 @@
     (handler-bind
      ((error #'(lambda (c) (return-from foo 'good))))
      (handler-bind ((error #'(lambda (c) (error c)))
-		    (error #'(lambda (c) (return-from foo 'bad))))
-		   (error "an error"))))
+                    (error #'(lambda (c) (return-from foo 'bad))))
+                   (error "an error"))))
   good)
 
 (defun handler-bind.7-handler-fn (c)
@@ -45,30 +45,30 @@
 (deftest handler-bind.7
   (catch 'foo
     (handler-bind ((simple-error #'handler-bind.7-handler-fn))
-		  (error "simple error")))
+                  (error "simple error")))
   good)
 
 (deftest handler-bind.8
   (catch 'foo
     (handler-bind ((simple-error 'handler-bind.7-handler-fn))
-		  (error "simple error")))
+                  (error "simple error")))
   good)
 
 (deftest handler-bind.9
   (catch 'foo
     (handler-bind ((simple-error #.(symbol-function
-				    'handler-bind.7-handler-fn)))
-		  (error "simple error")))
+                                    'handler-bind.7-handler-fn)))
+                  (error "simple error")))
   good)
 
 (deftest handler-bind.10
   (block done
     (flet ((%foo () (signal "A simple condition"))
-	   (%succeed (c) (declare (ignore c)) (return-from done 'good))
-	   (%fail (c) (declare (ignore c)) (return-from done 'bad)))
+           (%succeed (c) (declare (ignore c)) (return-from done 'good))
+           (%fail (c) (declare (ignore c)) (return-from done 'bad)))
       (handler-bind
        ((error #'%fail)
-	(simple-condition #'%succeed))
+        (simple-condition #'%succeed))
        (%foo))))
   good)
 
@@ -92,7 +92,7 @@
 (deftest handler-bind.13
   (handler-bind
    ((error #'(lambda (c) (declare (ignore c))
-	       (throw 'done 'good))))
+               (throw 'done 'good))))
    (catch 'done
      (error "an error")))
   good)
@@ -102,7 +102,7 @@
     (handler-bind
      ((symbol #'identity)  ;; can never succeed
       (error #'(lambda (c) (declare (ignore c))
-		 (throw 'done 'good))))
+                 (throw 'done 'good))))
      (error "an error")))
   good)
 
@@ -110,9 +110,9 @@
   (catch 'done
     (handler-bind
      ((nil #'(lambda (c) (declare (ignore c))
-	       (throw 'done 'bad)))
+               (throw 'done 'bad)))
       (error #'(lambda (c) (declare (ignore c))
-		 (throw 'done 'good))))
+                 (throw 'done 'good))))
      (error "an error")))
   good)
 
@@ -122,7 +122,7 @@
      (((not error) #'identity)
       (error
        #'(lambda (c) (declare (ignore c))
-	   (throw 'done 'good))))
+           (throw 'done 'good))))
      (error "an error")))
   good)
 
@@ -130,8 +130,8 @@
   (catch 'done
     (handler-bind
      ((#.(find-class 'error)
-	 #'(lambda (c) (declare (ignore c))
-	     (throw 'done 'good))))
+         #'(lambda (c) (declare (ignore c))
+             (throw 'done 'good))))
      (error "an error")))
   good)
 
@@ -139,8 +139,8 @@
 
 
 
-  
-		
 
-		
-  
+
+
+
+

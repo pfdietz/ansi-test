@@ -22,11 +22,11 @@
 ;;; Test side effects, evaluation order in assignment to NTH
 (deftest nth.order.1
   (let ((i 0)
-	(x (list 'a 'b 'c 'd))
-	y z)
+        (x (list 'a 'b 'c 'd))
+        y z)
     (and
      (eqlt (setf (nth (setf y (incf i)) x) (progn (setf z (incf i)) 'z))
-	   'z)
+           'z)
      (eqlt y 1)
      (eqlt z 2)
      x))
@@ -36,7 +36,7 @@
   (let ((i 0) x y (z '(a b c d e)))
     (values
      (nth (progn (setf x (incf i)) 1)
-	  (progn (setf y (incf i)) z))
+          (progn (setf y (incf i)) z))
      i x y))
   b 2 1 2)
 

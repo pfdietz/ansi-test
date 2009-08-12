@@ -47,10 +47,10 @@
 (deftest readtable-case.7
   (let ((rt (copy-readtable)))
     (loop for rtc in '(:upcase :downcase :preserve :invert)
-	  do (setf (readtable-case rt) rtc)
-	  nconc (let ((rt2 (copy-readtable rt)))
-		  (unless (eq (readtable-case rt2) rtc)
-		    (list rtc rt2)))))
+          do (setf (readtable-case rt) rtc)
+          nconc (let ((rt2 (copy-readtable rt)))
+                  (unless (eq (readtable-case rt2) rtc)
+                    (list rtc rt2)))))
   nil)
 
 ;;; Error cases
@@ -69,13 +69,13 @@
 
 (deftest readtable-case.error.4
   (check-type-error #'(lambda (x)
-			(let ((rt (copy-readtable)))
-			  (setf (readtable-case rt) x)))
-		    (typef '(member :upcase :downcase :preserve :invert)))
+                        (let ((rt (copy-readtable)))
+                          (setf (readtable-case rt) x)))
+                    (typef '(member :upcase :downcase :preserve :invert)))
   nil)
 
 (deftest readtable-case.error.5
   (check-type-error #'(lambda (x) (setf (readtable-case x) :upcase))
-		    (typef 'readtable))
+                    (typef 'readtable))
   nil)
 

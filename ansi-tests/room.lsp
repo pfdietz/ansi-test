@@ -7,29 +7,29 @@
 
 (deftest room.1
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (room))))
+             (*standard-output*)
+             (room))))
     (not (zerop (length s))))
   t)
 
 (deftest room.2
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (room nil))))
+             (*standard-output*)
+             (room nil))))
     (not (zerop (length s))))
   t)
 
 (deftest room.3
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (room :default))))
+             (*standard-output*)
+             (room :default))))
     (not (zerop (length s))))
   t)
 
 (deftest room.4
   (let ((s (with-output-to-string
-	     (*standard-output*)
-	     (room t))))
+             (*standard-output*)
+             (room t))))
     (not (zerop (length s))))
   t)
 

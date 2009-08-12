@@ -23,7 +23,7 @@
 (deftest remove-method.1
   (and
    (eqt (remove-method *remove-meth-gf-01* *remove-meth-gf-02-method-t*)
-	*remove-meth-gf-01*)
+        *remove-meth-gf-01*)
    (remove-meth-gf-01 :good))
   :good)
 
@@ -34,11 +34,11 @@
     (values
      (remove-meth-gf-01 10)
      (progn (setf meth (eval '(defmethod remove-meth-gf-01 ((x integer))
-				(1+ x))))
-	    nil)
+                                (1+ x))))
+            nil)
      (remove-meth-gf-01 10)
      (eqt *remove-meth-gf-01*
-	  (remove-method *remove-meth-gf-01* meth))
+          (remove-method *remove-meth-gf-01* meth))
      (remove-meth-gf-01 10)))
   10 nil 11 t 10)
 
@@ -50,12 +50,12 @@
      (mapcar #'remove-meth-gf-01 '(19 a))
      (progn
        (setf meth1 (eval '(defmethod remove-meth-gf-01 ((x symbol))
-			    (list x))))
+                            (list x))))
 
        (mapcar #'remove-meth-gf-01 '(19 a)))
      (progn
        (setf meth2 (eval '(defmethod remove-meth-gf-01 ((x number))
-			    (1+ x))))
+                            (1+ x))))
 
        (mapcar #'remove-meth-gf-01 '(19 a)))
      (eqt *remove-meth-gf-01* (remove-method *remove-meth-gf-01* meth1))
@@ -72,12 +72,12 @@
      (mapcar #'remove-meth-gf-01 '(19 a))
      (progn
        (setf meth1 (eval '(defmethod remove-meth-gf-01 ((x symbol))
-			    (list x))))
+                            (list x))))
 
        (mapcar #'remove-meth-gf-01 '(19 a)))
      (progn
        (setf meth2 (eval '(defmethod remove-meth-gf-01 ((x number))
-			    (1+ x))))
+                            (1+ x))))
 
        (mapcar #'remove-meth-gf-01 '(19 a)))
      (eqt *remove-meth-gf-01* (remove-method *remove-meth-gf-01* meth2))
@@ -94,12 +94,12 @@
      (mapcar #'remove-meth-gf-01 '(10 20.0))
      (progn
        (setf meth1 (eval '(defmethod remove-meth-gf-01 ((x integer))
-			    (1- x))))
+                            (1- x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (progn
        (setf meth2 (eval '(defmethod remove-meth-gf-01 ((x number))
-			    (1+ x))))
+                            (1+ x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (eqt *remove-meth-gf-01* (remove-method *remove-meth-gf-01* meth1))
@@ -114,12 +114,12 @@
      (mapcar #'remove-meth-gf-01 '(10 20.0))
      (progn
        (setf meth1 (eval '(defmethod remove-meth-gf-01 ((x integer))
-			    (1- x))))
+                            (1- x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (progn
        (setf meth2 (eval '(defmethod remove-meth-gf-01 ((x number))
-			    (1+ x))))
+                            (1+ x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (eqt *remove-meth-gf-01* (remove-method *remove-meth-gf-01* meth2))
@@ -134,12 +134,12 @@
      (mapcar #'remove-meth-gf-01 '(10 20.0))
      (progn
        (setf meth1 (eval '(defmethod remove-meth-gf-01 ((x number))
-			    (1+ x))))
+                            (1+ x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (progn
        (setf meth2 (eval '(defmethod remove-meth-gf-01 ((x integer))
-			    (1- x))))
+                            (1- x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (eqt *remove-meth-gf-01* (remove-method *remove-meth-gf-01* meth1))
@@ -154,12 +154,12 @@
      (mapcar #'remove-meth-gf-01 '(10 20.0))
      (progn
        (setf meth1 (eval '(defmethod remove-meth-gf-01 ((x number))
-			    (1+ x))))
+                            (1+ x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (progn
        (setf meth2 (eval '(defmethod remove-meth-gf-01 ((x integer))
-			    (1- x))))
+                            (1- x))))
 
        (mapcar #'remove-meth-gf-01 '(10 20.0)))
      (eqt *remove-meth-gf-01* (remove-method *remove-meth-gf-01* meth2))
@@ -184,7 +184,7 @@
      (mapcar #'remove-meth-gf-03 '(5 a))
      (progn
        (setf meth (eval '(defmethod remove-meth-gf-03 :before ((x number))
-			   (incf *rmgf-03-var*))))
+                           (incf *rmgf-03-var*))))
        (mapcar #'remove-meth-gf-03 '(5 a)))
      (eqt *remove-meth-gf-03* (remove-method *remove-meth-gf-03* meth))
      (mapcar #'remove-meth-gf-03 '(5 a))))
@@ -199,7 +199,7 @@
      (mapcar #'remove-meth-gf-03 '(5 a))
      (progn
        (setf meth (eval '(defmethod remove-meth-gf-03 :after ((x number))
-			   (incf *rmgf-03-var*))))
+                           (incf *rmgf-03-var*))))
        (mapcar #'remove-meth-gf-03 '(5 a)))
      (eqt *remove-meth-gf-03* (remove-method *remove-meth-gf-03* meth))
      (mapcar #'remove-meth-gf-03 '(5 a))))
@@ -214,9 +214,9 @@
      (mapcar #'remove-meth-gf-03 '(5 a))
      (progn
        (setf meth (eval '(defmethod remove-meth-gf-03 :around ((x number))
-			   (incf *rmgf-03-var*)
-			   (prog1 (call-next-method)
-			     (decf *rmgf-03-var*)))))
+                           (incf *rmgf-03-var*)
+                           (prog1 (call-next-method)
+                             (decf *rmgf-03-var*)))))
        (mapcar #'remove-meth-gf-03 '(5 a)))
      (eqt *remove-meth-gf-03* (remove-method *remove-meth-gf-03* meth))
      (mapcar #'remove-meth-gf-03 '(5 a))))

@@ -6,13 +6,13 @@
 (mk::defsystem "rt"
   :source-pathname #.(directory-namestring *LOAD-TRUENAME*)
   :binary-pathname #.(mk::append-directories
-		      (directory-namestring *LOAD-TRUENAME*)
-		      "binary/")
+                      (directory-namestring *LOAD-TRUENAME*)
+                      "binary/")
   :source-extension "lsp"
   :binary-extension
-  	#+CMU #.(C::BACKEND-FASL-FILE-TYPE C::*TARGET-BACKEND*)
-	#+ALLEGRO "fasl"
-	#+(OR AKCL GCL) "o"
+        #+CMU #.(C::BACKEND-FASL-FILE-TYPE C::*TARGET-BACKEND*)
+        #+ALLEGRO "fasl"
+        #+(OR AKCL GCL) "o"
         #+CLISP "fas"
         #-(OR CMU ALLEGRO AKCL GCL CLISP)
         #.(pathname-type (compile-file-pathname "foo.lisp"))

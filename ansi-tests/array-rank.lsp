@@ -13,7 +13,7 @@
 
 (deftest array-rank.2
   (check-predicate #'(lambda (e) (or (not (typep e 'vector))
-				     (eql (array-rank e) 1))))
+                                     (eql (array-rank e) 1))))
   nil)
 
 (deftest array-rank.3

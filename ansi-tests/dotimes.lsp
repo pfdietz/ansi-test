@@ -72,9 +72,9 @@
 ;;; Check there's an implicit tagbody
 (deftest dotimes.12
   (let ((even nil)
-	(odd nil))
+        (odd nil))
     (dotimes (i 8 (values (reverse even)
-			  (reverse odd)))
+                          (reverse odd)))
       (when (evenp i) (go even))
       (push i odd)
       (go done)
@@ -118,7 +118,7 @@
     (declare (special i))
     (flet ((%f () i))
       (dotimes (i 4)
-	(push (%f) y)))
+        (push (%f) y)))
     y)
   (0 0 0 0))
 
@@ -127,7 +127,7 @@
     (declare (special i))
     (flet ((%f () i))
       (dotimes (i bound)
-	(push (%f) y)))
+        (push (%f) y)))
     y)
   (0 0 0 0))
 
@@ -136,8 +136,8 @@
     (declare (special i))
     (flet ((%f () i))
       (dotimes (i 4)
-	(declare (special i))
-	(push (%f) y)))
+        (declare (special i))
+        (push (%f) y)))
     y)
   (3 2 1 0))
 
@@ -146,8 +146,8 @@
     (declare (special i))
     (flet ((%f () i))
       (dotimes (i bound)
-	(declare (special i))
-	(push (%f) y)))
+        (declare (special i))
+        (push (%f) y)))
     y)
   (3 2 1 0))
 
@@ -173,8 +173,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(dotimes (i (return-from done x))
-	  (declare (special x))))))
+        (dotimes (i (return-from done x))
+          (declare (special x))))))
   :good)
 
 (deftest dotimes.23
@@ -182,7 +182,7 @@
     (declare (special x))
     (let ((x :bad))
       (dotimes (i 10 x)
-	(declare (special x)))))
+        (declare (special x)))))
   :good)
 
 (deftest dotimes.23a
@@ -190,7 +190,7 @@
     (declare (special x))
     (let ((x :bad))
       (dotimes (i bound x)
-	(declare (special x)))))
+        (declare (special x)))))
   :good)
 
 (deftest dotimes.24

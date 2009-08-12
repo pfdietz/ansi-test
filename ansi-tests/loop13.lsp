@@ -15,14 +15,14 @@
 
 (deftest loop.13.3
   (loop for i from 0 below 100 by 7
-	when (> i 50) return i)
+        when (> i 50) return i)
   56)
 
 (deftest loop.13.4
   (let ((x 0))
     (loop do
-	  (incf x)
-	  (when (= x 10) (return x))))
+          (incf x)
+          (when (= x 10) (return x))))
   10)
 
 (deftest loop.13.5
@@ -38,9 +38,9 @@
 
 (deftest loop.13.8
   (let* ((limit (min 1000 (1- (min call-arguments-limit
-				   multiple-values-limit))))
-	 (vals (make-list limit :initial-element :a))
-	 (vals2 (multiple-value-list (eval `(loop return (values ,@vals))))))
+                                   multiple-values-limit))))
+         (vals (make-list limit :initial-element :a))
+         (vals2 (multiple-value-list (eval `(loop return (values ,@vals))))))
     (equalt vals vals2))
   t)
 
@@ -67,12 +67,12 @@
 (deftest loop.13.13
   (loop named foo
         with b = 1
-	and a = (return-from foo :good) return :bad)
+        and a = (return-from foo :good) return :bad)
   :good)
 
 (deftest loop.13.14
   (loop named foo
-	for a = (return-from foo :good) return :bad)
+        for a = (return-from foo :good) return :bad)
   :good)
 
 (deftest loop.13.15
@@ -93,12 +93,12 @@
 
 (deftest loop.13.19
   (loop named foo for a being the hash-keys of (return-from foo :good)
-	return :bad)
+        return :bad)
   :good)
 
 (deftest loop.13.20
   (loop named foo for a being the symbols of (return-from foo :good)
-	return :bad)
+        return :bad)
   :good)
 
 (deftest loop.13.21
@@ -219,15 +219,15 @@
 (deftest loop.13.53
   (block nil
     (loop named foo
-	  with b = 1
-	  and a = (return :good) return :bad)
+          with b = 1
+          and a = (return :good) return :bad)
     :bad)
   :good)
 
 (deftest loop.13.54
   (block nil
     (loop named foo
-	  for a = (return :good) return :bad)
+          for a = (return :good) return :bad)
     :bad)
   :good)
 
@@ -258,14 +258,14 @@
 (deftest loop.13.59
   (block nil
     (loop named foo for a being the hash-keys of (return :good)
-	  return :bad)
+          return :bad)
     :bad)
   :good)
 
 (deftest loop.13.60
   (block nil
     (loop named foo for a being the symbols of (return :good)
-	  return :bad)
+          return :bad)
     :bad)
   :good)
 
@@ -444,7 +444,7 @@
   (macrolet
    ((%m (z) z))
    (loop for i from 0 below 100 by 7
-	 when (> i 50) return (expand-in-current-env (%m i))))
+         when (> i 50) return (expand-in-current-env (%m i))))
   56)
 
 (deftest loop.13.90

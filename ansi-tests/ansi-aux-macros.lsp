@@ -24,7 +24,7 @@
 (defun should-never-be-called () nil)
 
 (defmacro normally (form &optional (default-form
-				     '(should-never-be-called)))
+                                     '(should-never-be-called)))
   `(if *should-always-be-true* ,form ,default-form))
 
 ;;; Macro to ignore errors, but report them anyway
@@ -36,11 +36,11 @@
   `(eval-when (:load-toplevel :compile-toplevel :execute)
      (#+sbcl let #+sbcl () #-sbcl progn
        (handler-case
-	(progn ,@body)
-	(error (condition)
-	       (princ condition)
-	       (terpri)
-	       (when *report-and-ignore-errors-break* (break))
-	       (values nil condition))))))
+        (progn ,@body)
+        (error (condition)
+               (princ condition)
+               (terpri)
+               (when *report-and-ignore-errors-break* (break))
+               (values nil condition))))))
 
-		   
+

@@ -57,27 +57,27 @@
 ;;; (deftest defvar.error.1
 ;;;   (signals-error (defvar) program-error)
 ;;;   t)
-;;; 
+;;;
 ;;; (deftest defvar.error.2
 ;;;   (signals-error (defvar *ignored-defvar-name* nil "documentation"
-;;; 		    "illegal extra argument")
+;;;                 "illegal extra argument")
 ;;;                  program-error)
 ;;;   t)
 
 (deftest defvar.error.1
   (signals-error (funcall (macro-function 'defvar))
-		 program-error)
+                 program-error)
   t)
 
 (deftest defvar.error.2
   (signals-error (funcall (macro-function 'defvar)
-			   '(defvar *nonexistent-variable* nil))
-		 program-error)
+                           '(defvar *nonexistent-variable* nil))
+                 program-error)
   t)
 
 (deftest defvar.error.3
   (signals-error (funcall (macro-function 'defvar)
-			   '(defvar *nonexistent-variable* nil)
-			   nil nil)
-		 program-error)
+                           '(defvar *nonexistent-variable* nil)
+                           nil nil)
+                 program-error)
   t)

@@ -44,17 +44,17 @@
 
 (deftest find-method.5
   (find-method #'find-method-gf-01 (list :around) (list (find-class t))
-	       nil)
+               nil)
   nil)
 
 (deftest find-method.6
   (find-method #'find-method-gf-01 (list :after)
-	       (list (find-class 'integer)) nil)
+               (list (find-class 'integer)) nil)
   nil)
 
 (deftest find-method.7
   (find-method #'find-method-gf-01 (list :before) (list (find-class 'real))
-	       nil)
+               nil)
   nil)
 
 ;;; EQL specializers
@@ -77,7 +77,7 @@
 
 (deftest find-method.9
   (eqt (find-method #'find-method-gf-02 nil
-		    (list (list 'eql *find-method-02-method2-value*)))
+                    (list (list 'eql *find-method-02-method2-value*)))
        *find-method-gf-02-method2*)
   t)
 
@@ -122,7 +122,7 @@
 (deftest find-method.error.8
   (handler-case
    (find-method #'find-method-gf-01 nil (list (find-class 'integer)
-					      (find-class t)))
+                                              (find-class t)))
    (error () :error))
   :error)
 
@@ -135,8 +135,8 @@
 (deftest find-method.error.10
   (handler-case
    (find-method #'find-method-gf-01 nil (list (find-class 'integer)
-					      (find-class t))
-		nil)
+                                              (find-class t))
+                nil)
    (error () :error))
   :error)
 

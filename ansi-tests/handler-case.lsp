@@ -44,7 +44,7 @@
 
 (deftest handler-case.6
   (handler-case (values)
-		(error () nil)))
+                (error () nil)))
 
 (deftest handler-case.7
   (handler-case 'foo (condition () 'bar))
@@ -66,46 +66,46 @@
 
 (deftest handler-case.11
   (labels ((%f () (declare (special *c*))
-	       (and (typep *c* 'condition) t))
-	   (%g ()
-	       (let ((*c* nil))
-		 (declare (special *c*))
-		 (%h)))
-	   (%h ()
-	    (handler-case
-	     (error "foo")
-	     (error (*c*) (declare (special *c*))
-		    (%f)))))
+               (and (typep *c* 'condition) t))
+           (%g ()
+               (let ((*c* nil))
+                 (declare (special *c*))
+                 (%h)))
+           (%h ()
+            (handler-case
+             (error "foo")
+             (error (*c*) (declare (special *c*))
+                    (%f)))))
     (%g))
   t)
 
 (deftest handler-case.12
   (handler-case (error "foo")
-		(nil () nil)
-		(error (c) (notnot-mv (typep c 'simple-error))))
+                (nil () nil)
+                (error (c) (notnot-mv (typep c 'simple-error))))
   t)
 
 (deftest handler-case.13
   (handler-case (error "foo")
-		(error (c) (values))))
+                (error (c) (values))))
 
 (deftest handler-case.14
   (handler-case (error "foo")
-		(error (c)
-		       (values 1 2 3 4 5 6 7 8)))
+                (error (c)
+                       (values 1 2 3 4 5 6 7 8)))
   1 2 3 4 5 6 7 8)
 
 (deftest handler-case.15
   (handler-case
    (handler-case (error "foo")
-		 (warning () 'bad))
+                 (warning () 'bad))
    (error () 'good))
   good)
 
 (deftest handler-case.16
   (handler-case
    (handler-case (error "foo")
-		 (error () 'good))
+                 (error () 'good))
    (error () 'bad))
   good)
 
@@ -114,7 +114,7 @@
     (values
      (handler-case
       (handler-case (error "foo")
-		    (error () (incf i) (error "bar")))
+                    (error () (incf i) (error "bar")))
       (error () 'good))
      i))
   good 1)
@@ -124,7 +124,7 @@
     (values
      (handler-case
       (handler-case (error "foo")
-		    (error (c) (incf i) (error c)))
+                    (error (c) (incf i) (error c)))
       (error () 'good))
      i))
   good 1)
@@ -133,11 +133,11 @@
   (handler-case
    (error "foo")
    (error (c)
-	  ;; Test that declarations can go here
-	  (declare (optimize (safety 3)))
-	  (declare (type condition c))
-	  (declare (ignore c))
-	  t))
+          ;; Test that declarations can go here
+          (declare (optimize (safety 3)))
+          (declare (type condition c))
+          (declare (ignore c))
+          t))
   t)
 
 (deftest handler-case.20
@@ -184,12 +184,12 @@
    (values 1 'a 1.0)
    (error () 'bad)
    (:no-error (a b c)
-	      ;; Test that declarations can go here
-	      (declare (type integer a))
-	      (declare (type symbol b))
-	      (declare (type number c))
-	      (declare (ignore a c))
-	      b))
+              ;; Test that declarations can go here
+              (declare (type integer a))
+              (declare (type symbol b))
+              (declare (type number c))
+              (declare (ignore a c))
+              b))
   a)
 
 (deftest handler-case.27
@@ -207,7 +207,7 @@
     (declare (special x))
     (let ((x :good))
       (handler-case nil
-		    (:no-error (z &aux (y x))
-			       (declare (special x) (ignore z))
-			       y))))
+                    (:no-error (z &aux (y x))
+                               (declare (special x) (ignore z))
+                               y))))
   :good)

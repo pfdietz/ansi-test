@@ -7,7 +7,7 @@
 
 (defparameter *eval-and-compile-fns*
   '(compile eval macroexpand macroexpand-1 proclaim special-operator-p
-	    constantp))
+            constantp))
 
 (deftest eval-and-compile-fns
   (remove-if #'fboundp *eval-and-compile-fns*)

@@ -92,14 +92,14 @@
 (def-pprint-test format./.19
   (progn
    (setf (symbol-function 'function-for-format-slash-19)
-	 #'(lambda (stream &rest args)
-	     (assert (= (length args) (length *expected-args*)))
-	     (assert (equal (car args) (car *expected-args*)))
-	     (assert (if (cadr args) (cadr *expected-args*)
-		       (not (cadr *expected-args*))))
-	     (assert (if (caddr args) (caddr *expected-args*)
-		       (not (caddr *expected-args*))))
-	     (apply #'pprint-fill stream (subseq args 0 3))))
+         #'(lambda (stream &rest args)
+             (assert (= (length args) (length *expected-args*)))
+             (assert (equal (car args) (car *expected-args*)))
+             (assert (if (cadr args) (cadr *expected-args*)
+                       (not (cadr *expected-args*))))
+             (assert (if (caddr args) (caddr *expected-args*)
+                       (not (caddr *expected-args*))))
+             (apply #'pprint-fill stream (subseq args 0 3))))
    (list
     (let ((*expected-args* '(1 nil nil)))
       (format nil "~/cl-test::function-for-format-slash-19/" 1))

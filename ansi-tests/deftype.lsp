@@ -33,7 +33,7 @@
 (deftest deftype.6
   (notnot-mv
    (typep (make-array '(3 5 6) :element-type '(unsigned-byte 8))
-	  '(even-array (unsigned-byte 8))))
+          '(even-array (unsigned-byte 8))))
   t)
 
 (deftest deftype.7
@@ -50,7 +50,7 @@
 
 (deftest deftype.9
   (let* ((sym (gensym))
-	 (form `(deftype ,sym (&optional x) `(integer 0 ,x))))
+         (form `(deftype ,sym (&optional x) `(integer 0 ,x))))
     (values
      (eqlt (eval form) sym)
      (multiple-value-list (subtypep* `(,sym) 'unsigned-byte))
@@ -58,9 +58,9 @@
      (multiple-value-list (subtypep* `(,sym 4) '(integer 0 4)))
      (multiple-value-list (subtypep* '(integer 0 4) `(,sym 4)))
      (loop for x in '(a -1 0 1 2 3 4 5 b)
-	   collect (notnot (typep x sym)))
+           collect (notnot (typep x sym)))
      (loop for x in '(a -1 0 1 2 3 4 5 b)
-	   collect (notnot (typep x `(,sym 4))))
+           collect (notnot (typep x `(,sym 4))))
      ))
   t (t t) (t t) (t t) (t t)
   (nil nil t t t t t t nil)
@@ -68,7 +68,7 @@
 
 (deftest deftype.10
   (let* ((sym (gensym))
-	 (form `(deftype ,sym (&optional (x 14)) `(integer 0 ,x))))
+         (form `(deftype ,sym (&optional (x 14)) `(integer 0 ,x))))
     (values
      (eqlt (eval form) sym)
      (multiple-value-list (subtypep* `(,sym) '(integer 0 14)))
@@ -76,9 +76,9 @@
      (multiple-value-list (subtypep* `(,sym 4) '(integer 0 4)))
      (multiple-value-list (subtypep* '(integer 0 4) `(,sym 4)))
      (loop for x in '(a -1 0 1 2 3 4 5 14 15 b)
-	   collect (notnot (typep x sym)))
+           collect (notnot (typep x sym)))
      (loop for x in '(a -1 0 1 2 3 4 5 14 15 b)
-	   collect (notnot (typep x `(,sym 4))))
+           collect (notnot (typep x `(,sym 4))))
      ))
   t (t t) (t t) (t t) (t t)
   (nil nil t t t t t t t nil nil)
@@ -86,7 +86,7 @@
 
 (deftest deftype.11
   (let* ((sym (gensym))
-	 (form `(deftype ,sym (&key foo bar) `(integer ,foo ,bar))))
+         (form `(deftype ,sym (&key foo bar) `(integer ,foo ,bar))))
     (values
      (eqlt (eval form) sym)
      (multiple-value-list (subtypep* `(,sym) 'integer))
@@ -116,7 +116,7 @@
 
 (deftest deftype.12
   (let* ((sym (gensym))
-	 (form `(deftype ,sym (&key foo bar &allow-other-keys) `(integer ,foo ,bar))))
+         (form `(deftype ,sym (&key foo bar &allow-other-keys) `(integer ,foo ,bar))))
     (values
      (eqlt (eval form) sym)
      (multiple-value-list (subtypep* `(,sym :xyz t) 'integer))
@@ -134,7 +134,7 @@
 
 (deftest deftype.13
   (let* ((sym (gensym))
-	 (form `(deftype ,sym (&rest args) (if args `(member ,@args) nil))))
+         (form `(deftype ,sym (&rest args) (if args `(member ,@args) nil))))
     (values
      (eqlt (eval form) sym)
 ;;     (multiple-value-list (subtypep* sym nil))
@@ -157,11 +157,11 @@
 #|
 (deftest deftype.14
   (let* ((sym (gensym))
-	 (*f* nil)
-	 (form `(let ((x 1))
-		  (declare (special *f*))
-		  (setf *f* #'(lambda (y) (setf x y)))
-		  (deftype ,sym () `(integer 0 ,x)))))
+         (*f* nil)
+         (form `(let ((x 1))
+                  (declare (special *f*))
+                  (setf *f* #'(lambda (y) (setf x y)))
+                  (deftype ,sym () `(integer 0 ,x)))))
     (declare (special *f*))
     (values
      (eqlt (eval form) sym)
@@ -173,10 +173,10 @@
 
 (deftest deftype.15
   (let* ((sym (gensym))
-	 (form `(let ((a 1))
-		  (deftype ,sym (&optional (x a))
-		    (declare (special a))
-		    `(integer 0 ,x)))))
+         (form `(let ((a 1))
+                  (deftype ,sym (&optional (x a))
+                    (declare (special a))
+                    `(integer 0 ,x)))))
     (values
      (eqlt (eval form) sym)
      (let ((a 2))
@@ -188,10 +188,10 @@
   t
   (nil t t nil nil)
   (nil t t nil nil))
-    
+
 (deftest deftype.16
   (let* ((sym (gensym))
-	 (form `(deftype ,sym () (return-from ,sym 'integer))))
+         (form `(deftype ,sym () (return-from ,sym 'integer))))
     (values
      (eqlt (eval form) sym)
      (subtypep* sym 'integer)
@@ -200,7 +200,7 @@
 
 (deftest deftype.17
   (let* ((sym (gensym))
-	 (form `(deftype ,sym () (values 'integer t))))
+         (form `(deftype ,sym () (values 'integer t))))
     (values
      (eqlt (eval form) sym)
      (subtypep* sym 'integer)
@@ -209,7 +209,7 @@
 
 (deftest deftype.18
   (let* ((sym (gensym))
-	 (form `(deftype ,sym ())))
+         (form `(deftype ,sym ())))
     (values
      (eqlt (eval form) sym)
      (subtypep* sym nil)
@@ -218,32 +218,32 @@
 
 (deftest deftype.19
   (let* ((sym (gensym))
-	 (form `(deftype ,sym ()
-		  (declare (optimize speed safety debug compilation-speed space))
-		  'integer)))		  
+         (form `(deftype ,sym ()
+                  (declare (optimize speed safety debug compilation-speed space))
+                  'integer)))
     (values
      (eqlt (eval form) sym)
      (subtypep* sym 'integer)
      (subtypep* 'integer sym)))
   t t t)
-  
+
 ;;; Error tests
 
 (deftest deftype.error.1
   (signals-error (funcall (macro-function 'deftype))
-		 program-error)
+                 program-error)
   t)
 
 (deftest deftype.error.2
   (signals-error (funcall (macro-function 'deftype)
-			   '(deftype nonexistent-type () nil))
-		 program-error)
+                           '(deftype nonexistent-type () nil))
+                 program-error)
   t)
 
 (deftest deftype.error.3
   (signals-error (funcall (macro-function 'deftype)
-			   '(deftype nonexistent-type () nil)
-			   nil nil)
-		 program-error)
+                           '(deftype nonexistent-type () nil)
+                           nil nil)
+                 program-error)
   t)
 

@@ -8,7 +8,7 @@
 ;;; Need to add non-error tests
 
 (def-macro-test defsetf.error.1 (defsetf nonexistent-access-fn
-				  nonexistent-update-fn))
+                                  nonexistent-update-fn))
 
 ;;; Short form
 
@@ -21,15 +21,15 @@
 (deftest defsetf.1
   (progn
     (let ((vals (multiple-value-list
-		 (defsetf defsetf.1-accessor defsetf.1-accessor-settor))))
+                 (defsetf defsetf.1-accessor defsetf.1-accessor-settor))))
       (assert (equal vals '(defsetf.1-accessor))
-	      ()
-	      "Return values are ~A~%" vals))
+              ()
+              "Return values are ~A~%" vals))
     (eval
      '(let ((x (list 1 2 3)))
-	(values
-	 (setf (defsetf.1-accessor x) 4)
-	 x))))
+        (values
+         (setf (defsetf.1-accessor x) 4)
+         x))))
   4
   (1 4 3))
 
@@ -94,7 +94,7 @@
 
 (defparameter *defsetf.4-vals*
   (multiple-value-list
-   (defsetf defsetf.4-accessor (n seq) (val) 
+   (defsetf defsetf.4-accessor (n seq) (val)
      (declare)
      "Doc string for defsetf.4-accessor setf"
      `(setf (elt ,seq ,n) ,val))))
@@ -110,15 +110,15 @@
 
 (deftest defsetf.4c
   (let ((x (list 1 2 3 4))
-	(i 0)
-	(j nil)
-	(k nil))
+        (i 0)
+        (j nil)
+        (k nil))
     (values
      (setf (defsetf.4-accessor
-	     (progn (setf j (incf i))
-		    2)
-	     (progn (setf k (incf i)) x))
-	   (progn (incf i) 'a))
+             (progn (setf j (incf i))
+                    2)
+             (progn (setf k (incf i)) x))
+           (progn (incf i) 'a))
      x
      i j k))
   a

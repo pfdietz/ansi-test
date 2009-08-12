@@ -7,10 +7,10 @@
 
 (deftest hash-table-p.1
   (loop for e in '(nil t 1 10.0 (a b c) #(a b c) #*1011
-		       #0aNIL #2a((a b)(c d)) #p"foo"
-		       "bar" #\a 3/5 #c(1.0 2.0))
-	when (hash-table-p e)
-	collect e)
+                       #0aNIL #2a((a b)(c d)) #p"foo"
+                       "bar" #\a 3/5 #c(1.0 2.0))
+        when (hash-table-p e)
+        collect e)
   nil)
 
 (deftest hash-table-p.2
@@ -36,6 +36,6 @@
 
 (deftest hash-table-p.error.2
   (signals-error (let ((h (make-hash-table))) (hash-table-p h nil))
-		 program-error)
+                 program-error)
   t)
 

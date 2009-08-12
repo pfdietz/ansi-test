@@ -7,10 +7,10 @@
 
 (deftest two-way-stream-input-stream.1
   (let* ((is (make-string-input-stream "foo"))
-	 (os (make-string-output-stream))
-	 (s (make-two-way-stream is os)))
+         (os (make-string-output-stream))
+         (s (make-two-way-stream is os)))
     (equalt (multiple-value-list (two-way-stream-input-stream s))
-	    (list is)))
+            (list is)))
   t)
 
 (deftest two-way-stream-input-stream.error.1
@@ -19,8 +19,8 @@
 
 (deftest two-way-stream-input-stream.error.2
   (signals-error (let* ((is (make-string-input-stream "foo"))
-			(os (make-string-output-stream))
-			(s (make-two-way-stream is os)))
-		   (two-way-stream-input-stream s nil))
-		 program-error)
+                        (os (make-string-output-stream))
+                        (s (make-two-way-stream is os)))
+                   (two-way-stream-input-stream s nil))
+                 program-error)
   t)

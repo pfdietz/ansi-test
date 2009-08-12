@@ -9,16 +9,16 @@
 
 (deftest pathname-version.1
   (loop for p in *pathnames*
-	for version = (pathname-version p)
-	unless (or (integerp version) (symbolp version))
-	collect (list p version))
+        for version = (pathname-version p)
+        unless (or (integerp version) (symbolp version))
+        collect (list p version))
   nil)
 
 ;;; section 19.3.2.1
 (deftest pathname-version.2
   (loop for p in *logical-pathnames*
-	when (eq (pathname-version p) :unspecific)
-	collect p)
+        when (eq (pathname-version p) :unspecific)
+        collect p)
   nil)
 
 (deftest pathname-version.3
@@ -31,7 +31,7 @@
 
 (deftest pathname-version.error.2
   (signals-error (pathname-version *default-pathname-defaults* nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest pathname-version.error.3

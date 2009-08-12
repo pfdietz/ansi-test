@@ -86,12 +86,12 @@
 
 (deftest unless.error.2
   (signals-error (funcall (macro-function 'unless)
-			   '(unless t))
-		 program-error)
+                           '(unless t))
+                 program-error)
   t)
 
 (deftest unless.error.3
   (signals-error (funcall (macro-function 'unless)
-			   '(unless t) nil nil)
-		 program-error)
+                           '(unless t) nil nil)
+                 program-error)
   t)

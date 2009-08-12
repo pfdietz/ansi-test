@@ -24,7 +24,7 @@
 
 (deftest get-setf-expansion.1
   (let* ((fn (gensym))
-	 (vals (multiple-value-list (get-setf-expansion (list fn)))))
+         (vals (multiple-value-list (get-setf-expansion (list fn)))))
     (values
      (length vals)
      (first  vals)
@@ -32,23 +32,23 @@
      (length (third vals))
      (block done
        (subst-if nil
-		 #'(lambda (term)
-		     (when (equal term `(function (setf ,fn)))
-		       (return-from done :good)))
-		 (fourth vals)))
+                 #'(lambda (term)
+                     (when (equal term `(function (setf ,fn)))
+                       (return-from done :good)))
+                 (fourth vals)))
      (if (equal (fifth vals) (list fn))
-	 :good
+         :good
        (fifth vals))))
   5 nil nil 1 :good :good)
 
 (deftest get-setf-expansion.2
   (let* ((fn (gensym))
-	 (vals (multiple-value-list (get-setf-expansion (list fn) nil))))
+         (vals (multiple-value-list (get-setf-expansion (list fn) nil))))
     (length vals))
   5)
 
 (deftest get-setf-expansion.3
   (let* ((var (gensym))
-	 (vals (multiple-value-list (get-setf-expansion var))))
+         (vals (multiple-value-list (get-setf-expansion var))))
     (length vals))
   5)

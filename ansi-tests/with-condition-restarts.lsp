@@ -53,7 +53,7 @@
 
 (deftest with-condition-restarts.6
   (let ((c (make-condition 'error))
-	(c2 (make-condition 'error)))
+        (c2 (make-condition 'error)))
     (handler-bind
      ((error #'(lambda (c) (invoke-restart (find-restart 'foo c2)))))
      (restart-case
@@ -67,7 +67,7 @@
 
 (deftest with-condition-restarts.7
   (let ((c (make-condition 'error))
-	(c2 (make-condition 'error)))
+        (c2 (make-condition 'error)))
     (handler-bind
      ((error #'(lambda (c) (invoke-restart 'foo))))
      (restart-case
@@ -84,12 +84,12 @@
 
 (deftest with-condition-restarts.8
   (let ((c (make-condition 'error))
-	(c2 (make-condition 'error)))
+        (c2 (make-condition 'error)))
     (restart-case
      (progn
        (with-condition-restarts
-	c
-	(list (find-restart 'foo)))
+        c
+        (list (find-restart 'foo)))
        (invoke-restart (find-restart 'foo c2)))
      (foo () 'good)
      (foo () 'bad)))

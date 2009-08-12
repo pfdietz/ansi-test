@@ -15,9 +15,9 @@
     (equalt
      (remove-duplicates
       (sort-symbols (let ((all nil))
-		      (do-symbols (x "B" all) (push x all)))))
+                      (do-symbols (x "B" all) (push x all)))))
      (list (find-symbol "BAR" "B")
-	   (find-symbol "FOO" "A"))))
+           (find-symbol "FOO" "A"))))
   t)
 
 ;;
@@ -46,8 +46,8 @@
   (remove-duplicates
    (collect-symbols "DS4")
    :test #'(lambda (x y)
-	     (and (eqt x y)
-		  (not (eqt x 'DS4::B)))))
+             (and (eqt x y)
+                  (not (eqt x 'DS4::B)))))
   (DS1:A DS1:B DS2::F DS3:G DS3:I DS3:J DS3:K DS4::X DS4::Y DS4::Z))
 
 
@@ -62,7 +62,7 @@
 
 (deftest do-symbols.7
   (let ((x nil)
-	(*package* (find-package "DS1")))
+        (*package* (find-package "DS1")))
     (list
      (do-symbols (s) (push s x))
      (sort-symbols x)))
@@ -95,11 +95,11 @@
        (assert (string= name "B"))
        (set-up-packages)
        (equalt
-	(remove-duplicates
-	 (sort-symbols (let ((all nil))
-			 (do-symbols (x name all) (push x all)))))
-	(list (find-symbol "BAR" "B")
-	      (find-symbol "FOO" "A"))))
+        (remove-duplicates
+         (sort-symbols (let ((all nil))
+                         (do-symbols (x name all) (push x all)))))
+        (list (find-symbol "BAR" "B")
+              (find-symbol "FOO" "A"))))
      t))
 
 (def-do-symbols-test do-symbols.9
@@ -107,33 +107,33 @@
 
 (def-do-symbols-test do-symbols.10
   (make-array 5 :element-type 'character
-	      :fill-pointer 1
-	      :initial-contents "BXXXX"))
+              :fill-pointer 1
+              :initial-contents "BXXXX"))
 
 (def-do-symbols-test do-symbols.11
   (make-array 5 :element-type 'base-char
-	      :fill-pointer 1
-	      :initial-contents "BXXXX"))
+              :fill-pointer 1
+              :initial-contents "BXXXX"))
 
 (def-do-symbols-test do-symbols.12
   (make-array 1 :element-type 'base-char
-	      :adjustable t :initial-contents "B"))
+              :adjustable t :initial-contents "B"))
 
 (def-do-symbols-test do-symbols.13
   (make-array 1 :element-type 'character
-	      :adjustable t :initial-contents "B"))
+              :adjustable t :initial-contents "B"))
 
 (def-do-symbols-test do-symbols.14
   (let* ((etype 'base-char)
-	 (name0 (make-array 4 :element-type etype :initial-contents "XBYZ")))
+         (name0 (make-array 4 :element-type etype :initial-contents "XBYZ")))
     (make-array 1 :element-type etype
-		:displaced-to name0 :displaced-index-offset 1)))
+                :displaced-to name0 :displaced-index-offset 1)))
 
 (def-do-symbols-test do-symbols.15
   (let* ((etype 'character)
-	 (name0 (make-array 4 :element-type etype :initial-contents "XBYZ")))
+         (name0 (make-array 4 :element-type etype :initial-contents "XBYZ")))
     (make-array 1 :element-type etype
-		:displaced-to name0 :displaced-index-offset 1)))
+                :displaced-to name0 :displaced-index-offset 1)))
 
 ;;; Free declaration scope tests
 
@@ -142,8 +142,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(do-symbols (s (return-from done x))
-	  (declare (special x))))))
+        (do-symbols (s (return-from done x))
+          (declare (special x))))))
   :good)
 
 (deftest do-symbols.17
@@ -151,7 +151,7 @@
     (declare (special x))
     (let ((x :bad))
       (do-symbols (s "CL-TEST" x)
-	(declare (special x)))))
+        (declare (special x)))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms

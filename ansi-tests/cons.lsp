@@ -20,15 +20,15 @@
 ;;; successive calls to cons produces results that are equal, but not eq
 (deftest cons-eq-equal
   (let ((x (cons 'a 'b))
-	(y (cons 'a 'b)))
+        (y (cons 'a 'b)))
     (and (not (eqt x y))
-	 (equalt x y)))
+         (equalt x y)))
   t)
 
 ;;; list can be expressed as a bunch of conses (with nil)
 (deftest cons-equal-list
   (equalt (cons 'a (cons 'b (cons 'c nil)))
-	  (list 'a 'b 'c))
+          (list 'a 'b 'c))
   t)
 
 ;;; Order of evaluation of cons arguments

@@ -19,10 +19,10 @@
 
 (deftest integerp.1
   (loop for i in *integers*
-	for vals = (multiple-value-list (integerp i))
-	unless (and (= (length vals) 1)
-		    (first vals))
-	collect (cons i vals))
+        for vals = (multiple-value-list (integerp i))
+        unless (and (= (length vals) 1)
+                    (first vals))
+        collect (cons i vals))
   nil)
 
 (deftest integerp.2

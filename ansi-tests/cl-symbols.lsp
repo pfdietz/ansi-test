@@ -1016,8 +1016,8 @@
     (loop for n in *cl-symbol-names* do (setf (gethash n ht) t))
     (let ((extras nil))
       (do-external-symbols (s "CL")
-			   (unless (gethash (symbol-name s) ht)
-			     (push s extras)))
+                           (unless (gethash (symbol-name s) ht)
+                             (push s extras)))
       extras))
   nil)
 
@@ -1029,18 +1029,18 @@
 
 (deftest keyword-behavior
   (let ((result nil)
-	(keyword-package (find-package "KEYWORD")))
+        (keyword-package (find-package "KEYWORD")))
     (do-symbols (s keyword-package result)
       (multiple-value-bind (sym status)
-	  (find-symbol (symbol-name s) keyword-package)
-	(cond
-	 ((not (eqt s sym)) (push (list s sym) result))
-	 ((eqt status :internal)
-	  (push (list s status) result))
-	 ((eqt status :external)
-	  (unless (and (eqt (symbol-value s) s)
-		       (constantp s))
-	    (push (list s sym 'not-constant) result)))))))
+          (find-symbol (symbol-name s) keyword-package)
+        (cond
+         ((not (eqt s sym)) (push (list s sym) result))
+         ((eqt status :internal)
+          (push (list s status) result))
+         ((eqt status :external)
+          (unless (and (eqt (symbol-value s) s)
+                       (constantp s))
+            (push (list s sym 'not-constant) result)))))))
   nil)
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -1054,9 +1054,9 @@
   (loop
    for s in (append *cl-function-symbols* *cl-accessor-symbols*)
    when (or (not (fboundp s))
-	    (macro-function s)
-	    (special-operator-p s)
-	    (not (symbol-function s)))
+            (macro-function s)
+            (special-operator-p s)
+            (not (symbol-function s)))
    collect s)
   nil)
 
@@ -1066,7 +1066,7 @@
   (loop
    for s in *cl-macro-symbols*
    when (or (not (fboundp s))
-	    (not (macro-function s)))
+            (not (macro-function s)))
    collect s)
   nil)
 
@@ -1076,7 +1076,7 @@
   (loop
    for s in *cl-constant-symbols*
    when (or (not (boundp s))
-	    (not (constantp s)))
+            (not (constantp s)))
    collect s)
   nil)
 
@@ -1088,7 +1088,7 @@
    when (not (boundp s))
    collect s)
   nil)
-	    
+
 ;;; Check that all types that are classes name classes.
 
 ;;; "Many but not all of the predefined type specifiers have
@@ -1102,8 +1102,8 @@
    for s in *cl-types-that-are-classes-symbols*
    for c = (find-class s nil)
    unless (and c
-	       (eq (class-name c) s)
-	       (typep c 'class))
+               (eq (class-name c) s)
+               (typep c 'class))
    collect s)
   nil)
 
@@ -1115,8 +1115,8 @@
    for s in *cl-types-that-are-classes-symbols*
    for c = (find-class s nil nil)
    unless (and c
-	       (eq (class-name c) s)
-	       (typep c 'class))
+               (eq (class-name c) s)
+               (typep c 'class))
    collect s)
   nil)
 
@@ -1126,12 +1126,12 @@
   (loop
    for s in *cl-types-that-are-classes-symbols*
    for c = (eval `(macrolet ((%foo (&environment env)
-				   (list 'quote
-					 (find-class ',s nil env))))
-		    (%foo)))
+                                   (list 'quote
+                                         (find-class ',s nil env))))
+                    (%foo)))
    unless (and c
-	       (eq (class-name c) s)
-	       (typep c 'class))
+               (eq (class-name c) s)
+               (typep c 'class))
    collect s)
   nil)
 
@@ -1164,7 +1164,7 @@
 
 (deftest symbol-plist.error.4
   (check-type-error #'(lambda (x) (setf (symbol-plist x) nil))
-		    #'symbolp)
+                    #'symbolp)
   nil)
 
 
@@ -1189,7 +1189,7 @@
   (let ((sym (gensym)))
     (declare (optimize safety))
     (handler-case (progn (symbol-value sym) :bad)
-		  (unbound-variable (c)
-				    (assert (eq (cell-error-name c) sym))
-				    :good)))
+                  (unbound-variable (c)
+                                    (assert (eq (cell-error-name c) sym))
+                                    :good)))
   :good)

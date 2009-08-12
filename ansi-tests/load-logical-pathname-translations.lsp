@@ -17,18 +17,18 @@
 (deftest load-logical-pathname-translations.error.1
   (handler-case
    (progn (load-logical-pathname-translations
-	   "THEREHADBETTERNOTBEAHOSTCALLEDTHIS")
-	 nil)
+           "THEREHADBETTERNOTBEAHOSTCALLEDTHIS")
+         nil)
    (error () :good))
   :good)
 
 (deftest load-logical-pathname-translations.error.2
   (signals-error (load-logical-pathname-translations)
-		 program-error)
+                 program-error)
   t)
 
 (deftest load-logical-pathname-translations.error.3
   (signals-error (load-logical-pathname-translations "CLTESTROOT" nil)
-		 program-error)
+                 program-error)
   t)
 

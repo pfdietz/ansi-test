@@ -13,13 +13,13 @@
 
 (deftest subtypep.fixnum.integer
   (check-equivalence `(integer ,most-negative-fixnum ,most-positive-fixnum)
-		     'fixnum)
+                     'fixnum)
   nil)
 
 (deftest subtypep.bignum.integer
   (check-equivalence
    `(or (integer * (,most-negative-fixnum))
-	(integer (,most-positive-fixnum) *))
+        (integer (,most-positive-fixnum) *))
    'bignum)
   nil)
 
@@ -220,7 +220,7 @@
 (deftest subtypep.integer.25
   (check-equivalence
    '(and (or (integer 0 10) (integer 20 30))
-	 (or (integer 5 15) (integer 25 35)))
+         (or (integer 5 15) (integer 25 35)))
    '(or (integer 5 10) (integer 25 30)))
   nil)
 
@@ -276,48 +276,48 @@
 
 (deftest subtypep.integer.real.4
   (loop for int-type in '(integer (integer) (integer *) (integer * *))
-	append (loop for real-type in '(real (real) (real *) (real * *))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type real-type))
-				   '(t t))
-		     collect (list int-type real-type)))
+        append (loop for real-type in '(real (real) (real *) (real * *))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type real-type))
+                                   '(t t))
+                     collect (list int-type real-type)))
   nil)
 
 (deftest subtypep.integer.real.5
   (loop for int-type in '((integer 10) (integer 10 *))
-	append (loop for real-type in '(real (real) (real *) (real * *)
-					     (real 10.0) (real 10.0 *)
-					     (real 10) (real 10 *))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type real-type))
-				   '(t t))
-		     collect (list int-type real-type)))
+        append (loop for real-type in '(real (real) (real *) (real * *)
+                                             (real 10.0) (real 10.0 *)
+                                             (real 10) (real 10 *))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type real-type))
+                                   '(t t))
+                     collect (list int-type real-type)))
   nil)
 
 (deftest subtypep.integer.real.6
   (loop for int-type in '((integer * 10) (integer * 5))
-	append (loop for real-type in '(real (real) (real *) (real * *)
-					     (real * 10.0)
-					    (real * 10) (real * 1000000000000))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type real-type))
-				   '(t t))
-		     collect (list int-type real-type)))
+        append (loop for real-type in '(real (real) (real *) (real * *)
+                                             (real * 10.0)
+                                            (real * 10) (real * 1000000000000))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type real-type))
+                                   '(t t))
+                     collect (list int-type real-type)))
   nil)
 
 (deftest subtypep.integer.real.7
   (loop for int-type in '((integer 0 10) (integer 2 5))
-	append (loop for real-type in '(real (real) (real *) (real * *)
-					    (real * 10) (real * 1000000000000)
-					    (real -10) (real -10.0)
-					    (real -10 *) (real -10.0 *)
-					    (real 0) (real 0.0)
-					    (real 0 10) (real * 10)
-					    (real 0 *) (real 0 10))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type real-type))
-				   '(t t))
-		     collect (list int-type real-type)))
+        append (loop for real-type in '(real (real) (real *) (real * *)
+                                            (real * 10) (real * 1000000000000)
+                                            (real -10) (real -10.0)
+                                            (real -10 *) (real -10.0 *)
+                                            (real 0) (real 0.0)
+                                            (real 0 10) (real * 10)
+                                            (real 0 *) (real 0 10))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type real-type))
+                                   '(t t))
+                     collect (list int-type real-type)))
   nil)
 
 (deftest subtypep.integer.real.8
@@ -369,52 +369,52 @@
 
 (deftest subtypep.integer.rational.4
   (loop for int-type in '(integer (integer) (integer *) (integer * *))
-	append (loop for rational-type
-		     in '(rational (rational) (rational *) (rational * *))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type rational-type))
-				   '(t t))
-		     collect (list int-type rational-type)))
+        append (loop for rational-type
+                     in '(rational (rational) (rational *) (rational * *))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type rational-type))
+                                   '(t t))
+                     collect (list int-type rational-type)))
   nil)
 
 (deftest subtypep.integer.rational.5
   (loop for int-type in '((integer 10) (integer 10 *))
-	append (loop for rational-type
-		     in '(rational (rational) (rational *) (rational * *)
-				   (rational 19/2) (rational 19/2 *)
-				   (rational 10) (rational 10 *))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type rational-type))
-				   '(t t))
-		     collect (list int-type rational-type)))
+        append (loop for rational-type
+                     in '(rational (rational) (rational *) (rational * *)
+                                   (rational 19/2) (rational 19/2 *)
+                                   (rational 10) (rational 10 *))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type rational-type))
+                                   '(t t))
+                     collect (list int-type rational-type)))
   nil)
 
 (deftest subtypep.integer.rational.6
   (loop for int-type in '((integer * 10) (integer * 5))
-	append (loop for rational-type
-		     in '(rational (rational) (rational *) (rational * *)
-				   (rational * 21/2)
-				   (rational * 10) (rational * 1000000000000))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type rational-type))
-				   '(t t))
-		     collect (list int-type rational-type)))
+        append (loop for rational-type
+                     in '(rational (rational) (rational *) (rational * *)
+                                   (rational * 21/2)
+                                   (rational * 10) (rational * 1000000000000))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type rational-type))
+                                   '(t t))
+                     collect (list int-type rational-type)))
   nil)
 
 (deftest subtypep.integer.rational.7
   (loop for int-type in '((integer 0 10) (integer 2 5))
-	append (loop for rational-type in
-		     '(rational (rational) (rational *) (rational * *)
-				(rational * 10) (rational * 1000000000000)
-				(rational -1) (rational -1/2)
-				(rational -1 *) (rational -1/2 *)
-				(rational 0)
-				(rational 0 10) (rational * 10)
-				(rational 0 *) (rational 0 10))
-		     unless (equal (multiple-value-list
-				    (subtypep* int-type rational-type))
-				   '(t t))
-		     collect (list int-type rational-type)))
+        append (loop for rational-type in
+                     '(rational (rational) (rational *) (rational * *)
+                                (rational * 10) (rational * 1000000000000)
+                                (rational -1) (rational -1/2)
+                                (rational -1 *) (rational -1/2 *)
+                                (rational 0)
+                                (rational 0 10) (rational * 10)
+                                (rational 0 *) (rational 0 10))
+                     unless (equal (multiple-value-list
+                                    (subtypep* int-type rational-type))
+                                   '(t t))
+                     collect (list int-type rational-type)))
   nil)
 
 (deftest subtypep.integer.rational.8

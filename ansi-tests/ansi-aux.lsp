@@ -18,8 +18,8 @@
   (if (null results)
       (values)
     (apply #'values
-	   (not (not (first results)))
-	   (rest results))))
+           (not (not (first results)))
+           (rest results))))
 
 (defmacro not-mv (form)
   `(not-mv-fn (multiple-value-list ,form)))
@@ -28,8 +28,8 @@
   (if (null results)
       (values)
     (apply #'values
-	   (not (first results))
-	   (rest results))))
+           (not (first results))
+           (rest results))))
 
 (declaim (ftype (function (t) function) to-function))
 
@@ -43,9 +43,9 @@
 ;;; (defaults to 1)
 (defmacro check-values (form &optional (num 1))
   (let ((v (gensym))
-	(n (gensym)))
+        (n (gensym)))
    `(let ((,v (multiple-value-list ,form))
-	  (,n ,num))
+          (,n ,num))
       (check-values-length ,v ,n ',form)
       (car ,v))))
 
@@ -63,11 +63,11 @@ Results: ~A~%" expected-number form n results))))
 ;;; Do multiple-value-bind, but check # of arguments
 (defmacro multiple-value-bind* ((&rest vars) form &body body)
   (let ((len (length vars))
-	(v (gensym)))
+        (v (gensym)))
     `(let ((,v (multiple-value-list ,form)))
        (check-values-length ,v ,len ',form)
        (destructuring-bind ,vars ,v ,@body))))
-  
+
 ;;; Comparison functions that are like various builtins,
 ;;; but are guaranteed to return T for true.
 
@@ -122,26 +122,26 @@ Results: ~A~%" expected-number form n results))))
        (typep a2 'array)
        (= (array-rank a1) (array-rank a2))
        (if (= (array-rank a1) 0)
-	   (equal (regression-test::my-aref a1) (regression-test::my-aref a2))
-	 (let ((ad (array-dimensions a1)))
-	   (and (equal ad (array-dimensions a2))
-		(locally
-		 (declare (type (array * *) a1 a2))
-		 (if (= (array-rank a1) 1)
-		     (let ((as (first ad)))
-		       (loop
-			for i from 0 below as
-			always (equal (regression-test::my-aref a1 i)
-				      (regression-test::my-aref a2 i))))
-		   (let ((as (array-total-size a1)))
-		     (and (= as (array-total-size a2))
-			  (loop
-			   for i from 0 below as
-			   always
-			   (equal
-			    (regression-test::my-row-major-aref a1 i)
-			    (regression-test::my-row-major-aref a2 i))
-			   ))))))))))
+           (equal (regression-test::my-aref a1) (regression-test::my-aref a2))
+         (let ((ad (array-dimensions a1)))
+           (and (equal ad (array-dimensions a2))
+                (locally
+                 (declare (type (array * *) a1 a2))
+                 (if (= (array-rank a1) 1)
+                     (let ((as (first ad)))
+                       (loop
+                        for i from 0 below as
+                        always (equal (regression-test::my-aref a1 i)
+                                      (regression-test::my-aref a2 i))))
+                   (let ((as (array-total-size a1)))
+                     (and (= as (array-total-size a2))
+                          (loop
+                           for i from 0 below as
+                           always
+                           (equal
+                            (regression-test::my-row-major-aref a1 i)
+                            (regression-test::my-row-major-aref a2 i))
+                           ))))))))))
 
 ;;; *universe* is defined elsewhere -- it is a list of various
 ;;; lisp objects used when stimulating things in various tests.
@@ -159,9 +159,9 @@ Results: ~A~%" expected-number form n results))))
   (multiple-value-bind (sub good)
       (subtypep* type1 type2)
     (if good
-	sub
+        sub
       (loop for e in *universe*
-	    always (or (not (typep e type1)) (typep e type2))))))
+            always (or (not (typep e type1)) (typep e type2))))))
 
 (defun check-type-predicate (P TYPE)
   "Check that a predicate P is the same as #'(lambda (x) (typep x TYPE))
@@ -176,23 +176,23 @@ Results: ~A~%" expected-number form n results))))
   (loop
       for x in *universe*
       when
-	(block failed
-	  (let ((p1 (handler-case
-			(normally (funcall (the function p) x))
-		      (error () (format t "(FUNCALL ~S ~S) failed~%"
-					P x)
-			(return-from failed t))))
-		(p2 (handler-case
-			(normally (typep x TYPE))
-		      (error () (format t "(TYPEP ~S '~S) failed~%"
-					x TYPE)
-			(return-from failed t)))))
-	      (when (or (and p1 (not p2))
-			(and (not p1) p2))
-		(format t "(FUNCALL ~S ~S) = ~S, (TYPEP ~S '~S) = ~S~%"
-			P x p1 x TYPE p2)
-		t)))
-	collect x))
+        (block failed
+          (let ((p1 (handler-case
+                        (normally (funcall (the function p) x))
+                      (error () (format t "(FUNCALL ~S ~S) failed~%"
+                                        P x)
+                        (return-from failed t))))
+                (p2 (handler-case
+                        (normally (typep x TYPE))
+                      (error () (format t "(TYPEP ~S '~S) failed~%"
+                                        x TYPE)
+                        (return-from failed t)))))
+              (when (or (and p1 (not p2))
+                        (and (not p1) p2))
+                (format t "(FUNCALL ~S ~S) = ~S, (TYPEP ~S '~S) = ~S~%"
+                        P x p1 x TYPE p2)
+                t)))
+        collect x))
 
 ;;; We have a common idiom where a guarded predicate should be
 ;;; true everywhere
@@ -201,8 +201,8 @@ Results: ~A~%" expected-number form n results))))
   "Return all elements of UNIVERSE for which the guard (if present) is false
    and for which PREDICATE is false."
   (remove-if #'(lambda (e) (or (and guard (funcall guard e))
-			       (funcall predicate e)))
-	     universe))
+                               (funcall predicate e)))
+             universe))
 
 (declaim (special *catch-error-type*))
 
@@ -213,10 +213,10 @@ Results: ~A~%" expected-number form n results))))
   (let ((r (find-restart 'continue condition)))
     (cond
      ((and *catch-error-type*
-	   (not (typep condition *catch-error-type*)))
+           (not (typep condition *catch-error-type*)))
       (format t "Condition ~S is not a ~A~%" condition *catch-error-type*)
       (cond (r (format t "Its continue restart is ~S~%" r))
-	    (t (format t "It has no continue restart~%")))
+            (t (format t "It has no continue restart~%")))
       (throw 'continue-failed nil))
      (r (invoke-restart r))
      (t (throw 'continue-failed nil)))))
@@ -268,15 +268,15 @@ the condition to go uncaught if it cannot be classified."
 
 (defun classify-error** (form)
   (handler-bind ((warning #'(lambda (c) (declare (ignore c))
-			      (muffle-warning))))
-		(proclaim '(optimize (safety 3)))
-		(classify-error*
-		 (if regression-test::*compile-tests*
-		     (funcall (compile nil `(lambda ()
-					      (declare (optimize (safety 3)))
-					      ,form)))
-		     (eval form))
-		 )))
+                              (muffle-warning))))
+                (proclaim '(optimize (safety 3)))
+                (classify-error*
+                 (if regression-test::*compile-tests*
+                     (funcall (compile nil `(lambda ()
+                                              (declare (optimize (safety 3)))
+                                              ,form)))
+                     (eval form))
+                 )))
 
 (defmacro classify-error (form)
   `(classify-error** ',form))
@@ -287,53 +287,53 @@ the condition to go uncaught if it cannot be classified."
 (defmacro signals-error (form error-name &key (safety 3) (name nil name-p) (inline nil))
   `(handler-bind
     ((warning #'(lambda (c) (declare (ignore c))
-			      (muffle-warning))))
+                              (muffle-warning))))
     (proclaim '(optimize (safety 3)))
     (handler-case
      (apply #'values
-	    nil
-	    (multiple-value-list
-	     ,(cond
-	       (inline form)
-	       (regression-test::*compile-tests*
-		`(funcall (compile nil '(lambda ()
-					  (declare (optimize (safety ,safety)))
-					  ,form))))
-	       (t `(eval ',form)))))
+            nil
+            (multiple-value-list
+             ,(cond
+               (inline form)
+               (regression-test::*compile-tests*
+                `(funcall (compile nil '(lambda ()
+                                          (declare (optimize (safety ,safety)))
+                                          ,form))))
+               (t `(eval ',form)))))
      (,error-name (c)
-		  (cond
-		   ,@(case error-name
-		       (type-error
-			`(((typep (type-error-datum c)
-				  (type-error-expected-type c))
-			   (values
-			    nil
-			    (list (list 'typep (list 'quote
-						     (type-error-datum c))
-					(list 'quote
-					      (type-error-expected-type c)))
-				  "==> true")))))
-		       ((undefined-function unbound-variable)
-			(and name-p
-			     `(((not (eq (cell-error-name c) ',name))
-				(values
-				 nil
-				 (list 'cell-error-name "==>"
-				       (cell-error-name c)))))))
-		       ((stream-error end-of-file reader-error)
-			`(((not (streamp (stream-error-stream c)))
-			   (values
-			    nil
-			    (list 'stream-error-stream "==>"
-				  (stream-error-stream c))))))
-		       (file-error
-			`(((not (pathnamep (pathname (file-error-pathname c))))
-			   (values
-			    nil
-			    (list 'file-error-pathname "==>"
-				  (file-error-pathname c))))))
-		       (t nil))
-		   (t (printable-p c)))))))
+                  (cond
+                   ,@(case error-name
+                       (type-error
+                        `(((typep (type-error-datum c)
+                                  (type-error-expected-type c))
+                           (values
+                            nil
+                            (list (list 'typep (list 'quote
+                                                     (type-error-datum c))
+                                        (list 'quote
+                                              (type-error-expected-type c)))
+                                  "==> true")))))
+                       ((undefined-function unbound-variable)
+                        (and name-p
+                             `(((not (eq (cell-error-name c) ',name))
+                                (values
+                                 nil
+                                 (list 'cell-error-name "==>"
+                                       (cell-error-name c)))))))
+                       ((stream-error end-of-file reader-error)
+                        `(((not (streamp (stream-error-stream c)))
+                           (values
+                            nil
+                            (list 'stream-error-stream "==>"
+                                  (stream-error-stream c))))))
+                       (file-error
+                        `(((not (pathnamep (pathname (file-error-pathname c))))
+                           (values
+                            nil
+                            (list 'file-error-pathname "==>"
+                                  (file-error-pathname c))))))
+                       (t nil))
+                   (t (printable-p c)))))))
 
 (defmacro signals-error-always (form error-name)
   `(values
@@ -342,36 +342,36 @@ the condition to go uncaught if it cannot be classified."
 
 (defmacro signals-type-error (var datum-form form &key (safety 3) (inline nil))
   (let ((lambda-form
-	 `(lambda (,var)
-	    (declare (optimize (safety ,safety)))
-	    ,form)))
+         `(lambda (,var)
+            (declare (optimize (safety ,safety)))
+            ,form)))
     `(let ((,var ,datum-form))
        (declare (optimize safety))
        (handler-bind
-	((warning #'(lambda (c) (declare (ignore c))
-		      (muffle-warning))))
-					; (proclaim '(optimize (safety 3)))
-	(handler-case
-	 (apply #'values
-		nil
-		(multiple-value-list
-		 (funcall
-		 ,(cond
-		   (inline `(function ,lambda-form))
-		   (regression-test::*compile-tests*
-		     `(compile nil ',lambda-form))
-		   (t `(eval ',lambda-form)))
-		  ,var)))
-	 (type-error
-	  (c)
-	  (let ((datum (type-error-datum c))
-		(expected-type (type-error-expected-type c)))
-	    (cond
-	     ((not (eql ,var datum))
-	      (list :datum-mismatch ,var datum))
-	     ((typep datum expected-type)
-	      (list :is-typep datum expected-type))
-	     (t (printable-p c))))))))))
+        ((warning #'(lambda (c) (declare (ignore c))
+                      (muffle-warning))))
+                                        ; (proclaim '(optimize (safety 3)))
+        (handler-case
+         (apply #'values
+                nil
+                (multiple-value-list
+                 (funcall
+                 ,(cond
+                   (inline `(function ,lambda-form))
+                   (regression-test::*compile-tests*
+                     `(compile nil ',lambda-form))
+                   (t `(eval ',lambda-form)))
+                  ,var)))
+         (type-error
+          (c)
+          (let ((datum (type-error-datum c))
+                (expected-type (type-error-expected-type c)))
+            (cond
+             ((not (eql ,var datum))
+              (list :datum-mismatch ,var datum))
+             ((typep datum expected-type)
+              (list :is-typep datum expected-type))
+             (t (printable-p c))))))))))
 
 (declaim (special *mini-universe*))
 
@@ -380,12 +380,12 @@ the condition to go uncaught if it cannot be classified."
    pred-fn signals a type error."
   (let (val)
     (loop for e in universe
-	  unless (or (funcall guard-fn e)
-		     (equal
-		      (setf val (multiple-value-list
-				 (signals-type-error x e (funcall pred-fn x) :inline t)))
-		      '(t)))
-	collect (list e val))))
+          unless (or (funcall guard-fn e)
+                     (equal
+                      (setf val (multiple-value-list
+                                 (signals-type-error x e (funcall pred-fn x) :inline t)))
+                      '(t)))
+        collect (list e val))))
 
 (defmacro check-type-error (&body args)
   `(locally (declare (optimize safety)) (check-type-error* ,@args)))
@@ -394,10 +394,10 @@ the condition to go uncaught if it cannot be classified."
   "Returns T iff obj can be printed to a string."
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*print-escape* nil))
+         (*print-escape* nil))
      (declare (optimize safety))
      (handler-case (and (stringp (write-to-string obj)) t)
-		   (condition (c) (declare (ignore c)) nil)))))
+                   (condition (c) (declare (ignore c)) nil)))))
 
 ;;;
 ;;; The function SUBTYPEP should return two generalized booleans.
@@ -406,28 +406,28 @@ the condition to go uncaught if it cannot be classified."
 ;;;
 (defun subtypep* (type1 type2)
   (apply #'values
-	 (mapcar #'notnot
-		 (multiple-value-list (subtypep type1 type2)))))
+         (mapcar #'notnot
+                 (multiple-value-list (subtypep type1 type2)))))
 
 (defun subtypep*-or-fail (type1 type2)
   (let ((results (multiple-value-list (subtypep type1 type2))))
     (and (= (length results) 2)
-	 (or (not (second results))
-	     (notnot (first results))))))
+         (or (not (second results))
+             (notnot (first results))))))
 
 (defun subtypep*-not-or-fail (type1 type2)
   (let ((results (multiple-value-list (subtypep type1 type2))))
     (and (= (length results) 2)
-	 (or (not (second results))
-	     (not (first results))))))
+         (or (not (second results))
+             (not (first results))))))
 
 ;; (declaim (ftype (function (&rest function) (values function &optional))
-;;		compose))
+;;              compose))
 
 (defun compose (&rest fns)
   (let ((rfns (reverse fns)))
     #'(lambda (x) (loop for f
-			in rfns do (setf x (funcall (the function f) x))) x)))
+                        in rfns do (setf x (funcall (the function f) x))) x)))
 
 (defun evendigitp (c)
   (notnot (find c "02468")))
@@ -462,9 +462,9 @@ the condition to go uncaught if it cannot be classified."
    CALL-ARGUMENTS-LIMIT."
   (if (cddddr args)
       (list 'list*
-	    (first args) (second args) (third args) (fourth args)
-	    (make-list-expr (cddddr args)))
-    (cons 'list args)))  
+            (first args) (second args) (third args) (fourth args)
+            (make-list-expr (cddddr args)))
+    (cons 'list args)))
 
 (defparameter +standard-chars+
   (coerce
@@ -473,13 +473,13 @@ the condition to go uncaught if it cannot be classified."
 
 (defparameter
   +base-chars+ #.(coerce
-		  (concatenate 'string
-			       "abcdefghijklmnopqrstuvwxyz"
-			       "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			       "0123456789"
-			       "<,>.?/\"':;[{]}~`!@#$%^&*()_-+= \\|")
-		  'simple-base-string))
-		  
+                  (concatenate 'string
+                               "abcdefghijklmnopqrstuvwxyz"
+                               "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                               "0123456789"
+                               "<,>.?/\"':;[{]}~`!@#$%^&*()_-+= \\|")
+                  'simple-base-string))
+
 
 (declaim (type simple-base-string +base-chars+))
 
@@ -491,18 +491,18 @@ the condition to go uncaught if it cannot be classified."
 (defparameter +alphanumeric-chars+ (subseq +standard-chars+ 0 62))
 (defparameter +digit-chars+ "0123456789")
 (defparameter +extended-digit-chars+ (coerce
-				      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-				      'simple-base-string))
+                                      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                      'simple-base-string))
 
 (declaim (type simple-base-string +alpha-chars+ +lower-case-chars+
-	       +upper-case-chars+ +alphanumeric-chars+ +extended-digit-chars+
-	       +standard-chars+))
+               +upper-case-chars+ +alphanumeric-chars+ +extended-digit-chars+
+               +standard-chars+))
 
 (defparameter +code-chars+
   (coerce (loop for i from 0 below 256
-		for c = (code-char i)
-		when c collect c)
-	  'simple-string))
+                for c = (code-char i)
+                when c collect c)
+          'simple-string))
 
 (declaim (type simple-string +code-chars+))
 
@@ -512,24 +512,24 @@ the condition to go uncaught if it cannot be classified."
 
 (defun has-non-abort-restart (c)
   (throw 'handled
-	 (if (position 'abort (the list (compute-restarts c))
-		       :key #'restart-name :test-not #'eq)
-	     'success
-	   'fail)))
+         (if (position 'abort (the list (compute-restarts c))
+                       :key #'restart-name :test-not #'eq)
+             'success
+           'fail)))
 
 (defmacro handle-non-abort-restart (&body body)
   `(catch 'handled
      (handler-bind ((error #'has-non-abort-restart))
-		   ,@body)))
+                   ,@body)))
 
 ;;; used in elt.lsp
 (defun elt-v-6-body ()
   (let ((x (make-int-list 1000)))
     (let ((a (make-array '(1000) :initial-contents x)))
       (loop
-	  for i from 0 to 999 do
-	    (unless (eql i (elt a i)) (return nil))
-	  finally (return t)))))
+          for i from 0 to 999 do
+            (unless (eql i (elt a i)) (return nil))
+          finally (return t)))))
 
 (defun make-adj-array (n &key initial-contents)
   (if initial-contents
@@ -541,24 +541,24 @@ the condition to go uncaught if it cannot be classified."
   (let ((x (make-int-list 1000)))
     (let ((a (make-adj-array '(1000) :initial-contents x)))
       (loop
-	  for i from 0 to 999 do
-	    (unless (eql i (elt a i)) (return nil))
-	  finally (return t)))))
+          for i from 0 to 999 do
+            (unless (eql i (elt a i)) (return nil))
+          finally (return t)))))
 
 (defparameter *displaced* (make-int-array 100000))
 
 (defun make-displaced-array (n displacement)
   (make-array n :displaced-to *displaced*
 
-	      :displaced-index-offset displacement))
+              :displaced-index-offset displacement))
 
 ;;; used in fill.lsp
 (defun array-unsigned-byte-fill-test-fn (byte-size &rest fill-args)
   (let* ((a (make-array '(5) :element-type (list 'unsigned-byte byte-size)
-			:initial-contents '(1 2 3 4 5)))
-	 (b (apply #'fill a fill-args)))
+                        :initial-contents '(1 2 3 4 5)))
+         (b (apply #'fill a fill-args)))
     (values (eqt a b)
-	    (map 'list #'identity a))))
+            (map 'list #'identity a))))
 
 ;;; used in fill-strings.lsp
 (defun array-string-fill-test-fn (a &rest fill-args)
@@ -574,121 +574,121 @@ the condition to go uncaught if it cannot be classified."
 (defparameter *subtype-table*
 (let ((table
        '(
-	 (null symbol)
-	 (symbol t)
-	 (boolean symbol)
-	 (standard-object t)
-	 (function t)
-	 (compiled-function function)
-	 (generic-function function)
-	 (standard-generic-function generic-function)
-	 (class standard-object)
-	 (built-in-class class)
-	 (structure-class class)
-	 (standard-class class)
-	 (method standard-object)
-	 (standard-method method)
-	 (structure-object t)
-	 (method-combination t)
-	 (condition t)
-	 (serious-condition condition)
-	 (error serious-condition)
-	 (type-error error)
-	 (simple-type-error type-error)
-	 (simple-condition condition)
-	 (simple-type-error simple-condition)
-	 (parse-error error)
-	 (hash-table t)
-	 (cell-error error)
-	 (unbound-slot cell-error)
-	 (warning condition)
-	 (style-warning warning)
-	 (storage-condition serious-condition)
-	 (simple-warning warning)
-	 (simple-warning simple-condition)
-	 (keyword symbol)
-	 (unbound-variable cell-error)
-	 (control-error error)
-	 (program-error error)
-	 (undefined-function cell-error)
-	 (package t)
-	 (package-error error)
-	 (random-state t)
-	 (number t)
-	 (real number)
-	 (complex number)
-	 (float real)
-	 (short-float float)
-	 (single-float float)
-	 (double-float float)
-	 (long-float float)
-	 (rational real)
-	 (integer rational)
-	 (ratio rational)
-	 (signed-byte integer)
-	 (integer signed-byte)
-	 (unsigned-byte signed-byte)
-	 (bit unsigned-byte)
-	 (fixnum integer)
-	 (bignum integer)
-	 (bit fixnum)
-	 (arithmetic-error error)
-	 (division-by-zero arithmetic-error)
-	 (floating-point-invalid-operation arithmetic-error)
-	 (floating-point-inexact arithmetic-error)
-	 (floating-point-overflow arithmetic-error)
-	 (floating-point-underflow arithmetic-error)
-	 (character t)
-	 (base-char character)
-	 (standard-char base-char)
-	 (extended-char character)
-	 (sequence t)
-	 (list sequence)
-	 (null list)
-	 (null boolean)
-	 (cons list)
-	 (array t)
-	 (simple-array array)
-	 (vector sequence)
-	 (vector array)
-	 (string vector)
-	 (bit-vector vector)
-	 (simple-vector vector)
-	 (simple-vector simple-array)
-	 (simple-bit-vector bit-vector)
-	 (simple-bit-vector simple-array)
-	 (base-string string)
-	 (simple-string string)
-	 (simple-string simple-array)
-	 (simple-base-string base-string)
-	 (simple-base-string simple-string)
-	 (pathname t)
-	 (logical-pathname pathname)
-	 (file-error error)
-	 (stream t)
-	 (broadcast-stream stream)
-	 (concatenated-stream stream)
-	 (echo-stream stream)
-	 (file-stream stream)
-	 (string-stream stream)
-	 (synonym-stream stream)
-	 (two-way-stream stream)
-	 (stream-error error)
-	 (end-of-file stream-error)
-	 (print-not-readable error)
-	 (readtable t)
-	 (reader-error parse-error)
-	 (reader-error stream-error)
-	 )))
+         (null symbol)
+         (symbol t)
+         (boolean symbol)
+         (standard-object t)
+         (function t)
+         (compiled-function function)
+         (generic-function function)
+         (standard-generic-function generic-function)
+         (class standard-object)
+         (built-in-class class)
+         (structure-class class)
+         (standard-class class)
+         (method standard-object)
+         (standard-method method)
+         (structure-object t)
+         (method-combination t)
+         (condition t)
+         (serious-condition condition)
+         (error serious-condition)
+         (type-error error)
+         (simple-type-error type-error)
+         (simple-condition condition)
+         (simple-type-error simple-condition)
+         (parse-error error)
+         (hash-table t)
+         (cell-error error)
+         (unbound-slot cell-error)
+         (warning condition)
+         (style-warning warning)
+         (storage-condition serious-condition)
+         (simple-warning warning)
+         (simple-warning simple-condition)
+         (keyword symbol)
+         (unbound-variable cell-error)
+         (control-error error)
+         (program-error error)
+         (undefined-function cell-error)
+         (package t)
+         (package-error error)
+         (random-state t)
+         (number t)
+         (real number)
+         (complex number)
+         (float real)
+         (short-float float)
+         (single-float float)
+         (double-float float)
+         (long-float float)
+         (rational real)
+         (integer rational)
+         (ratio rational)
+         (signed-byte integer)
+         (integer signed-byte)
+         (unsigned-byte signed-byte)
+         (bit unsigned-byte)
+         (fixnum integer)
+         (bignum integer)
+         (bit fixnum)
+         (arithmetic-error error)
+         (division-by-zero arithmetic-error)
+         (floating-point-invalid-operation arithmetic-error)
+         (floating-point-inexact arithmetic-error)
+         (floating-point-overflow arithmetic-error)
+         (floating-point-underflow arithmetic-error)
+         (character t)
+         (base-char character)
+         (standard-char base-char)
+         (extended-char character)
+         (sequence t)
+         (list sequence)
+         (null list)
+         (null boolean)
+         (cons list)
+         (array t)
+         (simple-array array)
+         (vector sequence)
+         (vector array)
+         (string vector)
+         (bit-vector vector)
+         (simple-vector vector)
+         (simple-vector simple-array)
+         (simple-bit-vector bit-vector)
+         (simple-bit-vector simple-array)
+         (base-string string)
+         (simple-string string)
+         (simple-string simple-array)
+         (simple-base-string base-string)
+         (simple-base-string simple-string)
+         (pathname t)
+         (logical-pathname pathname)
+         (file-error error)
+         (stream t)
+         (broadcast-stream stream)
+         (concatenated-stream stream)
+         (echo-stream stream)
+         (file-stream stream)
+         (string-stream stream)
+         (synonym-stream stream)
+         (two-way-stream stream)
+         (stream-error error)
+         (end-of-file stream-error)
+         (print-not-readable error)
+         (readtable t)
+         (reader-error parse-error)
+         (reader-error stream-error)
+         )))
   (when (subtypep* 'character 'base-char)
     (setq table
-	  (append
-	   '((character base-char)
-	     ;; (string base-string)
-	     ;; (simple-string simple-base-string)
-	     )
-	   table)))
-  
+          (append
+           '((character base-char)
+             ;; (string base-string)
+             ;; (simple-string simple-base-string)
+             )
+           table)))
+
   table))
 
 (defparameter *disjoint-types-list*
@@ -700,22 +700,22 @@ the condition to go uncaught if it cannot be classified."
   `((cons (cons t t) (cons t (cons t t)) (eql (nil)))
     (symbol keyword boolean null (eql a) (eql nil) (eql t) (eql *))
     (array vector simple-array simple-vector string simple-string
-	   base-string simple-base-string (eql #()))
+           base-string simple-base-string (eql #()))
     (character base-char standard-char (eql #\a)
-	       ,@(if (subtypep 'character 'base-char) nil
-		   (list 'extended-char)))
+               ,@(if (subtypep 'character 'base-char) nil
+                   (list 'extended-char)))
     (function compiled-function generic-function standard-generic-function
-	      (eql ,#'car))
+              (eql ,#'car))
     (package (eql ,(find-package "COMMON-LISP")))
     (pathname logical-pathname (eql #p""))
     (stream broadcast-stream concatenated-stream echo-stream
-	    file-stream string-stream synonym-stream two-way-stream)
+            file-stream string-stream synonym-stream two-way-stream)
     (number real complex float integer rational ratio fixnum
-	    bit (integer 0 100) (float 0.0 100.0) (integer 0 *)
-	    (rational 0 *) (mod 10)
-	    (eql 0)
-	    ,@(and (not (subtypep 'bignum nil))
-		   (list 'bignum)))
+            bit (integer 0 100) (float 0.0 100.0) (integer 0 *)
+            (rational 0 *) (mod 10)
+            (eql 0)
+            ,@(and (not (subtypep 'bignum nil))
+                   (list 'bignum)))
     (random-state)
     ,*condition-types*
     (restart)
@@ -728,7 +728,7 @@ the condition to go uncaught if it cannot be classified."
   (let ((len (length list)))
     (if (<= len n) list
       (append (subseq list 0 n)
-	      (format nil "And ~A more omitted." (- len n))))))
+              (format nil "And ~A more omitted." (- len n))))))
 
 (defun is-t-or-nil (e)
   (or (eqt e t) (eqt e nil)))
@@ -747,14 +747,14 @@ the condition to go uncaught if it cannot be classified."
 (defmacro defstruct* (&body args)
   `(eval-when (:load-toplevel :compile-toplevel :execute)
      (handler-case (eval '(defstruct ,@args))
-		      (serious-condition () nil))))
+                      (serious-condition () nil))))
 
 (defun safely-delete-package (package-designator)
   (let ((package (find-package package-designator)))
     (when package
       (let ((used-by (package-used-by-list package)))
-	(dolist (using-package used-by)
-	  (unuse-package package using-package)))
+        (dolist (using-package used-by)
+          (unuse-package package using-package)))
       (delete-package package))))
 
 #-(or allegro openmcl lispworks)
@@ -762,8 +762,8 @@ the condition to go uncaught if it cannot be classified."
   "Replace the versions field of the pathname specified by pathspec with
    :wild, and delete all the files this refers to."
   (let* ((wild-pathname (make-pathname :version :wild :defaults (pathname pathspec)))
-	 (truenames (directory wild-pathname)))
-    (mapc #'delete-file truenames)))    
+         (truenames (directory wild-pathname)))
+    (mapc #'delete-file truenames)))
 
 ;;; This is a hack to get around an ACL bug; OpenMCL also apparently
 ;;; needs it
@@ -780,10 +780,10 @@ the condition to go uncaught if it cannot be classified."
   (declare (ignore expected-fmt expected-args))
   (and (typep c 'simple-condition)
        (let ((fc (simple-condition-format-control c))
-	     (args (simple-condition-format-arguments c)))
-	 (and
-	  (stringp (apply #'format nil fc args))
-	  t))))
+             (args (simple-condition-format-arguments c)))
+         (and
+          (stringp (apply #'format nil fc args))
+          t))))
 
 (defun frob-simple-error (c expected-fmt &rest expected-args)
   (and (typep c 'simple-error)
@@ -803,22 +803,22 @@ the condition to go uncaught if it cannot be classified."
 (defun collect-properties (plist prop)
   "Collect all the properties in plist for a property prop."
   (loop for e on plist by #'cddr
-	when (eql (car e) prop)
-	collect (cadr e)))
+        when (eql (car e) prop)
+        collect (cadr e)))
 
 (defmacro def-macro-test (test-name macro-form)
   (let ((macro-name (car macro-form)))
     (assert (symbolp macro-name))
     `(deftest ,test-name
        (values
-	(signals-error (funcall (macro-function ',macro-name))
-		       program-error)
-	(signals-error (funcall (macro-function ',macro-name)
-				',macro-form)
-		       program-error)
-	(signals-error (funcall (macro-function ',macro-name)
-				',macro-form nil nil)
-		       program-error))
+        (signals-error (funcall (macro-function ',macro-name))
+                       program-error)
+        (signals-error (funcall (macro-function ',macro-name)
+                                ',macro-form)
+                       program-error)
+        (signals-error (funcall (macro-function ',macro-name)
+                                ',macro-form nil nil)
+                       program-error))
        t t t)))
 
 (defun typep* (element type)
@@ -876,11 +876,11 @@ the condition to go uncaught if it cannot be classified."
   `(deftest ,name
      (block done
        (let ((*debugger-hook* #'(lambda (&rest args)
-				  (declare (ignore args))
-				  (return-from done :good))))
-	 (handler-case
-	  (unwind-protect (eval ',form) (return-from done :good))
-	  (condition () :good))))
+                                  (declare (ignore args))
+                                  (return-from done :good))))
+         (handler-case
+          (unwind-protect (eval ',form) (return-from done :good))
+          (condition () :good))))
      :good))
 
 (defun rational-safely (x)
@@ -891,12 +891,12 @@ the condition to go uncaught if it cannot be classified."
   (multiple-value-bind (significand exponent sign)
       (integer-decode-float x)
     (let ((limit 1000)
-	  (radix (float-radix x)))
+          (radix (float-radix x)))
       (cond
        ((< exponent (- limit))
-	(* significand (expt radix (- limit)) sign))
+        (* significand (expt radix (- limit)) sign))
        ((> exponent limit)
-	(* significand (expt radix limit) sign))
+        (* significand (expt radix limit) sign))
        (t (rational x))))))
 
 (declaim (special *similarity-list*))
@@ -918,7 +918,7 @@ the condition to go uncaught if it cannot be classified."
 (defmethod is-similar* ((x symbol) (y symbol))
   (if (null (symbol-package x))
       (and (null (symbol-package y))
-	   (is-similar* (symbol-name x) (symbol-name y)))
+           (is-similar* (symbol-name x) (symbol-name y)))
     ;; I think the requirements for interned symbols in
     ;; 3.2.4.2.2 boils down to EQ after the symbols are in the lisp
     (eq x y))
@@ -926,55 +926,55 @@ the condition to go uncaught if it cannot be classified."
 
 (defmethod is-similar* ((x random-state) (y random-state))
   (let ((copy-of-x (make-random-state x))
-	(copy-of-y (make-random-state y))
-	(bound (1- (ash 1 24))))
+        (copy-of-y (make-random-state y))
+        (bound (1- (ash 1 24))))
     (and
      ;; Try 50 values, and assume the random state are the same
      ;; if all the values are the same.  Assuming the RNG is not
      ;; very pathological, this should be acceptable.
      (loop repeat 50
-	   always (eql (random bound copy-of-x)
-		       (random bound copy-of-y)))
+           always (eql (random bound copy-of-x)
+                       (random bound copy-of-y)))
      t)))
 
 (defmethod is-similar* ((x cons) (y cons))
   (or (and (eq x y) t)
       (and (loop for (x2 . y2) in *similarity-list*
-		 thereis (and (eq x x2) (eq y y2)))
-	   t)
+                 thereis (and (eq x x2) (eq y y2)))
+           t)
       (let ((*similarity-list*
-	     (cons (cons x y) *similarity-list*)))
-	(and (is-similar* (car x) (car y))
-	     ;; If this causes stack problems,
-	     ;; convert to a loop
-	     (is-similar* (cdr x) (cdr y))))))
+             (cons (cons x y) *similarity-list*)))
+        (and (is-similar* (car x) (car y))
+             ;; If this causes stack problems,
+             ;; convert to a loop
+             (is-similar* (cdr x) (cdr y))))))
 
 (defmethod is-similar* ((x vector) (y vector))
   (or (and (eq x y) t)
       (and
        (or (not (typep x 'simple-array))
-	   (typep x 'simple-array))
+           (typep x 'simple-array))
        (= (length x) (length y))
        (is-similar* (array-element-type x)
-		    (array-element-type y))
+                    (array-element-type y))
        (loop for i below (length x)
-	     always (is-similar* (aref x i) (aref y i)))
+             always (is-similar* (aref x i) (aref y i)))
        t)))
 
 (defmethod is-similar* ((x array) (y array))
   (or (and (eq x y) t)
       (and
        (or (not (typep x 'simple-array))
-	   (typep x 'simple-array))
+           (typep x 'simple-array))
        (= (array-rank x) (array-rank y))
        (equal (array-dimensions x) (array-dimensions y))
        (is-similar* (array-element-type x)
-		    (array-element-type y))
+                    (array-element-type y))
        (let ((*similarity-list*
-	      (cons (cons x y) *similarity-list*)))
-	 (loop for i below (array-total-size x)
-	       always (is-similar* (row-major-aref x i)
-				   (row-major-aref y i))))
+              (cons (cons x y) *similarity-list*)))
+         (loop for i below (array-total-size x)
+               always (is-similar* (row-major-aref x i)
+                                   (row-major-aref y i))))
        t)))
 
 (defmethod is-similar* ((x hash-table) (y hash-table))
@@ -995,128 +995,128 @@ the condition to go uncaught if it cannot be classified."
   (and (eql x y) t))
 
 (defparameter *initial-print-pprint-dispatch* (if (boundp '*print-pprint-dispatch*)
-						  *print-pprint-dispatch*
-						nil))
+                                                  *print-pprint-dispatch*
+                                                nil))
 
 (defmacro my-with-standard-io-syntax (&body body)
   `(let ((*package* (find-package "COMMON-LISP-USER"))
-	 (*print-array* t)
-	 (*print-base* 10)
-	 (*print-case* :upcase)
-	 (*print-circle* nil)
-	 (*print-escape* t)
-	 (*print-gensym* t)
-	 (*print-length* nil)
-	 (*print-level* nil)
-	 (*print-lines* nil)
-	 (*print-miser-width* nil)
-	 (*print-pprint-dispatch* *initial-print-pprint-dispatch*)
-	 (*print-pretty* nil)
-	 (*print-radix* nil)
-	 (*print-readably* t)
-	 (*print-right-margin* nil)
-	 (*read-base* 10)
-	 (*read-default-float-format* 'single-float)
-	 (*read-eval* t)
-	 (*read-suppress* nil)
-	 (*readtable* (copy-readtable nil)))
+         (*print-array* t)
+         (*print-base* 10)
+         (*print-case* :upcase)
+         (*print-circle* nil)
+         (*print-escape* t)
+         (*print-gensym* t)
+         (*print-length* nil)
+         (*print-level* nil)
+         (*print-lines* nil)
+         (*print-miser-width* nil)
+         (*print-pprint-dispatch* *initial-print-pprint-dispatch*)
+         (*print-pretty* nil)
+         (*print-radix* nil)
+         (*print-readably* t)
+         (*print-right-margin* nil)
+         (*read-base* 10)
+         (*read-default-float-format* 'single-float)
+         (*read-eval* t)
+         (*read-suppress* nil)
+         (*readtable* (copy-readtable nil)))
      ,@body))
 
 ;;; Function to produce a non-simple string
 
 (defun make-special-string (string &key fill adjust displace base)
   (let* ((len (length string))
-	 (len2 (if fill (+ len 4) len))
-	 (etype (if base 'base-char 'character)))
+         (len2 (if fill (+ len 4) len))
+         (etype (if base 'base-char 'character)))
     (if displace
-	(let ((s0 (make-array (+ len2 5)
-			      :initial-contents
-			      (concatenate 'string
-					   (make-string 2 :initial-element #\X)
-					   string
-					   (make-string (if fill 7 3)
-							:initial-element #\Y))
-			      :element-type etype)))
-	  (make-array len2 :element-type etype
-		      :adjustable adjust
-		      :fill-pointer (if fill len nil)
-		      :displaced-to s0
-		      :displaced-index-offset 2))
+        (let ((s0 (make-array (+ len2 5)
+                              :initial-contents
+                              (concatenate 'string
+                                           (make-string 2 :initial-element #\X)
+                                           string
+                                           (make-string (if fill 7 3)
+                                                        :initial-element #\Y))
+                              :element-type etype)))
+          (make-array len2 :element-type etype
+                      :adjustable adjust
+                      :fill-pointer (if fill len nil)
+                      :displaced-to s0
+                      :displaced-index-offset 2))
       (make-array len2 :element-type etype
-		  :initial-contents
-		  (if fill (concatenate 'string string "ZZZZ") string)
-		  :fill-pointer (if fill len nil)
-		  :adjustable adjust))))
+                  :initial-contents
+                  (if fill (concatenate 'string string "ZZZZ") string)
+                  :fill-pointer (if fill len nil)
+                  :adjustable adjust))))
 
 (defmacro do-special-strings ((var string-form &optional ret-form) &body forms)
   (let ((string (gensym))
-	(fill (gensym "FILL"))
-	(adjust (gensym "ADJUST"))
-	(base (gensym "BASE"))
-	(displace (gensym "DISPLACE")))
+        (fill (gensym "FILL"))
+        (adjust (gensym "ADJUST"))
+        (base (gensym "BASE"))
+        (displace (gensym "DISPLACE")))
     `(let ((,string ,string-form))
        (dolist (,fill '(nil t) ,ret-form)
-	 (dolist (,adjust '(nil t))
-	   (dolist (,base '(nil t))
-	     (dolist (,displace '(nil t))
-	       (let ((,var (make-special-string
-			    ,string
-			    :fill ,fill :adjust ,adjust
-			    :base ,base :displace ,displace)))
-		 ,@forms))))))))
+         (dolist (,adjust '(nil t))
+           (dolist (,base '(nil t))
+             (dolist (,displace '(nil t))
+               (let ((,var (make-special-string
+                            ,string
+                            :fill ,fill :adjust ,adjust
+                            :base ,base :displace ,displace)))
+                 ,@forms))))))))
 
 (defun make-special-integer-vector (contents &key fill adjust displace (etype 'integer))
   (let* ((len (length contents))
-	 (min (reduce #'min contents))
-	 (max (reduce #'max contents))
-	 (len2 (if fill (+ len 4) len)))
+         (min (reduce #'min contents))
+         (max (reduce #'max contents))
+         (len2 (if fill (+ len 4) len)))
     (unless (and (typep min etype)
-		 (typep max etype))
+                 (typep max etype))
       (setq etype `(integer ,min ,max)))
     (if displace
-	(let ((s0 (make-array (+ len2 5)
-			      :initial-contents
-			      (concatenate 'list
-					   (make-list 2 :initial-element
-						      (if (typep 0 etype) 0 min))
-					   contents
-					   (make-list (if fill 7 3)
-						      :initial-element
-						      (if (typep 1 etype) 1 max)))
-			      :element-type etype)))
-	  (make-array len2 :element-type etype
-		      :adjustable adjust
-		      :fill-pointer (if fill len nil)
-		      :displaced-to s0
-		      :displaced-index-offset 2))
+        (let ((s0 (make-array (+ len2 5)
+                              :initial-contents
+                              (concatenate 'list
+                                           (make-list 2 :initial-element
+                                                      (if (typep 0 etype) 0 min))
+                                           contents
+                                           (make-list (if fill 7 3)
+                                                      :initial-element
+                                                      (if (typep 1 etype) 1 max)))
+                              :element-type etype)))
+          (make-array len2 :element-type etype
+                      :adjustable adjust
+                      :fill-pointer (if fill len nil)
+                      :displaced-to s0
+                      :displaced-index-offset 2))
       (make-array len2 :element-type etype
-		  :initial-contents
-		  (if fill (concatenate 'list
-					contents
-					(make-list 4 :initial-element
-						   (if (typep 2 etype) 2 (floor (+ min max) 2))))
-		    contents)
-		  :fill-pointer (if fill len nil)
-		  :adjustable adjust))))
+                  :initial-contents
+                  (if fill (concatenate 'list
+                                        contents
+                                        (make-list 4 :initial-element
+                                                   (if (typep 2 etype) 2 (floor (+ min max) 2))))
+                    contents)
+                  :fill-pointer (if fill len nil)
+                  :adjustable adjust))))
 
 (defmacro do-special-integer-vectors ((var vec-form &optional ret-form) &body forms)
   (let ((vector (gensym))
-	(fill (gensym "FILL"))
-	(adjust (gensym "ADJUST"))
-	(etype (gensym "ETYPE"))
-	(displace (gensym "DISPLACE")))
+        (fill (gensym "FILL"))
+        (adjust (gensym "ADJUST"))
+        (etype (gensym "ETYPE"))
+        (displace (gensym "DISPLACE")))
     `(let ((,vector ,vec-form))
        (dolist (,fill '(nil t) ,ret-form)
-	 (dolist (,adjust '(nil t))
-	   (dolist (,etype ',(append (loop for i from 1 to 32 collect `(unsigned-byte ,i))
-				     (loop for i from 2 to 32 collect `(signed-byte ,i))
-				     '(integer)))
-	     (dolist (,displace '(nil t))
-	       (let ((,var (make-special-integer-vector
-			    ,vector
-			    :fill ,fill :adjust ,adjust
-			    :etype ,etype :displace ,displace)))
-		 ,@forms))))))))
+         (dolist (,adjust '(nil t))
+           (dolist (,etype ',(append (loop for i from 1 to 32 collect `(unsigned-byte ,i))
+                                     (loop for i from 2 to 32 collect `(signed-byte ,i))
+                                     '(integer)))
+             (dolist (,displace '(nil t))
+               (let ((,var (make-special-integer-vector
+                            ,vector
+                            :fill ,fill :adjust ,adjust
+                            :etype ,etype :displace ,displace)))
+                 ,@forms))))))))
 
 ;;; Return T if arg X is a string designator in this implementation
 
@@ -1164,17 +1164,17 @@ the condition to go uncaught if it cannot be classified."
    actually exist."
   (or (packagep x)
       (handler-case (and (locally (declare (optimize safety))
-				  (string x))
-			 t)
-		    (type-error () nil))))
+                                  (string x))
+                         t)
+                    (type-error () nil))))
 
 (defmacro def-fold-test (name form)
   "Create a test that FORM, which should produce a fresh value,
    does not improperly introduce sharing during constant folding."
   `(deftest ,name
      (flet ((%f () (declare (optimize (speed 3) (safety 0) (space 0)
-				      (compilation-speed 0) (debug 0)))
-	       ,form))
+                                      (compilation-speed 0) (debug 0)))
+               ,form))
        (eq (%f) (%f)))
      nil))
 

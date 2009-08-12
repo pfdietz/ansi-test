@@ -7,7 +7,7 @@
 
 (deftest symbol-function.1
   (let ((sym (gensym))
-	(f #'(lambda () (values 1 2 3))))
+        (f #'(lambda () (values 1 2 3))))
     (values
      (eqt (setf (symbol-function sym) f) f)
      (multiple-value-list (eval (list sym)))))
@@ -29,16 +29,16 @@
 
 (deftest symbol-function.error.4
   (check-type-error #'(lambda (x) (setf (symbol-function x) #'identity))
-		    #'symbolp)
+                    #'symbolp)
   nil)
 
 (deftest symbol-function.error.5
   (let ((sym (gensym)))
     (handler-case (progn (symbol-function sym) nil)
-		  (undefined-function
-		   (c)
-		   (assert (eq (cell-error-name c) sym))
-		   :good)))
+                  (undefined-function
+                   (c)
+                   (assert (eq (cell-error-name c) sym))
+                   :good)))
   :good)
 
 

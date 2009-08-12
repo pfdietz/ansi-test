@@ -12,30 +12,30 @@
 (defun make-random-backquoted-form (size)
   (my-with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*package* (find-package "CL-TEST")))
+         (*package* (find-package "CL-TEST")))
      (read-from-string
       (concatenate 'string
-		   "`"
-		   (make-random-backquoted-sequence-string size))))))
+                   "`"
+                   (make-random-backquoted-sequence-string size))))))
 
 (defun make-random-backquoted-sequence-string (size)
   (case size
     ((0 1) (make-random-backquoted-string size))
     (t
      (let* ((nelements (1+ (min (random (1- size)) (random (1- size)) 9)))
-	    (sizes (random-partition (1- size) nelements))
-	    (substrings (mapcar #'make-random-backquoted-string sizes)))
+            (sizes (random-partition (1- size) nelements))
+            (substrings (mapcar #'make-random-backquoted-string sizes)))
        (apply #'concatenate
-	      'string
-	      "("
-	      (car substrings)
-	      (if nil ; (and (> nelements 1) (coin))
-		  (nconc
-		   (loop for s in (cddr substrings) collect " " collect s)
-		   (list " . " (cadr substrings) ")"))
-		(nconc
-		 (loop for s in (cdr substrings) collect " " collect s)
-		 (list ")"))))))))
+              'string
+              "("
+              (car substrings)
+              (if nil ; (and (> nelements 1) (coin))
+                  (nconc
+                   (loop for s in (cddr substrings) collect " " collect s)
+                   (list " . " (cadr substrings) ")"))
+                (nconc
+                 (loop for s in (cdr substrings) collect " " collect s)
+                 (list ")"))))))))
 
 ;;; Create a string that is a backquoted form
 (defun make-random-backquoted-string (size)

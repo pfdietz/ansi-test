@@ -23,7 +23,7 @@
     (let ((y (list* 1 2 3 4 5 6 7 8 9 x)))
       (setf (cdr x) y)
       (let ((z (list* 'a 'b 'c 'd 'e y)))
-	(list-length z))))
+        (list-length z))))
   nil)
 
 (deftest list-length.order.1
@@ -42,7 +42,7 @@
 (deftest list-length.error.1
   (loop
    for x in (list 'a 1 1.0 #\w (make-array '(10))
-		  '(a b . c) (symbol-package 'cons))
+                  '(a b . c) (symbol-package 'cons))
    count (not (eval `(signals-type-error x ',x (list-length x)))))
   0)
 

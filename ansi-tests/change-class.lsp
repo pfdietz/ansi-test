@@ -13,7 +13,7 @@
 
 (deftest change-class.1.1
   (let ((obj (make-instance 'change-class-class-01a))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (typep* obj 'change-class-class-01a)
      (typep* obj 'change-class-class-01b)
@@ -29,7 +29,7 @@
 
 (deftest change-class.1.2
   (let ((obj (make-instance 'change-class-class-01a :a 1))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (typep* obj 'change-class-class-01a)
      (typep* obj 'change-class-class-01b)
@@ -45,7 +45,7 @@
 
 (deftest change-class.1.3
   (let ((obj (make-instance 'change-class-class-01a :b 2))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (typep* obj 'change-class-class-01a)
      (typep* obj 'change-class-class-01b)
@@ -62,7 +62,7 @@
 
 (deftest change-class.1.4
   (let ((obj (make-instance 'change-class-class-01a :a 1 :b 2 :c 5))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (typep* obj 'change-class-class-01a)
      (typep* obj 'change-class-class-01b)
@@ -79,7 +79,7 @@
 
 (deftest change-class.1.5
   (let ((obj (make-instance 'change-class-class-01a :a 1 :b 2 :c 5))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (eqt obj (change-class obj new-class :b2 8 :c2 76))
      (typep* obj 'change-class-class-01a)
@@ -91,7 +91,7 @@
 
 (deftest change-class.1.6
   (let ((obj (make-instance 'change-class-class-01a :a 1 :b 2 :c 5))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (eqt obj (change-class obj new-class :b2 19 :b2 34))
      (typep* obj 'change-class-class-01a)
@@ -103,7 +103,7 @@
 
 (deftest change-class.1.7
   (let ((obj (make-instance 'change-class-class-01a :a 1 :b 2 :c 5))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (eqt obj (change-class obj new-class :allow-other-keys nil))
      (typep* obj 'change-class-class-01a)
@@ -115,7 +115,7 @@
 
 (deftest change-class.1.8
   (let ((obj (make-instance 'change-class-class-01a :a 1 :b 2 :c 5))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (eqt obj (change-class obj new-class :allow-other-keys t))
      (typep* obj 'change-class-class-01a)
@@ -127,10 +127,10 @@
 
 (deftest change-class.1.9
   (let ((obj (make-instance 'change-class-class-01a :a 1 :b 2 :c 5))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (eqt obj (change-class obj new-class :allow-other-keys t
-			    :nonsense t))
+                            :nonsense t))
      (typep* obj 'change-class-class-01a)
      (typep* obj 'change-class-class-01b)
      (slot-exists-p obj 'a)
@@ -140,10 +140,10 @@
 
 (deftest change-class.1.10
   (let ((obj (make-instance 'change-class-class-01a :a 1 :b 2 :c 5))
-	(new-class (find-class 'change-class-class-01b)))
+        (new-class (find-class 'change-class-class-01b)))
     (values
      (eqt obj (change-class obj new-class :bad 0 :allow-other-keys t
-			    :allow-other-keys nil :nonsense t))
+                            :allow-other-keys nil :nonsense t))
      (typep* obj 'change-class-class-01a)
      (typep* obj 'change-class-class-01b)
      (slot-exists-p obj 'a)
@@ -155,7 +155,7 @@
   (handler-case
    (eval
     '(let ((obj (make-instance 'change-class-class-01a))
-	   (new-class (find-class 'change-class-class-01b)))
+           (new-class (find-class 'change-class-class-01b)))
        (declare (optimize (safety 3)))
        (eqt obj (change-class obj new-class :nonsense t))))
    (error () :expected-error))
@@ -164,8 +164,8 @@
 ;; test of class name as second argument
 (deftest change-class.1.12
   (let ((obj (make-instance 'change-class-class-01a :b 1))
-	;; (new-class (find-class 'change-class-class-01b))
-	)
+        ;; (new-class (find-class 'change-class-class-01b))
+        )
     (values
      (eqt obj (change-class obj 'change-class-class-01b :c2 3))
      (typep* obj 'change-class-class-01a)
@@ -188,7 +188,7 @@
 
 (deftest change-class.2.1
   (let ((obj (make-instance 'change-class-class-02a))
-	(new-class (find-class 'change-class-class-02b)))
+        (new-class (find-class 'change-class-class-02b)))
     (slot-makunbound obj 'a)
     (slot-makunbound obj 'b)
     (values
@@ -205,9 +205,9 @@
 
 (deftest change-class.2.2
   (let ((obj (make-instance 'change-class-class-02a))
-	(obj2 (make-instance 'change-class-class-02a))
-	obj3
-	(new-class (find-class 'change-class-class-02b)))
+        (obj2 (make-instance 'change-class-class-02a))
+        obj3
+        (new-class (find-class 'change-class-class-02b)))
     (setf (slot-value obj 'a) 'foo)
     (slot-makunbound obj 'b)
     (values
@@ -218,7 +218,7 @@
      (typep* obj 'change-class-class-02a)
      (typep* obj 'change-class-class-02b)
      (map-slot-boundp* (setf obj3 (make-instance 'change-class-class-02a))
-		       '(a b))
+                       '(a b))
      (map-slot-boundp* obj '(a b))
      (slot-value obj 'a)
      (slot-value obj2 'a)
@@ -235,10 +235,10 @@
 
 (deftest change-class.2.3
   (let ((obj (make-instance 'change-class-class-02a))
-	(obj2 (make-instance 'change-class-class-02a))
-	(new-class (find-class 'change-class-class-02b)))
+        (obj2 (make-instance 'change-class-class-02a))
+        (new-class (find-class 'change-class-class-02b)))
     (setf (slot-value obj 'a) 1
-	  (slot-value obj 'b) 16)
+          (slot-value obj 'b) 16)
     (values
      (map-slot-boundp* obj '(a b))
      (eqt obj (change-class obj new-class))
@@ -248,9 +248,9 @@
      (map-slot-boundp* (make-instance 'change-class-class-02a) '(a b))
      (map-slot-boundp* obj '(a b))
      (progn (slot-makunbound obj2 'a)
-	    (slot-makunbound obj2 'b)
-	    (map-slot-boundp* obj '(a b)))))
-		 
+            (slot-makunbound obj2 'b)
+            (map-slot-boundp* obj '(a b)))))
+
   (t t)
   t nil t
   (t t)
@@ -269,9 +269,9 @@
 
 (deftest change-class.3.1
   (let* ((obj (make-instance 'change-class-class-03a))
-	 (new-class (find-class 'change-class-class-03b))
-	 (obj2 (make-instance new-class))
-	 obj3)
+         (new-class (find-class 'change-class-class-03b))
+         (obj2 (make-instance new-class))
+         obj3)
     (slot-makunbound obj2 'a)
     (slot-makunbound obj2 'b)
     (values
@@ -288,9 +288,9 @@
 
 (deftest change-class.3.2
   (let* ((obj (make-instance 'change-class-class-03a :a 1))
-	 (new-class (find-class 'change-class-class-03b))
-	 (obj2 (make-instance new-class))
-	 obj3)
+         (new-class (find-class 'change-class-class-03b))
+         (obj2 (make-instance new-class))
+         obj3)
     (slot-makunbound obj2 'a)
     (setf (slot-value obj2 'b) 17)
     (values
@@ -320,7 +320,7 @@
 
 (deftest change-class.4.1
   (let ((obj (make-instance 'change-class-class-04a))
-	(new-class (find-class 'change-class-class-04b)))
+        (new-class (find-class 'change-class-class-04b)))
     (values
      (eqt obj (change-class obj new-class))
      (map-slot-boundp* obj '(a c))
@@ -331,7 +331,7 @@
 
 (deftest change-class.4.2
   (let ((obj (make-instance 'change-class-class-04a))
-	(new-class (find-class 'change-class-class-04b)))
+        (new-class (find-class 'change-class-class-04b)))
     (values
      (eqt obj (change-class obj new-class :a2 'z))
      (map-slot-value obj '(a c))))
@@ -340,7 +340,7 @@
 
 (deftest change-class.4.3
   (let ((obj (make-instance 'change-class-class-04a :a 'p :b 'q))
-	(new-class (find-class 'change-class-class-04b)))
+        (new-class (find-class 'change-class-class-04b)))
     (values
      (eqt obj (change-class obj new-class))
      (map-slot-value obj '(a c))))
@@ -349,7 +349,7 @@
 
 (deftest change-class.4.4
   (let ((obj (make-instance 'change-class-class-04a))
-	(new-class (find-class 'change-class-class-04b)))
+        (new-class (find-class 'change-class-class-04b)))
     (values
      (eqt obj (change-class obj new-class :c2 'k))
      (map-slot-boundp* obj '(a c))
@@ -360,7 +360,7 @@
 
 (deftest change-class.4.5
   (let* ((class (find-class 'change-class-class-04b))
-	 (obj (allocate-instance class)))
+         (obj (allocate-instance class)))
     (values
      (map-slot-boundp* obj '(a c))
      (eqt obj (change-class obj class))
@@ -368,7 +368,7 @@
   (nil nil)
   t
   (nil nil))
-     
+
 
 ;;; Custom methods for change-class
 
@@ -388,7 +388,7 @@
 
 (deftest change-class.5
   (let ((*changed-class-on-class-05* nil)
-	(obj (make-instance 'change-class-class-05)))
+        (obj (make-instance 'change-class-class-05)))
     (values
      (eqt obj (change-class obj (find-class 'change-class-class-05)))
      *changed-class-on-class-05*))
@@ -410,7 +410,7 @@
 
 (deftest change-class.6.1
   (let* ((class (find-class 'change-class-class-06))
-	 (obj (make-instance class)))
+         (obj (make-instance class)))
     (values
      (map-slot-boundp* obj '(a b c))
      (eqt obj (change-class obj class))
@@ -424,7 +424,7 @@
 
 (deftest change-class.6.2
   (let* ((class (find-class 'change-class-class-06))
-	 (obj (make-instance class :a 'bad)))
+         (obj (make-instance class :a 'bad)))
     (values
      (map-slot-boundp* obj '(a b c))
      (eqt obj (change-class obj class))
@@ -455,10 +455,10 @@
    (declare (ignore initargs))
    (setf (slot-value obj 'a) 'z)
    obj))
-  
+
 (deftest change-class.7.1
   (let* ((class (find-class 'change-class-class-07))
-	 (obj (allocate-instance class)))
+         (obj (allocate-instance class)))
     (values
      (map-slot-boundp* obj '(a b c))
      (eqt obj (change-class obj class))
@@ -471,7 +471,7 @@
 
 (deftest change-class.7.2
   (let* ((class (find-class 'change-class-class-07))
-	 (obj (allocate-instance class)))
+         (obj (allocate-instance class)))
     (values
      (map-slot-boundp* obj '(a b c))
      (eqt obj (change-class obj class :a 10))
@@ -484,7 +484,7 @@
 
 (deftest change-class.7.3
   (let* ((class (find-class 'change-class-class-07))
-	 (obj (allocate-instance class)))
+         (obj (allocate-instance class)))
     (values
      (map-slot-boundp* obj '(a b c))
      (eqt obj (change-class obj class :b 10))
@@ -498,8 +498,8 @@
 
 (deftest change-class.7.4
   (let* ((class (find-class 'change-class-class-07))
-	 (new-class (find-class 'change-class-class-07b))
-	 (obj (allocate-instance class)))
+         (new-class (find-class 'change-class-class-07b))
+         (obj (allocate-instance class)))
     (values
      (eqt obj (change-class obj new-class))
      (map-slot-boundp* obj '(a d))
@@ -509,8 +509,8 @@
 
 (deftest change-class.7.5
   (let* ((class (find-class 'change-class-class-07))
-	 (new-class (find-class 'change-class-class-07b))
-	 (obj (allocate-instance class)))
+         (new-class (find-class 'change-class-class-07b))
+         (obj (allocate-instance class)))
     (values
      (eqt obj (change-class obj new-class :allow-other-keys nil))
      (map-slot-boundp* obj '(a d))
@@ -520,8 +520,8 @@
 
 (deftest change-class.7.6
   (let* ((class (find-class 'change-class-class-07))
-	 (new-class (find-class 'change-class-class-07b))
-	 (obj (allocate-instance class)))
+         (new-class (find-class 'change-class-class-07b))
+         (obj (allocate-instance class)))
     (values
      (eqt obj (change-class obj new-class :allow-other-keys t))
      (map-slot-boundp* obj '(a d))
@@ -547,7 +547,7 @@
 
 (deftest change-class.8.1
   (let* ((class (find-class 'change-class-class-08))
-	 (obj (make-instance class)))
+         (obj (make-instance class)))
     (values
      (map-slot-boundp* obj '(a b))
      (eqt obj (change-class obj class))
@@ -557,10 +557,10 @@
   t
   (t nil)
   z)
-       
+
 (deftest change-class.8.2
   (let* ((class (find-class 'change-class-class-08))
-	 (obj (make-instance class :a 1 :b 2)))
+         (obj (make-instance class :a 1 :b 2)))
     (values
      (map-slot-boundp* obj '(a b))
      (eqt obj (change-class obj class))
@@ -574,7 +574,7 @@
 
 (deftest change-class.8.3
   (let* ((class (find-class 'change-class-class-08))
-	 (obj (make-instance class)))
+         (obj (make-instance class)))
     (values
      (map-slot-boundp* obj '(a b))
      (eqt obj (change-class obj class :a 12 :b 17))
@@ -589,7 +589,7 @@
 ;;; Put around method test here
 
 ;;; Put more inheritance tests here
-  
+
 ;;; Error tests
 
 (deftest change-class.error.1
@@ -598,13 +598,13 @@
 
 (deftest change-class.error.2
   (signals-error (change-class (make-instance 'change-class-class-01a))
-		 program-error)
+                 program-error)
   t)
 
 (deftest change-class.error.3
   (signals-error
    (let ((obj (make-instance 'change-class-class-01a))
-	 (new-class (find-class 'change-class-class-01b)))
+         (new-class (find-class 'change-class-class-01b)))
      (change-class obj new-class :c2))
    program-error)
   t)
@@ -612,7 +612,7 @@
 (deftest change-class.error.4
   (signals-error
    (let ((obj (make-instance 'change-class-class-01a))
-	 (new-class (find-class 'change-class-class-01b)))
+         (new-class (find-class 'change-class-class-01b)))
      (change-class obj new-class '(nonsense) 'a))
    program-error)
   t)
@@ -624,26 +624,26 @@
 (deftest change-class.error.5
   (let ((built-in-class (find-class 'built-in-class)))
     (loop for e in *mini-universe*
-	  for class = (class-of e)
-	  when (and (eq (class-of class) built-in-class)
-		    (handler-case
-		     (progn
-		       (change-class (make-instance 'change-class-class-01a)
-				     class)
-		       t)
-		     (error () nil)))
-	  collect e))
+          for class = (class-of e)
+          when (and (eq (class-of class) built-in-class)
+                    (handler-case
+                     (progn
+                       (change-class (make-instance 'change-class-class-01a)
+                                     class)
+                       t)
+                     (error () nil)))
+          collect e))
   nil)
 
 (deftest change-class.error.6
   (let ((built-in-class (find-class 'built-in-class)))
     (loop for e in *mini-universe*
-	  for class = (class-of e)
-	  when (and (eq (class-of class) built-in-class)
-		    (handler-case
-		     (progn
-		       (change-class e (find-class 'change-class-class-01a))
-		       t)
-		     (error () nil)))
-	  collect e))
+          for class = (class-of e)
+          when (and (eq (class-of class) built-in-class)
+                    (handler-case
+                     (progn
+                       (change-class e (find-class 'change-class-class-01a))
+                       t)
+                     (error () nil)))
+          collect e))
   nil)

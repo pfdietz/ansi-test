@@ -30,14 +30,14 @@
    repeat 100
    always
    (let ((a (list 1 2 3 4 5 6 7 8 9 0))
-	 (cmp (make-array '(10 10))))
+         (cmp (make-array '(10 10))))
      (loop for i from 0 to 9 do
-	   (loop for j from 0 to 9 do
-		 (setf (aref cmp i j) (zerop (logand (random 1024) 512)))))
+           (loop for j from 0 to 9 do
+                 (setf (aref cmp i j) (zerop (logand (random 1024) 512)))))
      (setq a (sort a #'(lambda (i j) (aref cmp i j))))
      (and (eqlt (length a) 10)
-	  (equalt (sort a #'<) '(0 1 2 3 4 5 6 7 8 9)))))
-  t)	
+          (equalt (sort a #'<) '(0 1 2 3 4 5 6 7 8 9)))))
+  t)
 
 (deftest sort-vector.1
   (let ((a (copy-seq #(1 4 2 5 3))))
@@ -57,7 +57,7 @@
 
 (deftest sort-vector.4
   (let ((a (make-array 10 :initial-contents '(10 40 20 50 30 15 45 25 55 35)
-		       :fill-pointer 5)))
+                       :fill-pointer 5)))
     (sort a #'<))
   #(10 20 30 40 50))
 
@@ -66,13 +66,13 @@
    repeat 100
    always
    (let ((a (vector 1 2 3 4 5 6 7 8 9 0))
-	 (cmp (make-array '(10 10))))
+         (cmp (make-array '(10 10))))
      (loop for i from 0 to 9 do
-	   (loop for j from 0 to 9 do
-		 (setf (aref cmp i j) (zerop (logand (random 1024) 512)))))
+           (loop for j from 0 to 9 do
+                 (setf (aref cmp i j) (zerop (logand (random 1024) 512)))))
      (setq a (sort a #'(lambda (i j) (aref cmp i j))))
      (and (eqlt (length a) 10)
-	  (equalpt (sort a #'<) #(0 1 2 3 4 5 6 7 8 9)))))
+          (equalpt (sort a #'<) #(0 1 2 3 4 5 6 7 8 9)))))
   t)
 
 (deftest sort-vector.6
@@ -98,33 +98,33 @@
 
 (deftest sort-vector.9
   (let* ((ivals '(1 4 7 3 2 6 5))
-	 (sivals '(1 2 3 4 5 6 7))
-	 (len (length ivals)))
+         (sivals '(1 2 3 4 5 6 7))
+         (len (length ivals)))
     (loop for etype in '(short-float single-float double-float long-float rational)
-	  for vals = (loop for i in ivals collect (coerce i etype))
-	  for svals = (loop for i in sivals collect (coerce i etype))
-	  for vec = (make-array len :element-type etype :initial-contents vals)
-	  for svec = (sort vec #'<)
-	  unless (and (eql (length svec) len)
-		      (every #'eql svals svec))
-	  collect (list etype vals svec)))
+          for vals = (loop for i in ivals collect (coerce i etype))
+          for svals = (loop for i in sivals collect (coerce i etype))
+          for vec = (make-array len :element-type etype :initial-contents vals)
+          for svec = (sort vec #'<)
+          unless (and (eql (length svec) len)
+                      (every #'eql svals svec))
+          collect (list etype vals svec)))
   nil)
 
 (deftest sort-vector.10
   (let* ((ivals '(1 4 7 3 2 6 5))
-	 (sivals '(1 2 3 4 5 6 7))
-	 (len (length ivals)))
+         (sivals '(1 2 3 4 5 6 7))
+         (len (length ivals)))
     (loop for cetype in '(short-float single-float double-float long-float rational)
-	  for etype = `(complex ,cetype)
-	  for vals = (loop for i in ivals collect (complex (coerce i cetype)
-							   (coerce (- i) cetype)))
-	  for svals = (loop for i in sivals collect (complex (coerce i cetype)
-							     (coerce (- i) cetype)))
-	  for vec = (make-array len :element-type etype :initial-contents vals)
-	  for svec = (sort vec #'(lambda (x y) (< (abs x) (abs y))))
-	  unless (and (eql (length svec) len)
-		      (every #'eql svals svec))
-	  collect (list etype vals svec)))
+          for etype = `(complex ,cetype)
+          for vals = (loop for i in ivals collect (complex (coerce i cetype)
+                                                           (coerce (- i) cetype)))
+          for svals = (loop for i in sivals collect (complex (coerce i cetype)
+                                                             (coerce (- i) cetype)))
+          for vec = (make-array len :element-type etype :initial-contents vals)
+          for svec = (sort vec #'(lambda (x y) (< (abs x) (abs y))))
+          unless (and (eql (length svec) len)
+                      (every #'eql svals svec))
+          collect (list etype vals svec)))
   nil)
 
 ;;; Bit vectors
@@ -142,8 +142,8 @@
 
 (deftest sort-bit-vector.3
   (let ((a (make-array 10 :initial-contents '(1 0 0 1 1 1 1 0 1 1)
-		       :element-type 'bit
-		       :fill-pointer 5)))
+                       :element-type 'bit
+                       :fill-pointer 5)))
     (sort a #'<))
   #*00111)
 
@@ -161,8 +161,8 @@
 
 (deftest sort-string.3
   (let ((a (make-array 10 :initial-contents "1001111011"
-		       :element-type 'character
-		       :fill-pointer 5)))
+                       :element-type 'character
+                       :fill-pointer 5)))
     (sort a #'char<))
   "00111")
 
@@ -180,7 +180,7 @@
   (let ((i 0) x y)
     (values
      (sort (progn (setf x (incf i)) (list 1 7 3 2))
-	   (progn (setf y (incf i)) #'<))
+           (progn (setf y (incf i)) #'<))
      i x y))
   (1 2 3 7) 2 1 2)
 
@@ -188,8 +188,8 @@
   (let ((i 0) x y z)
     (values
      (sort (progn (setf x (incf i)) (list 1 7 3 2))
-	   (progn (setf y (incf i)) #'<)
-	   :key (progn (setf z (incf i)) #'-))
+           (progn (setf y (incf i)) #'<)
+           :key (progn (setf z (incf i)) #'-))
      i x y z))
   (7 3 2 1) 3 1 2 3)
 

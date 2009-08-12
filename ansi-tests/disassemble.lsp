@@ -11,7 +11,7 @@
      (notnot
       (stringp
        (with-output-to-string (*standard-output*)
-			      (setf val (disassemble fn)))))
+                              (setf val (disassemble fn)))))
      val)))
 
 (deftest disassemble.1
@@ -53,7 +53,7 @@
 (deftest disassemble.8
   (progn
     (eval '(defun (setf disassemble-example-fn) (val arg)
-	     (setf (car arg) val)))
+             (setf (car arg) val)))
     (disassemble-it '(setf disassemble-example-fn)))
   t nil)
 
@@ -79,7 +79,7 @@
        #'values
        (disassemble-it fn)
        (if is-compiled? (notnot (typep (symbol-function fn) 'compiled-function))
-	 (not (typep (symbol-function fn) 'compiled-function))))))
+         (not (typep (symbol-function fn) 'compiled-function))))))
   t nil t)
 
 ;;; Error tests
@@ -94,6 +94,6 @@
 
 (deftest disassemble.error.3
   (check-type-error #'disassemble
-		    (typef '(or function symbol (cons (eql setf) (cons symbol null)))))
+                    (typef '(or function symbol (cons (eql setf) (cons symbol null)))))
   nil)
 

@@ -35,13 +35,13 @@
 
 (defmethod make-random-element-of ((type (eql rational)))
   (let* ((r (ash 1 (1+ (random *maximum-random-int-bits*))))
-	 (n (random r))
-	 (d (loop for x = (random r) unless (zerop x) do (return x))))
+         (n (random r))
+         (d (loop for x = (random r) unless (zerop x) do (return x))))
     (if (coin) (/ n d) (- (/ n d)))))
 
 (defmethod make-random-element-of ((type (eql integer)))
   (let* ((b (random *maximum-random-int-bits*))
-	 (x (ash 1 b)))
+         (x (ash 1 b)))
     (rcase
      (1 (+ x (make-random-element-of 'integer)))
      (1 (- (make-random-element-of 'integer) x))
@@ -68,7 +68,7 @@
 
 (defmethod make-random-element-of ((type (eql ratio)))
   (loop for x = (make-random-element-of 'rational)
-	unless (integerp x) return x))
+        unless (integerp x) return x))
 
 (defmethod make-random-element-of ((type complex))
   (make-random-element-of '(complex real)))
@@ -78,7 +78,7 @@
 
 (defmethod make-random-element-of ((type bignum))
   (make-random-element-of `(or (integer * (,most-negative-fixnum))
-			       (integer (,most-positive-fixnum)))))
+                               (integer (,most-positive-fixnum)))))
 
 (defmethod make-random-element-of ((type (eql number)))
   (make-random-element-of (random-from-seq #(integer rational float complex))))
@@ -87,11 +87,11 @@
   (rcase
    (3 (random-from-seq +standard-chars+))
    (2 (let ((r (random 256)))
-	(or (code-char r) (make-random-element-of 'character))))
+        (or (code-char r) (make-random-element-of 'character))))
    (1 (let ((r (random #.(ash 1 16))))
-	(or (code-char r) (make-random-element-of 'character))))
+        (or (code-char r) (make-random-element-of 'character))))
    (1 (let ((r (random #.(ash 1 24))))
-	(or (code-char r) (make-random-element-of 'character))))))
+        (or (code-char r) (make-random-element-of 'character))))))
 
 (defmethod make-random-element-of ((type 'base-char))
   (random-from-seq +standard-chars+))
@@ -169,37 +169,37 @@
 
 (defmethod make-random-element-of-compound-type ((type-op (eql and)) (args cons))
   (loop for e = (make-random-element-of (car args))
-	repeat 100
-	when (or (null (cdr args)) (typep e (cons 'and (cdr args))))
-	return x
-	finally (error "Cannot generate a random element of ~A"
-		       (cons 'and args))))
+        repeat 100
+        when (or (null (cdr args)) (typep e (cons 'and (cdr args))))
+        return x
+        finally (error "Cannot generate a random element of ~A"
+                       (cons 'and args))))
 
 (defmethod make-random-element-of-compound-type ((type-op (eql integer)) (args t))
   (let ((lo (let ((lo (car args)))
-	      (cond
-	       ((consp lo) (1+ (car lo)))
-	       ((eq lo nil) '*)
-	       (t lo))))
-	(hi (let ((hi (cadr args)))
-	      (cond
-	       ((consp hi) (1- (car hi)))
-	       ((eq hi nil) '*)
-	       (t hi)))))
+              (cond
+               ((consp lo) (1+ (car lo)))
+               ((eq lo nil) '*)
+               (t lo))))
+        (hi (let ((hi (cadr args)))
+              (cond
+               ((consp hi) (1- (car hi)))
+               ((eq hi nil) '*)
+               (t hi)))))
     (if (eq lo '*)
-	(if (eq hi '*)
-	    (let ((x (ash 1 (random *maximum-random-int-bits*))))
-	      (random-from-interval x (- x)))
-	  (random-from-interval (1+ hi)
-				(- hi (random (ash 1 *maximum-random-int-bits*)))))
-      
+        (if (eq hi '*)
+            (let ((x (ash 1 (random *maximum-random-int-bits*))))
+              (random-from-interval x (- x)))
+          (random-from-interval (1+ hi)
+                                (- hi (random (ash 1 *maximum-random-int-bits*)))))
+
       (if (eq hi '*)
-	  (random-from-interval (+ lo (random (ash 1 *maximum-random-int-bits*)) 1)
-				lo)
-	;; May generalize the next case to increase odds
-	;; of certain integers (near 0, near endpoints, near
-	;; powers of 2...)
-	(random-from-interval (1+ hi) lo)))))
+          (random-from-interval (+ lo (random (ash 1 *maximum-random-int-bits*)) 1)
+                                lo)
+        ;; May generalize the next case to increase odds
+        ;; of certain integers (near 0, near endpoints, near
+        ;; powers of 2...)
+        (random-from-interval (1+ hi) lo)))))
 
 (defmethod make-random-element-of-compound-type ((type-op (eql short-float)) (args t))
   (make-random-element-of-float-type type args))
@@ -215,8 +215,8 @@
 
 (defun make-random-element-of-float-type (type-op args)
   (let ((lo (car args))
-	(hi (cadr args))
-	lo= hi=)
+        (hi (cadr args))
+        lo= hi=)
     (cond
      ((consp lo) nil)
      ((member lo '(* nil))
@@ -238,14 +238,14 @@
     (let ((limit 100000))
       (cond
        ((or (<= hi 0)
-	    (>= lo 0)
-	    (and (<= (- limit) hi limit) (<= (- limit) lo limit)))
-	(loop for x = (+ (random (- hi lo)) lo)
-	      do (when (or lo= (/= x lo)) (return x))))
+            (>= lo 0)
+            (and (<= (- limit) hi limit) (<= (- limit) lo limit)))
+        (loop for x = (+ (random (- hi lo)) lo)
+              do (when (or lo= (/= x lo)) (return x))))
        (t
-	(rcase
-	 (1 (random (min hi (float limit hi))))
-	 (1 (- (random (min (float limit lo) (- lo)))))))))))
+        (rcase
+         (1 (random (min hi (float limit hi))))
+         (1 (- (random (min (float limit lo) (- lo)))))))))))
 
 (defmethod make-random-element-of-compound-type ((type-op (eql mod)) (args cons))
   (let ((modulus (car args)))
@@ -258,10 +258,10 @@
       (make-random-element-of '(integer 0 *))
     (let ((bits (car args)))
       (if (eq bits'*)
-	  (make-random-element-of '(integer 0 *))
-	(progn
-	  (assert (and (integerp bits) (>= bits 1)))
-	  (make-random-element-of `(integer 0 ,(1- (ash 1 bits)))))))))
+          (make-random-element-of '(integer 0 *))
+        (progn
+          (assert (and (integerp bits) (>= bits 1)))
+          (make-random-element-of `(integer 0 ,(1- (ash 1 bits)))))))))
 
 (defmethod make-random-element-of-compound-type ((type-op (eql eql)) (args cons))
   (assert (null (cdr args)))

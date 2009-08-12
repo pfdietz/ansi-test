@@ -11,7 +11,7 @@
 
 (deftest hash-table-size.error.2
   (signals-error (hash-table-size (make-hash-table) nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest hash-table-size.error.3

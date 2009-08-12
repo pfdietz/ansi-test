@@ -37,12 +37,12 @@
 
 (deftest lognot.4
   (loop for x = (random-from-interval (ash 1 (random 200)))
-	for z = (lognot x)
-	repeat 1000
-	unless (and (if (>= x 0) (< z 0) (>= z 0))
-		    (loop for i from 1 to 210
-			  always (if (not (logbitp i x))
-				     (logbitp i z)
-				   (not (logbitp i z)))))
-	collect (list x z))
+        for z = (lognot x)
+        repeat 1000
+        unless (and (if (>= x 0) (< z 0) (>= z 0))
+                    (loop for i from 1 to 210
+                          always (if (not (logbitp i x))
+                                     (logbitp i z)
+                                   (not (logbitp i z)))))
+        collect (list x z))
   nil)

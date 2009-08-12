@@ -15,9 +15,9 @@
 
 (deftest synonym-stream-symbol.error.2
   (signals-error (synonym-stream-symbol
-		  (make-synonym-stream '*terminal-io*)
-		  nil)
-		 program-error)
+                  (make-synonym-stream '*terminal-io*)
+                  nil)
+                 program-error)
   t)
 
 

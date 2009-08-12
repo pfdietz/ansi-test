@@ -17,7 +17,7 @@
   (flet ((%f () 'foo))
     (declare (ignorable (function %f))))
   nil)
-    
+
 (deftest ignorable.4
   (flet ((%f () 'foo))
     (declare (ignorable (function %f)))
@@ -28,28 +28,28 @@
 
 (deftest ignorable.5
   (flet (((setf %f) (x y) nil))
-	(declare (ignorable (function (setf %f))))
-	:good)
+        (declare (ignorable (function (setf %f))))
+        :good)
   :good)
 
 (deftest ignorable.6
   (flet (((setf %f) (x y) (setf (car y) x)))
-	(declare (ignorable (function (setf %f))))
-	(let ((z (cons 'a 'b)))
-	  (values (setf (%f z) 'c) z)))
+        (declare (ignorable (function (setf %f))))
+        (let ((z (cons 'a 'b)))
+          (values (setf (%f z) 'c) z)))
   c (c . b))
 
 (deftest ignorable.7
   (labels (((setf %f) (x y) nil))
-	  (declare (ignorable (function (setf %f))))
-	  :good)
+          (declare (ignorable (function (setf %f))))
+          :good)
   :good)
 
 (deftest ignorable.8
   (labels (((setf %f) (x y) (setf (car y) x)))
-	  (declare (ignorable (function (setf %f))))
-	  (let ((z (cons 'a 'b)))
-	    (values (setf (%f z) 'c) z)))
+          (declare (ignorable (function (setf %f))))
+          (let ((z (cons 'a 'b)))
+            (values (setf (%f z) 'c) z)))
   c (c . b))
 
 

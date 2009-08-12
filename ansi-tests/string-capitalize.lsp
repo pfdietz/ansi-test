@@ -46,7 +46,7 @@
   (let ((s "ABCDEF"))
     (values
      (loop for i from 0 to 5
-	   collect (string-capitalize s :start i))
+           collect (string-capitalize s :start i))
      s))
   ("Abcdef" "ABcdef" "ABCdef" "ABCDef" "ABCDEf" "ABCDEF")
   "ABCDEF")
@@ -55,7 +55,7 @@
   (let ((s "ABCDEF"))
     (values
      (loop for i from 0 to 5
-	   collect (string-capitalize s :start i :end nil))
+           collect (string-capitalize s :start i :end nil))
      s))
   ("Abcdef" "ABcdef" "ABCdef" "ABCDef" "ABCDEf" "ABCDEF")
   "ABCDEF")
@@ -64,7 +64,7 @@
   (let ((s "ABCDEF"))
     (values
      (loop for i from 0 to 6
-	   collect (string-capitalize s :end i))
+           collect (string-capitalize s :end i))
      s))
   ("ABCDEF" "ABCDEF" "AbCDEF" "AbcDEF" "AbcdEF" "AbcdeF" "Abcdef")
   "ABCDEF")
@@ -73,8 +73,8 @@
   (let ((s "ABCDEF"))
     (values
      (loop for i from 0 to 5
-	   collect (loop for j from i to 6
-			 collect (string-capitalize s :start i :end j)))
+           collect (loop for j from i to 6
+                         collect (string-capitalize s :start i :end j)))
      s))
   (("ABCDEF" "ABCDEF" "AbCDEF" "AbcDEF" "AbcdEF" "AbcdeF" "Abcdef")
    ("ABCDEF" "ABCDEF" "ABcDEF" "ABcdEF" "ABcdeF" "ABcdef")
@@ -91,29 +91,29 @@
 
 (deftest string-capitalize.12
   (loop for type in '(standard-char base-char character)
-	for s = (make-array '(10) :element-type type
-			    :fill-pointer 5
-			    :initial-contents "aB0cDefGHi")
-	collect (list s (string-capitalize s)))
+        for s = (make-array '(10) :element-type type
+                            :fill-pointer 5
+                            :initial-contents "aB0cDefGHi")
+        collect (list s (string-capitalize s)))
   (("aB0cD" "Ab0cd") ("aB0cD" "Ab0cd") ("aB0cD" "Ab0cd")))
 
 
 (deftest string-capitalize.13
   (loop for type in '(standard-char base-char character)
-	for s0 = (make-array '(10) :element-type type
-			     :initial-contents "zZaB0cDefG")
-	for s = (make-array '(5) :element-type type
-			    :displaced-to s0
-			    :displaced-index-offset 2)
-	collect (list s (string-capitalize s)))
+        for s0 = (make-array '(10) :element-type type
+                             :initial-contents "zZaB0cDefG")
+        for s = (make-array '(5) :element-type type
+                            :displaced-to s0
+                            :displaced-index-offset 2)
+        collect (list s (string-capitalize s)))
   (("aB0cD" "Ab0cd") ("aB0cD" "Ab0cd") ("aB0cD" "Ab0cd")))
 
 (deftest string-capitalize.14
   (loop for type in '(standard-char base-char character)
-	for s = (make-array '(5) :element-type type
-			    :adjustable t
-			    :initial-contents "aB0cD")
-	collect (list s (string-capitalize s)))
+        for s = (make-array '(5) :element-type type
+                            :adjustable t
+                            :initial-contents "aB0cD")
+        collect (list s (string-capitalize s)))
   (("aB0cD" "Ab0cd") ("aB0cD" "Ab0cd") ("aB0cD" "Ab0cd")))
 
 ;;; Order of evaluation tests
@@ -156,7 +156,7 @@
 
 (deftest string-capitalize.error.4
   (signals-error (string-capitalize (copy-seq "abc") :bad t
-				      :allow-other-keys nil) program-error)
+                                      :allow-other-keys nil) program-error)
   t)
 
 (deftest string-capitalize.error.5

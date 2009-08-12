@@ -9,16 +9,16 @@
 
 (deftest revappend.1
     (let* ((x (list 'a 'b 'c))
-	   (y (list 'd 'e 'f))
-	   (xcopy (make-scaffold-copy x))
-	   (ycopy (make-scaffold-copy y))
-	   )
+           (y (list 'd 'e 'f))
+           (xcopy (make-scaffold-copy x))
+           (ycopy (make-scaffold-copy y))
+           )
       (let ((result (revappend x y)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 (check-scaffold-copy y ycopy)
-	 (eqt (cdddr result) y)
-	 result)))
+        (and
+         (check-scaffold-copy x xcopy)
+         (check-scaffold-copy y ycopy)
+         (eqt (cdddr result) y)
+         result)))
   (c b a d e f))
 
 (deftest revappend.2
@@ -37,7 +37,7 @@
   (let ((i 0) x y)
     (values
      (revappend (progn (setf x (incf i)) (copy-list '(a b c)))
-		(progn (setf y (incf i)) (copy-list '(d e f))))
+                (progn (setf y (incf i)) (copy-list '(d e f))))
      i x y))
   (c b a d e f) 2 1 2)
 

@@ -24,7 +24,7 @@
 (deftest copy-list.4
   (let ((i 0))
     (values (copy-list (progn (incf i) '(a b c)))
-	    i))
+            i))
   (a b c) 1)
 
 (def-fold-test copy-list.fold.1 (copy-list '(a b c d)))

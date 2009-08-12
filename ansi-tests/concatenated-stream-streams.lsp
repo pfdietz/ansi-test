@@ -11,9 +11,9 @@
 
 (deftest concatenated-stream-streams.2
   (equalt (list (list *standard-input*))
-	  (multiple-value-list
-	   (concatenated-stream-streams
-	    (make-concatenated-stream *standard-input*))))
+          (multiple-value-list
+           (concatenated-stream-streams
+            (make-concatenated-stream *standard-input*))))
   t)
 
 (deftest concatenated-stream-streams.3
@@ -23,8 +23,8 @@
     (s2 "def")
     (let ((s (make-concatenated-stream s1 s2)))
       (equalt (list (list s1 s2))
-	      (multiple-value-list
-	       (concatenated-stream-streams s))))))
+              (multiple-value-list
+               (concatenated-stream-streams s))))))
   t)
 
 (deftest concatenated-stream-streams.4
@@ -34,8 +34,8 @@
     (s2 "def")
     (let ((s (make-concatenated-stream s1 s2)))
       (equalt (list (list s1 s2))
-	      (multiple-value-list
-	       (concatenated-stream-streams s))))))
+              (multiple-value-list
+               (concatenated-stream-streams s))))))
   t)
 
 (deftest concatenated-stream-streams.5
@@ -47,8 +47,8 @@
       (values
        (read-char s)
        (equalt (list (list s2))
-	       (multiple-value-list
-		(concatenated-stream-streams s)))))))
+               (multiple-value-list
+                (concatenated-stream-streams s)))))))
   #\d t)
 
 ;;; Error cases
@@ -59,9 +59,9 @@
 
 (deftest concatenated-stream-streams.error.2
   (signals-error (concatenated-stream-streams
-		  (make-concatenated-stream)
-		  nil)
-		 program-error)
+                  (make-concatenated-stream)
+                  nil)
+                 program-error)
   t)
 
 

@@ -18,85 +18,85 @@
 
 (deftest array-displacement.7
   (let* ((a (make-array '(10)))
-	 (b (make-array '(10) :displaced-to a)))
+         (b (make-array '(10) :displaced-to a)))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 0))))
+           (eqlt disp 0))))
   t)
 
 (deftest array-displacement.8
   (let* ((a (make-array '(10)))
-	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2)))
+         (b (make-array '(5) :displaced-to a :displaced-index-offset 2)))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 2))))
+           (eqlt disp 2))))
   t)
 
 (deftest array-displacement.9
   (let* ((a (make-array '(10) :element-type 'base-char))
-	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2
-			:element-type 'base-char)))
+         (b (make-array '(5) :displaced-to a :displaced-index-offset 2
+                        :element-type 'base-char)))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 2))))
+           (eqlt disp 2))))
   t)
 
 (deftest array-displacement.10
   (let* ((a (make-array '(10) :element-type 'base-char))
-	 (b (make-array '(5) :displaced-to a
-			:element-type 'base-char)))
+         (b (make-array '(5) :displaced-to a
+                        :element-type 'base-char)))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 0))))
+           (eqlt disp 0))))
   t)
 
 (deftest array-displacement.11
   (let* ((a (make-array '(10) :element-type 'bit))
-	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2
-			:element-type 'bit)))
+         (b (make-array '(5) :displaced-to a :displaced-index-offset 2
+                        :element-type 'bit)))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 2))))
+           (eqlt disp 2))))
   t)
 
 (deftest array-displacement.12
   (let* ((a (make-array '(10) :element-type 'bit))
-	 (b (make-array '(5) :displaced-to a
-			:element-type 'bit)))
+         (b (make-array '(5) :displaced-to a
+                        :element-type 'bit)))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 0))))
+           (eqlt disp 0))))
   t)
 
 (deftest array-displacement.13
   (let* ((a (make-array '(10) :element-type '(integer 0 255)))
-	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2
-			:element-type '(integer 0 255))))
+         (b (make-array '(5) :displaced-to a :displaced-index-offset 2
+                        :element-type '(integer 0 255))))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 2))))
+           (eqlt disp 2))))
   t)
 
 (deftest array-displacement.14
   (let* ((a (make-array '(10) :element-type '(integer 0 255)))
-	 (b (make-array '(5) :displaced-to a
-			:element-type '(integer 0 255))))
+         (b (make-array '(5) :displaced-to a
+                        :element-type '(integer 0 255))))
     (multiple-value-bind* (dt disp)
-	(array-displacement b)
+        (array-displacement b)
       (and (eqt a dt)
-	   (eqlt disp 0))))
+           (eqlt disp 0))))
   t)
 
 (deftest array-displacement.15
   (let* ((a (make-array '(10) :initial-contents '(a b c d e f g h i j)))
-	 (b (make-array '(5) :displaced-to a :displaced-index-offset 2)))
+         (b (make-array '(5) :displaced-to a :displaced-index-offset 2)))
     (macrolet
      ((%m (z) z))
      (multiple-value-bind
@@ -110,13 +110,13 @@
 
 (deftest array-displacement.order.1
   (let* ((a (make-array '(10)))
-	 (b (make-array '(10) :displaced-to a))
-	 (i 0))
+         (b (make-array '(10) :displaced-to a))
+         (i 0))
     (multiple-value-bind* (dt disp)
-	(array-displacement (progn (incf i) b))
+        (array-displacement (progn (incf i) b))
       (and (eql i 1)
-	   (eqt a dt)
-	   (eqlt disp 0))))
+           (eqt a dt)
+           (eqlt disp 0))))
   t)
 
 ;;; Error tests

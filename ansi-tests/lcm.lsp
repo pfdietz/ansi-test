@@ -18,61 +18,61 @@
 
 (deftest lcm.2
   (loop for i = (random-fixnum)
-	for a = (abs i)
-	repeat 1000
-	unless (and (eql a (lcm i))
-		    (eql a (lcm 1 i)))
-	collect i)
+        for a = (abs i)
+        repeat 1000
+        unless (and (eql a (lcm i))
+                    (eql a (lcm 1 i)))
+        collect i)
   nil)
 
 (deftest lcm.3
   (loop for i = (random-from-interval 10000000000000000)
-	for a = (abs i)
-	repeat 1000
-	unless (and (eql a (lcm i))
-		    (eql a (lcm i 1)))
-	collect i)
+        for a = (abs i)
+        repeat 1000
+        unless (and (eql a (lcm i))
+                    (eql a (lcm i 1)))
+        collect i)
   nil)
 
 (deftest lcm.4
   (loop for i = (random-fixnum)
-	for j = (random-fixnum)
-	repeat 1000
-	unless (eql (my-lcm i j) (lcm i j))
-	collect (list i j))
+        for j = (random-fixnum)
+        repeat 1000
+        unless (eql (my-lcm i j) (lcm i j))
+        collect (list i j))
   nil)
 
 (deftest lcm.5
   (let ((bound (ash 1 200)))
     (loop for i = (random-from-interval bound)
-	  for j = (random-from-interval bound)
-	  repeat 1000
-	  unless (eql (my-lcm i j) (lcm i j))
-	  collect (list i j)))
+          for j = (random-from-interval bound)
+          repeat 1000
+          unless (eql (my-lcm i j) (lcm i j))
+          collect (list i j)))
   nil)
 
 (deftest lcm.6
   (loop for i = (random-fixnum)
-	for j = (random-fixnum)
-	for k = (random-fixnum)
-	repeat 1000
-	unless (eql (my-lcm i (my-lcm j k)) (lcm i j k))
-	collect (list i j k))
+        for j = (random-fixnum)
+        for k = (random-fixnum)
+        repeat 1000
+        unless (eql (my-lcm i (my-lcm j k)) (lcm i j k))
+        collect (list i j k))
   nil)
 
 (deftest lcm.7
   (loop for i = (random-fixnum)
-	for j = (random-fixnum)
-	for k = (random-fixnum)
-	for n = (random-fixnum)
-	repeat 1000
-	unless (eql (my-lcm (my-lcm i j) (my-lcm k n)) (lcm i j k n))
-	collect (list i j k n))
+        for j = (random-fixnum)
+        for k = (random-fixnum)
+        for n = (random-fixnum)
+        repeat 1000
+        unless (eql (my-lcm (my-lcm i j) (my-lcm k n)) (lcm i j k n))
+        collect (list i j k n))
   nil)
 
 (deftest lcm.8
   (loop for i from 1 to (min 256 (1- call-arguments-limit))
-	always (eql (apply #'lcm (make-list i :initial-element 1)) 1))
+        always (eql (apply #'lcm (make-list i :initial-element 1)) 1))
   t)
 
 (deftest lcm.9
@@ -96,7 +96,7 @@
   (let ((i 0) x y)
     (values
      (lcm (progn (setf x (incf i)) 15)
-	  (progn (setf y (incf i)) 25))
+          (progn (setf y (incf i)) 25))
      i x y))
   75 2 1 2)
 
@@ -104,7 +104,7 @@
   (let ((i 0) x y)
     (values
      (lcm (progn (setf x (incf i)) 0)
-	  (progn (setf y (incf i)) 10))
+          (progn (setf y (incf i)) 10))
      i x y))
   0 2 1 2)
 

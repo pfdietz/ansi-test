@@ -16,7 +16,7 @@
 
 (deftest with-output-to-string.3
   (with-output-to-string (s (make-array 10 :fill-pointer 0
-					:element-type 'character)))
+                                        :element-type 'character)))
   nil)
 
 (deftest with-output-to-string.4
@@ -31,23 +31,23 @@
 
 (deftest with-output-to-string.5
   (with-output-to-string (s (make-array 10 :fill-pointer 0
-					:element-type 'character))
-			 (values)))
+                                        :element-type 'character))
+                         (values)))
 
 (deftest with-output-to-string.6
   (with-output-to-string (s (make-array 10 :fill-pointer 0
-					:element-type 'character))
-			 (values 'a 'b 'c 'd))
+                                        :element-type 'character))
+                         (values 'a 'b 'c 'd))
   a b c d)
 
 (deftest with-output-to-string.7
   (with-output-to-string (s nil :element-type 'character)
-			 (write-char #\& s))
+                         (write-char #\& s))
   "&")
 
 (deftest with-output-to-string.8
   (let ((str (with-output-to-string (s nil :element-type 'base-char)
-				    (write-char #\8 s))))
+                                    (write-char #\8 s))))
     (assert (typep str 'simple-base-string))
     str)
   "8")
@@ -59,11 +59,11 @@
 
 (deftest with-output-to-string.10
   (let* ((s1 (make-array 20 :element-type 'character
-			 :initial-element #\.))
-	 (s2 (make-array 10 :element-type 'character
-			 :displaced-to s1
-			 :displaced-index-offset 5
-			 :fill-pointer 0)))
+                         :initial-element #\.))
+         (s2 (make-array 10 :element-type 'character
+                         :displaced-to s1
+                         :displaced-index-offset 5
+                         :fill-pointer 0)))
 
     (values
      (with-output-to-string
@@ -81,7 +81,7 @@
 
 (deftest with-output-to-string.12
   (with-output-to-string (s) (declare (optimize safety))
-			 (declare (optimize (speed 0))))
+                         (declare (optimize (speed 0))))
   "")
 
 (deftest with-output-to-string.13
@@ -94,13 +94,13 @@
 
 (deftest with-output-to-string.14
   (let* ((str1 (make-array '(256) :element-type 'base-char :fill-pointer 0))
-	 (str2 (with-output-to-string
-		 (s nil :element-type 'base-char)
-		 (loop for i below 256
-		       for c = (code-char i)
-		       when (typep c 'base-char)
-		       do (progn (write-char c s)
-				 (vector-push c str1))))))
+         (str2 (with-output-to-string
+                 (s nil :element-type 'base-char)
+                 (loop for i below 256
+                       for c = (code-char i)
+                       when (typep c 'base-char)
+                       do (progn (write-char c s)
+                                 (vector-push c str1))))))
     (if (string= str1 str2) :good
       (list str1 str2)))
   :good)
@@ -112,8 +112,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-output-to-string (s (return-from done x))
-			       (declare (special x))))))
+        (with-output-to-string (s (return-from done x))
+                               (declare (special x))))))
   :good)
 
 (deftest with-output-to-string.16
@@ -121,9 +121,9 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good)
-	    (str (make-array '(10) :element-type 'character
-			     :fill-pointer 0)))
-	(with-output-to-string (s str :element-type (return-from done x))
-			       (declare (special x))))))
+            (str (make-array '(10) :element-type 'character
+                             :fill-pointer 0)))
+        (with-output-to-string (s str :element-type (return-from done x))
+                               (declare (special x))))))
   :good)
 

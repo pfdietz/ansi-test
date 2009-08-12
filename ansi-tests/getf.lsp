@@ -34,16 +34,16 @@
   (let ((i 0) x y)
     (values
      (getf (progn (setf x (incf i)) '(a b))
-	   (progn (setf y (incf i)) 'a))
+           (progn (setf y (incf i)) 'a))
      i x y))
   b 2 1 2)
-		  
+
 (deftest getf.order.2
   (let ((i 0) x y z)
     (values
      (getf (progn (setf x (incf i)) '(a b))
-	   (progn (setf y (incf i)) 'a)
-	   (setf z (incf i)))
+           (progn (setf y (incf i)) 'a)
+           (setf z (incf i)))
      i x y z))
   b 3 1 2 3)
 
@@ -76,7 +76,7 @@
        (not (member (car ptr) '(a b))))
       0)
      t))
-  t)    
+  t)
 
 (deftest setf-getf.3
   (let ((p (copy-list '(a 1 b 2))))
@@ -111,7 +111,7 @@
 
 (deftest setf-getf.5
   (let ((p (copy-list '(a 1 b 2)))
-	(foo nil))
+        (foo nil))
     (setf (getf p 'a (progn (setf foo t) 0)) 3)
     ;; Must check that only a, b have properties
     (and
@@ -147,11 +147,11 @@
 
 (deftest setf-getf.order.2
   (let ((p (list (copy-list '(a 1 b 2))))
-	(i 0) x y z w)
+        (i 0) x y z w)
     (setf (getf (car (progn (setf x (incf i)) p))
-		(progn (setf y (incf i)) 'c)
-		(setf z (incf i)))
-	  (progn (setf w (incf i)) 3))
+                (progn (setf y (incf i)) 'c)
+                (setf z (incf i)))
+          (progn (setf w (incf i)) 3))
     ;; Must check that only a, b, c have properties
     (values
      i x y z w
@@ -159,7 +159,7 @@
      (getf (car p) 'b)
      (getf (car p) 'c)
      (loop for ptr on (car p) by #'cddr count
-	  (not (member (car ptr) '(a b c))))))
+          (not (member (car ptr) '(a b c))))))
   4 1 2 3 4 1 2 3 0)
 
 (deftest incf-getf.1
@@ -186,10 +186,10 @@
      (eqlt (getf p 'b) 2)
      (eqlt (getf p 'c) 20)
      (eqlt
-	(loop
-	 for ptr on p by #'cddr count
-	 (not (member (car ptr) '(a b c))))
-	0)
+        (loop
+         for ptr on p by #'cddr count
+         (not (member (car ptr) '(a b c))))
+        0)
      t))
   t)
 

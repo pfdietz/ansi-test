@@ -7,9 +7,9 @@
 
 (deftest equal.1
   (loop for x in *symbols*
-	always (loop for y in *symbols*
-		     always (if (eq x y) (equal x y)
-			      (not (equal x y)))))
+        always (loop for y in *symbols*
+                     always (if (eq x y) (equal x y)
+                              (not (equal x y)))))
   t)
 
 (deftest equal.2
@@ -26,19 +26,19 @@
 
 (deftest equal.5
   (loop for c in *characters*
-	always (loop for d in *characters*
-		     always (if (eql c d) (equalt c d)
-			      (not (equalt c d)))))
+        always (loop for d in *characters*
+                     always (if (eql c d) (equalt c d)
+                              (not (equalt c d)))))
   t)
 
 (deftest equal.6
   (equalt (make-pathname :name (copy-seq "foo"))
-	  (make-pathname :name (copy-seq "foo")))
+          (make-pathname :name (copy-seq "foo")))
   t)
 
 (deftest equal.7
   (equalt (make-pathname :name (copy-seq "foo"))
-	  (make-pathname :name (copy-seq "bar")))
+          (make-pathname :name (copy-seq "bar")))
   nil)
 
 (deftest equal.8
@@ -64,7 +64,7 @@
 (deftest equal.13
   :notes (:nil-vectors-are-strings)
   (let ((x (make-array '(0) :element-type nil))
-	(y (make-array '(0) :element-type nil)))
+        (y (make-array '(0) :element-type nil)))
     (equalt x y))
   t)
 
@@ -77,32 +77,32 @@
 
 (deftest equal.15
   (equalt (make-array '(0) :element-type 'character)
-	  (make-array '(0) :element-type 'base-char))
+          (make-array '(0) :element-type 'base-char))
   t)
 
 (deftest equal.16
   (equalt "abc" (make-array '(3) :element-type 'base-char
-			    :initial-contents '(#\a #\b #\c)))
+                            :initial-contents '(#\a #\b #\c)))
   t)
 
 (deftest equal.17
   (let ((s (make-array '(10) :element-type 'character
-		       :initial-contents "0123456789"
-		       :fill-pointer 3)))
+                       :initial-contents "0123456789"
+                       :fill-pointer 3)))
     (values (equalt s "012") (equalt "012" s)))
   t t)
 
 (deftest equal.18
   (let ((b (make-array '(10) :element-type 'bit
-		       :initial-contents #*0110001110
-		       :fill-pointer 5)))
+                       :initial-contents #*0110001110
+                       :fill-pointer 5)))
     (values (equalt #*01100 b) (equalt #*01100 b)))
   t t)
 
 (deftest equal.19
   (let ((s (make-array '(10) :element-type 'base-char
-		       :initial-contents "0123456789"
-		       :fill-pointer 3)))
+                       :initial-contents "0123456789"
+                       :fill-pointer 3)))
     (values (equalt s "012") (equalt "012" s)))
   t t)
 

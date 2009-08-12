@@ -32,7 +32,7 @@
       (return-from done :bad))
      10
      (return-from done :good)))
-  :good)		     
+  :good)
 
 (defclass with-accessors-class-01 ()
   ((a :initarg :a :accessor wa-a)
@@ -53,7 +53,7 @@
      ((a wa-a) (b wa-b) (c wa-c))
      obj
      (values (setf a 'x) (setf b 'y) (setf c 'z)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   x y z (x y z))
 
 (deftest with-accessors.8
@@ -62,7 +62,7 @@
      ((a wa-a) (b wa-b) (c wa-c))
      obj
      (values (setq a 'x) (setq b 'y) (setq c 'z)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   x y z (x y z))
 
 (deftest with-accessors.9
@@ -71,7 +71,7 @@
      ((a wa-a) (b wa-b) (c wa-c))
      obj
      (values (incf a 4) (incf b 412) (incf c 75)
-	     (map-slot-value obj '(a b c)))))
+             (map-slot-value obj '(a b c)))))
   9 431 387 (9 431 387))
 
 (deftest with-accessors.10
@@ -100,8 +100,8 @@
 (deftest with-accessors.12
   (let ((obj (make-with-accessors-struct-02 :a 'x :b 'y :c 'z)))
     (with-accessors ((a wa-2-a) (b wa-2-b) (c wa-2-c))
-		    obj
-		    (values a b c)))
+                    obj
+                    (values a b c)))
   x y z)
 
 (deftest with-accessors.13
@@ -110,7 +110,7 @@
      ((a wa-2-a) (b wa-2-b) (c wa-2-c))
      obj
      (values (setf a 'x) (setf b 'y) (setf c 'z)
-	     (wa-2-a obj) (wa-2-b obj) (wa-2-c obj))))
+             (wa-2-a obj) (wa-2-b obj) (wa-2-c obj))))
   x y z x y z)
 
 ;;; Free declaration scope test
@@ -120,8 +120,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-accessors nil (return-from done x)
-			(declare (special x))))))
+        (with-accessors nil (return-from done x)
+                        (declare (special x))))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms
@@ -132,7 +132,7 @@
    ((%m (z) z))
    (let ((obj (make-with-accessors-struct-02 :a 'x :b 'y :c 'z)))
      (with-accessors ((a wa-2-a) (b wa-2-b) (c wa-2-c))
-		     (expand-in-current-env (%m obj))
-		     (values a b c))))
+                     (expand-in-current-env (%m obj))
+                     (values a b c))))
   x y z)
 

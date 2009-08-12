@@ -85,62 +85,62 @@
 
 (deftest loop.15.48
   (loop :for x :in '(1 2 3 4) :sum x :into foo :of-type fixnum
-	:finally (return foo))
+        :finally (return foo))
   10)
 
 (deftest loop.15.49
   (loop :for x :upfrom 1 :to 10
-	:if (evenp x) :sum x :into foo
-	:else :sum x :into bar
-	:end
-	:finally (return (values foo bar)))
+        :if (evenp x) :sum x :into foo
+        :else :sum x :into bar
+        :end
+        :finally (return (values foo bar)))
   30 25)
 
 (deftest loop.15.50
   (loop :for x :downfrom 10 :above 0
-	:when (evenp x) :sum x :into foo
-	:else :sum x :into bar
-	:end
-	:finally (return (values foo bar)))
+        :when (evenp x) :sum x :into foo
+        :else :sum x :into bar
+        :end
+        :finally (return (values foo bar)))
   30 25)
 
 (deftest loop.15.51
   (loop :for x :in '(a b nil c d nil)
-	:unless x :count t)
+        :unless x :count t)
   2)
 
 (deftest loop.15.52
   (loop :for x :in '(a b nil c d nil)
-	:unless x :collect x :into bar :and :count t :into foo
-	:end
-	finally (return (values bar foo)))
+        :unless x :collect x :into bar :and :count t :into foo
+        :end
+        finally (return (values bar foo)))
   (nil nil)
   2)
 
 (deftest loop.15.53
   (loop :for x :in '(nil nil a b nil c nil)
-	:collect x
-	:until x)
+        :collect x
+        :until x)
   (nil nil a))
 
 (deftest loop.15.54
   (loop :for x :in '(a b nil c nil)
-	:while x :collect x)
+        :while x :collect x)
   (a b))
 
 (deftest loop.15.55
   (loop :for x :in '(nil nil a b nil c nil)
-	:thereis x)
+        :thereis x)
   a)
 
 (deftest loop.15.56
   (loop :for x :in '(nil nil a b nil c nil)
-	:never x)
+        :never x)
   nil)
 
 (deftest loop.15.57
   (loop :for x :in '(a b c d e)
-	:always x)
+        :always x)
   t)
 
 (deftest loop.15.58
@@ -161,8 +161,8 @@
 
 (deftest loop.15.62
   (loop :for x = '(a b c) :then (cdr x)
-	:while x
-	:collect (car x))
+        :while x
+        :collect (car x))
   (a b c))
 
 (deftest loop.15.63
@@ -171,34 +171,34 @@
 
 (deftest loop.15.64
   (loop :for x :being :the :hash-keys :of (make-hash-table)
-	:count t)
+        :count t)
   0)
 
 (deftest loop.15.65
   (loop :for x :being :each :hash-key :in (make-hash-table)
-	:count t)
+        :count t)
   0)
 
 (deftest loop.15.66
   (loop :for x :being :each :hash-value :of (make-hash-table)
-	:count t)
+        :count t)
   0)
 
 (deftest loop.15.67
   (loop :for x :being :the :hash-values :in (make-hash-table)
-	:count t)
+        :count t)
   0)
 
 (deftest loop.15.68
   (loop :for x :being :the :hash-values :in (make-hash-table)
-	:using (:hash-key k)
-	:count t)
+        :using (:hash-key k)
+        :count t)
   0)
 
 (deftest loop.15.69
   (loop :for x :being :the :hash-keys :in (make-hash-table)
-	:using (:hash-value v)
-	:count t)
+        :using (:hash-value v)
+        :count t)
   0)
 
 (deftest loop.15.70

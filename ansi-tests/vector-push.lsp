@@ -7,12 +7,12 @@
 
 (deftest vector-push.1
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(a b c d e)))
-	(i 0) x y)
+                       :initial-contents '(a b c d e)))
+        (i 0) x y)
     (values
      (fill-pointer a)
      (vector-push (progn (setf x (incf i)) 'x)
-		  (progn (setf y (incf i)) a))
+                  (progn (setf y (incf i)) a))
      (fill-pointer a)
      a i x y))
   2 2 3 #(a b x) 2 1 2)
@@ -20,7 +20,7 @@
 
 (deftest vector-push.2
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(a b c d e))))
+                       :initial-contents '(a b c d e))))
     (values
      (fill-pointer a)
      (vector-push 'x a)
@@ -30,8 +30,8 @@
 
 (deftest vector-push.3
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents "abcde"
-		       :element-type 'base-char)))
+                       :initial-contents "abcde"
+                       :element-type 'base-char)))
     (values
      (fill-pointer a)
      (vector-push #\x a)
@@ -41,8 +41,8 @@
 
 (deftest vector-push.4
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents "abcde"
-		       :element-type 'base-char)))
+                       :initial-contents "abcde"
+                       :element-type 'base-char)))
     (values
      (fill-pointer a)
      (vector-push #\x a)
@@ -52,8 +52,8 @@
 
 (deftest vector-push.5
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents "abcde"
-		       :element-type 'character)))
+                       :initial-contents "abcde"
+                       :element-type 'character)))
     (values
      (fill-pointer a)
      (vector-push #\x a)
@@ -63,8 +63,8 @@
 
 (deftest vector-push.6
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents "abcde"
-		       :element-type 'character)))
+                       :initial-contents "abcde"
+                       :element-type 'character)))
     (values
      (fill-pointer a)
      (vector-push #\x a)
@@ -74,8 +74,8 @@
 
 (deftest vector-push.7
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(0 1 1 0 0)
-		       :element-type 'bit)))
+                       :initial-contents '(0 1 1 0 0)
+                       :element-type 'bit)))
     (values
      (fill-pointer a)
      (vector-push 0 a)
@@ -85,8 +85,8 @@
 
 (deftest vector-push.8
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(0 0 0 0 0)
-		       :element-type 'bit)))
+                       :initial-contents '(0 0 0 0 0)
+                       :element-type 'bit)))
     (values
      (fill-pointer a)
      (vector-push 1 a)
@@ -96,8 +96,8 @@
 
 (deftest vector-push.9
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(1 2 3 4 5)
-		       :element-type 'fixnum)))
+                       :initial-contents '(1 2 3 4 5)
+                       :element-type 'fixnum)))
     (values
      (fill-pointer a)
      (vector-push 0 a)
@@ -107,8 +107,8 @@
 
 (deftest vector-push.10
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(1 2 3 4 5)
-		       :element-type 'fixnum)))
+                       :initial-contents '(1 2 3 4 5)
+                       :element-type 'fixnum)))
     (values
      (fill-pointer a)
      (vector-push 0 a)
@@ -118,8 +118,8 @@
 
 (deftest vector-push.11
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(1 2 3 4 5)
-		       :element-type '(integer 0 (256)))))
+                       :initial-contents '(1 2 3 4 5)
+                       :element-type '(integer 0 (256)))))
     (values
      (fill-pointer a)
      (vector-push 0 a)
@@ -129,8 +129,8 @@
 
 (deftest vector-push.12
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(1 2 3 4 5)
-		       :element-type '(integer 0 (256)))))
+                       :initial-contents '(1 2 3 4 5)
+                       :element-type '(integer 0 (256)))))
     (values
      (fill-pointer a)
      (vector-push 0 a)
@@ -140,8 +140,8 @@
 
 (deftest vector-push.13
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0)
-		       :element-type 'short-float)))
+                       :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0)
+                       :element-type 'short-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0s0 a)
@@ -151,8 +151,8 @@
 
 (deftest vector-push.14
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0)
-		       :element-type 'short-float)))
+                       :initial-contents '(1.0s0 2.0s0 3.0s0 4.0s0 5.0s0)
+                       :element-type 'short-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0s0 a)
@@ -162,8 +162,8 @@
 
 (deftest vector-push.15
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0)
-		       :element-type 'single-float)))
+                       :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0)
+                       :element-type 'single-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0f0 a)
@@ -173,8 +173,8 @@
 
 (deftest vector-push.16
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0)
-		       :element-type 'single-float)))
+                       :initial-contents '(1.0f0 2.0f0 3.0f0 4.0f0 5.0f0)
+                       :element-type 'single-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0f0 a)
@@ -185,8 +185,8 @@
 
 (deftest vector-push.17
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0)
-		       :element-type 'double-float)))
+                       :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0)
+                       :element-type 'double-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0d0 a)
@@ -196,8 +196,8 @@
 
 (deftest vector-push.18
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0)
-		       :element-type 'double-float)))
+                       :initial-contents '(1.0d0 2.0d0 3.0d0 4.0d0 5.0d0)
+                       :element-type 'double-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0d0 a)
@@ -207,8 +207,8 @@
 
 (deftest vector-push.19
   (let ((a (make-array '(5) :fill-pointer 2
-		       :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0)
-		       :element-type 'long-float)))
+                       :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0)
+                       :element-type 'long-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0l0 a)
@@ -218,8 +218,8 @@
 
 (deftest vector-push.20
   (let ((a (make-array '(5) :fill-pointer 5
-		       :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0)
-		       :element-type 'long-float)))
+                       :initial-contents '(1.0l0 2.0l0 3.0l0 4.0l0 5.0l0)
+                       :element-type 'long-float)))
     (values
      (fill-pointer a)
      (vector-push 0.0l0 a)
@@ -235,9 +235,9 @@
   (declare (optimize (safety 3)))
   (handler-case
    (eval `(let ((a (copy-seq ,seq)))
-	    (declare (optimize (safety 3)))
-	    (or (notnot (array-has-fill-pointer-p a))
-		(vector-push ',val a))))
+            (declare (optimize (safety 3)))
+            (or (notnot (array-has-fill-pointer-p a))
+                (vector-push ',val a))))
    (error () t)))
 
 (deftest vector-push.error.1
@@ -266,44 +266,44 @@
 
 (deftest vector-push.error.7
   (vector-push-error-test (make-array '5 :element-type 'base-char
-				      :initial-element #\a)
-			  #\x)
+                                      :initial-element #\a)
+                          #\x)
   t)
 
 (deftest vector-push.error.8
   (vector-push-error-test (make-array '5 :element-type '(integer 0 (256))
-				      :initial-element 0)
-			  17)
+                                      :initial-element 0)
+                          17)
   t)
 
 (deftest vector-push.error.9
   (vector-push-error-test (make-array '5 :element-type 'float
-				      :initial-element 1.0)
-			  2.0)
+                                      :initial-element 1.0)
+                          2.0)
   t)
 
 (deftest vector-push.error.10
   (vector-push-error-test (make-array '5 :element-type 'short-float
-				      :initial-element 1.0s0)
-			  2.0s0)
+                                      :initial-element 1.0s0)
+                          2.0s0)
   t)
 
 (deftest vector-push.error.11
   (vector-push-error-test (make-array '5 :element-type 'long-float
-				      :initial-element 1.0l0)
-			  2.0l0)
+                                      :initial-element 1.0l0)
+                          2.0l0)
   t)
 
 (deftest vector-push.error.12
   (vector-push-error-test (make-array '5 :element-type 'single-float
-				      :initial-element 1.0f0)
-			  2.0f0)
+                                      :initial-element 1.0f0)
+                          2.0f0)
   t)
 
 (deftest vector-push.error.13
   (vector-push-error-test (make-array '5 :element-type 'double-float
-				      :initial-element 1.0d0)
-			  2.0d0)
+                                      :initial-element 1.0d0)
+                          2.0d0)
   t)
 
 (deftest vector-push.error.14

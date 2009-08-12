@@ -7,12 +7,12 @@
 
 (deftest ensure-directories-exist.1
   (let* ((pn (make-pathname :name "ensure-directories-exist.lsp"
-			    :defaults *default-pathname-defaults*))
-	 (results nil)
-	 (verbosity
-	  (with-output-to-string
-	    (*standard-output*)
-	    (setq results (multiple-value-list (ensure-directories-exist pn))))))
+                            :defaults *default-pathname-defaults*))
+         (results nil)
+         (verbosity
+          (with-output-to-string
+            (*standard-output*)
+            (setq results (multiple-value-list (ensure-directories-exist pn))))))
     (values
      (length results)
      (equalt (truename pn) (truename (first results)))
@@ -42,13 +42,13 @@
 
 (deftest ensure-directories-exist.4
   (let* ((pn (make-pathname :name "ensure-directories-exist.lsp"
-			    :defaults *default-pathname-defaults*))
-	 (results nil)
-	 (verbosity
-	  (with-output-to-string
-	    (*standard-output*)
-	    (setq results (multiple-value-list
-			   (ensure-directories-exist pn :verbose nil))))))
+                            :defaults *default-pathname-defaults*))
+         (results nil)
+         (verbosity
+          (with-output-to-string
+            (*standard-output*)
+            (setq results (multiple-value-list
+                           (ensure-directories-exist pn :verbose nil))))))
     (values
      (length results)
      (equalt (truename pn) (truename (first results)))
@@ -58,13 +58,13 @@
 
 (deftest ensure-directories-exist.5
   (let* ((pn (make-pathname :name "ensure-directories-exist.lsp"
-			    :defaults *default-pathname-defaults*))
-	 (results nil)
-	 (verbosity
-	  (with-output-to-string
-	    (*standard-output*)
-	    (setq results (multiple-value-list
-			   (ensure-directories-exist pn :verbose t))))))
+                            :defaults *default-pathname-defaults*))
+         (results nil)
+         (verbosity
+          (with-output-to-string
+            (*standard-output*)
+            (setq results (multiple-value-list
+                           (ensure-directories-exist pn :verbose t))))))
     (values
      (length results)
      (equalt (truename pn) (truename (first results)))
@@ -74,14 +74,14 @@
 
 (deftest ensure-directories-exist.6
   (let* ((pn (make-pathname :name "ensure-directories-exist.lsp"
-			    :defaults *default-pathname-defaults*))
-	 (results nil)
-	 (verbosity
-	  (with-output-to-string
-	    (*standard-output*)
-	    (setq results (multiple-value-list
-			   (ensure-directories-exist
-			    pn :allow-other-keys nil))))))
+                            :defaults *default-pathname-defaults*))
+         (results nil)
+         (verbosity
+          (with-output-to-string
+            (*standard-output*)
+            (setq results (multiple-value-list
+                           (ensure-directories-exist
+                            pn :allow-other-keys nil))))))
     (values
      (length results)
      (equalt (truename pn) (truename (first results)))
@@ -91,14 +91,14 @@
 
 (deftest ensure-directories-exist.7
   (let* ((pn (make-pathname :name "ensure-directories-exist.lsp"
-			    :defaults *default-pathname-defaults*))
-	 (results nil)
-	 (verbosity
-	  (with-output-to-string
-	    (*standard-output*)
-	    (setq results (multiple-value-list
-			   (ensure-directories-exist
-			    pn :allow-other-keys t :nonsense t))))))
+                            :defaults *default-pathname-defaults*))
+         (results nil)
+         (verbosity
+          (with-output-to-string
+            (*standard-output*)
+            (setq results (multiple-value-list
+                           (ensure-directories-exist
+                            pn :allow-other-keys t :nonsense t))))))
     (values
      (length results)
      (equalt (truename pn) (truename (first results)))
@@ -112,23 +112,23 @@
 ;; test is run
 (deftest ensure-directories-exist.8
   (let* ((subdir (make-pathname :directory '(:relative "scratch")
-				:defaults *default-pathname-defaults*))
-	 (pn (make-pathname :name "foo" :type "txt"
-			    :defaults subdir)))
+                                :defaults *default-pathname-defaults*))
+         (pn (make-pathname :name "foo" :type "txt"
+                            :defaults subdir)))
     (assert (not (probe-file pn)) ()
-	    "Delete subdirectory scratch and its contents!")
+            "Delete subdirectory scratch and its contents!")
     (let* ((results nil)
-	   (verbosity
-	    (with-output-to-string
-	      (*standard-output*)
-	      (setq results (multiple-value-list (ensure-directories-exist pn)))))
-	   (result-pn (first results))
-	   (created (second results)))
+           (verbosity
+            (with-output-to-string
+              (*standard-output*)
+              (setq results (multiple-value-list (ensure-directories-exist pn)))))
+           (result-pn (first results))
+           (created (second results)))
       ;; Create the file and write to it
       (with-open-file (*standard-output*
-		       pn :direction :output :if-exists :error
-		       :if-does-not-exist :create)
-		      (print nil))		      
+                       pn :direction :output :if-exists :error
+                       :if-does-not-exist :create)
+                      (print nil))
       (values
        (length results)
        (notnot created)
@@ -156,7 +156,7 @@
   (signals-error-always
    (ensure-directories-exist
     (make-pathname :directory '(:relative :wild)
-		   :defaults *default-pathname-defaults*))
+                   :defaults *default-pathname-defaults*))
    file-error)
   t t)
 

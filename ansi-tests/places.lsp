@@ -9,22 +9,22 @@
 
 (deftest setf.order.1
   (let ((x (vector nil nil nil nil))
-	(i 0))
+        (i 0))
     (setf (aref x (incf i)) (incf i))
     (values x i))
   #(nil 2 nil nil) 2)
 
 (deftest setf.order.2
   (let ((x (vector nil nil nil nil))
-	(i 0))
+        (i 0))
     (setf (aref x (incf i)) (incf i)
-	  (aref x (incf i)) (incf i 10))
+          (aref x (incf i)) (incf i 10))
     (values x i))
   #(nil 2 nil 13) 13)
 
 (deftest incf.order.1
   (let ((x (copy-seq #(0 0 0 0 0)))
-	(i 1))
+        (i 1))
     (values
      (incf (aref x (incf i)) (incf i))
      x i))
@@ -32,13 +32,13 @@
 
 (deftest decf.order.1
   (let ((x (copy-seq #(0 0 0 0 0)))
-	(i 1))
+        (i 1))
     (values
      (decf (aref x (incf i)) (incf i))
      x i))
   -3 #(0 0 -3 0 0) 3)
 
-   
+
 ;;; Section 5.1.2.1
 (deftest setf-var
   (let ((x nil))
@@ -79,13 +79,13 @@
 
 (deftest setf-values.5
   (let ((a (vector nil nil))
-	(i 0)
-	x y z)
+        (i 0)
+        x y z)
     (setf (values (aref a (progn (setf x (incf i)) 0))
-		  (aref a (progn (setf y (incf i)) 1)))
-	  (progn
-	    (setf z (incf i))
-	    (values 'foo 'bar)))
+                  (aref a (progn (setf y (incf i)) 1)))
+          (progn
+            (setf z (incf i))
+            (values 'foo 'bar)))
     (values a i x y z))
   #(foo bar) 3 1 2 3)
 
@@ -141,7 +141,7 @@
 (deftest setf-expander.1
   (let ((x (list 1)))
     (values (setf (accessor-5-1-2-6 x) 2)
-	    (1+ (car x))))
+            (1+ (car x))))
   2 3)
 
 ;;; Section 5.1.2.7
@@ -150,7 +150,7 @@
 (deftest setf-macro.1
   (let ((x (list 1)))
     (values (setf (accessor-5-1-2-7 x) 2)
-	    (1+ (car x))))
+            (1+ (car x))))
   2 3)
 
 (defun accessor-5-1-2-7a-update-fn (x y)
@@ -164,11 +164,11 @@
 ;; Test that the defsetf override the macro expansion
 (deftest setf-macro.2
   (let ((x (list 1))
-	(*x* nil))
+        (*x* nil))
      (declare (special *x*))
     (values (setf (accessor-5-1-2-7a x) 2)
-	    *x*
-	    (1+ (car x))))
+            *x*
+            (1+ (car x))))
   2 boo 3)
 
 (defmacro accessor-5-1-2-7b (x) `(accessor-5-1-2-7 ,x))
@@ -176,7 +176,7 @@
 (deftest setf-macro.3
   (let ((x (list 1)))
     (values (setf (accessor-5-1-2-7b x) 2)
-	    (1+ (car x))))
+            (1+ (car x))))
   2 3)
 
 ;; Macroexpansion from a macrolet
@@ -184,7 +184,7 @@
   (macrolet ((%m (y) `(car ,y)))
     (let ((x (list 1)))
       (values (setf (%m x) 2)
-	      (1+ (car x)))))
+              (1+ (car x)))))
   2 3)
 
 ;;; section 5.1.2.8 -- symbol macros
@@ -247,10 +247,10 @@
    ((%m (z) z))
    (let ((x nil))
      (values (setq x (expand-in-current-env (%m :good)))
-	     x)))
+             x)))
   :good :good)
 
-;;; Tests of SETF    
+;;; Tests of SETF
 
 (deftest setf.1
   (setf)

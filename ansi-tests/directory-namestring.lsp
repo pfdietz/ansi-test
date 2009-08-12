@@ -7,12 +7,12 @@
 
 (deftest directory-namestring.1
   (let* ((vals (multiple-value-list
-		(directory-namestring "directory-namestring.lsp")))
-	 (s (first vals)))
+                (directory-namestring "directory-namestring.lsp")))
+         (s (first vals)))
     (if (and (null (cdr vals))
-	     (stringp s)
-	     (equal (directory-namestring s) s))
-	:good
+             (stringp s)
+             (equal (directory-namestring s) s))
+        :good
       vals))
   :good)
 
@@ -32,10 +32,10 @@
 #-lispworks
 (deftest directory-namestring.3
   (let* ((name "directory-namestring.lsp")
-	 (pn (merge-pathnames (pathname name)))
-	 (name2 (with-open-file (s pn :direction :input)
-				(directory-namestring s)))
-	 (name3 (directory-namestring pn)))
+         (pn (merge-pathnames (pathname name)))
+         (name2 (with-open-file (s pn :direction :input)
+                                (directory-namestring s)))
+         (name3 (directory-namestring pn)))
     (or (equalt name2 name3) (list name2 name3)))
   t)
 

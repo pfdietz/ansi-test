@@ -8,7 +8,7 @@
 (deftest simple-bit-vector-p.2
   (notnot-mv (simple-bit-vector-p #*))
   t)
-  
+
 (deftest simple-bit-vector-p.3
   (notnot-mv (simple-bit-vector-p #*00101))
   t)
@@ -43,7 +43,7 @@
 
 (deftest simple-bit-vector-p.11
   (simple-bit-vector-p (make-array '(2 2) :element-type 'bit
-				   :initial-element 0))
+                                   :initial-element 0))
   nil)
 
 (deftest simple-bit-vector-p.12

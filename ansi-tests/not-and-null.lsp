@@ -19,8 +19,8 @@
 
 (deftest null.4
     (not (some #'null
-	       `(1 a 1.2 "a" #\w (a) ,*terminal-io*
-		   #'car (make-array '(10)))))
+               `(1 a 1.2 "a" #\w (a) ,*terminal-io*
+                   #'car (make-array '(10)))))
   t)
 
 (deftest null.error.1
@@ -45,8 +45,8 @@
 
 (deftest not.4
     (not (some #'not
-	       `(1 a 1.2 "a" #\w (a) ,*terminal-io*
-		   #'car (make-array '(10)))))
+               `(1 a 1.2 "a" #\w (a) ,*terminal-io*
+                   #'car (make-array '(10)))))
   t)
 
 

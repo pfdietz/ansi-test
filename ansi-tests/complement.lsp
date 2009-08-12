@@ -16,15 +16,15 @@
 (deftest complement.3
   (check-predicate
    #'(lambda (x) (eql (funcall (cl::complement #'not) x)
-		      (not (not x)))))
+                      (not (not x)))))
   nil)
 
 (deftest complement.4
   (let ((x '(#\b)))
     (loop for i from 2 to (min 256 (1- call-arguments-limit))
-	  always (progn
-		   (push #\a x)
-		   (apply (complement #'char=) x))))
+          always (progn
+                   (push #\a x)
+                   (apply (complement #'char=) x))))
   t)
 
 (deftest complement.5
@@ -61,15 +61,15 @@
        (%f :y nil) (%f :y t :y nil)
        (%f :x nil :y nil) (%f :x t :y nil)
        (%f :y t :x nil) (%f :x t :y t))
-      
+
        (list
-	(funcall cf) (funcall cf :x nil) (funcall cf :x t)
-	(funcall cf :y nil) (funcall cf :y t)
-	(funcall cf :x nil :y nil) (funcall cf :x t :y nil)
-	(funcall cf :y t :x nil) (funcall cf :x t :y t :x nil))
+        (funcall cf) (funcall cf :x nil) (funcall cf :x t)
+        (funcall cf :y nil) (funcall cf :y t)
+        (funcall cf :x nil :y nil) (funcall cf :x t :y nil)
+        (funcall cf :y t :x nil) (funcall cf :x t :y t :x nil))
        (list
-	(funcall cf :x nil :y t :foo nil :allow-other-keys t)
-	(funcall cf :x nil :y t :allow-other-keys nil)))))
+        (funcall cf :x nil :y t :foo nil :allow-other-keys t)
+        (funcall cf :x nil :y t :allow-other-keys nil)))))
   (nil nil t nil t nil t t nil)
   (t t nil t nil t nil nil t)
   (nil nil))
@@ -81,19 +81,19 @@
     (eval `(defmethod ,sym ((x t) (y t)) nil))
     (let ((cf (complement (symbol-function sym))))
       (values (funcall cf 'a 'b)
-	      (funcall cf 0 0)
-	      (funcall cf 0 1)
-	      (funcall cf 1 0)
-	      (funcall cf 1 1))))
+              (funcall cf 0 0)
+              (funcall cf 0 1)
+              (funcall cf 1 0)
+              (funcall cf 1 1))))
   t nil t t nil)
 
 (deftest complement.10
   (let ((cf (complement (compile nil '(lambda (x y) (evenp (+ x y)))))))
     (values (funcall cf 0 0)
-	    (funcall cf 0 1)
-	    (funcall cf 1 0)
-	    (funcall cf 1 1)))
-  nil t t nil)    
+            (funcall cf 0 1)
+            (funcall cf 1 0)
+            (funcall cf 1 1)))
+  nil t t nil)
 
 (deftest complement.order.1
   (let ((i 0))
@@ -116,12 +116,12 @@
 
 (deftest complement.error.3
   (signals-error (funcall (complement #'identity))
-		 program-error)
+                 program-error)
   t)
 
 (deftest complement.error.4
   (signals-error (funcall (complement #'identity) t t)
-		 program-error)
+                 program-error)
   t)
 
 (deftest complement.error.5
@@ -130,10 +130,10 @@
 
 (deftest complement.error.6
   (signals-error (funcall (complement #'(lambda (&key) t)) :allow-other-keys nil
-			  :allow-other-keys t :foo t) program-error)
+                          :allow-other-keys t :foo t) program-error)
   t)
 
 (deftest complement.error.7
   (signals-error (funcall (complement #'(lambda (x &rest y) (and x (evenp (length y))))))
-		 program-error)
+                 program-error)
   t)

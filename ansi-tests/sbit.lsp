@@ -12,9 +12,9 @@
 (deftest sbit.2
   (let ((a #*00000000))
     (loop for i from 0 below (length a)
-	  collect (let ((b (copy-seq a)))
-		    (setf (sbit b i) 1)
-		    b)))
+          collect (let ((b (copy-seq a)))
+                    (setf (sbit b i) 1)
+                    b)))
   (#*10000000
    #*01000000
    #*00100000
@@ -27,9 +27,9 @@
 (deftest sbit.3
   (let ((a #*11111111))
     (loop for i from 0 below (length a)
-	  collect (let ((b (copy-seq a)))
-		    (setf (sbit b i) 0)
-		    b)))
+          collect (let ((b (copy-seq a)))
+                    (setf (sbit b i) 0)
+                    b)))
   (#*01111111
    #*10111111
    #*11011111
@@ -73,17 +73,17 @@
   (let ((i 0) a b)
     (values
      (sbit (progn (setf a (incf i)) #*001001)
-	   (progn (setf b (incf i)) 1))
+           (progn (setf b (incf i)) 1))
      i a b))
   0 2 1 2)
 
 (deftest sbit.order.2
   (let ((i 0) a b c
-	(v (copy-seq #*001001)))
+        (v (copy-seq #*001001)))
     (values
      (setf (sbit (progn (setf a (incf i)) v)
-		 (progn (setf b (incf i)) 1))
-	   (progn (setf c (incf i)) 1))
+                 (progn (setf b (incf i)) 1))
+           (progn (setf c (incf i)) 1))
      v i a b c))
   1 #*011001 3 1 2 3)
 
@@ -91,5 +91,5 @@
   (signals-error (sbit) program-error)
   t)
 
-  
-  
+
+

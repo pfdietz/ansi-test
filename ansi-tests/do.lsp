@@ -20,14 +20,14 @@
 (deftest do.3
   (let ((x nil))
     (do ((i 0 (1+ i)))
-	((>= i 10) x)
+        ((>= i 10) x)
       (push i x)))
   (9 8 7 6 5 4 3 2 1 0))
 
 (deftest do.4
   (let ((x nil))
     (do ((i 0 (1+ i)))
-	((>= i 10) x)
+        ((>= i 10) x)
       (declare (fixnum i))
       (push i x)))
   (9 8 7 6 5 4 3 2 1 0))
@@ -49,7 +49,7 @@
 (deftest do.7
   (let ((x nil))
     (do ((i 0 (1+ i)))
-	((>= i 10) x)
+        ((>= i 10) x)
       (go around)
       small
       (push 'a x)
@@ -74,7 +74,7 @@
 (deftest do.9
   (let ((i 0))
     (do ()
-	((>= i 10) i)
+        ((>= i 10) i)
       (incf i)))
   10)
 
@@ -104,21 +104,21 @@
 (deftest do.14
   (let ((x 0))
     (flet ((%f () (locally (declare (special i))
-			   (incf x i))))
+                           (incf x i))))
       (do ((i 0 (1+ i)))
-	  ((>= i 10) x)
-	(declare (special i))
-	(%f))))
+          ((>= i 10) x)
+        (declare (special i))
+        (%f))))
   45)
 
 ;;; Confirm that the variables in succesive iterations are
 ;;; identical
 (deftest do.15
   (mapcar #'funcall
-	  (let ((x nil))
-	    (do ((i 0 (1+ i)))
-		((= i 5) x)
-	      (push #'(lambda () i) x))))
+          (let ((x nil))
+            (do ((i 0 (1+ i)))
+                ((= i 5) x)
+              (push #'(lambda () i) x))))
   (5 5 5 5 5))
 
 ;;; Scope of free declarations
@@ -128,9 +128,9 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(do ((i (return-from done x) 0))
-	    (t nil)
-	  (declare (special x))))))
+        (do ((i (return-from done x) 0))
+            (t nil)
+          (declare (special x))))))
   :good)
 
 (deftest do.17
@@ -138,9 +138,9 @@
     (let ((x :good))
       (declare (special x))
       (let ((x :bad))
-	(do ((i 0 (return-from done x)))
-	    (nil nil)
-	  (declare (special x))))))
+        (do ((i 0 (return-from done x)))
+            (nil nil)
+          (declare (special x))))))
   :good)
 
 (deftest do.18
@@ -148,9 +148,9 @@
     (let ((x :good))
       (declare (special x))
       (let ((x :bad))
-	(do ((i 0 0))
-	    ((return-from done x) nil)
-	  (declare (special x))))))
+        (do ((i 0 0))
+            ((return-from done x) nil)
+          (declare (special x))))))
   :good)
 
 (deftest do.19
@@ -158,7 +158,7 @@
     (declare (special x))
     (let ((x :bad))
       (do () (t x)
-	(declare (special x)))))
+        (declare (special x)))))
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms
@@ -169,8 +169,8 @@
     (macrolet
      ((%m (z) z))
      (do ((x (expand-in-current-env (%m 0)) (+ x 2)))
-	 ((> x 10) result)
-	 (push x result))))
+         ((> x 10) result)
+         (push x result))))
   (10 8 6 4 2 0))
 
 (deftest do.21
@@ -178,8 +178,8 @@
     (macrolet
      ((%m (z) z))
      (do ((x 0 (expand-in-current-env (%m (+ x 2)))))
-	 ((> x 10) result)
-	 (push x result))))
+         ((> x 10) result)
+         (push x result))))
   (10 8 6 4 2 0))
 
 (deftest do.22
@@ -187,8 +187,8 @@
     (macrolet
      ((%m (z) z))
      (do ((x 0 (+ x 2)))
-	 ((expand-in-current-env (%m (> x 10))) result)
-	 (push x result))))
+         ((expand-in-current-env (%m (> x 10))) result)
+         (push x result))))
   (10 8 6 4 2 0))
 
 (deftest do.23
@@ -196,8 +196,8 @@
     (macrolet
      ((%m (z) z))
      (do ((x 0 (+ x 2)))
-	 ((> x 10) (expand-in-current-env (%m result)))
-	 (push x result))))
+         ((> x 10) (expand-in-current-env (%m result)))
+         (push x result))))
   (10 8 6 4 2 0))
 
 (def-macro-test do.error.1

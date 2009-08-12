@@ -73,10 +73,10 @@ A
 (def-ppblock-test format._.8
   (progn
     (pprint-logical-block (*standard-output* nil)
-			  (format t "A ~_A ~_A ~_A ~_"))
+                          (format t "A ~_A ~_A ~_A ~_"))
     (format t "~_")
     (pprint-logical-block (*standard-output* nil)
-			  (format t "A ~_A ~_A ~_A ~_")))
+                          (format t "A ~_A ~_A ~_A ~_")))
   "A A A A
 A A A A "
   :margin 10)
@@ -86,20 +86,20 @@ A A A A "
     (s)
     (with-standard-io-syntax
      (let ((*print-readably* nil)
-	   (*print-escape* nil)
-	   (*print-pretty* t)
-	   (*print-right-margin* 4)
-	   (*print-miser-width* nil))
+           (*print-escape* nil)
+           (*print-pretty* t)
+           (*print-right-margin* 4)
+           (*print-miser-width* nil))
        (format s "A ~_A ~_A ~_A ~_A ~_"))))
   "A A A A A ")
 
 (deftest formatter._.9
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-pretty* t)
-	 (*print-right-margin* 4)
-	 (*print-miser-width* nil))
+         (*print-escape* nil)
+         (*print-pretty* t)
+         (*print-right-margin* 4)
+         (*print-miser-width* nil))
      (formatter-call-to-string
       (formatter "A ~_A ~_A ~_A ~_A ~_"))))
   "A A A A A ")
@@ -189,20 +189,20 @@ A A A A "
     (s)
     (with-standard-io-syntax
      (let ((*print-readably* nil)
-	   (*print-escape* nil)
-	   (*print-pretty* t)
-	   (*print-right-margin* 4)
-	   (*print-miser-width* 4))
+           (*print-escape* nil)
+           (*print-pretty* t)
+           (*print-right-margin* 4)
+           (*print-miser-width* 4))
        (format s "A ~@_A ~@_A ~@_A ~@_A ~@_"))))
   "A A A A A ")
 
 (deftest formatter.@_.10
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-pretty* t)
-	 (*print-right-margin* 4)
-	 (*print-miser-width* 4))
+         (*print-escape* nil)
+         (*print-pretty* t)
+         (*print-right-margin* 4)
+         (*print-miser-width* 4))
      (formatter-call-to-string
       (formatter "A ~@_A ~@_A ~@_A ~@_A ~@_"))))
   "A A A A A ")
@@ -256,11 +256,11 @@ A
 
 (def-ppblock-test format.\:_.6
   (format t "~W~W~:_~W~W~:_~W~W~:_~W~W~:_~W~W~:_"
-	  '(A B) #\Space
-	  '(A B) #\Space
-	  '(A B) #\Space
-	  '(A B) #\Space
-	  '(A B) #\Space)
+          '(A B) #\Space
+          '(A B) #\Space
+          '(A B) #\Space
+          '(A B) #\Space
+          '(A B) #\Space)
   "(A B) (A B)
 (A B) (A B)
 (A B) "
@@ -271,20 +271,20 @@ A
     (s)
     (with-standard-io-syntax
      (let ((*print-readably* nil)
-	   (*print-escape* nil)
-	   (*print-right-margin* 4)
-	   (*print-pretty* t)
-	   (*print-miser-width* nil))
+           (*print-escape* nil)
+           (*print-right-margin* 4)
+           (*print-pretty* t)
+           (*print-miser-width* nil))
        (format s "A ~:_A ~:_A ~:_A ~:_A ~:_"))))
   "A A A A A ")
 
 (deftest formatter.\:_.7
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-right-margin* 4)
-	 (*print-pretty* t)
-	 (*print-miser-width* nil))
+         (*print-escape* nil)
+         (*print-right-margin* 4)
+         (*print-pretty* t)
+         (*print-miser-width* nil))
      (formatter-call-to-string
       (formatter "A ~:_A ~:_A ~:_A ~:_A ~:_"))))
   "A A A A A ")
@@ -324,19 +324,19 @@ A "
     (s)
     (with-standard-io-syntax
      (let ((*print-readably* nil)
-	   (*print-escape* nil)
-	   (*print-pretty* t)
-	   (*print-right-margin* 4)
-	   (*print-miser-width* nil))
+           (*print-escape* nil)
+           (*print-pretty* t)
+           (*print-right-margin* 4)
+           (*print-miser-width* nil))
        (format s "A ~:@_A ~:@_A ~:@_A ~:@_A ~:@_"))))
   "A A A A A ")
 
 (deftest formatter.\:@_.5
   (with-standard-io-syntax
    (let ((*print-readably* nil)
-	 (*print-escape* nil)
-	 (*print-pretty* t)
-	 (*print-right-margin* 4)
-	 (*print-miser-width* nil))
+         (*print-escape* nil)
+         (*print-pretty* t)
+         (*print-right-margin* 4)
+         (*print-miser-width* nil))
      (formatter-call-to-string (formatter "A ~:@_A ~:@_A ~:@_A ~:@_A ~:@_"))))
   "A A A A A ")

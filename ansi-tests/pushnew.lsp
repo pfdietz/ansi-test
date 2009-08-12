@@ -18,7 +18,7 @@
 
 (deftest pushnew.2
   (let* ((x (copy-tree '(b c d a k f q)))
-	 (y (pushnew 'a x)))
+         (y (pushnew 'a x)))
     (and
      (eqt x y)
      x))
@@ -26,7 +26,7 @@
 
 (deftest pushnew.3
   (let* ((x (copy-tree '(1 2 3 4 5 6 7 8)))
-	 (y (pushnew 7 x)))
+         (y (pushnew 7 x)))
     (and
      (eqt x y)
      x))
@@ -34,16 +34,16 @@
 
 (deftest pushnew.4
   (let* ((x (copy-tree '((a b) 1 "and" c d e)))
-	 (y (pushnew (copy-tree '(c d)) x
-		     :test 'equal)))
+         (y (pushnew (copy-tree '(c d)) x
+                     :test 'equal)))
     (and (eqt x y)
-	 x))
+         x))
   ((c d) (a b) 1 "and" c d e))
 
 (deftest pushnew.5
   (let* ((x (copy-tree '((a b) 1 "and" c d e)))
-	 (y (pushnew (copy-tree '(a b)) x
-		     :test 'equal)))
+         (y (pushnew (copy-tree '(a b)) x
+                     :test 'equal)))
     (and
      (eqt x y)
      x))
@@ -51,20 +51,20 @@
 
 (deftest pushnew.6
   (let* ((x (copy-tree '((a b) (c e) (d f) (g h))))
-	 (y (pushnew (copy-tree '(d i)) x :key #'car))
-	 (z (pushnew (copy-tree '(z 10)) x :key #'car)))
+         (y (pushnew (copy-tree '(d i)) x :key #'car))
+         (z (pushnew (copy-tree '(z 10)) x :key #'car)))
     (and (eqt y (cdr z))
-	 (eqt z x)
-	 x))
+         (eqt z x)
+         x))
   ((z 10) (a b) (c e) (d f) (g h)))
 
 (deftest pushnew.7
   (let* ((x (copy-tree '(("abc" 1) ("def" 2) ("ghi" 3))))
-	 (y (pushnew (copy-tree '("def" 4)) x
-		     :key #'car :test #'string=))
-	 (z (pushnew (copy-tree '("xyz" 10))
-		     x
-		     :key #'car :test #'string=)))
+         (y (pushnew (copy-tree '("def" 4)) x
+                     :key #'car :test #'string=))
+         (z (pushnew (copy-tree '("xyz" 10))
+                     x
+                     :key #'car :test #'string=)))
     (and
      (eqt y (cdr x))
      (eqt x z)
@@ -73,10 +73,10 @@
 
 (deftest pushnew.8
   (let* ((x (copy-tree '(("abc" 1) ("def" 2) ("ghi" 3))))
-	 (y (pushnew (copy-tree '("def" 4)) x
-		     :key #'car :test-not (complement #'string=)))
-	 (z (pushnew (copy-tree '("xyz" 10)) x
-		     :key #'car :test-not (complement #'string=))))
+         (y (pushnew (copy-tree '("def" 4)) x
+                     :key #'car :test-not (complement #'string=)))
+         (z (pushnew (copy-tree '("xyz" 10)) x
+                     :key #'car :test-not (complement #'string=))))
     (and
      (eqt y (cdr x))
      (eqt x z)
@@ -85,10 +85,10 @@
 
 (deftest pushnew.9
   (let* ((x (copy-tree '(("abc" 1) ("def" 2) ("ghi" 3))))
-	 (y (pushnew (copy-tree '("def" 4)) x
-		     :key 'car :test-not (complement #'string=)))
-	 (z (pushnew (copy-tree '("xyz" 10)) x
-		     :key 'car :test-not (complement #'string=))))
+         (y (pushnew (copy-tree '("def" 4)) x
+                     :key 'car :test-not (complement #'string=)))
+         (z (pushnew (copy-tree '("xyz" 10)) x
+                     :key 'car :test-not (complement #'string=))))
     (and
      (eqt y (cdr x))
      (eqt x z)
@@ -98,15 +98,15 @@
 ;; Check that a NIL :key argument is the same as no key argument at all
 (deftest pushnew.10
   (let* ((x (list 'a 'b 'c 'd))
-	 (result (pushnew 'z x :key nil)))
+         (result (pushnew 'z x :key nil)))
     result)
   (z a b c d))
 
 ;; Check that a NIL :key argument is the same as no key argument at all
 (deftest pushnew.11
   (let* ((x (copy-tree '((a b) 1 "and" c d e)))
-	 (y (pushnew (copy-tree '(a b)) x
-		     :test 'equal :key nil)))
+         (y (pushnew (copy-tree '(a b)) x
+                     :test 'equal :key nil)))
     (and
      (eqt x y)
      x))
@@ -116,9 +116,9 @@
   (let ((i 0) x y z (d '(b c)))
     (values
      (pushnew (progn (setf x (incf i)) 'a)
-	      d
-	      :key (progn (setf y (incf i)) #'identity)
-	      :test (progn (setf z (incf i)) #'eql))
+              d
+              :key (progn (setf y (incf i)) #'identity)
+              :test (progn (setf z (incf i)) #'eql))
      d i x y z))
   (a b c) (a b c)
   3 1 2 3)
@@ -127,9 +127,9 @@
   (let ((i 0) x y z (d '(b c)))
     (values
      (pushnew (progn (setf x (incf i)) 'a)
-	      d
-	      :key (progn (setf y (incf i)) #'identity)
-	      :test-not (progn (setf z (incf i)) (complement #'eql)))
+              d
+              :key (progn (setf y (incf i)) #'identity)
+              :test-not (progn (setf z (incf i)) (complement #'eql)))
      d i x y z))
   (a b c) (a b c)
   3 1 2 3)
@@ -138,9 +138,9 @@
   (let ((i 0) x y z (d '(b c)))
     (values
      (pushnew (progn (setf x (incf i)) 'a)
-	      d
-	      :test (progn (setf z (incf i)) #'eql)
-	      :key (progn (setf y (incf i)) #'identity))
+              d
+              :test (progn (setf z (incf i)) #'eql)
+              :key (progn (setf y (incf i)) #'identity))
      d i x y z))
   (a b c) (a b c)
   3 1 3 2)
@@ -149,9 +149,9 @@
   (let ((i 0) x y z (d '(b c)))
     (values
      (pushnew (progn (setf x (incf i)) 'a)
-	      d
-	      :test-not (progn (setf z (incf i)) (complement #'eql))
-	      :key (progn (setf y (incf i)) #'identity))
+              d
+              :test-not (progn (setf z (incf i)) (complement #'eql))
+              :key (progn (setf y (incf i)) #'identity))
      d i x y z))
   (a b c) (a b c)
   3 1 3 2)
@@ -237,15 +237,15 @@
 
 (defharmless pushnew.test-and-test-not.1
   (let ((x '(b c))) (pushnew 'a x :test #'eql :test-not #'eql)))
-  
+
 (defharmless pushnew.test-and-test-not.2
   (let ((x '(b c))) (pushnew 'a x :test-not #'eql :test #'eql)))
-  
+
 
 (deftest pushnew.order.1
   (let ((x (vector nil nil nil nil))
-	(y (vector 'a 'b 'c 'd))
-	(i 1))
+        (y (vector 'a 'b 'c 'd))
+        (i 1))
     (pushnew (aref y (incf i)) (aref x (incf i)))
     (values x y i))
   #(nil nil nil (c))
@@ -254,10 +254,10 @@
 
 (deftest pushnew.order.2
   (let ((x (vector nil nil nil nil nil))
-	(y (vector 'a 'b 'c 'd 'e))
-	(i 1))
+        (y (vector 'a 'b 'c 'd 'e))
+        (i 1))
     (pushnew (aref y (incf i)) (aref x (incf i))
-	     :test (progn (incf i) #'eql))
+             :test (progn (incf i) #'eql))
     (values x y i))
   #(nil nil nil (c) nil)
   #(a b c d e)

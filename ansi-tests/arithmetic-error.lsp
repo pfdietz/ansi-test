@@ -6,8 +6,8 @@
 
 (deftest arithmethic-error.1
   (let ((a (make-condition 'arithmetic-error
-			   :operation '/
-			   :operands '(0 0))))
+                           :operation '/
+                           :operands '(0 0))))
     (values
      (notnot (typep a 'arithmetic-error))
      (notnot (typep a (find-class 'arithmetic-error)))
@@ -17,8 +17,8 @@
 
 (deftest arithmethic-error.2
   (let ((a (make-condition 'arithmetic-error
-			   :operation #'/
-			   :operands '(0 0))))
+                           :operation #'/
+                           :operands '(0 0))))
     (values
      (notnot (typep a 'arithmetic-error))
      (notnot (typep a 'error))
@@ -32,8 +32,8 @@
 
 (deftest arithmetic-error.3
   (let ((a (make-condition 'arithmetic-error
-			   :operation '/
-			   :operands '(0 0))))
+                           :operation '/
+                           :operands '(0 0))))
     (macrolet
      ((%m (z) z))
      (values
@@ -49,10 +49,10 @@
 
 (deftest arithmetic-error-operation.error.2
   (signals-error (arithmetic-error-operation
-		  (make-condition 'arithmetic-error :operation '/
-				  :operands '(1 0))
-		  nil)
-		 program-error)
+                  (make-condition 'arithmetic-error :operation '/
+                                  :operands '(1 0))
+                  nil)
+                 program-error)
   t)
 
 (deftest arithmetic-error-operands.error.1
@@ -61,8 +61,8 @@
 
 (deftest arithmetic-error-operands.error.2
   (signals-error (arithmetic-error-operands
-		  (make-condition 'arithmetic-error :operation '/
-				  :operands '(1 0))
-		  nil)
-		 program-error)
+                  (make-condition 'arithmetic-error :operation '/
+                                  :operands '(1 0))
+                  nil)
+                 program-error)
   t)

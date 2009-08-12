@@ -23,9 +23,9 @@
 
 (deftest add-method.error.2
   (let* ((gf (eval '(defgeneric add-method-gf-03 (x)
-		      (:method ((x t)) 'a))))
-	 (method (find-method #'add-method-gf-03 nil (list (find-class t))))
-	 (gf2 (eval '(defgeneric add-method-gf-04 (x y)))))
+                      (:method ((x t)) 'a))))
+         (method (find-method #'add-method-gf-03 nil (list (find-class t))))
+         (gf2 (eval '(defgeneric add-method-gf-04 (x y)))))
     (handler-case
      (add-method gf2 method)
      (error () :error)))
@@ -33,9 +33,9 @@
 
 (deftest add-method.error.3
   (let* ((gf (eval '(defgeneric add-method-gf-05 (x &optional y)
-		      (:method ((x t) &optional y) 'a))))
-	 (method (find-method #'add-method-gf-05 nil (list (find-class t))))
-	 (gf2 (eval '(defgeneric add-method-gf-06 (x y)))))
+                      (:method ((x t) &optional y) 'a))))
+         (method (find-method #'add-method-gf-05 nil (list (find-class t))))
+         (gf2 (eval '(defgeneric add-method-gf-06 (x y)))))
     (handler-case
      (add-method gf2 method)
      (error () :error)))
@@ -52,9 +52,9 @@
 (deftest add-method.error.6
   (signals-error
    (let* ((gf (eval '(defgeneric add-method-gf-07 (x)
-		       (:method ((x t)) 'a))))
-	  (method (find-method #'add-method-gf-07 nil (list (find-class t))))
-	  (gf2 (eval '(defgeneric add-method-gf-08 (x)))))
+                       (:method ((x t)) 'a))))
+          (method (find-method #'add-method-gf-07 nil (list (find-class t))))
+          (gf2 (eval '(defgeneric add-method-gf-08 (x)))))
      (remove-method gf method)
      (add-method gf2 method nil))
    program-error)
@@ -62,10 +62,10 @@
 
 (deftest add-method.error.7
   (let* ((gf (eval '(defgeneric add-method-gf-09 (x y)
-		      (:method ((x t) (y t)) 'a))))
-	 (method (find-method #'add-method-gf-09 nil (list (find-class t)
-							   (find-class t))))
-	 (gf2 (eval '(defgeneric add-method-gf-10 (x &optional y)))))
+                      (:method ((x t) (y t)) 'a))))
+         (method (find-method #'add-method-gf-09 nil (list (find-class t)
+                                                           (find-class t))))
+         (gf2 (eval '(defgeneric add-method-gf-10 (x &optional y)))))
      (remove-method gf method)
      (handler-case
       (add-method gf2 method)
@@ -74,9 +74,9 @@
 
 (deftest add-method.error.8
   (let* ((gf (eval '(defgeneric add-method-gf-11 (x &key y)
-		      (:method ((x t) &key y) 'a))))
-	 (method (find-method #'add-method-gf-11 nil (list (find-class t))))
-	 (gf2 (eval '(defgeneric add-method-gf-12 (x)))))
+                      (:method ((x t) &key y) 'a))))
+         (method (find-method #'add-method-gf-11 nil (list (find-class t))))
+         (gf2 (eval '(defgeneric add-method-gf-12 (x)))))
     (remove-method gf method)
     (handler-case
      (add-method gf2 method)
@@ -88,11 +88,11 @@
 
 (deftest add-method.1
   (let* ((gf (eval '(defgeneric add-method-gf-13 (x)
-		      (:method ((x integer)) 'a)
-		      (:method ((x t)) 'b))))
-	 (method (find-method #'add-method-gf-13
-			      nil (list (find-class 'integer))))
-	 (gf2 (eval '(defgeneric add-method-gf-14 (x)))))
+                      (:method ((x integer)) 'a)
+                      (:method ((x t)) 'b))))
+         (method (find-method #'add-method-gf-13
+                              nil (list (find-class 'integer))))
+         (gf2 (eval '(defgeneric add-method-gf-14 (x)))))
     (declare (type generic-function gf gf2))
     (values
      (funcall gf 0)
@@ -108,14 +108,14 @@
 
 (deftest add-method.2
   (let* ((specializers (list (find-class 'integer)))
-	 (gf (eval '(defgeneric add-method-gf-15 (x)
-		      (:method ((x integer)) 'a)
-		      (:method ((x t)) 'b))))
-	 (method (find-method gf nil specializers))
-	 (gf2 (eval '(defgeneric add-method-gf-16 (x)
-		       (:method ((x integer)) 'c)
-		       (:method ((x t)) 'd))))
-	 (method2 (find-method gf2 nil specializers)))
+         (gf (eval '(defgeneric add-method-gf-15 (x)
+                      (:method ((x integer)) 'a)
+                      (:method ((x t)) 'b))))
+         (method (find-method gf nil specializers))
+         (gf2 (eval '(defgeneric add-method-gf-16 (x)
+                       (:method ((x integer)) 'c)
+                       (:method ((x t)) 'd))))
+         (method2 (find-method gf2 nil specializers)))
     (declare (type generic-function gf gf2))
     (values
      (funcall gf 0)

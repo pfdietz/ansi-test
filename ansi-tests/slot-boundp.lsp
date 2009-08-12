@@ -41,10 +41,10 @@
 
 (deftest slot-boundp.order.1
   (let ((obj (make-instance 'slot-boundp-class-01))
-	(i 0) x y)
+        (i 0) x y)
     (values
      (slot-boundp (progn (setf x (incf i)) obj)
-		  (progn (setf y (incf i)) 'a))
+                  (progn (setf y (incf i)) 'a))
      i x y))
   nil 2 1 2)
 
@@ -56,14 +56,14 @@
 
 (deftest slot-boundp.error.2
   (signals-error (let ((obj (make-instance 'slot-boundp-class-01)))
-		    (slot-boundp obj))
-		 program-error)
+                    (slot-boundp obj))
+                 program-error)
   t)
 
 (deftest slot-boundp.error.3
   (signals-error (let ((obj (make-instance 'slot-boundp-class-01)))
-		    (slot-boundp obj 'a nil))
-		 program-error)
+                    (slot-boundp obj 'a nil))
+                 program-error)
   t)
 
 (deftest slot-boundp.error.4
@@ -77,9 +77,9 @@
 (deftest slot-boundp.error.5
   (let ((built-in-class (find-class 'built-in-class)))
     (loop for e in *mini-universe*
-	  for class = (class-of e)
-	  when (and (eq (class-of class) built-in-class)
-		    (handler-case (progn (slot-boundp e 'foo) t)
-				  (error () nil)))
-	  collect e))
+          for class = (class-of e)
+          when (and (eq (class-of class) built-in-class)
+                    (handler-case (progn (slot-boundp e 'foo) t)
+                                  (error () nil)))
+          collect e))
   nil)

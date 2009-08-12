@@ -13,7 +13,7 @@
 ;;; Gensym returns symbols with distinct print names
 (deftest gensym.2
   (string= (symbol-name (gensym))
-	   (symbol-name (gensym)))
+           (symbol-name (gensym)))
   nil)
 
 ;;; Gensym uses the *gensym-counter* special variable,

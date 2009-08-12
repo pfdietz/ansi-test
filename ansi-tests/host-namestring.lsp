@@ -7,14 +7,14 @@
 
 (deftest host-namestring.1
   (let* ((vals (multiple-value-list
-		(host-namestring "host-namestring.lsp")))
-	 (s (first vals)))
+                (host-namestring "host-namestring.lsp")))
+         (s (first vals)))
     (if (and (null (cdr vals))
-	     (or (null s)
-		 (stringp s)
-		 ;; (equal (host-namestring s) s)
-		 ))
-	:good
+             (or (null s)
+                 (stringp s)
+                 ;; (equal (host-namestring s) s)
+                 ))
+        :good
       vals))
   :good)
 
@@ -30,10 +30,10 @@
 
 (deftest host-namestring.3
   (let* ((name "host-namestring.lsp")
-	 (pn (merge-pathnames (pathname name)))
-	 (name2 (with-open-file (s pn :direction :input)
-				(host-namestring s)))
-	 (name3 (host-namestring pn)))
+         (pn (merge-pathnames (pathname name)))
+         (name2 (with-open-file (s pn :direction :input)
+                                (host-namestring s)))
+         (name3 (host-namestring pn)))
     (or (equalt name2 name3) (list name2 name3)))
   t)
 

@@ -153,8 +153,8 @@
   (block done
     (tagbody
      (ecase 'a (a (go 10)
-		  10
-		  (return-from done 'bad)))
+                  10
+                  (return-from done 'bad)))
      10
      (return-from done 'good)))
   good)
@@ -166,9 +166,9 @@
   (macrolet
    ((%m (z) z))
    (ecase (expand-in-current-env (%m :b))
-	  (:a :bad1)
-	  (:b :good)
-	  (:c :bad2)))
+          (:a :bad1)
+          (:b :good)
+          (:c :bad2)))
   :good)
 
 (deftest ecase.error.1
@@ -177,10 +177,10 @@
 
 (deftest ecase.error.2
   (signals-error (funcall (macro-function 'ecase) '(ecase t))
-		 program-error)
+                 program-error)
   t)
 
 (deftest ecase.error.3
   (signals-error (funcall (macro-function 'ecase) '(ecase t) nil nil)
-		 program-error)
+                 program-error)
   t)

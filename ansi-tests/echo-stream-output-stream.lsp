@@ -7,10 +7,10 @@
 
 (deftest echo-stream-output-stream.1
   (let* ((is (make-string-input-stream "foo"))
-	 (os (make-string-output-stream))
-	 (s (make-echo-stream is os)))
+         (os (make-string-output-stream))
+         (s (make-echo-stream is os)))
     (equalt (multiple-value-list (echo-stream-output-stream s))
-	    (list os)))
+            (list os)))
   t)
 
 (deftest echo-stream-output-stream.error.1
@@ -19,8 +19,8 @@
 
 (deftest echo-stream-output-stream.error.2
   (signals-error (let* ((is (make-string-input-stream "foo"))
-			(os (make-string-output-stream))
-			(s (make-echo-stream is os)))
-		   (echo-stream-output-stream s nil))
-		 program-error)
+                        (os (make-string-output-stream))
+                        (s (make-echo-stream is os)))
+                   (echo-stream-output-stream s nil))
+                 program-error)
   t)

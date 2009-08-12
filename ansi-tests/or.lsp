@@ -34,7 +34,7 @@
 (deftest or.8
   (let ((x 0))
     (values (or t (incf x))
-	    x))
+            x))
   t 0)
 
 (deftest or.9
@@ -59,7 +59,7 @@
    (or (expand-in-current-env (%m nil))
        (expand-in-current-env (%m 'a))
        nil))
-  a)       
+  a)
 
 ;;; Error tests
 

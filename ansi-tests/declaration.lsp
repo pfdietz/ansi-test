@@ -16,7 +16,7 @@
 
 (deftest declaration.3
   (let ((sym (gensym))
-	(sym2 (gensym)))
+        (sym2 (gensym)))
     (proclaim `(declaration ,sym ,sym2))
     nil)
   nil)
@@ -30,8 +30,8 @@
 ;;; Declare these only if bad declarations produce warnings.
 
 (when (block done
-	(handler-bind ((warning #'(lambda (c) (return-from done t))))
-		      (eval `(let () (declare (,(gensym))) nil))))
+        (handler-bind ((warning #'(lambda (c) (return-from done t))))
+                      (eval `(let () (declare (,(gensym))) nil))))
 
 (deftest declaration.4
   (let ((sym (gensym)))
@@ -55,35 +55,35 @@
   (let ((sym (gensym)))
     (proclaim `(declaration ,sym))
     (eval `(signals-error-always (define-condition ,sym (condition) (a b c))
-				 error)))
+                                 error)))
   t t)
 
 (deftest declaration.8
   (let ((sym (gensym)))
     (eval `(deftype ,sym () 'error))
     (eval `(signals-error-always (proclaim '(declaration ,sym))
-				 error)))
+                                 error)))
   t t)
 
 (deftest declaration.9
   (let ((sym (gensym)))
     (eval `(defstruct ,sym a b c))
     (eval `(signals-error-always (proclaim '(declaration ,sym))
-				 error)))
+                                 error)))
   t t)
 
 (deftest declaration.10
   (let ((sym (gensym)))
     (eval `(defclass ,sym () (a b c)))
     (eval `(signals-error-always (proclaim '(declaration ,sym))
-				 error)))
+                                 error)))
   t t)
 
 (deftest declaration.11
   (let ((sym (gensym)))
     (eval `(define-condition ,sym (condition) (a b c)))
     (eval `(signals-error-always (proclaim '(declaration ,sym))
-				 error)))
+                                 error)))
   t t)
 
 )

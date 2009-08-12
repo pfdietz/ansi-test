@@ -36,10 +36,10 @@
   (check-predicate
    #'(lambda (x)
        (handler-case (stringp (string x))
-		     (type-error () :caught))))
+                     (type-error () :caught))))
   nil)
 
-(deftest string.8 
+(deftest string.8
   :notes (:allow-nil-arrays :nil-vectors-are-strings)
   (subtypep* '(array nil (*)) 'string)
   t t)
@@ -71,27 +71,27 @@
 (deftest string.14
   (let ((count 0))
     (loop for i below (min char-code-limit 65536)
-	  for c = (code-char i)
-	  for s = (and c (string c))
-	  when (and c
-		    (or (not (stringp s))
-			(not (= (length s) 1))
-			(not (eql c (char s 0)))))
-	  collect (progn (incf count) (list i c s))
-	  until (>= count 100)))
+          for c = (code-char i)
+          for s = (and c (string c))
+          when (and c
+                    (or (not (stringp s))
+                        (not (= (length s) 1))
+                        (not (eql c (char s 0)))))
+          collect (progn (incf count) (list i c s))
+          until (>= count 100)))
   nil)
 
 (deftest string.15
   (when (> char-code-limit 65536)
     (loop for i = (random char-code-limit)
-	  for c = (code-char i)
-	  for s = (and c (string c))
-	  repeat 2000
-	  when (and c
-		    (or (not (stringp s))
-			(not (= (length s) 1))
-			(not (eql c (char s 0)))))
-	  collect (list i c s)))
+          for c = (code-char i)
+          for s = (and c (string c))
+          repeat 2000
+          when (and c
+                    (or (not (stringp s))
+                        (not (= (length s) 1))
+                        (not (eql c (char s 0)))))
+          collect (list i c s)))
   nil)
 
 (deftest string.16
@@ -121,19 +121,19 @@
 (deftest string.22
   (do-special-strings (s "X") (assert (typep s 'string)))
   nil)
-		     
+
 (deftest string.23
   (do-special-strings (s "X") (assert (typep s '(string))))
   nil)
-		     
+
 (deftest string.24
   (do-special-strings (s "X") (assert (typep s '(string *))))
   nil)
-		     
+
 (deftest string.25
   (do-special-strings (s "X")
-		      (or (array-has-fill-pointer-p s)
-			  (assert (typep s '(string 1)))))
+                      (or (array-has-fill-pointer-p s)
+                          (assert (typep s '(string 1)))))
   nil)
 
 (deftest string.26

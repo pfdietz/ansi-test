@@ -17,7 +17,7 @@
   (flet ((%f () 'foo))
     (declare (ignore (function %f))))
   nil)
-    
+
 (deftest ignore.4
   (flet ((%f () 'foo))
     (declare (ignore (function %f)))
@@ -26,12 +26,12 @@
 
 (deftest ignore.5
   (flet (((setf %f) (x y) (setf (car y) x)))
-	(declare (ignore (function (setf %f))))
-	:good)
+        (declare (ignore (function (setf %f))))
+        :good)
   :good)
 
 (deftest ignore.6
   (labels (((setf %f) (x y) (setf (car y) x)))
-	  (declare (ignore (function (setf %f))))
-	  :good)
+          (declare (ignore (function (setf %f))))
+          :good)
   :good)

@@ -41,18 +41,18 @@
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string (let ((s1 (make-symbol "X"))
-			    (s2 (make-symbol "X")))
-			(list s1 s2 s1 s2))
-		      :case :upcase :pretty nil :escape t :circle t)))
+                            (s2 (make-symbol "X")))
+                        (list s1 s2 s1 s2))
+                      :case :upcase :pretty nil :escape t :circle t)))
   "(#1=#:X #2=#:X #1# #2#)")
 
 (deftest print.cons.7
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string (let ((a (list 17 nil)))
-			(setf (cdr a) a)
-			a)
-		      :circle t :pretty nil :escape nil)))
+                        (setf (cdr a) a)
+                        a)
+                      :circle t :pretty nil :escape nil)))
   "#1=(17 . #1#)")
 
 ;;; Random printing
@@ -70,17 +70,17 @@
 #-lispworks
 (deftest print.cons.random.2
   (loop repeat 50
-	nconc
-	(let* ((n 20)
-	       (conses (apply #'vector
-			      (loop repeat n collect (cons nil nil)))))
-	  (loop for x across conses
-		for j = (random n)
-		for k = (random n)
-		do (setf (car x) (elt conses j)
-			 (cdr x) (elt conses k)))
-	  (randomly-check-readability (elt conses 0) :test #'is-similar
-				      :circle t)))
+        nconc
+        (let* ((n 20)
+               (conses (apply #'vector
+                              (loop repeat n collect (cons nil nil)))))
+          (loop for x across conses
+                for j = (random n)
+                for k = (random n)
+                do (setf (car x) (elt conses j)
+                         (cdr x) (elt conses k)))
+          (randomly-check-readability (elt conses 0) :test #'is-similar
+                                      :circle t)))
   nil)
 
 ;;; Printing with *print-length*
@@ -105,7 +105,7 @@
 
 (deftest print.cons.length.4
   (my-with-standard-io-syntax
-   (let ((*print-readably* nil))   
+   (let ((*print-readably* nil))
      (write-to-string '(4 8) :length 1 :pretty nil :escape nil)))
   "(4 ...)")
 
@@ -113,17 +113,17 @@
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string '(a b c d e f g h i j k l m n o p)
-		      :case :downcase :length 10
-		      :pretty nil :escape nil)))
+                      :case :downcase :length 10
+                      :pretty nil :escape nil)))
   "(a b c d e f g h i j ...)")
 
 
 (deftest print.cons.length.6
   (my-with-standard-io-syntax
-   (let ((*print-readably* nil))   
+   (let ((*print-readably* nil))
      (write-to-string '(((((((0)))))))
-		      :case :downcase :length 3
-		      :pretty nil :escape nil)))
+                      :case :downcase :length 3
+                      :pretty nil :escape nil)))
   "(((((((0)))))))")
 
 ;;; Printing with *print-level*
@@ -132,24 +132,24 @@
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string '(a)
-		      :case :downcase :level 0
-		      :escape nil :pretty nil)))
+                      :case :downcase :level 0
+                      :escape nil :pretty nil)))
   "#")
 
 (deftest print.cons.level.2
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string '(a)
-		      :case :downcase :level 1
-		      :escape nil :pretty nil)))
+                      :case :downcase :level 1
+                      :escape nil :pretty nil)))
   "(a)")
 
 (deftest print.cons.level.3
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string '((a))
-		      :case :downcase :level 1
-		      :escape nil :pretty nil)))
+                      :case :downcase :level 1
+                      :escape nil :pretty nil)))
   "(#)")
 
 
@@ -157,14 +157,14 @@
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string '(a)
-		      :case :downcase :level 2
-		      :escape nil :pretty nil)))
+                      :case :downcase :level 2
+                      :escape nil :pretty nil)))
   "(a)")
 
 (deftest print.cons.level.5
   (my-with-standard-io-syntax
    (let ((*print-readably* nil))
      (write-to-string '(#(a) #*1101 "abc")
-		      :case :downcase :level 1
-		      :pretty nil)))
+                      :case :downcase :level 1
+                      :pretty nil)))
   "(# #*1101 \"abc\")")

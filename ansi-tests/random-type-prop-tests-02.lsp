@@ -10,24 +10,24 @@
 (def-type-prop-test =.3 '= nil 4 :maxargs 10 :rest-type 'number)
 (def-type-prop-test =.4 '= '(integer integer) 2)
 (def-type-prop-test =.5 '= (list 'number #'(lambda (x) (if (coin) 'number
-							`(eql ,x)))) 2)
+                                                        `(eql ,x)))) 2)
 (def-type-prop-test =.6 '= (list 'number 'number
-				 #'(lambda (x y) (rcase
-						  (2 'number)
-						  (1 `(eql ,x))
-						  (1 `(eql ,y)))))
+                                 #'(lambda (x y) (rcase
+                                                  (2 'number)
+                                                  (1 `(eql ,x))
+                                                  (1 `(eql ,y)))))
   3)
 (def-type-prop-test /=.1 '/= '(number number) 2)
 (def-type-prop-test /=.2 '/= '(number number number) 3)
 (def-type-prop-test /=.3 '/= nil 4 :maxargs 10 :rest-type 'number)
 (def-type-prop-test /=.4 '/= '(integer integer) 2)
 (def-type-prop-test /=.5 '/= (list 'number #'(lambda (x) (if (coin) 'number
-							   `(eql ,x)))) 2)
+                                                           `(eql ,x)))) 2)
 (def-type-prop-test /=.6 '/= (list 'number 'number
-				   #'(lambda (x y) (rcase
-						    (2 'number)
-						    (1 `(eql ,x))
-						    (1 `(eql ,y)))))
+                                   #'(lambda (x y) (rcase
+                                                    (2 'number)
+                                                    (1 `(eql ,x))
+                                                    (1 `(eql ,y)))))
   3)
 (def-type-prop-test <.1 '< '(real real) 2)
 (def-type-prop-test <.2 '< '(real real real) 3)
@@ -58,24 +58,24 @@
 (def-type-prop-test <=.3 '<= nil 4 :maxargs 10 :rest-type 'real)
 (def-type-prop-test <=.4 '<= '(integer integer) 2)
 (def-type-prop-test <=.5 '<= (list 'real #'(lambda (x) (if (coin) 'real
-							 `(eql ,x)))) 2)
+                                                         `(eql ,x)))) 2)
 (def-type-prop-test <=.6 '<= (list 'real 'real
-				   #'(lambda (x y) (rcase
-						    (2 'real)
-						    (1 `(eql ,x))
-						    (1 `(eql ,y)))))
+                                   #'(lambda (x y) (rcase
+                                                    (2 'real)
+                                                    (1 `(eql ,x))
+                                                    (1 `(eql ,y)))))
   3)
 (def-type-prop-test >=.1 '>= '(real real) 2)
 (def-type-prop-test >=.2 '>= '(real real real) 3)
 (def-type-prop-test >=.3 '>= nil 4 :maxargs 10 :rest-type 'real)
 (def-type-prop-test >=.4 '>= '(integer integer) 2)
 (def-type-prop-test >=.5 '>= (list 'real #'(lambda (x) (if (coin) 'real
-							 `(eql ,x)))) 2)
+                                                         `(eql ,x)))) 2)
 (def-type-prop-test >=.6 '>= (list 'real 'real
-				   #'(lambda (x y) (rcase
-						    (2 'real)
-						    (1 `(eql ,x))
-						    (1 `(eql ,y)))))
+                                   #'(lambda (x y) (rcase
+                                                    (2 'real)
+                                                    (1 `(eql ,x))
+                                                    (1 `(eql ,y)))))
   3)
 
 (def-type-prop-test min.1 'min nil 2 :maxargs 6 :rest-type 'integer)

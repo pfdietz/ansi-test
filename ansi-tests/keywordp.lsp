@@ -25,11 +25,11 @@
 
 (deftest keywordp.13
   (let ((kwp (find-package "KEYWORD"))
-	(bad nil))
+        (bad nil))
     (do-symbols (s "KEYWORD" bad)
       (when (and (not (eq (symbol-package s) kwp))
-		 (keywordp s))
-	(push s bad))))
+                 (keywordp s))
+        (push s bad))))
   nil)
 
 (deftest keywordp.order.1

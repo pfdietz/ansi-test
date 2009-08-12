@@ -27,7 +27,7 @@
   (let (z)
     (values
      (loop for x from 1 to 10 count (< x 5) into foo
-	   finally (setq z foo))
+           finally (setq z foo))
      z))
   nil
   4)
@@ -36,7 +36,7 @@
   (let (z)
     (values
      (loop for x from 1 to 10 count (< x 5) into foo fixnum
-	   finally (setq z foo))
+           finally (setq z foo))
      z))
   nil
   4)
@@ -45,7 +45,7 @@
   (let (z)
     (values
      (loop for x from 1 to 10 count (< x 5) into foo of-type (integer 0 100)
-	   finally (setq z foo))
+           finally (setq z foo))
      z))
   nil
   4)
@@ -54,7 +54,7 @@
   (let (z)
     (values
      (loop for x from 1 to 10 count (< x 5) into foo float
-	   finally (setq z foo))
+           finally (setq z foo))
      z))
   nil
   4.0)
@@ -62,16 +62,16 @@
 (deftest loop.10.9
   (signals-error
    (loop with foo = 10
-	 for x in '(a b c) count x into foo
-	 finally (return foo))
+         for x in '(a b c) count x into foo
+         finally (return foo))
    program-error)
   t)
 
 (deftest loop.10.10
   (signals-error
    (loop with foo = 10
-	 for x in '(a b c) counting x into foo
-	 finally (return foo))
+         for x in '(a b c) counting x into foo
+         finally (return foo))
    program-error)
   t)
 
@@ -81,26 +81,26 @@
   (let ((*loop-count-var* 100))
     (values
      (loop for x in '(a b c d) count x into *loop-count-var*
-	   finally (return *loop-count-var*))
+           finally (return *loop-count-var*))
      *loop-count-var*))
   4 100)
 
 (deftest loop.10.12
   (loop for x in '(a b nil d nil e)
-	count x into foo
-	collect foo)
+        count x into foo
+        collect foo)
   (1 2 2 3 3 4))
-	
+
 (deftest loop.10.13
   (loop for x in '(a b nil d nil e)
-	counting x into foo
-	collect foo)
+        counting x into foo
+        collect foo)
   (1 2 2 3 3 4))
 
 (deftest loop.10.14
   (loop for x in '(a b c) count (return 10))
   10)
-	
+
 
 ;;; Tests of MAXIMIZE, MAXIMIZING
 
@@ -181,23 +181,23 @@
   (let ((*loop-max-var* 100))
     (values
      (loop for x in '(1 10 4 8) maximize x into *loop-max-var*
-	   finally (return *loop-max-var*))
+           finally (return *loop-max-var*))
      *loop-max-var*))
   10 100)
 
 (deftest loop.10.37
   (signals-error
    (loop with foo = 100
-	 for i from 1 to 10 maximize i into foo
-	 finally (return foo))
+         for i from 1 to 10 maximize i into foo
+         finally (return foo))
    program-error)
   t)
 
 (deftest loop.10.38
   (signals-error
    (loop with foo = 100
-	 for i from 1 to 10 maximizing i into foo
-	 finally (return foo))
+         for i from 1 to 10 maximizing i into foo
+         finally (return foo))
    program-error)
   t)
 
@@ -285,23 +285,23 @@
   (let ((*loop-min-var* 100))
     (values
      (loop for x in '(10 4 8) minimize x into *loop-min-var*
-	   finally (return *loop-min-var*))
+           finally (return *loop-min-var*))
      *loop-min-var*))
   4 100)
 
 (deftest loop.10.57
   (signals-error
    (loop with foo = 100
-	 for i from 1 to 10 minimize i into foo
-	 finally (return foo))
+         for i from 1 to 10 minimize i into foo
+         finally (return foo))
    program-error)
   t)
 
 (deftest loop.10.58
   (signals-error
    (loop with foo = 100
-	 for i from 1 to 10 minimizing i into foo
-	 finally (return foo))
+         for i from 1 to 10 minimizing i into foo
+         finally (return foo))
    program-error)
   t)
 
@@ -313,22 +313,22 @@
 
 (deftest loop.10.59
   (loop for i from 1 to 10
-	minimize i
-	maximize (- i))
+        minimize i
+        maximize (- i))
   1)
 
 (deftest loop.10.60
   (loop for i from 1 to 10
-	maximize (- i)
-	minimize i)
+        maximize (- i)
+        minimize i)
   -1)
 
 (deftest loop.10.61
   (loop for i from 5 downto 1
-	maximize i
-	minimize (- i))
+        maximize i
+        minimize (- i))
   -1)
-  
+
 
 ;;; Tests for SUM, SUMMING
 
@@ -380,55 +380,55 @@
   (let (z)
     (values
      (loop for i from 1 to 4 sum i into foo of-type (integer 0 10)
-	   finally (setq z foo))
+           finally (setq z foo))
      z))
   nil
   10)
 
 (deftest loop.10.82
   (loop for i from 1 to 4
-	sum i fixnum
-	count t)
+        sum i fixnum
+        count t)
   14)
 
 (deftest loop.10.83
   (loop for i from 1 to 4
-	sum i fixnum
-	count t fixnum)
+        sum i fixnum
+        count t fixnum)
   14)
 
 (deftest loop.10.84
   (let ((foo 100))
     (values
      (loop for i from 1 to 4 sum i into foo of-type integer
-	   finally (return foo))
+           finally (return foo))
      foo))
   10 100)
 
 (deftest loop.10.85
   (signals-error
    (loop with foo = 100
-	 for i from 1 to 4 sum i into foo
-	 finally (return foo))
+         for i from 1 to 4 sum i into foo
+         finally (return foo))
    program-error)
   t)
 
 (deftest loop.10.86
   (signals-error
    (loop with foo = 100
-	 for i from 1 to 4 summing i into foo
-	 finally (return foo))
+         for i from 1 to 4 summing i into foo
+         finally (return foo))
    program-error)
   t)
 
 (deftest loop.10.87
   (loop for i from 1 to 4
-	sum (complex i (1+ i)) of-type complex)
+        sum (complex i (1+ i)) of-type complex)
   #c(10 14))
 
 (deftest loop.10.88
   (loop for i from 1 to 4
-	sum (/ i 17) of-type rational)
+        sum (/ i 17) of-type rational)
   10/17)
 
 (deftest loop.10.89
@@ -437,16 +437,16 @@
 
 (deftest loop.10.90
   (loop for i from 1 to 4
-	sum i into foo
-	sum (1+ i) into bar
-	finally (return (values foo bar)))
+        sum i into foo
+        sum (1+ i) into bar
+        finally (return (values foo bar)))
   10 14)
 
 (deftest loop.10.91
   (loop for i from 1 to 4
-	sum i into foo fixnum
-	sum (float (1+ i)) into bar float
-	finally (return (values foo bar)))
+        sum i into foo fixnum
+        sum (float (1+ i)) into bar float
+        finally (return (values foo bar)))
   10 14.0)
 
 (deftest loop.10.92

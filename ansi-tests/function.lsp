@@ -26,15 +26,15 @@
 
 (deftest function.4
   (loop for x in *cl-symbol-names*
-	for s = (find-symbol x "CL")
-	for f = (and (fboundp s)
-		     (symbol-function s)
-		     (not (special-operator-p s))
-		     (not (macro-function s))
-		     (symbol-function s))
-	unless (or (null f)
-		   (typep f 'function))
-	collect x)
+        for s = (find-symbol x "CL")
+        for f = (and (fboundp s)
+                     (symbol-function s)
+                     (not (special-operator-p s))
+                     (not (macro-function s))
+                     (symbol-function s))
+        unless (or (null f)
+                   (typep f 'function))
+        collect x)
   nil)
 
 (deftest function.5
@@ -66,8 +66,8 @@
 ;;; In ANSI CL, symbols and cons can no longer also be of type FUNCTION.
 (deftest function.10
   (check-predicate (typef '(not (and (or number character symbol
-					 cons array)
-				     function))))
+                                         cons array)
+                                     function))))
   nil)
 
 (deftest function.11
@@ -112,7 +112,7 @@
     (values
      (%f 'a)
      (locally (declare (ftype (function (integer) t) %f))
-	      (%f 10))
+              (%f 10))
      (%f 'b)))
   nil nil nil)
 
@@ -153,7 +153,7 @@
   (flet ((%f (&key foo) foo))
     (declare (ftype (function (&key (:foo t) (:allow-other-keys t)) t) %f))
     (values (%f) (%f :foo 'a) (%f :allow-other-keys nil)
-	    (%f :allow-other-keys t :foo 'z)))
+            (%f :allow-other-keys t :foo 'z)))
   nil a nil z)
 
 (deftest function.21

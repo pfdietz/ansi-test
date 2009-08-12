@@ -21,7 +21,7 @@
   (loop
    (when (zerop x) (return y))
    (psetq x (mod y x)
-	  y x)))
+          y x)))
 
 (defun my-lcm (x y)
   (when (< x 0) (setf x (- x)))
@@ -31,4 +31,4 @@
     (/ (* x y) (my-gcd x y))))
 
 
-  
+

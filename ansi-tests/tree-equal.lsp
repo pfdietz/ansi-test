@@ -17,7 +17,7 @@
 
 (deftest tree-equal.3
   (notnot-mv (tree-equal (list 'a 'b (list 'c 'd))
-			 (list 'a 'b (list 'c 'd))))
+                         (list 'a 'b (list 'c 'd))))
   t)
 
 (deftest tree-equal.4
@@ -27,7 +27,7 @@
 (deftest tree-equal.5
   (notnot-mv (tree-equal 1 2 :test #'<))
   t)
-  
+
 (deftest tree-equal.6
   (notnot-mv (tree-equal 1 2 :test #'(lambda (x y) (values (< x y) t))))
   t)
@@ -35,15 +35,15 @@
 (deftest tree-equal.7
   (tree-equal 1 2 :test #'>)
   nil)
-  
+
 (deftest tree-equal.8
   (tree-equal (list 1) 2 :test (constantly t))
   nil)
 
 (deftest tree-equal.9
   (tree-equal (list 1) (list 2)
-	      :test #'(lambda (x y) (or (and (consp x) (consp y))
-					(eql x y))))
+              :test #'(lambda (x y) (or (and (consp x) (consp y))
+                                        (eql x y))))
   nil)
 
 (deftest tree-equal.10
@@ -52,8 +52,8 @@
 
 (deftest tree-equal.11
   (let* ((x (list 'a 'b))
-	 (y (list x x))
-	 (z (list (list 'a 'b) (list 'a 'b))))
+         (y (list x x))
+         (z (list (list 'a 'b) (list 'a 'b))))
     (notnot-mv (tree-equal y z)))
   t)
 
@@ -71,13 +71,13 @@
 
 (deftest tree-equal.15
   (let ((x (vector 'a 'b 'c))
-	(y (vector 'a' 'b 'c)))
+        (y (vector 'a' 'b 'c)))
     (tree-equal x y))
   nil)
 
 (deftest tree-equal.16
   (let ((x (copy-seq ""))
-	(y (copy-seq "")))
+        (y (copy-seq "")))
     (tree-equal x y))
   nil)
 
@@ -103,13 +103,13 @@
 
 (deftest tree-equal.allow-other-keys.4
   (notnot-mv (tree-equal '(a b) (list 'a 'b) :allow-other-keys t
-			 :allow-other-keys nil :foo t))
+                         :allow-other-keys nil :foo t))
   t)
 
 (deftest tree-equal.keywords.1
   (notnot-mv (tree-equal '(a . b) '(b . a)
-			 :test (complement #'eql)
-			 :test #'eql))
+                         :test (complement #'eql)
+                         :test #'eql))
   t)
 
 

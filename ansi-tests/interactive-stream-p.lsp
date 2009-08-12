@@ -7,8 +7,8 @@
 
 (deftest interactive-stream-p.1
   (let ((streams (list *debug-io* *error-output* *query-io*
-		       *standard-input* *standard-output*
-		       *trace-output* *terminal-io*)))
+                       *standard-input* *standard-output*
+                       *trace-output* *terminal-io*)))
     (mapc #'interactive-stream-p streams)
     ;; no error should occur
     nil)
@@ -24,5 +24,5 @@
 
 (deftest interactive-stream-p.error.3
   (signals-error (interactive-stream-p *terminal-io* nil)
-		 program-error)
+                 program-error)
   t)

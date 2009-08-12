@@ -63,18 +63,18 @@
 
 (deftest multiple-value-list.error.1
   (signals-error (funcall (macro-function 'multiple-value-list))
-		 program-error)
+                 program-error)
   t)
-  
+
 (deftest multiple-value-list.error.2
   (signals-error (funcall (macro-function 'multiple-value-list)
-			   '(multiple-value-list nil))
-		 program-error)
+                           '(multiple-value-list nil))
+                 program-error)
   t)
 
 (deftest multiple-value-list.error.3
   (signals-error (funcall (macro-function 'multiple-value-list)
-			   '(multiple-value-list nil)
-			   nil nil)
-		 program-error)
+                           '(multiple-value-list nil)
+                           nil nil)
+                 program-error)
   t)

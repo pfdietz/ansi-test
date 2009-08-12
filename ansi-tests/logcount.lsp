@@ -43,29 +43,29 @@
 
 (deftest logcount.6
   (loop for x = (random-fixnum)
-	repeat 100
-	always (eql (logcount x) (logcount (lognot x))))
+        repeat 100
+        always (eql (logcount x) (logcount (lognot x))))
   t)
 
 (deftest logcount.7
   (let ((bound (ash 1 300)))
     (loop for x = (random-from-interval bound)
-	  repeat 100
-	  always (eql (logcount x) (logcount (lognot x)))))
+          repeat 100
+          always (eql (logcount x) (logcount (lognot x)))))
   t)
 
 (deftest logcount.8
   (loop for y = (random (1+ most-positive-fixnum))
-	repeat 100
-	unless
-	(let ((cnt 0)
-	      (x y))
-	  (loop while (> x 0)
-		do
-		(when (oddp x) (incf cnt))
-		(setf x (ash x -1)))
-	  (eql cnt (logcount y)))
-	collect y)
+        repeat 100
+        unless
+        (let ((cnt 0)
+              (x y))
+          (loop while (> x 0)
+                do
+                (when (oddp x) (incf cnt))
+                (setf x (ash x -1)))
+          (eql cnt (logcount y)))
+        collect y)
   nil)
 
 

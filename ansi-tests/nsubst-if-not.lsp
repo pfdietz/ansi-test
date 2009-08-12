@@ -17,13 +17,13 @@
 
 (deftest nsubst-if-not.2
   (check-nsubst-if-not 'a (complement #'listp)
-		       '((100 1) (2 3) (4 3 2 1) (a b c)))
+                       '((100 1) (2 3) (4 3 2 1) (a b c)))
   a)
 
 (deftest nsubst-if-not.3
   (check-nsubst-if-not 'c #'identity
-		       '((100 1) (2 3) (4 3 2 1) (a b c))
-		       :key (complement #'listp))
+                       '((100 1) (2 3) (4 3 2 1) (a b c))
+                       :key (complement #'listp))
   c)
 
 (deftest nsubst-if-not.4
@@ -32,14 +32,14 @@
    #'(lambda (x) (not (eql x 17)))
    '((17) (17 22) (17 22 31) (17 21 34 54))
    :key #'(lambda (x)
-	    (and (consp x)
-		 (car x))))
+            (and (consp x)
+                 (car x))))
   (40 40 40 40))
 
 (deftest nsubst-if-not.5
   (check-nsubst-if-not 'a  #'(lambda (x) (not (eql x 'b)))
-		       '((a) (b) (c) (d))
-		       :key nil)
+                       '((a) (b) (c) (d))
+                       :key nil)
   ((a) (a) (c) (d)))
 
 (deftest nsubst-if-not.6
@@ -112,7 +112,7 @@
 
 (deftest nsubst-if-not.error.7
   (signals-error (nsubst-if-not 'a #'null nil
-				 :bad t :allow-other-keys nil) program-error)
+                                 :bad t :allow-other-keys nil) program-error)
   t)
 
 (deftest nsubst-if-not.error.8

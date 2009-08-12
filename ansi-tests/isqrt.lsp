@@ -27,39 +27,39 @@
 
 (deftest isqrt.error.5
   (loop for x in *mini-universe*
-	unless (or (and (integerp x) (>= x 0))
-		   (eval `(signals-type-error x ',x (isqrt x))))
-	collect x)
+        unless (or (and (integerp x) (>= x 0))
+                   (eval `(signals-type-error x ',x (isqrt x))))
+        collect x)
   nil)
 
 ;;; Non-error tests
 
 (deftest isqrt.1
   (loop for i from 0 to 10000
-	for i2 = (* i i)
-	for s = (isqrt i2)
-	unless (eql s i)
-	collect i)
+        for i2 = (* i i)
+        for s = (isqrt i2)
+        unless (eql s i)
+        collect i)
   nil)
 
 (deftest isqrt.2
   (loop for i = (random-from-interval most-positive-fixnum 0)
-	for s = (isqrt i)
-	repeat 1000
-	unless (and (integerp s)
-		    (>= s 0)
-		    (<= (* s s) i)
-		    (> (* (1+ s) (1+ s)) i))
-	collect (list i s))
+        for s = (isqrt i)
+        repeat 1000
+        unless (and (integerp s)
+                    (>= s 0)
+                    (<= (* s s) i)
+                    (> (* (1+ s) (1+ s)) i))
+        collect (list i s))
   nil)
 
 (deftest isqrt.3
   (loop for i = (random-from-interval 1000000000000000 0)
-	for s = (isqrt i)
-	repeat 1000
-	unless (and (integerp s)
-		    (>= s 0)
-		    (<= (* s s) i)
-		    (> (* (1+ s) (1+ s)) i))
-	collect (list i s))
+        for s = (isqrt i)
+        repeat 1000
+        unless (and (integerp s)
+                    (>= s 0)
+                    (<= (* s s) i)
+                    (> (* (1+ s) (1+ s)) i))
+        collect (list i s))
   nil)

@@ -5,7 +5,7 @@
 
 (let ((*default-pathname-defaults* (pathname *load-pathname*)))
   (let ((*default-pathname-defaults*
-	 (merge-pathnames (make-pathname :directory '(:relative :up)))))
+         (merge-pathnames (make-pathname :directory '(:relative :up)))))
     (load "gclload1.lsp"))
   (load "ba-test-package.lsp")
   (eval '(compile-and-load "ba-aux.lsp"))

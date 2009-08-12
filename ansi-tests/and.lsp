@@ -46,8 +46,8 @@
   (macrolet
    ((%m (z) z))
    (and (expand-in-current-env (%m :a))
-	(expand-in-current-env (%m :b))
-	(expand-in-current-env (%m :c))))
+        (expand-in-current-env (%m :b))
+        (expand-in-current-env (%m :c))))
   :c)
 
 ;;; Error tests
@@ -55,30 +55,30 @@
 (deftest and.order.1
   (let ((x 0))
     (values (and nil (incf x))
-	    x))
+            x))
   nil 0)
 
 (deftest and.order.2
   (let ((i 0) a b c d)
     (values
      (and (setf a (incf i))
-	  (setf b (incf i))
-	  (setf c (incf i))
-	  (setf d (incf i)))
+          (setf b (incf i))
+          (setf c (incf i))
+          (setf d (incf i)))
      i a b c d))
   4 4 1 2 3 4)
 
 (deftest and.error.1
   (signals-error (funcall (macro-function 'and))
-		 program-error)
+                 program-error)
   t)
 
 (deftest and.error.2
   (signals-error (funcall (macro-function 'and) '(and))
-		 program-error)
+                 program-error)
   t)
 
 (deftest and.error.3
   (signals-error (funcall (macro-function 'and) '(and) nil nil)
-		 program-error)
+                 program-error)
   t)

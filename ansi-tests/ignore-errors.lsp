@@ -21,8 +21,8 @@
   (multiple-value-bind (val cond)
       (ignore-errors (error "foo"))
     (and (null val)
-	 (typep cond 'simple-error)
-	 t))
+         (typep cond 'simple-error)
+         t))
   t)
 
 (deftest ignore-errors.5

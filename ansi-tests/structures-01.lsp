@@ -75,7 +75,7 @@
       (setf (s-1-foo s) nil)
       (setf (s-1-bar s) nil)
       (list (s-1-foo s2)
-	    (s-1-bar s2))))
+            (s-1-bar s2))))
   (a b))
 
 ;; Make produces unique items

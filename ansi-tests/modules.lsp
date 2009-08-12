@@ -42,7 +42,7 @@
 
 (deftest modules.7
   (let ((*modules* *modules*)
-	(fn 'modules7-fun))
+        (fn 'modules7-fun))
     (when (fboundp fn) (fmakunbound fn))
     (require "MODULES-7" #p"modules7.lsp")
     (funcall fn))
@@ -50,7 +50,7 @@
 
 (deftest modules.8
   (let ((*modules* *modules*)
-	(fns '(modules8a-fun modules8b-fun)))
+        (fns '(modules8a-fun modules8b-fun)))
     (dolist (fn fns)
       (when (fboundp fn) (fmakunbound fn)))
     (require "MODULES-8" '(#p"modules8a.lsp" #p"modules8b.lsp"))

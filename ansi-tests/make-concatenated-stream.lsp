@@ -47,16 +47,16 @@
 
 (deftest make-concatenated-stream.9
   (let ((pn #p"tmp.dat")
-	(element-type '(unsigned-byte 8)))
+        (element-type '(unsigned-byte 8)))
     (with-open-file (s pn :direction :output :element-type element-type
-		       :if-exists :supersede)
-		    (dolist (b '(1 5 9 13)) (write-byte b s)))
+                       :if-exists :supersede)
+                    (dolist (b '(1 5 9 13)) (write-byte b s)))
     (with-open-file
      (s1 pn :direction :input :element-type element-type)
      (with-open-file
       (s2 pn :direction :input :element-type element-type)
       (let ((s (make-concatenated-stream s1 s2)))
-	(loop repeat 8 collect (read-byte s))))))
+        (loop repeat 8 collect (read-byte s))))))
   (1 5 9 13 1 5 9 13))
 
 (deftest make-concatenated-stream.10
@@ -137,8 +137,8 @@
     (s2 "b")
     (let ((s (make-concatenated-stream s1 s2)))
       (multiple-value-bind (str mnp)
-	  (read-line s)
-	(values str (notnot mnp))))))
+          (read-line s)
+        (values str (notnot mnp))))))
   "ab" t)
 
 (deftest make-concatenated-stream.18
@@ -148,8 +148,8 @@
     (s2 "")
     (let ((s (make-concatenated-stream s1 s2)))
       (multiple-value-bind (str mnp)
-	  (read-line s)
-	(values str (notnot mnp))))))
+          (read-line s)
+        (values str (notnot mnp))))))
   "ab" t)
 
 (deftest make-concatenated-stream.19
@@ -159,8 +159,8 @@
     (s2 "ab")
     (let ((s (make-concatenated-stream s1 s2)))
       (multiple-value-bind (str mnp)
-	  (read-line s)
-	(values str (notnot mnp))))))
+          (read-line s)
+        (values str (notnot mnp))))))
   "ab" t)
 
 (deftest make-concatenated-stream.20
@@ -179,61 +179,61 @@
     (s2 "")
     (let ((s (make-concatenated-stream s1 s2)))
       (multiple-value-bind (str mnp)
-	  (read-line s nil :eof)
-	(values str (notnot mnp))))))
+          (read-line s nil :eof)
+        (values str (notnot mnp))))))
   :eof t)
 
 (deftest make-concatenated-stream.22
   (let ((pn #p"tmp.dat")
-	(element-type '(unsigned-byte 8)))
+        (element-type '(unsigned-byte 8)))
     (with-open-file (s pn :direction :output :element-type element-type
-		       :if-exists :supersede)
-		    (dolist (b '(1 5 9 13)) (write-byte b s)))
+                       :if-exists :supersede)
+                    (dolist (b '(1 5 9 13)) (write-byte b s)))
     (with-open-file
      (s1 pn :direction :input :element-type element-type)
      (with-open-file
       (s2 pn :direction :input :element-type element-type)
       (let ((s (make-concatenated-stream s1 s2))
-	    (x (vector nil nil nil nil nil nil nil nil)))
-	(values
-	 (read-sequence x s)
-	 x)))))
+            (x (vector nil nil nil nil nil nil nil nil)))
+        (values
+         (read-sequence x s)
+         x)))))
   8
   #(1 5 9 13 1 5 9 13))
 
 (deftest make-concatenated-stream.23
   (let ((pn #p"tmp.dat")
-	(element-type '(unsigned-byte 8)))
+        (element-type '(unsigned-byte 8)))
     (with-open-file (s pn :direction :output :element-type element-type
-		       :if-exists :supersede)
-		    (dolist (b '(1 5 9 13)) (write-byte b s)))
+                       :if-exists :supersede)
+                    (dolist (b '(1 5 9 13)) (write-byte b s)))
     (with-open-file
      (s1 pn :direction :input :element-type element-type)
      (with-open-file
       (s2 pn :direction :input :element-type element-type)
       (let ((s (make-concatenated-stream s1 s2))
-	    (x (vector nil nil nil nil nil nil)))
-	(values
-	 (read-sequence x s)
-	 x)))))
+            (x (vector nil nil nil nil nil nil)))
+        (values
+         (read-sequence x s)
+         x)))))
   6
   #(1 5 9 13 1 5))
 
 (deftest make-concatenated-stream.24
   (let ((pn #p"tmp.dat")
-	(element-type '(unsigned-byte 8)))
+        (element-type '(unsigned-byte 8)))
     (with-open-file (s pn :direction :output :element-type element-type
-		       :if-exists :supersede)
-		    (dolist (b '(1 5 9 13)) (write-byte b s)))
+                       :if-exists :supersede)
+                    (dolist (b '(1 5 9 13)) (write-byte b s)))
     (with-open-file
      (s1 pn :direction :input :element-type element-type)
      (with-open-file
       (s2 pn :direction :input :element-type element-type)
       (let ((s (make-concatenated-stream s1 s2))
-	    (x (vector nil nil nil nil nil nil nil nil nil nil)))
-	(values
-	 (read-sequence x s)
-	 x)))))
+            (x (vector nil nil nil nil nil nil nil nil nil nil)))
+        (values
+         (read-sequence x s)
+         x)))))
   8
   #(1 5 9 13 1 5 9 13 nil nil))
 
@@ -244,7 +244,7 @@
 (deftest make-concatenated-stream.26
   (let ((s (make-concatenated-stream)))
     (values (prog1 (close s) (close s))
-	    (open-stream-p s)))
+            (open-stream-p s)))
   t nil)
 
 (deftest make-concatenated-stream.27
@@ -309,15 +309,15 @@
 
 (deftest make-concatenated-stream.error.1
   (loop for x in *mini-universe*
-	unless (or (and (streamp x) (input-stream-p x))
-		   (eval `(signals-error (make-concatenated-stream ',x) t)))
-	collect x)
+        unless (or (and (streamp x) (input-stream-p x))
+                   (eval `(signals-error (make-concatenated-stream ',x) t)))
+        collect x)
   nil)
 
 (deftest make-concatenated-stream.error.2
   (loop for x in *streams*
-	unless (or (and (streamp x) (input-stream-p x))
-		   (eval `(signals-error (make-concatenated-stream ',x) t)))
-	collect x)
+        unless (or (and (streamp x) (input-stream-p x))
+                   (eval `(signals-error (make-concatenated-stream ',x) t)))
+        collect x)
   nil)
 

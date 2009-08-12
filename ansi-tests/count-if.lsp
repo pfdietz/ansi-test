@@ -44,38 +44,38 @@
 (deftest count-if-list.11
   (let ((c 0))
     (count-if #'evenp '(1 2 3 4 4 1 8 10 1)
-	      :key #'(lambda (x) (+ x (incf c)))))
+              :key #'(lambda (x) (+ x (incf c)))))
   6)
 
 (deftest count-if-list.12
   (let ((c 0))
     (count-if #'evenp '(0 1 2 3 4 4 1 7 10 1)
-	      :from-end t
-	      :key #'(lambda (x) (+ x (incf c)))))
+              :from-end t
+              :key #'(lambda (x) (+ x (incf c)))))
   8)
 
 (deftest count-if-list.13
   (count-if #'(lambda (x) (eqt x 'a))
-	    '(a b c d a e f a e f f a a) :start 2)
+            '(a b c d a e f a e f f a a) :start 2)
   4)
 
 (deftest count-if-list.14
   (count-if #'(lambda (x) (eqt x 'a))
-	    '(a b c d a e f a e f f a a) :end 7)
+            '(a b c d a e f a e f f a a) :end 7)
   2)
-  
+
 (deftest count-if-list.15
   (count-if #'(lambda (x) (eqt x 'a))
-	    '(a b c d a e f a e f f a a) :end 7
-	    :start 2)
+            '(a b c d a e f a e f f a a) :end 7
+            :start 2)
   1)
-  
+
 (deftest count-if-list.16
   (count-if #'(lambda (x) (eqt x 'a))
-	    '(a b c d a e f a e f f a a) :end 7
-	    :start 2 :from-end t)
+            '(a b c d a e f a e f f a a) :end 7
+            :start 2 :from-end t)
   1)
-  
+
 
 ;;; tests on vectors
 
@@ -118,157 +118,157 @@
 (deftest count-if-vector.11
   (let ((c 0))
     (count-if #'evenp #(1 2 3 4 4 1 8 10 1)
-	      :key #'(lambda (x) (+ x (incf c)))))
+              :key #'(lambda (x) (+ x (incf c)))))
   6)
 
 (deftest count-if-vector.12
   (let ((c 0))
     (count-if #'evenp #(0 1 2 3 4 4 1 7 10 1)
-	      :from-end t
-	      :key #'(lambda (x) (+ x (incf c)))))
+              :from-end t
+              :key #'(lambda (x) (+ x (incf c)))))
   8)
 
 (deftest count-if-vector.13
   (count-if #'(lambda (x) (eqt x 'a))
-	    #(a b c d a e f a e f f a a) :start 2)
+            #(a b c d a e f a e f f a a) :start 2)
   4)
 
 (deftest count-if-vector.14
   (count-if #'(lambda (x) (eqt x 'a))
-	    #(a b c d a e f a e f f a a) :end 7)
+            #(a b c d a e f a e f f a a) :end 7)
   2)
-  
+
 (deftest count-if-vector.15
   (count-if #'(lambda (x) (eqt x 'a))
-	    #(a b c d a e f a e f f a a) :end 7
-	    :start 2)
+            #(a b c d a e f a e f f a a) :end 7
+            :start 2)
   1)
-  
+
 (deftest count-if-vector.16
   (count-if #'(lambda (x) (eqt x 'a))
-	    #(a b c d a e f a e f f a a) :end 7
-	    :start 2 :from-end t)
+            #(a b c d a e f a e f f a a) :end 7
+            :start 2 :from-end t)
   1)
 
 ;;; Non-simple vectors
 
 (deftest count-if-nonsimple-vector.1
   (count-if #'identity (make-array 7 :initial-contents '(a b nil c d nil e)
-				   :fill-pointer t
-				   :adjustable t))
+                                   :fill-pointer t
+                                   :adjustable t))
   5)
 
 (deftest count-if-nonsimple-vector.2
   (count-if #'not (make-array 7 :initial-contents '(a b nil c d nil e)
-				   :fill-pointer t
-				   :adjustable t))
+                                   :fill-pointer t
+                                   :adjustable t))
   2)
 
 (deftest count-if-nonsimple-vector.3
   (count-if #'(lambda (x) (break)) (make-array 0
-				   :fill-pointer t
-				   :adjustable t))
+                                   :fill-pointer t
+                                   :adjustable t))
   0)
 
 (deftest count-if-nonsimple-vector.4
   (count-if #'identity
-	    (make-array 7 :initial-contents '(a b nil c d nil e)
-			:fill-pointer t
-			:adjustable t)
-	    :key #'identity)
+            (make-array 7 :initial-contents '(a b nil c d nil e)
+                        :fill-pointer t
+                        :adjustable t)
+            :key #'identity)
   5)
 
 (deftest count-if-nonsimple-vector.5
   (count-if 'identity
-	    (make-array 7 :initial-contents '(a b nil c d nil e)
-			:fill-pointer t
-			:adjustable t)
-	    :key #'identity)
+            (make-array 7 :initial-contents '(a b nil c d nil e)
+                        :fill-pointer t
+                        :adjustable t)
+            :key #'identity)
   5)
 
 (deftest count-if-nonsimple-vector.6
   (count-if #'identity
-	    (make-array 7 :initial-contents '(a b nil c d nil e)
-			:fill-pointer t
-			:adjustable t)
-	    :key 'identity)
+            (make-array 7 :initial-contents '(a b nil c d nil e)
+                        :fill-pointer t
+                        :adjustable t)
+            :key 'identity)
   5)
 
 (deftest count-if-nonsimple-vector.8
   (count-if #'identity
-	    (make-array 7 :initial-contents '(a b nil c d nil e)
-			:fill-pointer t
-			:adjustable t)
-	    :key 'not)
+            (make-array 7 :initial-contents '(a b nil c d nil e)
+                        :fill-pointer t
+                        :adjustable t)
+            :key 'not)
   2)
 
 (deftest count-if-nonsimple-vector.9
   (count-if #'evenp (make-array 9 :initial-contents '(1 2 3 4 4 1 8 10 1)
-				:fill-pointer t :adjustable t))
+                                :fill-pointer t :adjustable t))
   5)
 
 (deftest count-if-nonsimple-vector.10
   (count-if #'evenp
-	    (make-array 9 :initial-contents '(1 2 3 4 4 1 8 10 1)
-			:fill-pointer t :adjustable t)
-	    :key #'1+)
+            (make-array 9 :initial-contents '(1 2 3 4 4 1 8 10 1)
+                        :fill-pointer t :adjustable t)
+            :key #'1+)
   4)
 
 (deftest count-if-nonsimple-vector.11
   (let ((c 0))
     (count-if #'evenp
-	      (make-array 9 :initial-contents '(1 2 3 4 4 1 8 10 1)
-			  :fill-pointer t :adjustable t)
-	      :key #'(lambda (x) (+ x (incf c)))))
+              (make-array 9 :initial-contents '(1 2 3 4 4 1 8 10 1)
+                          :fill-pointer t :adjustable t)
+              :key #'(lambda (x) (+ x (incf c)))))
   6)
 
 (deftest count-if-nonsimple-vector.12
   (let ((c 0))
     (count-if #'evenp
-	      (make-array 10 :initial-contents '(0 1 2 3 4 4 1 7 10 1)
-			  :fill-pointer t :adjustable t)
-	      :from-end t
-	      :key #'(lambda (x) (+ x (incf c)))))
+              (make-array 10 :initial-contents '(0 1 2 3 4 4 1 7 10 1)
+                          :fill-pointer t :adjustable t)
+              :from-end t
+              :key #'(lambda (x) (+ x (incf c)))))
   8)
 
 (deftest count-if-nonsimple-vector.13
   (count-if #'(lambda (x) (eqt x 'a))
-	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
-			:fill-pointer t :adjustable t)
-	    :start 2)
+            (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
+                        :fill-pointer t :adjustable t)
+            :start 2)
   4)
 
 (deftest count-if-nonsimple-vector.14
   (count-if #'(lambda (x) (eqt x 'a))
-	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
-			:fill-pointer t :adjustable t)
-	    :end 7)
+            (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
+                        :fill-pointer t :adjustable t)
+            :end 7)
   2)
-  
+
 (deftest count-if-nonsimple-vector.15
   (count-if #'(lambda (x) (eqt x 'a))
-	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
-			:fill-pointer t :adjustable t)
-	    :end 7 :start 2)
+            (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
+                        :fill-pointer t :adjustable t)
+            :end 7 :start 2)
   1)
-  
+
 (deftest count-if-nonsimple-vector.16
   (count-if #'(lambda (x) (eqt x 'a))
-	    (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
-			:fill-pointer t :adjustable t)
-	    :end 7 :start 2 :from-end t)
+            (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
+                        :fill-pointer t :adjustable t)
+            :end 7 :start 2 :from-end t)
   1)
 
 (deftest count-if-nonsimple-vector.17
   (flet ((%f (x) (eqt x 'a)))
     (let ((s (make-array 13 :initial-contents '(a b c d a e f a e f f a a)
-			 :fill-pointer 6)))
+                         :fill-pointer 6)))
       (values (count-if #'%f s)
-	      (count-if #'%f s :end nil)
-	      (count-if #'%f s :end 4)
-	      (count-if #'%f s :start 1)
-	      (count-if #'%f s :start 1 :end 4)
-	      (count-if #'%f s :start 1 :end 4 :from-end t))))
+              (count-if #'%f s :end nil)
+              (count-if #'%f s :end 4)
+              (count-if #'%f s :start 1)
+              (count-if #'%f s :start 1 :end 4)
+              (count-if #'%f s :start 1 :end 4 :from-end t))))
   2 2 1 1 0 0)
 
 ;;; Other special vectors
@@ -293,23 +293,23 @@
 
 (deftest count-if.special-vector.3
   (loop for etype in '(short-float single-float double-float long-float)
-	for vals = (loop for e in '(0 1 2 1 3 0 4 5 6 0)
-			 collect (coerce e etype))
-	for vec = (make-array (length vals) :element-type etype :initial-contents vals)
-	for result = (count-if #'zerop vec)
-	unless (= result 3)
-	collect (list etype vals vec result))
+        for vals = (loop for e in '(0 1 2 1 3 0 4 5 6 0)
+                         collect (coerce e etype))
+        for vec = (make-array (length vals) :element-type etype :initial-contents vals)
+        for result = (count-if #'zerop vec)
+        unless (= result 3)
+        collect (list etype vals vec result))
   nil)
 
 (deftest count-if.special-vector.4
   (loop for cetype in '(short-float single-float double-float long-float integer rational)
-	for etype = `(complex ,cetype)
-	for vals = (loop for e in '(6 1 2 1 3 -4 4 5 6 100)
-			 collect (complex 0 (coerce e cetype)))
-	for vec = (make-array (length vals) :element-type etype :initial-contents vals)
-	for result = (count-if #'(lambda (x) (< (abs x) 5/2)) vec)
-	unless (= result 3)
-	collect (list etype vals vec result))
+        for etype = `(complex ,cetype)
+        for vals = (loop for e in '(6 1 2 1 3 -4 4 5 6 100)
+                         collect (complex 0 (coerce e cetype)))
+        for vec = (make-array (length vals) :element-type etype :initial-contents vals)
+        for result = (count-if #'(lambda (x) (< (abs x) 5/2)) vec)
+        unless (= result 3)
+        collect (list etype vals vec result))
   nil)
 
 
@@ -350,14 +350,14 @@
 (deftest count-if-bit-vector.11
   (let ((c 0))
     (count-if #'evenp #*001011101101
-	      :key #'(lambda (x) (+ x (incf c)))))
+              :key #'(lambda (x) (+ x (incf c)))))
   7)
 
 (deftest count-if-bit-vector.12
   (let ((c 0))
     (count-if #'evenp #*001011101101
-	      :from-end t
-	      :key #'(lambda (x) (+ x (incf c)))))
+              :from-end t
+              :key #'(lambda (x) (+ x (incf c)))))
   5)
 
 (deftest count-if-bit-vector.13
@@ -367,24 +367,24 @@
 (deftest count-if-bit-vector.14
   (count-if #'zerop #*0111011011100 :end 7)
   2)
-  
+
 (deftest count-if-bit-vector.15
   (count-if #'zerop #*0111011011100 :end 7 :start 2)
   1)
-  
+
 (deftest count-if-bit-vector.16
   (count-if #'zerop #*0111011011100 :end 7 :start 2 :from-end t)
   1)
 
 (deftest count-if-bit-vector.17
   (let ((s (make-array '(10) :initial-contents '(0 0 1 0 1 0 0 1 1 0)
-		       :element-type 'bit
-		       :fill-pointer 6)))
+                       :element-type 'bit
+                       :fill-pointer 6)))
     (values (count-if #'zerop s)
-	    (count-if #'zerop s :end nil)
-	    (count-if #'zerop s :end 4)
-	    (count-if #'zerop s :start 5)
-	    (count-if #'zerop s :start 1 :end 4)))
+            (count-if #'zerop s :end nil)
+            (count-if #'zerop s :end 4)
+            (count-if #'zerop s :start 5)
+            (count-if #'zerop s :start 1 :end 4)))
   4 4 3 1 2)
 
 ;;; tests on strings
@@ -420,14 +420,14 @@
 (deftest count-if-string.11
   (let ((c 0))
     (count-if #'evenp "001011101101"
-	      :key #'(lambda (x) (+ (if (eql x #\0) 0 1) (incf c)))))
+              :key #'(lambda (x) (+ (if (eql x #\0) 0 1) (incf c)))))
   7)
 
 (deftest count-if-string.12
   (let ((c 0))
     (count-if #'evenp "001011101101"
-	      :from-end t
-	      :key #'(lambda (x) (+ (if (eql x #\0) 0 1) (incf c)))))
+              :from-end t
+              :key #'(lambda (x) (+ (if (eql x #\0) 0 1) (incf c)))))
   5)
 
 (deftest count-if-string.13
@@ -437,26 +437,26 @@
 (deftest count-if-string.14
   (count-if #'(lambda (x) (eql x #\0)) "0111011011100" :end 7)
   2)
-  
+
 (deftest count-if-string.15
   (count-if #'(lambda (x) (eql x #\0)) "0111011011100" :end 7 :start 2)
   1)
-  
+
 (deftest count-if-string.16
   (count-if #'(lambda (x) (eql x #\0))
-	    "0111011011100" :end 7 :start 2 :from-end t)
+            "0111011011100" :end 7 :start 2 :from-end t)
   1)
 
 (deftest count-if-string.17
   (let ((s (make-array '(10)
-		       :initial-contents "00a0aa0a0a"
-		       :element-type 'character
-		       :fill-pointer 6)))
+                       :initial-contents "00a0aa0a0a"
+                       :element-type 'character
+                       :fill-pointer 6)))
     (values (count-if #'digit-char-p s)
-	    (count-if #'digit-char-p s :end nil)
-	    (count-if #'digit-char-p s :start 1)
-	    (count-if #'digit-char-p s :end 2)
-	    (count-if #'digit-char-p s :start 1 :end 2)))
+            (count-if #'digit-char-p s :end nil)
+            (count-if #'digit-char-p s :start 1)
+            (count-if #'digit-char-p s :end 2)
+            (count-if #'digit-char-p s :start 1 :end 2)))
   3 3 2 2 1)
 
 (deftest count-if-string.18
@@ -471,12 +471,12 @@
   (let ((i 0) c1 c2 c3 c4 c5 c6)
     (values
      (count-if (progn (setf c1 (incf i)) #'null)
-	       (progn (setf c2 (incf i)) '(a nil b c nil d e))
-	       :start (progn (setf c3 (incf i)) 0)
-	       :end (progn (setf c4 (incf i)) 3)
-	       :key (progn (setf c5 (incf i)) #'identity)
-	       :from-end (progn (setf c6 (incf i)) nil)
-	       )
+               (progn (setf c2 (incf i)) '(a nil b c nil d e))
+               :start (progn (setf c3 (incf i)) 0)
+               :end (progn (setf c4 (incf i)) 3)
+               :key (progn (setf c5 (incf i)) #'identity)
+               :from-end (progn (setf c6 (incf i)) nil)
+               )
      i c1 c2 c3 c4 c5 c6))
   1 6 1 2 3 4 5 6)
 
@@ -484,12 +484,12 @@
   (let ((i 0) c1 c2 c3 c4 c5 c6)
     (values
      (count-if (progn (setf c1 (incf i)) #'null)
-	       (progn (setf c2 (incf i)) '(a nil b c nil d e))
-	       :from-end (progn (setf c3 (incf i)) nil)
-	       :key (progn (setf c4 (incf i)) #'identity)
-	       :end (progn (setf c5 (incf i)) 3)
-	       :start (progn (setf c6 (incf i)) 0)
-	       )
+               (progn (setf c2 (incf i)) '(a nil b c nil d e))
+               :from-end (progn (setf c3 (incf i)) nil)
+               :key (progn (setf c4 (incf i)) #'identity)
+               :end (progn (setf c5 (incf i)) 3)
+               :start (progn (setf c6 (incf i)) 0)
+               )
      i c1 c2 c3 c4 c5 c6))
   1 6 1 2 3 4 5 6)
 
@@ -507,9 +507,9 @@
 ;;; The leftmost of two :allow-other-keys arguments is the one that  matters.
 (deftest count-if.allow-other-keys.3
   (count-if #'evenp '(1 2 3 4 5)
-	    :allow-other-keys t
-	    :allow-other-keys nil
-	    :bad t)
+            :allow-other-keys t
+            :allow-other-keys nil
+            :bad t)
   2)
 
 (deftest count-if.keywords.4
@@ -520,12 +520,12 @@
   (count-if #'evenp '(1 2 3 4 5) :allow-other-keys nil)
   2)
 
-	    
+
 ;;; Error tests
 
 (deftest count-if.error.1
   (check-type-error #'(lambda (x) (count-if #'identity x))
-		    #'sequencep)
+                    #'sequencep)
   nil)
 
 (deftest count-if.error.4
@@ -542,7 +542,7 @@
 
 (deftest count-if.error.7
   (signals-error (count-if #'null nil :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest count-if.error.8
@@ -556,9 +556,9 @@
 ;;; Only leftmost :allow-other-keys argument matters
 (deftest count-if.error.10
   (signals-error (count-if #'null nil :bad t
-			    :allow-other-keys nil
-			    :allow-other-keys t)
-		 program-error)
+                            :allow-other-keys nil
+                            :allow-other-keys t)
+                 program-error)
   t)
 
 (deftest count-if.error.11
@@ -575,10 +575,10 @@
 
 (deftest count-if.error.14
   (signals-error (count-if #'identity '(a b c) :key #'cdr)
-		 type-error)
+                 type-error)
   t)
 
 (deftest count-if.error.15
   (signals-error (count-if #'identity '(a b c) :key #'cons)
-		 program-error)
+                 program-error)
   t)

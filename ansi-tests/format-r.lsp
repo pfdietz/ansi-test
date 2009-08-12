@@ -15,13 +15,13 @@
    for s = (format nil "~~~dR" i)
    nconc
    (loop for x = (let ((bound (ash 1 (+ 2 (random 40)))))
-		   (- (random (* bound 2)) bound))
-	 for s1 = (format nil s x)
-	 for s2 = (with-standard-io-syntax
-		   (write-to-string x :base i :readably nil))
-	 repeat 100
-	 unless (string= s1 s2)
-	 collect (list i x s1 s2)))
+                   (- (random (* bound 2)) bound))
+         for s1 = (format nil s x)
+         for s2 = (with-standard-io-syntax
+                   (write-to-string x :base i :readably nil))
+         repeat 100
+         unless (string= s1 s2)
+         collect (list i x s1 s2)))
   nil)
 
 (deftest formatter.r.1
@@ -31,13 +31,13 @@
    for fn = (eval `(formatter ,s))
    nconc
    (loop for x = (let ((bound (ash 1 (+ 2 (random 40)))))
-		   (- (random (* bound 2)) bound))
-	 for s1 = (formatter-call-to-string fn x)
-	 for s2 = (with-standard-io-syntax
-		   (write-to-string x :base i :readably nil))
-	 repeat 100
-	 unless (string= s1 s2)
-	 collect (list i x s1 s2)))
+                   (- (random (* bound 2)) bound))
+         for s1 = (formatter-call-to-string fn x)
+         for s2 = (with-standard-io-syntax
+                   (write-to-string x :base i :readably nil))
+         repeat 100
+         unless (string= s1 s2)
+         collect (list i x s1 s2)))
   nil)
 
 (def-format-test format.r.2
@@ -48,87 +48,87 @@
 
 (deftest format.r.4
   (loop for base from 2 to 36
-	nconc
-	(loop for mincol from 0 to 20
-	      for fmt = (format nil "~~~D,~DR" base mincol)
-	      for s = (format nil fmt base)
-	      unless (if (<= mincol 2)
-			 (string= s "10")
-		       (string= (concatenate
-				 'string
-				 (make-string (- mincol 2)
-					      :initial-element #\Space)
-				 "10")
-				s))
-	      collect (list base mincol s)))
+        nconc
+        (loop for mincol from 0 to 20
+              for fmt = (format nil "~~~D,~DR" base mincol)
+              for s = (format nil fmt base)
+              unless (if (<= mincol 2)
+                         (string= s "10")
+                       (string= (concatenate
+                                 'string
+                                 (make-string (- mincol 2)
+                                              :initial-element #\Space)
+                                 "10")
+                                s))
+              collect (list base mincol s)))
   nil)
 
 (deftest formatter.r.4
   (loop for base from 2 to 36
-	nconc
-	(loop for mincol from 0 to 20
-	      for fmt = (format nil "~~~D,~DR" base mincol)
-	      for fn = (eval `(formatter ,fmt))
-	      for s = (formatter-call-to-string fn base)
-	      unless (if (<= mincol 2)
-			 (string= s "10")
-		       (string= (concatenate
-				 'string
-				 (make-string (- mincol 2)
-					      :initial-element #\Space)
-				 "10")
-				s))
-	      collect (list base mincol s)))
+        nconc
+        (loop for mincol from 0 to 20
+              for fmt = (format nil "~~~D,~DR" base mincol)
+              for fn = (eval `(formatter ,fmt))
+              for s = (formatter-call-to-string fn base)
+              unless (if (<= mincol 2)
+                         (string= s "10")
+                       (string= (concatenate
+                                 'string
+                                 (make-string (- mincol 2)
+                                              :initial-element #\Space)
+                                 "10")
+                                s))
+              collect (list base mincol s)))
   nil)
 
 (deftest format.r.5
   (loop for base from 2 to 36
-	nconc
-	(loop for mincol from 0 to 20
-	      for fmt = (format nil "~~~D,~D,'*r" base mincol)
-	      for s = (format nil fmt base)
-	      unless (if (<= mincol 2)
-			 (string= s "10")
-		       (string= (concatenate
-				 'string
-				 (make-string (- mincol 2)
-					      :initial-element #\*)
-				 "10")
-				s))
-	      collect (list base mincol s)))
+        nconc
+        (loop for mincol from 0 to 20
+              for fmt = (format nil "~~~D,~D,'*r" base mincol)
+              for s = (format nil fmt base)
+              unless (if (<= mincol 2)
+                         (string= s "10")
+                       (string= (concatenate
+                                 'string
+                                 (make-string (- mincol 2)
+                                              :initial-element #\*)
+                                 "10")
+                                s))
+              collect (list base mincol s)))
   nil)
 
 (deftest formatter.r.5
   (loop for base from 2 to 36
-	nconc
-	(loop for mincol from 0 to 20
-	      for fmt = (format nil "~~~D,~D,'*r" base mincol)
-	      for fn = (eval `(formatter ,fmt))
-	      for s = (formatter-call-to-string fn base)
-	      unless (if (<= mincol 2)
-			 (string= s "10")
-		       (string= (concatenate
-				 'string
-				 (make-string (- mincol 2)
-					      :initial-element #\*)
-				 "10")
-				s))
-	      collect (list base mincol s)))
+        nconc
+        (loop for mincol from 0 to 20
+              for fmt = (format nil "~~~D,~D,'*r" base mincol)
+              for fn = (eval `(formatter ,fmt))
+              for s = (formatter-call-to-string fn base)
+              unless (if (<= mincol 2)
+                         (string= s "10")
+                       (string= (concatenate
+                                 'string
+                                 (make-string (- mincol 2)
+                                              :initial-element #\*)
+                                 "10")
+                                s))
+              collect (list base mincol s)))
   nil)
 
 (deftest format.r.6
   (loop for base from 2 to 36
-	for s = (format nil "~vr" base (1+ base))
-	unless (string= s "11")
-	collect (list base s))
+        for s = (format nil "~vr" base (1+ base))
+        unless (string= s "11")
+        collect (list base s))
   nil)
 
 (deftest formatter.r.6
   (let ((fn (formatter "~vr")))
     (loop for base from 2 to 36
-	  for s = (formatter-call-to-string fn base (1+ base))
-	  unless (string= s "11")
-	  collect (list base s)))
+          for s = (formatter-call-to-string fn base (1+ base))
+          unless (string= s "11")
+          collect (list base s)))
   nil)
 
 (defparameter *english-number-names*
@@ -155,29 +155,29 @@
 
 (deftest format.r.7
   (loop for i from 0 to 100
-	for s1 = (format nil "~r" i)
-	for s2 in *english-number-names*
-	unless (string= s1 s2)
-	collect (list i s1 s2))
+        for s1 = (format nil "~r" i)
+        for s2 in *english-number-names*
+        unless (string= s1 s2)
+        collect (list i s1 s2))
   nil)
 
 (deftest formatter.r.7
   (let ((fn (formatter "~r")))
     (loop for i from 0 to 100
-	  for s1 = (formatter-call-to-string fn i)
-	  for s2 in *english-number-names*
-	  unless (string= s1 s2)
-	  collect (list i s1 s2)))
+          for s1 = (formatter-call-to-string fn i)
+          for s2 in *english-number-names*
+          unless (string= s1 s2)
+          collect (list i s1 s2)))
   nil)
 
 (deftest format.r.7a
   (loop for i from 1 to 100
-	for s1 = (format nil "~r" (- i))
-	for s2 in (cdr *english-number-names*)
-	for s3 = (concatenate 'string "negative " s2)
-	for s4 = (concatenate 'string "minus " s2)
-	unless (or (string= s1 s3) (string= s1 s4))
-	collect (list i s1 s3 s4))
+        for s1 = (format nil "~r" (- i))
+        for s2 in (cdr *english-number-names*)
+        for s3 = (concatenate 'string "negative " s2)
+        for s4 = (concatenate 'string "minus " s2)
+        unless (or (string= s1 s3) (string= s1 s4))
+        collect (list i s1 s3 s4))
   nil)
 
 (def-format-test format.r.8
@@ -197,8 +197,8 @@
     (with-standard-io-syntax
      (let ((*print-radix* t))
        (values
-	(format nil fn 123)
-	(formatter-call-to-string fn 123)))))
+        (format nil fn 123)
+        (formatter-call-to-string fn 123)))))
   "123"
   "123")
 
@@ -217,12 +217,12 @@
    for s = (format nil "~~~d:R" i)
    nconc
    (loop for x = (let ((bound (ash 1 (+ 2 (random 40)))))
-		   (- (random (* bound 2)) bound))
-	 for s1 = (remove #\, (format nil s x))
-	 for y = (let ((*read-base* i)) (read-from-string s1))
-	 repeat 100
-	 unless (= x y)
-	 collect (list i x s1 y)))
+                   (- (random (* bound 2)) bound))
+         for s1 = (remove #\, (format nil s x))
+         for y = (let ((*read-base* i)) (read-from-string s1))
+         repeat 100
+         unless (= x y)
+         collect (list i x s1 y)))
   nil)
 
 (deftest format.r.15
@@ -230,16 +230,16 @@
    for i = (+ 2 (random 35))
    for interval = (1+ (random 20))
    for comma = (loop for c = (random-from-seq +standard-chars+)
-		     unless (alphanumericp c)
-		     return c)
+                     unless (alphanumericp c)
+                     return c)
    for s = (format nil "~~~d,,,'~c,~d:R" i comma interval)
    for x = (let ((bound (ash 1 (+ 2 (random 40)))))
-	     (- (random (* bound 2)) bound))
+             (- (random (* bound 2)) bound))
    for s1 = (remove comma (format nil s x))
    for y = (let ((*read-base* i)) (read-from-string s1))
    repeat 1000
    unless (or (and (eql comma #\-) (< x 0))
-	      (= x y))
+              (= x y))
    collect (list i interval comma x s1 y))
   nil)
 
@@ -273,46 +273,46 @@
 
 (deftest format.r.18
   (loop for i from 0 to 100
-	for s1 = (format nil "~:r" i)
-	for s2 in *english-ordinal-names*
-	unless (string= s1 s2)
-	collect (list i s1 s2))
+        for s1 = (format nil "~:r" i)
+        for s2 in *english-ordinal-names*
+        unless (string= s1 s2)
+        collect (list i s1 s2))
   nil)
 
 (deftest formatter.r.18
   (let ((fn (formatter "~:r")))
     (loop for i from 0 to 100
-	  for s1 = (formatter-call-to-string fn i)
-	  for s2 in *english-ordinal-names*
-	  unless (string= s1 s2)
-	  collect (list i s1 s2)))
+          for s1 = (formatter-call-to-string fn i)
+          for s2 in *english-ordinal-names*
+          unless (string= s1 s2)
+          collect (list i s1 s2)))
   nil)
 
 (deftest format.r.18a
   (loop for i from 1 to 100
-	for s1 = (format nil "~:r" (- i))
-	for s2 in (cdr *english-ordinal-names*)
-	for s3 = (concatenate 'string "negative " s2)
-	for s4 = (concatenate 'string "minus " s2)
-	unless (or (string= s1 s3) (string= s1 s4))
-	collect (list i s1 s3 s4))
+        for s1 = (format nil "~:r" (- i))
+        for s2 in (cdr *english-ordinal-names*)
+        for s3 = (concatenate 'string "negative " s2)
+        for s4 = (concatenate 'string "minus " s2)
+        unless (or (string= s1 s3) (string= s1 s4))
+        collect (list i s1 s3 s4))
   nil)
 
 (deftest format.r.19
   (loop for i from 1
-	for s1 in *roman-numerals*
-	for s2 = (format nil "~@R" i)
-	unless (string= s1 s2)
-	collect (list i s1 s2))
+        for s1 in *roman-numerals*
+        for s2 = (format nil "~@R" i)
+        unless (string= s1 s2)
+        collect (list i s1 s2))
   nil)
 
 (deftest formatter.r.19
   (let ((fn (formatter "~@r")))
     (loop for i from 1
-	  for s1 in *roman-numerals*
-	  for s2 = (formatter-call-to-string fn i)
-	  unless (string= s1 s2)
-	  collect (list i s1 s2)))
+          for s1 in *roman-numerals*
+          for s2 = (formatter-call-to-string fn i)
+          unless (string= s1 s2)
+          collect (list i s1 s2)))
   nil)
 
 ;;; Old roman numerals
@@ -320,12 +320,12 @@
 (defun old-roman-numeral (x)
   (assert (typep x '(integer 1)))
   (let ((n-m 0)
-	(n-d 0)
-	(n-c 0)
-	(n-l 0)
-	(n-x 0)
-	(n-v 0)
-	)
+        (n-d 0)
+        (n-c 0)
+        (n-l 0)
+        (n-x 0)
+        (n-v 0)
+        )
     (loop while (>= x 1000) do (incf n-m) (decf x 1000))
     (when (>= x 500) (incf n-d) (decf x 500))
     (loop while (>= x 100) do (incf n-c) (decf x 100))
@@ -333,37 +333,37 @@
     (loop while (>= x 10) do (incf n-x) (decf x 10))
     (when (>= x 5) (incf n-v) (decf x 5))
     (concatenate 'string
-		 (make-string n-m :initial-element #\M)
-		 (make-string n-d :initial-element #\D)
-		 (make-string n-c :initial-element #\C)
-		 (make-string n-l :initial-element #\L)
-		 (make-string n-x :initial-element #\X)
-		 (make-string n-v :initial-element #\V)
-		 (make-string x   :initial-element #\I))))
+                 (make-string n-m :initial-element #\M)
+                 (make-string n-d :initial-element #\D)
+                 (make-string n-c :initial-element #\C)
+                 (make-string n-l :initial-element #\L)
+                 (make-string n-x :initial-element #\X)
+                 (make-string n-v :initial-element #\V)
+                 (make-string x   :initial-element #\I))))
 
 (deftest format.r.20
   (loop for i from 1 to 4999
-	for s1 = (format nil "~:@r" i)
-	for s2 = (old-roman-numeral i)
-	unless (string= s1 s2)
-	collect (list i s1 s2))
+        for s1 = (format nil "~:@r" i)
+        for s2 = (old-roman-numeral i)
+        unless (string= s1 s2)
+        collect (list i s1 s2))
   nil)
 
 (deftest formatter.r.20
   (let ((fn (formatter "~@:R")))
     (loop for i from 1 to 4999
-	  for s1 = (formatter-call-to-string fn i)
-	  for s2 = (old-roman-numeral i)
-	  unless (string= s1 s2)
-	  collect (list i s1 s2)))
+          for s1 = (formatter-call-to-string fn i)
+          for s2 = (old-roman-numeral i)
+          unless (string= s1 s2)
+          collect (list i s1 s2)))
   nil)
 
 (deftest format.r.21
   (loop for i from 1 to 4999
-	for s1 = (format nil "~:@r" i)
-	for s2 = (format nil "~@:R" i)
-	unless (string= s1 s2)
-	collect (list i s1 s2))
+        for s1 = (format nil "~:@r" i)
+        for s2 = (format nil "~@:R" i)
+        unless (string= s1 s2)
+        collect (list i s1 s2))
   nil)
 
 ;; Combinations of mincol and comma chars
@@ -381,17 +381,17 @@
 
 (deftest format.r.25
   (loop for i from 0 to 5
-	for s = (format nil "~10,vr" i 12345)
-	unless (string= s "12345")
-	collect (list i s))
+        for s = (format nil "~10,vr" i 12345)
+        unless (string= s "12345")
+        collect (list i s))
   nil)
 
 (deftest formatter.r.25
   (let ((fn (formatter "~10,vr")))
     (loop for i from 0 to 5
-	  for s = (formatter-call-to-string fn i 12345)
-	  unless (string= s "12345")
-	  collect (list i s)))
+          for s = (formatter-call-to-string fn i 12345)
+          unless (string= s "12345")
+          collect (list i s)))
   nil)
 
 (def-format-test format.r.26
@@ -443,24 +443,24 @@
      for radix = (+ 2 (random 35))
      for mincol = (and (coin) (random 50))
      for padchar = (and (coin)
-			(random-from-seq +standard-chars+))
+                        (random-from-seq +standard-chars+))
      for commachar = (and (coin)
-			  (random-from-seq +standard-chars+))
+                          (random-from-seq +standard-chars+))
      for commaint = (and (coin) (1+ (random 10)))
      for k = (ash 1 (+ 2 (random 30)))
      for x = (- (random (+ k k)) k)
      for fmt = (concatenate
-		'string
-		(format nil "~~~d," radix)
-		(if mincol (format nil "~d," mincol) ",")
-		(if padchar (format nil "'~c," padchar) ",")
-		(if commachar (format nil "'~c," commachar) ",")
-		(if commaint (format nil "~dr" commaint) "r"))
+                'string
+                (format nil "~~~d," radix)
+                (if mincol (format nil "~d," mincol) ",")
+                (if padchar (format nil "'~c," padchar) ",")
+                (if commachar (format nil "'~c," commachar) ",")
+                (if commaint (format nil "~dr" commaint) "r"))
      for s1 = (format nil fmt x)
      for s2 = (format nil "~v,v,v,v,vr" radix mincol padchar commachar commaint x)
      for s3 = (formatter-call-to-string fn radix mincol padchar commachar commaint x)
      repeat 2000
      unless (and (string= s1 s2)
-		 (string= s1 s3))
+                 (string= s1 s3))
      collect (list radix mincol padchar commachar commaint fmt x s1 s2 s3)))
   nil)

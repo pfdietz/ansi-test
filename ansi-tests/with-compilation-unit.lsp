@@ -26,7 +26,7 @@
 (deftest with-compilation-unit.5
   (with-compilation-unit (:override nil) :foo)
   :foo)
- 
+
 (deftest with-compilation-unit.6
   (with-compilation-unit (:override t) (values 10 17))
   10 17)
@@ -36,10 +36,10 @@
     (values
      (block done
        (with-compilation-unit
-	(:override nil)
-	(setq x 1)
-	(return-from done 2)
-	(setq x 2)))
+        (:override nil)
+        (setq x 1)
+        (return-from done 2)
+        (setq x 2)))
      x))
   2 1)
 

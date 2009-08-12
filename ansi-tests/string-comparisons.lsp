@@ -30,8 +30,8 @@
 ;;; Test that it doesn't stop at null characters
 (deftest string=.6
   (let ((s1 (copy-seq "abc"))
-	(s2 (copy-seq "abd"))
-	(c (or (code-char 0) #\a)))
+        (s2 (copy-seq "abd"))
+        (c (or (code-char 0) #\a)))
     (setf (char s1 1) c)
     (setf (char s2 1) c)
     (values (length s1) (length s2) (string= s1 s2)))
@@ -39,75 +39,75 @@
 
 (deftest string=.7
   (loop for i from 0 to 3
-	collect (not (string= "abc" "abd" :start1 0 :end1 i :end2 i)))
+        collect (not (string= "abc" "abd" :start1 0 :end1 i :end2 i)))
   (nil nil nil t))
 
 (deftest string=.8
   (loop for i from 0 to 3
-	collect (not (string= "abc" "ab" :end1 i)))
+        collect (not (string= "abc" "ab" :end1 i)))
   (t t nil t))
 
 (deftest string=.9
   (loop for i from 0 to 3
-	collect (not (string= "abc" "abd" :start2 0 :end2 i :end1 i)))
+        collect (not (string= "abc" "abd" :start2 0 :end2 i :end1 i)))
   (nil nil nil t))
 
 (deftest string=.10
   (loop for i from 0 to 3
-	collect (not (string= "ab" "abc" :end2 i)))
+        collect (not (string= "ab" "abc" :end2 i)))
   (t t nil t))
 
 (deftest string=.11
   (loop for i from 0 to 3
-	collect (not (string= "xyab" "ab" :start1 i)))
+        collect (not (string= "xyab" "ab" :start1 i)))
   (t t nil t))
 
 (deftest string=.12
   (loop for i from 0 to 3
-	collect (not (string= "ab" "xyab" :start2 i)))
+        collect (not (string= "ab" "xyab" :start2 i)))
   (t t nil t))
 
 (deftest string=.13
   (loop for i from 0 to 3
-	collect (not (string= "xyab" "ab" :start1 i :end1 nil)))
+        collect (not (string= "xyab" "ab" :start1 i :end1 nil)))
   (t t nil t))
 
 (deftest string=.14
   (loop for i from 0 to 3
-	collect (not (string= "ab" "xyab" :start2 i :end2 nil)))
+        collect (not (string= "ab" "xyab" :start2 i :end2 nil)))
   (t t nil t))
 
 ;;; Keyword argument processing
 
 (deftest string-comparison.allow-other-keys.1
   (loop for fn in '(string= string<= string>= string/= string< string>
-		    string-equal string-not-greaterp string-not-lessp
-		    string-not-equal string-lessp string-greaterp)
-	for expected in '(nil 0 nil 0 0 nil nil 0 nil 0 0 nil)
-	for result = (funcall fn "a" "b" :allow-other-keys t :foo nil)
-	unless (eql result expected)
-	collect (list fn expected result))
+                    string-equal string-not-greaterp string-not-lessp
+                    string-not-equal string-lessp string-greaterp)
+        for expected in '(nil 0 nil 0 0 nil nil 0 nil 0 0 nil)
+        for result = (funcall fn "a" "b" :allow-other-keys t :foo nil)
+        unless (eql result expected)
+        collect (list fn expected result))
   nil)
 
 (deftest string-comparison.allow-other-keys.2
   (loop for fn in '(string= string<= string>= string/= string< string>
-		    string-equal string-not-greaterp string-not-lessp
-		    string-not-equal string-lessp string-greaterp)
-	for expected in '(nil nil 0 0 nil 0 nil nil 0 0 nil 0)
-	for result = (funcall fn "c" "b" :allow-other-keys t
-			      :allow-other-keys nil :foo 1)
-	unless (eql result expected)
-	collect (list fn expected result))
+                    string-equal string-not-greaterp string-not-lessp
+                    string-not-equal string-lessp string-greaterp)
+        for expected in '(nil nil 0 0 nil 0 nil nil 0 0 nil 0)
+        for result = (funcall fn "c" "b" :allow-other-keys t
+                              :allow-other-keys nil :foo 1)
+        unless (eql result expected)
+        collect (list fn expected result))
   nil)
 
 (deftest string-comparison.allow-other-keys.3
   (loop for fn in '(string= string<= string>= string/= string< string>
-		    string-equal string-not-greaterp string-not-lessp
-		    string-not-equal string-lessp string-greaterp)
-	for expected in '(nil 0 nil 0 0 nil nil 0 nil 0 0 nil)
-	for result = (funcall fn "a" "b" :allow-other-keys nil)
-	unless (eql result expected)
-	collect (list fn expected result))
+                    string-equal string-not-greaterp string-not-lessp
+                    string-not-equal string-lessp string-greaterp)
+        for expected in '(nil 0 nil 0 0 nil nil 0 nil 0 0 nil)
+        for result = (funcall fn "a" "b" :allow-other-keys nil)
+        unless (eql result expected)
+        collect (list fn expected result))
   nil)
 
 
@@ -117,7 +117,7 @@
   (let ((i 0) x y)
     (values
      (string= (progn (setf x (incf i)) "abc")
-	      (progn (setf y (incf i)) "abd"))
+              (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -125,12 +125,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string= (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :start1 (progn (setf c (incf i)) 0)
-	      :start2 (progn (setf d (incf i)) 0)
-	      :end1 (progn (setf e (incf i)) nil)
-	      :end2 (progn (setf f (incf i)) nil)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :start1 (progn (setf c (incf i)) 0)
+              :start2 (progn (setf d (incf i)) 0)
+              :end1 (progn (setf e (incf i)) nil)
+              :end2 (progn (setf f (incf i)) nil)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -138,12 +138,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string= (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :end2 (progn (setf c (incf i)) nil)
-	      :end1 (progn (setf d (incf i)) nil)
-	      :start2 (progn (setf e (incf i)) 0)
-	      :start1 (progn (setf f (incf i)) 0)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :end2 (progn (setf c (incf i)) nil)
+              :end1 (progn (setf d (incf i)) nil)
+              :start2 (progn (setf e (incf i)) 0)
+              :start1 (progn (setf f (incf i)) 0)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -151,7 +151,7 @@
   (let ((i 0) x y)
     (values
      (string<= (progn (setf x (incf i)) "abf")
-	       (progn (setf y (incf i)) "abd"))
+               (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -159,12 +159,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string<= (progn (setf a (incf i)) "abf")
-	       (progn (setf b (incf i)) "abd")
-	       :start1 (progn (setf c (incf i)) 0)
-	       :start2 (progn (setf d (incf i)) 0)
-	       :end1 (progn (setf e (incf i)) nil)
-	       :end2 (progn (setf f (incf i)) nil)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :start1 (progn (setf c (incf i)) 0)
+               :start2 (progn (setf d (incf i)) 0)
+               :end1 (progn (setf e (incf i)) nil)
+               :end2 (progn (setf f (incf i)) nil)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -172,12 +172,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string<= (progn (setf a (incf i)) "abf")
-	       (progn (setf b (incf i)) "abd")
-	       :end2 (progn (setf c (incf i)) nil)
-	       :end1 (progn (setf d (incf i)) nil)
-	       :start2 (progn (setf e (incf i)) 0)
-	       :start1 (progn (setf f (incf i)) 0)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :end2 (progn (setf c (incf i)) nil)
+               :end1 (progn (setf d (incf i)) nil)
+               :start2 (progn (setf e (incf i)) 0)
+               :start1 (progn (setf f (incf i)) 0)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -185,7 +185,7 @@
   (let ((i 0) x y)
     (values
      (string< (progn (setf x (incf i)) "abf")
-	      (progn (setf y (incf i)) "abd"))
+              (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -193,12 +193,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string< (progn (setf a (incf i)) "abf")
-	      (progn (setf b (incf i)) "abd")
-	      :start1 (progn (setf c (incf i)) 0)
-	      :start2 (progn (setf d (incf i)) 0)
-	      :end1 (progn (setf e (incf i)) nil)
-	      :end2 (progn (setf f (incf i)) nil)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :start1 (progn (setf c (incf i)) 0)
+              :start2 (progn (setf d (incf i)) 0)
+              :end1 (progn (setf e (incf i)) nil)
+              :end2 (progn (setf f (incf i)) nil)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -206,12 +206,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string< (progn (setf a (incf i)) "abf")
-	      (progn (setf b (incf i)) "abd")
-	      :end2 (progn (setf c (incf i)) nil)
-	      :end1 (progn (setf d (incf i)) nil)
-	      :start2 (progn (setf e (incf i)) 0)
-	      :start1 (progn (setf f (incf i)) 0)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :end2 (progn (setf c (incf i)) nil)
+              :end1 (progn (setf d (incf i)) nil)
+              :start2 (progn (setf e (incf i)) 0)
+              :start1 (progn (setf f (incf i)) 0)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -220,7 +220,7 @@
   (let ((i 0) x y)
     (values
      (string/= (progn (setf x (incf i)) "abc")
-	       (progn (setf y (incf i)) "abc"))
+               (progn (setf y (incf i)) "abc"))
      i x y))
   nil 2 1 2)
 
@@ -228,12 +228,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string/= (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abc")
-	       :start1 (progn (setf c (incf i)) 0)
-	       :start2 (progn (setf d (incf i)) 0)
-	       :end1 (progn (setf e (incf i)) nil)
-	       :end2 (progn (setf f (incf i)) nil)
-	       )
+               (progn (setf b (incf i)) "abc")
+               :start1 (progn (setf c (incf i)) 0)
+               :start2 (progn (setf d (incf i)) 0)
+               :end1 (progn (setf e (incf i)) nil)
+               :end2 (progn (setf f (incf i)) nil)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -241,12 +241,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string/= (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abc")
-	       :end2 (progn (setf c (incf i)) nil)
-	       :end1 (progn (setf d (incf i)) nil)
-	       :start2 (progn (setf e (incf i)) 0)
-	       :start1 (progn (setf f (incf i)) 0)
-	       )
+               (progn (setf b (incf i)) "abc")
+               :end2 (progn (setf c (incf i)) nil)
+               :end1 (progn (setf d (incf i)) nil)
+               :start2 (progn (setf e (incf i)) 0)
+               :start1 (progn (setf f (incf i)) 0)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -254,7 +254,7 @@
   (let ((i 0) x y)
     (values
      (string<= (progn (setf x (incf i)) "abf")
-	       (progn (setf y (incf i)) "abd"))
+               (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -262,12 +262,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string>= (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abd")
-	       :start1 (progn (setf c (incf i)) 0)
-	       :start2 (progn (setf d (incf i)) 0)
-	       :end1 (progn (setf e (incf i)) nil)
-	       :end2 (progn (setf f (incf i)) nil)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :start1 (progn (setf c (incf i)) 0)
+               :start2 (progn (setf d (incf i)) 0)
+               :end1 (progn (setf e (incf i)) nil)
+               :end2 (progn (setf f (incf i)) nil)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -275,12 +275,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string>= (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abd")
-	       :end2 (progn (setf c (incf i)) nil)
-	       :end1 (progn (setf d (incf i)) nil)
-	       :start2 (progn (setf e (incf i)) 0)
-	       :start1 (progn (setf f (incf i)) 0)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :end2 (progn (setf c (incf i)) nil)
+               :end1 (progn (setf d (incf i)) nil)
+               :start2 (progn (setf e (incf i)) 0)
+               :start1 (progn (setf f (incf i)) 0)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -288,7 +288,7 @@
   (let ((i 0) x y)
     (values
      (string> (progn (setf x (incf i)) "abc")
-	      (progn (setf y (incf i)) "abd"))
+              (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -296,12 +296,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string> (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :start1 (progn (setf c (incf i)) 0)
-	      :start2 (progn (setf d (incf i)) 0)
-	      :end1 (progn (setf e (incf i)) nil)
-	      :end2 (progn (setf f (incf i)) nil)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :start1 (progn (setf c (incf i)) 0)
+              :start2 (progn (setf d (incf i)) 0)
+              :end1 (progn (setf e (incf i)) nil)
+              :end2 (progn (setf f (incf i)) nil)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -309,12 +309,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string> (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :end2 (progn (setf c (incf i)) nil)
-	      :end1 (progn (setf d (incf i)) nil)
-	      :start2 (progn (setf e (incf i)) 0)
-	      :start1 (progn (setf f (incf i)) 0)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :end2 (progn (setf c (incf i)) nil)
+              :end1 (progn (setf d (incf i)) nil)
+              :start2 (progn (setf e (incf i)) 0)
+              :start1 (progn (setf f (incf i)) 0)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -323,7 +323,7 @@
   (let ((i 0) x y)
     (values
      (string-equal (progn (setf x (incf i)) "abc")
-	      (progn (setf y (incf i)) "abd"))
+              (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -331,12 +331,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-equal (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :start1 (progn (setf c (incf i)) 0)
-	      :start2 (progn (setf d (incf i)) 0)
-	      :end1 (progn (setf e (incf i)) nil)
-	      :end2 (progn (setf f (incf i)) nil)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :start1 (progn (setf c (incf i)) 0)
+              :start2 (progn (setf d (incf i)) 0)
+              :end1 (progn (setf e (incf i)) nil)
+              :end2 (progn (setf f (incf i)) nil)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -344,12 +344,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-equal (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :end2 (progn (setf c (incf i)) nil)
-	      :end1 (progn (setf d (incf i)) nil)
-	      :start2 (progn (setf e (incf i)) 0)
-	      :start1 (progn (setf f (incf i)) 0)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :end2 (progn (setf c (incf i)) nil)
+              :end1 (progn (setf d (incf i)) nil)
+              :start2 (progn (setf e (incf i)) 0)
+              :start1 (progn (setf f (incf i)) 0)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -357,7 +357,7 @@
   (let ((i 0) x y)
     (values
      (string-not-greaterp (progn (setf x (incf i)) "abf")
-		       (progn (setf y (incf i)) "abd"))
+                       (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -365,12 +365,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-not-greaterp (progn (setf a (incf i)) "abf")
-	       (progn (setf b (incf i)) "abd")
-	       :start1 (progn (setf c (incf i)) 0)
-	       :start2 (progn (setf d (incf i)) 0)
-	       :end1 (progn (setf e (incf i)) nil)
-	       :end2 (progn (setf f (incf i)) nil)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :start1 (progn (setf c (incf i)) 0)
+               :start2 (progn (setf d (incf i)) 0)
+               :end1 (progn (setf e (incf i)) nil)
+               :end2 (progn (setf f (incf i)) nil)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -378,12 +378,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-not-greaterp (progn (setf a (incf i)) "abf")
-	       (progn (setf b (incf i)) "abd")
-	       :end2 (progn (setf c (incf i)) nil)
-	       :end1 (progn (setf d (incf i)) nil)
-	       :start2 (progn (setf e (incf i)) 0)
-	       :start1 (progn (setf f (incf i)) 0)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :end2 (progn (setf c (incf i)) nil)
+               :end1 (progn (setf d (incf i)) nil)
+               :start2 (progn (setf e (incf i)) 0)
+               :start1 (progn (setf f (incf i)) 0)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -391,7 +391,7 @@
   (let ((i 0) x y)
     (values
      (string-lessp (progn (setf x (incf i)) "abf")
-	      (progn (setf y (incf i)) "abd"))
+              (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -399,12 +399,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-lessp (progn (setf a (incf i)) "abf")
-	      (progn (setf b (incf i)) "abd")
-	      :start1 (progn (setf c (incf i)) 0)
-	      :start2 (progn (setf d (incf i)) 0)
-	      :end1 (progn (setf e (incf i)) nil)
-	      :end2 (progn (setf f (incf i)) nil)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :start1 (progn (setf c (incf i)) 0)
+              :start2 (progn (setf d (incf i)) 0)
+              :end1 (progn (setf e (incf i)) nil)
+              :end2 (progn (setf f (incf i)) nil)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -412,12 +412,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-lessp (progn (setf a (incf i)) "abf")
-	      (progn (setf b (incf i)) "abd")
-	      :end2 (progn (setf c (incf i)) nil)
-	      :end1 (progn (setf d (incf i)) nil)
-	      :start2 (progn (setf e (incf i)) 0)
-	      :start1 (progn (setf f (incf i)) 0)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :end2 (progn (setf c (incf i)) nil)
+              :end1 (progn (setf d (incf i)) nil)
+              :start2 (progn (setf e (incf i)) 0)
+              :start1 (progn (setf f (incf i)) 0)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -426,7 +426,7 @@
   (let ((i 0) x y)
     (values
      (string-not-equal (progn (setf x (incf i)) "abc")
-	       (progn (setf y (incf i)) "abc"))
+               (progn (setf y (incf i)) "abc"))
      i x y))
   nil 2 1 2)
 
@@ -434,12 +434,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-not-equal (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abc")
-	       :start1 (progn (setf c (incf i)) 0)
-	       :start2 (progn (setf d (incf i)) 0)
-	       :end1 (progn (setf e (incf i)) nil)
-	       :end2 (progn (setf f (incf i)) nil)
-	       )
+               (progn (setf b (incf i)) "abc")
+               :start1 (progn (setf c (incf i)) 0)
+               :start2 (progn (setf d (incf i)) 0)
+               :end1 (progn (setf e (incf i)) nil)
+               :end2 (progn (setf f (incf i)) nil)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -447,12 +447,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-not-equal (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abc")
-	       :end2 (progn (setf c (incf i)) nil)
-	       :end1 (progn (setf d (incf i)) nil)
-	       :start2 (progn (setf e (incf i)) 0)
-	       :start1 (progn (setf f (incf i)) 0)
-	       )
+               (progn (setf b (incf i)) "abc")
+               :end2 (progn (setf c (incf i)) nil)
+               :end1 (progn (setf d (incf i)) nil)
+               :start2 (progn (setf e (incf i)) 0)
+               :start1 (progn (setf f (incf i)) 0)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -460,7 +460,7 @@
   (let ((i 0) x y)
     (values
      (string-not-lessp (progn (setf x (incf i)) "abc")
-		       (progn (setf y (incf i)) "abd"))
+                       (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -468,12 +468,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-not-lessp (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abd")
-	       :start1 (progn (setf c (incf i)) 0)
-	       :start2 (progn (setf d (incf i)) 0)
-	       :end1 (progn (setf e (incf i)) nil)
-	       :end2 (progn (setf f (incf i)) nil)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :start1 (progn (setf c (incf i)) 0)
+               :start2 (progn (setf d (incf i)) 0)
+               :end1 (progn (setf e (incf i)) nil)
+               :end2 (progn (setf f (incf i)) nil)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -481,12 +481,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-not-lessp (progn (setf a (incf i)) "abc")
-	       (progn (setf b (incf i)) "abd")
-	       :end2 (progn (setf c (incf i)) nil)
-	       :end1 (progn (setf d (incf i)) nil)
-	       :start2 (progn (setf e (incf i)) 0)
-	       :start1 (progn (setf f (incf i)) 0)
-	       )
+               (progn (setf b (incf i)) "abd")
+               :end2 (progn (setf c (incf i)) nil)
+               :end1 (progn (setf d (incf i)) nil)
+               :start2 (progn (setf e (incf i)) 0)
+               :start1 (progn (setf f (incf i)) 0)
+               )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -494,7 +494,7 @@
   (let ((i 0) x y)
     (values
      (string-greaterp (progn (setf x (incf i)) "abc")
-	      (progn (setf y (incf i)) "abd"))
+              (progn (setf y (incf i)) "abd"))
      i x y))
   nil 2 1 2)
 
@@ -502,12 +502,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-greaterp (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :start1 (progn (setf c (incf i)) 0)
-	      :start2 (progn (setf d (incf i)) 0)
-	      :end1 (progn (setf e (incf i)) nil)
-	      :end2 (progn (setf f (incf i)) nil)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :start1 (progn (setf c (incf i)) 0)
+              :start2 (progn (setf d (incf i)) 0)
+              :end1 (progn (setf e (incf i)) nil)
+              :end2 (progn (setf f (incf i)) nil)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -515,12 +515,12 @@
   (let ((i 0) a b c d e f)
     (values
      (string-greaterp (progn (setf a (incf i)) "abc")
-	      (progn (setf b (incf i)) "abd")
-	      :end2 (progn (setf c (incf i)) nil)
-	      :end1 (progn (setf d (incf i)) nil)
-	      :start2 (progn (setf e (incf i)) 0)
-	      :start1 (progn (setf f (incf i)) 0)
-	      )
+              (progn (setf b (incf i)) "abd")
+              :end2 (progn (setf c (incf i)) nil)
+              :end1 (progn (setf d (incf i)) nil)
+              :start2 (progn (setf e (incf i)) 0)
+              :start1 (progn (setf f (incf i)) 0)
+              )
      i a b c d e f))
   nil 6 1 2 3 4 5 6)
 
@@ -529,11 +529,11 @@
 
 (deftest random-string-comparison-tests
   (loop for cmp in '(= /= < > <= >=)
-	append
-	(loop for case in '(nil t)
-	      collect
-	      (list cmp case
-		    (random-string-compare-test 10 cmp case 1000))))
+        append
+        (loop for case in '(nil t)
+              collect
+              (list cmp case
+                    (random-string-compare-test 10 cmp case 1000))))
   ((= nil 0) (= t 0) (/= nil 0) (/= t 0) (< nil 0) (< t 0)
    (> nil 0) (> t 0) (<= nil 0) (<= t 0) (>= nil 0) (>= t 0)))
 
@@ -719,8 +719,8 @@
 
 (deftest string=.error.6
   (signals-error (string= "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 (deftest string/=.error.1
@@ -745,8 +745,8 @@
 
 (deftest string/=.error.6
   (signals-error (string/= "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 
@@ -772,8 +772,8 @@
 
 (deftest string<.error.6
   (signals-error (string< "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 
@@ -799,8 +799,8 @@
 
 (deftest string<=.error.6
   (signals-error (string<= "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 
@@ -826,8 +826,8 @@
 
 (deftest string>.error.6
   (signals-error (string> "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 
@@ -853,8 +853,8 @@
 
 (deftest string>=.error.6
   (signals-error (string>= "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 
@@ -880,8 +880,8 @@
 
 (deftest string-equal.error.6
   (signals-error (string-equal "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 (deftest string-not-equal.error.1
@@ -906,8 +906,8 @@
 
 (deftest string-not-equal.error.6
   (signals-error (string-not-equal "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 (deftest string-lessp.error.1
@@ -932,8 +932,8 @@
 
 (deftest string-lessp.error.6
   (signals-error (string-lessp "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 (deftest string-greaterp.error.1
@@ -958,8 +958,8 @@
 
 (deftest string-greaterp.error.6
   (signals-error (string-greaterp "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 (deftest string-not-lessp.error.1
@@ -984,8 +984,8 @@
 
 (deftest string-not-lessp.error.6
   (signals-error (string-not-lessp "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)
 
 (deftest string-not-greaterp.error.1
@@ -1010,6 +1010,6 @@
 
 (deftest string-not-greaterp.error.6
   (signals-error (string-not-greaterp "a" "b" :allow-other-keys nil
-			  :allow-other-keys t :foo 'bar)
-		 program-error)
+                          :allow-other-keys t :foo 'bar)
+                 program-error)
   t)

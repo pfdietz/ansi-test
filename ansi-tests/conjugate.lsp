@@ -19,19 +19,19 @@
 
 (deftest conjugate.1
   (loop for x in *reals*
-	for vals = (multiple-value-list (conjugate x))
-	for xc = (car vals)
-	always (and (= (length vals) 1)
-		    (eql x xc)))
+        for vals = (multiple-value-list (conjugate x))
+        for xc = (car vals)
+        always (and (= (length vals) 1)
+                    (eql x xc)))
   t)
 
 (deftest conjugate.2
   (loop for x in *complexes*
-	for vals = (multiple-value-list (conjugate x))
-	for xc = (car vals)
-	always (and (= (length vals) 1)
-		    (eql (realpart x) (realpart xc))
-		    (eql (- (imagpart x)) (imagpart xc))))
+        for vals = (multiple-value-list (conjugate x))
+        for xc = (car vals)
+        always (and (= (length vals) 1)
+                    (eql (realpart x) (realpart xc))
+                    (eql (- (imagpart x)) (imagpart xc))))
   t)
 
 (deftest conjugate.3

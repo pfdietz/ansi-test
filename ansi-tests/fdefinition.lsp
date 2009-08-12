@@ -18,7 +18,7 @@
 (deftest fdefinition.error.3
   (let ((v (gensym)))
     (eval `(signals-error (fdefinition ',v) undefined-function
-			  :name ,v)))
+                          :name ,v)))
   t)
 
 (deftest fdefinition.error.4
@@ -28,7 +28,7 @@
 ;;; (deftest fdefinition.error.5
 ;;;  (let ((fn `(setf ,(gensym))))
 ;;;    (eval `(signals-error (fdefinition ',fn) undefined-function
-;;;			  :name ,fn)))
+;;;                       :name ,fn)))
 ;;;  t)
 
 (deftest fdefinition.error.6
@@ -41,15 +41,15 @@
 
 (deftest fdefinition.error.8
   (loop for x in *mini-universe*
-	unless (symbolp x)
-	nconc
-	(handler-case
-	 (list x (fdefinition `(setf ,x)))
-	 (type-error (c)
-		     (assert (not (typep (type-error-datum c)
-					 (type-error-expected-type c))))
-		     nil)
-	 (error (c) (list (list x c)))))
+        unless (symbolp x)
+        nconc
+        (handler-case
+         (list x (fdefinition `(setf ,x)))
+         (type-error (c)
+                     (assert (not (typep (type-error-datum c)
+                                         (type-error-expected-type c))))
+                     nil)
+         (error (c) (list (list x c)))))
   nil)
 
 ;;; Non-error cases
@@ -85,7 +85,7 @@
 
 (deftest fdefinition.5
   (let* ((sym (gensym))
-	 (fname (list 'setf sym)))
+         (fname (list 'setf sym)))
     (values
      (fboundp fname)
      (progn

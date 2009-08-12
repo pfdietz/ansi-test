@@ -13,7 +13,7 @@
      (compiled-function-p 'compile.1-fn)
      (let ((x (compile 'compile.1-fn)))
        (or (eqt x 'compile.1-fn)
-	   (notnot (compiled-function-p x))))
+           (notnot (compiled-function-p x))))
      (compiled-function-p 'compile.1-fn)
      (not (compiled-function-p #'compile.1-fn))
      (fmakunbound 'compile.1-fn)))
@@ -28,12 +28,12 @@
 ;;; COMPILE returns three values (function, warnings-p, failure-p)
 (deftest compile.2
   (let* ((results (multiple-value-list
-		   (compile nil '(lambda (x y) (cons y x)))))
-	 (fn (car results)))
+                   (compile nil '(lambda (x y) (cons y x)))))
+         (fn (car results)))
     (values (length results)
-	    (funcall fn 'a 'b)
-	    (second results)
-	    (third results)))
+            (funcall fn 'a 'b)
+            (second results)
+            (third results)))
   3
   (b . a)
   nil
@@ -42,16 +42,16 @@
 ;;; Compile does not coalesce literal constants
 (deftest compile.3
   (let ((x (list 'a 'b))
-	(y (list 'a 'b)))
+        (y (list 'a 'b)))
     (and (not (eqt x y))
-	 (funcall (compile nil `(lambda () (eqt ',x ',y))))))
+         (funcall (compile nil `(lambda () (eqt ',x ',y))))))
   nil)
 
 (deftest compile.4
   (let ((x (copy-seq "abc"))
-	(y (copy-seq "abc")))
+        (y (copy-seq "abc")))
     (and (not (eqt x y))
-	 (funcall (compile nil `(lambda () (eqt ,x ,y))))))
+         (funcall (compile nil `(lambda () (eqt ,x ,y))))))
   nil)
 
 (deftest compile.5
@@ -78,7 +78,7 @@
   (let ((i 0) a b)
     (values
      (funcall (compile (progn (setf a (incf i)) nil)
-		       (progn (setf b (incf i)) '(lambda () 'z))))
+                       (progn (setf b (incf i)) '(lambda () 'z))))
      i a b))
   z 2 1 2)
 
@@ -90,5 +90,5 @@
 
 (deftest compile.error.2
   (signals-error (compile nil '(lambda () nil) 'garbage)
-		 program-error)
+                 program-error)
   t)

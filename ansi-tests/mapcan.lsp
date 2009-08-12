@@ -17,8 +17,8 @@
 
 (deftest mapcan.3
   (let* ((x (list 'a 'b 'c 'd))
-	 (xcopy (make-scaffold-copy x))
-	 (result (mapcan #'list x)))
+         (xcopy (make-scaffold-copy x))
+         (result (mapcan #'list x)))
     (and
      (= (length x) (length result))
      (check-scaffold-copy x xcopy)
@@ -30,14 +30,14 @@
 
 (deftest mapcan.4
   (mapcan #'list
-	  (copy-list '(1 2 3 4))
-	  (copy-list '(a b c d)))
+          (copy-list '(1 2 3 4))
+          (copy-list '(a b c d)))
   (1 a 2 b 3 c 4 d))
 
 (deftest mapcan.5
   (mapcan #'(lambda (x y) (make-list y :initial-element x))
-	  (copy-list '(a b c d))
-	  (copy-list '(1 2 3 4)))
+          (copy-list '(a b c d))
+          (copy-list '(1 2 3 4)))
   (a b b c c c d d d d))
 
 (defvar *mapcan.6-var* nil)
@@ -55,32 +55,32 @@
   (let ((i 0) x y z)
     (values
      (mapcan (progn (setf x (incf i))
-		    #'list)
-	     (progn (setf y (incf i))
-		    '(a b c))
-	     (progn (setf z (incf i))
-		    '(1 2 3)))
+                    #'list)
+             (progn (setf y (incf i))
+                    '(a b c))
+             (progn (setf z (incf i))
+                    '(1 2 3)))
      i x y z))
   (a 1 b 2 c 3)
   3 1 2 3)
 
 (deftest mapcan.8
   (mapcan #'(lambda (x y) (make-list y :initial-element x))
-	  (copy-list '(a b c d))
-	  (copy-list '(1 2 3 4 5 6)))
+          (copy-list '(a b c d))
+          (copy-list '(1 2 3 4 5 6)))
   (a b b c c c d d d d))
 
 (deftest mapcan.9
   (mapcan #'(lambda (x y) (make-list y :initial-element x))
-	  (copy-list '(a b c d e f))
-	  (copy-list '(1 2 3 4)))
+          (copy-list '(a b c d e f))
+          (copy-list '(1 2 3 4)))
   (a b b c c c d d d d))
 
 (deftest mapcan.10
   (mapcan #'list
-	  (copy-list '(a b c d))
-	  (copy-list '(1 2 3 4))
-	  nil)
+          (copy-list '(a b c d))
+          (copy-list '(1 2 3 4))
+          nil)
   nil)
 
 (deftest mapcan.11
@@ -113,10 +113,10 @@
 
 (deftest mapcan.error.7
   (signals-error (mapcan #'cons '(a b c) '(1 2 3) '(4 5 6))
-		 program-error)
+                 program-error)
   t)
 
 (deftest mapcan.error.8
   (signals-error (mapcan #'identity (list* (list 1) (list 2) 3))
-		 type-error)
+                 type-error)
   t)

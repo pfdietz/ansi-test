@@ -38,11 +38,11 @@
 
 (deftest values-list.5
   (let ((x (loop for i from 1 to (min 1000
-				      (1- call-arguments-limit)
-				      (1- multiple-values-limit))
-		 collect i)))
+                                      (1- call-arguments-limit)
+                                      (1- multiple-values-limit))
+                 collect i)))
     (equalt x
-	    (multiple-value-list (values-list x))))
+            (multiple-value-list (values-list x))))
   t)
 
-  
+

@@ -7,7 +7,7 @@
 
 (deftest set.1
   (let ((*var-used-in-set-tests* 'a)
-	(var '*var-used-in-set-tests*))
+        (var '*var-used-in-set-tests*))
     (declare (special *var-used-in-set-tests*))
     (values
      *var-used-in-set-tests*
@@ -17,7 +17,7 @@
 
 (deftest set.2
   (let ((*var-used-in-set-tests* 'a)
-	(var '*var-used-in-set-tests*))
+        (var '*var-used-in-set-tests*))
     (declare (special *var-used-in-set-tests*))
     (values
      (let ((*var-used-in-set-tests* 'c))

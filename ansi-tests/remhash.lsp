@@ -8,41 +8,41 @@
 (deftest remhash.1
   (let ((table (make-hash-table)))
     (values (gethash 'a table)
-	    (remhash 'a table)
-	    (setf (gethash 'a table) 'b)
-	    (gethash 'a table)
-	    (notnot (remhash 'a table))
-	    (gethash 'a table)))
+            (remhash 'a table)
+            (setf (gethash 'a table) 'b)
+            (gethash 'a table)
+            (notnot (remhash 'a table))
+            (gethash 'a table)))
   nil nil b b t nil)
 
 (deftest remhash.2
   (let ((table (make-hash-table :test 'eq)))
     (values (gethash 'a table)
-	    (remhash 'a table)
-	    (setf (gethash 'a table) 'b)
-	    (gethash 'a table)
-	    (notnot (remhash 'a table))
-	    (gethash 'a table)))
+            (remhash 'a table)
+            (setf (gethash 'a table) 'b)
+            (gethash 'a table)
+            (notnot (remhash 'a table))
+            (gethash 'a table)))
   nil nil b b t nil)
 
 (deftest remhash.3
   (let ((table (make-hash-table :test 'equal)))
     (values (gethash 'a table)
-	    (remhash 'a table)
-	    (setf (gethash 'a table) 'b)
-	    (gethash 'a table)
-	    (notnot (remhash 'a table))
-	    (gethash 'a table)))
+            (remhash 'a table)
+            (setf (gethash 'a table) 'b)
+            (gethash 'a table)
+            (notnot (remhash 'a table))
+            (gethash 'a table)))
   nil nil b b t nil)
 
 (deftest remhash.4
   (let ((table (make-hash-table :test 'equalp)))
     (values (gethash 'a table)
-	    (remhash 'a table)
-	    (setf (gethash 'a table) 'b)
-	    (gethash 'a table)
-	    (notnot (remhash 'a table))
-	    (gethash 'a table)))
+            (remhash 'a table)
+            (setf (gethash 'a table) 'b)
+            (gethash 'a table)
+            (notnot (remhash 'a table))
+            (gethash 'a table)))
   nil nil b b t nil)
 
 (deftest remhash.5
@@ -51,15 +51,15 @@
 
 (deftest remhash.6
   (notnot-mv (remhash nil (let ((table (make-hash-table)))
-			    (setf (gethash nil table) t)
-			    table)))
+                            (setf (gethash nil table) t)
+                            table)))
   t)
 
 (deftest remhash.order.1
   (let ((i 0) x y)
     (values
      (remhash (progn (setf x (incf i)) 'a)
-	      (progn (setf y (incf i)) (make-hash-table)))
+              (progn (setf y (incf i)) (make-hash-table)))
      i x y))
   nil 2 1 2)
 
@@ -83,4 +83,4 @@
 
 
 
-	    
+

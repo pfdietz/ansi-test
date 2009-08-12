@@ -12,7 +12,7 @@
 
 (deftest user-homedir-pathname.2
   (let* ((pn-list (multiple-value-list (user-homedir-pathname)))
-	 (pn (first pn-list)))
+         (pn (first pn-list)))
     (values
      (length pn-list)
      (notnot-mv (pathnamep pn))))
@@ -35,15 +35,15 @@
 
 ;; (deftest user-homedir-pathname.6
 ;;  (let* ((pn (user-homedir-pathname))
-;;	 (host (pathname-host pn)))
+;;       (host (pathname-host pn)))
 ;;    (or (not host)
-;;	(equalt pn (user-homedir-pathname host))))
+;;      (equalt pn (user-homedir-pathname host))))
 ;;  t)
 
 (deftest user-homedir-pathname.7
   (let* ((pn (user-homedir-pathname :unspecific)))
     (or (null pn)
-	(notnot (pathnamep pn))))
+        (notnot (pathnamep pn))))
   t)
 
 (deftest user-homedir-pathname.error.1

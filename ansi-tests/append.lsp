@@ -17,20 +17,20 @@
 
 (deftest append.3
   (let ((x (list 'a 'b 'c 'd))
-	(y (list 'e 'f 'g)))
+        (y (list 'e 'f 'g)))
     (let ((xcopy (make-scaffold-copy x))
-	  (ycopy (make-scaffold-copy y)))
+          (ycopy (make-scaffold-copy y)))
       (let ((result (append x y)))
-	(and
-	 (check-scaffold-copy x xcopy)
-	 (check-scaffold-copy y ycopy)
-	 result))))
+        (and
+         (check-scaffold-copy x xcopy)
+         (check-scaffold-copy y ycopy)
+         result))))
   (a b c d e f g))
 
 (deftest append.4
   (append (list 'a) (list 'b) (list 'c)
-	  (list 'd) (list 'e) (list 'f)
-	  (list 'g) 'h)
+          (list 'd) (list 'e) (list 'f)
+          (list 'g) 'h)
   (a b c d e f g . h))
 
 (deftest append.5
@@ -51,17 +51,17 @@
 
 (deftest append.8
   (macrolet ((%m (z) z))
-	    (append (expand-in-current-env (%m '(a b c)))))
+            (append (expand-in-current-env (%m '(a b c)))))
   (a b c))
 
 (deftest append.9
   (macrolet ((%m (z) z))
-	    (append (expand-in-current-env (%m (list 1 2 3))) (list 4 5 6)))
+            (append (expand-in-current-env (%m (list 1 2 3))) (list 4 5 6)))
   (1 2 3 4 5 6))
 
 (deftest append.10
   (macrolet ((%m (z) z))
-	    (append (list 1 2 3) (expand-in-current-env (%m (list 4 5 6)))))
+            (append (list 1 2 3) (expand-in-current-env (%m (list 4 5 6)))))
   (1 2 3 4 5 6))
 
 ;;; Order of evaluation tests
@@ -70,8 +70,8 @@
   (let ((i 0) x y z)
     (values
      (append (progn (setf x (incf i)) (copy-list '(a b c)))
-	     (progn (setf y (incf i)) (copy-list '(d e f)))
-	     (progn (setf z (incf i)) (copy-list '(g h i))))
+             (progn (setf y (incf i)) (copy-list '(d e f)))
+             (progn (setf z (incf i)) (copy-list '(g h i))))
      i x y z))
   (a b c d e f g h i) 3 1 2 3)
 
@@ -86,10 +86,10 @@
 
 (deftest append.error.1
   (signals-error (append '(a . b) '(z))
-		 type-error)
+                 type-error)
   t)
 
 (deftest append.error.2
   (signals-error (append '(x y z) '(a . b) '(z))
-		 type-error)
+                 type-error)
   t)

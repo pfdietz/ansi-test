@@ -13,9 +13,9 @@
 
 (deftest mapcon.2
   (let* ((x (copy-list '(1 2 3 4)))
-	 (xcopy (make-scaffold-copy x))
-	 (result
-	  (mapcon #'(lambda (y) (append '(a) y nil)) x)))
+         (xcopy (make-scaffold-copy x))
+         (result
+          (mapcon #'(lambda (y) (append '(a) y nil)) x)))
     (and
      (check-scaffold-copy x xcopy)
      result))
@@ -23,13 +23,13 @@
 
 (deftest mapcon.3
   (let* ((x (copy-list '(4 2 3 2 2)))
-	 (y (copy-list '(a b c d e f g h i j k l)))
-	 (xcopy (make-scaffold-copy x))
-	 (ycopy (make-scaffold-copy y))
-	 (result
-	  (mapcon #'(lambda (xt yt)
-		      (subseq yt 0 (car xt)))
-		  x y)))
+         (y (copy-list '(a b c d e f g h i j k l)))
+         (xcopy (make-scaffold-copy x))
+         (ycopy (make-scaffold-copy y))
+         (result
+          (mapcon #'(lambda (xt yt)
+                      (subseq yt 0 (car xt)))
+                  x y)))
     (and
      (check-scaffold-copy x xcopy)
      (check-scaffold-copy y ycopy)
@@ -44,11 +44,11 @@
   (let ((i 0) x y z)
     (values
      (mapcon (progn (setf x (incf i))
-		    #'(lambda (x y) (list (car x) (car y))))
-	     (progn (setf y (incf i))
-		    '(a b c))
-	     (progn (setf z (incf i))
-		    '(1 2 3)))
+                    #'(lambda (x y) (list (car x) (car y))))
+             (progn (setf y (incf i))
+                    '(a b c))
+             (progn (setf z (incf i))
+                    '(1 2 3)))
      i x y z))
   (a 1 b 2 c 3)
   3 1 2 3)

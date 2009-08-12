@@ -8,14 +8,14 @@
 (deftest package-error.1
   (not
    (typep (make-condition 'package-error :package "CL")
-	  'package-error))
+          'package-error))
   nil)
 
 (deftest package-error.2
   (not
    (typep (make-condition 'package-error
-			  :package (find-package "CL"))
-	  'package-error))
+                          :package (find-package "CL"))
+          'package-error))
   nil)
 
 (deftest package-error.3
@@ -25,7 +25,7 @@
 (deftest package-error.4
    (not
     (typep (make-condition 'package-error
-			   :package (find-package '#:|CL|))
-	   'package-error))
+                           :package (find-package '#:|CL|))
+           'package-error))
   nil)
 

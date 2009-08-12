@@ -43,17 +43,17 @@
 
 (deftest hash-table-count.10
   (hash-table-count (let ((table (make-hash-table)))
-		      (setf (gethash 'x table) 1)
-		      table))
+                      (setf (gethash 'x table) 1)
+                      table))
   1)
 
 (deftest hash-table-count.11
   (let ((table (make-hash-table)))
     (setf (gethash 'x table) 1)
     (values (hash-table-count table)
-	    (progn
-	      (remhash 'x table)
-	      (hash-table-count table))))
+            (progn
+              (remhash 'x table)
+              (hash-table-count table))))
   1 0)
 
 ;; This function is mostly tested by calls to test-hash-table-1
@@ -64,5 +64,5 @@
 
 (deftest hash-table-count.error.2
   (signals-error (hash-table-count (make-hash-table) nil)
-		 program-error)
+                 program-error)
   t)

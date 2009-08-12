@@ -17,43 +17,43 @@
 (defparameter *loop.6.hash.1*
   (let ((table (make-hash-table :test #'eq)))
     (loop for (key . val) in *loop.6.alist*
-	  do (setf (gethash key table) val))
+          do (setf (gethash key table) val))
     table))
 
 (defparameter *loop.6.hash.2*
   (let ((table (make-hash-table :test #'eql)))
     (loop for (key . val) in *loop.6.alist*
-	  do (setf (gethash key table) val))
+          do (setf (gethash key table) val))
     table))
 
 (defparameter *loop.6.hash.3*
   (let ((table (make-hash-table :test #'equal)))
     (loop for (key . val) in *loop.6.alist.3*
-	  do (setf (gethash key table) val))
+          do (setf (gethash key table) val))
     table))
 
 ;;; (defparameter *loop.6.hash.4*
 ;;;  (let ((table (make-hash-table :test #'equalp)))
 ;;;    (loop for (key . val) in *loop.6.alist.2*
-;;;	  do (setf (gethash key table) val))
+;;;       do (setf (gethash key table) val))
 ;;;    table))
 
 (defparameter *loop.6.hash.5*
   (let ((table (make-hash-table :test #'eql)))
     (loop for (val . key) in *loop.6.alist.3*
-	  do (setf (gethash key table) val))
+          do (setf (gethash key table) val))
     table))
 
 (defparameter *loop.6.hash.6*
   (let ((table (make-hash-table :test #'eq)))
     (loop for (key . val) in *loop.6.alist*
-	  do (setf (gethash key table) (coerce val 'float)))
+          do (setf (gethash key table) (coerce val 'float)))
     table))
 
 (defparameter *loop.6.hash.7*
   (let ((table (make-hash-table :test #'equal)))
     (loop for (val . key) in *loop.6.alist.3*
-	  do (setf (gethash (coerce key 'float) table) val))
+          do (setf (gethash (coerce key 'float) table) val))
     table))
 
 (defparameter *loop.6.alist.8*
@@ -62,13 +62,13 @@
 (defparameter *loop.6.hash.8*
   (let ((table (make-hash-table :test #'equal)))
     (loop for (key . val) in *loop.6.alist.8*
-	  do (setf (gethash key table) val))
+          do (setf (gethash key table) val))
     table))
 
 (defparameter *loop.6.hash.9*
   (let ((table (make-hash-table :test #'equal)))
     (loop for (val . key) in *loop.6.alist.8*
-	  do (setf (gethash key table) val))
+          do (setf (gethash key table) val))
     table))
 
 ;;; being {each | the} {hash-value | hash-values | hash-key | hash-keys} {in | of }
@@ -95,69 +95,69 @@
 
 (deftest loop.6.6
   (sort (loop for x being the hash-key of *loop.6.hash.1* collect x)
-	#'symbol<)
+        #'symbol<)
   (a b c))
 
 (deftest loop.6.7
   (sort (loop for x being the hash-keys of *loop.6.hash.1* collect x)
-	#'symbol<)
+        #'symbol<)
   (a b c))
 
 (deftest loop.6.8
   (sort (loop for x being each hash-key of *loop.6.hash.1* collect x)
-	#'symbol<)
+        #'symbol<)
   (a b c))
 
 (deftest loop.6.9
   (sort (loop for x being each hash-keys of *loop.6.hash.1* collect x)
-	#'symbol<)
+        #'symbol<)
   (a b c))
 
 (deftest loop.6.10
   (sort (loop for x being each hash-keys in *loop.6.hash.1* collect x)
-	#'symbol<)
+        #'symbol<)
   (a b c))
 
 (deftest loop.6.11
   (sort (loop for (u . v) being the hash-keys of *loop.6.hash.3* collect u)
-	#'symbol<)
+        #'symbol<)
   (a1 b1 c1))
 
 (deftest loop.6.12
   (sort (loop for (u . v) being the hash-keys of *loop.6.hash.3* collect v)
-	#'symbol<)
+        #'symbol<)
   (a2 b2 c2))
 
 (deftest loop.6.13
   (sort (loop for (u . v) being the hash-values of *loop.6.hash.5* collect u)
-	#'symbol<)
+        #'symbol<)
   (a1 b1 c1))
 
 (deftest loop.6.14
   (sort (loop for (u . v) being the hash-values of *loop.6.hash.5* collect v)
-	#'symbol<)
+        #'symbol<)
   (a2 b2 c2))
 
 (deftest loop.6.15
   (sort (loop for k being the hash-keys of *loop.6.hash.1* using (hash-value v)
-	      collect (list k v))
-	#'< :key #'second)
+              collect (list k v))
+        #'< :key #'second)
   ((a 1) (b 2) (c 3)))
 
 (deftest loop.6.16
   (sort (loop for v being the hash-values of *loop.6.hash.1* using (hash-key k)
-	      collect (list k v))
-	#'< :key #'second)
+              collect (list k v))
+        #'< :key #'second)
   ((a 1) (b 2) (c 3)))
 
 (deftest loop.6.17
   (sort (loop for (u . nil) being the hash-values of *loop.6.hash.5* collect u)
-	#'symbol<)
+        #'symbol<)
   (a1 b1 c1))
 
 (deftest loop.6.18
   (sort (loop for (nil . v) being the hash-values of *loop.6.hash.5* collect v)
-	#'symbol<)
+        #'symbol<)
   (a2 b2 c2))
 
 (deftest loop.6.19
@@ -226,22 +226,22 @@
 
 (deftest loop.6.35
   (loop for (k1 . k2) of-type (integer . integer) being the hash-keys
-	of *loop.6.hash.8* sum (+ k1 k2))
+        of *loop.6.hash.8* sum (+ k1 k2))
   21)
 
 (deftest loop.6.36
   (loop for (v1 . v2) of-type (integer . integer) being the hash-values
-	of *loop.6.hash.9* sum (+ v1 v2))
+        of *loop.6.hash.9* sum (+ v1 v2))
   21)
 
 (deftest loop.6.37
   (loop for v being the hash-values of *loop.6.hash.8*
-	using (hash-key (k1 . k2)) sum (+ k1 k2))
+        using (hash-key (k1 . k2)) sum (+ k1 k2))
   21)
 
 (deftest loop.6.38
   (loop for k being the hash-keys of *loop.6.hash.9*
-	using (hash-value (v1 . v2)) sum (+ v1 v2))
+        using (hash-value (v1 . v2)) sum (+ v1 v2))
   21)
 
 (deftest loop.6.39
@@ -250,7 +250,7 @@
 
 (deftest loop.6.40
   (sort (loop as x being the hash-key of *loop.6.hash.1* collect x)
-	#'symbol<)
+        #'symbol<)
   (a b c))
 
 ;;; Test that explicit calls to macroexpand in subforms
@@ -260,15 +260,15 @@
   (macrolet
    ((%m (z) z))
    (loop for x being the hash-value of
-	 (expand-in-current-env (%m *loop.6.hash.1*)) sum x))
+         (expand-in-current-env (%m *loop.6.hash.1*)) sum x))
   6)
 
 (deftest loop.6.42
   (macrolet
    ((%m (z) z))
    (sort (loop for x being the hash-key of
-	       (expand-in-current-env (%m *loop.6.hash.1*)) collect x)
-	 #'symbol<))
+               (expand-in-current-env (%m *loop.6.hash.1*)) collect x)
+         #'symbol<))
   (a b c))
 
 ;;; Error tests
@@ -276,38 +276,38 @@
 (deftest loop.6.error.1
   (signals-error
    (loop for k from 1 to 10
-	 for k being the hash-keys of *loop.6.hash.1*
-	 count t)
+         for k being the hash-keys of *loop.6.hash.1*
+         count t)
    program-error)
   t)
 
 (deftest loop.6.error.2
   (signals-error
    (loop for k being the hash-keys of *loop.6.hash.1*
-	 for k from 1 to 10
-	 count t)
+         for k from 1 to 10
+         count t)
    program-error)
   t)
 
 (deftest loop.6.error.3
   (signals-error
    (loop for (k . k) being the hash-keys of *loop.6.hash.3*
-	 count t)
+         count t)
    program-error)
   t)
 
 (deftest loop.6.error.4
   (signals-error
    (loop for k being the hash-keys of *loop.6.hash.3*
-	 using (hash-value k)
-	 count t)
+         using (hash-value k)
+         count t)
    program-error)
   t)
 
 (deftest loop.6.error.5
   (signals-error
    (loop for k being the hash-values of *loop.6.hash.3*
-	 using (hash-key k)
-	 count t)
+         using (hash-key k)
+         count t)
    program-error)
   t)

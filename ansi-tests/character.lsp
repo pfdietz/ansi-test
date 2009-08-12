@@ -53,7 +53,7 @@
   (extended-char.3.body)
   t)
 
-;;; 
+;;;
 
 (deftest character.1
   (character.1.body)
@@ -110,9 +110,9 @@
 
 (deftest alpha-char-p.1
   (loop for c across +standard-chars+
-	always
-	(or (find c +alpha-chars+)
-	    (not (alpha-char-p c))))
+        always
+        (or (find c +alpha-chars+)
+            (not (alpha-char-p c))))
   t)
 
 ;;;
@@ -148,9 +148,9 @@
 
 (deftest alphanumericp.1
   (loop for c across +standard-chars+
-	always
-	(or (find c +alphanumeric-chars+)
-	    (not (alphanumericp c))))
+        always
+        (or (find c +alphanumeric-chars+)
+            (not (alphanumericp c))))
   t)
 
 (deftest alphanumericp.2
@@ -232,7 +232,7 @@
 (deftest digit-char-p.2
   (digit-char-p.2.body)
   t)
-		   
+
 (deftest digit-char-p.3
   (digit-char-p.3.body)
   t)
@@ -243,15 +243,15 @@
 
 (deftest digit-char-p.5
   (loop for i from 10 to 35
-	for c = (char +extended-digit-chars+ i)
-	never (or (digit-char-p c)
-		  (digit-char-p (char-downcase c))))
+        for c = (char +extended-digit-chars+ i)
+        never (or (digit-char-p c)
+                  (digit-char-p (char-downcase c))))
   t)
 
 (deftest digit-char-p.6
   (loop for i from 0 below 10
-	for c = (char +extended-digit-chars+ i)
-	always (eqlt (digit-char-p c) i))
+        for c = (char +extended-digit-chars+ i)
+        always (eqlt (digit-char-p c) i))
   t)
 
 (deftest digit-char-p.order.1
@@ -265,14 +265,14 @@
   (let ((i 0) x y)
     (values
      (digit-char-p (progn (setf x (incf i)) #\0)
-		   (progn (setf y (incf i)) 10))
+                   (progn (setf y (incf i)) 10))
      i x y))
   0 2 1 2)
 
 (deftest digit-char-p.error.1
   (signals-error (digit-char-p) program-error)
   t)
-  
+
 (deftest digit-char-p.error.2
   (signals-error (digit-char-p #\1 10 'foo) program-error)
   t)
@@ -281,9 +281,9 @@
 
 (deftest graphic-char-p.1
   (loop for c across +standard-chars+
-	always (if (eqlt c #\Newline)
-		   (not (graphic-char-p c))
-		 (graphic-char-p c)))
+        always (if (eqlt c #\Newline)
+                   (not (graphic-char-p c))
+                 (graphic-char-p c)))
   t)
 
 (deftest graphic-char-p.2
@@ -340,7 +340,7 @@
 (deftest standard-char-p.error.1
   (signals-error (standard-char-p) program-error)
   t)
-  
+
 (deftest standard-char-p.error.2
   (signals-error (standard-char-p #\a #\a) program-error)
   t)
@@ -535,7 +535,7 @@
 
 (deftest code-char.1
   (loop for x across +standard-chars+
-	always (eqlt (code-char (char-code x)) x))
+        always (eqlt (code-char (char-code x)) x))
   t)
 
 (deftest code-char.order.1
@@ -557,7 +557,7 @@
 
 (deftest char-int.1
   (loop for x across +standard-chars+
-	always (eqlt (char-int x) (char-code x)))
+        always (eqlt (char-int x) (char-code x)))
   t)
 
 (deftest char-int.2
@@ -597,18 +597,18 @@
 ;;; appropriate.  This is complicated by the possibility that two different
 ;;; names may refer to the same character (as is allowed by the standard,
 ;;; for example in the case of Newline and Linefeed).
- 
+
 (deftest char-name.4
   (loop for s in '("Rubout" "Page" "Backspace" "Return" "Tab" "Linefeed")
-	for c = (name-char s)
-	unless (or (not c)
-		   ;; If the char-name is not even string-equal,
-		   ;; assume we're sharing the character with some other
-		   ;; name, and assume it's ok
-		   (not (string-equal (char-name c) s))
-		   (string= (char-name c) s))
-	;; Collect list of cases that failed
-	collect (list s c (char-name c)))
+        for c = (name-char s)
+        unless (or (not c)
+                   ;; If the char-name is not even string-equal,
+                   ;; assume we're sharing the character with some other
+                   ;; name, and assume it's ok
+                   (not (string-equal (char-name c) s))
+                   (string= (char-name c) s))
+        ;; Collect list of cases that failed
+        collect (list s c (char-name c)))
   nil)
 
 (deftest char-name.5

@@ -11,24 +11,24 @@
 
 (deftest with-open-stream.2
   (with-open-stream (os (make-string-output-stream))
-		    (declare (ignore os)))
+                    (declare (ignore os)))
   nil)
 
 (deftest with-open-stream.3
   (with-open-stream (os (make-string-output-stream))
-		    (declare (ignore os))
-		    (declare (type string-stream os)))
+                    (declare (ignore os))
+                    (declare (type string-stream os)))
   nil)
 
 (deftest with-open-stream.4
   (with-open-stream (os (make-string-output-stream))
-		    (declare (ignore os))
-		    (values)))
+                    (declare (ignore os))
+                    (values)))
 
 (deftest with-open-stream.5
   (with-open-stream (os (make-string-output-stream))
-		    (declare (ignore os))
-		    (values 'a 'b))
+                    (declare (ignore os))
+                    (values 'a 'b))
   a b)
 
 (deftest with-open-stream.6
@@ -72,6 +72,6 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-open-stream (s (return-from done x))
-			  (declare (special x))))))
+        (with-open-stream (s (return-from done x))
+                          (declare (special x))))))
   :good)

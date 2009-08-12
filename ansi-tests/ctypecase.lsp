@@ -67,9 +67,9 @@
     (values
      (handler-bind
       ((type-error #'(lambda (c)
-		       (assert (eql (type-error-datum c) 1))
-		       (assert (not (typep 1 (type-error-expected-type c))))
-		       (store-value 'a c))))
+                       (assert (eql (type-error-datum c) 1))
+                       (assert (not (typep 1 (type-error-expected-type c))))
+                       (store-value 'a c))))
       (ctypecase x
        (symbol :good)
        (float :bad)))
@@ -84,8 +84,8 @@
 (deftest ctypecase.13
   (let ((x 'a))
     (ctypecase x
-	       (number 'bad)
-	       (#.(find-class 'symbol nil) 'good)))
+               (number 'bad)
+               (#.(find-class 'symbol nil) 'good)))
   good)
 
 (deftest ctypecase.14
@@ -93,8 +93,8 @@
     (tagbody
      (let ((x 'a))
        (ctypecase x (symbol (go 10)
-			    10
-			    (return-from done 'bad))))
+                            10
+                            (return-from done 'bad))))
      10
      (return-from done 'good)))
   good)
@@ -123,18 +123,18 @@
 
 (deftest ctypecase.error.1
   (signals-error (funcall (macro-function 'ctypecase))
-		 program-error)
+                 program-error)
   t)
 
 (deftest ctypecase.error.2
   (signals-error (funcall (macro-function 'ctypecase)
-			   '(ctypecase t))
-		 program-error)
+                           '(ctypecase t))
+                 program-error)
   t)
 
 (deftest ctypecase.error.3
   (signals-error (funcall (macro-function 'ctypecase)
-			   '(ctypecase t)
-			   nil nil)
-		 program-error)
+                           '(ctypecase t)
+                           nil nil)
+                 program-error)
   t)

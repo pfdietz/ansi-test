@@ -11,7 +11,7 @@
 
 (deftest eval.2
   (loop for x being the symbols of "KEYWORD"
-	always (eq (eval x) x))
+        always (eq (eval x) x))
   t)
 
 (deftest eval.3
@@ -49,7 +49,7 @@
 (deftest eval.error.3
   (let ((v (gensym)))
     (eval `(signals-error (eval (list ',v)) undefined-function
-			  :name ,v)))
+                          :name ,v)))
   t)
 
 (deftest eval.error.4

@@ -13,8 +13,8 @@
     (declare (special f))
     (flet ((f () :good))
       (flet ((g () (f)))
-	(flet ((f () :bad))
-	  (g)))))
+        (flet ((f () :bad))
+          (g)))))
   :good)
 
 (deftest special.2

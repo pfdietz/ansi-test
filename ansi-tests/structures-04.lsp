@@ -12,7 +12,7 @@
   a (b 0))
 
 (defstruct (struct-include-01b (:include struct-include-01a
-					 (a 100) (b 'x)))
+                                         (a 100) (b 'x)))
   (c 200) d)
 
 (deftest struct-include.1
@@ -46,7 +46,7 @@
   (a 0 :type number))
 
 (defstruct (struct-include-02b (:include struct-include-02a
-					 (a 10 :type integer))))
+                                         (a 10 :type integer))))
 
 (deftest struct-include.3
   (let ((obj (make-struct-include-02b)))
@@ -91,7 +91,7 @@
 (defstruct struct-include-04a a b)
 
 (defstruct (struct-include-04b (:include struct-include-04a
-					 (a 0 :read-only t))))
+                                         (a 0 :read-only t))))
 
 (deftest struct-include.6
   (let ((obj (make-struct-include-04b)))

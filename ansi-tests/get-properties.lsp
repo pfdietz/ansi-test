@@ -48,12 +48,12 @@
 
 (deftest get-properties.9
   (let* ((x (copy-list '(a b c d e f g h a c)))
-	 (xcopy (make-scaffold-copy x))
-	 (y (copy-list '(x y f g)))
-	 (ycopy (make-scaffold-copy y)))
+         (xcopy (make-scaffold-copy x))
+         (y (copy-list '(x y f g)))
+         (ycopy (make-scaffold-copy y)))
     (multiple-value-bind
-	(indicator value tail)
-	(get-properties x y)
+        (indicator value tail)
+        (get-properties x y)
       (and
        (check-scaffold-copy x xcopy)
        (check-scaffold-copy y ycopy)
@@ -66,7 +66,7 @@
     (values
      (multiple-value-list
       (get-properties (progn (setf x (incf i)) '(a b c d))
-		      (progn (setf y (incf i)) '(c))))
+                      (progn (setf y (incf i)) '(c))))
      i x y))
   (c d (c d)) 2 1 2)
 

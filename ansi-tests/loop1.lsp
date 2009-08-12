@@ -92,7 +92,7 @@
 (deftest loop.1.20
   (let ((a 0) (b 5) (c 1))
     (loop for x from a to b by c
-	  collect (progn (incf a) (incf b 2) (incf c 3) x)))
+          collect (progn (incf a) (incf b 2) (incf c 3) x)))
   (0 1 2 3 4 5))
 
 (deftest loop.1.21
@@ -131,9 +131,9 @@
   (let (a b c (i 0))
     (values
      (loop for x from (progn (setq a (incf i)) 0)
-	   below (progn (setq b (incf i)) 9)
-	   by (progn (setq c (incf i)) 2)
-	   collect x)
+           below (progn (setq b (incf i)) 9)
+           by (progn (setq c (incf i)) 2)
+           collect x)
      a b c i))
   (0 2 4 6 8)
   1 2 3 3)
@@ -142,9 +142,9 @@
   (let (a b c (i 0))
     (values
      (loop for x from (progn (setq a (incf i)) 0)
-	   by (progn (setq c (incf i)) 2)
-	   below (progn (setq b (incf i)) 9)
-	   collect x)
+           by (progn (setq c (incf i)) 2)
+           below (progn (setq b (incf i)) 9)
+           collect x)
      a b c i))
   (0 2 4 6 8)
   1 3 2 3)
@@ -153,10 +153,10 @@
   (let (a b c (i 0))
     (values
      (loop for x
-	   below (progn (setq b (incf i)) 9)
-	   by (progn (setq c (incf i)) 2)
-	   from (progn (setq a (incf i)) 0)
-	   collect x)
+           below (progn (setq b (incf i)) 9)
+           by (progn (setq c (incf i)) 2)
+           from (progn (setq a (incf i)) 0)
+           collect x)
      a b c i))
   (0 2 4 6 8)
   3 1 2 3)
@@ -165,10 +165,10 @@
   (let (a b c (i 0))
     (values
      (loop for x
-	   by (progn (setq c (incf i)) 2)
-	   below (progn (setq b (incf i)) 9)
-	   from (progn (setq a (incf i)) 0)
-	   collect x)
+           by (progn (setq c (incf i)) 2)
+           below (progn (setq b (incf i)) 9)
+           from (progn (setq a (incf i)) 0)
+           collect x)
      a b c i))
   (0 2 4 6 8)
   3 2 1 3)
@@ -280,7 +280,7 @@
 (deftest loop.1.54
   (let ((i 0))
     (loop for nil from 1 to 4
-	  for nil from 1 to 10 collect (incf i)))
+          for nil from 1 to 10 collect (incf i)))
   (1 2 3 4))
 
 (deftest loop.1.55
@@ -318,32 +318,32 @@
   (macrolet
    ((%m (z) z))
    (loop for i downfrom (expand-in-current-env (%m 10))
-	 to 3
-	 collect i))
+         to 3
+         collect i))
   (10 9 8 7 6 5 4 3))
 
 (deftest loop.1.61
   (macrolet
    ((%m (z) z))
    (loop for i downfrom 10
-	 to (expand-in-current-env (%m 3))
-	 collect i))
+         to (expand-in-current-env (%m 3))
+         collect i))
   (10 9 8 7 6 5 4 3))
 
 (deftest loop.1.62
   (macrolet
    ((%m (z) z))
    (loop for i from (expand-in-current-env (%m 10))
-	 downto 3
-	 collect i))
+         downto 3
+         collect i))
   (10 9 8 7 6 5 4 3))
 
 (deftest loop.1.63
   (macrolet
    ((%m (z) z))
    (loop for i from 10
-	 downto (expand-in-current-env (%m 3))
-	 collect i))
+         downto (expand-in-current-env (%m 3))
+         collect i))
   (10 9 8 7 6 5 4 3))
 
 (deftest loop.1.64
@@ -351,11 +351,11 @@
    ((%m (z) z))
    (loop for i from (expand-in-current-env (%m 1)) below 5 collect i))
   (1 2 3 4))
-  
+
 (deftest loop.1.65
   (macrolet
    ((%m (z) z))
    (loop for i from 1 below (expand-in-current-env (%m 5)) collect i))
   (1 2 3 4))
 
-  
+

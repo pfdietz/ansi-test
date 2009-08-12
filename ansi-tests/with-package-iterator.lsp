@@ -67,7 +67,7 @@
   t)
 
 (deftest with-package-iterator.11
-  (signals-error 
+  (signals-error
    (with-package-iterator (x "COMMON-LISP-USER"))
    program-error)
   t)
@@ -81,8 +81,8 @@
       (format t "Package ~S~%" p)
       (not (with-package-iterator-internal (list p))))
     (error (c)
-	   (format "Error ~S on package ~A~%" c p)
-	   t)))
+           (format "Error ~S on package ~A~%" c p)
+           t)))
   0)
 
 (deftest with-package-iterator.13
@@ -93,8 +93,8 @@
       (format t "Package ~S~%" p)
       (not (with-package-iterator-external (list p))))
     (error (c)
-	   (format "Error ~S on package ~A~%" c p)
-	   t)))
+           (format "Error ~S on package ~A~%" c p)
+           t)))
   0)
 
 (deftest with-package-iterator.14
@@ -105,8 +105,8 @@
       (format t "Package ~S~%" p)
       (not (with-package-iterator-inherited (list p))))
     (error (c)
-	   (format t "Error ~S on package ~S~%" c p)
-	   t)))
+           (format t "Error ~S on package ~S~%" c p)
+           t)))
   0)
 
 (def-macro-test with-package-iterator.error.1
@@ -120,59 +120,59 @@
      (let ((name ,name-form))
        (safely-delete-package name)
        (let* ((p (make-package name :use nil))
-	      (result nil)
-	      (s (intern "X" p)))
-	 (with-package-iterator
-	  (x name :internal)
-	  (loop
-	   (multiple-value-bind
-	       (good? sym)
-	       (x)
-	       (unless good?
-		 (safely-delete-package name)
-		 (return (equalt (list s) result)))
-	     (push sym result))))))
+              (result nil)
+              (s (intern "X" p)))
+         (with-package-iterator
+          (x name :internal)
+          (loop
+           (multiple-value-bind
+               (good? sym)
+               (x)
+               (unless good?
+                 (safely-delete-package name)
+                 (return (equalt (list s) result)))
+             (push sym result))))))
      t))
 
 (def-with-package-iterator-test with-package-iterator.15
   (make-array 5 :initial-contents "TEST1"
-	      :element-type 'base-char))
+              :element-type 'base-char))
 
 (def-with-package-iterator-test with-package-iterator.16
   (make-array 8 :initial-contents "TEST1XXX"
-	      :fill-pointer 5
-	      :element-type 'base-char))
+              :fill-pointer 5
+              :element-type 'base-char))
 
 (def-with-package-iterator-test with-package-iterator.17
   (make-array 8 :initial-contents "TEST1XXX"
-	      :fill-pointer 5
-	      :element-type 'character))
+              :fill-pointer 5
+              :element-type 'character))
 
 (def-with-package-iterator-test with-package-iterator.18
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t
-	      :element-type 'base-char))
+              :adjustable t
+              :element-type 'base-char))
 
 (def-with-package-iterator-test with-package-iterator.19
   (make-array 5 :initial-contents "TEST1"
-	      :adjustable t
-	      :element-type 'character))
+              :adjustable t
+              :element-type 'character))
 
 (def-with-package-iterator-test with-package-iterator.20
   (let* ((etype 'base-char)
-	 (name0 (make-array 10 :initial-contents "XTEST1YzYY"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "XTEST1YzYY"
+                            :element-type etype)))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 1)))
+                :displaced-to name0
+                :displaced-index-offset 1)))
 
 (def-with-package-iterator-test with-package-iterator.21
   (let* ((etype 'character)
-	 (name0 (make-array 10 :initial-contents "XTEST1YzYY"
-			    :element-type etype)))
+         (name0 (make-array 10 :initial-contents "XTEST1YzYY"
+                            :element-type etype)))
     (make-array 5 :element-type etype
-		:displaced-to name0
-		:displaced-index-offset 1)))
+                :displaced-to name0
+                :displaced-index-offset 1)))
 
 ;;; Free declaration scope
 
@@ -181,6 +181,6 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-package-iterator (s (return-from done x) :internal)
-			       (declare (special x))))))
+        (with-package-iterator (s (return-from done x) :internal)
+                               (declare (special x))))))
   :good)

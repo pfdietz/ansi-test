@@ -16,7 +16,7 @@
   (if (null x)
       alist
     (acons (car x) (car y)
-	   (my-pairlis (cdr x) (cdr y) alist))))
+           (my-pairlis (cdr x) (cdr y) alist))))
 
 (deftest pairlis.1
     (pairlis nil nil nil)
@@ -28,38 +28,38 @@
 
 (deftest pairlis.3
     (let* ((x (copy-list '(a b c d e)))
-	   (xcopy (make-scaffold-copy x))
-	   (y (copy-list '(1 2 3 4 5)))
-	   (ycopy (make-scaffold-copy y))
-	   (result (pairlis x y))
-	   (expected (my-pairlis x y)))
+           (xcopy (make-scaffold-copy x))
+           (y (copy-list '(1 2 3 4 5)))
+           (ycopy (make-scaffold-copy y))
+           (result (pairlis x y))
+           (expected (my-pairlis x y)))
       (and
        (check-scaffold-copy x xcopy)
        (check-scaffold-copy y ycopy)
        (or
-	(equal result expected)
-	(equal result (reverse expected)))
+        (equal result expected)
+        (equal result (reverse expected)))
        t))
   t)
 
 (deftest pairlis.4
     (let* ((x (copy-list '(a b c d e)))
-	   (xcopy (make-scaffold-copy x))
-	   (y (copy-list '(1 2 3 4 5)))
-	   (ycopy (make-scaffold-copy y))
-	   (z '((x . 10) (y . 20)))
-	   (zcopy (make-scaffold-copy z))
-	   (result (pairlis x y z))
-	   (expected (my-pairlis x y z)))
+           (xcopy (make-scaffold-copy x))
+           (y (copy-list '(1 2 3 4 5)))
+           (ycopy (make-scaffold-copy y))
+           (z '((x . 10) (y . 20)))
+           (zcopy (make-scaffold-copy z))
+           (result (pairlis x y z))
+           (expected (my-pairlis x y z)))
       (and
        (check-scaffold-copy x xcopy)
        (check-scaffold-copy y ycopy)
        (check-scaffold-copy z zcopy)
        (eqt (cdr (cddr (cddr result))) z)
        (or
-	(equal result expected)
-	(equal result (append (reverse (subseq expected 0 5))
-			      (subseq expected 5))))
+        (equal result expected)
+        (equal result (append (reverse (subseq expected 0 5))
+                              (subseq expected 5))))
        t))
   t)
 

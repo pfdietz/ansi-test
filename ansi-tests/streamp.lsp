@@ -7,11 +7,11 @@
 
 (deftest streamp.1
   (loop for s in (list *debug-io* *error-output* *query-io*
-		       *standard-input* *standard-output*
-		       *trace-output* *terminal-io*)
-	unless (equal (multiple-value-list (notnot-mv (streamp s)))
-		      '(t))
-	collect s)
+                       *standard-input* *standard-output*
+                       *trace-output* *terminal-io*)
+        unless (equal (multiple-value-list (notnot-mv (streamp s)))
+                      '(t))
+        collect s)
   nil)
 
 (deftest streamp.2
@@ -20,16 +20,16 @@
 
 (deftest streamp.3
   (let ((s (open "foo.txt" :direction :output
-		 :if-exists :supersede)))
+                 :if-exists :supersede)))
     (close s)
     (notnot-mv (streamp s)))
   t)
 
 (deftest streamp.4
   (let ((s (open "foo.txt" :direction :output
-		 :if-exists :supersede)))
+                 :if-exists :supersede)))
     (unwind-protect
-	(notnot-mv (streamp s))
+        (notnot-mv (streamp s))
       (close s)))
   t)
 

@@ -50,8 +50,8 @@
 ;;; See 11.1.2.1.1
 (deftest boundp.5
   (loop for x in *cl-non-variable-constant-symbols*
-	when (boundp x)
-	collect x)
+        when (boundp x)
+        collect x)
   nil)
 
 (deftest boundp.6

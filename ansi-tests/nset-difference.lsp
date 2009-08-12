@@ -13,13 +13,13 @@
 
 (deftest nset-difference.2
   (let ((result
-	 (nset-difference-with-check '(a b c) nil)))
+         (nset-difference-with-check '(a b c) nil)))
     (check-nset-difference '(a b c) nil result))
   t)
 
 (deftest nset-difference.3
   (let ((result
-	 (nset-difference-with-check '(a b c d e f) '(f b d))))
+         (nset-difference-with-check '(a b c d e f) '(f b d))))
     (check-nset-difference '(a b c d e f) '(f b d) result))
   t)
 
@@ -27,7 +27,7 @@
   (sort
    (copy-list
     (nset-difference-with-check (shuffle '(1 2 3 4 5 6 7 8))
-				'(10 101 4 74 2 1391 7 17831)))
+                                '(10 101 4 74 2 1391 7 17831)))
    #'<)
   (1 3 5 6 8))
 
@@ -37,7 +37,7 @@
 
 (deftest nset-difference.6
   (nset-difference-with-check '(a b c d e) '(d a b e)
-			      :key nil)
+                              :key nil)
   (c))
 
 (deftest nset-difference.7
@@ -54,17 +54,17 @@
 
 (deftest nset-difference.10
   (nset-difference-with-check '(a b c d e) '(d a b e)
-			      :test 'eq)
+                              :test 'eq)
   (c))
 
 (deftest nset-difference.11
   (nset-difference-with-check '(a b c d e) '(d a b e)
-			      :test 'eql)
+                              :test 'eql)
   (c))
 
 (deftest nset-difference.12
   (nset-difference-with-check '(a b c d e) '(d a b e)
-			      :test 'equal)
+                              :test 'equal)
   (c))
 
 (deftest nset-difference.13
@@ -73,14 +73,14 @@
 
 (deftest nset-difference.14
   (nset-difference-with-check '((a . 1) (b . 2) (c . 3))
-			      '((a . 1) (c . 3))
-			      :key 'car)
+                              '((a . 1) (c . 3))
+                              :key 'car)
   ((b . 2)))
 
 (deftest nset-difference.15
   (nset-difference-with-check '((a . 1) (b . 2) (c . 3))
-			      '((a . 1) (c . 3))
-			      :key #'car)
+                              '((a . 1) (c . 3))
+                              :key #'car)
   ((b . 2)))
 
 ;;
@@ -94,10 +94,10 @@
       (nset-difference-with-check
        '(1 2 3 4) '(e f g h)
        :test #'(lambda (x y)
-		 (when (or (member x '(e f g h))
-			   (member y '(1 2 3 4)))
-		   (return-from fail 'fail))
-		 (eqt x y))))
+                 (when (or (member x '(e f g h))
+                           (member y '(1 2 3 4)))
+                   (return-from fail 'fail))
+                 (eqt x y))))
      #'<))
   (1 2 3 4))
 
@@ -109,10 +109,10 @@
        '(1 2 3 4) '(e f g h)
        :key #'identity
        :test #'(lambda (x y)
-		 (when (or (member x '(e f g h))
-			   (member y '(1 2 3 4)))
-		   (return-from fail 'fail))
-		 (eqt x y))))
+                 (when (or (member x '(e f g h))
+                           (member y '(1 2 3 4)))
+                   (return-from fail 'fail))
+                 (eqt x y))))
      #'<))
   (1 2 3 4))
 
@@ -124,25 +124,25 @@
        '(1 2 3 4) '(e f g h)
        :test-not
        #'(lambda (x y)
-	   (when (or (member x '(e f g h))
-		     (member y '(1 2 3 4)))
-	     (return-from fail 'fail))
-	   (not (eqt x y)))))
+           (when (or (member x '(e f g h))
+                     (member y '(1 2 3 4)))
+             (return-from fail 'fail))
+           (not (eqt x y)))))
      #'<))
   (1 2 3 4))
 
 (deftest nset-difference.19
   (block fail
     (sort (copy-list
-	   (nset-difference-with-check
-	    '(1 2 3 4) '(e f g h)
-	    :test-not
-	    #'(lambda (x y)
-		(when (or (member x '(e f g h))
-			  (member y '(1 2 3 4)))
-		  (return-from fail 'fail))
-		(not (eqt x y)))))
-	  #'<))
+           (nset-difference-with-check
+            '(1 2 3 4) '(e f g h)
+            :test-not
+            #'(lambda (x y)
+                (when (or (member x '(e f g h))
+                          (member y '(1 2 3 4)))
+                  (return-from fail 'fail))
+                (not (eqt x y)))))
+          #'<))
   (1 2 3 4))
 
 (defharmless nset-difference.test-and-test-not.1
@@ -157,7 +157,7 @@
   (let ((i 0) x y)
     (values
      (nset-difference (progn (setf x (incf i)) (list 1 2 3 4))
-		      (progn (setf y (incf i)) (list 2 3 4)))
+                      (progn (setf y (incf i)) (list 2 3 4)))
      i x y))
   (1) 2 1 2)
 
@@ -165,9 +165,9 @@
   (let ((i 0) x y z)
     (values
      (nset-difference (progn (setf x (incf i)) (list 1 2 3 4))
-		      (progn (setf y (incf i)) (list 2 3 4))
-		      :test (progn (setf z (incf i))
-				   #'(lambda (x y) (= x (1- y)))))
+                      (progn (setf y (incf i)) (list 2 3 4))
+                      :test (progn (setf z (incf i))
+                                   #'(lambda (x y) (= x (1- y)))))
      i x y z))
   (4) 3 1 2 3)
 
@@ -175,10 +175,10 @@
   (let ((i 0) x y z w)
     (values
      (nset-difference (progn (setf x (incf i)) (list 1 2 3 4))
-		      (progn (setf y (incf i)) (list 2 3 4))
-		      :test (progn (setf z (incf i))
-				   #'(lambda (x y) (= x (1- y))))
-		      :key (progn (setf w (incf i)) nil))
+                      (progn (setf y (incf i)) (list 2 3 4))
+                      :test (progn (setf z (incf i))
+                                   #'(lambda (x y) (= x (1- y))))
+                      :key (progn (setf w (incf i)) nil))
      i x y z w))
   (4) 4 1 2 3 4)
 

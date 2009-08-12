@@ -12,9 +12,9 @@
 
 (deftest char.2
   (let ((s0 (copy-seq "abcd"))
-	(s1 (copy-seq "abcd"))
-	(s2 (copy-seq "abcd"))
-	(s3 (copy-seq "abcd")))
+        (s1 (copy-seq "abcd"))
+        (s2 (copy-seq "abcd"))
+        (s3 (copy-seq "abcd")))
     (setf (char s0 0) #\X)
     (setf (char s1 1) #\X)
     (setf (char s2 2) #\X)
@@ -24,15 +24,15 @@
 
 (deftest char.3
   (let ((s (make-array 6 :element-type 'character
-		       :initial-contents '(#\a #\b #\c #\d #\e #\f))))
+                       :initial-contents '(#\a #\b #\c #\d #\e #\f))))
     (setf (char s 3) #\X)
     s)
   "abcXef")
 
 (deftest char.4
   (let ((s (make-array 6 :element-type 'character
-		       :initial-contents '(#\a #\b #\c #\d #\e #\f)
-		       :fill-pointer 4)))
+                       :initial-contents '(#\a #\b #\c #\d #\e #\f)
+                       :fill-pointer 4)))
     (setf (char s 3) #\X)
     s)
   "abcX")
@@ -57,8 +57,8 @@
 
 (deftest char.8
   (let ((s (make-array 6 :element-type 'character
-		       :initial-contents '(#\a #\b #\c #\d #\e #\f)
-		       :fill-pointer 4)))
+                       :initial-contents '(#\a #\b #\c #\d #\e #\f)
+                       :fill-pointer 4)))
     (setf (char s 5) #\X)
     (setf (fill-pointer s) 6)
     s)
@@ -66,14 +66,14 @@
 
 (deftest char.9
   (let ((s (make-string 5 :initial-element #\a
-			:element-type 'base-char)))
+                        :element-type 'base-char)))
     (setf (char s 3) #\X)
     s)
   "aaaXa")
 
 (deftest char.10
   (let ((s (make-string 5 :initial-element #\a
-			:element-type 'standard-char)))
+                        :element-type 'standard-char)))
     (setf (char s 3) #\X)
     s)
   "aaaXa")
@@ -82,7 +82,7 @@
   (let ((i 0) a b)
     (values
      (char (progn (setf a (incf i)) "abc")
-	   (progn (setf b (incf i)) 1))
+           (progn (setf b (incf i)) 1))
      i a b))
   #\b 2 1 2)
 
@@ -91,7 +91,7 @@
     (values
      (setf
       (char (progn (setf a (incf i)) s)
-	    (progn (setf b (incf i)) 1))
+            (progn (setf b (incf i)) 1))
       (progn (setf c (incf i)) #\a))
      s i a b c))
   #\a "zazzz" 3 1 2 3)
@@ -118,9 +118,9 @@
 
 (deftest schar.2
   (let ((s0 (copy-seq "abcd"))
-	(s1 (copy-seq "abcd"))
-	(s2 (copy-seq "abcd"))
-	(s3 (copy-seq "abcd")))
+        (s1 (copy-seq "abcd"))
+        (s2 (copy-seq "abcd"))
+        (s3 (copy-seq "abcd")))
     (setf (schar s0 0) #\X)
     (setf (schar s1 1) #\X)
     (setf (schar s2 2) #\X)
@@ -154,7 +154,7 @@
 
 (deftest schar.7
   (let ((s (make-string 6 :initial-element #\x
-			:element-type 'standard-char)))
+                        :element-type 'standard-char)))
     (setf (schar s 2) #\X)
     s)
   "xxXxxx")
@@ -163,7 +163,7 @@
   (let ((i 0) a b)
     (values
      (schar (progn (setf a (incf i)) "abc")
-	    (progn (setf b (incf i)) 1))
+            (progn (setf b (incf i)) 1))
      i a b))
   #\b 2 1 2)
 
@@ -172,7 +172,7 @@
     (values
      (setf
       (schar (progn (setf a (incf i)) s)
-	     (progn (setf b (incf i)) 1))
+             (progn (setf b (incf i)) 1))
       (progn (setf c (incf i)) #\a))
      s i a b c))
   #\a "zazzz" 3 1 2 3)

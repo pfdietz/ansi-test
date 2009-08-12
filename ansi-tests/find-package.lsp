@@ -11,13 +11,13 @@
 
 (deftest find-package.1
   (let ((p (find-package "CL"))
-	(p2 (find-package "COMMON-LISP")))
+        (p2 (find-package "COMMON-LISP")))
     (and p p2 (eqt p p2)))
   t)
 
 (deftest find-package.2
   (let ((p (find-package "CL-USER"))
-	(p2 (find-package "COMMON-LISP-USER")))
+        (p2 (find-package "COMMON-LISP-USER")))
     (and p p2 (eqt p p2)))
   t)
 
@@ -31,8 +31,8 @@
     (set-up-packages)
     (let ((p (ignore-errors (find-package "A"))))
       (if (packagep p)
-	  t
-	p)))
+          t
+        p)))
   t)
 
 (deftest find-package.5
@@ -40,8 +40,8 @@
     (set-up-packages)
     (let ((p (ignore-errors (find-package #\A))))
       (if (packagep p)
-	  t
-	p)))
+          t
+        p)))
   t)
 
 (deftest find-package.6
@@ -49,8 +49,8 @@
     (set-up-packages)
     (let ((p (ignore-errors (find-package "B"))))
       (if (packagep p)
-	  t
-	p)))
+          t
+        p)))
   t)
 
 (deftest find-package.7
@@ -58,25 +58,25 @@
     (set-up-packages)
     (let ((p (ignore-errors (find-package #\B))))
       (if (packagep p)
-	  t
-	p)))
+          t
+        p)))
   t)
 
 (deftest find-package.8
   (progn
     (set-up-packages)
     (let ((p (ignore-errors (find-package "Q")))
-	  (p2 (ignore-errors (find-package "A"))))
+          (p2 (ignore-errors (find-package "A"))))
       (and (packagep p)
-	   (packagep p2)
-	   (eqt p p2))))
+           (packagep p2)
+           (eqt p p2))))
   t)
 
 (deftest find-package.9
   (progn
     (set-up-packages)
     (let ((p (ignore-errors (find-package "A")))
-	  (p2 (ignore-errors (find-package "B"))))
+          (p2 (ignore-errors (find-package "B"))))
       (eqt p p2)))
   nil)
 
@@ -84,63 +84,63 @@
   (progn
     (set-up-packages)
     (let ((p (ignore-errors (find-package #\Q)))
-	  (p2 (ignore-errors (find-package "Q"))))
+          (p2 (ignore-errors (find-package "Q"))))
       (and (packagep p)
-	   (eqt p p2))))
+           (eqt p p2))))
   t)
 
 (deftest find-package.11
   (let* ((cl (find-package "CL"))
-	 (cl2 (find-package cl)))
+         (cl2 (find-package cl)))
     (and (packagep cl)
-	 (eqt cl cl2)))
+         (eqt cl cl2)))
   t)
 
 (deftest find-package.12
   (let* ((name (make-array '(7) :initial-contents "KEYWORD"
-			   :element-type 'base-char))
-	 (p (find-package name)))
+                           :element-type 'base-char))
+         (p (find-package name)))
     (and p (eqt p (symbol-package :test))))
   t)
 
 (deftest find-package.13
   (let* ((name (make-array '(10) :initial-contents "KEYWORDXYZ"
-			   :fill-pointer 7
-			   :element-type 'base-char))
-	 (p (find-package name)))
+                           :fill-pointer 7
+                           :element-type 'base-char))
+         (p (find-package name)))
     (and p (eqt p (symbol-package :test))))
   t)
 
 (deftest find-package.14
   (let* ((name (make-array '(10) :initial-contents "KEYWORDXYZ"
-			   :fill-pointer 7
-			   :element-type 'character))
-	 (p (find-package name)))
+                           :fill-pointer 7
+                           :element-type 'character))
+         (p (find-package name)))
     (and p (eqt p (symbol-package :test))))
   t)
 
 (deftest find-package.15
   (let* ((name0 (make-array '(10) :initial-contents "XYKEYWORDZ"
-			    :element-type 'character))
-	 (name (make-array '(7) :displaced-to name0 :displaced-index-offset 2
-			   :element-type 'character))
-	 (p (find-package name)))
+                            :element-type 'character))
+         (name (make-array '(7) :displaced-to name0 :displaced-index-offset 2
+                           :element-type 'character))
+         (p (find-package name)))
     (and p (eqt p (symbol-package :test))))
   t)
 
 (deftest find-package.16
   (let* ((name (make-array '(7) :initial-contents "KEYWORD"
-			   :adjustable t
-			   :element-type 'base-char))
-	 (p (find-package name)))
+                           :adjustable t
+                           :element-type 'base-char))
+         (p (find-package name)))
     (and p (eqt p (symbol-package :test))))
   t)
 
 (deftest find-package.17
   (let* ((name (make-array '(7) :initial-contents "KEYWORD"
-			   :adjustable t
-			   :element-type 'character))
-	 (p (find-package name)))
+                           :adjustable t
+                           :element-type 'character))
+         (p (find-package name)))
     (and p (eqt p (symbol-package :test))))
   t)
 

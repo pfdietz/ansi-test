@@ -10,16 +10,16 @@
 (deftest return.error.1
   (signals-error (funcall (macro-function 'return)) program-error)
   t)
-  
+
 (deftest return.error.2
   (signals-error (funcall (macro-function 'return) '(return nil))
-		 program-error)
+                 program-error)
   t)
 
 (deftest return.error.3
   (signals-error (funcall (macro-function 'return)
-			  '(return nil) nil nil)
-		 program-error)
+                          '(return nil) nil nil)
+                 program-error)
   t)
 
 ;;;

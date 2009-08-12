@@ -102,8 +102,8 @@
   (:method ((x integer)) (list (incf x) (call-next-method)))
   (:method ((x symbol)) (list (setq x 'a) x (call-next-method)))
   (:method ((x cons)) (list x (let ((x :bad))
-				(declare (ignorable x))
-				(call-next-method))))
+                                (declare (ignorable x))
+                                (call-next-method))))
   (:method ((x t)) x))
 
 (deftest call-next-method.8
@@ -147,9 +147,9 @@
 
 (defgeneric cnm-gf-10 (x &optional y z)
   (:method ((x integer) &optional (y 'a y-p) (z 'b z-p))
-	   (list* x y (notnot y-p) z (notnot z-p) (call-next-method (1+ x))))
+           (list* x y (notnot y-p) z (notnot z-p) (call-next-method (1+ x))))
   (:method ((x t) &optional (y 'c y-p) (z 'd z-p))
-	   (list x y (notnot y-p) z (notnot z-p))))
+           (list x y (notnot y-p) z (notnot z-p))))
 
 (deftest call-next-method.11
   (values
@@ -175,39 +175,39 @@
 (defgeneric cnm-order-error-gf-01 (x)
   (declare (optimize (safety 3)))
   (:method ((x (eql 0)))
-	   (declare (optimize (safety 3)))
-	   (call-next-method 1))  ;; no longer EQL to 0
+           (declare (optimize (safety 3)))
+           (call-next-method 1))  ;; no longer EQL to 0
   (:method ((x t)) nil))
 
 (deftest call-next-method.error.1
   (locally
    (declare (optimize (safety 3)))
-   (handler-case 
+   (handler-case
     (eval '(locally (declare (optimize (safety 3)))
-		    (cnm-order-error-gf-01 0)))
+                    (cnm-order-error-gf-01 0)))
     (error () :error)))
   :error)
 
 (defgeneric cnm-order-error-gf-02 (x)
   (declare (optimize (safety 3)))
   (:method ((x integer))
-	   (declare (optimize (safety 3)))
-	   (call-next-method :bad))
+           (declare (optimize (safety 3)))
+           (call-next-method :bad))
   (:method ((x t)) x))
 
 (deftest call-next-method.error.2
   (locally
    (declare (optimize (safety 3)))
-   (handler-case 
+   (handler-case
     (eval '(locally (declare (optimize (safety 3)))
-		    (cnm-order-error-gf-02 0)))
+                    (cnm-order-error-gf-02 0)))
     (error () :error)))
   :error)
 
 
 
-	   
 
 
-  
+
+
 

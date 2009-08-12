@@ -7,22 +7,22 @@
 
 (deftest hash-table-rehash-threshold.1
   (typep* (hash-table-rehash-threshold (make-hash-table))
-	  '(real 0 1))
+          '(real 0 1))
   t)
 
 (deftest hash-table-rehash-threshold.2
   (loop for test in '(eq eql equal equalp)
-	unless (typep* (hash-table-rehash-threshold (make-hash-table :test test))
-		       '(real 0 1))
-	collect test)
+        unless (typep* (hash-table-rehash-threshold (make-hash-table :test test))
+                       '(real 0 1))
+        collect test)
   nil)
 
 (deftest hash-table-rehash-threshold.3
   (loop for test in '(eq eql equal equalp)
-	for fn = (symbol-function test)
-	unless (typep* (hash-table-rehash-threshold (make-hash-table :test fn))
-		       '(real 0 1))
-	collect test)
+        for fn = (symbol-function test)
+        unless (typep* (hash-table-rehash-threshold (make-hash-table :test fn))
+                       '(real 0 1))
+        collect test)
   nil)
 
 (deftest hash-table-rehash-threshold.error.1
@@ -31,7 +31,7 @@
 
 (deftest hash-table-rehash-threshold.error.2
   (signals-error (hash-table-rehash-threshold (make-hash-table) nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest hash-table-rehash-threshold.error.3

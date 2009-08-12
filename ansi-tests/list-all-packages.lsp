@@ -21,12 +21,12 @@
     (notnot
      (subsetp
       (list (find-package "CL")
-	    (find-package "CL-USER")
-	    (find-package "KEYWORD")
-	    (find-package "A")
-	    (find-package "REGRESSION-TEST")
-	    (find-package "CL-TEST")
-	    (find-package "B"))
+            (find-package "CL-USER")
+            (find-package "KEYWORD")
+            (find-package "A")
+            (find-package "REGRESSION-TEST")
+            (find-package "CL-TEST")
+            (find-package "B"))
       (list-all-packages))))
   t)
 
@@ -38,9 +38,9 @@
 ;; It returns a list of the same packages each time it is called
 (deftest list-all-packages.4
   (let ((p1 (list-all-packages))
-	(p2 (list-all-packages)))
+        (p2 (list-all-packages)))
     (and (subsetp p1 p2)
-	 (subsetp p2 p1)))
+         (subsetp p2 p1)))
   t)
 
 (deftest list-all-packages.error.1

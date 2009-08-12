@@ -12,13 +12,13 @@
   (block done
    (let (fn (cnd (make-condition 'simple-error)))
        (setq fn #'(lambda (c hook)
-		    (return-from done
-		      (and (null *debugger-hook*)
-			   (eqt hook fn)
-			   (eqt cnd c)
-			   'good))))
+                    (return-from done
+                      (and (null *debugger-hook*)
+                           (eqt hook fn)
+                           (eqt cnd c)
+                           'good))))
        (let ((*debugger-hook* fn))
-	 (invoke-debugger cnd)))
+         (invoke-debugger cnd)))
    'bad)
   good)
 
@@ -26,8 +26,8 @@
   (signals-error
    (block done
      (let ((*debugger-hook* #'(lambda (&rest args)
-				(declare (ignore args))
-				(return-from done 'bad))))
+                                (declare (ignore args))
+                                (return-from done 'bad))))
        (invoke-debugger)))
    program-error)
   t)
@@ -36,8 +36,8 @@
   (signals-error
    (block done
      (let ((*debugger-hook* #'(lambda (&rest args)
-				(declare (ignore args))
-				(return-from done 'bad))))
+                                (declare (ignore args))
+                                (return-from done 'bad))))
        (invoke-debugger (make-condition 'simple-error) nil)))
    program-error)
   t)

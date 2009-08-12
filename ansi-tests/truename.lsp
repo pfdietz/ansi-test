@@ -7,7 +7,7 @@
 
 (deftest truename.1
   (let* ((pn #p"truename.lsp")
-	 (tn (truename pn)))
+         (tn (truename pn)))
     (values
      (notnot (pathnamep pn))
      (typep pn 'logical-pathname)
@@ -18,8 +18,8 @@
 
 (deftest truename.2
   (let* ((name "truename.lsp")
-	 (pn (pathname name))
-	 (tn (truename name)))
+         (pn (pathname name))
+         (tn (truename name)))
     (values
      (notnot (pathnamep pn))
      (typep pn 'logical-pathname)
@@ -34,11 +34,11 @@
      (s pn :direction :input)
      (let ((tn (truename s)))
        (values
-	(notnot (pathnamep pn))
-	(typep pn 'logical-pathname)
-	(equalt (pathname-name pn) (pathname-name tn))
-	(equalt (pathname-type pn) (pathname-type tn))
-	))))
+        (notnot (pathnamep pn))
+        (typep pn 'logical-pathname)
+        (equalt (pathname-name pn) (pathname-name tn))
+        (equalt (pathname-type pn) (pathname-type tn))
+        ))))
   t nil t t)
 
 (deftest truename.4
@@ -46,26 +46,26 @@
     (let ((s (open pn :direction :input)))
       (close s)
       (let ((tn (truename s)))
-	(values
-	 (notnot (pathnamep pn))
-	 (typep pn 'logical-pathname)
-	 (equalt (pathname-name pn) (pathname-name tn))
-	 (equalt (pathname-type pn) (pathname-type tn))
-	 ))))
+        (values
+         (notnot (pathnamep pn))
+         (typep pn 'logical-pathname)
+         (equalt (pathname-name pn) (pathname-name tn))
+         (equalt (pathname-type pn) (pathname-type tn))
+         ))))
   t nil t t)
 
 (deftest truename.5
   (let* ((lpn "CLTEST:foo.txt")
-	 (pn (translate-logical-pathname lpn)))
+         (pn (translate-logical-pathname lpn)))
     (unless (probe-file lpn)
       (with-open-file (s lpn :direction :output) (format s "Stuff~%")))
     (let ((tn (truename lpn)))
       (values
        (notnot (pathnamep pn))
        (if (equalt (pathname-name pn) (pathname-name tn))
-	   t (list (pathname-name pn) (pathname-name tn)))
+           t (list (pathname-name pn) (pathname-name tn)))
        (if (equalt (pathname-type pn) (pathname-type tn))
-	   t (list (pathname-type pn) (pathname-type tn)))
+           t (list (pathname-type pn) (pathname-type tn)))
        )))
   t t t)
 
@@ -102,7 +102,7 @@
 (deftest truename.error.6
   (signals-error-always
    (let ((pn (make-pathname :name :wild
-			    :defaults *default-pathname-defaults*)))
+                            :defaults *default-pathname-defaults*)))
      (truename pn))
    file-error)
   t t)

@@ -14,8 +14,8 @@
      (with-output-to-string
        (os)
        (with-open-stream
-	(*terminal-io* (make-two-way-stream is os))
-	(return-from done (read-preserving-whitespace t))))))
+        (*terminal-io* (make-two-way-stream is os))
+        (return-from done (read-preserving-whitespace t))))))
   1)
 
 (deftest read-preserving-whitespace.2
@@ -115,7 +115,7 @@
   (with-input-from-string
    (s "")
    (read-preserving-whitespace s nil 'foo))
-  foo)			  
+  foo)
 
 ;;; Error tests
 

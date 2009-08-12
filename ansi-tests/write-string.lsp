@@ -21,8 +21,8 @@
      (with-output-to-string
        (*standard-output*)
        (setq result
-	     (multiple-value-list
-	      (write-string (make-array '(0) :element-type nil)))))
+             (multiple-value-list
+              (write-string (make-array '(0) :element-type nil)))))
      result))
   "" (""))
 
@@ -50,7 +50,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-string "abcde" s :start 1 :end 3))))
+                     (write-string "abcde" s :start 1 :end 3))))
      result))
   "bc" ("abcde"))
 
@@ -60,7 +60,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-string "abcde" s :start 1 :end nil))))
+                     (write-string "abcde" s :start 1 :end nil))))
      result))
   "bcde" ("abcde"))
 
@@ -79,7 +79,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-string "abcde" s :end 3 :allow-other-keys nil))))
+                     (write-string "abcde" s :end 3 :allow-other-keys nil))))
      result))
   "abc" ("abcde"))
 
@@ -89,8 +89,8 @@
      (with-output-to-string
        (s)
        (setq result
-	     (multiple-value-list
-	      (write-string "abcde" s :end 3 :allow-other-keys t :foo 'bar))))
+             (multiple-value-list
+              (write-string "abcde" s :end 3 :allow-other-keys t :foo 'bar))))
      result))
   "abc" ("abcde"))
 
@@ -100,7 +100,7 @@
      (with-output-to-string
        (s)
        (setq result (multiple-value-list
-		     (write-string "abcde" s :end 3 :end 2))))
+                     (write-string "abcde" s :end 3 :end 2))))
      result))
   "abc" ("abcde"))
 
@@ -127,10 +127,10 @@
     (do-special-strings
      (s "abcde" nil)
      (assert (equal
-	      (with-output-to-string
-		(*standard-output*)
-		(setq result (multiple-value-list (write-string "abcde"))))
-	      "abcde"))
+              (with-output-to-string
+                (*standard-output*)
+                (setq result (multiple-value-list (write-string "abcde"))))
+              "abcde"))
      (assert (equal result '("abcde")))))
   nil)
 
@@ -150,7 +150,7 @@
 
 (deftest write-string.error.4
   (signals-error (write-string "" *standard-output*
-			       :allow-other-keys nil
-			       :foo nil)
-		 program-error)
+                               :allow-other-keys nil
+                               :foo nil)
+                 program-error)
   t)

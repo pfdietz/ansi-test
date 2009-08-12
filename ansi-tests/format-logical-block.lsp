@@ -286,8 +286,8 @@
 
 (def-pprint-test format.logical-block.circle.3
   (format nil "~:<~@{~A~^ ~}~:>" (let ((x (list 0)))
-				   (setf (cdr x) x)
-				   x))
+                                   (setf (cdr x) x)
+                                   x))
   "#1=(0 . #1#)"
   :circle t
   :len 500)

@@ -15,8 +15,8 @@
 
 (deftest defmethod.2
   (let* ((sym (gensym))
-	 (method
-	  (eval `(defmethod ,sym ((x integer)) (list x)))))
+         (method
+          (eval `(defmethod ,sym ((x integer)) (list x)))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -25,8 +25,8 @@
 
 (deftest defmethod.3
   (let* ((sym (gensym))
-	 (method
-	  (eval `(let ((x 0)) (defmethod ,sym ((x (eql (incf x)))) (list x))))))
+         (method
+          (eval `(let ((x 0)) (defmethod ,sym ((x (eql (incf x)))) (list x))))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -36,8 +36,8 @@
 
 (deftest defmethod.4
   (let* ((sym (gensym))
-	 (method
-	  (eval `(defmethod (setf ,sym) ((x t) (y cons)) (setf (car y) x)))))
+         (method
+          (eval `(defmethod (setf ,sym) ((x t) (y cons)) (setf (car y) x)))))
     (values
      (typep* method 'standard-method)
      (fboundp sym)
@@ -47,8 +47,8 @@
 
 (deftest defmethod.5
   (let* ((sym (gensym))
-	 (method
-	  (eval `(defmethod ,sym ((x integer)) (return-from ,sym (list x))))))
+         (method
+          (eval `(defmethod ,sym ((x integer)) (return-from ,sym (list x))))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -57,8 +57,8 @@
 
 (deftest defmethod.6
   (let* ((sym (gensym))
-	 (method
-	  (eval `(defmethod (setf ,sym) ((x t) (y cons)) (return-from ,sym (setf (car y) x))))))
+         (method
+          (eval `(defmethod (setf ,sym) ((x t) (y cons)) (return-from ,sym (setf (car y) x))))))
     (values
      (typep* method 'standard-method)
      (fboundp sym)
@@ -68,8 +68,8 @@
 
 (deftest defmethod.7
   (let* ((sym (gensym))
-	 (method
-	  (eval `(defmethod ,sym ((x integer) &aux (y (list x))) y))))
+         (method
+          (eval `(defmethod ,sym ((x integer) &aux (y (list x))) y))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -78,7 +78,7 @@
 
 (deftest defmethod.8
   (let* ((sym (gensym))
-	 (method (eval `(defmethod ,sym ((x integer) &key z) (list x z)))))
+         (method (eval `(defmethod ,sym ((x integer) &key z) (list x z)))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -92,7 +92,7 @@
 
 (deftest defmethod.9
   (let* ((sym (gensym))
-	 (method (eval `(defmethod ,sym ((x integer) &key (z :missing)) (list x z)))))
+         (method (eval `(defmethod ,sym ((x integer) &key (z :missing)) (list x z)))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -104,7 +104,7 @@
 
 (deftest defmethod.10
   (let* ((sym (gensym))
-	 (method (eval `(defmethod ,sym ((x integer) &key (z :missing z-p)) (list x z (notnot z-p))))))
+         (method (eval `(defmethod ,sym ((x integer) &key (z :missing z-p)) (list x z (notnot z-p))))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -116,7 +116,7 @@
 
 (deftest defmethod.11
   (let* ((sym (gensym))
-	 (method (eval `(defmethod ,sym ((x integer) &rest z) (list x z)))))
+         (method (eval `(defmethod ,sym ((x integer) &rest z) (list x z)))))
     (values
      (typep* method 'standard-method)
      (typep* (fdefinition sym) 'standard-generic-function)
@@ -207,24 +207,24 @@
   (let ((sym (gensym)))
     (eval `(locally (declare (optimize safety)) (defmethod ,sym ((x t)) x)))
     (values (eval `(signals-error (,sym) program-error))
-	    (eval `(signals-error (,sym 1 2) program-error))))
+            (eval `(signals-error (,sym 1 2) program-error))))
   t t)
 
 (deftest defmethod.error.14
   (let ((sym (gensym)))
     (eval `(locally (declare (optimize safety)) (defmethod ,sym ((x t) &key) x)))
     (values (eval `(signals-error (,sym) program-error))
-	    (eval `(signals-error (,sym 1 2) program-error))
-	    (eval `(signals-error (,sym 1 :bogus t) program-error))
-	    (eval `(signals-error (,sym 1 :allow-other-keys nil :allow-other-keys t :bogus t) program-error))))
+            (eval `(signals-error (,sym 1 2) program-error))
+            (eval `(signals-error (,sym 1 :bogus t) program-error))
+            (eval `(signals-error (,sym 1 :allow-other-keys nil :allow-other-keys t :bogus t) program-error))))
   t t t t)
 
 (deftest defmethod.error.15
   (let ((sym (gensym)))
     (eval `(locally (declare (optimize safety)) (defmethod ,sym ((x t) &key y) x)))
     (values (eval `(signals-error (,sym 1 :bogus t) program-error))
-	    (eval `(signals-error (,sym 1 :y) program-error))
-	    (eval `(signals-error (,sym 1 3 nil) program-error))))
+            (eval `(signals-error (,sym 1 :y) program-error))
+            (eval `(signals-error (,sym 1 3 nil) program-error))))
   t t t)
 
 

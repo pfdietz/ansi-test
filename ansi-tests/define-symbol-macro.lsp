@@ -7,20 +7,20 @@
 
 (deftest define-symbol-macro.error.1
   (signals-error (funcall (macro-function 'define-symbol-macro))
-		 program-error)
+                 program-error)
   t)
 
 (deftest define-symbol-macro.error.2
   (signals-error (funcall (macro-function 'define-symbol-macro)
-			   '(define-symbol-macro
-			      nonexistent-symbol-macro nil))
-		 program-error)
+                           '(define-symbol-macro
+                              nonexistent-symbol-macro nil))
+                 program-error)
   t)
 
 (deftest define-symbol-macro.error.3
   (signals-error (funcall (macro-function 'define-symbol-macro)
-			   '(define-symbol-macro
-			      nonexistent-symbol-macro nil)
-			   nil nil)
-		 program-error)
+                           '(define-symbol-macro
+                              nonexistent-symbol-macro nil)
+                           nil nil)
+                 program-error)
   t)

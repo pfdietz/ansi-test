@@ -31,12 +31,12 @@
 
 (deftest logtest.1
   (loop for x = (logand (random-fixnum) (random-fixnum))
-	for y = (logand (random-fixnum) (random-fixnum))
-	repeat 10000
-	unless (if (logtest x y)
-		   (not (zerop (logand x y)))
-		 (zerop (logand x y)))
-	collect (list x y))
+        for y = (logand (random-fixnum) (random-fixnum))
+        repeat 10000
+        unless (if (logtest x y)
+                   (not (zerop (logand x y)))
+                 (zerop (logand x y)))
+        collect (list x y))
   nil)
 
 (deftest logtest.2
@@ -46,6 +46,6 @@
 (deftest logtest.3
   (notnot-mv (logtest 8 (logior 8 4)))
   t)
-  
 
-  
+
+

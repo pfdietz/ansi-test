@@ -65,8 +65,8 @@
   (report-and-ignore-errors
    (defparameter *dmc-long-03*
      (define-method-combination mc-long-03 nil ((method-list * :order :most-specific-first
-							     :description "This method has qualifiers ~A"
-							     ))
+                                                             :description "This method has qualifiers ~A"
+                                                             ))
        `(vector ,@(mapcar #'(lambda (m) `(call-method ,m)) method-list)))))
   (report-and-ignore-errors
    (defgeneric dmc-long-gf-03 (x y) (:method-combination mc-long-03)))
@@ -100,7 +100,7 @@
    (defparameter *dmc-long-04*
      (let ((order :most-specific-last))
        (define-method-combination mc-long-04 nil ((method-list * :order order))
-	 `(vector ,@(mapcar #'(lambda (m) `(call-method ,m)) method-list))))))
+         `(vector ,@(mapcar #'(lambda (m) `(call-method ,m)) method-list))))))
   (report-and-ignore-errors
    (defgeneric dmc-long-gf-04 (x y) (:method-combination mc-long-04)))
   )
@@ -126,12 +126,12 @@
   t)
 
 ;;; Empty qualifier list
-  
+
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (report-and-ignore-errors
    (defparameter *dmc-long-05*
      (define-method-combination mc-long-05 nil ((method-list nil)
-						(ignored-methods *))
+                                                (ignored-methods *))
        (declare (ignorable ignored-methods))
        `(vector ,@(mapcar #'(lambda (m) `(call-method ,m)) method-list)))))
   (report-and-ignore-errors
@@ -157,12 +157,12 @@
   #() #(z) #(a z) #(b z) #(a b z))
 
 ;;; :required
-  
+
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (report-and-ignore-errors
    (defparameter *dmc-long-06*
      (define-method-combination mc-long-06 nil ((method-list nil :required t)
-						(ignored-methods *))
+                                                (ignored-methods *))
        (declare (ignorable ignored-methods))
        `(vector ,@(mapcar #'(lambda (m) `(call-method ,m)) method-list)))))
   (report-and-ignore-errors

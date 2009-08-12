@@ -14,8 +14,8 @@
 (deftest mapc.2
   (let ((x 0))
     (let ((result
-	   (mapc #'(lambda (y) (incf x y))
-		 '(1 2 3 4))))
+           (mapc #'(lambda (y) (incf x y))
+                 '(1 2 3 4))))
       (list result x)))
   ((1 2 3 4) 10))
 
@@ -23,8 +23,8 @@
   (let ((x 0))
     (list
      (mapc #'(lambda (y z) (declare (ignore y z)) (incf x))
-	   (make-list 5 :initial-element 'a)
-	   (make-list 5 ))
+           (make-list 5 :initial-element 'a)
+           (make-list 5 ))
      x))
   ((a a a a a) 5))
 
@@ -32,8 +32,8 @@
   (let ((x 0))
     (list
      (mapc #'(lambda (y z) (declare (ignore y z)) (incf x))
-	   (make-list 5 :initial-element 'a)
-	   (make-list 10))
+           (make-list 5 :initial-element 'a)
+           (make-list 10))
      x))
   ((a a a a a) 5))
 
@@ -41,30 +41,30 @@
   (let ((x 0))
     (list
      (mapc #'(lambda (y z) (declare (ignore y z)) (incf x))
-	   (make-list 5 :initial-element 'a)
-	   (make-list 3))
+           (make-list 5 :initial-element 'a)
+           (make-list 3))
      x))
   ((a a a a a) 3))
 
 (deftest mapc.6
   (let* ((x (copy-list '(a b c d e f g h)))
-	 (xcopy (make-scaffold-copy x)))
+         (xcopy (make-scaffold-copy x)))
     (setf *mapc.6-var* nil)
     (let ((result (mapc 'mapc.6-fun x)))
       (and (check-scaffold-copy x xcopy)
-	   (eqt result x)
-	   *mapc.6-var*)))
+           (eqt result x)
+           *mapc.6-var*)))
   (h g f e d c b a))
 
 (deftest mapc.order.1
   (let ((i 0) x y z)
     (values
      (mapc (progn (setf x (incf i))
-		  #'list)
-	   (progn (setf y (incf i))
-		  '(a b c))
-	   (progn (setf z (incf i))
-		  '(1 2 3)))
+                  #'list)
+           (progn (setf y (incf i))
+                  '(a b c))
+           (progn (setf z (incf i))
+                  '(1 2 3)))
      i x y z))
   (a b c) 3 1 2 3)
 

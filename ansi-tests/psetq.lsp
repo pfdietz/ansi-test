@@ -24,8 +24,8 @@
     (values
      (symbol-macrolet ((x y))
        (let ((y 1))
-	 (psetq x 2)
-	 y))
+         (psetq x 2)
+         y))
      x))
   2 0)
 
@@ -40,7 +40,7 @@
 (deftest psetq.6
   (let ((c 0) x y)
     (psetq x (incf c)
-	   y (incf c))
+           y (incf c))
     (values c x y))
   2 1 2)
 
@@ -49,11 +49,11 @@
 
 (deftest psetq.7
   (symbol-macrolet ((x (aref a (incf i)))
-		    (y (aref a (incf i))))
+                    (y (aref a (incf i))))
     (let ((a (copy-seq #(0 1 2 3 4 5 6 7 8 9)))
-	  (i 0))
+          (i 0))
       (psetq x (aref a (incf i))
-	     y (aref a (incf i)))
+             y (aref a (incf i)))
       (values a i)))
   #(0 2 2 4 4 5 6 7 8 9)
   4)
@@ -64,7 +64,7 @@
     (values
      *x* *y*
      (psetq *x* 6
-	    *y* 15)
+            *y* 15)
      *x* *y*))
   0 10 nil 6 15)
 
@@ -74,7 +74,7 @@
     (values
      *x* *y*
      (psetq *x* *y*
-	    *y* *x*)
+            *y* *x*)
      *x* *y*))
   0 10 nil 10 0)
 
@@ -87,7 +87,7 @@
    (let ((x nil) (y nil))
      (values
       (psetq x (expand-in-current-env (%m 1))
-	     y (expand-in-current-env (%m 2)))
+             y (expand-in-current-env (%m 2)))
       x y)))
   nil 1 2)
 
@@ -97,10 +97,10 @@
 
 (deftest psetq.error.2
   (signals-error (funcall (macro-function 'psetq) '(psetq))
-		 program-error)
+                 program-error)
   t)
 
 (deftest psetq.error.3
   (signals-error (funcall (macro-function 'psetq) '(psetq) nil nil)
-		 program-error)
+                 program-error)
   t)

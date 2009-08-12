@@ -76,12 +76,12 @@
 
 (deftest when.error.2
   (signals-error (funcall (macro-function 'when)
-			   '(when t))
-		 program-error)
+                           '(when t))
+                 program-error)
   t)
 
 (deftest when.error.3
   (signals-error (funcall (macro-function 'when)
-			   '(when t) nil nil)
-		 program-error)
+                           '(when t) nil nil)
+                 program-error)
   t)

@@ -16,11 +16,11 @@
      ((> (length s) 1) (values s :too-long))
      (t
       (let ((c (elt s 0)))
-	(loop for i from 2 to 100
-	      for s = (format nil (format nil "~~~D|" i))
-	      unless (and (= (length s) i)
-			  (every #'(lambda (c2) (char= c c2)) s))
-	      collect i)))))
+        (loop for i from 2 to 100
+              for s = (format nil (format nil "~~~D|" i))
+              unless (and (= (length s) i)
+                          (every #'(lambda (c2) (char= c c2)) s))
+              collect i)))))
   nil)
 
 (deftest format.page.3
@@ -30,11 +30,11 @@
      ((> (length s) 1) (values s :too-long))
      (t
       (let ((c (elt s 0)))
-	(loop for i from 2 to 100
-	      for s = (format nil "~v|" i)
-	      unless (and (= (length s) i)
-			  (every #'(lambda (c2) (char= c c2)) s))
-	      collect i)))))
+        (loop for i from 2 to 100
+              for s = (format nil "~v|" i)
+              unless (and (= (length s) i)
+                          (every #'(lambda (c2) (char= c c2)) s))
+              collect i)))))
   nil)
 
 (def-format-test format.page.4

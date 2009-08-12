@@ -53,15 +53,15 @@
   (let ((x (list nil)) (i 0) a b)
     (values
      (push (progn (setf a (incf i)) 'z)
-	   (car (progn (setf b (incf i)) x)))
+           (car (progn (setf b (incf i)) x)))
      x
      i a b))
   (z) ((z)) 2 1 2)
 
 (deftest push.order.2
   (let ((x (vector nil nil nil nil))
-	(y (vector 'a 'b 'c 'd))
-	(i 1))
+        (y (vector 'a 'b 'c 'd))
+        (i 1))
     (push (aref y (incf i)) (aref x (incf i)))
     (values x y i))
   #(nil nil nil (c))

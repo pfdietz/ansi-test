@@ -14,8 +14,8 @@
      (with-output-to-string
        (os)
        (with-open-stream
-	(*terminal-io* (make-two-way-stream is os))
-	(return-from done (read t))))))
+        (*terminal-io* (make-two-way-stream is os))
+        (return-from done (read t))))))
   1)
 
 (deftest read.2
@@ -115,7 +115,7 @@
   (with-input-from-string
    (s "")
    (read s nil 'foo))
-  foo)			  
+  foo)
 
 ;;; Error tests
 

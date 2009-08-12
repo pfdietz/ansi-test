@@ -20,15 +20,15 @@
 (deftest first-etc-1
   (let ((x (loop for i from 1 to 20 collect i)))
     (list (first x)
-	  (second x)
-	  (third x)
-	  (fourth x)
-	  (fifth x)
-	  (sixth x)
-	  (seventh x)
-	  (eighth x)
-	  (ninth x)
-	  (tenth x)))
+          (second x)
+          (third x)
+          (fourth x)
+          (fifth x)
+          (sixth x)
+          (seventh x)
+          (eighth x)
+          (ninth x)
+          (tenth x)))
   (1 2 3 4 5 6 7 8 9 10))
 
 (deftest first-etc-2
@@ -59,82 +59,82 @@
 
 (loop
  for fn in '(car cdr caar cadr cdar cddr
-		 caaar caadr cadar caddr cdaar cdadr cddar cdddr
-		 caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
-		 cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr)
+                 caaar caadr cadar caddr cdaar cdadr cddar cdddr
+                 caaaar caaadr caadar caaddr cadaar cadadr caddar cadddr
+                 cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr)
  do
  (let ((level (- (length (symbol-name fn)) 2)))
    (eval `(deftest ,(intern
-		     (concatenate 'string
-				  (symbol-name fn)
-				  "-SET")
-		     :cl-test)
-	    (let ((x (create-c*r-test ,level))
-		  (y (list (create-c*r-test ,level)))
-		  (i 0))
-	      (and
-	       (setf (,fn (progn (incf i) x)) 'a)
-	       (eqlt (,fn x) 'a)
-	       (eqlt i 1)
-	       (setf (,fn x) 'none)
-	       (equalt x (create-c*r-test ,level))
-	       (setf (,fn (progn (incf i) (car y))) 'a)
-	       (eqlt (,fn (car y)) 'a)
-	       (eqlt i 2)
-	       (setf (,fn (car y)) 'none)
-	       (null (cdr y))
-	       (equalt (car y) (create-c*r-test ,level))
-	       ))
-	    t))))
+                     (concatenate 'string
+                                  (symbol-name fn)
+                                  "-SET")
+                     :cl-test)
+            (let ((x (create-c*r-test ,level))
+                  (y (list (create-c*r-test ,level)))
+                  (i 0))
+              (and
+               (setf (,fn (progn (incf i) x)) 'a)
+               (eqlt (,fn x) 'a)
+               (eqlt i 1)
+               (setf (,fn x) 'none)
+               (equalt x (create-c*r-test ,level))
+               (setf (,fn (progn (incf i) (car y))) 'a)
+               (eqlt (,fn (car y)) 'a)
+               (eqlt i 2)
+               (setf (,fn (car y)) 'none)
+               (null (cdr y))
+               (equalt (car y) (create-c*r-test ,level))
+               ))
+            t))))
 
 (loop
  for (fn len) in '((first 1) (second 2) (third 3) (fourth 4)
-		   (fifth 5) (sixth 6) (seventh 7) (eighth 8)
-		   (ninth 9) (tenth 10))
+                   (fifth 5) (sixth 6) (seventh 7) (eighth 8)
+                   (ninth 9) (tenth 10))
  do
  (eval
   `(deftest ,(intern
-	      (concatenate 'string
-			   (symbol-name fn)
-			   "-SET")
-	      :cl-test)
+              (concatenate 'string
+                           (symbol-name fn)
+                           "-SET")
+              :cl-test)
      (let* ((x (make-list 20 :initial-element nil))
-	    (y (list (copy-list x)))
-	    (cnt 0))
+            (y (list (copy-list x)))
+            (cnt 0))
        (and
-	(setf (,fn (progn (incf cnt) x)) 'a)
-	(eqlt cnt 1)
-	(loop
-	 for i from 1 to 20
-	 do (when (and (not (eql i ,len))
-		       (nth (1- i) x))
-	      (return nil))
-	 finally (return t))
-	(setf (,fn (car y)) 'a)
-	(loop
-	 for i from 1 to 20
-	 do (when (and (not (eql i ,len))
-		       (nth (1- i) (car y)))
-	      (return nil))
-	 finally (return t))
-	(eqlt (,fn x) 'a)
-	(eqlt (nth ,(1- len) x) 'a)
-	(eqlt (,fn (car y)) 'a)
-	(nth ,(1- len) (car y))))
+        (setf (,fn (progn (incf cnt) x)) 'a)
+        (eqlt cnt 1)
+        (loop
+         for i from 1 to 20
+         do (when (and (not (eql i ,len))
+                       (nth (1- i) x))
+              (return nil))
+         finally (return t))
+        (setf (,fn (car y)) 'a)
+        (loop
+         for i from 1 to 20
+         do (when (and (not (eql i ,len))
+                       (nth (1- i) (car y)))
+              (return nil))
+         finally (return t))
+        (eqlt (,fn x) 'a)
+        (eqlt (nth ,(1- len) x) 'a)
+        (eqlt (,fn (car y)) 'a)
+        (nth ,(1- len) (car y))))
      a)))
 
 ;; set up program-error tests
 
 (loop for name in *cons-accessors*
       do (eval
-	  `(deftest ,(intern (concatenate 'string (symbol-name name)
-					  ".ERROR.NO-ARGS")
-			     :cl-test)
-	     (signals-error (,name) program-error)
-	     t))
+          `(deftest ,(intern (concatenate 'string (symbol-name name)
+                                          ".ERROR.NO-ARGS")
+                             :cl-test)
+             (signals-error (,name) program-error)
+             t))
       do (eval
-	  `(deftest ,(intern (concatenate 'string (symbol-name name)
-					  ".ERROR.EXCESS-ARGS")
-			     :cl-test)
-	     (signals-error (,name nil nil) program-error)
-	     t)))
+          `(deftest ,(intern (concatenate 'string (symbol-name name)
+                                          ".ERROR.EXCESS-ARGS")
+                             :cl-test)
+             (signals-error (,name nil nil) program-error)
+             t)))

@@ -17,7 +17,7 @@
 
 (deftest allocate-instance.1
   (let* ((class (find-class 'allocate-instance-class-01))
-	 (obj (allocate-instance class)))
+         (obj (allocate-instance class)))
     (values
      (eqt (class-of obj) class)
      (typep* obj 'allocate-instance-class-01)
@@ -28,9 +28,9 @@
 
 (deftest allocate-instance.2
   (let* ((class (find-class 'allocate-instance-class-01))
-	 (obj (allocate-instance class
-				 :foo t :a 10 :b 12 :c 1.0 :d 'a :e 17
-				 :f nil :bar t)))
+         (obj (allocate-instance class
+                                 :foo t :a 10 :b 12 :c 1.0 :d 'a :e 17
+                                 :f nil :bar t)))
     (values
      (eqt (class-of obj) class)
      (typep* obj 'allocate-instance-class-01)
@@ -41,7 +41,7 @@
 
 (deftest allocate-instance.3
   (let* ((class (find-class 'allocate-instance-class-01))
-	 (obj (allocate-instance class :allow-other-keys nil :xyzzy t)))
+         (obj (allocate-instance class :allow-other-keys nil :xyzzy t)))
     (values
      (eqt (class-of obj) class)
      (typep* obj 'allocate-instance-class-01)
@@ -73,11 +73,11 @@
 
 (deftest allocate-instance.5
   (let* ((class (find-class 'allocate-instance-struct-01))
-	 (obj   (allocate-instance class)))
+         (obj   (allocate-instance class)))
     (setf (allocate-instance-struct-01-a obj) 'x
-	  (allocate-instance-struct-01-b obj) 1234567890
-	  (allocate-instance-struct-01-c obj) #\Z
-	  (allocate-instance-struct-01-d obj) 'foo)
+          (allocate-instance-struct-01-b obj) 1234567890
+          (allocate-instance-struct-01-c obj) #\Z
+          (allocate-instance-struct-01-d obj) 'foo)
     (values
      (eqt (class-of obj) class)
      (typep* obj 'allocate-instance-struct-01)
@@ -93,11 +93,11 @@
 
 (deftest allocate-instance.order.1
   (let* ((class (find-class 'allocate-instance-class-01))
-	 (i 0) x y z w
-	 (obj (allocate-instance (progn (setf x (incf i)) class)
-				 :e (setf y (incf i))
-				 :b (setf z (incf i))
-				 :e (setf w (incf i)))))
+         (i 0) x y z w
+         (obj (allocate-instance (progn (setf x (incf i)) class)
+                                 :e (setf y (incf i))
+                                 :b (setf z (incf i))
+                                 :e (setf w (incf i)))))
     (values
      (eqt (class-of obj) class)
      (typep* obj 'allocate-instance-class-01)
@@ -118,13 +118,13 @@
 #|
 (deftest allocate-instance.error.2
   (signals-error (allocate-instance (find-class 'allocate-instance-class-01)
-				     :b)
-		 program-error)
+                                     :b)
+                 program-error)
   t)
 
 (deftest allocate-instance.error.3
   (signals-error (allocate-instance (find-class 'allocate-instance-class-01)
-				     '(a b c) nil)
-		 program-error)
+                                     '(a b c) nil)
+                 program-error)
   t)
 |#

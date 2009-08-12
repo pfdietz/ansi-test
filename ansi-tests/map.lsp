@@ -211,7 +211,7 @@
   :notes (:result-type-element-type-by-subtype)
   (let ((type '(or (vector t 10) (vector t 5))))
     (if (subtypep type '(vector t))
-	(equalpt (map type #'identity '(1 2 3 4 5)) #(1 2 3 4 5))
+        (equalpt (map type #'identity '(1 2 3 4 5)) #(1 2 3 4 5))
       t))
   t)
 
@@ -251,7 +251,7 @@
 
 (deftest map.error.8
   (signals-error (map 'list #'cons '(a b c d) '(1 2 3 4) '(5 6 7 8))
-		 program-error)
+                 program-error)
   t)
 
 (deftest map.error.9
@@ -262,14 +262,14 @@
   :notes (:result-type-element-type-by-subtype)
   (let ((type '(or (vector bit) (vector t))))
     (if (subtypep type 'vector)
-	(eval `(signals-error-always (map ',type #'identity '(1 0 1)) error))
+        (eval `(signals-error-always (map ',type #'identity '(1 0 1)) error))
       (values t t)))
   t t)
 
 (deftest map.error.11
   (let ((type '(or (vector t 5) (vector t 10))))
     (if (subtypep type 'vector)
-	(eval `(signals-error (map ',type #'identity '(1 2 3 4 5 6)) type-error))
+        (eval `(signals-error (map ',type #'identity '(1 2 3 4 5 6)) type-error))
       t))
   t)
 
@@ -285,41 +285,41 @@
 
 (deftest map.fill.1
   (let ((s1 (make-array '(10) :initial-contents '(a b c d e f g h i j)
-			:fill-pointer 8)))
+                        :fill-pointer 8)))
     (map 'list #'identity s1))
   (a b c d e f g h))
 
 (deftest map.fill.2
   (let ((s1 (make-array '(10) :initial-contents '(a b c d e f g h i j)
-			:fill-pointer 8)))
+                        :fill-pointer 8)))
     (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
 
 (deftest map.fill.3
   (let ((s1 (make-array '(10) :initial-element #\a
-			:element-type 'character
-			:fill-pointer 8)))
+                        :element-type 'character
+                        :fill-pointer 8)))
     (map 'string #'identity s1))
   "aaaaaaaa")
-  
+
 (deftest map.fill.4
   (let ((s1 (make-array '(10) :initial-element #\a
-			:element-type 'base-char
-			:fill-pointer 8)))
+                        :element-type 'base-char
+                        :fill-pointer 8)))
     (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
 
 (deftest map.fill.5
   (let ((s1 (make-array '(10) :initial-element 0
-			:element-type 'bit
-			:fill-pointer 8)))
+                        :element-type 'bit
+                        :fill-pointer 8)))
     (map 'bit-vector #'identity s1))
-  #*00000000)  
-  
+  #*00000000)
+
 (deftest map.fill.6
   (let ((s1 (make-array '(10) :initial-element 1
-			:element-type 'bit
-			:fill-pointer 8)))
+                        :element-type 'bit
+                        :fill-pointer 8)))
     (map 'list #'(lambda (x y) x) '(1 2 3 4 5 6 7 8 9 10) s1))
   (1 2 3 4 5 6 7 8))
 
@@ -369,49 +369,49 @@
 
 (deftest map.specialized-vector.4
   (loop for i from 1 to 40
-	for type = `(unsigned-byte ,i)
-	for bound = (ash 1 i)
-	for len = 10
-	for vals = (loop repeat len collect (random i))
-	for result = (map `(vector ,type) #'identity vals)
-	unless (and (= (length result) len)
-		    (every #'eql vals result))
-	collect (list i vals result))
+        for type = `(unsigned-byte ,i)
+        for bound = (ash 1 i)
+        for len = 10
+        for vals = (loop repeat len collect (random i))
+        for result = (map `(vector ,type) #'identity vals)
+        unless (and (= (length result) len)
+                    (every #'eql vals result))
+        collect (list i vals result))
   nil)
 
 (deftest map.specialized-vector.5
   (loop for i from 1 to 40
-	for type = `(signed-byte ,i)
-	for bound = (ash 1 i)
-	for len = 10
-	for vals = (loop repeat len collect (- (random i) (/ bound 2)))
-	for result = (map `(vector ,type) #'identity vals)
-	unless (and (= (length result) len)
-		    (every #'eql vals result))
-	collect (list i vals result))
+        for type = `(signed-byte ,i)
+        for bound = (ash 1 i)
+        for len = 10
+        for vals = (loop repeat len collect (- (random i) (/ bound 2)))
+        for result = (map `(vector ,type) #'identity vals)
+        unless (and (= (length result) len)
+                    (every #'eql vals result))
+        collect (list i vals result))
   nil)
 
 (deftest map.specialized-vector.6
   (loop for type in '(short-float single-float long-float double-float)
-	for len = 10
-	for vals = (loop for i from 1 to len collect (coerce i type))
-	for result = (map `(vector ,type) #'identity vals)
-	unless (and (= (length result) len)
-		    (every #'eql vals result))
-	collect (list type vals result))
+        for len = 10
+        for vals = (loop for i from 1 to len collect (coerce i type))
+        for result = (map `(vector ,type) #'identity vals)
+        unless (and (= (length result) len)
+                    (every #'eql vals result))
+        collect (list type vals result))
   nil)
 
 (deftest map.specialized-vector.7
   (loop for etype in '(short-float single-float long-float double-float
-		       integer rational)
-	for type = `(complex ,etype)
-	for len = 10
-	for vals = (loop for i from 1 to len collect (complex (coerce i etype)
-							      (coerce (- i) etype)))
-	for result = (map `(vector ,type) #'identity vals)
-	unless (and (= (length result) len)
-		    (every #'eql vals result))
-	collect (list type vals result))
+                       integer rational)
+        for type = `(complex ,etype)
+        for len = 10
+        for vals = (loop for i from 1 to len collect (complex (coerce i etype)
+                                                              (coerce (- i) etype)))
+        for result = (map `(vector ,type) #'identity vals)
+        unless (and (= (length result) len)
+                    (every #'eql vals result))
+        collect (list type vals result))
   nil)
 
 ;;; Order of evaluation tests
@@ -420,9 +420,9 @@
   (let ((i 0) a b c d)
     (values
      (map (progn (setf a (incf i)) 'list)
-	  (progn (setf b (incf i)) #'list)
-	  (progn (setf c (incf i)) '(a b c))
-	  (progn (setf d (incf i)) '(b c d)))
+          (progn (setf b (incf i)) #'list)
+          (progn (setf c (incf i)) '(a b c))
+          (progn (setf d (incf i)) '(b c d)))
      i a b c d))
   ((a b)(b c)(c d)) 4 1 2 3 4)
 

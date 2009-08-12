@@ -11,12 +11,12 @@
 
 (deftest concatenate.2
   (let* ((orig (list 'a 'b 'c 'd 'e))
-	 (copy (concatenate 'list orig)))
+         (copy (concatenate 'list orig)))
     (values
      copy
      (intersection (loop for e on orig collect e)
-		   (loop for e on copy collect e)
-		   :test #'eq)))
+                   (loop for e on copy collect e)
+                   :test #'eq)))
   (a b c d e)
   nil)
 
@@ -38,7 +38,7 @@
 
 (deftest concatenate.7
   (let* ((orig (vector 'a 'b 'c 'd 'e))
-	 (copy (concatenate 'vector orig)))
+         (copy (concatenate 'vector orig)))
     (values
      copy
      (eqt copy orig)))
@@ -133,28 +133,28 @@
 
 (deftest concatenate.25
   (let ((x (make-array '(10) :initial-contents '(a b c d e f g h i j)
-		       :fill-pointer 5)))
+                       :fill-pointer 5)))
     (concatenate 'list x x))
   (a b c d e a b c d e))
 
 (deftest concatenate.26
   (let ((x (make-array '(10) :initial-contents '(a b c d e f g h i j)
-		       :fill-pointer 5)))
+                       :fill-pointer 5)))
     (concatenate 'list x))
   (a b c d e))
 
 (deftest concatenate.27
   (let* ((x (make-array '(10) :initial-contents '(a b c d e f g h i j)
-		       :fill-pointer 5))
-	 (result (concatenate 'vector x)))
+                       :fill-pointer 5))
+         (result (concatenate 'vector x)))
     (values (not (simple-vector-p result))
-	    result))
+            result))
   nil
   #(a b c d e))
 
 (deftest concatenate.28
   (let* ((x (make-array '(10) :initial-contents "abcdefghij"
-			:fill-pointer 5 :element-type 'character)))
+                        :fill-pointer 5 :element-type 'character)))
     (values
      (concatenate 'string x '(#\z))
      (concatenate 'string '(#\z) x)
@@ -170,7 +170,7 @@
 
 (deftest concatenate.29
   (let* ((x (make-array '(10) :initial-contents "abcdefghij"
-			:fill-pointer 5 :element-type 'base-char)))
+                        :fill-pointer 5 :element-type 'base-char)))
     (values
      (concatenate 'string x '(#\z))
      (concatenate 'string '(#\z) x)
@@ -186,7 +186,7 @@
 
 (deftest concatenate.30
   (let* ((x (make-array '(10) :initial-contents #*0110010111
-			:fill-pointer 5 :element-type 'bit)))
+                        :fill-pointer 5 :element-type 'bit)))
     (values
      (concatenate 'bit-vector x '(0))
      (concatenate '(bit-vector) '(0) x)
@@ -202,7 +202,7 @@
 
 (deftest concatenate.30a
   (let* ((x (make-array '(10) :initial-contents #*0110010111
-			:fill-pointer 5 :element-type 'bit)))
+                        :fill-pointer 5 :element-type 'bit)))
     (values
      (concatenate 'simple-bit-vector x '(0))
      (concatenate 'simple-bit-vector '(0) x)
@@ -240,40 +240,40 @@
 (deftest concatenate.34
   (concatenate 'simple-string "abc" "def")
   "abcdef")
-		     
+
 (deftest concatenate.35
   (concatenate '(simple-string) "abc" "def")
   "abcdef")
-		     
+
 (deftest concatenate.36
   (concatenate '(simple-string *) "abc" "def")
   "abcdef")
-		     
+
 (deftest concatenate.37
   (concatenate '(simple-string 6) "abc" "def")
   "abcdef")
-		     
+
 (deftest concatenate.38
   (concatenate '(string) "abc" "def")
   "abcdef")
-		     
+
 (deftest concatenate.39
   (concatenate '(string *) "abc" "def")
   "abcdef")
-		     
+
 (deftest concatenate.40
   (concatenate '(string 6) "abc" "def")
   "abcdef")
 
 ;;; Order of evaluation tests
-		     
+
 (deftest concatenate.order.1
   (let ((i 0) w x y z)
     (values
      (concatenate (progn (setf w (incf i)) 'string)
-		  (progn (setf x (incf i)) "abc")
-		  (progn (setf y (incf i)) "def")
-		  (progn (setf z (incf i)) "ghi"))
+                  (progn (setf x (incf i)) "abc")
+                  (progn (setf y (incf i)) "def")
+                  (progn (setf z (incf i)) "ghi"))
      i w x y z))
   "abcdefghi" 4 1 2 3 4)
 
@@ -281,9 +281,9 @@
   (let ((i 0) x y z)
     (values
      (concatenate 'string
-		  (progn (setf x (incf i)) "abc")
-		  (progn (setf y (incf i)) "def")
-		  (progn (setf z (incf i)) "ghi"))
+                  (progn (setf x (incf i)) "abc")
+                  (progn (setf y (incf i)) "def")
+                  (progn (setf z (incf i)) "ghi"))
      i x y z))
   "abcdefghi" 3 1 2 3)
 
@@ -297,7 +297,7 @@
 (def-fold-test concatenate.fold.6 (concatenate 'vector #(a b c d)))
 (def-fold-test concatenate.fold.7 (concatenate 'bit-vector #*110101101))
 (def-fold-test concatenate.fold.8 (concatenate 'string "abcdef"))
-  
+
 ;;; Error tests
 
 (deftest concatenate.error.1
@@ -310,7 +310,7 @@
 
 (deftest concatenate.error.3
   (signals-error (concatenate '(vector * 3) '(a b c d e))
-		 type-error)
+                 type-error)
   t)
 
 (deftest concatenate.error.4
@@ -319,14 +319,14 @@
 
 (deftest concatenate.error.5
   (signals-error (locally (concatenate '(vector * 3) '(a b c d e)) t)
-		 type-error)
+                 type-error)
   t)
 
 (deftest concatenate.error.6
   :notes (:result-type-element-type-by-subtype)
   (let ((type '(or (vector bit) (vector t))))
     (if (subtypep type 'vector)
-	(eval `(signals-error-always (concatenate ',type '(0 1 0) '(1 1 0)) error))
+        (eval `(signals-error-always (concatenate ',type '(0 1 0) '(1 1 0)) error))
       (values t t)))
   t t)
 

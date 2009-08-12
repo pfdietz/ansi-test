@@ -7,51 +7,51 @@
 
 (deftest sin.1
   (loop for i from -1000 to 1000
-	for rlist = (multiple-value-list (sin i))
-	for y = (car rlist)
-	always (and (null (cdr rlist))
-		    (<= -1 y 1)
-		    (or (rationalp y) (typep y 'single-float))))
+        for rlist = (multiple-value-list (sin i))
+        for y = (car rlist)
+        always (and (null (cdr rlist))
+                    (<= -1 y 1)
+                    (or (rationalp y) (typep y 'single-float))))
   t)
 
 (deftest sin.2
   (loop for x = (- (random 2000.0s0) 1000.0s0)
-	for rlist = (multiple-value-list (sin x))
-	for y = (car rlist)
-	repeat 1000
-	always (and (null (cdr rlist))
-		    (<= -1 y 1)
-		    (typep y 'short-float)))
+        for rlist = (multiple-value-list (sin x))
+        for y = (car rlist)
+        repeat 1000
+        always (and (null (cdr rlist))
+                    (<= -1 y 1)
+                    (typep y 'short-float)))
   t)
 
 (deftest sin.3
   (loop for x = (- (random 2000.0f0) 1000.0f0)
-	for rlist = (multiple-value-list (sin x))
-	for y = (car rlist)
-	repeat 1000
-	always (and (null (cdr rlist))
-		    (<= -1 y 1)
-		    (typep y 'single-float)))
+        for rlist = (multiple-value-list (sin x))
+        for y = (car rlist)
+        repeat 1000
+        always (and (null (cdr rlist))
+                    (<= -1 y 1)
+                    (typep y 'single-float)))
   t)
 
 (deftest sin.4
   (loop for x = (- (random 2000.0d0) 1000.0d0)
-	for rlist = (multiple-value-list (sin x))
-	for y = (car rlist)
-	repeat 1000
-	always (and (null (cdr rlist))
-		    (<= -1 y 1)
-		    (typep y 'double-float)))
+        for rlist = (multiple-value-list (sin x))
+        for y = (car rlist)
+        repeat 1000
+        always (and (null (cdr rlist))
+                    (<= -1 y 1)
+                    (typep y 'double-float)))
   t)
 
 (deftest sin.5
   (loop for x = (- (random 2000.0l0) 1000.0l0)
-	for rlist = (multiple-value-list (sin x))
-	for y = (car rlist)
-	repeat 1000
-	always (and (null (cdr rlist))
-		    (<= -1 y 1)
-		    (typep y 'long-float)))
+        for rlist = (multiple-value-list (sin x))
+        for y = (car rlist)
+        repeat 1000
+        always (and (null (cdr rlist))
+                    (<= -1 y 1)
+                    (typep y 'long-float)))
   t)
 
 (deftest sin.6
@@ -77,8 +77,8 @@
 
 (deftest sin.11
   (loop for i from 1 to 100
-	unless (approx= (sin i) (sin (coerce i 'single-float)))
-	collect i)
+        unless (approx= (sin i) (sin (coerce i 'single-float)))
+        collect i)
   nil)
 
 (deftest sin.12
@@ -115,42 +115,42 @@
 
 (deftest sin.20
   (loop for r = (- (random 2000) 1000)
-	for i = (- (random 20) 10)
-	for y = (sin (complex r i))
-	repeat 1000
-	always (numberp y))
+        for i = (- (random 20) 10)
+        for y = (sin (complex r i))
+        repeat 1000
+        always (numberp y))
   t)
 
 (deftest sin.21
   (loop for r = (- (random 2000.0s0) 1000.0s0)
-	for i = (- (random 20.0s0) 10.0s0)
-	for y = (sin (complex r i))
-	repeat 1000
-	always (numberp y))
+        for i = (- (random 20.0s0) 10.0s0)
+        for y = (sin (complex r i))
+        repeat 1000
+        always (numberp y))
   t)
 
 (deftest sin.22
   (loop for r = (- (random 2000.0f0) 1000.0f0)
-	for i = (- (random 20.0f0) 10.0f0)
-	for y = (sin (complex r i))
-	repeat 1000
-	always (numberp y))
+        for i = (- (random 20.0f0) 10.0f0)
+        for y = (sin (complex r i))
+        repeat 1000
+        always (numberp y))
   t)
 
 (deftest sin.23
   (loop for r = (- (random 2000.0d0) 1000.0d0)
-	for i = (- (random 20.0d0) 10.0d0)
-	for y = (sin (complex r i))
-	repeat 1000
-	always (numberp y))
+        for i = (- (random 20.0d0) 10.0d0)
+        for y = (sin (complex r i))
+        repeat 1000
+        always (numberp y))
   t)
 
 (deftest sin.24
   (loop for r = (- (random 2000.0l0) 1000.0l0)
-	for i = (- (random 20.0l0) 10.0l0)
-	for y = (sin (complex r i))
-	repeat 1000
-	always (numberp y))
+        for i = (- (random 20.0l0) 10.0l0)
+        for y = (sin (complex r i))
+        repeat 1000
+        always (numberp y))
   t)
 
 ;;; FIXME

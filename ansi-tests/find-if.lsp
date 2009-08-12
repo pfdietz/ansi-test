@@ -27,39 +27,39 @@
 
 (deftest find-if-list.5
   (loop for i from 0 to 7 collect
-	(find-if #'evenp '(1 2 4 8 3 1 6 7) :start i))
+        (find-if #'evenp '(1 2 4 8 3 1 6 7) :start i))
   (2 2 4 8 6 6 6 nil))
 
 (deftest find-if-list.6
   (loop for i from 0 to 7 collect
-	(find-if #'evenp '(1 2 4 8 3 1 6 7) :start i :end nil))
+        (find-if #'evenp '(1 2 4 8 3 1 6 7) :start i :end nil))
   (2 2 4 8 6 6 6 nil))
 
 (deftest find-if-list.7
   (loop for i from 0 to 7 collect
-	(find-if #'evenp '(1 2 4 8 3 1 6 7) :start i :from-end t))
+        (find-if #'evenp '(1 2 4 8 3 1 6 7) :start i :from-end t))
   (6 6 6 6 6 6 6 nil))
 
 (deftest find-if-list.8
   (loop for i from 0 to 7 collect
-	(find-if #'evenp '(1 2 4 8 3 1 6 7) :start i :end nil :from-end t))
+        (find-if #'evenp '(1 2 4 8 3 1 6 7) :start i :end nil :from-end t))
   (6 6 6 6 6 6 6 nil))
 
 (deftest find-if-list.9
   (loop for i from 0 to 8 collect
-	(find-if #'evenp '(1 2 4 8 3 1 6 7) :end i))
+        (find-if #'evenp '(1 2 4 8 3 1 6 7) :end i))
   (nil nil 2 2 2 2 2 2 2))
 
 (deftest find-if-list.10
   (loop for i from 0 to 8 collect
-	(find-if #'evenp '(1 2 4 8 3 1 6 7) :end i :from-end t))
+        (find-if #'evenp '(1 2 4 8 3 1 6 7) :end i :from-end t))
   (nil nil 2 4 8 8 8 6 6))
 
 (deftest find-if-list.11
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'evenp '(1 2 4 8 3 1 6 7) :start j :end i)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'evenp '(1 2 4 8 3 1 6 7) :start j :end i)))
   ((nil 2 2 2 2 2 2 2)
    (2 2 2 2 2 2 2)
    (4 4 4 4 4 4)
@@ -71,10 +71,10 @@
 
 (deftest find-if-list.12
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'evenp '(1 2 4 8 3 1 6 7) :start j :end i
-		       :from-end t)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'evenp '(1 2 4 8 3 1 6 7) :start j :end i
+                       :from-end t)))
   ((nil 2 4 8 8 8 6 6)
    (2 4 8 8 8 6 6)
    (4 8 8 8 6 6)
@@ -86,33 +86,33 @@
 
 (deftest find-if-list.13
   (loop for i from 0 to 6
-	collect
-	(find-if #'evenp '(1 6 11 32 45 71 100) :key #'1+ :start i))
+        collect
+        (find-if #'evenp '(1 6 11 32 45 71 100) :key #'1+ :start i))
   (1 11 11 45 45 71 nil))
 
 (deftest find-if-list.14
   (loop for i from 0 to 6
-	collect
-	(find-if #'evenp '(1 6 11 32 45 71 100) :key '1+ :start i :from-end t))
+        collect
+        (find-if #'evenp '(1 6 11 32 45 71 100) :key '1+ :start i :from-end t))
   (71 71 71 71 71 71 nil))
 
 (deftest find-if-list.15
   (loop for i from 0 to 7
-	collect
-	(find-if #'evenp '(1 6 11 32 45 71 100) :key #'1+ :end i))
+        collect
+        (find-if #'evenp '(1 6 11 32 45 71 100) :key #'1+ :end i))
   (nil 1 1 1 1 1 1 1))
 
 (deftest find-if-list.16
   (loop for i from 0 to 7
-	collect
-	(find-if #'evenp '(1 6 11 32 45 71 100) :key '1+ :end i :from-end t))
+        collect
+        (find-if #'evenp '(1 6 11 32 45 71 100) :key '1+ :end i :from-end t))
   (nil 1 1 11 11 45 71 71))
 
 (deftest find-if-list.17
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'oddp '(1 2 4 8 3 1 6 7) :start j :end i :key #'1-)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'oddp '(1 2 4 8 3 1 6 7) :start j :end i :key #'1-)))
   ((nil 2 2 2 2 2 2 2)
    (2 2 2 2 2 2 2)
    (4 4 4 4 4 4)
@@ -124,10 +124,10 @@
 
 (deftest find-if-list.18
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'oddp '(1 2 4 8 3 1 6 7) :start j :end i
-		       :from-end t :key #'1+)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'oddp '(1 2 4 8 3 1 6 7) :start j :end i
+                       :from-end t :key #'1+)))
   ((nil 2 4 8 8 8 6 6)
    (2 4 8 8 8 6 6)
    (4 8 8 8 6 6)
@@ -161,39 +161,39 @@
 
 (deftest find-if-vector.5
   (loop for i from 0 to 7 collect
-	(find-if #'evenp #(1 2 4 8 3 1 6 7) :start i))
+        (find-if #'evenp #(1 2 4 8 3 1 6 7) :start i))
   (2 2 4 8 6 6 6 nil))
 
 (deftest find-if-vector.6
   (loop for i from 0 to 7 collect
-	(find-if #'evenp #(1 2 4 8 3 1 6 7) :start i :end nil))
+        (find-if #'evenp #(1 2 4 8 3 1 6 7) :start i :end nil))
   (2 2 4 8 6 6 6 nil))
 
 (deftest find-if-vector.7
   (loop for i from 0 to 7 collect
-	(find-if #'evenp #(1 2 4 8 3 1 6 7) :start i :from-end t))
+        (find-if #'evenp #(1 2 4 8 3 1 6 7) :start i :from-end t))
   (6 6 6 6 6 6 6 nil))
 
 (deftest find-if-vector.8
   (loop for i from 0 to 7 collect
-	(find-if #'evenp #(1 2 4 8 3 1 6 7) :start i :end nil :from-end t))
+        (find-if #'evenp #(1 2 4 8 3 1 6 7) :start i :end nil :from-end t))
   (6 6 6 6 6 6 6 nil))
 
 (deftest find-if-vector.9
   (loop for i from 0 to 8 collect
-	(find-if #'evenp #(1 2 4 8 3 1 6 7) :end i))
+        (find-if #'evenp #(1 2 4 8 3 1 6 7) :end i))
   (nil nil 2 2 2 2 2 2 2))
 
 (deftest find-if-vector.10
   (loop for i from 0 to 8 collect
-	(find-if #'evenp #(1 2 4 8 3 1 6 7) :end i :from-end t))
+        (find-if #'evenp #(1 2 4 8 3 1 6 7) :end i :from-end t))
   (nil nil 2 4 8 8 8 6 6))
 
 (deftest find-if-vector.11
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'evenp #(1 2 4 8 3 1 6 7) :start j :end i)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'evenp #(1 2 4 8 3 1 6 7) :start j :end i)))
   ((nil 2 2 2 2 2 2 2)
    (2 2 2 2 2 2 2)
    (4 4 4 4 4 4)
@@ -205,10 +205,10 @@
 
 (deftest find-if-vector.12
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'evenp #(1 2 4 8 3 1 6 7) :start j :end i
-		       :from-end t)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'evenp #(1 2 4 8 3 1 6 7) :start j :end i
+                       :from-end t)))
   ((nil 2 4 8 8 8 6 6)
    (2 4 8 8 8 6 6)
    (4 8 8 8 6 6)
@@ -220,33 +220,33 @@
 
 (deftest find-if-vector.13
   (loop for i from 0 to 6
-	collect
-	(find-if #'evenp #(1 6 11 32 45 71 100) :key #'1+ :start i))
+        collect
+        (find-if #'evenp #(1 6 11 32 45 71 100) :key #'1+ :start i))
   (1 11 11 45 45 71 nil))
 
 (deftest find-if-vector.14
   (loop for i from 0 to 6
-	collect
-	(find-if #'evenp #(1 6 11 32 45 71 100) :key '1+ :start i :from-end t))
+        collect
+        (find-if #'evenp #(1 6 11 32 45 71 100) :key '1+ :start i :from-end t))
   (71 71 71 71 71 71 nil))
 
 (deftest find-if-vector.15
   (loop for i from 0 to 7
-	collect
-	(find-if #'evenp #(1 6 11 32 45 71 100) :key #'1+ :end i))
+        collect
+        (find-if #'evenp #(1 6 11 32 45 71 100) :key #'1+ :end i))
   (nil 1 1 1 1 1 1 1))
 
 (deftest find-if-vector.16
   (loop for i from 0 to 7
-	collect
-	(find-if #'evenp #(1 6 11 32 45 71 100) :key '1+ :end i :from-end t))
+        collect
+        (find-if #'evenp #(1 6 11 32 45 71 100) :key '1+ :end i :from-end t))
   (nil 1 1 11 11 45 71 71))
 
 (deftest find-if-vector.17
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'oddp #(1 2 4 8 3 1 6 7) :start j :end i :key #'1-)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'oddp #(1 2 4 8 3 1 6 7) :start j :end i :key #'1-)))
   ((nil 2 2 2 2 2 2 2)
    (2 2 2 2 2 2 2)
    (4 4 4 4 4 4)
@@ -258,10 +258,10 @@
 
 (deftest find-if-vector.18
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'oddp #(1 2 4 8 3 1 6 7) :start j :end i
-		       :from-end t :key #'1+)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'oddp #(1 2 4 8 3 1 6 7) :start j :end i
+                       :from-end t :key #'1+)))
   ((nil 2 4 8 8 8 6 6)
    (2 4 8 8 8 6 6)
    (4 8 8 8 6 6)
@@ -273,7 +273,7 @@
 
 (deftest find-if-vector.19
   (let ((a (make-array '(10) :initial-contents '(1 2 3 4 5 6 7 8 9 10)
-		       :fill-pointer 5)))
+                       :fill-pointer 5)))
     (values
      (find-if #'evenp a)
      (find-if #'evenp a :from-end t)
@@ -298,8 +298,8 @@
 
 (deftest find-if-bit-vector.4
   (loop for i from 0 to 6
-	collect (loop for j from i to 7
-		      collect (find-if #'evenp #*0110110 :start i :end j)))
+        collect (loop for j from i to 7
+                      collect (find-if #'evenp #*0110110 :start i :end j)))
   ((nil 0 0 0 0 0 0 0)
    (nil nil nil 0 0 0 0)
    (nil nil 0 0 0 0)
@@ -310,9 +310,9 @@
 
 (deftest find-if-bit-vector.5
   (loop for i from 0 to 6
-	collect (loop for j from i to 7
-		      collect (find-if #'evenp #*0110110 :start i :end j
-				       :from-end t)))
+        collect (loop for j from i to 7
+                      collect (find-if #'evenp #*0110110 :start i :end j
+                                       :from-end t)))
   ((nil 0 0 0 0 0 0 0)
    (nil nil nil 0 0 0 0)
    (nil nil 0 0 0 0)
@@ -323,9 +323,9 @@
 
 (deftest find-if-bit-vector.6
   (loop for i from 0 to 6
-	collect (loop for j from i to 7
-		      collect (find-if #'oddp #*0110110 :start i :end j
-				       :from-end t :key #'1+)))
+        collect (loop for j from i to 7
+                      collect (find-if #'oddp #*0110110 :start i :end j
+                                       :from-end t :key #'1+)))
   ((nil 0 0 0 0 0 0 0)
    (nil nil nil 0 0 0 0)
    (nil nil 0 0 0 0)
@@ -336,9 +336,9 @@
 
 (deftest find-if-bit-vector.7
   (loop for i from 0 to 6
-	collect (loop for j from i to 7
-		      collect (find-if #'oddp #*0110110 :start i :end j
-				       :key '1-)))
+        collect (loop for j from i to 7
+                      collect (find-if #'oddp #*0110110 :start i :end j
+                                       :key '1-)))
   ((nil 0 0 0 0 0 0 0)
    (nil nil nil 0 0 0 0)
    (nil nil 0 0 0 0)
@@ -364,7 +364,7 @@
 (deftest find-if-string.3
   (find-if #'evendigitp "12483167")
   #\2)
-  
+
 (deftest find-if-string.3a
   (find-if #'evenp "12483167" :key #'(lambda (c) (read-from-string (string c))))
   #\2)
@@ -375,39 +375,39 @@
 
 (deftest find-if-string.5
   (loop for i from 0 to 7 collect
-	(find-if #'evendigitp "12483167" :start i))
+        (find-if #'evendigitp "12483167" :start i))
   (#\2 #\2 #\4 #\8 #\6 #\6 #\6 nil))
 
 (deftest find-if-string.6
   (loop for i from 0 to 7 collect
-	(find-if #'evendigitp "12483167" :start i :end nil))
+        (find-if #'evendigitp "12483167" :start i :end nil))
   (#\2 #\2 #\4 #\8 #\6 #\6 #\6 nil))
 
 (deftest find-if-string.7
   (loop for i from 0 to 7 collect
-	(find-if #'evendigitp "12483167" :start i :from-end t))
+        (find-if #'evendigitp "12483167" :start i :from-end t))
   (#\6 #\6 #\6 #\6 #\6 #\6 #\6 nil))
 
 (deftest find-if-string.8
   (loop for i from 0 to 7 collect
-	(find-if #'evendigitp "12483167" :start i :end nil :from-end t))
+        (find-if #'evendigitp "12483167" :start i :end nil :from-end t))
   (#\6 #\6 #\6 #\6 #\6 #\6 #\6 nil))
 
 (deftest find-if-string.9
   (loop for i from 0 to 8 collect
-	(find-if #'evendigitp "12483167" :end i))
+        (find-if #'evendigitp "12483167" :end i))
   (nil nil #\2 #\2 #\2 #\2 #\2 #\2 #\2))
 
 (deftest find-if-string.10
   (loop for i from 0 to 8 collect
-	(find-if #'evendigitp "12483167" :end i :from-end t))
+        (find-if #'evendigitp "12483167" :end i :from-end t))
   (nil nil #\2 #\4 #\8 #\8 #\8 #\6 #\6))
 
 (deftest find-if-string.11
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'evendigitp "12483167" :start j :end i)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'evendigitp "12483167" :start j :end i)))
   ((nil #\2 #\2 #\2 #\2 #\2 #\2 #\2)
    (#\2 #\2 #\2 #\2 #\2 #\2 #\2)
    (#\4 #\4 #\4 #\4 #\4 #\4)
@@ -419,10 +419,10 @@
 
 (deftest find-if-string.12
   (loop for j from 0 to 7
-	collect
-	(loop for i from (1+ j) to 8 collect
-	      (find-if #'evendigitp "12483167" :start j :end i
-		       :from-end t)))
+        collect
+        (loop for i from (1+ j) to 8 collect
+              (find-if #'evendigitp "12483167" :start j :end i
+                       :from-end t)))
   ((nil #\2 #\4 #\8 #\8 #\8 #\6 #\6)
    (#\2 #\4 #\8 #\8 #\8 #\6 #\6)
    (#\4 #\8 #\8 #\8 #\6 #\6)
@@ -434,59 +434,59 @@
 
 (deftest find-if-string.13
   (loop for i from 0 to 6
-	collect
-	(find-if #'evenp "1473816"
-		 :key (compose #'read-from-string #'string)
-		 :start i))
+        collect
+        (find-if #'evenp "1473816"
+                 :key (compose #'read-from-string #'string)
+                 :start i))
   (#\4 #\4 #\8 #\8 #\8 #\6 #\6))
 
 (deftest find-if-string.14
   (loop for i from 0 to 6
-	collect
-	(find-if #'evenp "1473816"
-		 :key (compose #'read-from-string #'string)
-		 :start i :from-end t))
+        collect
+        (find-if #'evenp "1473816"
+                 :key (compose #'read-from-string #'string)
+                 :start i :from-end t))
   (#\6 #\6 #\6 #\6 #\6 #\6 #\6))
 
 (deftest find-if-string.15
   (loop for i from 0 to 7
-	collect
-	(find-if #'evenp "1473816"
-		 :key (compose #'read-from-string #'string)
-		 :end i))
+        collect
+        (find-if #'evenp "1473816"
+                 :key (compose #'read-from-string #'string)
+                 :end i))
   (nil nil #\4 #\4 #\4 #\4 #\4 #\4))
 
 (deftest find-if-string.16
   (loop for i from 0 to 7
-	collect
-	(find-if #'evenp "1473816"
-		 :key (compose #'read-from-string #'string)
-		 :end i :from-end t))
+        collect
+        (find-if #'evenp "1473816"
+                 :key (compose #'read-from-string #'string)
+                 :end i :from-end t))
   (nil nil #\4 #\4 #\4 #\8 #\8 #\6))
 
 (deftest find-if-string.17
   (loop for j from 0 to 6
-	collect
-	(loop for i from (1+ j) to 7 collect
-	      (find-if #'evenp "1473816"
-		 :key (compose #'read-from-string #'string)
-		 :start j :end i)))
+        collect
+        (loop for i from (1+ j) to 7 collect
+              (find-if #'evenp "1473816"
+                 :key (compose #'read-from-string #'string)
+                 :start j :end i)))
   ((nil #\4 #\4 #\4 #\4 #\4 #\4)
    (#\4 #\4 #\4 #\4 #\4 #\4)
    (nil nil #\8 #\8 #\8)
    (nil #\8 #\8 #\8)
    (#\8 #\8 #\8)
    (nil #\6)
-   (#\6)))  
+   (#\6)))
 
 (deftest find-if-string.18
   (loop for j from 0 to 6
-	collect
-	(loop for i from (1+ j) to 7 collect
-	      (find-if #'evenp "1473816"
-		 :key (compose #'read-from-string #'string)
-		 :start j :end i
-		 :from-end t)))
+        collect
+        (loop for i from (1+ j) to 7 collect
+              (find-if #'evenp "1473816"
+                 :key (compose #'read-from-string #'string)
+                 :start j :end i
+                 :from-end t)))
   ((nil #\4 #\4 #\4 #\8 #\8 #\6)
    (#\4 #\4 #\4 #\8 #\8 #\6)
    (nil nil #\8 #\8 #\6)
@@ -497,8 +497,8 @@
 
 (deftest find-if-string.19
   (let ((a (make-array '(10) :initial-contents "123456789a"
-		       :fill-pointer 5
-		       :element-type 'character)))
+                       :fill-pointer 5
+                       :element-type 'character)))
     (values
      (find-if #'evendigitp a)
      (find-if #'evendigitp a :from-end t)
@@ -526,9 +526,9 @@
 ;;; The leftmost of two :allow-other-keys arguments is the one that  matters.
 (deftest find-if.allow-other-keys.3
   (find-if #'evenp '(1 2 3 4 5)
-	    :allow-other-keys t
-	    :allow-other-keys nil
-	    :bad t)
+            :allow-other-keys t
+            :allow-other-keys nil
+            :bad t)
   2)
 
 (deftest find-if.keywords.4
@@ -564,7 +564,7 @@
 
 (deftest find-if.error.8
   (signals-error (find-if #'null nil :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest find-if.error.9
@@ -593,7 +593,7 @@
 
 (deftest find-if.error.15
   (signals-error (find-if #'identity '(a b c) :key #'car)
-		 type-error)
+                 type-error)
   t)
 
 ;;; Order of evaluation tests
@@ -602,7 +602,7 @@
   (let ((i 0) x y)
     (values
      (find-if (progn (setf x (incf i)) #'identity)
-	      (progn (setf y (incf i)) '(nil nil nil a nil nil)))
+              (progn (setf y (incf i)) '(nil nil nil a nil nil)))
      i x y))
   a 2 1 2)
 
@@ -610,12 +610,12 @@
   (let ((i 0) a b c d e f)
     (values
      (find-if (progn (setf a (incf i)) #'null)
-	      (progn (setf b (incf i)) '(nil nil nil a nil nil))
-	      :start (progn (setf c (incf i)) 1)
-	      :end   (progn (setf d (incf i)) 4)
-	      :from-end (setf e (incf i))
-	      :key   (progn (setf f (incf i)) #'null)
-	      )
+              (progn (setf b (incf i)) '(nil nil nil a nil nil))
+              :start (progn (setf c (incf i)) 1)
+              :end   (progn (setf d (incf i)) 4)
+              :from-end (setf e (incf i))
+              :key   (progn (setf f (incf i)) #'null)
+              )
      i a b c d e f))
   a 6 1 2 3 4 5 6)
 
@@ -624,11 +624,11 @@
   (let ((i 0) a b c d e f)
     (values
      (find-if (progn (setf a (incf i)) #'null)
-	      (progn (setf b (incf i)) '(nil nil nil a nil nil))
-	      :key   (progn (setf c (incf i)) #'null)
-	      :from-end (setf d (incf i))
-	      :end   (progn (setf e (incf i)) 4)
-	      :start (progn (setf f (incf i)) 1)
-	      )
+              (progn (setf b (incf i)) '(nil nil nil a nil nil))
+              :key   (progn (setf c (incf i)) #'null)
+              :from-end (setf d (incf i))
+              :end   (progn (setf e (incf i)) 4)
+              :start (progn (setf f (incf i)) 1)
+              )
      i a b c d e f))
   a 6 1 2 3 4 5 6)

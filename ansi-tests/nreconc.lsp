@@ -9,10 +9,10 @@
 
 (deftest nreconc.1
   (let* ((x (list 'a 'b 'c))
-	 (y (copy-tree '(d e f)))
-	 (result (nreconc x y)))
+         (y (copy-tree '(d e f)))
+         (result (nreconc x y)))
     (and (equal y '(d e f))
-	 result))
+         result))
   (c b a d e f))
 
 (deftest nreconc.2
@@ -23,7 +23,7 @@
   (let ((i 0) x y)
     (values
      (nreconc (progn (setf x (incf i)) (copy-list '(a b c)))
-	      (progn (setf y (incf i)) (copy-list '(d e f))))
+              (progn (setf y (incf i)) (copy-list '(d e f))))
      i x y))
   (c b a d e f) 2 1 2)
 

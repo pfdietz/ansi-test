@@ -39,13 +39,13 @@
 (deftest structure-2-2
   (let ((*s-2-f6-counter* 0))
     (eqt (s-2-f5 (make-s-2))
-	 (s-2-f5 (make-s-2))))
+         (s-2-f5 (make-s-2))))
   nil)
 
 ;; Creation with various fields does the right thing
 (deftest structure-2-3
   (let* ((*s-2-f6-counter* 0)
-	 (s (make-s-2 :f1 17)))
+         (s (make-s-2 :f1 17)))
     (and
      (eqlt (s-2-f1 s) 17)
      (eqt  (s-2-f2 s) 'a)
@@ -58,7 +58,7 @@
 
 (deftest structure-2-4
   (let* ((*s-2-f6-counter* 0)
-	 (s (make-s-2 :f2 'z)))
+         (s (make-s-2 :f2 'z)))
     (and
      (eqlt (s-2-f1 s) 0)
      (eqt  (s-2-f2 s) 'z)
@@ -71,7 +71,7 @@
 
 (deftest structure-2-5
   (let* ((*s-2-f6-counter* 0)
-	 (s (make-s-2 :f3 1.0)))
+         (s (make-s-2 :f3 1.0)))
     (and
      (eqlt (s-2-f1 s) 0)
      (eqt  (s-2-f2 s) 'a)
@@ -84,7 +84,7 @@
 
 (deftest structure-2-6
   (let* ((*s-2-f6-counter* 0)
-	 (s (make-s-2 :f4 #\z)))
+         (s (make-s-2 :f4 #\z)))
     (and
      (eqlt (s-2-f1 s) 0)
      (eqt  (s-2-f2 s) 'a)
@@ -97,7 +97,7 @@
 
 (deftest structure-2-7
   (let* ((*s-2-f6-counter* 0)
-	 (s (make-s-2 :f5 '(c d e))))
+         (s (make-s-2 :f5 '(c d e))))
     (and
      (eqlt (s-2-f1 s) 0)
      (eqt  (s-2-f2 s) 'a)
@@ -110,7 +110,7 @@
 
 (deftest structure-2-8
   (let* ((*s-2-f6-counter* 0)
-	 (s (make-s-2 :f6 10)))
+         (s (make-s-2 :f6 10)))
     (and
      (eqlt (s-2-f1 s) 0)
      (eqt  (s-2-f2 s) 'a)
@@ -142,7 +142,7 @@
 (defstruct-with-tests (struct-test-15 (:predicate nil)) a15 b15)
 (defstruct-with-tests (struct-test-16 :predicate) a16 b16)
 (defstruct-with-tests (struct-test-17
-		       (:predicate struct-test-17-alternate-pred))
+                       (:predicate struct-test-17-alternate-pred))
   a17 b17)
 
 (defstruct-with-tests (struct-test-18 :copier) a18 b18)
@@ -214,7 +214,7 @@
   (struct-test-38 11 12 4))
 
 (defstruct-with-tests (struct-test-39 (:predicate nil)
-				      (:type list) :named)
+                                      (:type list) :named)
   a39 b39 c39)
 
 (deftest structure-39-1
@@ -233,11 +233,11 @@
 ;;; Confirm that the defined structure types are all disjoint
 (deftest structs-are-disjoint
   (loop for s1 in *defstruct-with-tests-names*
-	sum (loop for s2 in *defstruct-with-tests-names*
-		  unless (eq s1 s2)
-		  count (not (equalt (multiple-value-list
-				      (subtypep* s1 s2))
-				     '(nil t)))))
+        sum (loop for s2 in *defstruct-with-tests-names*
+                  unless (eq s1 s2)
+                  count (not (equalt (multiple-value-list
+                                      (subtypep* s1 s2))
+                                     '(nil t)))))
   0)
 
 (defstruct-with-tests (struct-test-45 (:type list) (:initial-offset 2))
@@ -248,7 +248,7 @@
   (1 2))
 
 (defstruct-with-tests (struct-test-46 (:type list)
-				      (:include struct-test-45))
+                                      (:include struct-test-45))
   c46 d46)
 
 (deftest structure-46-1
@@ -256,8 +256,8 @@
   (1 2 3 4))
 
 (defstruct-with-tests (struct-test-47 (:type list)
-				      (:initial-offset 3)
-				      (:include struct-test-45))
+                                      (:initial-offset 3)
+                                      (:include struct-test-45))
   c47 d47)
 
 (deftest structure-47-1
@@ -266,8 +266,8 @@
   1 2 3 4)
 
 (defstruct-with-tests (struct-test-48 (:type list)
-				      (:initial-offset 0)
-				      (:include struct-test-45))
+                                      (:initial-offset 0)
+                                      (:include struct-test-45))
   c48 d48)
 
 (deftest structure-48-1
@@ -287,11 +287,11 @@
   (b51 25 :type (integer 0 255)))
 
 (defstruct-with-tests (struct-test-52 (:type vector)
-				      (:initial-offset 0))
+                                      (:initial-offset 0))
   a52 b52)
 
 (defstruct-with-tests (struct-test-53 (:type vector)
-				      (:initial-offset 5))
+                                      (:initial-offset 5))
   "This is struct-test-53"
   a53 b53)
 
@@ -301,8 +301,8 @@
   10 a)
 
 (defstruct-with-tests (struct-test-54 (:type vector)
-				      (:initial-offset 2)
-				      (:include struct-test-53))
+                                      (:initial-offset 2)
+                                      (:include struct-test-53))
   "This is struct-test-54"
   a54 b54)
 
@@ -312,8 +312,8 @@
   8 g 10 a)
 
 (defstruct-with-tests (struct-test-55 (:type list)
-				      (:initial-offset 2)
-				      :named)
+                                      (:initial-offset 2)
+                                      :named)
   a55 b55 c55)
 
 (deftest structure-55-1
@@ -322,9 +322,9 @@
   struct-test-55 p q)
 
 (defstruct-with-tests (struct-test-56 (:type list)
-				      (:initial-offset 3)
-				      (:include struct-test-55)
-				      :named)
+                                      (:initial-offset 3)
+                                      (:include struct-test-55)
+                                      :named)
   d56 e56)
 
 (deftest structure-56-1
@@ -355,8 +355,8 @@
   (let ((*st-60* 10))
     (let ((s (make-struct-test-60 :*st-60* 200)))
       (values (struct-test-60-a60 s)
-	      (struct-test-60-*st-60* s)
-	      (struct-test-60-b60 s))))
+              (struct-test-60-*st-60* s)
+              (struct-test-60-b60 s))))
   10 200 10)
 
 
@@ -370,7 +370,7 @@
 (deftest structure-61-1
   (let ((s (make-struct-test-61 :a 10 :b 'c)))
     (values (struct-test-61-a s)
-	    (struct-test-61-b s)))
+            (struct-test-61-b s)))
   10 c)
 
 ;;; Initializer forms are evaluated only when needed, and are
@@ -379,15 +379,15 @@
 (eval-when (:load-toplevel :execute)
   (let ((x nil))
     (flet ((%f () x)
-	  (%g (y) (setf x y)))
+          (%g (y) (setf x y)))
       (defstruct struct-test-62
-	(a (progn (setf x 'a) nil))
-	(f #'%f)
-	(g #'%g)))))
+        (a (progn (setf x 'a) nil))
+        (f #'%f)
+        (g #'%g)))))
 
 (deftest structure-62-1
   (let* ((s (make-struct-test-62 :a 1))
-	 (f (struct-test-62-f s)))
+         (f (struct-test-62-f s)))
     (assert (typep f 'function))
     (values
      (struct-test-62-a s)
@@ -396,8 +396,8 @@
 
 (deftest structure-62-2
   (let* ((s (make-struct-test-62))
-	 (f (struct-test-62-f s))
-	 (g (struct-test-62-g s)))
+         (f (struct-test-62-f s))
+         (g (struct-test-62-g s)))
     (assert (typep f 'function))
     (assert (typep g 'function))
     (locally
@@ -483,7 +483,7 @@
   (b nil))
 
 (defstruct-with-tests (struct-test-68 (:include struct-test-67))
-  c d)  
+  c d)
 
 ;;; Error tests
 

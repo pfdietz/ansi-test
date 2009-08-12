@@ -19,33 +19,33 @@
 
 (deftest imagpart.1
   (loop for x in *reals*
-	for c = (complex 0 x)
-	for ip = (imagpart c)
-	unless (eql x ip)
-	collect (list x c ip))
+        for c = (complex 0 x)
+        for ip = (imagpart c)
+        unless (eql x ip)
+        collect (list x c ip))
   nil)
 
 (deftest imagpart.2
   (loop for x in *reals*
-	for c = (complex 1 x)
-	for ip = (imagpart c)
-	unless (eql x ip)
-	collect (list x c ip))
+        for c = (complex 1 x)
+        for ip = (imagpart c)
+        unless (eql x ip)
+        collect (list x c ip))
   nil)
 
 (deftest imagpart.3
   (loop for x in *reals*
-	for c = (complex x x)
-	for ip = (imagpart c)
-	unless (eql x ip)
-	collect (list x c ip))
+        for c = (complex x x)
+        for ip = (imagpart c)
+        unless (eql x ip)
+        collect (list x c ip))
   nil)
 
 (deftest imagpart.4
   (loop for x in *reals*
-	for ip = (imagpart x)
-	unless (eql (* 0 x) ip)
-	collect (list x ip (* 0 x)))
+        for ip = (imagpart x)
+        unless (eql (* 0 x) ip)
+        collect (list x ip (* 0 x)))
   nil)
 
 

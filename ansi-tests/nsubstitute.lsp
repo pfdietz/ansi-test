@@ -63,90 +63,90 @@
 
 (deftest nsubstitute-list.15
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (let* ((orig '(a a a a a a a a a a))
-		     (x (copy-seq orig))
-		     (y (nsubstitute 'x 'a x :start i :end j)))
-		(equal y (nconc (make-list i :initial-element 'a)
-				(make-list (- j i) :initial-element 'x)
-				(make-list (- 10 j) :initial-element 'a))))))
+        (loop for j from i to 10 always
+              (let* ((orig '(a a a a a a a a a a))
+                     (x (copy-seq orig))
+                     (y (nsubstitute 'x 'a x :start i :end j)))
+                (equal y (nconc (make-list i :initial-element 'a)
+                                (make-list (- j i) :initial-element 'x)
+                                (make-list (- 10 j) :initial-element 'a))))))
   t)
 
 (deftest nsubstitute-list.16
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (let* ((orig '(a a a a a a a a a a))
-		     (x (copy-seq orig))
-		     (y (nsubstitute 'x 'a x :start i :end j :from-end t)))
-		(equal y (nconc (make-list i :initial-element 'a)
-				(make-list (- j i) :initial-element 'x)
-				(make-list (- 10 j) :initial-element 'a))))))
+        (loop for j from i to 10 always
+              (let* ((orig '(a a a a a a a a a a))
+                     (x (copy-seq orig))
+                     (y (nsubstitute 'x 'a x :start i :end j :from-end t)))
+                (equal y (nconc (make-list i :initial-element 'a)
+                                (make-list (- j i) :initial-element 'x)
+                                (make-list (- 10 j) :initial-element 'a))))))
   t)
 
 (deftest nsubstitute-list.17
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig '(a a a a a a a a a a))
-			   (x (copy-seq orig))
-			   (y (nsubstitute 'x 'a x :start i :end j :count c)))
-		      (equal y (nconc (make-list i :initial-element 'a)
-				      (make-list c :initial-element 'x)
-				      (make-list (- 10 (+ i c)) :initial-element 'a)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig '(a a a a a a a a a a))
+                           (x (copy-seq orig))
+                           (y (nsubstitute 'x 'a x :start i :end j :count c)))
+                      (equal y (nconc (make-list i :initial-element 'a)
+                                      (make-list c :initial-element 'x)
+                                      (make-list (- 10 (+ i c)) :initial-element 'a)))))))
   t)
 
 (deftest nsubstitute-list.18
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig '(a a a a a a a a a a))
-			   (x (copy-seq orig))
-			   (y (nsubstitute 'x 'a x :start i :end j :count c :from-end t)))
-		      (equal y (nconc (make-list (- j c) :initial-element 'a)
-				      (make-list c :initial-element 'x)
-				      (make-list (- 10 j) :initial-element 'a)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig '(a a a a a a a a a a))
+                           (x (copy-seq orig))
+                           (y (nsubstitute 'x 'a x :start i :end j :count c :from-end t)))
+                      (equal y (nconc (make-list (- j c) :initial-element 'a)
+                                      (make-list c :initial-element 'x)
+                                      (make-list (- 10 j) :initial-element 'a)))))))
   t)
 
 (deftest nsubstitute-list.19
   (let* ((orig '(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (result (nsubstitute 'x 5 x :test #'(lambda (a b) (<= (abs (- a b)) 2)))))
+         (x (copy-seq orig))
+         (result (nsubstitute 'x 5 x :test #'(lambda (a b) (<= (abs (- a b)) 2)))))
     result)
   (1 2 x x x x x 8 9))
 
 (deftest nsubstitute-list.20
   (let* ((orig '(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c -4)
-	 (result (nsubstitute 'x 5 x :test #'(lambda (a b) (incf c 2) (= (+ b c) a)))))
+         (x (copy-seq orig))
+         (c -4)
+         (result (nsubstitute 'x 5 x :test #'(lambda (a b) (incf c 2) (= (+ b c) a)))))
     result)
   (1 2 x 4 5 6 7 8 9))
 
 
 (deftest nsubstitute-list.21
   (let* ((orig '(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c 5)
-	 (result (nsubstitute 'x 9 x :test #'(lambda (a b) (incf c -2) (= (+ b c) a))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 5)
+         (result (nsubstitute 'x 9 x :test #'(lambda (a b) (incf c -2) (= (+ b c) a))
+                             :from-end t)))
     result)
   (1 2 3 4 5 6 7 x 9))
 
 (deftest nsubstitute-list.22
   (let* ((orig '(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c -4)
-	 (result (nsubstitute 'x 5 x :test-not #'(lambda (a b) (incf c 2) (/= (+ b c) a)))))
+         (x (copy-seq orig))
+         (c -4)
+         (result (nsubstitute 'x 5 x :test-not #'(lambda (a b) (incf c 2) (/= (+ b c) a)))))
     result)
   (1 2 x 4 5 6 7 8 9))
 
 
 (deftest nsubstitute-list.23
   (let* ((orig '(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c 5)
-	 (result (nsubstitute 'x 9 x :test-not #'(lambda (a b) (incf c -2) (/= (+ b c) a))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 5)
+         (result (nsubstitute 'x 9 x :test-not #'(lambda (a b) (incf c -2) (/= (+ b c) a))
+                             :from-end t)))
     result)
   (1 2 3 4 5 6 7 x 9))
 
@@ -210,121 +210,121 @@
 
 (deftest nsubstitute-vector.15
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (let* ((orig #(a a a a a a a a a a))
-		     (x (copy-seq orig))
-		     (y (nsubstitute 'x 'a x :start i :end j)))
-		(equalp y (concatenate 'simple-vector
-				       (make-array i :initial-element 'a)
-				       (make-array (- j i) :initial-element 'x)
-				       (make-array (- 10 j) :initial-element 'a))))))
+        (loop for j from i to 10 always
+              (let* ((orig #(a a a a a a a a a a))
+                     (x (copy-seq orig))
+                     (y (nsubstitute 'x 'a x :start i :end j)))
+                (equalp y (concatenate 'simple-vector
+                                       (make-array i :initial-element 'a)
+                                       (make-array (- j i) :initial-element 'x)
+                                       (make-array (- 10 j) :initial-element 'a))))))
   t)
 
 (deftest nsubstitute-vector.16
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (let* ((orig #(a a a a a a a a a a))
-		     (x (copy-seq orig))
-		     (y (nsubstitute 'x 'a x :start i :end j :from-end t)))
-		(equalp y (concatenate 'simple-vector
-				       (make-array i :initial-element 'a)
-				       (make-array (- j i) :initial-element 'x)
-				       (make-array (- 10 j) :initial-element 'a))))))
+        (loop for j from i to 10 always
+              (let* ((orig #(a a a a a a a a a a))
+                     (x (copy-seq orig))
+                     (y (nsubstitute 'x 'a x :start i :end j :from-end t)))
+                (equalp y (concatenate 'simple-vector
+                                       (make-array i :initial-element 'a)
+                                       (make-array (- j i) :initial-element 'x)
+                                       (make-array (- 10 j) :initial-element 'a))))))
   t)
 
 (deftest nsubstitute-vector.17
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig #(a a a a a a a a a a))
-			   (x (copy-seq orig))
-			   (y (nsubstitute 'x 'a x :start i :end j :count c)))
-		      (equalp y (concatenate 'simple-vector
-					     (make-array i :initial-element 'a)
-					     (make-array c :initial-element 'x)
-					     (make-array (- 10 (+ i c)) :initial-element 'a)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig #(a a a a a a a a a a))
+                           (x (copy-seq orig))
+                           (y (nsubstitute 'x 'a x :start i :end j :count c)))
+                      (equalp y (concatenate 'simple-vector
+                                             (make-array i :initial-element 'a)
+                                             (make-array c :initial-element 'x)
+                                             (make-array (- 10 (+ i c)) :initial-element 'a)))))))
   t)
 
 (deftest nsubstitute-vector.18
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig #(a a a a a a a a a a))
-			   (x (copy-seq orig))
-			   (y (nsubstitute 'x 'a x :start i :end j :count c :from-end t)))
-		      (equalp y (concatenate 'simple-vector
-					     (make-array (- j c) :initial-element 'a)
-					     (make-array c :initial-element 'x)
-					     (make-array (- 10 j) :initial-element 'a)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig #(a a a a a a a a a a))
+                           (x (copy-seq orig))
+                           (y (nsubstitute 'x 'a x :start i :end j :count c :from-end t)))
+                      (equalp y (concatenate 'simple-vector
+                                             (make-array (- j c) :initial-element 'a)
+                                             (make-array c :initial-element 'x)
+                                             (make-array (- 10 j) :initial-element 'a)))))))
   t)
 
 (deftest nsubstitute-vector.19
   (let* ((orig #(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (result (nsubstitute 'x 5 x :test #'(lambda (a b) (<= (abs (- a b)) 2)))))
+         (x (copy-seq orig))
+         (result (nsubstitute 'x 5 x :test #'(lambda (a b) (<= (abs (- a b)) 2)))))
     result)
   #(1 2 x x x x x 8 9))
 
 (deftest nsubstitute-vector.20
   (let* ((orig #(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c -4)
-	 (result (nsubstitute 'x 5 x :test #'(lambda (a b) (incf c 2) (= (+ b c) a)))))
+         (x (copy-seq orig))
+         (c -4)
+         (result (nsubstitute 'x 5 x :test #'(lambda (a b) (incf c 2) (= (+ b c) a)))))
     result)
   #(1 2 x 4 5 6 7 8 9))
 
 
 (deftest nsubstitute-vector.21
   (let* ((orig #(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c 5)
-	 (result (nsubstitute 'x 9 x :test #'(lambda (a b) (incf c -2) (= (+ b c) a))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 5)
+         (result (nsubstitute 'x 9 x :test #'(lambda (a b) (incf c -2) (= (+ b c) a))
+                             :from-end t)))
     result)
   #(1 2 3 4 5 6 7 x 9))
 
 (deftest nsubstitute-vector.22
   (let* ((orig #(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c -4)
-	 (result (nsubstitute 'x 5 x :test-not #'(lambda (a b) (incf c 2) (/= (+ b c) a)))))
+         (x (copy-seq orig))
+         (c -4)
+         (result (nsubstitute 'x 5 x :test-not #'(lambda (a b) (incf c 2) (/= (+ b c) a)))))
     result)
   #(1 2 x 4 5 6 7 8 9))
 
 (deftest nsubstitute-vector.23
   (let* ((orig #(1 2 3 4 5 6 7 8 9))
-	 (x (copy-seq orig))
-	 (c 5)
-	 (result (nsubstitute 'x 9 x :test-not #'(lambda (a b) (incf c -2) (/= (+ b c) a))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 5)
+         (result (nsubstitute 'x 9 x :test-not #'(lambda (a b) (incf c -2) (/= (+ b c) a))
+                             :from-end t)))
     result)
   #(1 2 3 4 5 6 7 x 9))
 
 (deftest nsubstitute-vector.28
   (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
-		       :fill-pointer 5))
-	 (result (nsubstitute 'z 'a x)))
+                       :fill-pointer 5))
+         (result (nsubstitute 'z 'a x)))
     result)
   #(z b z c b))
 
 (deftest nsubstitute-vector.29
   (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
-		       :fill-pointer 5))
-	 (result (nsubstitute 'z 'a x :from-end t)))
+                       :fill-pointer 5))
+         (result (nsubstitute 'z 'a x :from-end t)))
     result)
   #(z b z c b))
 
 (deftest nsubstitute-vector.30
   (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
-		       :fill-pointer 5))
-	 (result (nsubstitute 'z 'a x :count 1)))
+                       :fill-pointer 5))
+         (result (nsubstitute 'z 'a x :count 1)))
     result)
   #(z b a c b))
 
 (deftest nsubstitute-vector.31
   (let* ((x (make-array '(10) :initial-contents '(a b a c b a d e a f)
-		       :fill-pointer 5))
-	 (result (nsubstitute 'z 'a x :from-end t :count 1)))
+                       :fill-pointer 5))
+         (result (nsubstitute 'z 'a x :from-end t :count 1)))
     result)
   #(a b z c b))
 
@@ -388,137 +388,137 @@
 
 (deftest nsubstitute-string.15
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (let* ((orig "aaaaaaaaaa")
-		     (x (copy-seq orig))
-		     (y (nsubstitute #\x #\a x :start i :end j)))
-		(equalp y (concatenate 'simple-string
-				       (make-array i :initial-element #\a)
-				       (make-array (- j i) :initial-element #\x)
-				       (make-array (- 10 j) :initial-element #\a))))))
+        (loop for j from i to 10 always
+              (let* ((orig "aaaaaaaaaa")
+                     (x (copy-seq orig))
+                     (y (nsubstitute #\x #\a x :start i :end j)))
+                (equalp y (concatenate 'simple-string
+                                       (make-array i :initial-element #\a)
+                                       (make-array (- j i) :initial-element #\x)
+                                       (make-array (- 10 j) :initial-element #\a))))))
   t)
 
 (deftest nsubstitute-string.16
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (let* ((orig "aaaaaaaaaa")
-		     (x (copy-seq orig))
-		     (y (nsubstitute #\x #\a x :start i :end j :from-end t)))
-		(equalp y (concatenate 'simple-string
-				       (make-array i :initial-element #\a)
-				       (make-array (- j i) :initial-element #\x)
-				       (make-array (- 10 j) :initial-element #\a))))))
+        (loop for j from i to 10 always
+              (let* ((orig "aaaaaaaaaa")
+                     (x (copy-seq orig))
+                     (y (nsubstitute #\x #\a x :start i :end j :from-end t)))
+                (equalp y (concatenate 'simple-string
+                                       (make-array i :initial-element #\a)
+                                       (make-array (- j i) :initial-element #\x)
+                                       (make-array (- 10 j) :initial-element #\a))))))
   t)
 
 (deftest nsubstitute-string.17
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig "aaaaaaaaaa")
-			   (x (copy-seq orig))
-			   (y (nsubstitute #\x #\a x :start i :end j :count c)))
-		      (equalp y (concatenate 'simple-string
-					     (make-array i :initial-element #\a)
-					     (make-array c :initial-element #\x)
-					     (make-array (- 10 (+ i c)) :initial-element #\a)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig "aaaaaaaaaa")
+                           (x (copy-seq orig))
+                           (y (nsubstitute #\x #\a x :start i :end j :count c)))
+                      (equalp y (concatenate 'simple-string
+                                             (make-array i :initial-element #\a)
+                                             (make-array c :initial-element #\x)
+                                             (make-array (- 10 (+ i c)) :initial-element #\a)))))))
   t)
 
 (deftest nsubstitute-string.18
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig "aaaaaaaaaa")
-			   (x (copy-seq orig))
-			   (y (nsubstitute #\x #\a x :start i :end j :count c :from-end t)))
-		      (equalp y (concatenate 'simple-string
-					     (make-array (- j c) :initial-element #\a)
-					     (make-array c :initial-element #\x)
-					     (make-array (- 10 j) :initial-element #\a)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig "aaaaaaaaaa")
+                           (x (copy-seq orig))
+                           (y (nsubstitute #\x #\a x :start i :end j :count c :from-end t)))
+                      (equalp y (concatenate 'simple-string
+                                             (make-array (- j c) :initial-element #\a)
+                                             (make-array c :initial-element #\x)
+                                             (make-array (- 10 j) :initial-element #\a)))))))
   t)
 
 (deftest nsubstitute-string.19
   (let* ((orig "123456789")
-	 (x (copy-seq orig))
-	 (result (nsubstitute #\x #\5 x :test #'(lambda (a b)	
-						 (setq a (read-from-string (string a)))
-						 (setq b (read-from-string (string b)))
-						 (<= (abs (- a b)) 2)))))
+         (x (copy-seq orig))
+         (result (nsubstitute #\x #\5 x :test #'(lambda (a b)
+                                                 (setq a (read-from-string (string a)))
+                                                 (setq b (read-from-string (string b)))
+                                                 (<= (abs (- a b)) 2)))))
     result)
   "12xxxxx89")
 
 (deftest nsubstitute-string.20
   (let* ((orig "123456789")
-	 (x (copy-seq orig))
-	 (c -4)
-	 (result (nsubstitute #\x #\5 x :test #'(lambda (a b)
-						 (setq a (read-from-string (string a)))
-						 (setq b (read-from-string (string b)))
-						 (incf c 2) (= (+ b c) a)))))
+         (x (copy-seq orig))
+         (c -4)
+         (result (nsubstitute #\x #\5 x :test #'(lambda (a b)
+                                                 (setq a (read-from-string (string a)))
+                                                 (setq b (read-from-string (string b)))
+                                                 (incf c 2) (= (+ b c) a)))))
     result)
   "12x456789")
 
 
 (deftest nsubstitute-string.21
   (let* ((orig "123456789")
-	 (x (copy-seq orig))
-	 (c 5)
-	 (result (nsubstitute #\x #\9 x :test #'(lambda (a b)
-						 (setq a (read-from-string (string a)))
-						 (setq b (read-from-string (string b)))
-						 (incf c -2) (= (+ b c) a))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 5)
+         (result (nsubstitute #\x #\9 x :test #'(lambda (a b)
+                                                 (setq a (read-from-string (string a)))
+                                                 (setq b (read-from-string (string b)))
+                                                 (incf c -2) (= (+ b c) a))
+                             :from-end t)))
     result)
   "1234567x9")
 
 (deftest nsubstitute-string.22
   (let* ((orig "123456789")
-	 (x (copy-seq orig))
-	 (c -4)
-	 (result (nsubstitute #\x #\5 x :test-not #'(lambda (a b)
-						     (setq a (read-from-string (string a)))
-						     (setq b (read-from-string (string b)))
-						     (incf c 2) (/= (+ b c) a)))))
+         (x (copy-seq orig))
+         (c -4)
+         (result (nsubstitute #\x #\5 x :test-not #'(lambda (a b)
+                                                     (setq a (read-from-string (string a)))
+                                                     (setq b (read-from-string (string b)))
+                                                     (incf c 2) (/= (+ b c) a)))))
     result)
   "12x456789")
 
 
 (deftest nsubstitute-string.23
   (let* ((orig "123456789")
-	 (x (copy-seq orig))
-	 (c 5)
-	 (result (nsubstitute #\x #\9 x :test-not #'(lambda (a b)
-						     (setq a (read-from-string (string a)))
-						     (setq b (read-from-string (string b)))
-						     (incf c -2) (/= (+ b c) a))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 5)
+         (result (nsubstitute #\x #\9 x :test-not #'(lambda (a b)
+                                                     (setq a (read-from-string (string a)))
+                                                     (setq b (read-from-string (string b)))
+                                                     (incf c -2) (/= (+ b c) a))
+                             :from-end t)))
     result)
   "1234567x9")
 
 (deftest nsubstitute-string.28
   (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
-		       :fill-pointer 5 :element-type 'character))
-	 (result (nsubstitute #\z #\a x)))
+                       :fill-pointer 5 :element-type 'character))
+         (result (nsubstitute #\z #\a x)))
     result)
   "zbzcb")
 
 (deftest nsubstitute-string.29
   (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
-		       :fill-pointer 5 :element-type 'character))
-	 (result (nsubstitute #\z #\a x :from-end t)))
+                       :fill-pointer 5 :element-type 'character))
+         (result (nsubstitute #\z #\a x :from-end t)))
     result)
   "zbzcb")
 
 (deftest nsubstitute-string.30
   (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
-		       :fill-pointer 5 :element-type 'character))
-	 (result (nsubstitute #\z #\a x :count 1)))
+                       :fill-pointer 5 :element-type 'character))
+         (result (nsubstitute #\z #\a x :count 1)))
     result)
   "zbacb")
 
 (deftest nsubstitute-string.31
   (let* ((x (make-array '(10) :initial-contents "abacbadeaf"
-		       :fill-pointer 5 :element-type 'character))
-	 (result (nsubstitute #\z #\a x :from-end t :count 1)))
+                       :fill-pointer 5 :element-type 'character))
+         (result (nsubstitute #\z #\a x :from-end t :count 1)))
     result)
   "abzcb")
 
@@ -527,198 +527,198 @@
 
 (deftest nsubstitute-bit-vector.1
   (let* ((orig #*)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 0 1 x)))
+         (x (copy-seq orig))
+         (result (nsubstitute 0 1 x)))
     result)
   #*)
 
 (deftest nsubstitute-bit-vector.2
   (let* ((orig #*)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x)))
     result)
   #*)
 
 (deftest nsubstitute-bit-vector.3
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 0 1 x)))
+         (x (copy-seq orig))
+         (result (nsubstitute 0 1 x)))
     result)
   #*000000)
 
 (deftest nsubstitute-bit-vector.4
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x)))
     result)
   #*111111)
 
 (deftest nsubstitute-bit-vector.5
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :start 1)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :start 1)))
     result)
   #*011111)
-  
+
 (deftest nsubstitute-bit-vector.6
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 0 1 x :start 2 :end nil)))
+         (x (copy-seq orig))
+         (result (nsubstitute 0 1 x :start 2 :end nil)))
     result)
   #*010000)
 
 (deftest nsubstitute-bit-vector.7
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :end 4)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :end 4)))
     result)
   #*111101)
-  
+
 (deftest nsubstitute-bit-vector.8
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 0 1 x :end nil)))
+         (x (copy-seq orig))
+         (result (nsubstitute 0 1 x :end nil)))
     result)
   #*000000)
 
 (deftest nsubstitute-bit-vector.9
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 0 1 x :end 3)))
+         (x (copy-seq orig))
+         (result (nsubstitute 0 1 x :end 3)))
     result)
   #*000101)
 
 (deftest nsubstitute-bit-vector.10
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 0 1 x :start 2 :end 4)))
+         (x (copy-seq orig))
+         (result (nsubstitute 0 1 x :start 2 :end 4)))
     result)
   #*010001)
 
 (deftest nsubstitute-bit-vector.11
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :start 2 :end 4)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :start 2 :end 4)))
     result)
   #*011101)
 
 (deftest nsubstitute-bit-vector.12
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count 1)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count 1)))
     result)
   #*110101)
 
 (deftest nsubstitute-bit-vector.13
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count 0)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count 0)))
     result)
   #*010101)
 
 (deftest nsubstitute-bit-vector.14
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count -1)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count -1)))
     result)
   #*010101)
 
 (deftest nsubstitute-bit-vector.15
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count 1 :from-end t)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count 1 :from-end t)))
     result)
   #*010111)
 
 (deftest nsubstitute-bit-vector.16
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count 0 :from-end t)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count 0 :from-end t)))
     result)
   #*010101)
 
 (deftest nsubstitute-bit-vector.17
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count -1 :from-end t)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count -1 :from-end t)))
     result)
   #*010101)
 
 (deftest nsubstitute-bit-vector.18
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count nil)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count nil)))
     result)
   #*111111)
 
 (deftest nsubstitute-bit-vector.19
   (let* ((orig #*010101)
-	 (x (copy-seq orig))
-	 (result (nsubstitute 1 0 x :count nil :from-end t)))
+         (x (copy-seq orig))
+         (result (nsubstitute 1 0 x :count nil :from-end t)))
     result)
   #*111111)
 
 (deftest nsubstitute-bit-vector.20
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig #*0000000000)
-			   (x (copy-seq orig))
-			   (y (nsubstitute 1 0 x :start i :end j :count c)))
-		      (equalp y (concatenate
-				 'simple-bit-vector
-				 (make-list i :initial-element 0)
-				 (make-list c :initial-element 1)
-				 (make-list (- 10 (+ i c)) :initial-element 0)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig #*0000000000)
+                           (x (copy-seq orig))
+                           (y (nsubstitute 1 0 x :start i :end j :count c)))
+                      (equalp y (concatenate
+                                 'simple-bit-vector
+                                 (make-list i :initial-element 0)
+                                 (make-list c :initial-element 1)
+                                 (make-list (- 10 (+ i c)) :initial-element 0)))))))
   t)
 
 (deftest nsubstitute-bit-vector.21
   (loop for i from 0 to 9 always
-	(loop for j from i to 10 always
-	      (loop for c from 0 to (- j i) always
-		    (let* ((orig #*1111111111)
-			   (x (copy-seq orig))
-			   (y (nsubstitute 0 1 x :start i :end j :count c :from-end t)))
-		      (equalp y (concatenate
-				 'simple-bit-vector
-				 (make-list (- j c) :initial-element 1)
-				 (make-list c :initial-element 0)
-				 (make-list (- 10 j) :initial-element 1)))))))
+        (loop for j from i to 10 always
+              (loop for c from 0 to (- j i) always
+                    (let* ((orig #*1111111111)
+                           (x (copy-seq orig))
+                           (y (nsubstitute 0 1 x :start i :end j :count c :from-end t)))
+                      (equalp y (concatenate
+                                 'simple-bit-vector
+                                 (make-list (- j c) :initial-element 1)
+                                 (make-list c :initial-element 0)
+                                 (make-list (- 10 j) :initial-element 1)))))))
   t)
 
 (deftest nsubstitute-bit-vector.22
   (let* ((orig #*0101010101)
-	 (x (copy-seq orig))
-	 (c 0)
-	 (result (nsubstitute 1 0 x :test #'(lambda (a b) (incf c) (and (<= 2 c 5) (= a b))))))
+         (x (copy-seq orig))
+         (c 0)
+         (result (nsubstitute 1 0 x :test #'(lambda (a b) (incf c) (and (<= 2 c 5) (= a b))))))
     result)
   #*0111110101)
 
 (deftest nsubstitute-bit-vector.23
   (let* ((orig #*0101010101)
-	 (x (copy-seq orig))
-	 (c 0)
-	 (result (nsubstitute 1 0 x :test-not #'(lambda (a b) (incf c)
-						 (not (and (<= 2 c 5) (= a b)))))))
+         (x (copy-seq orig))
+         (c 0)
+         (result (nsubstitute 1 0 x :test-not #'(lambda (a b) (incf c)
+                                                 (not (and (<= 2 c 5) (= a b)))))))
     result)
   #*0111110101)
 
 (deftest nsubstitute-bit-vector.24
   (let* ((orig #*0101010101)
-	 (x (copy-seq orig))
-	 (c 0)
-	 (result (nsubstitute 1 0 x :test #'(lambda (a b) (incf c) (and (<= 2 c 5) (= a b)))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 0)
+         (result (nsubstitute 1 0 x :test #'(lambda (a b) (incf c) (and (<= 2 c 5) (= a b)))
+                             :from-end t)))
     result)
   #*0101011111)
 
 (deftest nsubstitute-bit-vector.25
   (let* ((orig #*0101010101)
-	 (x (copy-seq orig))
-	 (c 0)
-	 (result (nsubstitute 1 0 x :test-not #'(lambda (a b) (incf c)
-						 (not (and (<= 2 c 5) (= a b))))
-			     :from-end t)))
+         (x (copy-seq orig))
+         (c 0)
+         (result (nsubstitute 1 0 x :test-not #'(lambda (a b) (incf c)
+                                                 (not (and (<= 2 c 5) (= a b))))
+                             :from-end t)))
     result)
   #*0101011111)
 
@@ -751,64 +751,64 @@
 
 (deftest nsubstitute-list.24
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car)))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car)))
     result)
   ((a 10) (b 2) (a 10) (c 4) (d 5) (a 10) (e 7)))
 
 (deftest nsubstitute-list.25
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :start 1 :end 5)))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car :start 1 :end 5)))
     result)
   ((a 1) (b 2) (a 10) (c 4) (d 5) (a 6) (e 7)))
 
 (deftest nsubstitute-list.26
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eql))))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eql))))
     result)
   ((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
 (deftest nsubstitute-list.27
   (let* ((orig '((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eql)))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eql)))
     result)
-  ((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))    
+  ((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
 (deftest nsubstitute-vector.24
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car)))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car)))
     result)
   #((a 10) (b 2) (a 10) (c 4) (d 5) (a 10) (e 7)))
-    
+
 (deftest nsubstitute-vector.25
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :start 1 :end 5)))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car :start 1 :end 5)))
     result)
   #((a 1) (b 2) (a 10) (c 4) (d 5) (a 6) (e 7)))
 
 (deftest nsubstitute-vector.26
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eql))))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car :test (complement #'eql))))
     result)
   #((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
 (deftest nsubstitute-vector.27
   (let* ((orig #((a 1) (b 2) (a 3) (c 4) (d 5) (a 6) (e 7)))
-	 (x (copy-seq orig))
-	 (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eql)))
+         (x (copy-seq orig))
+         (result (nsubstitute '(a 10) 'a x :key #'car :test-not #'eql)))
     result)
   #((a 1) (a 10) (a 3) (a 10) (a 10) (a 6) (a 10)))
 
 (deftest nsubstitute-vector.32
   (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
-	 (v2 (make-array '(8) :displaced-to v1
-			 :displaced-index-offset 3)))
+         (v2 (make-array '(8) :displaced-to v1
+                         :displaced-index-offset 3)))
     (values
      (nsubstitute 'x 'c v2 :count 1)
      v1))
@@ -817,8 +817,8 @@
 
 (deftest nsubstitute-vector.33
   (let* ((v1 (copy-seq #(a b c d a b c d a b c d a b c d)))
-	 (v2 (make-array '(8) :displaced-to v1
-			 :displaced-index-offset 3)))
+         (v2 (make-array '(8) :displaced-to v1
+                         :displaced-index-offset 3)))
     (values
      (nsubstitute 'x 'c v2 :count 1 :from-end t)
      v1))
@@ -828,29 +828,29 @@
 
 (deftest nsubstitute-string.24
   (let* ((orig "0102342015")
-	 (x (copy-seq orig))
-	 (result (nsubstitute #\a #\1 x :key #'nextdigit)))
+         (x (copy-seq orig))
+         (result (nsubstitute #\a #\1 x :key #'nextdigit)))
     result)
   "a1a2342a15")
-    
+
 (deftest nsubstitute-string.25
   (let* ((orig "0102342015")
-	 (x (copy-seq orig))
-	 (result (nsubstitute #\a #\1 x :key #'nextdigit :start 1 :end 6)))
+         (x (copy-seq orig))
+         (result (nsubstitute #\a #\1 x :key #'nextdigit :start 1 :end 6)))
     result)
   "01a2342015")
 
 (deftest nsubstitute-string.26
   (let* ((orig "0102342015")
-	 (x (copy-seq orig))
-	 (result (nsubstitute #\a #\1 x :key #'nextdigit :test (complement #'eql))))
+         (x (copy-seq orig))
+         (result (nsubstitute #\a #\1 x :key #'nextdigit :test (complement #'eql))))
     result)
   "0a0aaaa0aa")
 
 (deftest nsubstitute-string.27
   (let* ((orig "0102342015")
-	 (x (copy-seq orig))
-	 (result (nsubstitute #\a #\1 x :key #'nextdigit :test-not #'eql)))
+         (x (copy-seq orig))
+         (result (nsubstitute #\a #\1 x :key #'nextdigit :test-not #'eql)))
     result)
   "0a0aaaa0aa")
 
@@ -879,29 +879,29 @@
 
 (deftest nsubstitute-bit-vector.30
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
-		       :fill-pointer 5 :element-type 'bit))
-	 (result (nsubstitute 1 0 x)))
+                       :fill-pointer 5 :element-type 'bit))
+         (result (nsubstitute 1 0 x)))
     result)
   #*11111)
 
 (deftest nsubstitute-bit-vector.31
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
-		       :fill-pointer 5 :element-type 'bit))
-	 (result (nsubstitute 1 0 x :from-end t)))
+                       :fill-pointer 5 :element-type 'bit))
+         (result (nsubstitute 1 0 x :from-end t)))
     result)
   #*11111)
 
 (deftest nsubstitute-bit-vector.32
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
-		       :fill-pointer 5 :element-type 'bit))
-	 (result (nsubstitute 1 0 x :count 1)))
+                       :fill-pointer 5 :element-type 'bit))
+         (result (nsubstitute 1 0 x :count 1)))
     result)
   #*11011)
 
 (deftest nsubstitute-bit-vector.33
   (let* ((x (make-array '(10) :initial-contents '(0 1 0 1 1 0 1 1 0 1)
-		       :fill-pointer 5 :element-type 'bit))
-	 (result (nsubstitute 1 0 x :from-end t :count 1)))
+                       :fill-pointer 5 :element-type 'bit))
+         (result (nsubstitute 1 0 x :from-end t :count 1)))
     result)
   #*01111)
 
@@ -951,17 +951,17 @@
 
 (deftest nsubstitute.allow-other-keys.3
   (nsubstitute 'a 0 (list 1 2 0 3 1 0 3) :allow-other-keys t
-		  :allow-other-keys nil :bad t)
+                  :allow-other-keys nil :bad t)
   (1 2 a 3 1 a 3))
 
 (deftest nsubstitute.allow-other-keys.4
   (nsubstitute 'a 0 (list 1 2 0 3 1 0 3) :bad t
-		  :allow-other-keys t :allow-other-keys nil)
+                  :allow-other-keys t :allow-other-keys nil)
   (1 2 a 3 1 a 3))
 
 (deftest nsubstitute.allow-other-keys.5
   (nsubstitute 'a 0 (list 1 2 0 3 1 0 3)
-		  :allow-other-keys t :key #'1-)
+                  :allow-other-keys t :key #'1-)
   (a 2 0 3 a 0 3))
 
 (deftest nsubstitute.keywords.6
@@ -970,7 +970,7 @@
 
 (deftest nsubstitute.allow-other-keys.7
   (nsubstitute 'a 0 (list 1 2 0 3 1 0 3) :allow-other-keys t
-		  :bad t :allow-other-keys nil)
+                  :bad t :allow-other-keys nil)
   (1 2 a 3 1 a 3))
 
 (deftest nsubstitute.allow-other-keys.8

@@ -12,8 +12,8 @@
 (deftest probe-file.2
   (let ((s (open #p"probe-file.lsp" :direction :input)))
     (prog1
-	(equalpt (truename #p"probe-file.lsp")
-		 (probe-file s))
+        (equalpt (truename #p"probe-file.lsp")
+                 (probe-file s))
       (close s)))
   t)
 
@@ -21,12 +21,12 @@
   (let ((s (open #p"probe-file.lsp" :direction :input)))
     (close s)
     (equalpt (truename #p"probe-file.lsp")
-	     (probe-file s)))
+             (probe-file s)))
   t)
 
 (deftest probe-file.4
   (equalpt (truename #p"probe-file.lsp")
-	   (probe-file "CLTEST:probe-file.lsp"))
+           (probe-file "CLTEST:probe-file.lsp"))
   t)
 
 ;;; Specialized string tests
@@ -38,7 +38,7 @@
      (assert (equalpt (truename #p"probe-file.lsp") (probe-file s)))
      (close s)))
   nil)
-       
+
 ;;; Error tests
 
 (deftest probe-file.error.1

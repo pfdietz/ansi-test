@@ -15,9 +15,9 @@
   (cl:handler-case
    (let ((vals (multiple-value-list (apply #'compile args))))
      (if (and (= (length vals) 3)
-	      (cadr vals)
-	      (caadr vals))
-	 t
+              (cadr vals)
+              (caadr vals))
+         t
        (apply #'values nil vals)))
    (error () t)))
 
@@ -25,9 +25,9 @@
 
 (deftest compile.1
   (loop for x in *mini-universe*
-	unless (or (function-name-p x)
-		   (compile-fails? x))
-	collect x)
+        unless (or (function-name-p x)
+                   (compile-fails? x))
+        collect x)
   nil)
 
 (deftest compile.2
@@ -38,9 +38,9 @@
   (let ((sym (gensym)))
     (eval `(defun ,sym () nil))
     (loop for x in *mini-universe*
-	  unless (or (functionp x) (and (consp x) (eql (car x) 'lambda))
-		     (compile-fails? sym x))
-	  collect x))
+          unless (or (functionp x) (and (consp x) (eql (car x) 'lambda))
+                     (compile-fails? sym x))
+          collect x))
   nil)
 
 (deftest compile.4
@@ -156,85 +156,85 @@
 #-sbcl
 (deftest type.1
   (loop for x in *mini-universe*
-	for tp = (type-of x)
-	for lambda-form = `(lambda (y) (declare (optimize safety)
-						(type (not ,tp) y)) y)
-	for fn = (progn (print lambda-form)
-			(eval `(function ,lambda-form)))
-	unless (eval `(signals-error (funcall ',fn ',x) error))
-	collect x)
+        for tp = (type-of x)
+        for lambda-form = `(lambda (y) (declare (optimize safety)
+                                                (type (not ,tp) y)) y)
+        for fn = (progn (print lambda-form)
+                        (eval `(function ,lambda-form)))
+        unless (eval `(signals-error (funcall ',fn ',x) error))
+        collect x)
   nil)
 
 (deftest type.2
   (let* ((utypes (coerce (mapcar #'type-of *universe*) 'vector))
-	 (n (length utypes)))
+         (n (length utypes)))
     (flet ((%rtype () (elt utypes (random n))))
       (loop for x in *mini-universe*
-	    for tp = (loop for tp = (%rtype)
-			   while (typep x tp)
-			   finally (return tp))
-	    for lambda-form = `(lambda (y) (declare (optimize safety)
-						(type ,tp y)) y)
-	    for fn = (progn ;; (print lambda-form)
-			    (eval `(function ,lambda-form)))
-	    unless (eval `(signals-error (funcall ',fn ',x) error))
-	    collect x)))
+            for tp = (loop for tp = (%rtype)
+                           while (typep x tp)
+                           finally (return tp))
+            for lambda-form = `(lambda (y) (declare (optimize safety)
+                                                (type ,tp y)) y)
+            for fn = (progn ;; (print lambda-form)
+                            (eval `(function ,lambda-form)))
+            unless (eval `(signals-error (funcall ',fn ',x) error))
+            collect x)))
   nil)
 
 (deftest type.2c
   (let* ((utypes (coerce (mapcar #'type-of *universe*) 'vector))
-	 (n (length utypes)))
+         (n (length utypes)))
     (flet ((%rtype () (elt utypes (random n))))
       (loop for x in *mini-universe*
-	    for tp = (loop for tp = (%rtype)
-			   while (typep x tp)
-			   finally (return tp))
-	    for lambda-form = `(lambda (y) (declare (optimize safety)
-						(type ,tp y)) y)
-	    for fn = (progn ;; (print lambda-form)
-			    (compile nil lambda-form))
-	    unless (eval `(signals-error (funcall ',fn ',x) error))
-	    collect x)))
+            for tp = (loop for tp = (%rtype)
+                           while (typep x tp)
+                           finally (return tp))
+            for lambda-form = `(lambda (y) (declare (optimize safety)
+                                                (type ,tp y)) y)
+            for fn = (progn ;; (print lambda-form)
+                            (compile nil lambda-form))
+            unless (eval `(signals-error (funcall ',fn ',x) error))
+            collect x)))
   nil)
 
 (deftest type.3
   (loop for x in *mini-universe*
-	for tp = (type-of x)
-	for lambda-form = `(lambda (z) (declare (optimize safety))
-			     (let ((y z))
-			       (declare (type ,tp y))
-			       y))
-	for fn = (progn ;; (print lambda-form)
-		   (eval `(function ,lambda-form)))
-	unless (or (typep nil tp)
-		   (eval `(signals-error (funcall ',fn nil) error)))
-	collect x)
+        for tp = (type-of x)
+        for lambda-form = `(lambda (z) (declare (optimize safety))
+                             (let ((y z))
+                               (declare (type ,tp y))
+                               y))
+        for fn = (progn ;; (print lambda-form)
+                   (eval `(function ,lambda-form)))
+        unless (or (typep nil tp)
+                   (eval `(signals-error (funcall ',fn nil) error)))
+        collect x)
   nil)
 
 (deftest type.3c
   (loop for x in *mini-universe*
-	for tp = (type-of x)
-	for lambda-form = `(lambda (z) (declare (optimize safety))
-			     (let ((y z))
-			       (declare (type ,tp y))
-			       y))
-	for fn = (progn ;; (print lambda-form)
-		   (compile nil lambda-form))
-	unless (or (typep nil tp)
-		   (eval `(signals-error (funcall ',fn nil) error)))
-	collect x)
+        for tp = (type-of x)
+        for lambda-form = `(lambda (z) (declare (optimize safety))
+                             (let ((y z))
+                               (declare (type ,tp y))
+                               y))
+        for fn = (progn ;; (print lambda-form)
+                   (compile nil lambda-form))
+        unless (or (typep nil tp)
+                   (eval `(signals-error (funcall ',fn nil) error)))
+        collect x)
   nil)
 
 (deftest type.4
   (loop for x in *mini-universe*
-	for tp = (type-of x)
-	for lambda-form = `(lambda (z) (declare (optimize safety))
-			     (the ,tp z))
-	for fn = (progn ;; (print lambda-form)
-		   (eval `(function ,lambda-form)))
-	unless (or (typep nil tp)
-		   (eval `(signals-error (funcall ',fn nil) error)))
-	collect x)
+        for tp = (type-of x)
+        for lambda-form = `(lambda (z) (declare (optimize safety))
+                             (the ,tp z))
+        for fn = (progn ;; (print lambda-form)
+                   (eval `(function ,lambda-form)))
+        unless (or (typep nil tp)
+                   (eval `(signals-error (funcall ',fn nil) error)))
+        collect x)
   nil)
 
 (deftest type.5
@@ -251,12 +251,12 @@
 
 (deftest type.8
   (signals-error (let ((x (make-array 3 :initial-element 0
-				      :element-type '(integer 0 2))))
-		   (declare (optimize safety)
-			    (type (array (integer 0 2) (3)) x))
-		   (setf (aref x 0) 3)
-		   (aref x 0))
-		 error)
+                                      :element-type '(integer 0 2))))
+                   (declare (optimize safety)
+                            (type (array (integer 0 2) (3)) x))
+                   (setf (aref x 0) 3)
+                   (aref x 0))
+                 error)
   t)
 
 ;; Move the type tests off to another file, eventually.
@@ -328,4 +328,4 @@
 (def-error-test the.5 (setf (the t) nil))
 (def-error-test the.6 (let (x y) (setf (the t x y) nil)))
 
-;;; 
+;;;

@@ -27,15 +27,15 @@
 
 (deftest adjustable-array-p.6
   (macrolet ((%m (z) z))
-	    (let ((a (make-array '(5) :adjustable t)))
-	      (notnot (adjustable-array-p (expand-in-current-env (%m a))))))
+            (let ((a (make-array '(5) :adjustable t)))
+              (notnot (adjustable-array-p (expand-in-current-env (%m a))))))
   t)
 
 (deftest adjustable-array-p.order.1
   (let ((i 0) x)
     (values
      (notnot (adjustable-array-p (progn (setf x (incf i))
-					(make-array '(5) :adjustable t))))
+                                        (make-array '(5) :adjustable t))))
      i x))
   t 1 1)
 
@@ -63,7 +63,7 @@
 
 (deftest adjustable-array-p.error.6
   (signals-error (let ((x 10))
-		    (locally (declare (optimize (safety 3)))
-			   (adjustable-array-p x)))
-		 type-error)
+                    (locally (declare (optimize (safety 3)))
+                           (adjustable-array-p x)))
+                 type-error)
   t)

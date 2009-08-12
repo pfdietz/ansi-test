@@ -13,11 +13,11 @@
 
 (deftest mapl.2
   (let* ((a nil)
-	 (x (copy-list '(a b c)))
-	 (xcopy (make-scaffold-copy x))
-	 (result
-	  (mapl #'(lambda (y) (push y a))
-		x)))
+         (x (copy-list '(a b c)))
+         (xcopy (make-scaffold-copy x))
+         (result
+          (mapl #'(lambda (y) (push y a))
+                x)))
     (and
      (check-scaffold-copy x xcopy)
      (eqt result x)
@@ -26,16 +26,16 @@
 
 (deftest mapl.3
   (let* ((a nil)
-	 (x (copy-list '(a b c d)))
-	 (y (copy-list '(1 2 3 4)))
-	 (xcopy (make-scaffold-copy x))
-	 (ycopy (make-scaffold-copy y))
-	 (result
-	  (mapl #'(lambda (xtail ytail)
-		    (setf a
-			  (append (mapcar #'list xtail ytail)
-				  a)))
-		x y)))
+         (x (copy-list '(a b c d)))
+         (y (copy-list '(1 2 3 4)))
+         (xcopy (make-scaffold-copy x))
+         (ycopy (make-scaffold-copy y))
+         (result
+          (mapl #'(lambda (xtail ytail)
+                    (setf a
+                          (append (mapcar #'list xtail ytail)
+                                  a)))
+                x y)))
     (and
      (eqt result x)
      (check-scaffold-copy x xcopy)
@@ -46,16 +46,16 @@
 
 (deftest mapl.4
   (let* ((a nil)
-	 (x (copy-list '(a b c d)))
-	 (y (copy-list '(1 2 3 4 5 6 7 8)))
-	 (xcopy (make-scaffold-copy x))
-	 (ycopy (make-scaffold-copy y))
-	 (result
-	  (mapl #'(lambda (xtail ytail)
-		    (setf a
-			  (append (mapcar #'list xtail ytail)
-				  a)))
-		x y)))
+         (x (copy-list '(a b c d)))
+         (y (copy-list '(1 2 3 4 5 6 7 8)))
+         (xcopy (make-scaffold-copy x))
+         (ycopy (make-scaffold-copy y))
+         (result
+          (mapl #'(lambda (xtail ytail)
+                    (setf a
+                          (append (mapcar #'list xtail ytail)
+                                  a)))
+                x y)))
     (and
      (eqt result x)
      (check-scaffold-copy x xcopy)
@@ -66,16 +66,16 @@
 
 (deftest mapl.5
   (let* ((a nil)
-	 (x (copy-list '(a b c d e f g)))
-	 (y (copy-list '(1 2 3 4)))
-	 (xcopy (make-scaffold-copy x))
-	 (ycopy (make-scaffold-copy y))
-	 (result
-	  (mapl #'(lambda (xtail ytail)
-		    (setf a
-			  (append (mapcar #'list xtail ytail)
-				  a)))
-		x y)))
+         (x (copy-list '(a b c d e f g)))
+         (y (copy-list '(1 2 3 4)))
+         (xcopy (make-scaffold-copy x))
+         (ycopy (make-scaffold-copy y))
+         (result
+          (mapl #'(lambda (xtail ytail)
+                    (setf a
+                          (append (mapcar #'list xtail ytail)
+                                  a)))
+                x y)))
     (and
      (eqt result x)
      (check-scaffold-copy x xcopy)
@@ -88,14 +88,14 @@
   (let ((i 0) x y z)
     (values
      (mapl (progn
-	     (setf x (incf i))
-	     (constantly nil))
-	   (progn
-	     (setf y (incf i))
-	     '(a b c))
-	   (progn
-	     (setf z (incf i))
-	     '(1 2 3)))
+             (setf x (incf i))
+             (constantly nil))
+           (progn
+             (setf y (incf i))
+             '(a b c))
+           (progn
+             (setf z (incf i))
+             '(1 2 3)))
      i x y z))
   (a b c) 3 1 2 3)
 

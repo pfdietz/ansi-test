@@ -52,12 +52,12 @@
        (s)
        (write-char #\Space s)
        (setq result
-	     (list
-	      (multiple-value-list (notnot-mv (fresh-line s)))
-	      (multiple-value-list (fresh-line s))
-	      (multiple-value-list (fresh-line s)))))
+             (list
+              (multiple-value-list (notnot-mv (fresh-line s)))
+              (multiple-value-list (fresh-line s))
+              (multiple-value-list (fresh-line s)))))
      result))
-  " 
+  "
 " ((t) (nil) (nil)))
 
 (deftest fresh-line.6

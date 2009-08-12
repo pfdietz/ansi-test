@@ -34,14 +34,14 @@
 ;;; Confirm argument is executed just once.
 (deftest pop.order.1
   (let ((i 0)
-	(a (vector (list 'a 'b 'c))))
+        (a (vector (list 'a 'b 'c))))
     (pop (aref a (progn (incf i) 0)))
     (values a i))
   #((b c)) 1)
 
 (deftest push-and-pop
   (let* ((x (copy-tree '(a b)))
-	 (y x))
+         (y x))
     (push 'c x)
     (and
      (eqt (cdr x) y)

@@ -63,7 +63,7 @@
   (with-input-from-string
    (is "abc")
    (let ((*terminal-io* (make-two-way-stream
-			 is (make-string-output-stream))))
+                         is (make-string-output-stream))))
      (values
       (read-char t)
       (unread-char #\a t)

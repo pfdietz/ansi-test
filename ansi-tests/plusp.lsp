@@ -39,8 +39,8 @@
 
 (deftest plusp.4
   (loop for x in *reals*
-	when (if (plusp x) (<= x 0) (> x 0))
-	collect x)
+        when (if (plusp x) (<= x 0) (> x 0))
+        collect x)
   nil)
 
 (deftest plusp.5
@@ -53,17 +53,17 @@
 
 (deftest plusp.7
   (remove-if #'plusp
-	     (list least-positive-short-float
-		   least-positive-normalized-short-float
-		   least-positive-single-float
-		   least-positive-normalized-single-float
-		   least-positive-double-float
-		   least-positive-normalized-double-float
-		   least-positive-long-float
-		   least-positive-normalized-long-float
-		   most-positive-short-float
-		   most-positive-single-float
-		   most-positive-double-float
-		   most-positive-long-float))
+             (list least-positive-short-float
+                   least-positive-normalized-short-float
+                   least-positive-single-float
+                   least-positive-normalized-single-float
+                   least-positive-double-float
+                   least-positive-normalized-double-float
+                   least-positive-long-float
+                   least-positive-normalized-long-float
+                   most-positive-short-float
+                   most-positive-single-float
+                   most-positive-double-float
+                   most-positive-long-float))
   nil)
 

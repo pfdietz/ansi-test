@@ -31,11 +31,11 @@
 (deftest peek-char.3
   (with-input-from-string
    (*standard-input* (concatenate 'string
-				  (string #\Newline)
-				  (string #\Newline)
-				  "  "
-				  (string #\Newline)
-				  "ab"))
+                                  (string #\Newline)
+                                  (string #\Newline)
+                                  "  "
+                                  (string #\Newline)
+                                  "ab"))
    (values
     (peek-char)
     (read-char)
@@ -49,9 +49,9 @@
   (deftest peek-char.4
     (with-input-from-string
      (*standard-input* (concatenate 'string
-				    (string (name-char "Linefeed"))
-				    (string (name-char "Linefeed"))
-				    "abc"))
+                                    (string (name-char "Linefeed"))
+                                    (string (name-char "Linefeed"))
+                                    "abc"))
      (values
       (peek-char)
       (read-char)
@@ -65,9 +65,9 @@
   (deftest peek-char.5
     (with-input-from-string
      (*standard-input* (concatenate 'string
-				    (string (name-char "Page"))
-				    (string (name-char "Page"))
-				    "abc"))
+                                    (string (name-char "Page"))
+                                    (string (name-char "Page"))
+                                    "abc"))
      (values
       (peek-char)
       (read-char)
@@ -81,9 +81,9 @@
   (deftest peek-char.6
     (with-input-from-string
      (*standard-input* (concatenate 'string
-				    (string (name-char "Tab"))
-				    (string (name-char "Tab"))
-				    "abc"))
+                                    (string (name-char "Tab"))
+                                    (string (name-char "Tab"))
+                                    "abc"))
      (values
       (peek-char)
       (read-char)
@@ -97,9 +97,9 @@
   (deftest peek-char.7
     (with-input-from-string
      (*standard-input* (concatenate 'string
-				    (string (name-char "Return"))
-				    (string (name-char "Return"))
-				    "abc"))
+                                    (string (name-char "Return"))
+                                    (string (name-char "Return"))
+                                    "abc"))
      (values
       (peek-char)
       (read-char)
@@ -183,14 +183,14 @@
      (with-output-to-string
        (os)
        (let ((es (make-echo-stream is os)))
-	 (let ((pos1 (file-position os)))
-	   (unless (zerop pos1) (return-from done :good))
-	   (peek-char nil es nil)
-	   (let ((pos2 (file-position os)))
-	     (return-from done
-	       (if (eql pos1 pos2)
-		   :good
-		 (list pos1 pos2)))))))))
+         (let ((pos1 (file-position os)))
+           (unless (zerop pos1) (return-from done :good))
+           (peek-char nil es nil)
+           (let ((pos2 (file-position os)))
+             (return-from done
+               (if (eql pos1 pos2)
+                   :good
+                 (list pos1 pos2)))))))))
   :good)
 
 (deftest peek-char.18
@@ -200,14 +200,14 @@
      (with-output-to-string
        (os)
        (let ((es (make-echo-stream is os)))
-	 (let ((pos1 (file-position os)))
-	   (unless (zerop pos1) (return-from done :good))
-	   (peek-char t es nil)
-	   (let ((pos2 (file-position os)))
-	     (return-from done
-	       (if (eql pos1 pos2)
-		   pos1
-		 :good))))))))
+         (let ((pos1 (file-position os)))
+           (unless (zerop pos1) (return-from done :good))
+           (peek-char t es nil)
+           (let ((pos2 (file-position os)))
+             (return-from done
+               (if (eql pos1 pos2)
+                   pos1
+                 :good))))))))
   :good)
 
 (deftest peek-char.19
@@ -217,14 +217,14 @@
      (with-output-to-string
        (os)
        (let ((es (make-echo-stream is os)))
-	 (let ((pos1 (file-position os)))
-	   (unless (zerop pos1) (return-from done :good))
-	   (peek-char #\c es nil)
-	   (let ((pos2 (file-position os)))
-	     (return-from done
-	       (if (eql pos1 pos2)
-		   pos1
-		 :good))))))))
+         (let ((pos1 (file-position os)))
+           (unless (zerop pos1) (return-from done :good))
+           (peek-char #\c es nil)
+           (let ((pos2 (file-position os)))
+             (return-from done
+               (if (eql pos1 pos2)
+                   pos1
+                 :good))))))))
   :good)
 
 ;;; Interactions with the readtable

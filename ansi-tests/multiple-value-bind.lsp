@@ -43,11 +43,11 @@
     (declare (special z))
     (values
      (flet ((%x () (symbol-value 'x))
-	    (%y () (symbol-value 'y))
-	    (%z () (symbol-value 'z)))
+            (%y () (symbol-value 'y))
+            (%z () (symbol-value 'z)))
        (multiple-value-bind (x y z) (values 1 2 3)
-	 (declare (special x y))
-	 (list (%x) (%y) (%z))))
+         (declare (special x y))
+         (list (%x) (%y) (%z))))
      x y z))
   (1 2 0) nil nil 0)
 
@@ -91,26 +91,26 @@
   (macrolet
    ((%m (z) z))
    (multiple-value-bind (x y z)
-			(expand-in-current-env (%m (values 1 2 3)))
-			(list x y z)))
+                        (expand-in-current-env (%m (values 1 2 3)))
+                        (list x y z)))
   (1 2 3))
 
 ;;; Error cases
 
 (deftest multiple-value-bind.error.1
   (signals-error (funcall (macro-function 'multiple-value-bind))
-		 program-error)
+                 program-error)
   t)
-  
+
 (deftest multiple-value-bind.error.2
   (signals-error (funcall (macro-function 'multiple-value-bind)
-			   '(multiple-value-bind nil nil))
-		 program-error)
+                           '(multiple-value-bind nil nil))
+                 program-error)
   t)
 
 (deftest multiple-value-bind.error.3
   (signals-error (funcall (macro-function 'multiple-value-bind)
-			   '(multiple-value-bind nil nil)
-			   nil nil)
-		 program-error)
+                           '(multiple-value-bind nil nil)
+                           nil nil)
+                 program-error)
   t)

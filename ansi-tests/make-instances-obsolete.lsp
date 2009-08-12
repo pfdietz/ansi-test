@@ -13,27 +13,27 @@
 
 (deftest make-instances-obsolete.1
   (let* ((class-designator 'make-instances-obsolete-class-01)
-	 (class (find-class class-designator))
-	 (obj (make-instance class :a 'x :b 'y :c 'z :d 17)))
+         (class (find-class class-designator))
+         (obj (make-instance class :a 'x :b 'y :c 'z :d 17)))
     (values
      (eqt (class-of obj) class)
      (map-slot-value obj '(a b c d))
      (let ((val (make-instances-obsolete class)))
        (or (eqt val class-designator)
-	   (eqt val class)))
+           (eqt val class)))
      (map-slot-value obj '(a b c d))))
   t (x y z 17) t (x y z 17))
 
 (deftest make-instances-obsolete.2
   (let* ((class-designator 'make-instances-obsolete-class-01)
-	 (class (find-class class-designator))
-	 (obj (make-instance class :a 'x :b 'y :c 'z :d 17)))
+         (class (find-class class-designator))
+         (obj (make-instance class :a 'x :b 'y :c 'z :d 17)))
     (values
      (eqt (class-of obj) class)
      (map-slot-value obj '(a b c d))
      (let ((val (make-instances-obsolete class-designator)))
        (or (eqt val class-designator)
-	   (eqt val class)))
+           (eqt val class)))
      (map-slot-value obj '(a b c d))))
   t (x y z 17) t (x y z 17))
 
@@ -45,7 +45,7 @@
 
 (deftest make-instances-obsolete.error.2
   (signals-error (make-instances-obsolete
-		   (find-class 'make-instances-obsolete-class-01)
-		   nil)
-		 program-error)
+                   (find-class 'make-instances-obsolete-class-01)
+                   nil)
+                 program-error)
   t)

@@ -36,7 +36,7 @@
 ;; consp, but not both
 (deftest consp-xor-atom-universe
   (check-predicate #'(lambda (x) (or (and (consp x) (not (atom x)))
-				     (and (not (consp x)) (atom x)))))
+                                     (and (not (consp x)) (atom x)))))
   nil)
 
 ;; Everything in type cons satisfies consp, and vice versa

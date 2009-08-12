@@ -33,8 +33,8 @@
 
 (deftest assoc.7
     (let* ((x (copy-tree '((a . b) (b . c) (c . d))))
-	   (xcopy (make-scaffold-copy x))
-	   (result (assoc 'b x)))
+           (xcopy (make-scaffold-copy x))
+           (result (assoc 'b x)))
       (and
        (eqt result (second x))
        (check-scaffold-copy x xcopy)))
@@ -46,7 +46,7 @@
 
 (deftest assoc.9
     (assoc (copy-seq "abc")
-	   '((abc . 1) ("abc" . 2) ("abc" . 3)))
+           '((abc . 1) ("abc" . 2) ("abc" . 3)))
   nil)
 
 (deftest assoc.10
@@ -61,67 +61,67 @@
 
 (deftest assoc.12
     (assoc #\e '(("abefd" . 1) ("aevgd" . 2) ("edada" . 3))
-	   :key #'(lambda (x) (schar x 1)))
+           :key #'(lambda (x) (schar x 1)))
   ("aevgd" . 2))
 
 (deftest assoc.13
     (assoc nil '(((a) . b) ( nil . c ) ((nil) . d))
-	   :key #'car)
+           :key #'car)
   (nil . c))
 
 (deftest assoc.14
     (assoc (copy-seq "abc")
-	   '((abc . 1) ("abc" . 2) ("abc" . 3))
-	   :test #'equal)
+           '((abc . 1) ("abc" . 2) ("abc" . 3))
+           :test #'equal)
   ("abc" . 2))
 
 (deftest assoc.15
     (assoc (copy-seq "abc")
-	   '((abc . 1) ("abc" . 2) ("abc" . 3))
-	   :test #'equalp)
+           '((abc . 1) ("abc" . 2) ("abc" . 3))
+           :test #'equalp)
   ("abc" . 2))
 
 (deftest assoc.16
     (assoc (copy-list '(a)) (copy-tree '(((a) b) ((a) (c))))
-	   :test #'equal)
+           :test #'equal)
   ((a) b))
 
 (deftest assoc.17
     (assoc (copy-seq "abc")
-	   '((abc . 1) (a . a) (b . b) ("abc" . 2) ("abc" . 3))
-	   :test-not (complement #'equalp))
+           '((abc . 1) (a . a) (b . b) ("abc" . 2) ("abc" . 3))
+           :test-not (complement #'equalp))
   ("abc" . 2))
 
 (deftest assoc.18
     (assoc 'a '((a . d)(b . c)) :test-not #'eq)
   (b . c))
-     
+
 (deftest assoc.19
     (assoc 'a '((a . d)(b . c)) :test (complement #'eq))
   (b . c))
 
 (deftest assoc.20
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
-	   :key #'(lambda (x) (and (stringp x) (string-downcase x)))
-	   :test #'equal)
+           :key #'(lambda (x) (and (stringp x) (string-downcase x)))
+           :test #'equal)
   ("A" . 6))
 
 (deftest assoc.21
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
-	   :key #'(lambda (x) (and (stringp x) x))
-	   :test #'equal)
+           :key #'(lambda (x) (and (stringp x) x))
+           :test #'equal)
   ("a" . 3))
 
 (deftest assoc.22
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
-	   :key #'(lambda (x) (and (stringp x) (string-downcase x)))
-	   :test-not (complement #'equal))
+           :key #'(lambda (x) (and (stringp x) (string-downcase x)))
+           :test-not (complement #'equal))
   ("A" . 6))
 
 (deftest assoc.23
     (assoc "a" '(("" . 1) (a . 2) ("A" . 6) ("a" . 3) ("A" . 5))
-	   :key #'(lambda (x) (and (stringp x) x))
-	   :test-not (complement #'equal))
+           :key #'(lambda (x) (and (stringp x) x))
+           :test-not (complement #'equal))
   ("a" . 3))
 
 ;; Check that it works when test returns a true value
@@ -129,7 +129,7 @@
 
 (deftest assoc.24
     (assoc 'a '((b . 1) (a . 2) (c . 3))
-	   :test #'(lambda (x y) (and (eqt x y) 'matched)))
+           :test #'(lambda (x y) (and (eqt x y) 'matched)))
   (a . 2))
 
 ;; Check that the order of the arguments to test is correct
@@ -137,9 +137,9 @@
 (deftest assoc.25
     (block fail
       (assoc 'a '((b . 1) (c . 2) (a . 3))
-	     :test #'(lambda (x y)
-		       (unless (eqt x 'a) (return-from fail 'fail))
-		       (eqt x y))))
+             :test #'(lambda (x y)
+                       (unless (eqt x 'a) (return-from fail 'fail))
+                       (eqt x y))))
   (a . 3))
 
 ;;; Order of test arguments
@@ -160,7 +160,7 @@
 
 (deftest assoc.31
   (let () (assoc nil '((a . b) nil (c . d) (nil . e) (nil . f) nil (g . h))
-		 :test #'eq))
+                 :test #'eq))
   (nil . e))
 
 ;;; :test & :test-not together are harmless
@@ -177,7 +177,7 @@
   (let ((i 0) x y)
     (values
      (assoc (progn (setf x (incf i)) 'c)
-	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4))))
+            (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4))))
      i x y))
   (c . 3) 2 1 2)
 
@@ -185,8 +185,8 @@
   (let ((i 0) x y z)
     (values
      (assoc (progn (setf x (incf i)) 'c)
-	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
-	    :test (progn (setf z (incf i)) #'eq))
+            (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
+            :test (progn (setf z (incf i)) #'eq))
      i x y z))
   (c . 3) 3 1 2 3)
 
@@ -194,8 +194,8 @@
   (let ((i 0) x y)
     (values
      (assoc (progn (setf x (incf i)) 'c)
-	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
-	    :test #'eq)
+            (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
+            :test #'eq)
      i x y))
   (c . 3) 2 1 2)
 
@@ -203,9 +203,9 @@
   (let ((i 0) x y z w)
     (values
      (assoc (progn (setf x (incf i)) 'c)
-	    (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
-	    :key (progn (setf z (incf i)) #'identity)
-	    :key (progn (setf w (incf i)) #'not))
+            (progn (setf y (incf i)) '((a . 1) (b . 2) (c . 3) (d . 4)))
+            :key (progn (setf z (incf i)) #'identity)
+            :key (progn (setf w (incf i)) #'not))
      i x y z w))
   (c . 3) 4 1 2 3 4)
 
@@ -221,7 +221,7 @@
 
 (deftest assoc.allow-other-keys.3
   (assoc 'b '((a . 1) (b . 2) (c . 3)) :allow-other-keys t :also-bad t
-	 :test-not #'eql)
+         :test-not #'eql)
   (a . 1))
 
 (deftest assoc.allow-other-keys.4
@@ -263,32 +263,32 @@
 
 (deftest assoc.error.6
   (signals-error (assoc nil nil :bad t :allow-other-keys nil)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc.error.7
   (signals-error (assoc 'a '((a . b)) :test #'identity)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc.error.8
   (signals-error (assoc 'a '((a . b)) :test-not #'identity)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc.error.9
   (signals-error (assoc 'a '((a . b)) :key #'cons)
-		 program-error)
+                 program-error)
   t)
 
 (deftest assoc.error.10
   (signals-error (assoc 'z '((a . b) . c))
-		 type-error)
+                 type-error)
   t)
 
 (deftest assoc.error.11
   (signals-error (assoc 'z '((a . b) :bad (c . d)))
-		 type-error)
+                 type-error)
   t)
 
 (deftest assoc.error.12

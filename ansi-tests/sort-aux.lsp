@@ -10,8 +10,8 @@
   (if (null (cdr list))
       list
     (let* ((len2 (ash (length list) -1))
-	   (l1 (my-numeric-sort (subseq list 0 len2)))
-	   (l2 (my-numeric-sort (subseq list len2))))
+           (l1 (my-numeric-sort (subseq list 0 len2)))
+           (l2 (my-numeric-sort (subseq list len2))))
       (my-numeric-merge l1 l2))))
 
 (defun my-numeric-merge (l1 l2)
@@ -31,7 +31,7 @@
    for i below reps
    for list = (generate-random-sort-test (random n) m)
    unless (equal (my-numeric-sort list)
-		 (sort (copy-seq list) #'<))
+                 (sort (copy-seq list) #'<))
    collect list))
 
 (defun random-stable-sort-test (n m reps)
@@ -39,5 +39,5 @@
    for i below reps
    for list = (generate-random-sort-test (random n) m)
    unless (equal (my-numeric-sort list)
-		 (stable-sort (copy-seq list) #'<))
+                 (stable-sort (copy-seq list) #'<))
    collect list))

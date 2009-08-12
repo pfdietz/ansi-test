@@ -25,10 +25,10 @@
 
 (deftest aref.5
   (let ((a (make-array '(2 3) :element-type 'base-char
-		       :initial-contents '("abc" "def"))))
+                       :initial-contents '("abc" "def"))))
     (loop for i below 2
-	  collect (loop for j below 3
-			collect (aref a i j))))
+          collect (loop for j below 3
+                        collect (aref a i j))))
   ((#\a #\b #\c)
    (#\d #\e #\f)))
 
@@ -38,11 +38,11 @@
 
 (deftest aref.7
   (let ((a (make-array '(2 5) :element-type 'bit
-		       :initial-contents '((1 1 0 0 1)
-					   (0 1 0 1 0)))))
+                       :initial-contents '((1 1 0 0 1)
+                                           (0 1 0 1 0)))))
     (loop for i below 2
-	  collect (loop for j below 5
-			collect (aref a i j))))
+          collect (loop for j below 5
+                        collect (aref a i j))))
   ((1 1 0 0 1)
    (0 1 0 1 0)))
 
@@ -52,7 +52,7 @@
   (let ((i 0) x y (a #(a b c d)))
     (values
      (aref (progn (setf x (incf i)) a)
-	   (progn (setf y (incf i)) 2))
+           (progn (setf y (incf i)) 2))
      i x y))
   c 2 1 2)
 
@@ -60,8 +60,8 @@
   (let ((i 0) x y z (a #2a((a b c)(d e f))))
     (values
      (aref (progn (setf x (incf i)) a)
-	   (progn (setf y (incf i)) 1)
-	   (progn (setf z (incf i)) 2))
+           (progn (setf y (incf i)) 1)
+           (progn (setf z (incf i)) 2))
      i x y z))
   f 3 1 2 3)
 
@@ -127,8 +127,8 @@
   (let ((i 0) x y z (a (copy-seq #(a b c d))))
     (values
      (setf (aref (progn (setf x (incf i)) a)
-		 (progn (setf y (incf i)) 2))
-	   (progn (setf z (incf i)) 'z))
+                 (progn (setf y (incf i)) 2))
+           (progn (setf z (incf i)) 'z))
      a
      i x y z))
   z #(a b z d) 3 1 2 3)

@@ -70,49 +70,49 @@
 
 (deftest loop.11.11
   (loop with i = 0 while (if (< i 10) t (return 'good))
-	collect (incf i))
+        collect (incf i))
   good)
 
 (deftest loop.11.12
   (loop with i = 0
-	while (< i 10) collect (incf i)
-	while (< i 10) collect (incf i)
-	while (< i 10) collect (incf i))
+        while (< i 10) collect (incf i)
+        while (< i 10) collect (incf i)
+        while (< i 10) collect (incf i))
   (1 2 3 4 5 6 7 8 9 10))
 
 (deftest loop.11.13
   (loop with i = 0 while (< i 10) collect (incf i)
-	finally (return 'done))
+        finally (return 'done))
   done)
 
 (deftest loop.11.14
   (loop for i in '(a b c)
-	while nil
-	collect i)
+        while nil
+        collect i)
   nil)
 
 (deftest loop.11.15
   (loop for i in '(a b c)
-	collect i
-	while nil)
+        collect i
+        while nil)
   (a))
 
 (deftest loop.11.16
   (loop for i in '(a b c)
-	while t
-	collect i)
+        while t
+        collect i)
   (a b c))
 
 (deftest loop.11.17
   (loop for i in '(a b c)
-	collect i
-	while t)
+        collect i
+        while t)
   (a b c))
 
 (deftest loop.11.18
   (loop for i from 1 to 10
-	while (< i 6)
-	finally (return i))
+        while (< i 6)
+        finally (return i))
   6)
 
 ;;; Tests of UNTIL
@@ -123,87 +123,87 @@
 
 (deftest loop.11.21
   (loop with i = 0 while (if (< i 10) t (return 'good))
-	collect (incf i))
+        collect (incf i))
   good)
 
 (deftest loop.11.22
   (loop with i = 0
-	until (>= i 10) collect (incf i)
-	until (>= i 10) collect (incf i)
-	until (>= i 10) collect (incf i))
+        until (>= i 10) collect (incf i)
+        until (>= i 10) collect (incf i)
+        until (>= i 10) collect (incf i))
   (1 2 3 4 5 6 7 8 9 10))
 
 (deftest loop.11.23
   (loop with i = 0 until (>= i 10) collect (incf i)
-	finally (return 'done))
+        finally (return 'done))
   done)
 
 (deftest loop.11.24
   (loop for i in '(a b c)
-	until t
-	collect i)
+        until t
+        collect i)
   nil)
 
 (deftest loop.11.25
   (loop for i in '(a b c)
-	collect i
-	until t)
+        collect i
+        until t)
   (a))
 
 (deftest loop.11.26
   (loop for i in '(a b c)
-	until nil
-	collect i)
+        until nil
+        collect i)
   (a b c))
 
 (deftest loop.11.27
   (loop for i in '(a b c)
-	collect i
-	until nil)
+        collect i
+        until nil)
   (a b c))
 
 (deftest loop.11.28
   (loop for i from 1 to 10
-	until (>= i 6)
-	finally (return i))
+        until (>= i 6)
+        finally (return i))
   6)
 
 ;;; More tests of a bug that showed up in c.l.l
 
 (deftest loop.11.29
   (loop for i in '(4 8 9 A 13)
-	when (eq i 'a) return :good
-	while (< i 12) collect i)
+        when (eq i 'a) return :good
+        while (< i 12) collect i)
   :good)
 
 (deftest loop.11.30
   (loop for i in '(4 8 9 A 13)
-	unless (numberp i) return :good
-	while (< i 12) collect i)
+        unless (numberp i) return :good
+        while (< i 12) collect i)
   :good)
 
 (deftest loop.11.31
   (loop for i in '(4 8 9 A 13)
-	when (eq i 'a) return :good
-	until (> i 12) collect i)
+        when (eq i 'a) return :good
+        until (> i 12) collect i)
   :good)
 
 (deftest loop.11.32
   (loop for i in '(4 8 9 A 13)
-	unless (numberp i) return :good
-	until (> i 12) collect i)
+        unless (numberp i) return :good
+        until (> i 12) collect i)
   :good)
 
 (deftest loop.11.33
   (loop for i in '(4 8 9 A 13)
-	if (not (numberp i)) return :good end
-	while (< i 12) collect i)
+        if (not (numberp i)) return :good end
+        while (< i 12) collect i)
   :good)
 
 (deftest loop.11.34
   (loop for i in '(4 8 9 A 13)
-	if (not (numberp i)) return :good end
-	until (> i 12) collect i)
+        if (not (numberp i)) return :good end
+        until (> i 12) collect i)
   :good)
 
 ;;; Test that explicit calls to macroexpand in subforms

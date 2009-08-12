@@ -21,8 +21,8 @@
 
 (deftest with-input-from-string.3a
   (with-input-from-string (s "abc")
-			  (declare (optimize speed))
-			  (declare (optimize space)))
+                          (declare (optimize speed))
+                          (declare (optimize space)))
   nil)
 
 (deftest with-input-from-string.4
@@ -183,8 +183,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-input-from-string (s (return-from done x))
-				(declare (special x))))))
+        (with-input-from-string (s (return-from done x))
+                                (declare (special x))))))
   :good)
 
 (deftest with-input-from-string.20
@@ -192,8 +192,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-input-from-string (s "abc" :start (return-from done x))
-				(declare (special x))))))
+        (with-input-from-string (s "abc" :start (return-from done x))
+                                (declare (special x))))))
   :good)
 
 (deftest with-input-from-string.21
@@ -201,8 +201,8 @@
     (let ((x :bad))
       (declare (special x))
       (let ((x :good))
-	(with-input-from-string (s "abc" :end (return-from done x))
-				(declare (special x))))))
+        (with-input-from-string (s "abc" :end (return-from done x))
+                                (declare (special x))))))
   :good)
 
 ;;; index is not updated if the form exits abnormally
@@ -222,22 +222,22 @@
   (macrolet
    ((%m (z) z))
    (with-input-from-string (s (expand-in-current-env (%m "123")))
-			  (read-char s)))
+                          (read-char s)))
   #\1)
 
 (deftest with-input-from-string.24
   (macrolet
    ((%m (z) z))
    (with-input-from-string (s "123" :start (expand-in-current-env (%m 1)))
-			   (read-char s)))
+                           (read-char s)))
   #\2)
 
 (deftest with-input-from-string.25
   (macrolet
    ((%m (z) z))
    (with-input-from-string (s "123" :start 0
-			      :end (expand-in-current-env (%m 0)))
-			   (read-char s nil nil)))
+                              :end (expand-in-current-env (%m 0)))
+                           (read-char s nil nil)))
   nil)
 
 

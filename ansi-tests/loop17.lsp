@@ -139,7 +139,7 @@
   (macrolet
    ((%m (z) z))
    (loop with x = 0
-	 initially (expand-in-current-env (%m (incf x)))
-	 until t
-	 finally (expand-in-current-env (%m (return x)))))
+         initially (expand-in-current-env (%m (incf x)))
+         until t
+         finally (expand-in-current-env (%m (return x)))))
   1)

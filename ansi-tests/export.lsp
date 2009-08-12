@@ -14,21 +14,21 @@
     (safely-delete-package "TEST1")
     (let ((p (make-package "TEST1")))
       (let ((sym (intern "FOO" p))
-	    (i 0) x y)
-	(setf return-value (export (progn (setf x (incf i)) sym)
-				   (progn (setf y (incf i)) p)))
-	(multiple-value-bind* (sym2 status)
-	    (find-symbol "FOO" p)
-	  (prog1
-	      (and sym2
-		   (eql i 2)
-		   (eql x 1)
-		   (eql y 2)
-		   (eqt (symbol-package sym2) p)
-		   (string= (symbol-name sym2) "FOO")
-		   (eqt sym sym2)
-		   (eqt status :external))
-	    (delete-package p)))))
+            (i 0) x y)
+        (setf return-value (export (progn (setf x (incf i)) sym)
+                                   (progn (setf y (incf i)) p)))
+        (multiple-value-bind* (sym2 status)
+            (find-symbol "FOO" p)
+          (prog1
+              (and sym2
+                   (eql i 2)
+                   (eql x 1)
+                   (eql y 2)
+                   (eqt (symbol-package sym2) p)
+                   (string= (symbol-name sym2) "FOO")
+                   (eqt sym sym2)
+                   (eqt status :external))
+            (delete-package p)))))
     return-value)
   t)
 
@@ -37,16 +37,16 @@
     (safely-delete-package "TEST1")
     (let ((p (make-package "TEST1")))
       (let ((sym (intern "FOO" p)))
-	(export (list sym) p)
-	(multiple-value-bind* (sym2 status)
-	    (find-symbol "FOO" p)
-	  (prog1
-	      (and sym2
-		   (eqt (symbol-package sym2) p)
-		   (string= (symbol-name sym2) "FOO")
-		   (eqt sym sym2)
-		   (eqt status :external))
-	    (delete-package p))))))
+        (export (list sym) p)
+        (multiple-value-bind* (sym2 status)
+            (find-symbol "FOO" p)
+          (prog1
+              (and sym2
+                   (eqt (symbol-package sym2) p)
+                   (string= (symbol-name sym2) "FOO")
+                   (eqt sym sym2)
+                   (eqt status :external))
+            (delete-package p))))))
   t)
 
 (deftest export.3
@@ -88,14 +88,14 @@
     (make-package "TEST2" :use '("TEST1"))
     (export (intern "X" "TEST2") "TEST2")
     (prog1
-	(handler-case
-	 (let ((sym (intern "X" "TEST1")))
-	   (handler-case
-	    (export sym "TEST1")
-	    (error (c)
-		   (format t "Caught error in EXPORT.5: ~A~%" c)
-		   'caught)))
-	 (error (c) c))
+        (handler-case
+         (let ((sym (intern "X" "TEST1")))
+           (handler-case
+            (export sym "TEST1")
+            (error (c)
+                   (format t "Caught error in EXPORT.5: ~A~%" c)
+                   'caught)))
+         (error (c) c))
       (delete-package "TEST2")
       (delete-package "TEST1")))
   caught)

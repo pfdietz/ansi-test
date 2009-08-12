@@ -21,36 +21,36 @@
 
 (deftest abs.1
   (loop for x in *numbers*
-	for a = (abs x)
-	always (and (realp a) (not (minusp a))))
+        for a = (abs x)
+        always (and (realp a) (not (minusp a))))
   t)
 
 (deftest abs.2
   (loop for x = (random-fixnum)
-	for a = (abs x)
-	repeat 10000
-	unless (if (plusp x) (eql x a) (eql (- x) a))
-	collect (list x a))
+        for a = (abs x)
+        repeat 10000
+        unless (if (plusp x) (eql x a) (eql (- x) a))
+        collect (list x a))
   nil)
 
 (deftest abs.3
   (let ((bound (ash 1 300)))
     (loop for x = (random-from-interval bound)
-	  for a = (abs x)
-	  repeat 10000
-	  unless (if (plusp x) (eql x a) (eql (- x) a))
-	  collect (list x a)))
+          for a = (abs x)
+          repeat 10000
+          unless (if (plusp x) (eql x a) (eql (- x) a))
+          collect (list x a)))
   nil)
 
 (deftest abs.4
   (loop for num = (random-fixnum)
-	for den = (random-fixnum)
-	for den2 = (if (zerop den) 1 den)
-	for r = (/ num den)
-	for a = (abs r)
-	repeat 10000
-	unless (if (>= r 0) (eql r a) (eql (- r) a))
-	collect (list num den2 r a))
+        for den = (random-fixnum)
+        for den2 = (if (zerop den) 1 den)
+        for r = (/ num den)
+        for a = (abs r)
+        repeat 10000
+        unless (if (>= r 0) (eql r a) (eql (- r) a))
+        collect (list num den2 r a))
   nil)
 
 (deftest abs.5
@@ -73,8 +73,8 @@
      for a = (abs x)
      repeat 10000
      unless (if (minusp x)
-		(eql (- x) a)
-	      (eql x a))
+                (eql (- x) a)
+              (eql x a))
      collect (list x a)))
   nil)
 
@@ -85,8 +85,8 @@
      for a = (abs x)
      repeat 10000
      unless (if (minusp x)
-		(eql (- x) a)
-	      (eql x a))
+                (eql (- x) a)
+              (eql x a))
      collect (list x a)))
   nil)
 
@@ -97,8 +97,8 @@
      for a = (abs x)
      repeat 10000
      unless (if (minusp x)
-		(eql (- x) a)
-	      (eql x a))
+                (eql (- x) a)
+              (eql x a))
      collect (list x a)))
   nil)
 
@@ -109,8 +109,8 @@
      for a = (abs x)
      repeat 10000
      unless (if (minusp x)
-		(eql (- x) a)
-	      (eql x a))
+                (eql (- x) a)
+              (eql x a))
      collect (list x a)))
   nil)
 
@@ -122,15 +122,15 @@
 ;;; (deftest abs.10
 ;;;   (abs -0.0s0)
 ;;;   -0.0s0)
-;;; 
+;;;
 ;;; (deftest abs.11
 ;;;   (abs -0.0f0)
 ;;;   -0.0f0)
-;;; 
+;;;
 ;;; (deftest abs.12
 ;;;   (abs -0.0d0)
 ;;;   -0.0d0)
-;;; 
+;;;
 ;;; (deftest abs.13
 ;;;   (abs -0.0l0)
 ;;;   -0.0l0)
@@ -175,5 +175,5 @@
 
 (deftest abs.22
   (macrolet ((%m (z) z))
-	    (abs (expand-in-current-env (%m -4))))
+            (abs (expand-in-current-env (%m -4))))
   4)

@@ -37,7 +37,7 @@
 (deftest funcall.7
   (flet ((xcons (x y) (list y x)))
     (values (funcall 'xcons 1 2)
-	    (funcall #'xcons 1 2)))
+            (funcall #'xcons 1 2)))
   (1 . 2)
   (2 1))
 
@@ -55,7 +55,7 @@
   (let ((i 0) a b)
     (values
      (funcall (progn (setf a (incf i)) #'car)
-	      (progn (setf b (incf i)) '(x . y)))
+              (progn (setf b (incf i)) '(x . y)))
      i a b))
   x 2 1 2)
 
@@ -63,8 +63,8 @@
   (let ((i 0) a b c)
     (values
      (funcall (progn (setf a (incf i)) #'cons)
-	      (progn (setf b (incf i)) 'x)
-	      (progn (setf c (incf i)) 'y))
+              (progn (setf b (incf i)) 'x)
+              (progn (setf c (incf i)) 'y))
      i a b c))
   (x . y) 3 1 2 3)
 
@@ -84,8 +84,8 @@
 ;;; called on a symbol with a global definition as a macro
 (deftest funcall.error.3
   (signals-error (funcall 'defconstant '(defconstant x 10))
-		 undefined-function
-		 :name defconstant)
+                 undefined-function
+                 :name defconstant)
   t)
 
 (deftest funcall.error.4

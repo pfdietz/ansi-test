@@ -7,12 +7,12 @@
 
 (deftest compute-restarts.1
   (loop for r in (compute-restarts)
-	always (typep r 'restart))
+        always (typep r 'restart))
   t)
 
 (deftest compute-restarts.2
   (loop for r in (compute-restarts)
-	always (typep r (find-class 'restart)))
+        always (typep r (find-class 'restart)))
   t)
 
 (deftest compute-restarts.3
@@ -24,15 +24,15 @@
 
 (deftest compute-restarts.4
   (loop for r1 in (compute-restarts)
-	for r2 in (compute-restarts)
-	always (eq r1 r2))
+        for r2 in (compute-restarts)
+        always (eq r1 r2))
   t)
 
 (deftest compute-restarts.5
   (restart-case
    (loop for r1 in (compute-restarts)
-	 for r2 in (compute-restarts)
-	 always (eq r1 r2))
+         for r2 in (compute-restarts)
+         always (eq r1 r2))
    (foo () t)
    (bar () t)
    (foo () nil))
@@ -41,8 +41,8 @@
 (deftest compute-restarts.6
   (restart-case
    (let* ((restarts (compute-restarts))
-	  (p (position 'foo restarts :key #'restart-name))
-	  (r (find 'foo restarts :start (1+ p) :key #'restart-name)))
+          (p (position 'foo restarts :key #'restart-name))
+          (r (find 'foo restarts :start (1+ p) :key #'restart-name)))
      (invoke-restart r))
    (foo () 'bad)
    (foo () 'good)
@@ -52,11 +52,11 @@
 (deftest compute-restarts.7
   (handler-bind
    ((error #'(lambda (c)
-	       (let* ((restarts (compute-restarts c))
-		      (r (remove 'foo restarts
-				 :test-not #'eq
-				 :key #'restart-name)))
-		 (invoke-restart (second r))))))
+               (let* ((restarts (compute-restarts c))
+                      (r (remove 'foo restarts
+                                 :test-not #'eq
+                                 :key #'restart-name)))
+                 (invoke-restart (second r))))))
    (restart-case
     (error "an error")
     (foo () 'bad)
@@ -67,12 +67,12 @@
 (deftest compute-restarts.8
   (handler-bind
    ((error #'(lambda (c)
-	       (declare (ignore c))
-	       (let* ((restarts (compute-restarts))
-		      (r (remove 'foo restarts
-				 :test-not #'eq
-				 :key #'restart-name)))
-		 (invoke-restart (second r))))))
+               (declare (ignore c))
+               (let* ((restarts (compute-restarts))
+                      (r (remove 'foo restarts
+                                 :test-not #'eq
+                                 :key #'restart-name)))
+                 (invoke-restart (second r))))))
    (restart-case
     (error "an error")
     (foo () 'bad)
@@ -85,19 +85,19 @@
     (block done
       (handler-bind
        ((error #'(lambda (c)
-		   (declare (ignore c))
-		   (let* ((restarts (compute-restarts c2))
-			  (r (remove 'foo restarts
-				     :test-not #'eq
-				     :key #'restart-name)))
-		     ;; (write restarts)
-		     (return-from done
-		       (values r
-			       (mapcar #'restart-name r)))))))
+                   (declare (ignore c))
+                   (let* ((restarts (compute-restarts c2))
+                          (r (remove 'foo restarts
+                                     :test-not #'eq
+                                     :key #'restart-name)))
+                     ;; (write restarts)
+                     (return-from done
+                       (values r
+                               (mapcar #'restart-name r)))))))
        (restart-case
-	(error "an error")
-	(foo () 'bad)
-	(foo () 'also-bad)))))
+        (error "an error")
+        (foo () 'bad)
+        (foo () 'also-bad)))))
   nil nil)
 
 ;;; This test is disabled until I figure out how to fix
@@ -108,21 +108,21 @@
     (block done
       (handler-bind
        ((error #'(lambda (c)
-		   (declare (ignore c))
-		   (let* ((restarts (compute-restarts c2))
-			  (r (remove 'foo restarts
-				     :test-not #'eq
-				     :key #'restart-name)))
-		     ;; (write restarts)
-		     (return-from done
-		       (values r
-			       (mapcar #'restart-name r)))))))
+                   (declare (ignore c))
+                   (let* ((restarts (compute-restarts c2))
+                          (r (remove 'foo restarts
+                                     :test-not #'eq
+                                     :key #'restart-name)))
+                     ;; (write restarts)
+                     (return-from done
+                       (values r
+                               (mapcar #'restart-name r)))))))
        (restart-case
-	(progn (error "an error"))
-	(foo () :test (lambda (c) (or (null c) (not (eq c c2))))
-	     'bad)
-	(foo () :test (lambda (c) (or (null c) (not (eq c c2))))
-	     'also-bad)))))
+        (progn (error "an error"))
+        (foo () :test (lambda (c) (or (null c) (not (eq c c2))))
+             'bad)
+        (foo () :test (lambda (c) (or (null c) (not (eq c c2))))
+             'also-bad)))))
   nil nil)
 |#
 

@@ -10,9 +10,9 @@
       (pathnamep x)
       (typep x 'file-stream)
       (and (typep x 'synonym-stream)
-	   (could-be-pathname-designator
-	    (symbol-value
-	     (synonym-stream-symbol x))))))
+           (could-be-pathname-designator
+            (symbol-value
+             (synonym-stream-symbol x))))))
 
 (defun explode-pathname (pn)
   (list
