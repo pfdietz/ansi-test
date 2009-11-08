@@ -118,13 +118,12 @@
      (+ i 2)))
   15)
 
-
-
-
-
-
-
-
-
-
-
+(deftest with-standard-io-syntax.23
+  (let ((*print-pprint-dispatch* (copy-pprint-dispatch nil)))
+    (set-pprint-dispatch 'symbol #'(lambda (stream obj)
+                                     (declare (ignore obj))
+                                     (write-string "FOO" stream)))
+    (list (let ((*print-pretty* t)) (princ-to-string 'bar))
+          (with-standard-io-syntax
+            (let ((*print-pretty* t)) (princ-to-string 'bar)))))
+  ("FOO" "BAR"))
