@@ -213,7 +213,7 @@ X AAA BBB CCC")
 (def-pprint-test format.justify.30
   (format nil "~%X ~<~%X ~0,3:;AAA~>~<~%X ~0,3:;BBB~>~<~%X ~0,3:;CCC~>")
   "
-X
+X 
 X AAA
 X BBB
 X CCC")
@@ -226,7 +226,7 @@ X AAABBBCCC")
 (def-pprint-test format.justify.32
   (format nil "~%X ~<~%X ~0,3:;AAA~>,~<~%X ~0,3:;BBB~>,~<~%X ~0,3:;CCC~>")
   "
-X
+X 
 X AAA,
 X BBB,
 X CCC")
