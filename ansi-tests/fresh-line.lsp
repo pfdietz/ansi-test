@@ -57,7 +57,7 @@
               (multiple-value-list (fresh-line s))
               (multiple-value-list (fresh-line s)))))
      result))
-  "
+  " 
 " ((t) (nil) (nil)))
 
 (deftest fresh-line.6
