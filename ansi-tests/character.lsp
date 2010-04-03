@@ -347,10 +347,21 @@
 
 ;;;
 
+;; based on http://unicode.org/faq/casemap_charprop.html#2
+;; ABCL doesn't implement the pairwise case mappings
+;; ABCL deems Unicode conformance more important than CLHS conformance
+;; SBCL's solution to make these tests work is by declaring
+;; characters to be without case, even though Unicode does declare
+;; a case mapping
+;;
+;; this comment applies to char-upcase.1 and char-upcase.2
+
+#-abcl
 (deftest char-upcase.1
   (char-upcase.1.body)
   t)
 
+#-abcl
 (deftest char-upcase.2
   (char-upcase.2.body)
   t)
