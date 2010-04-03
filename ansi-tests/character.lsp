@@ -355,6 +355,7 @@
 ;; a case mapping
 ;;
 ;; this comment applies to char-upcase.1 and char-upcase.2
+;; and char-downcase.1 and char-downcase.2
 
 #-abcl
 (deftest char-upcase.1
@@ -391,10 +392,13 @@
 
 ;;;
 
+;; see char-upcase.1 why this test is commented out for ABCL
+#-abcl
 (deftest char-downcase.1
   (char-downcase.1.body)
   t)
 
+#-abcl
 (deftest char-downcase.2
   (char-downcase.2.body)
   t)
