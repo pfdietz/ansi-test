@@ -61,27 +61,26 @@
                     (eqt (catch-type-error (funcall fn x)) 'type-error)))))
 
 (defun standard-char.5.body ()
-  (loop for i from 0 below (min 65536 char-code-limit)
-        always (let ((c (code-char i)))
-                 (not (and (typep c 'standard-char)
-                           (not (standard-char-p c)))))))
+  (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
+        unless (not (and (typep c 'standard-char)
+                         (not (standard-char-p c))))
+        collect c))
 
 (defun extended-char.3.body ()
-  (loop for i from 0 below (min 65536 char-code-limit)
-        always (let ((c (code-char i)))
-                 (not (and (typep c 'base-char)
-                           (typep c 'extended-char)
-                           )))))
+  (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
+        unless (not (and (typep c 'base-char)
+                         (typep c 'extended-char)))
+        collect c))
 
 (defun character.1.body ()
-  (loop for i from 0 below (min 65536 char-code-limit)
-        always (let ((c (code-char i)))
-                 (or (null c)
-                     (let ((s (string c)))
-                       (and
-                        (eqlt (character c) c)
-                        (eqlt (character s) c)
-                        (eqlt (character (make-symbol s)) c)))))))
+  (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
+        unless (or (null c)
+                   (let ((s (string c)))
+                     (and
+                      (eqlt (character c) c)
+                      (eqlt (character s) c)
+                      (eqlt (character (make-symbol s)) c))))
+        collect c))
 
 (defun character.2.body ()
   (loop for x in *universe*
@@ -95,19 +94,20 @@
         do (return x)))
 
 (defun characterp.2.body ()
-  (loop for i from 0 below (min 65536 char-code-limit)
-        always (let ((c (code-char i)))
-                 (or (null c) (characterp c)))))
+  (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
+        unless (or (null c) (characterp c))
+        collect c))
 
 (defun characterp.3.body ()
   (loop for x in *universe*
-        always (let ((p (characterp x))
+        unless (let ((p (characterp x))
                      (q (typep x 'character)))
-                 (if p (notnot q) (not q)))))
+                 (if p (notnot q) (not q)))
+        collect x))
 
 (defun alphanumericp.4.body ()
   (loop for x in *universe*
-        always (or (not (characterp x))
+        unless (or (not (characterp x))
                    (if (or (digit-char-p x) (alpha-char-p x))
                        (alphanumericp x)
                      ;; The hyperspec has an example that claims alphanumeric ==
@@ -115,13 +115,13 @@
                      ;;  that there can be numeric characters for which digit-char-p
                      ;;  returns NIL.  Therefore, I've weakened the next line
                      ;; (not (alphanumericp x))
-                     t
-                     ))))
+                     t))
+        collect x))
 
 (defun alphanumericp.5.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for x = (code-char i)
-        always (or (not (characterp x))
+        unless (or (not (characterp x))
                    (if (or (digit-char-p x) (alpha-char-p x))
                        (alphanumericp x)
                      ;; The hyperspec has an example that claims alphanumeric ==
@@ -129,8 +129,8 @@
                      ;;  that there can be numeric characters for which digit-char-p
                      ;;  returns NIL.  Therefore, I've weakened the next line
                      ;; (not (alphanumericp x))
-                     t
-                     ))))
+                     t))
+        collect x))
 
 (defun digit-char.1.body.old ()
   (loop for r from 2 to 36 always
@@ -153,110 +153,121 @@
 
 (defun digit-char-p.1.body ()
   (loop for x in *universe*
-        always (not (and (characterp x)
+        unless (not (and (characterp x)
                          (not (alphanumericp x))
-                         (digit-char-p x)))))
+                         (digit-char-p x)))
+        collect x))
 
 (defun digit-char-p.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for x = (code-char i)
-        always (or (not x)
+        unless (or (not x)
                    (not (and (not (alphanumericp x))
-                             (digit-char-p x))))))
+                             (digit-char-p x))))
+        collect x))
 
 (defun digit-char-p.3.body ()
   (loop for r from 2 to 35
-        always
+    for bad =
         (loop for i from r to 35
               for c = (char +extended-digit-chars+ i)
-              never (or (digit-char-p c r)
-                        (digit-char-p (char-downcase c) r)))))
+              when (or (digit-char-p c r)
+                        (digit-char-p (char-downcase c) r))
+              collect i)
+    when bad collect (cons r bad)))
 
 (defun digit-char-p.4.body ()
   (loop for r from 2 to 35
-        always
+    for bad =
         (loop for i from 0 below r
               for c = (char +extended-digit-chars+ i)
-              always (and (eqlt (digit-char-p c r) i)
-                          (eqlt (digit-char-p (char-downcase c) r) i)))))
+              unless (and (eqlt (digit-char-p c r) i)
+                          (eqlt (digit-char-p (char-downcase c) r) i))
+              collect i)
+    when bad collect (cons r bad)))
 
 (defun standard-char-p.2.body ()
   (loop for x in *universe*
-        always (or (not (characterp x))
+        unless (or (not (characterp x))
                    (find x +standard-chars+)
-                   (not (standard-char-p x)))))
+                   (not (standard-char-p x)))
+        collect x))
 
 (defun standard-char-p.2a.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for x = (code-char i)
-        always (or (not (characterp x))
+        unless (or (not (characterp x))
                    (find x +standard-chars+)
-                   (not (standard-char-p x)))))
+                   (not (standard-char-p x)))
+        collect x))
 
 (defun char-upcase.1.body ()
   (loop for x in *universe*
-        always
-        (or (not (characterp x))
-            (let ((u (char-upcase x)))
-              (and
-               (or (lower-case-p x) (eqlt u x))
-               (eqlt u (char-upcase u)))))))
+        unless (or (not (characterp x))
+                   (let ((u (char-upcase x)))
+                     (and
+                      (or (lower-case-p x) (eqlt u x))
+                      (eqlt u (char-upcase u)))))
+        collect x))
 
 (defun char-upcase.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for x = (code-char i)
-        always
-        (or (not x)
-            (let ((u (char-upcase x)))
-              (and
-               (or (lower-case-p x) (eqlt u x))
-               (eqlt u (char-upcase u)))))))
+        unless (or (not x)
+                   (let ((u (char-upcase x)))
+                     (and
+                      (or (lower-case-p x) (eqlt u x))
+                      (eqlt u (char-upcase u)))))
+        collect x))
 
 (defun char-downcase.1.body ()
   (loop for x in *universe*
-        always
-        (or (not (characterp x))
-            (let ((u (char-downcase x)))
-              (and
-               (or (upper-case-p x) (eqlt u x))
-               (eqlt u (char-downcase u)))))))
+        unless (or (not (characterp x))
+                   (let ((u (char-downcase x)))
+                     (and
+                      (or (upper-case-p x) (eqlt u x))
+                      (eqlt u (char-downcase u)))))
+        collect x))
 
 (defun char-downcase.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for x = (code-char i)
-        always
-        (or (not x)
-            (let ((u (char-downcase x)))
-              (and
-               (or (upper-case-p x) (eqlt u x))
-               (eqlt u (char-downcase u)))))))
+        unless (or (not x)
+                   (let ((u (char-downcase x)))
+                     (and
+                      (or (upper-case-p x) (eqlt u x))
+                      (eqlt u (char-downcase u)))))
+        collect x))
 
 (defun both-case-p.1.body ()
   (loop for x in *universe*
-        always (or (not (characterp x))
+        unless (or (not (characterp x))
                    (if (both-case-p x)
                        (and (graphic-char-p x)
                             (or (upper-case-p x)
                                 (lower-case-p x)))
                      (not (or (upper-case-p x)
-                              (lower-case-p x)))))))
+                              (lower-case-p x)))))
+        collect x))
 
 (defun both-case-p.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for x = (code-char i)
-        always (or (not (characterp x))
+        unless (or (not (characterp x))
                    (if (both-case-p x)
                        (and (graphic-char-p x)
                             (or (upper-case-p x)
                                 (lower-case-p x)))
                      (not (or (upper-case-p x)
-                              (lower-case-p x)))))))
+                              (lower-case-p x)))))
+        collect x))
 
 (defun char-code.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for c = (code-char i)
-        always (or (not c)
-                   (eqlt (char-code c) i))))
+        unless (or (not c)
+                   (eqlt (char-code c) i))
+        collect c))
 
 (defun char-int.2.fn ()
   (declare (optimize (safety 3) (speed 1) (space 1)))
@@ -306,7 +317,7 @@
   (declare (optimize (safety 3)))
   (loop for x in *universe*
         for s = (catch-type-error (string x))
-        always
+        unless
         (or (eqlt s 'type-error)
             (let ((c (name-char x)))
               (or (not c)
@@ -318,4 +329,5 @@
                     (and name
                          (string-equal name s)))
                   |#
-                  )))))
+                  )))
+        collect x))

@@ -140,7 +140,9 @@
 
 (deftest string-is-not-vector-of-character.1
   :notes (:nil-vectors-are-strings)
-  (subtypep* 'string '(vector character))
+  (or (subtypep* 'string '(vector character))
+      (subtypep* 'string '(vector base-char))
+      (subtypep* 'string '(vector extended-char)))
   nil t)
 
 (deftest vector-of-character-is-string.2
