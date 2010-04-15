@@ -64,13 +64,13 @@
   (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
         unless (not (and (typep c 'standard-char)
                          (not (standard-char-p c))))
-        collect c))
+        collect (char-name c)))
 
 (defun extended-char.3.body ()
   (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
         unless (not (and (typep c 'base-char)
                          (typep c 'extended-char)))
-        collect c))
+        collect (char-name c)))
 
 (defun character.1.body ()
   (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
@@ -80,7 +80,7 @@
                       (eqlt (character c) c)
                       (eqlt (character s) c)
                       (eqlt (character (make-symbol s)) c))))
-        collect c))
+        collect (char-name c)))
 
 (defun character.2.body ()
   (loop for x in *universe*
@@ -96,7 +96,7 @@
 (defun characterp.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit) for c = (code-char i)
         unless (or (null c) (characterp c))
-        collect c))
+        collect (char-name c)))
 
 (defun characterp.3.body ()
   (loop for x in *universe*
@@ -130,7 +130,7 @@
                      ;;  returns NIL.  Therefore, I've weakened the next line
                      ;; (not (alphanumericp x))
                      t))
-        collect x))
+        collect (char-name x)))
 
 (defun digit-char.1.body.old ()
   (loop for r from 2 to 36 always
@@ -164,7 +164,7 @@
         unless (or (not x)
                    (not (and (not (alphanumericp x))
                              (digit-char-p x))))
-        collect x))
+        collect (char-name x)))
 
 (defun digit-char-p.3.body ()
   (loop for r from 2 to 35
@@ -199,7 +199,7 @@
         unless (or (not (characterp x))
                    (find x +standard-chars+)
                    (not (standard-char-p x)))
-        collect x))
+        collect (char-name x)))
 
 (defun char-upcase.1.body ()
   (loop for x in *universe*
@@ -208,7 +208,7 @@
                      (and
                       (or (lower-case-p x) (eqlt u x))
                       (eqlt u (char-upcase u)))))
-        collect x))
+        collect (char-name x)))
 
 (defun char-upcase.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
@@ -218,7 +218,7 @@
                      (and
                       (or (lower-case-p x) (eqlt u x))
                       (eqlt u (char-upcase u)))))
-        collect x))
+        collect (char-name x)))
 
 (defun char-downcase.1.body ()
   (loop for x in *universe*
@@ -227,7 +227,7 @@
                      (and
                       (or (upper-case-p x) (eqlt u x))
                       (eqlt u (char-downcase u)))))
-        collect x))
+        collect (char-name x)))
 
 (defun char-downcase.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
@@ -237,7 +237,7 @@
                      (and
                       (or (upper-case-p x) (eqlt u x))
                       (eqlt u (char-downcase u)))))
-        collect x))
+        collect (char-name x)))
 
 (defun both-case-p.1.body ()
   (loop for x in *universe*
@@ -248,7 +248,7 @@
                                 (lower-case-p x)))
                      (not (or (upper-case-p x)
                               (lower-case-p x)))))
-        collect x))
+        collect (char-name x)))
 
 (defun both-case-p.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
@@ -260,14 +260,14 @@
                                 (lower-case-p x)))
                      (not (or (upper-case-p x)
                               (lower-case-p x)))))
-        collect x))
+        collect (char-name x)))
 
 (defun char-code.2.body ()
   (loop for i from 0 below (min 65536 char-code-limit)
         for c = (code-char i)
         unless (or (not c)
                    (eqlt (char-code c) i))
-        collect c))
+        collect (char-name c)))
 
 (defun char-int.2.fn ()
   (declare (optimize (safety 3) (speed 1) (space 1)))
