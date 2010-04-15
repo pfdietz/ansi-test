@@ -31,6 +31,10 @@
   (rtest:disable-note :allow-nil-arrays)
   (rtest:disable-note :nil-vectors-are-strings))
 
+#+cmu
+(progn
+ (rt:disable-note :nil-vectors-are-strings))
+
 #+gcl(si::use-fast-links nil)
 
 (in-package :cl-test)
