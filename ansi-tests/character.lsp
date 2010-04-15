@@ -39,7 +39,7 @@
 
 (deftest standard-char.5
   (standard-char.5.body)
-  t)
+  ())
 
 (deftest extended-char.1
   (subtypep* 'extended-char 'character)
@@ -51,13 +51,13 @@
 
 (deftest extended-char.3
   (extended-char.3.body)
-  t)
+  ())
 
 ;;;
 
 (deftest character.1
   (character.1.body)
-  t)
+  ())
 
 (deftest character.2
   (character.2.body)
@@ -86,11 +86,11 @@
 
 (deftest characterp.2
   (characterp.2.body)
-  t)
+  ())
 
 (deftest characterp.3
   (characterp.3.body)
-  t)
+  ())
 
 (deftest characterp.order.1
   (let ((i 0))
@@ -110,10 +110,10 @@
 
 (deftest alpha-char-p.1
   (loop for c across +standard-chars+
-        always
-        (or (find c +alpha-chars+)
-            (not (alpha-char-p c))))
-  t)
+        unless (or (find c +alpha-chars+)
+                   (not (alpha-char-p c)))
+        collect c)
+  ())
 
 ;;;
 
@@ -148,10 +148,10 @@
 
 (deftest alphanumericp.1
   (loop for c across +standard-chars+
-        always
-        (or (find c +alphanumeric-chars+)
-            (not (alphanumericp c))))
-  t)
+        unless (or (find c +alphanumeric-chars+)
+                   (not (alphanumericp c)))
+        collect c)
+  ())
 
 (deftest alphanumericp.2
   (every #'alphanumericp +alphanumeric-chars+)
@@ -163,11 +163,11 @@
 
 (deftest alphanumericp.4
   (alphanumericp.4.body)
-  t)
+  ())
 
 (deftest alphanumericp.5
   (alphanumericp.5.body)
-  t)
+  ())
 
 (deftest alphanumbericp.6
   (macrolet ((%m (z) z)) (alphanumericp (expand-in-current-env (%m #\=))))
@@ -227,32 +227,34 @@
 
 (deftest digit-char-p.1
   (digit-char-p.1.body)
-  t)
+  ())
 
 (deftest digit-char-p.2
   (digit-char-p.2.body)
-  t)
+  ())
 
 (deftest digit-char-p.3
   (digit-char-p.3.body)
-  t)
+  ())
 
 (deftest digit-char-p.4
   (digit-char-p.4.body)
-  t)
+  ())
 
 (deftest digit-char-p.5
   (loop for i from 10 to 35
         for c = (char +extended-digit-chars+ i)
-        never (or (digit-char-p c)
-                  (digit-char-p (char-downcase c))))
-  t)
+        when (or (digit-char-p c)
+                 (digit-char-p (char-downcase c)))
+        collect c)
+  ())
 
 (deftest digit-char-p.6
   (loop for i from 0 below 10
         for c = (char +extended-digit-chars+ i)
-        always (eqlt (digit-char-p c) i))
-  t)
+        unless (eqlt (digit-char-p c) i)
+        collect i)
+  ())
 
 (deftest digit-char-p.order.1
   (let ((i 0))
@@ -281,10 +283,11 @@
 
 (deftest graphic-char-p.1
   (loop for c across +standard-chars+
-        always (if (eqlt c #\Newline)
+        unless (if (eqlt c #\Newline)
                    (not (graphic-char-p c))
-                 (graphic-char-p c)))
-  t)
+                   (graphic-char-p c))
+        collect c)
+  ())
 
 (deftest graphic-char-p.2
   (loop
@@ -320,11 +323,11 @@
 
 (deftest standard-char-p.2
   (standard-char-p.2.body)
-  t)
+  ())
 
 (deftest standard-char-p.2a
   (standard-char-p.2a.body)
-  t)
+  ())
 
 (deftest standard-char-p.3
   (char-type-error-check #'standard-char-p)
@@ -360,12 +363,12 @@
 #-abcl
 (deftest char-upcase.1
   (char-upcase.1.body)
-  t)
+  ())
 
 #-abcl
 (deftest char-upcase.2
   (char-upcase.2.body)
-  t)
+  ())
 
 (deftest char-upcase.3
   (map 'string #'char-upcase +alpha-chars+)
@@ -396,12 +399,12 @@
 #-abcl
 (deftest char-downcase.1
   (char-downcase.1.body)
-  t)
+  ())
 
 #-abcl
 (deftest char-downcase.2
   (char-downcase.2.body)
-  t)
+  ())
 
 (deftest char-downcase.3
   (map 'string #'char-downcase +alpha-chars+)
@@ -492,11 +495,11 @@
 
 (deftest both-case-p.1
   (both-case-p.1.body)
-  t)
+  ())
 
 (deftest both-case-p.2
   (both-case-p.2.body)
-  t)
+  ())
 
 (deftest both-case-p.3
   (char-type-error-check #'both-case-p)
@@ -529,7 +532,7 @@
 
 (deftest char-code.2
   (char-code.2.body)
-  t)
+  ())
 
 (deftest char-code.order.1
   (let ((i 0))
@@ -550,8 +553,9 @@
 
 (deftest code-char.1
   (loop for x across +standard-chars+
-        always (eqlt (code-char (char-code x)) x))
-  t)
+        unless (eqlt (code-char (char-code x)) x)
+        collect x)
+  ())
 
 (deftest code-char.order.1
   (let ((i 0))
@@ -572,8 +576,9 @@
 
 (deftest char-int.1
   (loop for x across +standard-chars+
-        always (eqlt (char-int x) (char-code x)))
-  t)
+        unless (eqlt (char-int x) (char-code x))
+        collect x)
+  ())
 
 (deftest char-int.2
   (char-int.2.fn)
