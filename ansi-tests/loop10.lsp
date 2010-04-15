@@ -516,43 +516,43 @@
    (loop for x from 1 to 10 counting (expand-in-current-env (%m t))))
   10)
 
-(deftest loop.10.106
+(deftest loop.10.107
   (macrolet
    ((%m (z) z))
    (loop for x from 1 to 10 count (expand-in-current-env (%m nil))))
   0)
 
-(deftest loop.10.107
+(deftest loop.10.108
   (macrolet
    ((%m (z) z))
    (loop for x in '(1 4 10 5 7 9) maximize (expand-in-current-env (%m x))))
   10)
 
-(deftest loop.10.108
+(deftest loop.10.109
   (macrolet
    ((%m (z) z))
    (loop for x in '(1 4 10 5 7 9) maximizing (expand-in-current-env (%m 17))))
   17)
 
-(deftest loop.10.109
+(deftest loop.10.110
   (macrolet
    ((%m (z) z))
    (loop for x in '(5 4 10 1 7 9) minimize (expand-in-current-env (%m x))))
   1)
 
-(deftest loop.10.110
+(deftest loop.10.111
   (macrolet
    ((%m (z) z))
    (loop for x in '(5 4 10 1 7 9) minimizing (expand-in-current-env (%m 3))))
   3)
 
-(deftest loop.10.111
+(deftest loop.10.112
   (macrolet
    ((%m (z) z))
    (loop for x in '(1 4 10 5 7 9) sum (expand-in-current-env (%m x))))
   36)
 
-(deftest loop.10.112
+(deftest loop.10.113
   (macrolet
    ((%m (z) z))
    (loop for x in '(1 4 10 5 7 9) summing (expand-in-current-env (%m 2))))
