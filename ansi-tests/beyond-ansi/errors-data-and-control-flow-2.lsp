@@ -184,6 +184,18 @@
 (def-error-test go.4 (tagbody (go done . foo) done))
 (def-error-test go.5 (tagbody (go done foo) done))
 
+;; try to use GO on tag outside of dynamic-extent of TAGBODY
+(def-error-test go.6
+  (let ((f nil))
+    (tagbody (setf f (lambda () (go foo))) foo)
+    (funcall f)))
+(def-error-test go.7
+    (funcall (block nil
+               (tagbody
+                  (return (lambda () (go :foo)))
+                :foo (return 42)))))
+
+
 ;;; RETURN-FROM
 
 (def-error-test return-from.1 (return-from))
