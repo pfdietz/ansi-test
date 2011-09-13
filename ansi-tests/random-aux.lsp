@@ -294,7 +294,6 @@
 (defun positive-integer-qualifier-p (qualifiers)
   (typep qualifiers '(cons (integer 1) null)))
 
-#-armedbear
 (define-method-combination randomized nil ((method-list positive-integer-qualifier-p))
   (assert method-list)
   (let ((clauses (mapcar #'(lambda (method)
@@ -303,5 +302,3 @@
                          method-list)))
   `(loop (catch 'fail (return (rcase ,@clauses))))))
 
-#+armedbear
-(warn "ABCL doesn't support the long form of DEFINE-METHOD-COMBINATION; randomized testing disabled.")
