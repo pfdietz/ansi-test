@@ -404,3 +404,34 @@
             (labels ((%f () (expand-in-current-env (%m :good))))
                     (%f)))
   :good)
+
+
+;;; local function bindings shadow global functions, macros
+;;; and compiler-macros
+
+
+
+(defun labels.50 () :bad)
+
+
+(deftest labels.50
+   (labels ((labels.50 () :good))
+     (labels.50))
+   :good)
+
+(defmacro labels.51 () :bad)
+
+(deftest labels.51
+   (labels ((labels.51 () :good))
+      (labels.51))
+   :good)
+
+(define-compiler-macro labels.52 (&whole form)
+   :bad)
+
+(deftest labels.52
+   (labels ((labels.52 () :good))
+     (labels.52))
+   :good)
+
+   

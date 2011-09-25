@@ -346,6 +346,7 @@
       (%f)))
   :good)
 
+
 ;;; The &environment parameter is bound first
 
 (deftest macrolet.38
@@ -443,3 +444,29 @@
 
 
 ;;; TODO: more special declarations for other macrolet arguments
+
+
+;;; macrolet shadows global macro, function and compiler-macro
+;;; definitions
+
+(defmacro macrolet.50 () :bad)
+
+(deftest macrolet.50
+   (macrolet ((macrolet.50 () :good))
+     (macrolet.50))
+   :good)
+
+(defun macrolet.51 () :bad)
+
+(deftest macrolet.51
+   (macrolet ((macrolet.51 () :good))
+      (macrolet.51))
+   :good)
+
+(define-compiler-macro macrolet.52 (&whole form)
+  :bad)
+
+(deftest macrolet.52
+   (macrolet ((macrolet.52 () :good))
+      (macrolet.52))
+   :good)

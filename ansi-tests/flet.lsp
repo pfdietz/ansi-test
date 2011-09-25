@@ -559,4 +559,27 @@
                   (%f)))
   :good)
 
+;;; local function bindings shadow global functions, macros
+;;; and compiler-macros
 
+(defun flet.72 () :bad)
+
+(deftest flet.72
+   (flet ((flet.72 () :good))
+     (flet.72))
+   :good)
+
+(defmacro flet.73 () :bad)
+
+(deftest flet.73
+   (flet ((flet.73 () :good))
+     (flet.73))
+   :good)
+
+(define-compiler-macro flet.74 (&whole form)
+   :bad)
+
+(deftest flet.74
+   (flet ((flet.74 () :good))
+     (flet.74))
+   :good)
