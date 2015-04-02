@@ -197,7 +197,6 @@
   (loop for x of-type fixnum from 1 to 5 collect x)
   (1 2 3 4 5))
 
-#|
 ;;; The following provides an example where an incorrect
 ;;; implementation will assign X an out-of-range value
 ;;; at the end.
@@ -208,23 +207,22 @@
 ;;; Test that the index variable achieves the inclusive
 ;;; upper bound, but does not exceed it.
 (deftest loop.1.40
-  (loop for x from 1 to 5 do nil finally (return x))
+  (loop for x from 1 to 5 do (progn) finally (return x))
   5)
 
 ;;; Test that the index variable acheives the exclusive
 ;;; upper bound, but does not exceed it.
 (deftest loop.1.41
-  (loop for x from 1 below 5 do nil finally (return x))
+  (loop for x from 1 below 5 do (progn) finally (return x))
   4)
 
 (deftest loop.1.42
-  (loop for x from 10 downto 0 do nil finally (return x))
+  (loop for x from 10 downto 0 do (progn) finally (return x))
   0)
 
 (deftest loop.1.43
-  (loop for x from 10 above 0 do nil finally (return x))
+  (loop for x from 10 above 0 do (progn) finally (return x))
   1)
-|#
 
 ;;; The arithmetic loop form says the types are numbers, not
 ;;; reals, so arguably they should work on complexes (which are
