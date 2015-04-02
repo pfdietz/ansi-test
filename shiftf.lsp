@@ -79,4 +79,13 @@
       x y)))
   1 2 foo)
 
+;;; Test that SHIFTF returns a single value, even though the first
+;;; place has multiple values.
+(deftest shiftf.7
+  (let ((x 'a) (y 'b))
+    (values
+     (multiple-value-list (shiftf (values x y) (floor 10 3)))
+     x y))
+  (a) 3 1)
+
 ;;; Need to add more shiftf tests here
