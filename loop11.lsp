@@ -49,9 +49,13 @@
     z)
   1)
 
+;;; This test is wrong because REPEAT is a main clause whereas FOR is
+;;; a variable clause, and no main clause can precede a variable
+;;; clause.
+;;;
 ;;; (deftest loop.11.8
-;;;  (loop repeat 3 for i in '(a b c d e) collect i)
-;;;  (a b c))
+;;;   (loop repeat 3 for i in '(a b c d e) collect i)
+;;;   (a b c))
 
 ;;; Enough implementors have complained about this test that
 ;;; I'm removing it.  The standard is self-contradictory
