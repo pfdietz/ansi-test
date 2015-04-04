@@ -59,6 +59,31 @@
            ))))))
   0)
 
+;;; Test :nicknames option with more than one occurrence.
+;;; Do not check use-list, because it is implementation dependent
+;;; Try several ways of specifying a nickname.
+(deftest defpackage.2b
+  (loop
+   for n in '("I" #:|I| #\I) count
+   (not
+    (ignore-errors
+      (progn
+        (safely-delete-package "H")
+        (let ((p (ignore-errors
+                   (eval `(defpackage "H"
+			    (:nicknames ,n)
+			    (:nicknames "J"))))))
+          (and
+           (packagep p)
+           (equal (package-name p)              "H")
+           (equal (package-used-by-list p)      nil)
+           (equal (sort (copy-list (package-nicknames p))
+                        #'string<)
+                  '("I" "J"))
+           (equal (package-shadowing-symbols p) nil)
+           (null (documentation p t))))))))
+  0)
+
 ;; Test defpackage with documentation option
 ;; Do not check use-list, because it is implementation dependent
 (deftest defpackage.3
