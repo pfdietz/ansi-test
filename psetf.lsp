@@ -410,4 +410,13 @@
       x y)))
   nil 2 1)
 
+;; Test, if psetf handles correctly multiple values.
+(deftest psetf.41
+    (let ((y 2) (z 3) u x a b c)
+      (psetf (values a b c) (values 1 2 3)
+             (values u x)   (values y z))
+      (values a b c u x))
+  1 2 3 2 3)
+
+
 ;;; TODO: logical-pathname-translations, readtable-case
