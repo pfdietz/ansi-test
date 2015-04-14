@@ -3,5 +3,5 @@
 (defsystem :regression-test
   :serial t
   :components
-  ((:file "rt-package")
-   (:file "rt")))
+  ((:cl-source-file.lsp "rt-package")
+   (:cl-source-file.lsp "rt")))
