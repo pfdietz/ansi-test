@@ -78,7 +78,7 @@
     (loop for x in (remove-duplicates '(1 1.0s0 1.0f0 1.0d0 1.0l0))
           for s = (format nil "~2f" x)
           for s2 = (formatter-call-to-string fn x)
-          unless (and (string= s "1.") (string= s s2))
+          unless (and (string= s "1.0") (string= s s2))
           collect (list x s s2)))
   nil)
 
@@ -105,7 +105,7 @@
     (loop for x in (remove-duplicates '(1 1.0s0 1.0f0 1.0d0 1.0l0))
           for s = (format nil "~3@F" x)
           for s2 = (formatter-call-to-string fn x)
-          unless (and (string= s "+1.") (string= s s2))
+          unless (and (string= s "+1.0") (string= s s2))
           collect (list x s s2)))
   nil)
 
@@ -533,4 +533,13 @@
         for s2 = (and c (format nil "~,,,,vf" c x))
         unless (equal s1 s2)
         collect (list i c f1 s1 s2))
+  nil)
+
+(deftest format.f.45
+  (let ((fn (formatter "~2f")))
+    (loop for x in (remove-duplicates '(1 1.1s0 1.1f0 1.1d0 1.1l0))
+          for s = (format nil "~2f" x)
+          for s2 = (formatter-call-to-string fn x)
+          unless (and (string= s "1.1") (string= s s2))
+          collect (list x s s2)))
   nil)
