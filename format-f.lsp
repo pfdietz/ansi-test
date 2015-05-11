@@ -25,7 +25,7 @@
      collect (list x type s1 s2 s3)))
   nil)
 
-(deftest format.f.2
+(deftest xoxoformat.f.2
   (let ((*print-readably* nil)
         (fn (formatter "~f")))
     (loop
@@ -536,7 +536,10 @@
   nil)
 
 (def-format-test format.f.45
-    "~0f" (1.1) "1.1")
+    "~2f" (1.1) "1.0")
+
+(def-format-test format.f.45b
+    "~3f" (1.1) "1.1")
 
 ;; This fails on ECL 15.3.7
 (def-format-test format.f.46
