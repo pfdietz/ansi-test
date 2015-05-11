@@ -535,11 +535,17 @@
         collect (list i c f1 s1 s2))
   nil)
 
-(deftest format.f.45
-  (let ((fn (formatter "~2f")))
-    (loop for x in (remove-duplicates '(1 1.1s0 1.1f0 1.1d0 1.1l0))
-          for s = (format nil "~2f" x)
-          for s2 = (formatter-call-to-string fn x)
-          unless (and (string= s "1.1") (string= s s2))
-          collect (list x s s2)))
-  nil)
+(def-format-test format.f.45
+    "~0f" (1.1) "1.1")
+
+;; This fails on ECL 15.3.7
+(def-format-test format.f.46
+    "~0f" (0.01) ".0")
+
+;; sbcl prints "."
+(def-format-test format.f.46b
+    "~0,0f" (0.01) "0.")
+
+;; Most implementations print .00
+(def-format-test format.f.47
+    "~3f" (0.000001) "0.0")
