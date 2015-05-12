@@ -25,7 +25,7 @@
      collect (list x type s1 s2 s3)))
   nil)
 
-(deftest xoxoformat.f.2
+(deftest format.f.2
   (let ((*print-readably* nil)
         (fn (formatter "~f")))
     (loop
