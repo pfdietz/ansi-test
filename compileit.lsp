@@ -5,7 +5,9 @@
 ;; (pushnew :ansi-tests-strict-initial-element *features*)
 
 #+allegro (run-shell-command "rm -f *.fasl")
-#+cmu (run-program "rm -f *.x86f")
+#+cmu (run-program "rm" (list "-f"
+			      (concatenate 'string "*."
+					   (pathname-type (compile-file-pathname "a.lisp")))))
 
 (load "gclload1.lsp")
 (load "gclload2.lsp")
