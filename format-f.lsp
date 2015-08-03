@@ -552,3 +552,7 @@
 ;; Most implementations print .00
 (def-format-test format.f.47
     "~3f" (0.000001) "0.0")
+
+;; CCL 1.10 and ECL 15.3.7 ignore k parameter when w and d aren't set
+(def-format-test format.f.48
+    "~,,2f" (0.1) "10.0")
