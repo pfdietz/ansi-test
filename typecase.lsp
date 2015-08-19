@@ -142,6 +142,25 @@
              (t (expand-in-current-env (%m :bad2)))))
   :good)
 
+(deftest typecase.22
+  (macrolet
+   ((%m (z) z))
+   (typecase
+    (expand-in-current-env (%m :foo))
+    (integer :bad1)
+    (keyword :good)
+    (symbol :bad2)))
+  :good)
+
+(deftest typecase.23
+  (macrolet
+   ((%m (z) z))
+   (typecase :foo
+    (integer (expand-in-current-env (%m :bad1)))
+    (keyword (expand-in-current-env (%m :good)))
+    (symbol (expand-in-current-env (%m :bad2)))))
+  :good)
+
 ;;; Error cases
 
 (deftest typecase.error.1

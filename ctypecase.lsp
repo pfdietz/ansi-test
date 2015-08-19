@@ -99,9 +99,15 @@
      (return-from done 'good)))
   good)
 
-;;; Test that explicit calls to macroexpand in subforms
-;;; are done in the correct environment
+;; Following tests (ctypecase.15 and ctypecase.16) are invalid, since
+;; ctypecase provides restart, which evaluates to assignment to :foo,
+;; which is constant. Both tests were transformed into valid ones and
+;; moved to typecase.lsp (typecase.22 and typecase.23).
+;;
+;; Related discussion:
+;; https://mailman.common-lisp.net/pipermail/ansi-test-devel/2012-January/000108.html
 
+#+(or)
 (deftest ctypecase.15
   (macrolet
    ((%m (z) z))
@@ -112,6 +118,7 @@
     (symbol :bad2)))
   :good)
 
+#+(or)
 (deftest ctypecase.16
   (macrolet
    ((%m (z) z))
