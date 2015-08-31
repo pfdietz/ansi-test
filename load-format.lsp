@@ -8,48 +8,48 @@
 ;;; Format tests
 
 ;;; 22.3.1
-(load "format-c.lsp")
-(load "formatter-c.lsp")
-(load "format-percent.lsp")
-(load "format-ampersand.lsp")
-(load "format-page.lsp")
-(load "format-tilde.lsp")
+(load "format/format-c.lsp")
+(load "format/formatter-c.lsp")
+(load "format/format-percent.lsp")
+(load "format/format-ampersand.lsp")
+(load "format/format-page.lsp")
+(load "format/format-tilde.lsp")
 
 ;;; 22.3.2
-(load "format-r.lsp")
-(load "format-d.lsp")
-(load "format-b.lsp")
-(load "format-o.lsp")
-(load "format-x.lsp")
+(load "format/format-r.lsp")
+(load "format/format-d.lsp")
+(load "format/format-b.lsp")
+(load "format/format-o.lsp")
+(load "format/format-x.lsp")
 
 ;;; 22.3.3
-(load "format-f.lsp")
+(load "format/format-f.lsp")
 
 ;;; 22.3.4
-(load "format-a.lsp")
-(load "format-s.lsp")
+(load "format/format-a.lsp")
+(load "format/format-s.lsp")
 
 ;;; 22.3.5
-(load "format-underscore.lsp")
-(load "format-logical-block.lsp")
-(load "format-i.lsp")
-(load "format-slash.lsp")
+(load "format/format-underscore.lsp")
+(load "format/format-logical-block.lsp")
+(load "format/format-i.lsp")
+(load "format/format-slash.lsp")
 
 ;;; 22.3.6
-(load "format-t.lsp")
-(load "format-justify.lsp")
+(load "format/format-t.lsp")
+(load "format/format-justify.lsp")
 
 ;;; 22.3.7
-(load "format-goto.lsp")
-(load "format-conditional.lsp")
-(load "format-brace.lsp")
-(load "format-question.lsp")
+(load "format/format-goto.lsp")
+(load "format/format-conditional.lsp")
+(load "format/format-brace.lsp")
+(load "format/format-question.lsp")
 
 ;;; 22.3.8
-(load "format-paren.lsp")
-(load "format-p.lsp")
+(load "format/format-paren.lsp")
+(load "format/format-p.lsp")
 
 ;;; 22.3.9
-(load "format-circumflex.lsp")
-(load "format-newline.lsp")
+(load "format/format-circumflex.lsp")
+(load "format/format-newline.lsp")
 
