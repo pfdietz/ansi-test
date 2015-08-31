@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(load "load-system-construction/compile-file.lsp")
-(load "load-system-construction/load.lsp")
-(load "load-system-construction/with-compilation-unit.lsp")
-(load "load-system-construction/features.lsp")
-(load "load-system-construction/modules.lsp")
+(load "system-construction/compile-file.lsp")
+(load "system-construction/load.lsp")
+(load "system-construction/with-compilation-unit.lsp")
+(load "system-construction/features.lsp")
+(load "system-construction/modules.lsp")
