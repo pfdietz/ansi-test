@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 (deftest mapcon.1
   (mapcon #'(lambda (x) (append '(a) x nil)) nil)

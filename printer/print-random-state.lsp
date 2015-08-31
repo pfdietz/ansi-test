@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (deftest print.random-state.1
   (loop repeat 100

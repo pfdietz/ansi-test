@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
-(compile-and-load "backquote-aux.lsp")
+
+
 
 (deftest print.backquote.random.1
   (let* ((x '`(a ,b ,@c (d . ,e) ,.f #(1 2 ,p ,@q ,.r s) g))

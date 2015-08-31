@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 (deftest nth.1
   (nth-1-body (loop for i from 1 to 2000 collect (* 4 i)))

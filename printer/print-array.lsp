@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Apr 22 22:38:11 2004
 ;;;; Contains: Tests of printing of arrays (other than vectors)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (in-package :cl-test)
 

@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (def-pprint-test print-unreadable-object.1
   (loop

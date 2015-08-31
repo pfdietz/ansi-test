@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (eval-when (:load-toplevel :compile-toplevel :execute)
-  (compile-and-load "random-aux.lsp"))
+  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))
 
 (defparameter *hash-table-test-iters* 1000)
 

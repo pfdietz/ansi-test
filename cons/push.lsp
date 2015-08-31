@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 ;;; See also places.lsp
 

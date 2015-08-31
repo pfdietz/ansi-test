@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (compile-and-load "random-aux.lsp"))
+  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))
 
 ;;; Binary search on reals
 

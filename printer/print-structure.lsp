@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (defstruct print-struct-1
   foo bar)

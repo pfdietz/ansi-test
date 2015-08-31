@@ -4,7 +4,7 @@
 ;;;; Contains: Tests of the ~^ format directive (inside other format constructs)
 
 (in-package :cl-test)
-(compile-and-load "printer-aux.lsp")
+
 
 ;;; Tests of ~^ inside ~{ ... ~}
 

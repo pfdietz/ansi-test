@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 (deftest nintersection.1
   (nintersection nil nil)

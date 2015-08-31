@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
+
 
 (deftest numerator.error.1
   (signals-error (numerator) program-error)

@@ -1,4 +1,7 @@
 ;;; Tests of data and control flow
+(compile-and-load "ANSI-TESTS:AUX;cons-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
 
 (load "data-and-control-flow/data-and-control-flow.lsp")
 (load "data-and-control-flow/places.lsp")

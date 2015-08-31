@@ -3,7 +3,9 @@
 ;;;; Created:  Sun Oct  6 00:32:56 2002
 ;;;; Contains: Loader for files containing package tests
 
-(compile-and-load "packages-00.lsp")
+(compile-and-load "ANSI-TESTS:AUX;packages00-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;package-aux.lsp")
+
 (load "packages/find-symbol.lsp")
 (load "packages/find-all-symbols.lsp")
 (load "packages/find-package.lsp")

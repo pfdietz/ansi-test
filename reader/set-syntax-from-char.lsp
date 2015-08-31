@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "reader-aux.lsp")
+
 
 (defmacro def-set-syntax-from-char-test (name form &body expected-values)
   `(deftest ,name

@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (defmacro def-pprint-newline-test (name form expected-value &rest key-args)
   `(def-pprint-test ,name

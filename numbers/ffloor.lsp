@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "ffloor-aux.lsp")
+
+
 
 (deftest ffloor.error.1
   (signals-error (ffloor) program-error)

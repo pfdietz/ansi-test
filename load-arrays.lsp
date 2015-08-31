@@ -1,5 +1,7 @@
 ;;; Tests on arrays
-(compile-and-load "array-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;array-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;bit-aux.lsp")
+
 (load "arrays/aref.lsp")
 (load "arrays/array.lsp")
 (load "arrays/array-t.lsp")

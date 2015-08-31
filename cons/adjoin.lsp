@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 (deftest adjoin.1
   (adjoin 'a nil)

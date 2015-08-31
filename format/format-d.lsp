@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (deftest format.d.1
   (with-standard-io-syntax

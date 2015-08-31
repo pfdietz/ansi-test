@@ -136,6 +136,7 @@ rt_1000_8:
 
 
 clean:
+	@rm -f auxiliary/*fas
 	@rm -f test*.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
 	@rm -f *.dfsl *.d64fsl
 	@(cd beyond-ansi; $(MAKE) clean)

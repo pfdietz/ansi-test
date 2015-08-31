@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-(compile-and-load "packages-00.lsp")
-
 ;;(declaim (optimize (safety 3)))
 
 ;; Test find-symbol, with the various combinations of

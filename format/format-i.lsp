@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 ;;; pprint-indent.9
 (def-pprint-test format.i.1

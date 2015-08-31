@@ -1,5 +1,5 @@
 ;;; Tests of iteration forms
-;;(load "iteration.lsp")
+
 (load "iteration/do.lsp")
 (load "iteration/dostar.lsp")
 (load "iteration/dolist.lsp")

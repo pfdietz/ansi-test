@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-(compile-and-load "string-aux.lsp")
-
 (deftest string=.1
   (not (string= "abc" (copy-seq "abc")))
   nil)

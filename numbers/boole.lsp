@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
+
 
 (defparameter *boole-val-names*
   '(boole-1 boole-2 boole-and boole-andc1 boole-andc2

@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (deftest format.b.1
   (let ((fn (formatter "~b")))

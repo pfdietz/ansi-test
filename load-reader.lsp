@@ -1,9 +1,5 @@
-;-*- Mode:     Lisp -*-
-;;;; Author:   Paul Dietz
-;;;; Created:  Mon Feb 23 05:20:41 2004
-;;;; Contains: Load tests of the reader
-
-(in-package :cl-test)
+;;;; Tests of the reader
+(compile-and-load "ANSI-TESTS:AUX;reader-aux.lsp")
 
 (load "reader/reader-test.lsp")
 (load "reader/with-standard-io-syntax.lsp")

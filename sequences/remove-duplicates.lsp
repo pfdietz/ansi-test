@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "remove-aux.lsp")
-(compile-and-load "remove-duplicates-aux.lsp")
+
+
 
 (deftest random-remove-duplicates
   (loop for result = (random-test-remove-dups (1+ (random 20)))

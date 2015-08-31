@@ -1,4 +1,4 @@
-(compile-and-load "hash-table-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;hash-table-aux.lsp")
 
 (load "hash-tables/hash-table.lsp")
 (load "hash-tables/make-hash-table.lsp")

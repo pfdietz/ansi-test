@@ -4,7 +4,7 @@
 ;;;; Contains: Tests of printing using the ~A directive
 
 (in-package :cl-test)
-(compile-and-load "printer-aux.lsp")
+
 
 (def-format-test format.a.1
   "~a" (nil) "NIL")

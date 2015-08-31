@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 (deftest acons.1
   (let* ((x (copy-tree '((c . d) (e . f))))

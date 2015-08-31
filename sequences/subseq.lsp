@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "subseq-aux.lsp")
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; subseq, on lists

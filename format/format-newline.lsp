@@ -4,7 +4,7 @@
 ;;;; Contains: Tests of ~<newline>
 
 (in-package :cl-test)
-(compile-and-load "printer-aux.lsp")
+
 
 (def-format-test format.newline.1
   (concatenate 'string "~" (string #\Newline) "   X")

@@ -5,8 +5,21 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "random-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;numbers-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;floor-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;ffloor-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;ceiling-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;fceiling-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;truncate-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;ftruncate-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;round-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;fround-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;times-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;division-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;exp-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;gcd-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
 
 (load "numbers/number-comparison.lsp")
 (load "numbers/max.lsp")

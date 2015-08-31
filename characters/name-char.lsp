@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "char-aux.lsp")
+
 
 (deftest name-char.1
   (name-char.1.body)

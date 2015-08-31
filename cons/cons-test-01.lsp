@@ -7,7 +7,7 @@
 
 (declaim (optimize (safety 3)))
 
-(compile-and-load "cons-aux.lsp")
+
 
 ;;
 ;; Test the subtype relationships between null, list, cons and atom

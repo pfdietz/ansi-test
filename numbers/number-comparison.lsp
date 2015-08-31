@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
+
 
 ;;; Errors tests on comparison functions
 

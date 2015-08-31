@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "pathnames-aux.lsp")
+
 
 ;;; Much of the behavior cannot be tested portably.
 

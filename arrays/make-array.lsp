@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "array-aux.lsp")
+
 
 (deftest make-array.1
   (let ((a (make-array-with-checks 10)))

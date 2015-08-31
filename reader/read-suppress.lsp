@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "reader-aux.lsp")
+
 
 (defmacro def-read-suppress-test (name string)
   `(def-syntax-test ,name

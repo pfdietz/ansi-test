@@ -1,11 +1,5 @@
-;-*- Mode:     Lisp -*-
-;;;; Author:   Paul Dietz
-;;;; Created:  Sat Nov 29 04:33:05 2003
-;;;; Contains: Load tests for pathnames and logical pathnames
-
-(in-package :cl-test)
-
-(compile-and-load "pathnames-aux.lsp")
+;;;; Tests for pathnames and logical pathnames
+(compile-and-load "ANSI-TESTS:AUX;pathnames-aux.lsp")
 
 (load "pathnames/pathnames.lsp")
 (load "pathnames/pathname.lsp")

@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Apr 20 22:36:53 2004
 ;;;; Contains: Tests of vector printing
 
-(compile-and-load "printer-aux.lsp")
+
 
 (in-package :cl-test)
 

@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "types-aux.lsp")
+
 
 (deftest subtypep-function.1
   (check-all-not-subtypep t '(function (t) t))

@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "times-aux.lsp")
+
+
 
 (deftest *.1
   (*)

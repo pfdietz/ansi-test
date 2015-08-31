@@ -1,6 +1,7 @@
 ;;; Tests of conditions
-(compile-and-load "types-aux.lsp")
-(compile-and-load "define-condition-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;define-condition-aux.lsp")
+
 (load "conditions/condition.lsp")
 (load "conditions/cell-error-name.lsp")
 (load "conditions/assert.lsp")

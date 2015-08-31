@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
+
 
 (deftest sqrt.error.1
   (signals-error (sqrt) program-error)

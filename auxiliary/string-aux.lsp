@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (compile-and-load "random-aux.lsp"))
+  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))
 
 (defun my-string-compare (string1 string2 comparison
                                   &key (start1 0) end1 (start2 0) end2 case

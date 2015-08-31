@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "pathnames-aux.lsp")
+
 
 (deftest pathname-type.1
   (loop for p in *pathnames*

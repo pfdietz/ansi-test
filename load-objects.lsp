@@ -3,7 +3,8 @@
 ;;;; Created:  Mon Mar 24 03:39:09 2003
 ;;;; Contains: Loader for CLOS-related test files
 
-(compile-and-load "defclass-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;defclass-aux.lsp")
+
 (load "objects/defclass.lsp")
 (load "objects/defclass-01.lsp")
 (load "objects/defclass-02.lsp")

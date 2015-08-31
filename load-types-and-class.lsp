@@ -1,4 +1,5 @@
 ;;; Tests of types and classes
+(compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
 
 (load "types-and-classes/types-and-class.lsp")
 (load "types-and-classes/types-and-class-2.lsp")

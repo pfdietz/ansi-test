@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (def-pprint-test format.t.1
   (format nil "~0,0T")

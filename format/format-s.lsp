@@ -4,7 +4,7 @@
 ;;;; Contains: Test of the ~S format directive
 
 (in-package :cl-test)
-(compile-and-load "printer-aux.lsp")
+
 
 (deftest format.s.1
   (let ((*print-readably* nil)

@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 (deftest nsublis.1
   (check-nsublis '((a b) g (d e 10 g h) 15 . g)

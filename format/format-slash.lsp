@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (def-pprint-test format./.1
   (format nil "~/pprint-linear/" 1)

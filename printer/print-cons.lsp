@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Apr 19 07:28:40 2004
 ;;;; Contains: Tests of printing of conses
 
-(compile-and-load "printer-aux.lsp")
+
 
 (in-package :cl-test)
 

@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 (deftest set-exclusive-or.1
   (set-exclusive-or nil nil)

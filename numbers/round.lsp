@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "round-aux.lsp")
+
+
 
 (deftest round.error.1
   (signals-error (round) program-error)

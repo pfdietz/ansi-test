@@ -1,6 +1,6 @@
 ;;; Tests of symbols
-(compile-and-load "cl-symbols-aux.lsp")
-;; (load "cl-symbol-names.lsp")  ;; moved to gclload1.lsp
+(compile-and-load "ANSI-TESTS:AUX;cl-symbols-aux.lsp")
+
 (load "symbols/cl-symbols.lsp")
 (load "symbols/symbolp.lsp")
 (load "symbols/keywordp.lsp")

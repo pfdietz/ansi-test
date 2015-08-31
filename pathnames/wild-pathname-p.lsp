@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "pathnames-aux.lsp")
+
 
 (deftest wild-pathname-p.1
   (wild-pathname-p (make-pathname))

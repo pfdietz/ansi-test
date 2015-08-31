@@ -5,7 +5,8 @@
 
 (in-package :cl-test)
 
-(eval-when (:compile-toplevel :load-toplevel :execute) (compile-and-load "random-aux.lsp"))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))
 
 (defmacro def-print-test (name form result &rest bindings)
   `(deftest ,name

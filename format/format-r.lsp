@@ -6,7 +6,7 @@
 (in-package :cl-test)
 
 ;;; Test of various radixes
-(compile-and-load "printer-aux.lsp")
+
 (compile-and-load "roman-numerals.lsp")
 
 (deftest format.r.1

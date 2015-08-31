@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "reader-aux.lsp")
+
 
 (def-syntax-test syntax.whitespace.1
   ;; Check that various standard or semistandard characters are whitespace[2]

@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-(compile-and-load "random-aux.lsp")
-
 (deftest equalp.1
   (loop for c across +base-chars+
         always (loop for d across +base-chars+

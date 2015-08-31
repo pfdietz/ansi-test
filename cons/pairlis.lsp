@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "cons-aux.lsp")
+
 
 ;; Pairlis has two legal behaviors: the pairs
 ;; can be prepended in the same order, or in the

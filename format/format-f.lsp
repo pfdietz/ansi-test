@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 ;;; Equivalent to PRIN1 for 0 or (abs x) in range [10^-3,10^7).
 

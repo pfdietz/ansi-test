@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "random-aux.lsp")
+
+
 
 (deftest random.error.1
   (signals-error (random) program-error)

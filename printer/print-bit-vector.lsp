@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Apr 20 22:10:53 2004
 ;;;; Contains: Tests for printing of bit vectors
 
-(compile-and-load "printer-aux.lsp")
+
 
 (in-package :cl-test)
 

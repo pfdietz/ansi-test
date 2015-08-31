@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-; (compile-and-load "cons-aux.lsp")
-
 (deftest atom.1
   (loop for x in *universe*
         unless (if (atom x) (not (consp x)) (consp x))

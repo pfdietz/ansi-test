@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
+
 
 (deftest 1+.error.1
   (signals-error (1+) program-error)

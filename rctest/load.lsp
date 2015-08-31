@@ -4,7 +4,7 @@
 (load "../rt-package.lsp")
 (compile-and-load "../rt.lsp")
 (load "../cl-test-package.lsp")
-(compile-and-load "../random-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
 (load "rctest-package.lsp")
 (compile-and-load "rctest-util.lsp")
 (compile-and-load "generator.lsp")

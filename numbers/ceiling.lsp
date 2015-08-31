@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "ceiling-aux.lsp")
+
+
 
 (deftest ceiling.error.1
   (signals-error (ceiling) program-error)

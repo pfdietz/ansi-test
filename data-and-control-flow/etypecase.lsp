@@ -5,8 +5,6 @@
 
 (in-package :cl-test)
 
-(compile-and-load "types-aux.lsp")
-
 (deftest etypecase.1
   (etypecase 1 (integer 'a) (t 'b))
   a)

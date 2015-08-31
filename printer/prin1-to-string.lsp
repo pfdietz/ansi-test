@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 
 (deftest prin1-to-string.1
   (random-prin1-to-string-test 5)

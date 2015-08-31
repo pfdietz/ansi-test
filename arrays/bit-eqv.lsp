@@ -6,7 +6,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "bit-aux.lsp")
+
 
 (deftest bit-eqv.1
   (let* ((s1 (make-array nil :initial-element 0 :element-type 'bit))

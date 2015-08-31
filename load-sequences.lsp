@@ -1,4 +1,8 @@
 ;;; Tests of sequences
+(compile-and-load "ANSI-TESTS:AUX;search-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;subseq-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;remove-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;remove-duplicates-aux.lsp")
 
 (load "sequences/copy-seq.lsp")
 (load "sequences/elt.lsp")

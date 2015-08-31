@@ -1,4 +1,5 @@
 ;;; Tests of strings
+(compile-and-load "ANSI-TESTS:AUX;string-aux.lsp")
 
 (load "strings/char-schar.lsp")
 (load "strings/string.lsp")
@@ -18,6 +19,5 @@
 (load "strings/string-right-trim.lsp")
 
 ;;; Tests of string comparison functions
-(compile-and-load "string-aux.lsp")
 (load "strings/string-comparisons.lsp")
 (load "strings/make-string.lsp")

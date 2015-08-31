@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "types-aux.lsp")
+
 
 ;;;;;;;
 

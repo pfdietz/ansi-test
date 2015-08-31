@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "ftruncate-aux.lsp")
+
+
 
 ;;; Error tests
 

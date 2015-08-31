@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "reader-aux.lsp")
+
 
 (def-syntax-test read-symbol.1
   (read-from-string "a")

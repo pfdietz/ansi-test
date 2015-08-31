@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "printer-aux.lsp")
+
 ;; (compile-and-load "write-aux.lsp")
 
 ;;; This function is also incidentally tested elsewhere.

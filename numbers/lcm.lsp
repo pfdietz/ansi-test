@@ -5,8 +5,8 @@
 
 (in-package :cl-test)
 
-(compile-and-load "numbers-aux.lsp")
-(compile-and-load "gcd-aux.lsp")
+
+
 
 (deftest lcm.error.1
   (check-type-error #'lcm #'integerp)
