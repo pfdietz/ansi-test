@@ -6,6 +6,6 @@
 (in-package :cl-test)
 
 (compile-and-load "char-aux.lsp")
-(load "character.lsp")
-(load "char-compare.lsp")
-(load "name-char.lsp")
+(load "characters/character.lsp")
+(load "characters/char-compare.lsp")
+(load "characters/name-char.lsp")
