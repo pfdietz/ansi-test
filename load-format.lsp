@@ -52,4 +52,3 @@
 ;;; 22.3.9
 (load "format/format-circumflex.lsp")
 (load "format/format-newline.lsp")
-

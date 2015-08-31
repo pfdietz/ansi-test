@@ -1,11 +1,6 @@
-;-*- Mode:     Lisp -*-
-;;;; Author:   Paul Dietz
-;;;; Created:  Mon Feb 23 04:40:33 2004
-;;;; Contains: File to load tests of the lisp printer
-
-(in-package :cl-test)
-
-(compile-and-load "printer-aux.lsp")
+;;;; Tests of the lisp printer
+(compile-and-load "ANSI-TESTS:AUX;printer-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;backquote-aux.lsp")
 
 (load "printer/copy-pprint-dispatch.lsp")
 
@@ -46,4 +41,4 @@
 (load "printer/print-level.lsp")
 (load "printer/print-length.lsp")
 
-(load "printer/load-format.lsp")
+(load "load-format.lsp")
