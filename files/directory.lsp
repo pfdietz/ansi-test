@@ -51,9 +51,11 @@
   nil)
 
 (deftest directory.8
-  (let* ((pathname-pattern "CLTEST:*.*")
-         (len (length (directory pathname-pattern))))
-    (if (< len 500) len nil))
+    ;; what does this test do? Checks if we have >= then 30 files?
+    ;; seems bogus to me -- jd
+    (let* ((pathname-pattern "CLTEST:*.*")
+           (len (length (directory pathname-pattern))))
+      (if (< len 30) len nil))
   nil)
 
 ;;; Specialized string tests

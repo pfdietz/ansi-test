@@ -8,32 +8,32 @@
   nil)
 
 (deftest probe-file.2
-  (let ((s (open #p"sample-files/probe-file.txt" :direction :input)))
+  (let ((s (open #p"probe-file.txt" :direction :input)))
     (prog1
-        (equalpt (truename #p"sample-files/probe-file.txt")
+        (equalpt (truename #p"probe-file.txt")
                  (probe-file s))
       (close s)))
   t)
 
 (deftest probe-file.3
-  (let ((s (open #p"sample-files/probe-file.txt" :direction :input)))
+  (let ((s (open #p"probe-file.txt" :direction :input)))
     (close s)
-    (equalpt (truename #p"sample-files/probe-file.txt")
+    (equalpt (truename #p"probe-file.txt")
              (probe-file s)))
   t)
 
 (deftest probe-file.4
-  (equalpt (truename #p"sample-files/probe-file.txt")
-           (probe-file "CLTEST:sample-files/probe-file.txt"))
+  (equalpt (truename #p"probe-file.txt")
+           (probe-file "CLTEST:probe-file.txt"))
   t)
 
 ;;; Specialized string tests
 
 (deftest probe-file.5
   (do-special-strings
-   (str "sample-files/probe-file.txt" nil)
+   (str "probe-file.txt" nil)
    (let ((s (open str :direction :input)))
-     (assert (equalpt (truename #p"sample-files/probe-file.txt") (probe-file s)))
+     (assert (equalpt (truename #p"probe-file.txt") (probe-file s)))
      (close s)))
   nil)
 
@@ -44,7 +44,7 @@
   t)
 
 (deftest probe-file.error.2
-  (signals-error (probe-file #p"sample-files/probe-file.txt" nil) program-error)
+  (signals-error (probe-file #p"probe-file.txt" nil) program-error)
   t)
 
 (deftest probe-file.error.3

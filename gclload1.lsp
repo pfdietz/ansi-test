@@ -1,6 +1,8 @@
 #+ecl (si::package-lock (find-package "COMMON-LISP") nil)
 #+ecl (compile nil '(lambda () nil))
-#+ecl (setq c:*suppress-compiler-warnings* t c:*suppress-compiler-notes* t)
+#+ecl (setq c:*suppress-compiler-warnings* t
+            c:*suppress-compiler-notes*    t
+            c:*suppress-compiler-messages* t)
 #+:armedbear (require 'pprint)
 #+cmu (setq ext:*gc-verbose* nil)
 #+gcl (setq compiler:*suppress-compiler-notes* t

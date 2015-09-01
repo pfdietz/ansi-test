@@ -35,22 +35,22 @@
 (deftest pathname.6
     (equalt #p"sample-files/pathname.txt"
             (pathname
-             (make-array 12
+             (make-array 25
                          :initial-contents "sample-files/pathname.txt"
                          :element-type 'base-char)))
   t)
 
 (deftest pathname.7
     (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 15
+            (pathname (make-array 28
                                   :initial-contents "sample-files/pathname.txtXXX"
                                   :element-type 'base-char
-                                  :fill-pointer 12)))
+                                  :fill-pointer 25)))
   t)
 
 (deftest pathname.8
     (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 12
+            (pathname (make-array 25
                                   :initial-contents "sample-files/pathname.txt"
                                   :element-type 'base-char
                                   :adjustable t)))
@@ -58,15 +58,15 @@
 
 (deftest pathname.9
     (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 15
+            (pathname (make-array 28
                                   :initial-contents "sample-files/pathname.txtXXX"
                                   :element-type 'character
-                                  :fill-pointer 12)))
+                                  :fill-pointer 25)))
   t)
 
 (deftest pathname.10
     (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 12
+            (pathname (make-array 25
                                   :initial-contents "sample-files/pathname.txt"
                                   :element-type 'character
                                   :adjustable t)))
@@ -77,11 +77,12 @@
        collect
          (equalt #p"sample-files/pathname.txt"
                  (pathname
-                  (let* ((s (make-array 15
+                  (let* ((s (make-array 28
                                         :initial-contents
                                         "XXsample-files/pathname.txtX"
                                         :element-type etype)))
-                    (make-array 12 :element-type etype
+                    (make-array 25 
+                                :element-type etype
                                 :displaced-to s
                                 :displaced-index-offset 2)))))
   (t t t))

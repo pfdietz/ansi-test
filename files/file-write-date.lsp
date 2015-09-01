@@ -6,7 +6,7 @@
 
 
 (deftest file-write-date.1
-  (let* ((pn "file-write-date.lsp")
+  (let* ((pn "sample-files/file-write-date.txt")
          (date (file-write-date pn))
          (time (get-universal-time)))
     (or (null date)
@@ -16,7 +16,7 @@
   t)
 
 (deftest file-write-date.2
-  (let* ((pn #p"file-write-date.lsp")
+  (let* ((pn #p"sample-files/file-write-date.txt")
          (date (file-write-date pn))
          (time (get-universal-time)))
     (or (null date)
@@ -26,7 +26,7 @@
   t)
 
 (deftest file-write-date.3
-  (let* ((pn (truename "file-write-date.lsp"))
+  (let* ((pn (truename "sample-files/file-write-date.txt"))
          (date (file-write-date pn))
          (time (get-universal-time)))
     (or (null date)
@@ -47,13 +47,13 @@
   nil)
 
 (deftest file-write-date.5
-  (length (multiple-value-list (file-write-date "file-write-date.lsp")))
+  (length (multiple-value-list (file-write-date "sample-files/file-write-date.txt")))
   1)
 
 ;;; Specialized string tests
 
 (deftest file-write-date.6
-  (let* ((str "file-write-date.lsp")
+  (let* ((str "sample-files/file-write-date.txt")
          (date (file-write-date str)))
     (do-special-strings
      (s str nil)
@@ -70,7 +70,7 @@
   t)
 
 (deftest file-write-date.error.2
-  (signals-error (file-write-date "file-write-date.lsp" nil)
+  (signals-error (file-write-date "sample-files/file-write-date.txt" nil)
                  program-error)
   t)
 

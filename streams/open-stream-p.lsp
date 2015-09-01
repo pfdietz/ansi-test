@@ -16,24 +16,24 @@
   nil)
 
 (deftest open-stream-p.2
-  (with-open-file (s "open-stream-p.lsp" :direction :input)
+  (with-open-file (s "sample-files/open-stream-p.txt" :direction :input)
                   (notnot-mv (open-stream-p s)))
   t)
 
 (deftest open-stream-p.3
-  (with-open-file (s "foo.txt" :direction :output
+  (with-open-file (s "scratch/foo.txt" :direction :output
                      :if-exists :supersede)
                   (notnot-mv (open-stream-p s)))
   t)
 
 (deftest open-stream-p.4
-  (let ((s (open "open-stream-p.lsp" :direction :input)))
+  (let ((s (open "sample-files/open-stream-p.txt" :direction :input)))
     (close s)
     (open-stream-p s))
   nil)
 
 (deftest open-stream-p.5
-  (let ((s (open "foo.txt" :direction :output
+  (let ((s (open "scratch/foo.txt" :direction :output
                  :if-exists :supersede)))
     (close s)
     (open-stream-p s))

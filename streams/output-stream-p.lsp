@@ -14,12 +14,12 @@
   t)
 
 (deftest output-stream-p.3
-  (with-open-file (s "output-stream-p.lsp" :direction :input)
+  (with-open-file (s "sample-files/output-stream-p.txt" :direction :input)
                   (output-stream-p s))
   nil)
 
 (deftest output-stream-p.4
-  (with-open-file (s "foo.txt" :direction :output
+  (with-open-file (s "scratch/foo.txt" :direction :output
                      :if-exists :supersede)
                   (notnot-mv (output-stream-p s)))
   t)
