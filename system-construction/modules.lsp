@@ -44,7 +44,7 @@
   (let ((*modules* *modules*)
         (fn 'modules7-fun))
     (when (fboundp fn) (fmakunbound fn))
-    (require "MODULES-7" #p"modules7.lsp")
+    (require "MODULES-7" #p"sample-files/modules7.lsp")
     (funcall fn))
   :good)
 
@@ -53,7 +53,8 @@
         (fns '(modules8a-fun modules8b-fun)))
     (dolist (fn fns)
       (when (fboundp fn) (fmakunbound fn)))
-    (require "MODULES-8" '(#p"modules8a.lsp" #p"modules8b.lsp"))
+    (require "MODULES-8" '(#p"sample-files/modules8a.lsp"
+                           #p"sample-files/modules8b.lsp"))
     (mapcar #'funcall fns))
   (:good :also-good))
 

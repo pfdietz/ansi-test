@@ -39,7 +39,7 @@
 
 (deftest listen.7
   (with-open-file
-   (s "listen.lsp")
+   (s "sample-files/listen.txt")
    (values
     (notnot (listen s))
     (handler-case

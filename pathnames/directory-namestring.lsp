@@ -1,4 +1,4 @@
-;-*- Mode:     Lisp -*-
+                                        ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Sun Sep 12 06:21:42 2004
 ;;;; Contains: Tests for DIRECTORY-NAMESTRING
@@ -6,22 +6,22 @@
 
 
 (deftest directory-namestring.1
-  (let* ((vals (multiple-value-list
-                (directory-namestring "directory-namestring.lsp")))
-         (s (first vals)))
-    (if (and (null (cdr vals))
-             (stringp s)
-             (equal (directory-namestring s) s))
-        :good
-      vals))
+    (let* ((vals (multiple-value-list
+                  (directory-namestring "sample-files/directory-namestring.txt")))
+           (s (first vals)))
+      (if (and (null (cdr vals))
+               (stringp s)
+               (equal (directory-namestring s) s))
+          :good
+          vals))
   :good)
 
 (deftest directory-namestring.2
-  (do-special-strings
-   (s "directory-namestring.lsp" nil)
-   (let ((ns (directory-namestring s)))
-     (assert (stringp ns))
-     (assert (string= (directory-namestring ns) ns))))
+    (do-special-strings
+        (s "sample-files/directory-namestring.txt" nil)
+      (let ((ns (directory-namestring s)))
+        (assert (stringp ns))
+        (assert (string= (directory-namestring ns) ns))))
   nil)
 
 ;;; Lispworks makes another assumption about filename normalization
@@ -31,20 +31,22 @@
 ;;;  in which so much is left up to the implementation.)
 #-lispworks
 (deftest directory-namestring.3
-  (let* ((name "directory-namestring.lsp")
-         (pn (merge-pathnames (pathname name)))
-         (name2 (with-open-file (s pn :direction :input)
-                                (directory-namestring s)))
-         (name3 (directory-namestring pn)))
-    (or (equalt name2 name3) (list name2 name3)))
+    (let* ((name "sample-files/directory-namestring.txt")
+           (pn (merge-pathnames (pathname name)))
+           (name2 (with-open-file (s pn :direction :input)
+                    (directory-namestring s)))
+           (name3 (directory-namestring pn)))
+      (or (equalt name2 name3) (list name2 name3)))
   t)
 
 ;;; Error tests
 
 (deftest directory-namestring.error.1
-  (signals-error (directory-namestring) program-error)
+    (signals-error (directory-namestring) program-error)
   t)
 
 (deftest directory-namestring.error.2
-  (signals-error (directory-namestring "directory-namestring.lsp" nil) program-error)
+    (signals-error
+     (directory-namestring "sample-files/directory-namestring.txt" nil)
+     program-error)
   t)

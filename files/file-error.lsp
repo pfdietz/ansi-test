@@ -21,41 +21,42 @@
   t t)
 
 (deftest file-error-pathname.1
-  (let ((c (make-condition 'file-error :pathname "foo.txt")))
+  (let ((c (make-condition 'file-error :pathname "scratch/foo.txt")))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
      (file-error-pathname c)))
-  t t "foo.txt")
+  t t "scratch/foo.txt")
 
 (deftest file-error-pathname.2
-  (let ((c (make-condition 'file-error :pathname #p"foo.txt")))
+  (let ((c (make-condition 'file-error :pathname #p"scratch/foo.txt")))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
-     (equalt #p"foo.txt" (file-error-pathname c))))
+     (equalt #p"scratch/foo.txt" (file-error-pathname c))))
   t t t)
 
 (deftest file-error-pathname.3
-  (let ((c (make-condition 'file-error :pathname "CLTEST:foo.txt")))
+  (let ((c (make-condition 'file-error :pathname "CLTEST:scratch/foo.txt")))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
-     (equalpt "CLTEST:foo.txt"
+     (equalpt "CLTEST:scratch/foo.txt"
               (file-error-pathname c))))
   t t t)
 
 (deftest file-error-pathname.4
-  (let ((c (make-condition 'file-error :pathname (logical-pathname "CLTEST:foo.txt"))))
+  (let ((c (make-condition
+            'file-error :pathname (logical-pathname "CLTEST:scratch/foo.txt"))))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
-     (equalpt (logical-pathname "CLTEST:foo.txt")
+     (equalpt (logical-pathname "CLTEST:scratch/foo.txt")
               (file-error-pathname c))))
   t t t)
 
 (deftest file-error-pathname.5
-  (with-open-file (s "file-error.lsp" :direction :input)
+  (with-open-file (s "sample-files/file-error.txt" :direction :input)
                   (let ((c (make-condition 'file-error :pathname s)))
                     (values
                      (notnot (typep c 'file-error))
@@ -64,7 +65,7 @@
   t t t)
 
 (deftest file-error-pathname.6
-  (let ((s (open "file-error.lsp" :direction :input)))
+  (let ((s (open "sample-files/file-error.txt" :direction :input)))
     (close s)
     (let ((c (make-condition 'file-error :pathname s)))
       (values
@@ -79,11 +80,7 @@
 
 (deftest file-error-pathname.error.2
   (signals-error
-   (file-error-pathname (make-condition 'file-error :pathname "foo.txt") nil)
-   program-error)
-  t)
-
-
-
-
-
+   (file-error-pathname
+    (make-condition 'file-error :pathname "scratch/foo.txt")
+    nil)
+   program-error) t)

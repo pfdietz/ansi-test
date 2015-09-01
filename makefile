@@ -136,7 +136,8 @@ rt_1000_8:
 
 
 clean:
-	@rm -f auxiliary/*fas
+	@rm -f auxiliary/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
+	@rm -f sample-files/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}x
 	@rm -f test*.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
 	@rm -f *.dfsl *.d64fsl
 	@(cd beyond-ansi; $(MAKE) clean)

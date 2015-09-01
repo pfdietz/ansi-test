@@ -38,7 +38,7 @@
 
 (deftest logical-pathname.error.3
   (signals-error
-   (with-open-file (s #p"logical-pathname.lsp" :direction :input)
+   (with-open-file (s #p"sample-files/logical-pathname.txt" :direction :input)
                    (logical-pathname s))
    type-error)
   t)

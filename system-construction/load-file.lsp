@@ -36,12 +36,12 @@
        (funcall funname))))
 
 (deftest load.1
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1)
-  t nil)
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1) t nil)
 
 (deftest load.2
-  (load-file-test #p"compile-file-test-file.lsp" 'compile-file-test-fun.1)
-  t nil)
+  (load-file-test #p"sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1) t nil)
 
 (deftest load.3
   (with-input-from-string
@@ -50,22 +50,26 @@
   t good)
 
 (deftest load.4
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :external-format :default)
   t nil)
 
 (deftest load.5
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :verbose t)
   t nil)
 
 (deftest load.6
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :*load-verbose* t)
   t nil)
 
 (deftest load.7
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :*load-verbose* t :verbose nil)
   t nil)
 
@@ -76,22 +80,26 @@
   t good)
 
 (deftest load.9
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :print t)
   t nil)
 
 (deftest load.10
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :*load-print* t)
   t nil)
 
 (deftest load.11
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :*load-print* t :print nil)
   t nil)
 
 (deftest load.12
-  (load-file-test "compile-file-test-file.lsp" 'compile-file-test-fun.1
+  (load-file-test "sample-files/compile-file-test-file.lsp"
+                  'compile-file-test-fun.1
                   :*load-print* nil :print t)
   t nil)
 
@@ -102,7 +110,7 @@
   t good)
 
 (deftest load.14
-  (load "nonexistent-file.lsp" :if-does-not-exist nil)
+  (load "sample-files/nonexistent-file.lsp" :if-does-not-exist nil)
   nil)
 
 (defpackage LOAD-TEST-PACKAGE (:use "COMMON-LISP"))
@@ -148,7 +156,7 @@
   (t good) !FOO)
 
 (deftest load.17
-  (let ((file #p"load-test-file.lsp"))
+  (let ((file #p"sample-files/load-test-file.lsp"))
     (fmakunbound 'load-file-test-fun.1)
     (fmakunbound 'load-file-test-fun.2)
     (values
@@ -165,7 +173,7 @@
 ;;; properly when loading compiled files
 
 (deftest load.18
-  (let* ((file "load-test-file-2.lsp")
+  (let* ((file "sample-files/load-test-file-2.lsp")
          (target (enough-namestring (compile-file-pathname file))))
     (declare (special *load-test-var.1* *load-test-var.2*))
     (compile-file file)
@@ -212,14 +220,13 @@
 ;;; Error tests
 
 (deftest load.error.1
-  (signals-error (load "nonexistent-file.lsp") file-error)
-  t)
+  (signals-error (load "sample-files/nonexistent-file.lsp")
+                 file-error) t)
 
 (deftest load.error.2
   (signals-error (load) program-error)
   t)
 
 (deftest load.error.3
-  (signals-error (load "compile-file-test-file.lsp" :bad-key-arg t)
-                 program-error)
-  t)
+  (signals-error (load "sample-files/compile-file-test-file.lsp" :bad-key-arg
+                       t) program-error) t)
