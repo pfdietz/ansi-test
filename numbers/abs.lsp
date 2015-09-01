@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Sep  1 20:16:42 2003
 ;;;; Contains: Tests of ABS
 
-(in-package :cl-test)
+
 
 
 

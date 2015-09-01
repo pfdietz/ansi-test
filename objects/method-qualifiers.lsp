@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 11 07:14:12 2003
 ;;;; Contains: Tests of METHOD-QUALIFIERS
 
-(in-package :cl-test)
+
 
 (defgeneric mq-generic-function (x))
 

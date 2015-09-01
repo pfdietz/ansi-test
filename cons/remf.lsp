@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:38:18 2003
 ;;;; Contains: Tests of REMF
 
-(in-package :cl-test)
+
 
 
 

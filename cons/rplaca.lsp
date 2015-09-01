@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:29:43 2003
 ;;;; Contains: Tests of RPLACA
 
-(in-package :cl-test)
+
 
 
 

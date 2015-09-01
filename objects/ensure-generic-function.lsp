@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Mar 27 21:29:53 2003
 ;;;; Contains: Tests for ENSURE-GENERIC-FUNCTION
 
-(in-package :cl-test)
+
 
 (deftest ensure-generic-function.1
   (if (typep #'car 'generic-function)

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 11 19:53:37 2003
 ;;;; Contains: Tests of REMOVE-METHOD
 
-(in-package :cl-test)
+
 
 (defparameter *remove-meth-gf-01*
   (defgeneric remove-meth-gf-01 (x)))

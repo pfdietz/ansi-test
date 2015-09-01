@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 15:38:30 2003
 ;;;; Contains: Tests of PSETF
 
-(in-package :cl-test)
+
 
 (deftest psetf.order.1
   (let ((x (vector nil nil nil nil))

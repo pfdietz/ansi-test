@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 13:03:22 2003
 ;;;; Contains: Tests of type BIT-VECTOR
 
-(in-package :cl-test)
+
 
 (deftest bit-vector.1
   (notnot-mv (find-class 'bit-vector))

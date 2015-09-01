@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May  8 19:53:39 2005
 ;;;; Contains: Tests of SLEEP
 
-(in-package :cl-test)
+
 
 (deftest sleep.1
   (sleep 0)

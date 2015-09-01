@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Nov 29 05:54:30 2003
 ;;;; Contains: Tests of MAKE-PATHNAME
 
-(in-package :cl-test)
+
 
 (defvar *null-pathname*
     (make-pathname))

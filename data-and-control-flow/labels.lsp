@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Oct  9 19:06:33 2002
 ;;;; Contains: Tests of LABELS
 
-(in-package :cl-test)
+
 
 (deftest labels.1
   (labels ((%f () 1))

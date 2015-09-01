@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:33:23 2003
 ;;;; Contains: Tests of NTH
 
-(in-package :cl-test)
+
 
 
 

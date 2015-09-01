@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep  4 22:03:21 2003
 ;;;; Contains: Tests of LCM
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Aug 28 11:23:40 2003
 ;;;; Contains: Auxiliary functions for testing the multiplication operator *
 
-(in-package :cl-test)
+
 
 (defun integer-times (x y)
   (assert (integerp x))

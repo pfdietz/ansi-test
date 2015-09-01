@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  2 19:36:22 2003
 ;;;; Contains: Tests of EXPT
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 06:29:51 2004
 ;;;; Contains: Tests for SINH
 
-(in-package :cl-test)
+
 
 (deftest sinh.1
   (let ((result (sinh 0)))

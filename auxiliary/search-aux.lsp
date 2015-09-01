@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Aug 24 07:22:10 2002
 ;;;; Contains: Aux. functions for testing SEARCH
 
-(in-package :cl-test)
+
 
 (defparameter *searched-list*
   '(b b a b b b b b b b a b a b b b a b a b b b a a a a b a a b a a a a a

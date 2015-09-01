@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 10 14:39:01 2003
 ;;;; Contains: Tests for SLOT-MAKUNBOUND
 
-(in-package :cl-test)
+
 
 ;;; This function is heavily tested in other files as well
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Aug 20 06:22:23 2003
 ;;;; Contains: Tests of FCEILING
 
-(in-package :cl-test)
+
 
 
 

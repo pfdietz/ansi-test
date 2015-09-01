@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 21:03:18 2003
 ;;;; Contains: Tests for COMPLEXP
 
-(in-package :cl-test)
+
 
 (deftest complexp.error.1
   (signals-error (complexp) program-error)

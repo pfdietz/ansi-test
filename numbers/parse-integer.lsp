@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 10:24:13 2003
 ;;;; Contains: Tests of PARSE-INTEGER
 
-(in-package :cl-test)
+
 
 (deftest parse-integer.error.1
   (signals-error (parse-integer) program-error)

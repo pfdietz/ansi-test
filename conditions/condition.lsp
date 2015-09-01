@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 27 22:13:25 2003
 ;;;; Contains: Tests of class CONDITION
 
-(in-package :cl-test)
+
 
 (deftest condition.1
   (notnot-mv (find-class 'condition nil))

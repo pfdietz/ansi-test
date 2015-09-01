@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 19 11:42:14 2002
 ;;;; Contains: Tests of DEFINE-MODIFY-MACRO
 
-(in-package :cl-test)
+
 
 (deftest define-modify-macro.1
   (values

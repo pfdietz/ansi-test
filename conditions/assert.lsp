@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 28 06:48:19 2003
 ;;;; Contains: Tests of ASSERT
 
-(in-package :cl-test)
+
 
 (deftest assert.1
   (assert t)

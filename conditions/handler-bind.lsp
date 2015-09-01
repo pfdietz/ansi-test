@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Feb 28 22:07:25 2003
 ;;;; Contains: Tests of HANDLER-BIND
 
-(in-package :cl-test)
+
 
 (deftest handler-bind.1
   (handler-bind ())

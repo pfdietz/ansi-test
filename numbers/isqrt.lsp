@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 15:40:09 2003
 ;;;; Contains: Tests of ISQRT
 
-(in-package :cl-test)
+
 
 
 

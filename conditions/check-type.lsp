@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Feb 15 20:12:04 2003
 ;;;; Contains: Tests of CHECK-TYPE
 
-(in-package :cl-test)
+
 
 (deftest check-type.1
   (let ((x 'a))

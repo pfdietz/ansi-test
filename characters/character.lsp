@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct  5 12:52:18 2002
 ;;;; Contains: Tests associated with the class CHARACTER
 
-(in-package :cl-test)
+
 
 (deftest character-class.1
   (subtypep* 'character t)

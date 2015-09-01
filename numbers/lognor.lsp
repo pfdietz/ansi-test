@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 06:14:35 2003
 ;;;; Contains: Tests of LOGNOR
 
-(in-package :cl-test)
+
 
 
 

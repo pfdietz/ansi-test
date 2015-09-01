@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Mar 28 07:29:48 1998
 ;;;; Contains: Testing of CL Features related to "CONS", part 1
 
-(in-package :cl-test)
+
 
 (declaim (optimize (safety 3)))
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 23:21:11 2002
 ;;;; Contains: Tests for IDENTITY
 
-(in-package :cl-test)
+
 
 (deftest identity.1
   (check-predicate #'(lambda (x) (eqlt x (check-values (identity x)))))

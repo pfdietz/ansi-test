@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 09:33:40 2003
 ;;;; Contains: Tests of CLRHASH
 
-(in-package :cl-test)
+
 
 (deftest clrhash.1
   (let ((table (make-hash-table)))

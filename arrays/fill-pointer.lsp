@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 22:14:23 2003
 ;;;; Contains: Tests of FILL-POINTER
 
-(in-package :cl-test)
+
 
 ;;; More tests are in make-array.lsp
 

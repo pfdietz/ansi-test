@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:04:27 2003
 ;;;; Contains: Tests of MAKE-LIST
 
-(in-package :cl-test)
+
 
 
 

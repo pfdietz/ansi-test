@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Apr  7 07:24:43 2003
 ;;;; Contains: Auxiliary functions for number tests
 
-(in-package :cl-test)
+
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Oct  6 20:04:33 2002
 ;;;; Contains: Tests for COMPLEMENT
 
-(in-package :cl-test)
+
 
 (deftest complement.1
   (notnot-mv (funcall (complement #'identity) nil))

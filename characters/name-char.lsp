@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug 29 17:14:03 2004
 ;;;; Contains: Tests of NAME-CHAR
 
-(in-package :cl-test)
+
 
 
 

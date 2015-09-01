@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan  6 05:32:37 2004
 ;;;; Contains: Tests of TRUENAME
 
-(in-package :cl-test)
+
 
 (deftest truename.1
   (let* ((pn #p"truename.lsp")

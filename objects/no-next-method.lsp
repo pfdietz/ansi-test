@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 11 14:41:50 2003
 ;;;; Contains: Tests of NO-NEXT-METHOD
 
-(in-package :cl-test)
+
 
 (defgeneric no-next-meth-gf-01 (x))
 

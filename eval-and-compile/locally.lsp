@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jan  8 06:02:47 2005
 ;;;; Contains: Tests of LOCALLY
 
-(in-package :cl-test)
+
 
 (deftest locally.1
   (locally)

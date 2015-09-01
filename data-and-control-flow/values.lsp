@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 19 08:18:50 2002
 ;;;; Contains: Tests of VALUES
 
-(in-package :cl-test)
+
 
 (deftest values.0
   (values))

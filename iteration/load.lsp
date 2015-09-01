@@ -1,6 +1,10 @@
 ;;; Tests of iteration forms
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "do.lsp")
   (load "dostar.lsp")
   (load "dolist.lsp")

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug  1 07:14:17 2004
 ;;;; Contains: Tests of the ~f format directive
 
-(in-package :cl-test)
+
 
 
 

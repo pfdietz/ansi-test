@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Mar  6 17:45:42 2003
 ;;;; Contains: Auxiliary functions for cons-related tests
 
-(in-package :cl-test)
+
 
 ;;;
 ;;; A scaffold is a structure that is used to remember the object

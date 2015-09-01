@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 20 21:25:22 2003
 ;;;; Contains: Tests for ADJUSTABLE-ARRAY-P
 
-(in-package :cl-test)
+
 
 (deftest adjustable-array-p.1
   (notnot (adjustable-array-p (make-array '(5) :adjustable t)))

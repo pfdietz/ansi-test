@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jan 22 21:23:45 2003
 ;;;; Contains: Tests for SIMPLE-VECTOR-P
 
-(in-package :cl-test)
+
 
 ;;; More tests for this are in make-array.lsp
 

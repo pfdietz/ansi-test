@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Oct 10 07:14:30 2004
 ;;;; Contains: Aux. functions for random tests on classes
 
-(in-package :cl-test)
+
 
 (defun random-class-1-fn (&key (n 10) (rep 1000))
   "Randomly break and recreate a linear chain of class definitions"

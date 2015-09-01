@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 20:32:57 2003
 ;;;; Contains: Tests for ARRAY-RANK
 
-(in-package :cl-test)
+
 
 ;;; Most tests for ARRAY-RANK are in make-array.lsp
 

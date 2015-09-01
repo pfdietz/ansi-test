@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 21 07:59:24 2005
 ;;;; Contains: Tests of the IGNORE declarations
 
-(in-package :cl-test)
+
 
 (deftest ignore.1
   (let ((x 'foo)) (declare (ignore x)))

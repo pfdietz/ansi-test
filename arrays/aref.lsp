@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Feb 11 17:33:24 2003
 ;;;; Contains: Tests for AREF
 
-(in-package :cl-test)
+
 
 ;;; AREF is also tested in many other places
 

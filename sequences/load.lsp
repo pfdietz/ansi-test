@@ -4,7 +4,11 @@
 (compile-and-load "ANSI-TESTS:AUX;remove-aux.lsp")
 (compile-and-load "ANSI-TESTS:AUX;remove-duplicates-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "copy-seq.lsp")
   (load "elt.lsp")
   (load "fill.lsp")

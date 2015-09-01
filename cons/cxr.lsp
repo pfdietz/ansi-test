@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:28:38 2003
 ;;;; Contains: Tests of C*R functions
 
-(in-package :cl-test)
+
 
 
 

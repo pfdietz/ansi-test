@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 06:11:12 2003
 ;;;; Contains: Tests of LOGNAND
 
-(in-package :cl-test)
+
 
 
 

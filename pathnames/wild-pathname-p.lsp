@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Dec 31 16:54:55 2003
 ;;;; Contains: Tests of WILD-PATHNAME-P
 
-(in-package :cl-test)
+
 
 
 

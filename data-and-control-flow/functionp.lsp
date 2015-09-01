@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Oct  7 06:39:21 2002
 ;;;; Contains: Tests for FUNCTIONP
 
-(in-package :cl-test)
+
 
 ;;;
 ;;; Note!  FUNCTIONP and FUNCTION behave differently in ANSI CL than

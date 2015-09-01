@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 19:56:29 2003
 ;;;; Contains: Tests of COMPLEX
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

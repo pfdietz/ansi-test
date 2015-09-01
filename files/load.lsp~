@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jan  1 11:59:35 2004
 ;;;; Contains: Load tests of section 20, 'Files'
 
-(in-package :cl-test)
+
 
 (let ((*default-pathname-defaults* (pathname *load-pathname*)))
   (load "directory.lsp")

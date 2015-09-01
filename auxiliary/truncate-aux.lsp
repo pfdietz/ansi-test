@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Aug 20 05:15:17 2003
 ;;;; Contains: Aux. functions associated with tests of TRUNCATE
 
-(in-package :cl-test)
+
 
 (defun truncate.1-fn ()
   (loop for n = (- (random 2000000000)

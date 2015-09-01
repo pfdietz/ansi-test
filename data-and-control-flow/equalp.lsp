@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 22:14:42 2002
 ;;;; Contains: Tests for EQUALP
 
-(in-package :cl-test)
+
 
 (deftest equalp.1
   (loop for c across +base-chars+

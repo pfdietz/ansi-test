@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Oct  8 22:55:02 2002
 ;;;; Contains: Tests of FLET
 
-(in-package :cl-test)
+
 
 (deftest flet.1
   (flet ((%f () 1))

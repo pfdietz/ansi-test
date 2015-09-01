@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:37:00 2003
 ;;;; Contains: Tests of GET-PROPERTIES
 
-(in-package :cl-test)
+
 
 
 

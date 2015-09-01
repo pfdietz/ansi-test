@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 16 23:40:32 2003
 ;;;; Contains: Tests of DEFUN
 
-(in-package :cl-test)
+
 
 
 ;;; Tests for implicit blocks

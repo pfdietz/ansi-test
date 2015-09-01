@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jan 22 20:16:38 2003
 ;;;; Contains: Tests of ROW-MAJOR-AREF
 
-(in-package :cl-test)
+
 
 ;;; ROW-MAJOR-AREF is also used by equalp-with-case (see rt/rt.lsp)
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 17 11:54:54 2003
 ;;;; Contains: Tests of MAKE-LOAD-FORM-SAVING-SLOTS
 
-(in-package :cl-test)
+
 
 ;;; These are tests of MAKE-LOAD-FORM-SAVING-SLOTS proper; tests involving
 ;;; file compilation will be located elsewhere.

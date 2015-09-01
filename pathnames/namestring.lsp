@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep  2 07:24:42 2004
 ;;;; Contains: Tests for NAMESTRING
 
-(in-package :cl-test)
+
 
 (deftest namestring.1
   (let* ((vals (multiple-value-list (namestring "namestring.lsp")))

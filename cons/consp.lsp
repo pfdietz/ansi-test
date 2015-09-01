@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:27:16 2003
 ;;;; Contains: Tests of CONSP
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 23:05:10 2002
 ;;;; Contains: Tests of CTYPECASE
 
-(in-package :cl-test)
+
 
 (deftest ctypecase.1
   (let ((x 1))

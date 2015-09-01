@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 19 08:24:14 2002
 ;;;; Contains: Tests of NTH-VALUE
 
-(in-package :cl-test)
+
 
 (deftest nth-value.1
   (nth-value 0 'a)

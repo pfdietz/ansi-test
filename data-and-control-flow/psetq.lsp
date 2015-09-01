@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 15:37:20 2003
 ;;;; Contains: Tests of PSETQ
 
-(in-package :cl-test)
+
 
 (deftest psetq.1
   (psetq)

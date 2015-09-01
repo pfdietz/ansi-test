@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 23:16:23 2002
 ;;;; Contains: Tests for MULTIPLE-VALUE-BIND
 
-(in-package :cl-test)
+
 
 (deftest multiple-value-bind.1
   (multiple-value-bind (x y z) (values 1 2 3)

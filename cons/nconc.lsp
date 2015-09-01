@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:35:53 2003
 ;;;; Contains: Tests of NCONC
 
-(in-package :cl-test)
+
 
 
 

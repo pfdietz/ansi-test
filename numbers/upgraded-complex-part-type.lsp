@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Nov 27 21:15:46 2004
 ;;;; Contains: Tests of UPGRADE-COMPLEX-PART-TYPE
 
-(in-package :cl-test)
+
 
 
 

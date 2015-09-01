@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:46:56 2003
 ;;;; Contains: Tests of LDIFF
 
-(in-package :cl-test)
+
 
 
 

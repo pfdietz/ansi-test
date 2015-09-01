@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:08:41 1998
 ;;;; Contains: Tests of USE-PACKAGE
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug 31 10:48:25 2003
 ;;;; Contains: Tests of ODDP
 
-(in-package :cl-test)
+
 
 
 

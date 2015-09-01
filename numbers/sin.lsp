@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Feb  9 20:20:46 2004
 ;;;; Contains: Tests for SIN
 
-(in-package :cl-test)
+
 
 (deftest sin.1
   (loop for i from -1000 to 1000

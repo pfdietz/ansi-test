@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Oct  7 22:11:31 2002
 ;;;; Contains: Tests for LAMBDA-LIST-KEYWORDS
 
-(in-package :cl-test)
+
 
 ;;; The variable is bound
 (deftest lambda-list-keywords.1

@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Aug  4 21:42:14 2003
 ;;;; Contains: Tests for PLUSP
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

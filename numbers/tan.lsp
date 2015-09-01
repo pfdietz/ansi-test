@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Feb  9 20:55:40 2004
 ;;;; Contains: Tests of TAN
 
-(in-package :cl-test)
+
 
 (deftest tan.1
   (loop for i from -1000 to 1000

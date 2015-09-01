@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:06:48 1998
 ;;;; Contains: Tests of UNUSE-PACKAGE
 
-(in-package :cl-test)
+
 
 
 

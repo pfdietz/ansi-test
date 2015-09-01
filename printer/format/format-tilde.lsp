@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jul 28 00:27:00 2004
 ;;;; Contains: Tests of format directive ~~
 
-(in-package :cl-test)
+
 
 
 (def-format-test format.~.1

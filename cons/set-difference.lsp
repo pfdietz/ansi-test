@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:44:06 2003
 ;;;; Contains: Tests of SET-DIFFERENCE
 
-(in-package :cl-test)
+
 
 
 

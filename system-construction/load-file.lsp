@@ -3,8 +3,6 @@
 ;;;; Created:  Tue Apr 12 21:51:49 2005
 ;;;; Contains: Tests of LOAD
 
-(in-package :cl-test)
-
 (defun load-file-test (file funname &rest args &key
                             if-does-not-exist
                             (print nil print-p)

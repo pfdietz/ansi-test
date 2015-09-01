@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 12 12:30:46 2002
 ;;;; Contains: Tests of BLOCK
 
-(in-package :cl-test)
+
 
 (deftest block.1
   (block foo

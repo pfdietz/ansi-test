@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Mar 22 23:48:53 2003
 ;;;; Contains: Tests of COMPUTE-RESTARTS
 
-(in-package :cl-test)
+
 
 (deftest compute-restarts.1
   (loop for r in (compute-restarts)

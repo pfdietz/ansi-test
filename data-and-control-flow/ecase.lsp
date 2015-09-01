@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 20:17:30 2002
 ;;;; Contains: Tests for ECASE
 
-(in-package :cl-test)
+
 
 (deftest ecase.1
   (ecase 'b (a 1) (b 2) (c 3))

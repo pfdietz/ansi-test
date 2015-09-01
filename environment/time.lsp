@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Dec 12 09:43:47 2004
 ;;;; Contains: Tests of TIME
 
-(in-package :cl-test)
+
 
 (deftest time.1
   (let ((s (with-output-to-string

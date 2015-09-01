@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:36:46 2003
 ;;;; Contains: Tests of APPEND
 
-(in-package :cl-test)
+
 
 
 

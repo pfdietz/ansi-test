@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 07:07:07 2002
 ;;;; Contains: Tests for SOME
 
-(in-package :cl-test)
+
 
 (deftest some.1
   (some #'identity nil)

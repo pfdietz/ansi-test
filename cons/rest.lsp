@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:49:14 2003
 ;;;; Contains: Tests of REST
 
-(in-package :cl-test)
+
 
 
 

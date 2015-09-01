@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Oct  7 22:37:22 2002
 ;;;; Contains: Tests of FBOUNDP
 
-(in-package :cl-test)
+
 
 (deftest fboundp.1
   (not-mv (fboundp 'car))

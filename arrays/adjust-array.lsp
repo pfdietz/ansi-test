@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 15 07:27:22 2004
 ;;;; Contains: Tests of ADJUST-ARRAY
 
-(in-package :cl-test)
+
 
 (defun listify-form (form)
   (cond

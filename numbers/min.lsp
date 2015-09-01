@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Aug  4 21:24:45 2003
 ;;;; Contains: Tests of MIN
 
-(in-package :cl-test)
+
 
 
 

@@ -5,7 +5,7 @@
 
 ;;; See also the tests in decode-universal-time.lsp
 
-(in-package :cl-test)
+
 
 (deftest encode-universal-time.1
   (loop with count = 0

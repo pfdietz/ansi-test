@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Aug  4 21:47:34 2003
 ;;;; Contains: Tests of ZEROP
 
-(in-package :cl-test)
+
 
 (deftest zerop.error.1
   (signals-error (zerop) program-error)

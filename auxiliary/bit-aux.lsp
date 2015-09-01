@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jul 24 19:25:39 2005
 ;;;; Contains: Aux file for BIT-* tests
 
-(in-package :cl-test)
+
 
 (defun bit-random-test-fn (bit-fn log-fn &key (reps 5000) (maxlen 100))
   (assert (typep maxlen '(integer 1)))

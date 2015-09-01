@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 05:47:24 2003
 ;;;; Contains: Tests for HASH-TABLE-REHASH-SIZE
 
-(in-package :cl-test)
+
 
 (deftest hash-table-rehash-size.1
   (typep* (hash-table-rehash-size (make-hash-table))

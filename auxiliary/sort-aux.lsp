@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jul 17 06:42:27 2003
 ;;;; Contains: Routines for testing SORT, NSORT
 
-(in-package :cl-test)
+
 
 (defun my-numeric-sort (list)
   "Sort (nondestructively) a list of reals."

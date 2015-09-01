@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar 23 08:37:15 2003
 ;;;; Contains: Tests of CONTINUE restart and function
 
-(in-package :cl-test)
+
 
 (deftest continue.1
   (restart-case

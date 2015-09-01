@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 06:08:21 2003
 ;;;; Contains: Tests of LOGIOR
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 19:39:34 2002
 ;;;; Contains: Tests of UNLESS
 
-(in-package :cl-test)
+
 
 (deftest unless.1
   (unless t)

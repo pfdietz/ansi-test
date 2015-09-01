@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:26:48 2003
 ;;;; Contains: Tests of ACONS
 
-(in-package :cl-test)
+
 
 
 

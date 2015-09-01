@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Sep  3 06:51:03 2003
 ;;;; Contains: Tests of GCD
 
-(in-package :cl-test)
+
 
 
 

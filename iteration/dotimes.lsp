@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jan  8 07:27:15 2005
 ;;;; Contains: Tests of DOTIMES
 
-(in-package :cl-test)
+
 
 
 (deftest dotimes.1

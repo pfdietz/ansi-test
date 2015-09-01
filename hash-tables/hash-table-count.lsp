@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 05:14:25 2003
 ;;;; Contains: Tests of HASH-TABLE-COUNT
 
-(in-package :cl-test)
+
 
 (deftest hash-table-count.1
   (hash-table-count (make-hash-table))

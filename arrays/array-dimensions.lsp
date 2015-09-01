@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 06:59:37 2003
 ;;;; Contains: Tests of ARRAY-DIMENSIONS
 
-(in-package :cl-test)
+
 
 ;;; The tests in make-array.lsp also test this function
 

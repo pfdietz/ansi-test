@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Oct  6 19:47:16 2002
 ;;;; Contains: Tests for CONSTANTLY
 
-(in-package :cl-test)
+
 
 (deftest constantly.1
   (let ((fn (cl:constantly 10))

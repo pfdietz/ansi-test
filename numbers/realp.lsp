@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 08:22:06 2003
 ;;;; Contains: Tests of REALP
 
-(in-package :cl-test)
+
 
 (deftest realp.error.1
   (signals-error (realp) program-error)

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:37:41 2003
 ;;;; Contains: Tests of GETF
 
-(in-package :cl-test)
+
 
 
 

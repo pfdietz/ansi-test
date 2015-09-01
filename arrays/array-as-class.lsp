@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 07:45:25 2003
 ;;;; Contains: Tests for ARRAY as a class
 
-(in-package :cl-test)
+
 
 (deftest array-as-class.1
   (notnot-mv (typep #() (find-class 'array)))

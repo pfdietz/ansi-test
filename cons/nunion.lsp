@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:42:35 2003
 ;;;; Contains: Tests of NUNION
 
-(in-package :cl-test)
+
 
 
 

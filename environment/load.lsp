@@ -3,7 +3,11 @@
 ;;;; Created:  Sun Dec 12 19:43:17 2004
 ;;;; Contains: Load environment tests (section 25)
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "apropos.lsp")
   (load "apropos-list.lsp")
   (load "describe.lsp")

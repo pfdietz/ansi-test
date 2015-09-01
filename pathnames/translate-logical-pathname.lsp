@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Dec 29 14:45:50 2003
 ;;;; Contains: Tests for TRANSLATE-LOGICAL-PATHNAME
 
-(in-package :cl-test)
+
 
 ;; On physical pathnames, t-l-p returns the pathname itself
 

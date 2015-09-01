@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jan 23 06:32:02 2003
 ;;;; Contains: Tests of VECTOR (type and function)
 
-(in-package :cl-test)
+
 
 ;;; More tests of type vector in make-array.lsp
 

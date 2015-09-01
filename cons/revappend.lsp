@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:37:43 2003
 ;;;; Contains: Tests of REVAPPEND
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 19:36:57 2002
 ;;;; Contains: Tests of WHEN
 
-(in-package :cl-test)
+
 
 (deftest when.1
   (when t)

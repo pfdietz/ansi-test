@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:22:16 2003
 ;;;; Contains: Tests of MAPCAR
 
-(in-package :cl-test)
+
 
 
 

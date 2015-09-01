@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 13:17:05 2003
 ;;;; Contains: Tests for VECTORP
 
-(in-package :cl-test)
+
 
 (deftest vectorp.1
   (vectorp 1)

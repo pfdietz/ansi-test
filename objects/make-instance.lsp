@@ -3,7 +3,7 @@
 ;;;; Created:  Mon May 12 21:19:36 2003
 ;;;; Contains: Tests of MAKE-INSTANCE
 
-(in-package :cl-test)
+
 
 ;;; MAKE-INSTANCE is used in many other tests as well
 

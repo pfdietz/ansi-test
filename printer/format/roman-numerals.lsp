@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jul 29 08:44:15 2004
 ;;;; Contains: The roman numbers from 1 to 3999
 
-(in-package :cl-test)
+
 
 (defparameter *roman-numerals*
   '("I" "II" "III" "IV" "V" "VI" "VII" "VIII" "IX" "X" "XI" "XII" "XIII" "XIV" "XV" "XVI" "XVII"

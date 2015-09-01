@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug 31 11:15:14 2003
 ;;;; Contains: Tests of the - function
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 13 16:27:12 2003
 ;;;; Contains: Tests for FUNCTION-LAMBDA-EXPRESSION
 
-(in-package :cl-test)
+
 
 (deftest function-lambda-expression.1
   (length

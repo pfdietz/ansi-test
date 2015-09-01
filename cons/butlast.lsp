@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:41:14 2003
 ;;;; Contains: Tests of BUTLAST
 
-(in-package :cl-test)
+
 
 
 

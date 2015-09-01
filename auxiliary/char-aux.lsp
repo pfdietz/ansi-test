@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct  5 20:15:55 2002
 ;;;; Contains: Auxiliary functions for character tests
 
-(in-package :cl-test)
+
 
 (defun is-ordered-by (seq fn)
   (declare (type function fn))

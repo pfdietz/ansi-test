@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 19 09:21:57 2002
 ;;;; Contains: Tests of PROG
 
-(in-package :cl-test)
+
 
 (deftest prog.1
   (prog ())

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 19:25:28 2003
 ;;;; Contains: Tests of BIT-ORC1
 
-(in-package :cl-test)
+
 
 
 

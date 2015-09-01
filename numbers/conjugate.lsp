@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 21:07:36 2003
 ;;;; Contains: Tests of CONJUGATE
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

@@ -1,7 +1,11 @@
 ;;; Tests of conses
 (compile-and-load "ANSI-TESTS:AUX;cons-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "cons.lsp")
   (load "consp.lsp")
   (load "atom.lsp")

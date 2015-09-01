@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 05:56:22 2003
 ;;;; Contains: Tests for HASH-TABLE-TEST
 
-(in-package :cl-test)
+
 
 (deftest hash-table-test.1
   (hash-table-test (make-hash-table))

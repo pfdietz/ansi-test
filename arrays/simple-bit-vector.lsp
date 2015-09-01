@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 13:12:07 2003
 ;;;; Contains: Tests for type SIMPLE-BIT-VECTOR
 
-(in-package :cl-test)
+
 
 (deftest simple-bit-vector.2
   (notnot-mv (typep #* 'simple-bit-vector))

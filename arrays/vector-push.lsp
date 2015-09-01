@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jan 25 00:55:43 2003
 ;;;; Contains: Tests for VECTOR-PUSH
 
-(in-package :cl-test)
+
 
 (deftest vector-push.1
   (let ((a (make-array '(5) :fill-pointer 2

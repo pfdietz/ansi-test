@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 20:45:17 2003
 ;;;; Contains: Tests of LDB
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

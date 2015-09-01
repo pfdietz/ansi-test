@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar 23 09:13:59 2003
 ;;;; Contains: Tests for USE-VALUE restart and function
 
-(in-package :cl-test)
+
 
 (deftest use-value.1
   (restart-case

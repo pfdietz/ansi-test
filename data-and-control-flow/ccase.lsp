@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 21:06:45 2002
 ;;;; Contains: Tests of CCASE
 
-(in-package :cl-test)
+
 
 (deftest ccase.1
   (let ((x 'b))

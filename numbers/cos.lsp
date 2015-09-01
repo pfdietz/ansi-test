@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Feb  9 20:53:42 2004
 ;;;; Contains: Tests of COS
 
-(in-package :cl-test)
+
 
 (deftest cos.1
   (loop for i from -1000 to 1000

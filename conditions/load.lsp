@@ -2,7 +2,11 @@
 (compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
 (compile-and-load "ANSI-TESTS:AUX;define-condition-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "condition.lsp")
   (load "cell-error-name.lsp")
   (load "assert.lsp")

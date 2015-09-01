@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:44:44 2003
 ;;;; Contains: Tests of NSET-DIFFERENCE
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 27 22:36:48 2003
 ;;;; Contains: Tests of CELL-ERROR-NAME
 
-(in-package :cl-test)
+
 
 (deftest cell-error-name.1
   (handler-case

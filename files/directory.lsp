@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jan  1 12:00:18 2004
 ;;;; Contains: Tests of DIRECTORY
 
-(in-package :cl-test)
+
 
 (deftest directory.1
   (directory "nonexistent")

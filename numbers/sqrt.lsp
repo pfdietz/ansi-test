@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 10:54:17 2003
 ;;;; Contains: Tests of SQRT
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Sep  1 19:53:34 2003
 ;;;; Contains: Tests of 1+
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Nov 11 20:17:51 2004
 ;;;; Contains: Tests of the ~^ format directive (inside other format constructs)
 
-(in-package :cl-test)
+
 
 
 ;;; Tests of ~^ inside ~{ ... ~}

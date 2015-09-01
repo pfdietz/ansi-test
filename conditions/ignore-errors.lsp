@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar  2 20:38:25 2003
 ;;;; Contains: Tests of IGNORE-ERRORS
 
-(in-package :cl-test)
+
 
 (deftest ignore-errors.1
   (ignore-errors)

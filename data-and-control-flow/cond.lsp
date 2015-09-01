@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 07:37:58 2002
 ;;;; Contains: Tests of COND
 
-(in-package :cl-test)
+
 
 (deftest cond.1
   (cond)

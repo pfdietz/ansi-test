@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jun  9 07:02:53 2005
 ;;;; Contains: Separate tests for DEFMETHOD
 
-(in-package :cl-test)
+
 
 (deftest defmethod.1
   (let ((sym (gensym)))

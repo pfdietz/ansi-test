@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 07:20:31 2003
 ;;;; Contains: Tests of SIMPLE-ARRAY
 
-(in-package :cl-test)
+
 
 ;;; Tests of simple-array by itself
 

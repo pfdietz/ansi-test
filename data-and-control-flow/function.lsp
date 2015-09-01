@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Oct  7 07:34:29 2002
 ;;;; Contains: Tests for type FUNCTION and the special form FUNCTION
 
-(in-package :cl-test)
+
 
 ;;;
 ;;; Note! There are significant incompatibilities between CLTL1 and ANSI CL

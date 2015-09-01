@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 20:43:54 2003
 ;;;; Contains: Tests of DPB
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jan  8 06:22:53 2004
 ;;;; Contains: Tests for RENAME-FILE
 
-(in-package :cl-test)
+
 
 (deftest rename-file.1
   (let ((pn1 #p"file-to-be-renamed.txt")

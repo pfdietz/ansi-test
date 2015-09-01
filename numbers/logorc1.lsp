@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 06:23:43 2003
 ;;;; Contains: Tests of LOGORC1
 
-(in-package :cl-test)
+
 
 
 

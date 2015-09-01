@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:03:01 2003
 ;;;; Contains: Tests of LIST-LENGTH
 
-(in-package :cl-test)
+
 
 
 

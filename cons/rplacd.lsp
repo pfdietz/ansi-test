@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:30:28 2003
 ;;;; Contains: Tests of RPLACD
 
-(in-package :cl-test)
+
 
 
 

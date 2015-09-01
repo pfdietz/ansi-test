@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 22:51:25 2002
 ;;;; Contains: Tests for TYPECASE
 
-(in-package :cl-test)
+
 
 (deftest typecase.1
   (typecase 1 (integer 'a) (t 'b))

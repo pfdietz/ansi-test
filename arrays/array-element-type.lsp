@@ -2,7 +2,7 @@
 ;;;; Author:   Paul Dietz
 ;;;; Contains: Tests of the function ARRAY-ELEMENT-TYPE
 
-(in-package :cl-test)
+
 
 ;;; Mosts tests are in other files, incidental to testing of
 ;;; other things

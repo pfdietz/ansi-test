@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Mar 24 03:40:24 2003
 ;;;; Contains: Auxiliary functions for testing CLOS
 
-(in-package :cl-test)
+
 
 (defun make-defclass-test-name (&rest args)
   (intern (apply #'concatenate 'string (mapcar #'string args))

@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Nov 27 06:43:21 2002
 ;;;; Contains: Tests of LAMBDA forms
 
-(in-package :cl-test)
+
 
 (deftest lambda.1
   ((lambda (x) x) 'a)

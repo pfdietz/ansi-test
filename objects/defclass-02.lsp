@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Apr 25 07:16:57 2003
 ;;;; Contains: Tests of DEFCLASS with simple inheritance
 
-(in-package :cl-test)
+
 
 ;;;
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:51:56 2003
 ;;;; Contains: Tests of MEMBER-IF
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 31 08:04:45 2003
 ;;;; Contains: Tests of NEXT-METHOD-P
 
-(in-package :cl-test)
+
 
 (defgeneric nmp-gf-01 (x)
   (:method ((x integer)) (notnot-mv (next-method-p)))

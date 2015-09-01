@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 13 16:32:44 2003
 ;;;; Contains: Tests of COMPILED-FUNCTION-P
 
-(in-package :cl-test)
+
 
 (deftest compiled-function-p.1
   (check-type-predicate #'compiled-function-p 'compiled-function)

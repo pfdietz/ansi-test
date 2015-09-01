@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May  3 14:23:29 2003
 ;;;; Contains: Tests of CHANGE-CLASS
 
-(in-package :cl-test)
+
 
 (defclass change-class-class-01a ()
   ((a :initarg :a) (b :initarg :b) (c :initarg :c)))

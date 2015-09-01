@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan  5 20:53:03 2004
 ;;;; Contains: Tests of ENSURE-DIRECTORIES-EXIST
 
-(in-package :cl-test)
+
 
 (deftest ensure-directories-exist.1
   (let* ((pn (make-pathname :name "ensure-directories-exist.lsp"

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Oct 31 21:41:49 2004
 ;;;; Contains: Additional tests of the REAL type specifier
 
-(in-package :cl-test)
+
 
 (deftest real.1
   (loop for i = 1 then (ash i 1)

@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Aug  3 11:55:07 2004
 ;;;; Contains: Test of the ~S format directive
 
-(in-package :cl-test)
+
 
 
 (deftest format.s.1

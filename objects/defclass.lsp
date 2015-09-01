@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Mar 24 03:39:54 2003
 ;;;; Contains: Tests of DEFCLASS
 
-(in-package :cl-test)
+
 
 (defclass-with-tests defclass-1 nil nil)
 (defclass-with-tests defclass-2 nil (slot1 slot2 slot3))

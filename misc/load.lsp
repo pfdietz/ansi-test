@@ -5,7 +5,11 @@
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "misc.lsp")
 
 ;;; Misc. tests dealing with type propagation in CMUCL

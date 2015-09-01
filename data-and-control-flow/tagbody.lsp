@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 12 13:27:22 2002
 ;;;; Contains: Tests of TAGBODY
 
-(in-package :cl-test)
+
 
 (deftest tagbody.1
   (tagbody)

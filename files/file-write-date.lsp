@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan  6 06:01:35 2004
 ;;;; Contains: Tests for FILE-WRITE-DATE
 
-(in-package :cl-test)
+
 
 (deftest file-write-date.1
   (let* ((pn "file-write-date.lsp")

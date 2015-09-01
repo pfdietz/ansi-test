@@ -3,9 +3,6 @@
 ;;;; Created:  Sun Apr 20 20:58:54 2003
 ;;;; Contains: Tests for DEFCLASS, part 01
 
-
-(in-package :cl-test)
-
 ;;; I've decided to write some 'manual' tests, then refactor these back
 ;;; to the automatic mechanisms I'll put into defclass-aux.lsp after
 ;;; I have a better understanding of the object system

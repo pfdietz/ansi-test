@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Oct  9 21:45:07 2002
 ;;;; Contains: Tests of FUNCALL
 
-(in-package :cl-test)
+
 
 (deftest funcall.1
   (let ((fn #'cons))

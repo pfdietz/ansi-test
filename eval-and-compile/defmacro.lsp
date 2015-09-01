@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 12:35:24 2003
 ;;;; Contains: Tests of DEFMACRO
 
-(in-package :cl-test)
+
 
 (deftest defmacro.error.1
   (signals-error (funcall (macro-function 'defmacro))

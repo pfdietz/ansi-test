@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Apr 25 06:59:22 2003
 ;;;; Contains: Error case tests for DEFCLASS
 
-(in-package :cl-test)
+
 
 ;;; I created some redundant tests by accident.  This list of
 ;;; tests could be reduced in size.

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Dec  6 14:23:54 2003
 ;;;; Contains: Tests for PATHNAME-DEVICE
 
-(in-package :cl-test)
+
 
 
 

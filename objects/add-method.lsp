@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jun  4 19:12:25 2003
 ;;;; Contains: Tests for ADD-METHOD
 
-(in-package :cl-test)
+
 
 (defgeneric add-method-gf-01 (x)
   (:method ((x t)) 'a))

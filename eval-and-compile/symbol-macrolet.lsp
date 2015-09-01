@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jan  8 05:58:53 2005
 ;;;; Contains: Tests of SYMBOL-MACROLET
 
-(in-package :cl-test)
+
 
 (deftest symbol-macrolet.1
   (loop for s in *cl-non-variable-constant-symbols*

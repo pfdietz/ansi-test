@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Sep  1 21:30:38 2003
 ;;;; Contains: Aux. functions for testing EXP, EXPT
 
-(in-package :cl-test)
+
 
 (defun my-exp (x n)
   "Compute e^x in the appropriate float result type, summing

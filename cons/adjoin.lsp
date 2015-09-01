@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Mar 28 07:33:20 1998
 ;;;; Contains:  Tests of ADJOIN
 
-(in-package :cl-test)
+
 
 
 

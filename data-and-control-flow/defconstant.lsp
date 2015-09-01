@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 10 23:05:39 2002
 ;;;; Contains: Tests of DEFCONSTANT
 
-(in-package :cl-test)
+
 
 (defconstant test-constant-1  17)
 

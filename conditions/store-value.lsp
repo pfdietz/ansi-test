@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar 23 09:10:22 2003
 ;;;; Contains: Tests for STORE-VALUE restart and function
 
-(in-package :cl-test)
+
 
 (deftest store-value.1
   (restart-case

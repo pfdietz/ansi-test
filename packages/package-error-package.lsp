@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 22 06:52:56 2004
 ;;;; Contains: Tests of PACKAGE-ERROR-PACKAGE
 
-(in-package :cl-test)
+
 
 (deftest package-error-package.1
   (eqt (find-package (package-error-package

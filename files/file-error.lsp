@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 13 19:10:02 2004
 ;;;; Contains: Tests of the FILE-ERROR condition, and associated accessor function
 
-(in-package :cl-test)
+
 
 (deftest file-error.1
   (let ((pn (make-pathname :name :wild

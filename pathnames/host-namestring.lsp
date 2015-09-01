@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep 12 06:22:40 2004
 ;;;; Contains: Tests of HOST-NAMESTRING
 
-(in-package :cl-test)
+
 
 (deftest host-namestring.1
   (let* ((vals (multiple-value-list

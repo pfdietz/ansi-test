@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Aug  4 21:33:44 2003
 ;;;; Contains: Tests of MINUSP
 
-(in-package :cl-test)
+
 
 (deftest minusp.error.1
   (signals-error (minusp) program-error)

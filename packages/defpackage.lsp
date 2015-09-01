@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:09:18 1998
 ;;;; Contains: Tests of DEFPACKAGE
 
-(in-package :cl-test)
+
 
 
 

@@ -6,7 +6,7 @@
 ;;; The following test was suggested by Sam Steingold,
 ;;; so I've created this file to hold it.
 
-(in-package :cl-test)
+
 
 (defvar *eval-when.1-collector*)
 

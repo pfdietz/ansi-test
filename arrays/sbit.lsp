@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 15:30:31 2003
 ;;;; Contains: Tests for SBIT
 
-(in-package :cl-test)
+
 
 (deftest sbit.1
   (sbit #*0010 2)

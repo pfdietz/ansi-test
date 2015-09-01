@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 21:38:16 2002
 ;;;; Contains: Tests for EQUAL
 
-(in-package :cl-test)
+
 
 (deftest equal.1
   (loop for x in *symbols*

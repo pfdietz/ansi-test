@@ -1,6 +1,10 @@
 (compile-and-load "ANSI-TESTS:AUX;hash-table-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "hash-table.lsp")
   (load "make-hash-table.lsp")
   (load "hash-table-p.lsp")

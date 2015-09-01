@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 17:53:30 2003
 ;;;; Contains: Tests of MAKE-RANDOM-STATE
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jan 25 11:55:48 2003
 ;;;; Contains: Tests of (array t ...) type specifiers
 
-(in-package :cl-test)
+
 
 ;;; Tests of (array t)
 

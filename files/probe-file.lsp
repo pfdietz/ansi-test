@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan  5 20:46:29 2004
 ;;;; Contains: Tests of PROBE-FILE
 
-(in-package :cl-test)
+
 
 (deftest probe-file.1
   (probe-file #p"nonexistent")

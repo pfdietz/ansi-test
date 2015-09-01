@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:39:19 2003
 ;;;; Contains: Tests of INTERSECTION
 
-(in-package :cl-test)
+
 
 
 

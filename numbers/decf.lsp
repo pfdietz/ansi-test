@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep  4 20:50:54 2003
 ;;;; Contains: Tests of DECF
 
-(in-package :cl-test)
+
 
 
 

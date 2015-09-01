@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 05:55:23 2003
 ;;;; Contains: Tests of LOGEQV
 
-(in-package :cl-test)
+
 
 
 

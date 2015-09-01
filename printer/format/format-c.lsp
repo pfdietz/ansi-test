@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jul 27 23:07:16 2004
 ;;;; Contains: Tests of formatted output, ~C directive
 
-(in-package :cl-test)
+
 
 
 

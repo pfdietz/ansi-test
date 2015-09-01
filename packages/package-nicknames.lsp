@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 07:51:26 1998
 ;;;; Contains: Tests of PACKAGE-NICKNAMES
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

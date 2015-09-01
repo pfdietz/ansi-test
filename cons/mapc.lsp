@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:21:24 2003
 ;;;; Contains: Tests of MAPC
 
-(in-package :cl-test)
+
 
 
 

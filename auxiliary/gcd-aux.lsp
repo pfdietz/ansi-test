@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Sep  3 06:57:22 2003
 ;;;; Contains: Aux. functions for testing GCD
 
-(in-package :cl-test)
+
 
 (defun my-gcd (x y)
   (cond

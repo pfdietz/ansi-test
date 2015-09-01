@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar 23 08:25:50 2003
 ;;;; Contains: Tests of the ABORT restart and function
 
-(in-package :cl-test)
+
 
 (deftest abort.1
   (restart-case

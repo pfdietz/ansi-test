@@ -6,7 +6,11 @@
 (compile-and-load "ANSI-TESTS:AUX;packages00-aux.lsp")
 (compile-and-load "ANSI-TESTS:AUX;package-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "find-symbol.lsp")
   (load "find-all-symbols.lsp")
   (load "find-package.lsp")

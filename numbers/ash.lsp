@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 08:43:03 2003
 ;;;; Contains: Tests of ASH
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

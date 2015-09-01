@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 17:18:01 2003
 ;;;; Contains: Tests of DEFSETF
 
-(in-package :cl-test)
+
 
 ;;; Need to add non-error tests
 

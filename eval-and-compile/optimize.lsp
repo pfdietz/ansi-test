@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 21 09:31:34 2005
 ;;;; Contains: Tests of the OPTIMIZE declaration
 
-(in-package :cl-test)
+
 
 (deftest optimize.1
   (locally (declare (optimize)) nil)

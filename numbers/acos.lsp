@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Feb 10 05:39:24 2004
 ;;;; Contains: Tess of ACOS
 
-(in-package :cl-test)
+
 
 (deftest acos.1
   (loop for i from -1000 to 1000

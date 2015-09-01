@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 17 08:12:35 2003
 ;;;; Contains: Tests of MAKE-INSTANCES-OBSOLETE
 
-(in-package :cl-test)
+
 
 (defclass make-instances-obsolete-class-01 ()
   ((a :initarg :a)

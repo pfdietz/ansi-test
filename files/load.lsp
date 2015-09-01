@@ -3,9 +3,11 @@
 ;;;; Created:  Thu Jan  1 11:59:35 2004
 ;;;; Contains: Load tests of section 20, 'Files'
 
-(in-package :cl-test)
+(in-package #:cl-test)
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "directory.lsp")
   (load "probe-file.lsp")
   (load "ensure-directories-exist.lsp")

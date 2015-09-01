@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 20:16:50 2003
 ;;;; Contains: Tests of BIT-VECTOR-P
 
-(in-package :cl-test)
+
 
 (deftest bit-vector-p.2
   (notnot-mv (bit-vector-p #*))

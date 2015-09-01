@@ -4,7 +4,7 @@
 ;;;; Contains: Tests of CERROR
 
 
-(in-package :cl-test)
+
 
 (deftest cerror.1
   (let ((fmt "Cerror"))

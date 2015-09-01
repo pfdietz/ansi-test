@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 22 06:55:56 2004
 ;;;; Contains: Tests of PACKAGE-USE-LIST
 
-(in-package :cl-test)
+
 
 ;;; Most tests of this function are in files for other package-related operators
 

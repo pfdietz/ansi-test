@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 12 09:24:36 2002
 ;;;; Contains: Tests for LET, LET*
 
-(in-package :cl-test)
+
 
 ;;; LET and LET* are also heavily exercised in the many other tests.
 

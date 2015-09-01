@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May  7 07:00:58 2005
 ;;;; Contains: Tests of DECODE-UNIVERSAL-TIME
 
-(in-package :cl-test)
+
 
 (deftest decode-universal-time.1
   (decode-universal-time 0 0)

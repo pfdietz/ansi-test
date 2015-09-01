@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug  3 15:55:17 2003
 ;;;; Contains: Tests of MAX
 
-(in-package :cl-test)
+
 
 
 

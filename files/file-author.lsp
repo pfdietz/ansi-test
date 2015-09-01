@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan  6 05:41:06 2004
 ;;;; Contains: Tests of FILE-AUTHOR
 
-(in-package :cl-test)
+
 
 (deftest file-author.1
   (loop for pn in

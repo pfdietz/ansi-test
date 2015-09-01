@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 23:22:46 2003
 ;;;; Contains: Tests for LOGTEST
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

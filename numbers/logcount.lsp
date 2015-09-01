@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 23:12:56 2003
 ;;;; Contains: Tests of LOGCOUNT
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

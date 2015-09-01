@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 12 13:04:02 2002
 ;;;; Contains: Tests of CATCH and THROW
 
-(in-package :cl-test)
+
 
 (deftest catch.1
   (catch 'foo)

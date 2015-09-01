@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 17:50:04 2003
 ;;;; Contains: Tests of RANDOM-STATE-P
 
-(in-package :cl-test)
+
 
 (deftest random-state-p.error.1
   (signals-error (random-state-p) program-error)

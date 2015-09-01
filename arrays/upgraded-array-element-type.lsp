@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jan 22 20:43:55 2003
 ;;;; Contains: Tests of UPGRADED-ARRAY-ELEMENT-TYPE
 
-(in-package :cl-test)
+
 
 (deftest upgraded-array-element-type.1
   (let ((upgraded-bit (upgraded-array-element-type 'bit)))

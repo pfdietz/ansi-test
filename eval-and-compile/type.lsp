@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 29 08:25:46 2005
 ;;;; Contains: Tests of TYPE declarations
 
-(in-package :cl-test)
+
 
 ;;; Also of implicit type declarations
 

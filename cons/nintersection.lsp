@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:40:02 2003
 ;;;; Contains: Tests of NINTERSECTION
 
-(in-package :cl-test)
+
 
 
 

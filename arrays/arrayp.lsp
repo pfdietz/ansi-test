@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 22:08:21 2003
 ;;;; Contains: Tests of ARRAYP
 
-(in-package :cl-test)
+
 
 ;;; Also tested by make-array.lsp
 

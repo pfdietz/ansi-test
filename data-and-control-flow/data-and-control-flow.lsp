@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Oct 21 22:21:48 2002
 ;;;; Contains: Overall tests for section 5 of spec, "Data and Control Flow"
 
-(in-package :cl-test)
+
 
 ;;; Functions from section 5
 (defparameter *dcf-fns*

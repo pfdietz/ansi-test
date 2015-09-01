@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Sep  8 20:21:19 2003
 ;;;; Contains: Tests of BOOLE and associated constants
 
-(in-package :cl-test)
+
 
 
 

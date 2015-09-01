@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Dec 31 09:31:33 2003
 ;;;; Contains: Tests (such as they are) for LOAD-LOGICAL-PATHNAME-TRANSLATIONS
 
-(in-package :cl-test)
+
 
 ;;; The function LOAD-LOGICAL-PATHNAME-TRANSLATIONS is almost entirely
 ;;; untestable, since the basic behavior is implementation defined.

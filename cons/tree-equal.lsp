@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jun 14 07:23:03 2003
 ;;;; Contains: Tests of TREE-EQUAL
 
-(in-package :cl-test)
+
 
 
 

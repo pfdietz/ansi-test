@@ -4,7 +4,7 @@
 ;;;; Contains: Tests of the DECLARATION declarations
 
 
-(in-package :cl-test)
+
 
 (deftest declaration.1
   (progn (declaim (declaration)) nil)

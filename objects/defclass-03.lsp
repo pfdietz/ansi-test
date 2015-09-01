@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 27 16:23:59 2003
 ;;;; Contains: Tests of DEFCLASS with more involved inheritance
 
-(in-package :cl-test)
+
 
 ;;;
 

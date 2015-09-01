@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Feb 23 06:20:00 2004
 ;;;; Contains: Auxiliary functions and macros for printer tests
 
-(in-package :cl-test)
+
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))

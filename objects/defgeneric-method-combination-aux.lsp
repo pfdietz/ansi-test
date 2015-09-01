@@ -3,7 +3,7 @@
 ;;;; Created:  Wed May 28 14:02:42 2003
 ;;;; Contains: Class definitions for defgeneric-method-combination-*.lsp
 
-(in-package :cl-test)
+
 
 (defclass dgmc-class-01 () ())
 (defclass dgmc-class-02 (dgmc-class-01) ())

@@ -4,7 +4,7 @@
 ;;;; Contains: Tests of BIT-EQV
 
 
-(in-package :cl-test)
+
 
 
 

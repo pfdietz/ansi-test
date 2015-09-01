@@ -3,9 +3,11 @@
 ;;;; Created:  Tue Jan 13 19:38:10 2004
 ;;;; Contains: Load files containing tests for section 21 (streams)
 
-(in-package :cl-test)
+(in-package #:cl-test)
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "input-stream-p.lsp")
   (load "output-stream-p.lsp")
   (load "interactive-stream-p.lsp")

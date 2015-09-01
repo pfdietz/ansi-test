@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 11 13:46:44 2003
 ;;;; Contains: Tests of NO-APPLICABLE-METHOD
 
-(in-package :cl-test)
+
 
 (defgeneric no-app-meth-gf-01 (x))
 

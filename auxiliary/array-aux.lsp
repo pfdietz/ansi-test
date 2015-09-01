@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 05:11:31 2003
 ;;;; Contains: Auxiliary functions for array tests
 
-(in-package :cl-test)
+
 
 (defun make-array-check-upgrading (type)
   (subtypep* type (array-element-type (make-array 0 :element-type type))))

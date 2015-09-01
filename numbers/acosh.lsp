@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 19:20:53 2004
 ;;;; Contains: Tests of ACOSH
 
-(in-package :cl-test)
+
 
 (deftest acosh.1
   (let ((result (acosh 1)))

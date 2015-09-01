@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep  4 22:29:09 2003
 ;;;; Contains: Tests of SIGNUM
 
-(in-package :cl-test)
+
 
 (deftest signum.error.1
   (signals-error (signum) program-error)

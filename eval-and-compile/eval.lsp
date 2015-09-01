@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Nov 21 10:43:15 2002
 ;;;; Contains: Tests of EVAL
 
-(in-package :cl-test)
+
 
 (deftest eval.1
   (eval 1)

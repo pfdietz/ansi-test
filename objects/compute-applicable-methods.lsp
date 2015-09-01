@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jun  2 06:40:41 2003
 ;;;; Contains: Tests for COMPUTE-APPLICABLE-METHODS
 
-(in-package :cl-test)
+
 
 (defgeneric cam-gf-01 (x y))
 

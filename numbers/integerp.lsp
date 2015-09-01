@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 10:18:34 2003
 ;;;; Contains: Tests for INTEGERP
 
-(in-package :cl-test)
+
 
 (deftest integerp.error.1
   (signals-error (integerp) program-error)

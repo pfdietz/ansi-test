@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Nov 28 06:43:51 2002
 ;;;; Contains: Aux. functions for cl-symbols.lsp
 
-(in-package :cl-test)
+
 
 (declaim (optimize (safety 3)))
 

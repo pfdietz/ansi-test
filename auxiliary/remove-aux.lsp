@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep 15 07:42:36 2002
 ;;;; Contains: Auxiliary functions for testing REMOVE and related functions
 
-(in-package :cl-test)
+
 
 (defun make-random-element (type)
   (cond

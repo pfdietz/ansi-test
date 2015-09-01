@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:28:09 2003
 ;;;; Contains: Tests of ATOM
 
-(in-package :cl-test)
+
 
 (deftest atom.1
   (loop for x in *universe*

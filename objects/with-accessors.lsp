@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 17 17:07:29 2003
 ;;;; Contains: Tests of WITH-ACCESSORS
 
-(in-package :cl-test)
+
 
 (deftest with-accessors.1
   (with-accessors () nil)

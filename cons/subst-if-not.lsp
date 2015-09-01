@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:48:22 2003
 ;;;; Contains: Tests of SUBST-IF-NOT
 
-(in-package :cl-test)
+
 
 
 

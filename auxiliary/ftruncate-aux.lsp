@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Aug 20 06:37:01 2003
 ;;;; Contains: Aux. functions for testing FTRUNCATE
 
-(in-package :cl-test)
+
 
 (defun ftruncate.1-fn ()
   (loop for n = (- (random 200000)

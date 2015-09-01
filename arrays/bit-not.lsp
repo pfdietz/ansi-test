@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 19:40:13 2003
 ;;;; Contains: Tests of BIT-NOT
 
-(in-package :cl-test)
+
 
 (deftest bit-not.1
   (let ((a1 (make-array nil :element-type 'bit :initial-element 0)))

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:30:55 2003
 ;;;; Contains: Tests of PAIRLIS
 
-(in-package :cl-test)
+
 
 
 

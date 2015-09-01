@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May  8 20:28:21 2005
 ;;;; Contains: Tests of GET-INTERNAL-REAL-TIME, GET-INTERNAL-RUN-TIME
 
-(in-package :cl-test)
+
 
 (deftest get-internal-real-time.1
   (notnot-mv (typep (multiple-value-list (get-internal-real-time)) '(cons unsigned-byte null)))

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 08:24:57 2003
 ;;;; Contains: Tests of NUMERATOR, DENOMINATOR
 
-(in-package :cl-test)
+
 
 
 

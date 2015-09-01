@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Mar  4 06:21:51 2005
 ;;;; Contains: CMUCL type prop failures (moved from misc.lsp)
 
-(in-package :cl-test)
+
 
 ;;; All these are 'strange template failures'
 ;;; The comment before each is the NAME of the template in the backtrace

@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 13 15:27:51 2003
 ;;;; Contains: Tests for FDEFINITION
 
-(in-package :cl-test)
+
 
 ;;; Error cases
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:03:37 2003
 ;;;; Contains: Tests of LISTP
 
-(in-package :cl-test)
+
 
 
 

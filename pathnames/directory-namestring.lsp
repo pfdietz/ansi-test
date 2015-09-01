@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep 12 06:21:42 2004
 ;;;; Contains: Tests for DIRECTORY-NAMESTRING
 
-(in-package :cl-test)
+
 
 (deftest directory-namestring.1
   (let* ((vals (multiple-value-list

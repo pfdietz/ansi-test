@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 17 20:55:50 2003
 ;;;; Contains: Tests of DEFGENERIC
 
-(in-package :cl-test)
+
 
 ;;; Various error cases
 

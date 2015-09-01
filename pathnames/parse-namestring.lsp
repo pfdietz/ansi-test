@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Aug 14 13:59:18 2004
 ;;;; Contains: Tests of PARSE-NAMESTRING
 
-(in-package :cl-test)
+
 
 ;;; "Parsing a null string always succeeds, producing a pathname
 ;;;  with all components (except the host) equal to nil."

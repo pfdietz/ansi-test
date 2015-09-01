@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Aug 20 06:36:35 2003
 ;;;; Contains: Tests of FTRUNCATE
 
-(in-package :cl-test)
+
 
 
 

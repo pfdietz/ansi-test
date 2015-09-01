@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:27:20 2003
 ;;;; Contains: Tests of ASSOC
 
-(in-package :cl-test)
+
 
 
 

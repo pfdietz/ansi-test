@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 21 07:33:53 2005
 ;;;; Contains: Tests of PROCLAIM
 
-(in-package :cl-test)
+
 
 (deftest proclaim.1
   (let ((sym (gensym)))

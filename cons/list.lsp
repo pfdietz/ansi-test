@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:56:04 2003
 ;;;; Contains: Tests of LIST, LIST*
 
-(in-package :cl-test)
+
 
 
 

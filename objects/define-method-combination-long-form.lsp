@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jul 13 08:26:41 2003
 ;;;; Contains: Tests of DEFINE-METHOD-COMBINATION (long form)
 
-(in-package :cl-test)
+
 
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (report-and-ignore-errors

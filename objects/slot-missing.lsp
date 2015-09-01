@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jun 15 06:03:58 2003
 ;;;; Contains: Tests of SLOT-MISSING
 
-(in-package :cl-test)
+
 
 (defparameter *slot-missing-class-01-var* nil)
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Aug 21 14:21:07 2003
 ;;;; Contains: Aux. functions for testing ROUND
 
-(in-package :cl-test)
+
 
 (defun round.1-fn ()
   (loop for n = (- (random 2000000000)

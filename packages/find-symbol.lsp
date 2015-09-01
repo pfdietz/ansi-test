@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 07:49:34 1998
 ;;;; Contains: Tests for FIND-SYMBOL
 
-(in-package :cl-test)
+
 
 ;;(declaim (optimize (safety 3)))
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 10 23:21:50 2002
 ;;;; Contains: Tests for DEFVAR
 
-(in-package :cl-test)
+
 
 (defvar *defvar-test-var-1* 100)
 

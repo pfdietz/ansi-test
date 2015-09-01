@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 07:41:15 2003
 ;;;; Contains: Tests of REALPART
 
-(in-package :cl-test)
+
 
 (deftest realpart.error.1
   (signals-error (realpart) program-error)

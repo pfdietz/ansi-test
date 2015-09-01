@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Mar 28 07:32:20 1998
 ;;;; Contains: Testing of CL Features related to "CONS", part 3
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 20:13:22 2003
 ;;;; Contains: Tests of BYTE, BYTE-SIZE, and BYTE-POSITION
 
-(in-package :cl-test)
+
 
 (deftest byte.error.1
   (signals-error (byte) program-error)

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar 23 08:46:05 2003
 ;;;; Contains: Tests of the MUFFLE-WARNING restart and function
 
-(in-package :cl-test)
+
 
 (deftest muffle-warning.1
   (restart-case

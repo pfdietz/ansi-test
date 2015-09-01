@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Oct  8 00:09:14 2002
 ;;;; Contains: Tests for FMAKUNBOUND
 
-(in-package :cl-test)
+
 
 (deftest fmakunbound.1
   (let ((g (gensym)))

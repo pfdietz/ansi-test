@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Feb 21 18:26:08 2004
 ;;;; Contains: Tests of DO-EXTERNAL-SYMBOLS
 
-(in-package :cl-test)
+
 
 
 

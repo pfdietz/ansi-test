@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 18 20:47:58 2003
 ;;;; Contains: Tests of DISASSEMBLE
 
-(in-package :cl-test)
+
 
 (defun disassemble-it (fn)
   (let (val)

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Dec 11 22:15:54 2004
 ;;;; Contains: Tests of various string-returning functions from section 25
 
-(in-package :cl-test)
+
 
 (defmacro def-env-tests (fn-name)
   (flet ((%name (suffix) (intern (concatenate 'string (symbol-name fn-name) suffix)

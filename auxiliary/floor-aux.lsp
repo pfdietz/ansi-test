@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Aug  9 08:08:00 2003
 ;;;; Contains: Aux. functions used in FLOOR tests
 
-(in-package :cl-test)
+
 
 (defun floor.1-fn ()
   (loop for n = (- (random 2000000000)

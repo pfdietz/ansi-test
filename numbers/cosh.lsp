@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 06:54:15 2004
 ;;;; Contains: Tests of COSH
 
-(in-package :cl-test)
+
 
 (deftest cosh.1
   (let ((result (cosh 0)))

@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 13 16:53:39 2003
 ;;;; Contains: Tests for VALUES-LIST
 
-(in-package :cl-test)
+
 
 (deftest values-list.error.1
   (signals-error (values-list) program-error)

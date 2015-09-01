@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Aug 20 06:24:45 2003
 ;;;; Contains: Tests of FCEILING
 
-(in-package :cl-test)
+
 
 (defun fceiling.1-fn ()
   (loop for n = (- (random 200000)

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:47:05 2003
 ;;;; Contains: Tests of NSET-EXCLUSIVE-OR
 
-(in-package :cl-test)
+
 
 
 

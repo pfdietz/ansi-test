@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 19:56:44 2002
 ;;;; Contains: Tests of CASE
 
-(in-package :cl-test)
+
 
 (deftest case.1
   (case 'a)

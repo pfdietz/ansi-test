@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jun  4 20:14:26 2003
 ;;;; Contains: Tests for UNBOUND-SLOT, UNBOUND-SLOT-INSTANCE
 
-(in-package :cl-test)
+
 
 (defclass ubs-class-01 ()
   ((a :initarg :a)))

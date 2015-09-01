@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 15 12:54:22 2005
 ;;;; Contains: Tests of INSPECT
 
-(in-package :cl-test)
+
 
 ;;; INSPECT's normal behavior is entirely implementation-dependent,
 ;;; so it cannot be tested here.  Only test simple error cases.

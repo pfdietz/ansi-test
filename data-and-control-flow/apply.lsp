@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jan 13 15:13:07 2003
 ;;;; Contains: Tests of APPLY
 
-(in-package :cl-test)
+
 
 ;;; Error cases
 

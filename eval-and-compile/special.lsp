@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 21 12:51:59 2005
 ;;;; Contains: Tests of the declaration SPECIAL
 
-(in-package :cl-test)
+
 
 ;;; Many tests for this declaration are in the tests
 ;;; for specific binding forms.

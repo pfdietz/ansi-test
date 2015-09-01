@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 23:07:33 2003
 ;;;; Contains: Tests of FLOATP
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

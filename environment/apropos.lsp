@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Dec 12 16:17:47 2004
 ;;;; Contains: Tests for APROPOS
 
-(in-package :cl-test)
+
 
 (deftest apropos.1
   (loop for n from 10

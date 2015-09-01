@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 21:36:33 2003
 ;;;; Contains: Tests for MAKE-HASH-TABLE
 
-(in-package :cl-test)
+
 
 ;; (eval-when (:load-toplevel :compile-toplevel :execute)
 ;;  (compile-and-load "hash-table-aux.lsp"))

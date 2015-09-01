@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Apr 28 21:06:58 2003
 ;;;; Contains: Tests of ALLOCATE-INSTANCE
 
-(in-package :cl-test)
+
 
 ;;; According to the CLHS, the meaning of adding methods to
 ;;; ALLOCATE-INSTANCE is unspecified, so this will not be tested

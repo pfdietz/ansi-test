@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 15 12:56:29 2005
 ;;;; Contains: Tests of DRIBBLE
 
-(in-package :cl-test)
+
 
 ;;; Error tests only -- cannot depend on using it in a program
 ;;; See the CLHS DRIBBLE and issue DRIBBLE-TECHNIQUE for an explanation

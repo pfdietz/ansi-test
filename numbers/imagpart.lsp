@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 07:47:43 2003
 ;;;; Contains: Tests of IMAGPART
 
-(in-package :cl-test)
+
 
 (deftest imagpart.error.1
   (signals-error (imagpart) program-error)

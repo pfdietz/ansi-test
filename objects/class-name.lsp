@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jun 15 12:05:47 2003
 ;;;; Contains: Tests of CLASS-NAME
 
-(in-package :cl-test)
+
 
 ;;; This is mostly tested elsewhere.
 

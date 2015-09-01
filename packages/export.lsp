@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 07:59:45 1998
 ;;;; Contains: Tests of EXPORT
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

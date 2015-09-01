@@ -5,7 +5,7 @@
 
 ;; find-class is also tested in numerous other places.
 
-(in-package :cl-test)
+
 
 (deftest find-class.1
   (loop for name in *cl-types-that-are-classes-symbols*

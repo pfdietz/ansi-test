@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Mar 22 06:58:03 2003
 ;;;; Contains: Tests for RESTART-CASE
 
-(in-package :cl-test)
+
 
 (deftest restart-case.1
   (restart-case (values)))

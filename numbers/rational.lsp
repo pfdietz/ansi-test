@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Sep  1 13:49:18 2003
 ;;;; Contains: Tests of RATIONAL
 
-(in-package :cl-test)
+
 
 (deftest rational.error.1
   (signals-error (rational) program-error)

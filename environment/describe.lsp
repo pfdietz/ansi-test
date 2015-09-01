@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Dec 12 13:22:13 2004
 ;;;; Contains: Tests of DESCRIBE
 
-(in-package :cl-test)
+
 
 (defun harness-for-describe (fn)
   (let (s1 s2)

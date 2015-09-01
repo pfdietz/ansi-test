@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Dec  6 14:23:22 2003
 ;;;; Contains: Tests for PATHNAME-HOST
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May 15 13:07:39 2005
 ;;;; Contains: Tests of ED
 
-(in-package :cl-test)
+
 
 ;;; Since the normal behavior of ED is implementation dependent,
 ;;; test only the error behavior

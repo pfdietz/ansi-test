@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Mar 21 22:28:53 2003
 ;;;; Contains: Tests for RESTART-BIND
 
-(in-package :cl-test)
+
 
 (deftest restart-bind.1
   (restart-bind () nil)

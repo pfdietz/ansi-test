@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:04:56 1998
 ;;;; Contains: Tests of UNINTERN
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

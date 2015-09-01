@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Jun 21 20:59:17 2004
 ;;;; Contains: Aux. functions for package tests
 
-(in-package :cl-test)
+
 
 (defmacro test-with-package-iterator (package-list-expr &rest symbol-types)
   "Build an expression that tests the with-package-iterator form."

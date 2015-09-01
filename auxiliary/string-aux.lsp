@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct  4 06:51:32 2002
 ;;;; Contains: Auxiliary functions for string testing
 
-(in-package :cl-test)
+
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))

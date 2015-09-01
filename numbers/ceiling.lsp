@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Aug 19 06:50:44 2003
 ;;;; Contains: Tests of CEILING
 
-(in-package :cl-test)
+
 
 
 

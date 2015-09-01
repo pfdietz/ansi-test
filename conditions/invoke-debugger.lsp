@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Feb 28 21:59:57 2003
 ;;;; Contains: Tests of INVOKE-DEBUGGER
 
-(in-package :cl-test)
+
 
 ;;; We can't test actual entry into the debugger, but we can test
 ;;; that the function in *debugger-hook* is properly called.

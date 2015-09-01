@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar 23 04:06:06 2003
 ;;;; Contains: Tests of WITH-CONDITION-RESTARTS
 
-(in-package :cl-test)
+
 
 (deftest with-condition-restarts.1
   (let (a b c (i 0))

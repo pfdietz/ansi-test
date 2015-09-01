@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Nov 26 20:01:27 2002
 ;;;; Contains: Aux. functions for subseq tests
 
-(in-package :cl-test)
+
 
 (defun subseq-list.4-body ()
   (block done

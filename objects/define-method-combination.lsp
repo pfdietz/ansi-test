@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jun 15 10:49:39 2003
 ;;;; Contains: Tests of DEFINE-METHOD-COMBINATION
 
-(in-package :cl-test)
+
 
 (defclass dmc-class-01a () ())
 (defclass dmc-class-01b (dmc-class-01a) ())

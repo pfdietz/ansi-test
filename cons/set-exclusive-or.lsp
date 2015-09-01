@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:45:46 2003
 ;;;; Contains: Tests of SET-EXCLUSIVE-OR
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Nov 10 21:13:04 2002
 ;;;; Contains: Tests for LOOP-AS-HASH forms
 
-(in-package :cl-test)
+
 
 (defparameter *loop.6.alist*
   '((a . 1) (b . 2) (c . 3)))

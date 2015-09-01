@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 05:23:45 2003
 ;;;; Contains: Tests for HASH-TABLE-SIZE
 
-(in-package :cl-test)
+
 
 (deftest hash-table-size.error.1
   (signals-error (hash-table-size) program-error)

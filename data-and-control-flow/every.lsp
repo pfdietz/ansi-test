@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 23:25:58 2002
 ;;;; Contains: Tests of EVERY
 
-(in-package :cl-test)
+
 
 (deftest every.1
   (notnot-mv (every #'identity nil))

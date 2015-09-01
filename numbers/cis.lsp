@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 18:42:15 2003
 ;;;; Contains: Tests of CIS
 
-(in-package :cl-test)
+
 
 
 

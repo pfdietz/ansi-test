@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 19:01:38 2003
 ;;;; Contains: Tests of BIT-ANDC2
 
-(in-package :cl-test)
+
 
 
 

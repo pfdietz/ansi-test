@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Jun 23 11:54:10 2005
 ;;;; Contains: Tests of MAKE-CONDITION
 
-(in-package :cl-test)
+
 
 
 (deftest make-condition.1

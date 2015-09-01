@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep 12 06:23:50 2004
 ;;;; Contains: Tests of ENOUGH-NAMESTRING
 
-(in-package :cl-test)
+
 
 (deftest enough-namestring.1
   (let* ((vals (multiple-value-list (enough-namestring "enough-namestring.lsp")))

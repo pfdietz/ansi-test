@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 06:44:45 2002
 ;;;; Contains: Tests of T
 
-(in-package :cl-test)
+
 
 (deftest t.1
   t t)

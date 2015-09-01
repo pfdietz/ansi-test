@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 23 20:48:12 2003
 ;;;; Contains: Tests for WARN
 
-(in-package :cl-test)
+
 
 (deftest warn.1
   (let ((warned nil))

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:48:36 2003
 ;;;; Contains: Tests of NTHCDR
 
-(in-package :cl-test)
+
 
 
 

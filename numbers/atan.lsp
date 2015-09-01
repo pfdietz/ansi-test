@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 06:01:55 2004
 ;;;; Contains: Tests of ATAN
 
-(in-package :cl-test)
+
 
 (deftest atan.1
   (let ((result (atan 0)))

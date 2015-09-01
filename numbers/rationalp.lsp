@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 08:36:31 2003
 ;;;; Contains: Tests of RATIONALP
 
-(in-package :cl-test)
+
 
 (deftest rationalp.error.1
   (signals-error (rationalp) program-error)

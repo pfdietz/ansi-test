@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 22 07:10:22 2004
 ;;;; Contains: Tests for FIND-ALL-SYMBOLS
 
-(in-package :cl-test)
+
 
 (deftest find-all-symbols.1
   (let ((all-packages (list-all-packages)))

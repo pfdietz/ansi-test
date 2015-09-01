@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 06:16:20 2003
 ;;;; Contains: Tests of LOGNOT
 
-(in-package :cl-test)
+
 
 
 

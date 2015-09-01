@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Sep  8 21:47:22 2003
 ;;;; Contains: Tests of LOGANDC1
 
-(in-package :cl-test)
+
 
 
 

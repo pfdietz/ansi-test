@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 07:14:14 2002
 ;;;; Contains: Tests for NOTANY
 
-(in-package :cl-test)
+
 
 (deftest notany.1
   (not-mv (notany #'identity nil))

@@ -5,11 +5,11 @@
 
 (in-package :cl-test)
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "compile-file.lsp")
   (load "load-file.lsp")
   (load "with-compilation-unit.lsp")
   (load "features.lsp")
-  (load "modules.lsp")
-)
-
+  (load "modules.lsp"))

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jan  8 07:26:22 2005
 ;;;; Contains: Tests of DO*
 
-(in-package :cl-test)
+
 
 
 (deftest do*.1

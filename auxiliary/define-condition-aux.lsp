@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar  9 05:40:13 2003
 ;;;; Contains: Auxiliary functions for testing DEFINE-CONDITION
 
-(in-package :cl-test)
+
 
 (defun make-def-cond-name (name &rest suffixes)
   (intern (apply #'concatenate 'string (string name) "/"

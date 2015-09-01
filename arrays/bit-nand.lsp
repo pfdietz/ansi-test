@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 19:16:15 2003
 ;;;; Contains: Tests for BIT-NAND
 
-(in-package :cl-test)
+
 
 
 

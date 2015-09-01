@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 15:44:38 2003
 ;;;; Contains: Tests for ROTATEF
 
-(in-package :cl-test)
+
 
 (deftest rotatef-order.1
   (let ((x (vector 'a 'b 'c 'd 'e 'f))

@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 13 18:42:29 2004
 ;;;; Contains: Tests for DELETE-FILE
 
-(in-package :cl-test)
+
 
 (deftest delete-file.1
   (let ((pn "scratchfile.txt"))

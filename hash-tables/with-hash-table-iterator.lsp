@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 20:08:43 2003
 ;;;; Contains: Tests of WITH-HASH-TABLE-ITERATOR
 
-(in-package :cl-test)
+
 
 (deftest with-hash-table-iterator.1
   (with-hash-table-iterator (x (make-hash-table)))

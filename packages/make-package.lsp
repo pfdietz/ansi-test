@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:02:43 1998
 ;;;; Contains: Tests of MAKE-PACKAGE
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

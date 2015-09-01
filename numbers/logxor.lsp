@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 06:30:57 2003
 ;;;; Contains: Tests of LOGXOR
 
-(in-package :cl-test)
+
 
 
 

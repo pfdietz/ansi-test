@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Jun 24 20:53:36 2005
 ;;;; Contains: Tests for LET*
 
-(in-package :cl-test)
+
 
 (deftest let*.1
   (let* ((x 0)) x)

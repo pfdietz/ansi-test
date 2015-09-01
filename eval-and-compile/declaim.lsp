@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 21 07:44:07 2005
 ;;;; Contains: Tests of DECLAIM
 
-(in-package :cl-test)
+
 
 (deftest declaim.1
   (progn (declaim) nil)

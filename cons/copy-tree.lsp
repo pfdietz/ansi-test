@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:31:33 2003
 ;;;; Contains: Tests of COPY-TREE
 
-(in-package :cl-test)
+
 
 
 

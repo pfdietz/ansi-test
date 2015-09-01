@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Aug 21 16:07:59 2003
 ;;;; Contains: Tests of FROUND
 
-(in-package :cl-test)
+
 
 
 

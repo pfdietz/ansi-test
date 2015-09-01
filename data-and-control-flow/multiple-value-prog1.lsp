@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 19 06:48:02 2002
 ;;;; Contains: Tests for MULTIPLE-VALUE-PROG1
 
-(in-package :cl-test)
+
 
 (deftest multiple-value-prog1.1
   (multiple-value-prog1 nil)

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug 15 07:46:22 2004
 ;;;; Contains: Tests for PATHNAME-MATCH-P
 
-(in-package :cl-test)
+
 
 
 

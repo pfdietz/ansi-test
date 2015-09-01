@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 07:20:12 2002
 ;;;; Contains: Tests for NOTEVERY
 
-(in-package :cl-test)
+
 
 (deftest notevery.1
   (notevery #'identity nil)

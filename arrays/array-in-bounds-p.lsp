@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 19:57:29 2003
 ;;;; Contains: Tests for ARRAY-IN-BOUNDS-P
 
-(in-package :cl-test)
+
 
 (deftest array-in-bounds-p.1
   (array-in-bounds-p #() 0)

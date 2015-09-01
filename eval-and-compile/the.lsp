@@ -3,7 +3,7 @@
 ;;;; Created:  Tue May  6 06:48:48 2003
 ;;;; Contains: Tests of THE
 
-(in-package :cl-test)
+
 
 (deftest the.1
   (the (values) (values)))

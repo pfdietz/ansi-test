@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 28 21:37:43 2003
 ;;;; Contains: Tests of ERROR
 
-(in-package :cl-test)
+
 
 (deftest error.1
   (let ((fmt "Error"))

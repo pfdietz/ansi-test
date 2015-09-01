@@ -3,8 +3,6 @@
 ;;;; Created:  Mon Jun 21 20:14:38 2004
 ;;;; Contains: Aux. functions for types tests
 
-(in-package :cl-test)
-
 (defun classes-are-disjoint (c1 c2)
   "If either c1 or c2 is a builtin class or the name of a builtin
    class, then check for disjointness.  Return a non-NIL list

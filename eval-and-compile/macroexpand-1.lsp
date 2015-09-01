@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 28 13:47:32 2005
 ;;;; Contains: Tests of MACROEXPAND-1
 
-(in-package :cl-test)
+
 
 (deftest macroexpand-1.error.1
   (signals-error (macroexpand-1) program-error)

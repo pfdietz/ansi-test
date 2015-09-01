@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 19:53:33 2004
 ;;;; Contains: Tests of LOG
 
-(in-package :cl-test)
+
 
 (deftest log.1
   (let ((result (log 1)))

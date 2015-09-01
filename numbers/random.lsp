@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 15:47:42 2003
 ;;;; Contains: Tests of RANDOM
 
-(in-package :cl-test)
+
 
 
 

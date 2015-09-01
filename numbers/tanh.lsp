@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 19:16:35 2004
 ;;;; Contains: Tests of TANH
 
-(in-package :cl-test)
+
 
 (deftest tanh.1
   (let ((result (tanh 0)))

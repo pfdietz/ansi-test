@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 21:37:03 2003
 ;;;; Contains: Tests of ARRAY-ROW-MAJOR-INDEX
 
-(in-package :cl-test)
+
 
 ;;; More array-row-major-index tests are in make-array.lsp
 

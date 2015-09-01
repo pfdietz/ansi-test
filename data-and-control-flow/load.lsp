@@ -3,7 +3,11 @@
 (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
 (compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "data-and-control-flow.lsp")
   (load "places.lsp")
   (load "psetq.lsp")
@@ -80,5 +84,5 @@
   (load "unwind-protect.lsp")
   (load "values-list.lsp")
   (load "values.lsp")
-  (load "when.lsp"))
-
+  (load "when.lsp")
+)

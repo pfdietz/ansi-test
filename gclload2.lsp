@@ -1,4 +1,5 @@
 ;;; Load test files
+(in-package :cl-test)
 
 ;;; Tests of symbols
 (load "symbols/load.lsp")
@@ -41,7 +42,7 @@
 (load "structures/load.lsp")
 
 ;;; Tests of types and classes
-(load "types-and-class/load.lsp")
+(load "types-and-classes/load.lsp")
 
 ;;; Tests of strings
 (load "strings/load.lsp")

@@ -3,8 +3,6 @@
 ;;;; Created:  Mon Aug  2 21:47:02 2004
 ;;;; Contains: Load format-related tests
 
-(in-package :cl-test)
-
 ;;; Format tests
 
 ;;; 22.3.1

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun May  8 19:25:41 2005
 ;;;; Contains: Tests of GET-UNIVERSAL-TIME, GET-DECODED-TIME
 
-(in-package :cl-test)
+
 
 ;;; Note -- this ignores the possibilty that the time cannot
 ;;; be determined.

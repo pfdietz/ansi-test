@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 10 23:13:22 2002
 ;;;; Contains: Tests of DEFPARAMETER
 
-(in-package :cl-test)
+
 
 (defparameter *defparameter-test-var-1* 100)
 

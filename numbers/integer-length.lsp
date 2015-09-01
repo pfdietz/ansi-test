@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Sep  7 10:10:10 2003
 ;;;; Contains: Tests for INTEGER-LENGTH
 
-(in-package :cl-test)
+
 
 (deftest integer-length.error.1
   (signals-error (integer-length) program-error)

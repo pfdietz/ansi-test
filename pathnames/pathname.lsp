@@ -3,7 +3,6 @@
 ;;;; Created:  Sat Nov 29 05:06:57 2003
 ;;;; Contains: Tests of the function PATHNAME
 
-(in-package :cl-test)
 
 (deftest pathname.1
   (loop for x in *pathnames*
@@ -11,19 +10,19 @@
   t)
 
 (deftest pathname.2
-  (equalt #p"ansi-aux.lsp" (pathname "ansi-aux.lsp"))
+  (equalt #p"pathname.lsp" (pathname "pathname.lsp"))
   t)
 
 (deftest pathname.3
-  (let ((s (open "ansi-aux.lsp" :direction :input)))
-    (prog1 (equalt (truename (pathname s)) (truename #p"ansi-aux.lsp"))
+  (let ((s (open "pathname.lsp" :direction :input)))
+    (prog1 (equalt (truename (pathname s)) (truename #p"pathname.lsp"))
       (close s)))
   t)
 
 (deftest pathname.4
-  (let ((s (open "ansi-aux.lsp" :direction :input)))
+  (let ((s (open "pathname.lsp" :direction :input)))
     (close s)
-    (equalt (truename (pathname s)) (truename #p"ansi-aux.lsp")))
+    (equalt (truename (pathname s)) (truename #p"pathname.lsp")))
   t)
 
 (deftest pathname.5
@@ -32,35 +31,35 @@
   t)
 
 (deftest pathname.6
-  (equalt #p"ansi-aux.lsp"
-          (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
+  (equalt #p"pathname.lsp"
+          (pathname (make-array 12 :initial-contents "pathname.lsp"
                                 :element-type 'base-char)))
   t)
 
 (deftest pathname.7
-  (equalt #p"ansi-aux.lsp"
-          (pathname (make-array 15 :initial-contents "ansi-aux.lspXXX"
+  (equalt #p"pathname.lsp"
+          (pathname (make-array 15 :initial-contents "pathname.lspXXX"
                                 :element-type 'base-char
                                 :fill-pointer 12)))
   t)
 
 (deftest pathname.8
-  (equalt #p"ansi-aux.lsp"
-          (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
+  (equalt #p"pathname.lsp"
+          (pathname (make-array 12 :initial-contents "pathname.lsp"
                                 :element-type 'base-char
                                 :adjustable t)))
   t)
 
 (deftest pathname.9
-  (equalt #p"ansi-aux.lsp"
-          (pathname (make-array 15 :initial-contents "ansi-aux.lspXXX"
+  (equalt #p"pathname.lsp"
+          (pathname (make-array 15 :initial-contents "pathname.lspXXX"
                                 :element-type 'character
                                 :fill-pointer 12)))
   t)
 
 (deftest pathname.10
-  (equalt #p"ansi-aux.lsp"
-          (pathname (make-array 12 :initial-contents "ansi-aux.lsp"
+  (equalt #p"pathname.lsp"
+          (pathname (make-array 12 :initial-contents "pathname.lsp"
                                 :element-type 'character
                                 :adjustable t)))
   t)
@@ -68,9 +67,9 @@
 (deftest pathname.11
   (loop for etype in '(standard-char base-char character)
         collect
-        (equalt #p"ansi-aux.lsp"
+        (equalt #p"pathname.lsp"
                 (pathname
-                 (let* ((s (make-array 15 :initial-contents "XXansi-aux.lspX"
+                 (let* ((s (make-array 15 :initial-contents "XXpathname.lspX"
                                        :element-type etype)))
                    (make-array 12 :element-type etype
                                :displaced-to s

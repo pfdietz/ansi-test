@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Aug 28 10:41:34 2003
 ;;;; Contains: Tests of the multiplication function *
 
-(in-package :cl-test)
+
 
 
 

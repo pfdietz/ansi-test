@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 06:38:33 2002
 ;;;; Contains: Tests of NOT and NULL
 
-(in-package :cl-test)
+
 
 (deftest null.1
   (null nil)

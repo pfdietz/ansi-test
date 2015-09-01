@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Oct  7 19:20:17 2002
 ;;;; Contains: Tests of various kinds of places (section 5.1)
 
-(in-package :cl-test)
+
 
 ;;; Section 5.1.1.1
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Aug  4 22:16:00 2003
 ;;;; Contains: Tests of FLOOR
 
-(in-package :cl-test)
+
 
 
 

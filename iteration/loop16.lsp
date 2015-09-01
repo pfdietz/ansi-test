@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Nov 21 09:46:27 2002
 ;;;; Contains: Tests that uninterned symbols can be loop keywords
 
-(in-package :cl-test)
+
 
 
 (deftest loop.16.30

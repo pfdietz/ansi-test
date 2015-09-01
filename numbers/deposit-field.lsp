@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 20:23:15 2003
 ;;;; Contains: Tests of DEPOSIT-FIELD
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

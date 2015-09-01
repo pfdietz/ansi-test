@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct  4 09:24:24 2003
 ;;;; Contains: Aux. functions for testing hash tables
 
-(in-package :cl-test)
+
 
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp"))

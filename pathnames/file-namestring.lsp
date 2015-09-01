@@ -3,8 +3,6 @@
 ;;;; Created:  Sat Sep 11 07:40:47 2004
 ;;;; Contains: Tests for FILE-NAMESTRING
 
-(in-package :cl-test)
-
 (deftest file-namestring.1
   (let* ((vals (multiple-value-list
                 (file-namestring "file-namestring.lsp")))

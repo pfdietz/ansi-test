@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Sep  9 07:02:00 2003
 ;;;; Contains: Tests of LOGBITP
 
-(in-package :cl-test)
+
 
 
 

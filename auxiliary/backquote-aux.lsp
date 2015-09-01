@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Jun 11 08:04:23 2004
 ;;;; Contains: Aux. functions associated with backquote tests
 
-(in-package :cl-test)
+
 
 ;;; Not yet finished
 

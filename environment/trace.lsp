@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Dec 12 19:53:11 2004
 ;;;; Contains: Tests of TRACE, UNTRACE
 
-(in-package :cl-test)
+
 
 (defun function-to-trace (x) (car x))
 (defun another-function-to-trace (x) (cdr x))

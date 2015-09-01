@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 13:22:59 2003
 ;;;; Contains: Tests for accessor BIT
 
-(in-package :cl-test)
+
 
 (deftest bit.1
   (bit #*0010 2)

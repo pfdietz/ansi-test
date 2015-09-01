@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 22:28:35 2003
 ;;;; Contains: Tests of PUSHNEW
 
-(in-package :cl-test)
+
 
 
 

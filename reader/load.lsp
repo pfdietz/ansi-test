@@ -1,7 +1,11 @@
 ;;;; Tests of the reader
 (compile-and-load "ANSI-TESTS:AUX;reader-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "reader-test.lsp")
   (load "with-standard-io-syntax.lsp")
   (load "copy-readtable.lsp")
@@ -18,5 +22,4 @@
   (load "dispatch-macro-characters.lsp")
 
   (load "syntax.lsp")
-  (load "syntax-tokens.lsp")
-)
+  (load "syntax-tokens.lsp"))

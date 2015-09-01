@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 05:59:43 2004
 ;;;; Contains: Tests for ASIN
 
-(in-package :cl-test)
+
 
 (deftest asin.1
   (loop for i from -1000 to 1000

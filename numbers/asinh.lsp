@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 19:19:02 2004
 ;;;; Contains: Tests of ASINH
 
-(in-package :cl-test)
+
 
 (deftest asinh.1
   (let ((result (asinh 0)))

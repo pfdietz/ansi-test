@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 18 23:02:23 2002
 ;;;; Contains: Tests of ETYPECASE
 
-(in-package :cl-test)
+
 
 (deftest etypecase.1
   (etypecase 1 (integer 'a) (t 'b))

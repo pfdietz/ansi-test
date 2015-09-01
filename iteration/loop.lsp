@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Oct 25 18:48:59 2002
 ;;;; Contains: Tests of LOOP
 
-(in-package :cl-test)
+
 
 ;;; Simple loops
 (deftest sloop.1

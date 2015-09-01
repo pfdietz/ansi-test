@@ -3,8 +3,6 @@
 ;;;; Created:  Mon Apr  7 07:16:44 2003
 ;;;; Contains: Forms to load files containing tests of number concepts
 
-(in-package :cl-test)
-
 (compile-and-load "ANSI-TESTS:AUX;numbers-aux.lsp")
 (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
 (compile-and-load "ANSI-TESTS:AUX;floor-aux.lsp")
@@ -21,7 +19,11 @@
 (compile-and-load "ANSI-TESTS:AUX;gcd-aux.lsp")
 (compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "number-comparison.lsp")
   (load "max.lsp")
   (load "min.lsp")
@@ -126,5 +128,5 @@
 
   (load "upgraded-complex-part-type.lsp")
 
-  (load "earithmetic-error.lsp")
+  (load "arithmetic-error.lsp")
 )

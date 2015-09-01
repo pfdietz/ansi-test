@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:55:19 2003
 ;;;; Contains: Tests of COPY-LIST
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:33:49 2003
 ;;;; Contains: Tests of RASSOC
 
-(in-package :cl-test)
+
 
 
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 10 22:39:25 2002
 ;;;; Contains: Tests for CALL-ARGUMENTS-LIMIT
 
-(in-package :cl-test)
+
 
 (deftest call-arguments-limit.1
   (notnot-mv (constantp 'call-arguments-limit))

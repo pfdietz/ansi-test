@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Feb 19 07:06:48 2004
 ;;;; Contains: Tests of IMPORT
 
-(in-package :cl-test)
+
 
 
 

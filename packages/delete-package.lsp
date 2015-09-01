@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:01:58 1998
 ;;;; Contains: Tests of DELETE-PACKAGE
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; delete-package

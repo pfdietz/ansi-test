@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug 29 07:42:18 2004
 ;;;; Contains: Tests for SHADOWING-IMPORT
 
-(in-package :cl-test)
+
 
 (deftest shadowing-import.1
   (let ((name1 "TEST1")

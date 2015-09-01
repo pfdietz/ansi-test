@@ -1,7 +1,11 @@
 ;;;; Tests for pathnames and logical pathnames
 (compile-and-load "ANSI-TESTS:AUX;pathnames-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "pathnames.lsp")
   (load "pathname.lsp")
   (load "pathnamep.lsp")
@@ -28,5 +32,4 @@
   (load "merge-pathnames.lsp")
   (load "pathname-match-p.lsp")
 
-  (load "parse-namestring.lsp")
-)
+  (load "parse-namestring.lsp"))

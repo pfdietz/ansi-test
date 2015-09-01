@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jan 22 21:39:30 2003
 ;;;; Contains: Tests of SVREF
 
-(in-package :cl-test)
+
 
 (deftest svref.1
   (let ((a (vector 1 2 3 4)))

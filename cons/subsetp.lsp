@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Apr  1 22:10:54 1998
 ;;;; Contains: Tests of SUBSETP
 
-(in-package :cl-test)
+
 
 
 

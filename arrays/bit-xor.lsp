@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 19:35:46 2003
 ;;;; Contains: Tests of BIT-XOR
 
-(in-package :cl-test)
+
 
 
 

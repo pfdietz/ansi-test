@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:28:37 2003
 ;;;; Contains: Tests of ASSOC-IF-NOT
 
-(in-package :cl-test)
+
 
 
 

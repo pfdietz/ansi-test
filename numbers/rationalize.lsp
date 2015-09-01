@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Sep  1 14:00:45 2003
 ;;;; Contains: Tests of RATIONALIZE
 
-(in-package :cl-test)
+
 
 (deftest rationalize.error.1
   (signals-error (rationalize) program-error)

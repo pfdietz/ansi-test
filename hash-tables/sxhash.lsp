@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 21:18:12 2003
 ;;;; Contains: Tests of SXHASH
 
-(in-package :cl-test)
+
 
 (deftest sxhash.1
   (check-predicate #'(lambda (x) (typep (sxhash x) '(and unsigned-byte fixnum))))

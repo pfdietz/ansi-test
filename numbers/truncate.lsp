@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Aug 20 05:13:26 2003
 ;;;; Contains: Tests of TRUNCATE
 
-(in-package :cl-test)
+
 
 
 

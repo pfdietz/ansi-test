@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 10 16:16:59 2003
 ;;;; Contains: Tests of SLOT-VALUE
 
-(in-package :cl-test)
+
 
 ;;; SLOT-VALUE is used extensively elsewhere.
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Dec 14 06:21:45 2004
 ;;;; Contains: Tests of APROPOS-LIST
 
-(in-package :cl-test)
+
 
 (deftest apropos-list.1
   (let ((pkg "CL-TEST-APROPOS-LIST-PACKAGE"))

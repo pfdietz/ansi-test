@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Aug 20 22:05:20 2003
 ;;;; Contains: Tests of the EPSILON constants
 
-(in-package :cl-test)
+
 
 
 

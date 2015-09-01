@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Dec 12 09:20:47 2004
 ;;;; Contains: Tests of ROOM
 
-(in-package :cl-test)
+
 
 (deftest room.1
   (let ((s (with-output-to-string

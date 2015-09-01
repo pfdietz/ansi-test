@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jan 22 21:17:25 2003
 ;;;; Contains: Misc. tests of array features
 
-(in-package :cl-test)
+
 
 (deftest array-dimension-limit.1
   (and (<= 1024 array-dimension-limit) t)

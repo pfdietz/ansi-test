@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Feb 17 06:38:07 2003
 ;;;; Contains: Tests of MULTIPLE-VALUE-LIST
 
-(in-package :cl-test)
+
 
 (deftest multiple-value-list.1
   (multiple-value-list 'a)

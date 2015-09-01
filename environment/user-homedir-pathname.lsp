@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Dec 11 22:26:24 2004
 ;;;; Contains: Tests of USER-HOMEDIR-PATHNAME
 
-(in-package :cl-test)
+
 
 (deftest user-homedir-pathname.1
   (let ((pn (user-homedir-pathname)))

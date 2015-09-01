@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:24:00 2003
 ;;;; Contains: Tests of MAPLIST
 
-(in-package :cl-test)
+
 
 
 

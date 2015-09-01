@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Aug 21 16:08:55 2003
 ;;;; Contains: Aux. functions for testing FROUND
 
-(in-package :cl-test)
+
 
 (defun fround.1-fn ()
   (loop for n = (- (random 200000)

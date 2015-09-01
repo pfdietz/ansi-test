@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Jan 24 07:46:29 2003
 ;;;; Contains: Tests for VECTOR-POP
 
-(in-package :cl-test)
+
 
 (deftest vector-pop.1
   (let ((v (make-array '(5) :initial-contents '(a b c d e)

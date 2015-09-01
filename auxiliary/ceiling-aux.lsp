@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Aug 19 06:52:02 2003
 ;;;; Contains: Aux. functions for CEILING
 
-(in-package :cl-test)
+
 
 (defun ceiling.1-fn ()
   (loop for n = (- (random 2000000000)

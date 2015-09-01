@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Aug 12 07:02:07 2003
 ;;;; Contains: Aux. functions used in FFLOOR tests
 
-(in-package :cl-test)
+
 
 (defun ffloor.1-fn ()
   (loop for n = (- (random 200000)

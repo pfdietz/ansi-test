@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:01:20 1998
 ;;;; Contains: Tests of SHADOW
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

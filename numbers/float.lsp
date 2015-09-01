@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 21:53:51 2003
 ;;;; Contains: Tests of FLOAT
 
-(in-package :cl-test)
+
 
 (deftest float.error.1
   (signals-error (float) program-error)

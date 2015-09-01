@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 25 08:06:03 1998
 ;;;; Contains: Tests of IN-PACKAGE
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,7 +55,7 @@
   package-error)
 
 (def-macro-test in-package.error.1
-  (in-package :cl-test))
+    (in-package :cl-test))
 
 (defmacro def-in-package-test (test-name name-form)
   `(deftest ,test-name

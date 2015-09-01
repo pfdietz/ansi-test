@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jun 15 06:57:23 2003
 ;;;; Contains: Tests for SLOT-UNBOUND
 
-(in-package :cl-test)
+
 
 (defclass slot-unbound-class-01 ()
   ((a :reader sunb-a)

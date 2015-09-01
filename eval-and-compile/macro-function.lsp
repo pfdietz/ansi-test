@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Jun  3 22:17:34 2005
 ;;;; Contains: Tests of MACRO-FUNCTION
 
-(in-package :cl-test)
+
 
 (deftest macro-function.1
   (loop for n in *cl-macro-symbols*

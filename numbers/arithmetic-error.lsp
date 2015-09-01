@@ -2,7 +2,7 @@
 ;;;; Author:   Paul Dietz
 ;;;; Contains: Tests of ARITHMETIC-ERROR condition and associated accessors
 
-(in-package :cl-test)
+
 
 (deftest arithmethic-error.1
   (let ((a (make-condition 'arithmetic-error

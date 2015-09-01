@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 19:13:34 2003
 ;;;; Contains: Tests of BIT-IOR
 
-(in-package :cl-test)
+
 
 
 

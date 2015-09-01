@@ -1,77 +1,51 @@
 ;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
-;;;; Created:  Sat Jul 31 05:19:39 2004
-;;;; Contains: Tests of the ~D format directive
-
-(in-package :cl-test)
+;;;; Created:  Sun Aug  1 05:10:10 2004
+;;;; Contains: Tests of the ~B format directive
 
 
 
-(deftest format.d.1
-  (with-standard-io-syntax
-   (loop for x = (ash 1 (+ 2 (random 80)))
-         for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~D" i)
-         for j = (read-from-string s1)
-         repeat 1000
-         when (or (/= i j)
-                  (find #\. s1)
-                  (find #\+ s1)
-                  (find-if #'alpha-char-p s1))
-         collect (list i s1 j)))
-  nil)
 
-(deftest formatter.d.1
-  (let ((fn (formatter "~D")))
+
+(deftest format.b.1
+  (let ((fn (formatter "~b")))
     (with-standard-io-syntax
      (loop for x = (ash 1 (+ 2 (random 80)))
            for i = (- (random (+ x x)) x)
-           for s1 = (formatter-call-to-string fn i)
-           for j = (read-from-string s1)
+           for s1 = (format nil "~B" i)
+           for s2 = (formatter-call-to-string fn i)
+           for j = (let ((*read-base* 2)) (read-from-string s1))
            repeat 1000
-           when (or (/= i j)
-                    (find #\. s1)
+           when (or (not (string= s1 s2))
+                    (/= i j)
                     (find #\+ s1)
-                    (find-if #'alpha-char-p s1))
-           collect (list i s1 j))))
+                    (loop for c across s1 thereis (not (find c "-01"))))
+           collect (list i s1 j s2))))
   nil)
 
-(deftest format.d.2
-  (with-standard-io-syntax
-   (loop for x = (ash 1 (+ 2 (random 80)))
-         for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~@d" i)
-         for j = (read-from-string s1)
-         repeat 1000
-         when (or (/= i j)
-                  (find #\. s1)
-                  ;; (find #\+ s1)
-                  (find-if #'alpha-char-p s1))
-         collect (list i s1 j)))
-  nil)
-
-(deftest formatter.d.2
-  (let ((fn (formatter "~@D")))
+(deftest format.b.2
+  (let ((fn (formatter "~@b")))
     (with-standard-io-syntax
      (loop for x = (ash 1 (+ 2 (random 80)))
            for i = (- (random (+ x x)) x)
-           for s1 = (formatter-call-to-string fn i)
-           for j = (read-from-string s1)
+           for s1 = (format nil "~@b" i)
+           for s2 = (formatter-call-to-string fn i)
+           for j = (let ((*read-base* 2)) (read-from-string s1))
            repeat 1000
            when (or (/= i j)
-                    (find #\. s1)
-                    ;; (find #\+ s1)
-                    (find-if #'alpha-char-p s1))
-           collect (list i s1 j))))
+                    (not (string= s1 s2))
+                    (loop for c across s1 thereis (not (find c "-+01"))))
+           collect (list i s1 j s2))))
   nil)
 
-(deftest format.d.3
+(deftest format.b.3
   (with-standard-io-syntax
    (loop for x = (ash 1 (+ 2 (random 80)))
          for mincol = (random 30)
          for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~d" i)
-         for s2 = (format nil (format nil "~~~dd" mincol) i)
+         for s1 = (format nil "~b" i)
+         for fmt = (format nil "~~~db" mincol)
+         for s2 = (format nil fmt i)
          for pos = (search s1 s2)
          repeat 1000
          when (or (null pos)
@@ -82,15 +56,14 @@
          collect (list i mincol s1 s2 pos)))
   nil)
 
-(deftest formatter.d.3
+(deftest formatter.b.3
   (with-standard-io-syntax
    (loop for x = (ash 1 (+ 2 (random 80)))
          for mincol = (random 30)
          for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~d" i)
-         for format-string = (format nil "~~~dd" mincol)
-         ; for s2 = (format nil format-string i)
-         for fn = (eval `(formatter ,format-string))
+         for s1 = (format nil "~b" i)
+         for fmt = (format nil "~~~db" mincol)
+         for fn = (eval `(formatter ,fmt))
          for s2 = (formatter-call-to-string fn i)
          for pos = (search s1 s2)
          repeat 100
@@ -102,16 +75,14 @@
          collect (list i mincol s1 s2 pos)))
   nil)
 
-(deftest format.d.4
+(deftest format.b.4
   (with-standard-io-syntax
-   (loop with limit = 10
-         with count = 0
-         for x = (ash 1 (+ 2 (random 80)))
+   (loop for x = (ash 1 (+ 2 (random 80)))
          for mincol = (random 30)
          for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~@D" i)
-         for format-string = (format nil "~~~d@d" mincol)
-         for s2 = (format nil format-string i)
+         for s1 = (format nil "~@B" i)
+         for fmt = (format nil "~~~d@b" mincol)
+         for s2 = (format nil fmt i)
          for pos = (search s1 s2)
          repeat 1000
          when (or (null pos)
@@ -120,22 +91,17 @@
                        (or (/= (length s2) mincol)
                            (not (eql (position #\Space s2 :test-not #'eql)
                                      (- (length s2) (length s1)))))))
-         collect (if (> (incf count) limit)
-                     "Count limit exceeded"
-                     (list i mincol s1 format-string s2 pos))
-         while (<= count limit)))
+         collect (list i mincol s1 s2 pos)))
   nil)
 
-(deftest formatter.d.4
+(deftest formatter.b.4
   (with-standard-io-syntax
-   (loop with limit = 10
-         with count = 0
-         for x = (ash 1 (+ 2 (random 80)))
+   (loop for x = (ash 1 (+ 2 (random 80)))
          for mincol = (random 30)
          for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~@D" i)
-         for format-string = (format nil "~~~d@d" mincol)
-         for fn = (eval `(formatter ,format-string))
+         for s1 = (format nil "~@B" i)
+         for fmt = (format nil "~~~d@b" mincol)
+         for fn = (eval `(formatter ,fmt))
          for s2 = (formatter-call-to-string fn i)
          for pos = (search s1 s2)
          repeat 100
@@ -145,20 +111,19 @@
                        (or (/= (length s2) mincol)
                            (not (eql (position #\Space s2 :test-not #'eql)
                                      (- (length s2) (length s1)))))))
-         collect (if (> (incf count) limit)
-                     "Count limit exceeded"
-                   (list i mincol s1 s2 pos))
-         while (<= count limit)))
+         collect (list i mincol s1 s2 pos)))
   nil)
 
-(deftest format.d.5
+(deftest format.b.5
   (with-standard-io-syntax
    (loop for x = (ash 1 (+ 2 (random 80)))
          for mincol = (random 30)
          for padchar = (random-from-seq +standard-chars+)
          for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~d" i)
-         for s2 = (format nil (format nil "~~~d,'~cd" mincol padchar) i)
+         for s1 = (format nil "~b" i)
+         for fmt = (format nil "~~~d,'~c~c" mincol padchar
+                           (random-from-seq "bB"))
+         for s2 = (format nil fmt i)
          for pos = (search s1 s2)
          repeat 1000
          when (or (null pos)
@@ -169,15 +134,16 @@
          collect (list i mincol s1 s2 pos)))
   nil)
 
-(deftest formatter.d.5
+(deftest formatter.b.5
   (with-standard-io-syntax
    (loop for x = (ash 1 (+ 2 (random 80)))
          for mincol = (random 30)
          for padchar = (random-from-seq +standard-chars+)
          for i = (- (random (+ x x)) x)
-         for s1 = (format nil "~d" i)
-         for format-string = (format nil "~~~d,'~cd" mincol padchar)
-         for fn = (eval `(formatter ,format-string))
+         for s1 = (format nil "~b" i)
+         for fmt = (format nil "~~~d,'~c~c" mincol padchar
+                           (random-from-seq "bB"))
+         for fn = (eval `(formatter ,fmt))
          for s2 = (formatter-call-to-string fn i)
          for pos = (search s1 s2)
          repeat 100
@@ -189,15 +155,15 @@
          collect (list i mincol s1 s2 pos)))
   nil)
 
-(deftest format.d.6
-  (let ((fn (formatter "~v,vd")))
+(deftest format.b.6
+  (let ((fn (formatter "~v,vB")))
     (with-standard-io-syntax
      (loop for x = (ash 1 (+ 2 (random 80)))
            for mincol = (random 30)
            for padchar = (random-from-seq +standard-chars+)
            for i = (- (random (+ x x)) x)
-           for s1 = (format nil "~d" i)
-           for s2 = (format nil "~v,vD" mincol padchar i)
+           for s1 = (format nil "~b" i)
+           for s2 = (format nil "~v,vb" mincol padchar i)
            for s3 = (formatter-call-to-string fn mincol padchar i)
            for pos = (search s1 s2)
            repeat 1000
@@ -210,17 +176,15 @@
            collect (list i mincol s1 s2 s3 pos))))
   nil)
 
-(deftest format.d.7
-  (let ((fn (formatter "~v,v@D")))
+(deftest format.b.7
+  (let ((fn (formatter "~v,v@B")))
     (with-standard-io-syntax
-     (loop with limit = 10
-           with count = 0
-           for x = (ash 1 (+ 2 (random 80)))
+     (loop for x = (ash 1 (+ 2 (random 80)))
            for mincol = (random 30)
            for padchar = (random-from-seq +standard-chars+)
            for i = (- (random (+ x x)) x)
-           for s1 = (format nil "~@d" i)
-           for s2 = (format nil "~v,v@d" mincol padchar i)
+           for s1 = (format nil "~@B" i)
+           for s2 = (format nil "~v,v@b" mincol padchar i)
            for s3 = (formatter-call-to-string fn mincol padchar i)
            for pos = (search s1 s2)
            repeat 1000
@@ -231,41 +195,33 @@
                          (or (/= (length s2) mincol)
                              (find padchar s2 :end (- (length s2) (length s1))
                                    :test-not #'eql))))
-           collect (if (> (incf count) limit)
-                       "Count limit exceeded"
-                     (list i mincol s1 s2 s3 pos))
-           while (<= count limit))))
+           collect (list i mincol s1 s2 s3 pos))))
   nil)
 
 ;;; Comma tests
 
-(deftest format.d.8
-  (let ((fn1 (formatter "~d"))
-        (fn2 (formatter "~:d")))
-    (loop for i from -999 to 999
-          for s1 = (format nil "~d" i)
-          for s2 = (format nil "~:d" i)
-          for s3 = (formatter-call-to-string fn1 i)
-          for s4 = (formatter-call-to-string fn2 i)
-          unless (and (string= s1 s2) (string= s1 s3) (string= s1 s4))
-          collect (list i s1 s2 s3 s4)))
+(deftest format.b.8
+  (let ((fn (formatter "~:B")))
+    (loop for i from -7 to 7
+          for s1 = (format nil "~b" i)
+          for s2 = (format nil "~:b" i)
+          for s3 = (formatter-call-to-string fn i)
+          unless (and (string= s1 s2) (string= s2 s3))
+          collect (list i s1 s2 s3)))
   nil)
 
-(deftest format.d.9
-  (let ((fn1 (formatter "~d"))
-        (fn2 (formatter "~:d")))
+(deftest format.b.9
+  (let ((fn (formatter "~:b")))
     (with-standard-io-syntax
      (loop for x = (ash 1 (+ 2 (random 80)))
            for i = (- (random (+ x x)) x)
            for commachar = #\,
-           for s1 = (format nil "~d" i)
-           for s2 = (format nil "~:d" i)
-           for s3 = (formatter-call-to-string fn1 i)
-           for s4 = (formatter-call-to-string fn2 i)
+           for s1 = (format nil "~b" i)
+           for s2 = (format nil "~:B" i)
+           for s3 = (formatter-call-to-string fn i)
            repeat 1000
-           unless (and (string= s1 s3)
-                       (string= s2 s4)
-                       (string= s1 (remove commachar s2))
+           unless (and (string= s1 (remove commachar s2))
+                       (string= s2 s3)
                        (not (eql (elt s2 0) commachar))
                        (or (>= i 0) (not (eql (elt s2 1) commachar)))
                        (let ((len (length s2))
@@ -273,23 +229,23 @@
                          (loop for i from (if (< i 0) 2 1) below len
                                always (if (= (mod (- len i) ci+1) 0)
                                           (eql (elt s2 i) commachar)
-                                        (find (elt s2 i) "0123456789")))))
-           collect (list x i commachar s1 s2 s3 s4))))
+                                        (find (elt s2 i) "01")))))
+           collect (list x i commachar s1 s2 s3))))
   nil)
 
-(deftest format.d.10
-  (let ((fn (formatter "~,,v:d")))
+(deftest format.b.10
+  (let ((fn (formatter "~,,v:B")))
     (with-standard-io-syntax
      (loop for x = (ash 1 (+ 2 (random 80)))
            for i = (- (random (+ x x)) x)
            for commachar = (random-from-seq +standard-chars+)
-           for s1 = (format nil "~d" i)
-           for s2 = (format nil "~,,v:d" commachar i)
+           for s1 = (format nil "~b" i)
+           for s2 = (format nil "~,,v:b" commachar i)
            for s3 = (formatter-call-to-string fn commachar i)
            repeat 1000
            unless (and
-                   (string= s2 s3)
                    (eql (elt s1 0) (elt s2 0))
+                   (string= s2 s3)
                    (if (< i 0) (eql (elt s1 1) (elt s2 1)) t)
                    (let ((len (length s2))
                          (ci+1 4)
@@ -297,18 +253,18 @@
                      (loop for i from (if (< i 0) 2 1) below len
                            always (if (= (mod (- len i) ci+1) 0)
                                       (eql (elt s2 i) commachar)
-                                    (eql (elt s1 (incf j)) (elt s2 i))))))
+                                 (eql (elt s1 (incf j)) (elt s2 i))))))
            collect (list x i commachar s1 s2 s3))))
   nil)
 
-(deftest format.d.11
+(deftest format.b.11
   (with-standard-io-syntax
    (loop for x = (ash 1 (+ 2 (random 80)))
          for i = (- (random (+ x x)) x)
          for commachar = (random-from-seq +standard-chars+)
-         for s1 = (format nil "~d" i)
-         for format-string = (format nil "~~,,'~c:d" commachar)
-         for s2 = (format nil format-string i)
+         for s1 = (format nil "~b" i)
+         for fmt = (format nil "~~,,'~c:~c" commachar (random-from-seq "bB"))
+         for s2 = (format nil fmt i)
          repeat 1000
          unless (and
                  (eql (elt s1 0) (elt s2 0))
@@ -323,15 +279,14 @@
          collect (list x i commachar s1 s2)))
   nil)
 
-(deftest formatter.d.11
+(deftest formatter.b.11
   (with-standard-io-syntax
    (loop for x = (ash 1 (+ 2 (random 80)))
          for i = (- (random (+ x x)) x)
          for commachar = (random-from-seq +standard-chars+)
-         for s1 = (format nil "~d" i)
-         for format-string = (format nil "~~,,'~c:d" commachar)
-         for fn = (eval `(formatter ,format-string))
-         ; for s2 = (format nil format-string i)
+         for s1 = (format nil "~b" i)
+         for fmt = (format nil "~~,,'~c:~c" commachar (random-from-seq "bB"))
+         for fn = (eval `(formatter ,fmt))
          for s2 = (formatter-call-to-string fn i)
          repeat 100
          unless (and
@@ -347,20 +302,20 @@
          collect (list x i commachar s1 s2)))
   nil)
 
-(deftest format.d.12
-  (let ((fn (formatter "~,,v,v:d")))
+(deftest format.b.12
+  (let ((fn (formatter "~,,V,V:b")))
     (with-standard-io-syntax
      (loop for x = (ash 1 (+ 2 (random 80)))
            for i = (- (random (+ x x)) x)
            for commachar = (random-from-seq +standard-chars+)
            for commaint = (1+ (random 20))
-           for s1 = (format nil "~d" i)
-           for s2 = (format nil "~,,v,v:D" commachar commaint i)
+           for s1 = (format nil "~b" i)
+           for s2 = (format nil "~,,v,v:B" commachar commaint i)
            for s3 = (formatter-call-to-string fn commachar commaint i)
            repeat 1000
            unless (and
-                   (string= s2 s3)
                    (eql (elt s1 0) (elt s2 0))
+                   (string= s2 s3)
                    (if (< i 0) (eql (elt s1 1) (elt s2 1)) t)
                    (let ((len (length s2))
                          (ci+1 (1+ commaint))
@@ -372,18 +327,19 @@
            collect (list x i commachar s1 s2 s3))))
   nil)
 
-(deftest format.d.13
-  (let ((fn (formatter "~,,v,v:@D")))
+(deftest format.b.13
+  (let ((fn (formatter "~,,V,V@:B")))
     (with-standard-io-syntax
      (loop for x = (ash 1 (+ 2 (random 80)))
            for i = (- (random (+ x x)) x)
            for commachar = (random-from-seq +standard-chars+)
            for commaint = (1+ (random 20))
-           for s1 = (format nil "~@d" i)
-           for s2 = (format nil "~,,v,v:@d" commachar commaint i)
+           for s1 = (format nil "~@B" i)
+           for s2 = (format nil "~,,v,v:@b" commachar commaint i)
            for s3 = (formatter-call-to-string fn commachar commaint i)
            repeat 1000
            unless (and
+                   (string= s2 s3)
                    (eql (elt s1 0) (elt s2 0))
                    (eql (elt s1 1) (elt s2 1))
                    (let ((len (length s2))
@@ -398,51 +354,60 @@
 
 ;;; NIL arguments
 
-(def-format-test format.d.14
-  "~vD" (nil 100) "100")
+(def-format-test format.b.14
+  "~vb" (nil #b110100) "110100")
 
-(def-format-test format.d.15
-  "~6,vD" (nil 100) "   100")
+(def-format-test format.b.15
+  "~6,vB" (nil #b100) "   100")
 
-(def-format-test format.d.16
-  "~,,v:d" (nil 12345) "12,345")
+(def-format-test format.b.16
+  "~,,v:b" (nil #b10011) "10,011")
 
-(def-format-test format.d.17
-  "~,,'*,v:d" (nil 12345) "12*345")
+(def-format-test format.b.17
+  "~,,'*,v:B" (nil #b10110) "10*110")
 
 ;;; When the argument is not an integer, print as if using ~A and base 10
 
-(deftest format.d.18
-  (loop for x in *mini-universe*
-        for s1 = (format nil "~d" x)
-        for s2 = (format nil "~A" x)
-        unless (or (integerp x) (string= s1 s2))
-        collect (list x s1 s2))
+(deftest format.b.18
+  (let ((fn (formatter "~b")))
+    (loop for x in *mini-universe*
+          for s1 = (format nil "~b" x)
+          for s2 = (let ((*print-base* 2)) (format nil "~A" x))
+          for s3 = (formatter-call-to-string fn x)
+          unless (or (integerp x) (and (string= s1 s2) (string= s1 s3)))
+          collect (list x s1 s2 s3)))
   nil)
 
-(deftest format.d.19
-  (loop for x in *mini-universe*
-        for s1 = (format nil "~:d" x)
-        for s2 = (format nil "~A" x)
-        unless (or (integerp x) (string= s1 s2))
-        collect (list x s1 s2))
+(deftest format.b.19
+  (let ((fn (formatter "~:b")))
+    (loop for x in *mini-universe*
+          for s1 = (format nil "~:B" x)
+          for s2 = (let ((*print-base* 2)) (format nil "~A" x))
+          for s3 = (formatter-call-to-string fn x)
+          unless (or (integerp x) (and (string= s1 s2) (string= s1 s3)))
+          collect (list x s1 s2 s3)))
   nil)
 
-(deftest format.d.20
-  (loop for x in *mini-universe*
-        for s1 = (format nil "~@d" x)
-        for s2 = (format nil "~A" x)
-        unless (or (integerp x) (string= s1 s2))
-        collect (list x s1 s2))
+(deftest format.b.20
+  (let ((fn (formatter "~@b")))
+    (loop for x in *mini-universe*
+          for s1 = (format nil "~@b" x)
+          for s2 = (let ((*print-base* 2)) (format nil "~A" x))
+          for s3 = (formatter-call-to-string fn x)
+          unless (or (integerp x) (and (string= s1 s2) (string= s1 s3)))
+          collect (list x s1 s2 s3)))
   nil)
 
-(deftest format.d.21
-  (loop for x in *mini-universe*
-        for s1 = (format nil "~A" x)
-        for s2 = (format nil "~@:d" x)
-        for s3 = (format nil "~A" x)
-        unless (or (integerp x) (string= s1 s2) (not (string= s1 s3)))
-        collect (list x s1 s2))
+(deftest format.b.21
+  (let ((fn (formatter "~:@b")))
+    (loop for x in *mini-universe*
+          for s1 = (let ((*print-base* 2)) (format nil "~A" x))
+          for s2 = (format nil "~@:B" x)
+          for s3 = (formatter-call-to-string fn x)
+          for s4 = (let ((*print-base* 2)) (format nil "~A" x))
+          unless (or (integerp x) (and (string= s1 s2) (string= s1 s3))
+                     (string/= s1 s4))
+          collect (list x s1 s2 s3)))
   nil)
 
 ;;; Must add tests for non-integers when the parameters
@@ -452,115 +417,100 @@
 
 ;;; # arguments
 
-(deftest format.d.22
+(deftest format.b.22
   (apply
    #'values
-   (loop for i from 0 to 10
+   (let ((fn (formatter "~#B"))
+         (bv #b11001))
+     (loop for i from 0 to 10
+           for args = (make-list i)
+           for s = (apply #'format nil "~#b" bv args)
+           for s2 = (with-output-to-string
+                      (stream)
+                      (assert (equal (apply fn stream bv args) args)))
+           do (assert (string= s s2))
+           collect s)))
+  "11001"
+  "11001"
+  "11001"
+  "11001"
+  "11001"
+  " 11001"
+  "  11001"
+  "   11001"
+  "    11001"
+  "     11001"
+  "      11001")
+
+(deftest format.b.23
+  (apply
+   #'values
+   (let ((fn (formatter "~,,,#:b"))
+         (bv #b1100100010))
+     (loop for i from 0 to 10
          for args = (make-list i)
-         for s = (apply #'format nil "~#d" 12345 args)
-         collect s))
-  "12345"
-  "12345"
-  "12345"
-  "12345"
-  "12345"
-  " 12345"
-  "  12345"
-  "   12345"
-  "    12345"
-  "     12345"
-  "      12345")
-
-(deftest formatter.d.22
-  (apply
-   #'values
-   (let ((fn (formatter "~#D")))
-     (loop for i from 0 to 10
-           for args = (make-list i)
-           ; for s = (apply #'format nil "~#d" 12345 args)
-           for s = (with-output-to-string
-                     (stream)
-                     (assert (equal (apply fn stream 12345 args) args)))
-           collect s)))
-  "12345"
-  "12345"
-  "12345"
-  "12345"
-  "12345"
-  " 12345"
-  "  12345"
-  "   12345"
-  "    12345"
-  "     12345"
-  "      12345")
-
-(deftest format.d.23
-  (apply
-   #'values
-   (let ((fn (formatter "~,,,#:D")))
-     (loop for i from 0 to 10
-           for args = (make-list i)
-           for s = (apply #'format nil "~,,,#:d" 1234567890 args)
-           for s2 = (with-output-to-string
+         for s = (apply #'format nil "~,,,#:B" bv args)
+         for s2 = (with-output-to-string
                       (stream)
-                      (assert (equal (apply fn stream 1234567890 args) args)))
+                      (assert (equal (apply fn stream bv args) args)))
            do (assert (string= s s2))
            collect s)))
-  "1,2,3,4,5,6,7,8,9,0"
-  "12,34,56,78,90"
-  "1,234,567,890"
-  "12,3456,7890"
-  "12345,67890"
-  "1234,567890"
-  "123,4567890"
-  "12,34567890"
-  "1,234567890"
-  "1234567890"
-  "1234567890")
+  "1,1,0,0,1,0,0,0,1,0"
+  "11,00,10,00,10"
+  "1,100,100,010"
+  "11,0010,0010"
+  "11001,00010"
+  "1100,100010"
+  "110,0100010"
+  "11,00100010"
+  "1,100100010"
+  "1100100010"
+  "1100100010")
 
-(deftest format.d.24
+(deftest format.b.24
   (apply
    #'values
-   (let ((fn (formatter "~,,,#:@d")))
+   (let ((fn (formatter "~,,,#@:B"))
+         (bv #b1100100010))
      (loop for i from 0 to 10
            for args = (make-list i)
-           for s = (apply #'format nil "~,,,#@:D" 1234567890 args)
+           for s = (apply #'format nil "~,,,#@:B" bv args)
            for s2 = (with-output-to-string
                       (stream)
-                      (assert (equal (apply fn stream 1234567890 args) args)))
+                      (assert (equal (apply fn stream bv args) args)))
            do (assert (string= s s2))
            collect s)))
-  "+1,2,3,4,5,6,7,8,9,0"
-  "+12,34,56,78,90"
-  "+1,234,567,890"
-  "+12,3456,7890"
-  "+12345,67890"
-  "+1234,567890"
-  "+123,4567890"
-  "+12,34567890"
-  "+1,234567890"
-  "+1234567890"
-  "+1234567890")
+  "+1,1,0,0,1,0,0,0,1,0"
+  "+11,00,10,00,10"
+  "+1,100,100,010"
+  "+11,0010,0010"
+  "+11001,00010"
+  "+1100,100010"
+  "+110,0100010"
+  "+11,00100010"
+  "+1,100100010"
+  "+1100100010"
+  "+1100100010")
 
-(def-format-test format.d.25
-  "~+10d" (1234) "      1234")
+(def-format-test format.b.25
+  "~+10b" (#b1101) "      1101")
 
-(def-format-test format.d.26
-  "~+10@d" (1234) "     +1234")
+(def-format-test format.b.26
+  "~+10@B" (#b1101) "     +1101")
 
-(def-format-test format.d.27
-  "~-1d" (1234) "1234")
+(def-format-test format.b.27
+  "~-1b" (#b1101) "1101")
 
-(def-format-test format.d.28
-  "~-1000000000000000000d" (1234) "1234")
+(def-format-test format.b.28
+  "~-1000000000000000000B" (#b1101) "1101")
 
-(def-format-test format.d.29
-  "~vd" ((1- most-negative-fixnum) 1234) "1234")
+(def-format-test format.b.29
+  "~vb" ((1- most-negative-fixnum) #b1101) "1101")
 
 ;;; Randomized test
 
-(deftest format.d.30
-  (let ((fn (formatter "~v,v,v,vD")))
+(deftest format.b.30
+  (let ((fn (formatter "~V,V,V,VB")))
     (loop
      for mincol = (and (coin) (random 50))
      for padchar = (and (coin)
@@ -575,11 +525,11 @@
                 (if mincol (format nil "~~~d," mincol) "~,")
                 (if padchar (format nil "'~c," padchar) ",")
                 (if commachar (format nil "'~c," commachar) ",")
-                (if commaint (format nil "~dd" commaint) "d"))
+                (if commaint (format nil "~db" commaint) "b"))
      for s1 = (format nil fmt x)
-     for s2 = (format nil "~v,v,v,vd" mincol padchar commachar commaint x)
+     for s2 = (format nil "~v,v,v,vb" mincol padchar commachar commaint x)
      for s3 = (formatter-call-to-string fn mincol padchar commachar commaint x)
      repeat 2000
      unless (and (string= s1 s2) (string= s2 s3))
-     collect (list mincol padchar commachar commaint fmt x s1 s2 s3)))
+     collect (list mincol padchar commachar commaint fmt x s1 s2)))
   nil)

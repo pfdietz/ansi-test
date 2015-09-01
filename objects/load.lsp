@@ -5,7 +5,11 @@
 
 (compile-and-load "ANSI-TESTS:AUX;defclass-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "defclass.lsp")
   (load "defclass-01.lsp")
   (load "defclass-02.lsp")
@@ -57,5 +61,4 @@
   (load "class-name.lsp")
   (load "class-of.lsp")
   (load "unbound-slot.lsp")
-  (load "defmethod.lsp")
-)
+  (load "defmethod.lsp"))

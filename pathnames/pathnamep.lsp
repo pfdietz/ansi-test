@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Dec  6 10:26:45 2003
 ;;;; Contains: Tests of PATHNAMEP
 
-(in-package :cl-test)
+
 
 (deftest pathnamep.1
   (check-type-predicate #'pathnamep 'pathname)

@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Dec 31 11:25:55 2003
 ;;;; Contains: Tests of MERGE-PATHNAMES
 
-(in-package :cl-test)
+
 
 #|
 (defun merge-pathnames-test (&rest args)

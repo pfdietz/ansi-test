@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Jan 26 19:20:40 2003
 ;;;; Contains: Tests for BIT-NOR
 
-(in-package :cl-test)
+
 
 
 

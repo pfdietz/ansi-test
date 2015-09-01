@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 12:33:02 2003
 ;;;; Contains: Tests of DEFINE-COMPILER-MACRO
 
-(in-package :cl-test)
+
 
 ;;; Need to add non-error tests
 

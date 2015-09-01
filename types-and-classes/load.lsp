@@ -1,7 +1,11 @@
 ;;; Tests of types and classes
 (compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
 
-(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+(in-package #:cl-test)
+
+(let ((*default-pathname-defaults*
+       (make-pathname
+        :directory (pathname-directory *load-pathname*))))
   (load "types-and-class.lsp")
   (load "types-and-class-2.lsp")
   (load "coerce.lsp")
@@ -21,5 +25,4 @@
   (load "standard-generic-function.lsp")
   (load "type-of.lsp")
   (load "typep.lsp")
-  (load "class-precedence-lists.lsp")
-)
+  (load "class-precedence-lists.lsp"))

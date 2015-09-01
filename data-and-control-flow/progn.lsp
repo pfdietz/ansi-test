@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct 19 09:33:51 2002
 ;;;; Contains: Tests of PROGN
 
-(in-package :cl-test)
+
 
 (deftest progn.1
   (progn)

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 22 06:52:21 2004
 ;;;; Contains: Tests of the condition PACKAGE-ERROR
 
-(in-package :cl-test)
+
 
 (deftest package-error.1
   (not

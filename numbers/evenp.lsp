@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug 31 10:39:01 2003
 ;;;; Contains: Tests of EVENP
 
-(in-package :cl-test)
+
 
 
 

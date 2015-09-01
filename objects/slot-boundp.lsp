@@ -3,7 +3,7 @@
 ;;;; Created:  Tue May  6 05:53:32 2003
 ;;;; Contains: Tests of SLOT-BOUNDP
 
-(in-package :cl-test)
+
 
 ;;; SLOT-BOUNDP is extensively tested in other files as well
 

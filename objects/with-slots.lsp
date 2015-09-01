@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 17 18:04:10 2003
 ;;;; Contains: Tests of WITH-SLOTS
 
-(in-package :cl-test)
+
 
 (deftest with-slots.1
   (with-slots () nil)

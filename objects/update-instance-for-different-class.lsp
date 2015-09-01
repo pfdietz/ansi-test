@@ -3,7 +3,7 @@
 ;;;; Created:  Mon May  5 19:32:56 2003
 ;;;; Contains: Tests for UPDATE-INSTANCE-FOR-DIFFERENT-CLASS
 
-(in-package :cl-test)
+
 
 (defclass uifdc-class-01a () ((a :initarg :a) (b :initarg :b)))
 (defclass uifdc-class-01b () (a b))

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 16:00:32 2003
 ;;;; Contains: Tests of RETURN
 
-(in-package :cl-test)
+
 
 ;;; RETURN is tested extensively in other files
 

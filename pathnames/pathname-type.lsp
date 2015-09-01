@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Dec  6 14:45:16 2003
 ;;;; Contains: Tests for PATHNAME-TYPE
 
-(in-package :cl-test)
+
 
 
 

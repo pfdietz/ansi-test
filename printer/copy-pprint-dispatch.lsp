@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Feb 23 04:41:29 2004
 ;;;; Contains: Tests of COPY-PPRINT-DISPATCH
 
-(in-package :cl-test)
+
 
 (deftest copy-pprint-dispatch.1
   (with-standard-io-syntax

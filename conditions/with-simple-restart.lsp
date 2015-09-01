@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Mar 23 04:36:52 2003
 ;;;; Contains: Tests for WITH-SIMPLE-RESTART
 
-(in-package :cl-test)
+
 
 (deftest with-simple-restart.1
   (with-simple-restart (foo ""))

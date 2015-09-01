@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 06:32:46 2002
 ;;;; Contains: Tests for NIL
 
-(in-package :cl-test)
+
 
 (deftest nil.1
   (check-predicate #'(lambda (x) (not (subtypep (type-of x) nil))))

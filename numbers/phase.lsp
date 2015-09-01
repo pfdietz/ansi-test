@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 21:15:54 2003
 ;;;; Contains: Tests of PHASE
 
-(in-package :cl-test)
+
 
 (deftest phase.error.1
   (signals-error (phase) program-error)

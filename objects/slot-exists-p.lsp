@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 10 09:39:01 2003
 ;;;; Contains: Tests of SLOT-EXISTS-P
 
-(in-package :cl-test)
+
 
 ;;; This function is also tested incidentally in many other files
 

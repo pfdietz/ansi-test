@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 22 06:53:55 2004
 ;;;; Contains: Tests of the KEYWORD package
 
-(in-package :cl-test)
+
 
 ;; Check that each keyword satisfies keywordp
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Apr 20 07:41:24 2003
 ;;;; Contains: Tests of UNION
 
-(in-package :cl-test)
+
 
 
 

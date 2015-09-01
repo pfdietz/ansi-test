@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jun  3 21:12:03 2003
 ;;;; Contains: Tests for FIND-METHOD
 
-(in-package :cl-test)
+
 
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (report-and-ignore-errors

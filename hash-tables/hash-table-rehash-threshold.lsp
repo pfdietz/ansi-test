@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Nov 28 05:52:52 2003
 ;;;; Contains: Tests of HASH-TABLE-REHASH-THRESHOLD
 
-(in-package :cl-test)
+
 
 (deftest hash-table-rehash-threshold.1
   (typep* (hash-table-rehash-threshold (make-hash-table))

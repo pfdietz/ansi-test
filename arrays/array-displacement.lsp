@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 06:20:51 2003
 ;;;; Contains: Tests for ARRAY-DISPLACEMENT
 
-(in-package :cl-test)
+
 
 ;;; The tests in make-array.lsp also test array-displacement
 

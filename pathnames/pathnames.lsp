@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Nov 29 04:21:53 2003
 ;;;; Contains: Various tests on pathnames
 
-(in-package :cl-test)
+
 
 (deftest pathnames-print-and-read-properly
   (with-standard-io-syntax

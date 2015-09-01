@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Aug 31 04:34:17 2003
 ;;;; Contains: Tests of the function +
 
-(in-package :cl-test)
+
 
 
 ;;; (compile-and-load "plus-aux.lsp")

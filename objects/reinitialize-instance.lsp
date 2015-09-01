@@ -3,7 +3,7 @@
 ;;;; Created:  Mon Apr 28 21:56:47 2003
 ;;;; Contains: Tests for REINITIALIZE-INSTANCE
 
-(in-package :cl-test)
+
 
 ;;; Many of the classes used here are defined in defclass-??.lsp
 

@@ -3,7 +3,7 @@
 ;;;; Created:  Sun Feb 22 06:51:38 2004
 ;;;; Contains: Tests of PACKAGEP
 
-(in-package :cl-test)
+
 
 (deftest packagep.1
   (check-type-predicate #'packagep 'package)

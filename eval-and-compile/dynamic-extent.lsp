@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 21 09:10:52 2005
 ;;;; Contains: Tests of DYNAMIC-EXTENT
 
-(in-package :cl-test)
+
 
 (deftest dynamic-extent.1
   (let () (declare (dynamic-extent)))

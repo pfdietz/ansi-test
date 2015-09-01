@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Oct  5 19:36:00 2002
 ;;;; Contains: Tests of character comparison functions
 
-(in-package :cl-test)
+
 
 ;;; The character comparisons should throw a PROGRAM-ERROR when
 ;;; safe-called with no arguments

@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 17 09:16:20 2003
 ;;;; Contains: Tests of MAKE-LOAD-FORM
 
-(in-package :cl-test)
+
 
 ;;; These tests are just of MAKE-LOAD-FORM itself; tests of file compilation
 ;;; that depend on MAKE-LOAD-FORM will be found elsewhere.

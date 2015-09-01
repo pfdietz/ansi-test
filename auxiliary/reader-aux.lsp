@@ -3,7 +3,7 @@
 ;;;; Created:  Fri Jan 14 07:43:48 2005
 ;;;; Contains: Auxiliary functions and macros for reader tests
 
-(in-package :cl-test)
+
 
 ;;; Define a test using standard io syntax
 

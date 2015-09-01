@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Sep  6 18:20:36 2003
 ;;;; Contains: Tests of NUMBERP
 
-(in-package :cl-test)
+
 
 (deftest numberp.error.1
   (signals-error (numberp) program-error)

@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Jan 21 22:01:09 2003
 ;;;; Contains: Tests of ARRAY-TOTAL-SIZE
 
-(in-package :cl-test)
+
 
 ;;; More tests of ARRAY-TOTAL-SIZE are in make-array.lsp
 

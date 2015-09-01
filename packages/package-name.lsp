@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Feb 21 17:48:05 2004
 ;;;; Contains: Tests of PACKAGE-NAME
 
-(in-package :cl-test)
+
 (declaim (optimize (safety 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

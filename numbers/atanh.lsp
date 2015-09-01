@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Feb 11 19:26:25 2004
 ;;;; Contains: Tests of ATANH
 
-(in-package :cl-test)
+
 
 (deftest atanh.1
   (let ((result (atanh 0)))

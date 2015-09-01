@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Apr 19 21:54:12 2003
 ;;;; Contains: Tests of NSUBST-IF-NOT
 
-(in-package :cl-test)
+
 
 
 

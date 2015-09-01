@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Apr  2 22:53:27 2003
 ;;;; Contains: Tests for definitions of classes with forward references
 
-(in-package :cl-test)
+
 
 (deftest defclass.forward-ref.1
   (let ((c1 (gensym))

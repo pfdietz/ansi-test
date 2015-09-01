@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Dec 14 07:30:01 2004
 ;;;; Contains: Tests of DOCUMENTATION
 
-(in-package :cl-test)
+
 
 ;;; documentation (x function) (doc-type (eql 't))
 

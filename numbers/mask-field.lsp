@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Sep 11 21:27:13 2003
 ;;;; Contains: Tests of MASK-FIELD
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

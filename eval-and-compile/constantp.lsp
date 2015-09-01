@@ -5,7 +5,7 @@
 
 ;;; See also defconstant.lsp
 
-(in-package :cl-test)
+
 
 ;;; Error tests
 

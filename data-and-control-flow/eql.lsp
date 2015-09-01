@@ -3,7 +3,7 @@
 ;;;; Created:  Thu Oct 17 19:36:33 2002
 ;;;; Contains: Tests of EQL
 
-(in-package :cl-test)
+
 
 ;;; EQLT is defined in ansi-aux.lsp
 ;;; It calls EQL, returning NIL when the result is false and T when it

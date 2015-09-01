@@ -3,7 +3,7 @@
 ;;;; Created:  Tue Apr 29 04:09:06 2003
 ;;;; Contains: Tests of SHARED-INITIALIZE
 
-(in-package :cl-test)
+
 
 (defclass shared-init-class-01 ()
   ((a :initform 'x :initarg :a)

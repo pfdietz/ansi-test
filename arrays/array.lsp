@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Jan 25 08:46:58 2003
 ;;;; Contains: Tests of the ARRAY type specifier
 
-(in-package :cl-test)
+
 
 ;;; Tests of array by itself
 

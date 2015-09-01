@@ -3,7 +3,7 @@
 ;;;; Created:  Sat May 24 21:31:55 2003
 ;;;; Contains: Tests of DEFGENERIC with :method-combination +
 
-(in-package :cl-test)
+
 
 (declaim (special *x*))
 
