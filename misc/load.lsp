@@ -5,8 +5,9 @@
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
-(load "misc/misc.lsp")
+(let ((*default-pathname-defaults* (pathname *load-pathname*)))
+  (load "misc.lsp")
 
 ;;; Misc. tests dealing with type propagation in CMUCL
-(load "misc/misc-cmucl-type-prop.lsp")
-
+  (load "misc-cmucl-type-prop.lsp")
+)
