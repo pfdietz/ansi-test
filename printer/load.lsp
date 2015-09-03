@@ -8,12 +8,12 @@
        (make-pathname
         :directory (pathname-directory *load-pathname*))))
   (load "copy-pprint-dispatch.lsp")
-
   (load "print-integers.lsp")
   (load "print-ratios.lsp")
   (load "print-floats.lsp")
   (load "print-complex.lsp")
   (load "print-characters.lsp")
+  (load "print-lines.lsp")
   (load "print-symbols.lsp")
   (load "print-strings.lsp")
   (load "print-cons.lsp")

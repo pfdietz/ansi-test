@@ -3,10 +3,6 @@
 ;;;; Created:  Tue Jul 27 09:32:46 2004
 ;;;; Contains: Tests involving PRINT-LINES
 
-(in-package :cl-test)
-
-(compile-and-load "printer-aux.lsp")
-
 (deftest print-lines.1
   *print-lines*
   nil)
