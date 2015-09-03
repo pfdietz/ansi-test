@@ -2,8 +2,6 @@
 ;;;; Author:   Paul Dietz
 ;;;; Contains: Tests of the function ARRAY-HAS-FILL-POINTER-P
 
-(in-package :cl-test)
-
 ;;; Many tests are in other files, incidental to testing of
 ;;; other things
 
@@ -52,5 +50,3 @@
 (deftest array-has-fill-pointer-p.error.4
   (signals-type-error x nil (array-has-fill-pointer-p x))
   t)
-
-

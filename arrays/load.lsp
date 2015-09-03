@@ -22,6 +22,7 @@
   (load "array-dimension.lsp")
   (load "array-dimensions.lsp")
   (load "array-element-type.lsp")
+  (load "array-has-fill-pointer-p.lsp")
   (load "array-in-bounds-p.lsp")
   (load "array-misc.lsp")
   (load "array-rank.lsp")
