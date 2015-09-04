@@ -1,10 +1,10 @@
-;-*- Mode:     Lisp -*-
+n;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Mon Jan  5 20:53:03 2004
 ;;;; Contains: Tests of ENSURE-DIRECTORIES-EXIST
 
 (deftest ensure-directories-exist.1
-  (let* ((pn (make-pathname :name "sample-files/ensure-directories-exist.txt"
+  (let* ((pn (make-pathname :name "ensure-directories-exist.txt"
                             :defaults *default-pathname-defaults*))
          (results nil)
          (verbosity
@@ -20,7 +20,7 @@
 
 (deftest ensure-directories-exist.2
   (with-open-file
-   (s "sample-files/ensure-directories-exist.txt" :direction :input)
+   (s "ensure-directories-exist.txt" :direction :input)
    (let* ((results (multiple-value-list (ensure-directories-exist s))))
      (values
       (length results)
@@ -29,7 +29,7 @@
    2 t nil)
 
 (deftest ensure-directories-exist.3
-  (let ((s (open "sample-files/ensure-directories-exist.txt" :direction :input)))
+  (let ((s (open "ensure-directories-exist.txt" :direction :input)))
     (close s)
     (let* ((results (multiple-value-list (ensure-directories-exist s))))
       (values
@@ -39,7 +39,7 @@
    2 t nil)
 
 (deftest ensure-directories-exist.4
-  (let* ((pn (make-pathname :name "sample-files/ensure-directories-exist.txt"
+  (let* ((pn (make-pathname :name "ensure-directories-exist.txt"
                             :defaults *default-pathname-defaults*))
          (results nil)
          (verbosity
@@ -55,7 +55,7 @@
   2 t nil "")
 
 (deftest ensure-directories-exist.5
-  (let* ((pn (make-pathname :name "sample-files/ensure-directories-exist.txt"
+  (let* ((pn (make-pathname :name "ensure-directories-exist.txt"
                             :defaults *default-pathname-defaults*))
          (results nil)
          (verbosity
@@ -71,7 +71,7 @@
   2 t nil "")
 
 (deftest ensure-directories-exist.6
-  (let* ((pn (make-pathname :name "sample-files/ensure-directories-exist.txt"
+  (let* ((pn (make-pathname :name "ensure-directories-exist.txt"
                             :defaults *default-pathname-defaults*))
          (results nil)
          (verbosity
@@ -88,7 +88,7 @@
   2 t nil "")
 
 (deftest ensure-directories-exist.7
-  (let* ((pn (make-pathname :name "sample-files/ensure-directories-exist.txt"
+  (let* ((pn (make-pathname :name "ensure-directories-exist.txt"
                             :defaults *default-pathname-defaults*))
          (results nil)
          (verbosity
@@ -140,7 +140,7 @@
 
 (deftest ensure-directories-exist.9
   (do-special-strings
-   (str "sample-files/ensure-directories-exist.txt" nil)
+   (str "ensure-directories-exist.txt" nil)
    (let* ((results (multiple-value-list (ensure-directories-exist str))))
      (assert (eql (length results) 2))
      (assert (equalt (truename (first results)) (truename str)))
