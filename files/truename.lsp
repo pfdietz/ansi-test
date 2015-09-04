@@ -3,8 +3,6 @@
 ;;;; Created:  Tue Jan  6 05:32:37 2004
 ;;;; Contains: Tests of TRUENAME
 
-
-
 (deftest truename.1
   (let* ((pn #p"truename.txt")
          (tn (truename pn)))
@@ -55,7 +53,7 @@
   t nil t t)
 
 (deftest truename.5
-  (let* ((lpn "CLTEST:scratch/foo.txt")
+  (let* ((lpn "CLTEST:foo.txt")
          (pn (translate-logical-pathname lpn)))
     (unless (probe-file lpn)
       (with-open-file (s lpn :direction :output) (format s "Stuff~%")))

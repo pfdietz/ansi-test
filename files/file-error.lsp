@@ -3,8 +3,6 @@
 ;;;; Created:  Tue Jan 13 19:10:02 2004
 ;;;; Contains: Tests of the FILE-ERROR condition, and associated accessor function
 
-
-
 (deftest file-error.1
   (let ((pn (make-pathname :name :wild
                            :type "txt"
@@ -21,37 +19,37 @@
   t t)
 
 (deftest file-error-pathname.1
-  (let ((c (make-condition 'file-error :pathname "scratch/foo.txt")))
+  (let ((c (make-condition 'file-error :pathname "foo.txt")))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
      (file-error-pathname c)))
-  t t "scratch/foo.txt")
+  t t "foo.txt")
 
 (deftest file-error-pathname.2
-  (let ((c (make-condition 'file-error :pathname #p"scratch/foo.txt")))
+  (let ((c (make-condition 'file-error :pathname #p"foo.txt")))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
-     (equalt #p"scratch/foo.txt" (file-error-pathname c))))
+     (equalt #p"foo.txt" (file-error-pathname c))))
   t t t)
 
 (deftest file-error-pathname.3
-  (let ((c (make-condition 'file-error :pathname "CLTEST:scratch/foo.txt")))
+  (let ((c (make-condition 'file-error :pathname "CLTEST:foo.txt")))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
-     (equalpt "CLTEST:scratch/foo.txt"
+     (equalpt "CLTEST:foo.txt"
               (file-error-pathname c))))
   t t t)
 
 (deftest file-error-pathname.4
   (let ((c (make-condition
-            'file-error :pathname (logical-pathname "CLTEST:scratch/foo.txt"))))
+            'file-error :pathname (logical-pathname "CLTEST:foo.txt"))))
     (values
      (notnot (typep c 'file-error))
      (eqlt (class-of c) (find-class 'file-error))
-     (equalpt (logical-pathname "CLTEST:scratch/foo.txt")
+     (equalpt (logical-pathname "CLTEST:foo.txt")
               (file-error-pathname c))))
   t t t)
 
@@ -81,6 +79,6 @@
 (deftest file-error-pathname.error.2
   (signals-error
    (file-error-pathname
-    (make-condition 'file-error :pathname "scratch/foo.txt")
+    (make-condition 'file-error :pathname "foo.txt")
     nil)
    program-error) t)
