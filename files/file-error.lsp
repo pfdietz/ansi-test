@@ -56,7 +56,7 @@
   t t t)
 
 (deftest file-error-pathname.5
-  (with-open-file (s "sample-files/file-error.txt" :direction :input)
+  (with-open-file (s "file-error.txt" :direction :input)
                   (let ((c (make-condition 'file-error :pathname s)))
                     (values
                      (notnot (typep c 'file-error))
@@ -65,7 +65,7 @@
   t t t)
 
 (deftest file-error-pathname.6
-  (let ((s (open "sample-files/file-error.txt" :direction :input)))
+  (let ((s (open "file-error.txt" :direction :input)))
     (close s)
     (let ((c (make-condition 'file-error :pathname s)))
       (values
