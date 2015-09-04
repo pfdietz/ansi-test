@@ -1,4 +1,4 @@
-n;-*- Mode:     Lisp -*-
+;-*- Mode:     Lisp -*-
 ;;;; Author:   Paul Dietz
 ;;;; Created:  Mon Jan  5 20:53:03 2004
 ;;;; Contains: Tests of ENSURE-DIRECTORIES-EXIST
