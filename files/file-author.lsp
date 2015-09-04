@@ -15,28 +15,28 @@
   nil)
 
 (deftest file-author.2
-  (let ((author (file-author "sample-files/file-author.txt")))
+  (let ((author (file-author "file-author.txt")))
     (if (or (null author) (stringp author))
         nil
       author))
   nil)
 
 (deftest file-author.3
-  (let ((author (file-author #p"sample-files/file-author.txt")))
+  (let ((author (file-author #p"file-author.txt")))
     (if (or (null author) (stringp author))
         nil
       author))
   nil)
 
 (deftest file-author.4
-  (let ((author (file-author (truename "sample-files/file-author.txt"))))
+  (let ((author (file-author (truename "file-author.txt"))))
     (if (or (null author) (stringp author))
         nil
       author))
   nil)
 
 (deftest file-author.5
-  (let ((author (with-open-file (s "sample-files/file-author.txt" :direction :input)
+  (let ((author (with-open-file (s "file-author.txt" :direction :input)
                                 (file-author s))))
     (if (or (null author) (stringp author))
         nil
@@ -44,7 +44,7 @@
   nil)
 
 (deftest file-author.6
-  (let ((author (let ((s (open "sample-files/file-author.txt" :direction :input)))
+  (let ((author (let ((s (open "file-author.txt" :direction :input)))
                   (close s)
                   (file-author s))))
     (if (or (null author) (stringp author))
@@ -56,8 +56,8 @@
 
 (deftest file-author.7
   (do-special-strings
-   (s "sample-files/file-author.txt" nil)
-   (assert (equal (file-author s) (file-author "sample-files/file-author.txt"))))
+   (s "file-author.txt" nil)
+   (assert (equal (file-author s) (file-author "file-author.txt"))))
   nil)
 
 ;;; FIXME
@@ -70,7 +70,7 @@
   t)
 
 (deftest file-author.error.2
-  (signals-error (file-author "sample-files/file-author.txt" nil) program-error)
+  (signals-error (file-author "file-author.txt" nil) program-error)
   t)
 
 (deftest file-author.error.3
@@ -82,7 +82,7 @@
 
 (deftest file-author.error.4
   (signals-error-always
-   (file-author (make-pathname :name "sample-files/file-author" :type :wild
+   (file-author (make-pathname :name "file-author" :type :wild
                                :defaults *default-pathname-defaults*))
    file-error)
   t t)

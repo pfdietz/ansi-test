@@ -6,7 +6,7 @@
 
 
 (deftest truename.1
-  (let* ((pn #p"sample-files/truename.txt")
+  (let* ((pn #p"truename.txt")
          (tn (truename pn)))
     (values
      (notnot (pathnamep pn))
@@ -17,7 +17,7 @@
   t nil t t)
 
 (deftest truename.2
-  (let* ((name "sample-files/truename.txt")
+  (let* ((name "truename.txt")
          (pn (pathname name))
          (tn (truename name)))
     (values
@@ -29,7 +29,7 @@
   t nil t t)
 
 (deftest truename.3
-  (let* ((pn #p"sample-files/truename.txt"))
+  (let* ((pn #p"truename.txt"))
     (with-open-file
      (s pn :direction :input)
      (let ((tn (truename s)))
@@ -42,7 +42,7 @@
   t nil t t)
 
 (deftest truename.4
-  (let* ((pn #p"sample-files/truename.txt"))
+  (let* ((pn #p"truename.txt"))
     (let ((s (open pn :direction :input)))
       (close s)
       (let ((tn (truename s)))
@@ -73,8 +73,8 @@
 
 (deftest truename.6
   (do-special-strings
-   (s "sample-files/truename.txt" nil)
-   (assert (equalp (truename s) (truename "sample-files/truename.txt"))))
+   (s "truename.txt" nil)
+   (assert (equalp (truename s) (truename "truename.txt"))))
   nil)
 
 ;;; Error tests
@@ -84,21 +84,21 @@
   t)
 
 (deftest truename.error.2
-  (signals-error (truename "sample-files/truename.txt" nil) program-error)
+  (signals-error (truename "truename.txt" nil) program-error)
   t)
 
 (deftest truename.error.3
-  (signals-error-always (truename "sample-files/nonexistent") file-error)
+  (signals-error-always (truename "nonexistent") file-error)
   t t)
 
 (deftest truename.error.4
-  (signals-error-always (truename #p"sample-files/nonexistent") file-error)
+  (signals-error-always (truename #p"nonexistent") file-error)
   t t)
 
 (deftest truename.error.5
     (signals-error-always
      (truename
-      (logical-pathname "CLTESTROOT:sample-files/nonexistent"))
+      (logical-pathname "CLTESTROOT:nonexistent"))
   file-error) t t)
 
 (deftest truename.error.6
