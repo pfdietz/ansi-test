@@ -1,75 +1,76 @@
 ;;; Load test files
+(in-package :cl-test)
 
 ;;; Tests of symbols
-(load "load-symbols.lsp")
+(load "symbols/load.lsp")
 
 ;;; Tests of evaluation and compilation
-(load "load-eval-and-compile.lsp")
+(load "eval-and-compile/load.lsp")
 
 ;;; Tests of data and control flow
-(load "load-data-and-control-flow.lsp")
+(load "data-and-control-flow/load.lsp")
 
 ;;; Tests of iteration forms
-(load "load-iteration.lsp")
+(load "iteration/load.lsp")
 
 ;;; Tests of objects
-(load "load-objects.lsp")
+(load "objects/load.lsp")
 
 ;;; Tests of conditions
-(load "load-conditions.lsp")
+(load "conditions/load.lsp")
 
 ;;; Tests of conses
-(load "load-cons.lsp")
+(load "cons/load.lsp")
 
 ;;; Tests on arrays
-(load "load-arrays.lsp")
+(load "arrays/load.lsp")
 
 ;;; Tests of hash tables
-(load "load-hash-tables.lsp")
+(load "hash-tables/load.lsp")
 
 ;;; Tests of packages
 
-(load "load-packages.lsp")
+(load "packages/load.lsp")
 
 ;;; Tests of numbers (section 12)
-(load "load-numbers.lsp")
+(load "numbers/load.lsp")
 
 ;;; Tests of sequences
-(load "load-sequences.lsp")
+(load "sequences/load.lsp")
 
 ;;; Tests of structures
-(load "load-structures.lsp")
+(load "structures/load.lsp")
 
 ;;; Tests of types and classes
-(load "load-types-and-class.lsp")
+(load "types-and-classes/load.lsp")
 
 ;;; Tests of strings
-(load "load-strings.lsp")
+(load "strings/load.lsp")
 
 ;;; Tests for character functions
-(load "load-characters.lsp")
+(load "characters/load.lsp")
 
 ;;; Tests of pathnames
-(load "load-pathnames.lsp")
+(load "pathnames/load.lsp")
 
 ;;; Tests of file operations
-(load "load-files.lsp")
+(load "files/load.lsp")
 
 ;;; Tests of streams
-(load "load-streams.lsp")
+(load "streams/load.lsp")
 
 ;;; Tests of the printer
-(load "load-printer.lsp")
+(load "printer/load.lsp")
 
 ;;; Tests of the reader
-(load "load-reader.lsp")
+(load "reader/load.lsp")
 
 ;;; Tests of system construction
-(load "load-system-construction.lsp")
+(load "system-construction/load.lsp")
 
 ;;; Tests of environment
-(load "load-environment.lsp")
+(load "environment/load.lsp")
 
 ;;; Miscellaneous tests, mostly tests that failed in random testing
 ;;; on various implementations
-(load "load-misc.lsp")
+(load "misc/load.lsp")

@@ -4,7 +4,7 @@
 # LISP=~/sbcl/src/runtime/sbcl --core ~/sbcl/output/sbcl.core --noinform
 # LISP=clisp -ansi -q
 # LISP=abcl
-# LISP=ecl
+LISP=ecl
 # LISP=/usr/local/lib/LispWorks/nongraphic-lispworks-4450
 # LISP=acl
 
@@ -136,6 +136,8 @@ rt_1000_8:
 
 
 clean:
+	@rm -f auxiliary/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
+	@rm -f sample-files/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
 	@rm -f test*.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
 	@rm -f *.dfsl *.d64fsl
 	@(cd beyond-ansi; $(MAKE) clean)
