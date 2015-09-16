@@ -35,22 +35,22 @@
 (deftest pathname.6
     (equalt #p"pathname.txt"
             (pathname
-             (make-array 25
+             (make-array 12
                          :initial-contents "pathname.txt"
                          :element-type 'base-char)))
   t)
 
 (deftest pathname.7
     (equalt #p"pathname.txt"
-            (pathname (make-array 28
+            (pathname (make-array 15
                                   :initial-contents "pathname.txtXXX"
                                   :element-type 'base-char
-                                  :fill-pointer 25)))
+                                  :fill-pointer 12)))
   t)
 
 (deftest pathname.8
     (equalt #p"pathname.txt"
-            (pathname (make-array 25
+            (pathname (make-array 12
                                   :initial-contents "pathname.txt"
                                   :element-type 'base-char
                                   :adjustable t)))
@@ -58,15 +58,15 @@
 
 (deftest pathname.9
     (equalt #p"pathname.txt"
-            (pathname (make-array 28
+            (pathname (make-array 15
                                   :initial-contents "pathname.txtXXX"
                                   :element-type 'character
-                                  :fill-pointer 25)))
+                                  :fill-pointer 12)))
   t)
 
 (deftest pathname.10
     (equalt #p"pathname.txt"
-            (pathname (make-array 25
+            (pathname (make-array 12
                                   :initial-contents "pathname.txt"
                                   :element-type 'character
                                   :adjustable t)))
@@ -77,11 +77,11 @@
        collect
          (equalt #p"pathname.txt"
                  (pathname
-                  (let* ((s (make-array 28
+                  (let* ((s (make-array 15
                                         :initial-contents
                                         "XXpathname.txtX"
                                         :element-type etype)))
-                    (make-array 25 
+                    (make-array 8
                                 :element-type etype
                                 :displaced-to s
                                 :displaced-index-offset 2)))))
