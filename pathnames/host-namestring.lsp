@@ -7,7 +7,7 @@
 
 (deftest host-namestring.1
     (let* ((vals (multiple-value-list
-                  (host-namestring "sample-files/host-namestring.txt")))
+                  (host-namestring "host-namestring.txt")))
            (s (first vals)))
       (if (and (null (cdr vals))
                (or (null s)
@@ -20,7 +20,7 @@
 
 (deftest host-namestring.2
     (do-special-strings
-        (s "sample-files/host-namestring.txt" nil)
+        (s "host-namestring.txt" nil)
       (let ((ns (host-namestring s)))
         (when ns
           (assert (stringp ns))
@@ -29,7 +29,7 @@
   nil)
 
 (deftest host-namestring.3
-    (let* ((name "sample-files/host-namestring.txt")
+    (let* ((name "host-namestring.txt")
            (pn (merge-pathnames (pathname name)))
            (name2 (with-open-file (s pn :direction :input)
                     (host-namestring s)))
@@ -44,6 +44,6 @@
   t)
 
 (deftest host-namestring.error.2
-    (signals-error (host-namestring "sample-files/host-namestring.txt" nil)
+    (signals-error (host-namestring "host-namestring.txt" nil)
                    program-error)
   t)

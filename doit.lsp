@@ -70,7 +70,8 @@
 (when *load-pathname*
   (mapc #'regression-test:rem-test '(load-pathname.1 load-truename.1)))
 
-(time (regression-test:do-tests))
+(ext:chdir #P"sandbox/")
+(time (regression-test:do-tests)))
 
 #+allegro (cl-user::exit)
 #+(or cmu sbcl gcl armedbear clisp) (cl-user::quit)

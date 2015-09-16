@@ -12,7 +12,7 @@ MAKE=make
 
 test:
 	@rm -rf scratch
-	cat doit.lsp | $(LISP) | tee test.out
+	cd sandbox | cat doit.lsp | $(LISP) | tee test.out
 
 test-symbols:
 	(cat doit1.lsp ; echo "(load \"load-symbols.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-symbols.out

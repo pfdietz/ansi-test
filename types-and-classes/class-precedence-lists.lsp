@@ -97,7 +97,7 @@
                 (make-echo-stream (make-string-input-stream "foo") out))
   (echo-stream stream t))
 
-(def-cpl-test (open "sample-files/class-precedence-lists.txt" :direction :probe)
+(def-cpl-test (open "class-precedence-lists.txt" :direction :probe)
   (file-stream stream t))
 
 (def-cpl-test 1.0s0 (float real number t) float-cpl.1)

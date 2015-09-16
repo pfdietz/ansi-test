@@ -6,23 +6,23 @@
 
 
 (deftest directory.1
-  (directory "sample-files/nonexistent")
+  (directory "nonexistent")
   nil)
 
 (deftest directory.2
-  (directory #p"sample-files/nonexistent")
+  (directory #p"nonexistent")
   nil)
 
 (deftest directory.3
-  (directory "sample-files/nonexistent" :allow-other-keys nil)
+  (directory "nonexistent" :allow-other-keys nil)
   nil)
 
 (deftest directory.4
-  (directory "sample-files/nonexistent" :allow-other-keys t :foo 'bar)
+  (directory "nonexistent" :allow-other-keys t :foo 'bar)
   nil)
 
 (deftest directory.5
-  (directory "sample-files/nonexistent" :foo 0 :allow-other-keys t)
+  (directory "nonexistent" :foo 0 :allow-other-keys t)
   nil)
 
 (deftest directory.6
@@ -62,7 +62,7 @@
 
 (deftest directory.9
   (do-special-strings
-   (s "sample-files/nonexistent" nil)
+   (s "nonexistent" nil)
    (assert (null (directory s))))
   nil)
 

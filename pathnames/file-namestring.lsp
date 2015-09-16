@@ -5,7 +5,7 @@
 
 (deftest file-namestring.1
     (let* ((vals (multiple-value-list
-                  (file-namestring "sample-files/file-namestring.txt")))
+                  (file-namestring "file-namestring.txt")))
            (s (first vals)))
       (if (and (null (cdr vals))
                (stringp s)
@@ -16,14 +16,14 @@
 
 (deftest file-namestring.2
     (do-special-strings
-        (s "sample-files/file-namestring.txt" nil)
+        (s "file-namestring.txt" nil)
       (let ((ns (file-namestring s)))
         (assert (stringp ns))
         (assert (string= (file-namestring ns) ns))))
   nil)
 
 (deftest file-namestring.3
-    (let* ((name "sample-files/file-namestring.txt")
+    (let* ((name "file-namestring.txt")
            (pn (merge-pathnames (pathname name)))
            (name2 (with-open-file (s pn :direction :input)
                     (file-namestring s)))
@@ -38,6 +38,6 @@
   t)
 
 (deftest file-namestring.error.2
-    (signals-error (file-namestring "sample-files/file-namestring.txt" nil)
+    (signals-error (file-namestring "file-namestring.txt" nil)
                    program-error)
   t)
