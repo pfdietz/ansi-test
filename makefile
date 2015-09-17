@@ -137,11 +137,11 @@ rt_1000_8:
 
 clean:
 	@rm -f auxiliary/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
-	@rm -f sample-files/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
+	@rm -f sandbox/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
 	@rm -f test*.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
 	@rm -f *.dfsl *.d64fsl
 	@(cd beyond-ansi; $(MAKE) clean)
-	@rm -rf scratch/ scratch.txt
+	@rm -rf sandbox/scratch/ sandbox/scratch.txt
 	@rm -f foo.txt foo.lsp foo.dat
 	@rm -f tmp.txt tmp.dat tmp2.dat temp.dat
 	@rm -f gazonk* out.class
