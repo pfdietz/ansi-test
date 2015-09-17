@@ -70,7 +70,9 @@
 (when *load-pathname*
   (mapc #'regression-test:rem-test '(load-pathname.1 load-truename.1)))
 
-(ext:chdir #P"sandbox/")
+;; We could use uiop:chdir here, but what about new implementations?
+(setf *default-pathname-defaults* (truename #P"sandbox/"))
+
 (time (regression-test:do-tests)))
 
 #+allegro (cl-user::exit)
