@@ -81,7 +81,7 @@
                                         :initial-contents
                                         "XXpathname.txtX"
                                         :element-type etype)))
-                    (make-array 8
+                    (make-array 12
                                 :element-type etype
                                 :displaced-to s
                                 :displaced-index-offset 2)))))
