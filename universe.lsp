@@ -399,16 +399,20 @@
    (declare (optimize safety))
    (ignore-errors
      (setf (logical-pathname-translations "CLTESTROOT")
-           `(("**;*.*.*" ,(make-pathname :directory '(:absolute :wild-inferiors)
-                                         :name :wild :type :wild)))))
+           `(("**;*.*.*" ,(merge-pathnames
+                           "sandbox/"
+                           (make-pathname :directory '(:absolute :wild-inferiors)
+                                          :name :wild :type :wild))))))
    (ignore-errors
      (setf (logical-pathname-translations "CLTEST")
-           `(("**;*.*.*" ,(make-pathname
-                           :directory (append
-                                       (pathname-directory
-                                        (truename (make-pathname)))
-                                       '(:wild-inferiors))
-                           :name :wild :type :wild)))))
+           `(("**;*.*.*" ,(merge-pathnames
+                           "sandbox/"
+                           (make-pathname
+                            :directory (append
+                                        (pathname-directory
+                                         (truename (make-pathname)))
+                                        '(:wild-inferiors))
+                            :name :wild :type :wild))))))
    ))
 
 (defparameter *logical-pathnames*
