@@ -11,80 +11,80 @@ LISP=ecl
 MAKE=make
 
 test:
-	@rm -rf scratch
+	@rm -rf sandbox/scratch
 	cat doit.lsp | $(LISP) | tee test.out
 
 test-symbols:
-	(cat doit1.lsp ; echo "(load \"load-symbols.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-symbols.out
+	(cat doit1.lsp ; echo "(load \"symbols/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-symbols.out
 
 test-eval-and-compile:
-	(cat doit1.lsp ; echo "(load \"load-eval-and-compile.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-eval-and-compile.out
+	(cat doit1.lsp ; echo "(load \"eval-and-compile/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-eval-and-compile.out
 
 test-data-and-control-flow:
-	(cat doit1.lsp ; echo "(load \"load-data-and-control-flow.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-data-and-control-flow.out
+	(cat doit1.lsp ; echo "(load \"data-and-control-flow/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-data-and-control-flow.out
 
 test-iteration:
-	(cat doit1.lsp ; echo "(load \"load-iteration.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-iteration.out
+	(cat doit1.lsp ; echo "(load \"iteration/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-iteration.out
 
 test-objects:
-	(cat doit1.lsp ; echo "(load \"load-objects.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-objects.out
+	(cat doit1.lsp ; echo "(load \"objects/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-objects.out
 
 test-conditions:
-	(cat doit1.lsp ; echo "(load \"load-conditions.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-conditions.out
+	(cat doit1.lsp ; echo "(load \"conditions/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-conditions.out
 
 test-cons:
-	(cat doit1.lsp ; echo "(load \"load-cons.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-cons.out
+	(cat doit1.lsp ; echo "(load \"cons/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-cons.out
 
 test-arrays:
-	(cat doit1.lsp ; echo "(load \"load-arrays.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-arrays.out
+	(cat doit1.lsp ; echo "(load \"arrays/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-arrays.out
 
 test-hash-tables:
-	(cat doit1.lsp ; echo "(load \"load-hash-tables.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-hash-tables.out
+	(cat doit1.lsp ; echo "(load \"hash-tables/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-hash-tables.out
 
 test-packages:
-	(cat doit1.lsp ; echo "(load \"load-packages.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-packages.out
+	(cat doit1.lsp ; echo "(load \"packages/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-packages.out
 
 test-numbers:
-	(cat doit1.lsp ; echo "(load \"load-numbers.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-numbers.out
+	(cat doit1.lsp ; echo "(load \"numbers/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-numbers.out
 
 test-sequences:
-	(cat doit1.lsp ; echo "(load \"load-sequences.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-sequences.out
+	(cat doit1.lsp ; echo "(load \"sequences/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-sequences.out
 
 test-structures:
-	(cat doit1.lsp ; echo "(load \"load-structures.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-structures.out
+	(cat doit1.lsp ; echo "(load \"structures/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-structures.out
 
 test-types-and-class:
-	(cat doit1.lsp ; echo "(load \"load-types-and-class.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-types-and-class.out
+	(cat doit1.lsp ; echo "(load \"types-and-class/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-types-and-class.out
 
 test-strings:
-	(cat doit1.lsp ; echo "(load \"load-strings.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-strings.out
+	(cat doit1.lsp ; echo "(load \"strings/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-strings.out
 
 test-characters:
-	(cat doit1.lsp ; echo "(load \"load-characters.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-characters.out
+	(cat doit1.lsp ; echo "(load \"characters/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-characters.out
 
 test-pathnames:
-	(cat doit1.lsp ; echo "(load \"load-pathnames.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-pathnames.out
+	(cat doit1.lsp ; echo "(load \"pathnames/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-pathnames.out
 
 test-files:
-	(cat doit1.lsp ; echo "(load \"load-files.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-files.out
+	(cat doit1.lsp ; echo "(load \"files/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-files.out
 
 test-streams:
-	(cat doit1.lsp ; echo "(load \"load-streams.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-streams.out
+	(cat doit1.lsp ; echo "(load \"streams/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-streams.out
 
 test-printer:
-	(cat doit1.lsp ; echo "(load \"load-printer.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-printer.out
+	(cat doit1.lsp ; echo "(load \"printer/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-printer.out
 
 test-reader:
-	(cat doit1.lsp ; echo "(load \"load-reader.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-reader.out
+	(cat doit1.lsp ; echo "(load \"reader/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-reader.out
 
 test-system-construction:
-	(cat doit1.lsp ; echo "(load \"load-system-construction.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-system-construction.out
+	(cat doit1.lsp ; echo "(load \"system-construction/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-system-construction.out
 
 test-environment:
-	(cat doit1.lsp ; echo "(load \"load-environment.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-environment.out
+	(cat doit1.lsp ; echo "(load \"environment/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-environment.out
 
 test-misc:
-	(cat doit1.lsp ; echo "(load \"load-misc.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-misc.out
+	(cat doit1.lsp ; echo "(load \"misc/load.lsp\")"; cat doit2.lsp) | $(LISP) | tee test-misc.out
 
 test-all: test-symbols test-eval-and-compile test-data-and-control-flow test-iteration test-objects \
          test-conditions test-cons test-arrays test-hash-tables test-packages test-numbers \
