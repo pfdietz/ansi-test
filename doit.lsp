@@ -73,7 +73,7 @@
 ;; We could use uiop:chdir here, but what about new implementations?
 (setf *default-pathname-defaults* (truename #P"sandbox/"))
 
-(time (regression-test:do-tests)))
+(time (regression-test:do-tests))
 
 #+allegro (cl-user::exit)
 #+(or cmu sbcl gcl armedbear clisp) (cl-user::quit)
