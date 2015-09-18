@@ -14,7 +14,7 @@
   t)
 
 (deftest input-stream-p.3
-    (with-open-file (s "sample-files/input-stream-p.txt" :direction :input)
+    (with-open-file (s "input-stream-p.txt" :direction :input)
       (notnot-mv (input-stream-p s)))
   t)
 

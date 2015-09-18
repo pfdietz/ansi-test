@@ -10,21 +10,21 @@
   t)
 
 (deftest pathname.2
-    (equalt #p"sample-files/pathname.txt" (pathname "sample-files/pathname.txt"))
+    (equalt #p"pathname.txt" (pathname "pathname.txt"))
   t)
 
 (deftest pathname.3
-    (let ((s (open "sample-files/pathname.txt" :direction :input)))
+    (let ((s (open "pathname.txt" :direction :input)))
       (prog1 (equalt (truename (pathname s))
-                     (truename #p"sample-files/pathname.txt"))
+                     (truename #p"pathname.txt"))
         (close s)))
   t)
 
 (deftest pathname.4
-    (let ((s (open "sample-files/pathname.txt" :direction :input)))
+    (let ((s (open "pathname.txt" :direction :input)))
       (close s)
       (equalt (truename (pathname s))
-              (truename #p"sample-files/pathname.txt")))
+              (truename #p"pathname.txt")))
   t)
 
 (deftest pathname.5
@@ -33,41 +33,41 @@
   t)
 
 (deftest pathname.6
-    (equalt #p"sample-files/pathname.txt"
+    (equalt #p"pathname.txt"
             (pathname
-             (make-array 25
-                         :initial-contents "sample-files/pathname.txt"
+             (make-array 12
+                         :initial-contents "pathname.txt"
                          :element-type 'base-char)))
   t)
 
 (deftest pathname.7
-    (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 28
-                                  :initial-contents "sample-files/pathname.txtXXX"
+    (equalt #p"pathname.txt"
+            (pathname (make-array 15
+                                  :initial-contents "pathname.txtXXX"
                                   :element-type 'base-char
-                                  :fill-pointer 25)))
+                                  :fill-pointer 12)))
   t)
 
 (deftest pathname.8
-    (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 25
-                                  :initial-contents "sample-files/pathname.txt"
+    (equalt #p"pathname.txt"
+            (pathname (make-array 12
+                                  :initial-contents "pathname.txt"
                                   :element-type 'base-char
                                   :adjustable t)))
   t)
 
 (deftest pathname.9
-    (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 28
-                                  :initial-contents "sample-files/pathname.txtXXX"
+    (equalt #p"pathname.txt"
+            (pathname (make-array 15
+                                  :initial-contents "pathname.txtXXX"
                                   :element-type 'character
-                                  :fill-pointer 25)))
+                                  :fill-pointer 12)))
   t)
 
 (deftest pathname.10
-    (equalt #p"sample-files/pathname.txt"
-            (pathname (make-array 25
-                                  :initial-contents "sample-files/pathname.txt"
+    (equalt #p"pathname.txt"
+            (pathname (make-array 12
+                                  :initial-contents "pathname.txt"
                                   :element-type 'character
                                   :adjustable t)))
   t)
@@ -75,13 +75,13 @@
 (deftest pathname.11
     (loop for etype in '(standard-char base-char character)
        collect
-         (equalt #p"sample-files/pathname.txt"
+         (equalt #p"pathname.txt"
                  (pathname
-                  (let* ((s (make-array 28
+                  (let* ((s (make-array 15
                                         :initial-contents
-                                        "XXsample-files/pathname.txtX"
+                                        "XXpathname.txtX"
                                         :element-type etype)))
-                    (make-array 25 
+                    (make-array 12
                                 :element-type etype
                                 :displaced-to s
                                 :displaced-index-offset 2)))))

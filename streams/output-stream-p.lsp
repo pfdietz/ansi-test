@@ -14,7 +14,7 @@
   t)
 
 (deftest output-stream-p.3
-  (with-open-file (s "sample-files/output-stream-p.txt" :direction :input)
+  (with-open-file (s "output-stream-p.txt" :direction :input)
                   (output-stream-p s))
   nil)
 

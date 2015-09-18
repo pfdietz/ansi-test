@@ -6,12 +6,12 @@
 (in-package :cl-test)
 
 (deftest file-position.1
-  (with-open-file (is "sample-files/file-position.txt":direction :input)
+  (with-open-file (is "file-position.txt":direction :input)
                   (file-position is))
   0)
 
 (deftest file-position.2
-  (with-open-file (is "sample-files/file-position.txt":direction :input)
+  (with-open-file (is "file-position.txt":direction :input)
                   (values
                    (multiple-value-list
                     (notnot-mv (file-position is :start)))
@@ -20,7 +20,7 @@
   (t) 0)
 
 (deftest file-position.3
-  (with-open-file (is "sample-files/file-position.txt":direction :input)
+  (with-open-file (is "file-position.txt":direction :input)
                   (values
                    (multiple-value-list
                     (notnot-mv (file-position is :end)))
@@ -29,7 +29,7 @@
 
 (deftest file-position.4
   (with-open-file
-   (is "sample-files/file-position.txt":direction :input)
+   (is "file-position.txt":direction :input)
    (values
     (file-position is)
     (read-char is)
@@ -149,7 +149,7 @@
 (deftest file-position.error.3
   (signals-error
    (with-open-file
-    (is "sample-files/file-position.txt" :direction :input)
+    (is "file-position.txt" :direction :input)
     (flet ((%fail () (error 'type-error)))
       (unless (file-position is :end) (%fail))
       (let ((fp (file-position is)))
@@ -161,7 +161,7 @@
 (deftest file-position.error.4
   (signals-error
    (with-open-file
-    (is "sample-files/file-position.txt" :direction :input)
+    (is "file-position.txt" :direction :input)
     (file-position is 1000000000000000000000))
    error)
   t)

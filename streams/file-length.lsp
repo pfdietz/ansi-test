@@ -11,7 +11,7 @@
 
 (deftest file-length.error.2
   (signals-error
-   (with-open-file (is "sample-files/file-length.txt" :direction :input)
+   (with-open-file (is "file-length.txt" :direction :input)
                    (file-length is nil))
    program-error)
   t)
@@ -37,7 +37,7 @@
 (deftest file-length.error.5
   (signals-error
    (with-open-file
-    (is "sample-files/file-length.txt" :direction :input)
+    (is "file-length.txt" :direction :input)
     (with-open-file
      (os "tmp.txt" :direction :output :if-exists :supersede)
      (let ((s (make-two-way-stream is os)))
@@ -48,7 +48,7 @@
 (deftest file-length.error.6
   (signals-error
    (with-open-file
-    (is "sample-files/file-length.txt" :direction :input)
+    (is "file-length.txt" :direction :input)
     (with-open-file
      (os "tmp.txt" :direction :output :if-exists :supersede)
      (let ((s (make-echo-stream is os)))
@@ -71,7 +71,7 @@
 (deftest file-length.error.10
   (signals-error
    (with-open-file
-    (is "sample-files/file-length.txt" :direction :input)
+    (is "file-length.txt" :direction :input)
     (let ((s (make-concatenated-stream is)))
       (unwind-protect (file-length s) (close s))))
    type-error)
@@ -94,7 +94,7 @@
 (deftest file-length.1
   (let ((results (multiple-value-list
                   (with-open-file
-                   (is "sample-files/file-length.txt" :direction :input)
+                   (is "file-length.txt" :direction :input)
                    (file-length is)))))
     (and (= (length results) 1)
          (typep (car results) '(integer 1))
@@ -167,7 +167,7 @@
 
 (deftest file-length.6
   (with-open-file
-   (*foo* "sample-files/file-length.txt" :direction :input)
+   (*foo* "file-length.txt" :direction :input)
    (declare (special *foo*))
    (let ((s (make-synonym-stream '*foo*)))
      (unwind-protect

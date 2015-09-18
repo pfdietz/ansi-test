@@ -7,7 +7,7 @@
 
 (deftest directory-namestring.1
     (let* ((vals (multiple-value-list
-                  (directory-namestring "sample-files/directory-namestring.txt")))
+                  (directory-namestring "directory-namestring.txt")))
            (s (first vals)))
       (if (and (null (cdr vals))
                (stringp s)
@@ -18,7 +18,7 @@
 
 (deftest directory-namestring.2
     (do-special-strings
-        (s "sample-files/directory-namestring.txt" nil)
+        (s "directory-namestring.txt" nil)
       (let ((ns (directory-namestring s)))
         (assert (stringp ns))
         (assert (string= (directory-namestring ns) ns))))
@@ -31,7 +31,7 @@
 ;;;  in which so much is left up to the implementation.)
 #-lispworks
 (deftest directory-namestring.3
-    (let* ((name "sample-files/directory-namestring.txt")
+    (let* ((name "directory-namestring.txt")
            (pn (merge-pathnames (pathname name)))
            (name2 (with-open-file (s pn :direction :input)
                     (directory-namestring s)))
@@ -47,6 +47,6 @@
 
 (deftest directory-namestring.error.2
     (signals-error
-     (directory-namestring "sample-files/directory-namestring.txt" nil)
+     (directory-namestring "directory-namestring.txt" nil)
      program-error)
   t)

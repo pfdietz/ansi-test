@@ -64,86 +64,86 @@
            (funcall funname)))))))
 
 (deftest compile-file.1
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1) t nil)
 
 (deftest compile-file.2
-  (compile-file-test "sample-files/compile-file-test-file-2.lsp"
+  (compile-file-test "compile-file-test-file-2.lsp"
                      'compile-file-test-fun.2
                      :expect-style-warnings t)
   t nil)
 
 (deftest compile-file.2a
-  (compile-file-test "sample-files/compile-file-test-file-2a.lsp"
+  (compile-file-test "compile-file-test-file-2a.lsp"
                      'compile-file-test-fun.2a
                      :expect-warnings t)
   t nil)
 
 (deftest compile-file.3
   (let ((*package* (find-package "CL-TEST")))
-    (compile-file-test "sample-files/compile-file-test-file-3.lsp"
+    (compile-file-test "compile-file-test-file-3.lsp"
                        'compile-file-test-fun.3)) t nil)
 
 (deftest compile-file.4
   (let ((*package* (find-package "CL-USER")))
-    (compile-file-test "sample-files/compile-file-test-file-3.lsp"
+    (compile-file-test "compile-file-test-file-3.lsp"
                        'cl-user::compile-file-test-fun.3)) t nil)
 
 (deftest compile-file.5
-  (compile-file-test #p"sample-files/compile-file-test-file.lsp"
+  (compile-file-test #p"compile-file-test-file.lsp"
                      'compile-file-test-fun.1) t nil)
 
 (deftest compile-file.6
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :output-file "foo.fasl")
   t nil)
 
 (deftest compile-file.6a
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :output-file "foo.ufsl")
   t nil)
 
 (deftest compile-file.7
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :external-format :default)
   t nil)
 
 (deftest compile-file.8
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :output-file #p"foo.fasl")
   t nil)
 
 (deftest compile-file.9
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :print t)
   t nil)
 
 (deftest compile-file.10
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :verbose t)
   t nil)
 
 (deftest compile-file.11
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :print nil)
   t nil)
 
 (deftest compile-file.12
-    (compile-file-test "sample-files/compile-file-test-file.lsp"
+    (compile-file-test "compile-file-test-file.lsp"
                        'compile-file-test-fun.1
                      :verbose nil)
   t nil)
 
 ;;; A file stream is a pathname designator
 (deftest compile-file.13
-  (with-open-file (s "sample-files/compile-file-test-file.lsp" :direction :input)
+  (with-open-file (s "compile-file-test-file.lsp" :direction :input)
                   (compile-file-test s 'compile-file-test-fun.1))
   t nil)
 
@@ -151,7 +151,7 @@
   (let ((s (open "foo.fasl" :direction :output :if-exists :supersede
                  :if-does-not-exist :create)))
     (close s)
-    (compile-file-test "sample-files/compile-file-test-file.lsp"
+    (compile-file-test "compile-file-test-file.lsp"
                        'compile-file-test-fun.1
                        :output-file s))
   t nil)
@@ -159,13 +159,13 @@
 (deftest compile-file.15
   (let ((*readtable* (copy-readtable nil)))
     (set-macro-character #\! (get-macro-character #\'))
-    (compile-file-test "sample-files/compile-file-test-file-4.lsp"
+    (compile-file-test "compile-file-test-file-4.lsp"
                        'compile-file-test-fun.4)) t foo)
 
 ;;; Tests for *compile-file-truename*, *compile-file-pathname*
 
 (deftest compile-file.16
-  (let* ((file #p"sample-files/compile-file-test-file-5.lsp")
+  (let* ((file #p"compile-file-test-file-5.lsp")
          (target-pathname (compile-file-pathname file))
          (*compile-print* nil)
          (*compile-verbose* nil))
@@ -193,19 +193,19 @@
   (let ((file (logical-pathname "CLTEST:COMPILE-FILE-TEST-LP.OUT")))
     (with-open-file
      (s file :direction :output :if-exists :supersede :if-does-not-exist :create))
-    (compile-file-test "sample-files/compile-file-test-file.lsp"
+    (compile-file-test "compile-file-test-file.lsp"
                        'compile-file-test-fun.1
                        :output-file file))
   t nil)
 
 (deftest compile-file.19
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :*compile-verbose* t)
   t nil)
 
 (deftest compile-file.20
-  (compile-file-test "sample-files/compile-file-test-file.lsp"
+  (compile-file-test "compile-file-test-file.lsp"
                      'compile-file-test-fun.1
                      :*compile-print* t)
   t nil)
@@ -221,7 +221,7 @@
 ;;; Error cases
 
 (deftest compile-file.error.1
-  (signals-error (compile-file "sample-files/nonexistent-file-to-compile.lsp")
+  (signals-error (compile-file "nonexistent-file-to-compile.lsp")
                  file-error) t)
 
 (deftest compile-file.error.2

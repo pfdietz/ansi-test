@@ -7,7 +7,7 @@
 
 (deftest enough-namestring.1
     (let* ((vals (multiple-value-list
-                  (enough-namestring "sample-files/enough-namestring.txt")))
+                  (enough-namestring "enough-namestring.txt")))
            (s (first vals)))
       (if (and (null (cdr vals))
                (stringp s)
@@ -18,14 +18,14 @@
 
 (deftest enough-namestring.2
   (do-special-strings
-   (s "sample-files/enough-namestring.txt" nil)
+   (s "enough-namestring.txt" nil)
    (let ((ns (enough-namestring s)))
      (assert (stringp ns))
      (assert (string= (enough-namestring ns) ns))))
   nil)
 
 (deftest enough-namestring.3
-  (let* ((name "sample-files/enough-namestring.txt")
+  (let* ((name "enough-namestring.txt")
          (pn (merge-pathnames (pathname name)))
          (name2 (enough-namestring pn))
          (name3 (enough-namestring name)))
@@ -33,7 +33,7 @@
   t)
 
 (deftest enough-namestring.4
-  (let* ((name "sample-files/enough-namestring.txt")
+  (let* ((name "enough-namestring.txt")
          (pn (merge-pathnames (pathname name)))
          (name2 (with-open-file (s pn :direction :input) (enough-namestring s)))
          (name3 (enough-namestring name)))
@@ -42,7 +42,7 @@
 
 (deftest enough-namestring.5
   (let* ((vals (multiple-value-list
-                (enough-namestring "sample-files/enough-namestring.txt"
+                (enough-namestring "enough-namestring.txt"
                                    *default-pathname-defaults*)))
          (s (first vals)))
     (if (and (null (cdr vals))
@@ -54,7 +54,7 @@
 
 (deftest enough-namestring.6
     (let* ((vals (multiple-value-list
-                  (enough-namestring "sample-files/enough-namestring.txt"
+                  (enough-namestring "enough-namestring.txt"
                                      (namestring *default-pathname-defaults*))))
            (s (first vals)))
       (if (and (null (cdr vals))
@@ -68,7 +68,7 @@
     (do-special-strings
         (s (namestring *default-pathname-defaults*) nil)
       (let* ((vals (multiple-value-list
-                    (enough-namestring "sample-files/enough-namestring.txt" s)))
+                    (enough-namestring "enough-namestring.txt" s)))
              (s2 (first vals)))
         (assert (null (cdr vals)))
         (assert (stringp s2))
@@ -83,7 +83,7 @@
 
 (deftest enough-namestring.error.2
     (signals-error
-     (enough-namestring "sample-files/enough-namestring.txt"
+     (enough-namestring "enough-namestring.txt"
                         *default-pathname-defaults* nil)
      program-error)
   t)

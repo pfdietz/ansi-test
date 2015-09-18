@@ -16,7 +16,7 @@
   nil)
 
 (deftest open-stream-p.2
-  (with-open-file (s "sample-files/open-stream-p.txt" :direction :input)
+  (with-open-file (s "open-stream-p.txt" :direction :input)
                   (notnot-mv (open-stream-p s)))
   t)
 
@@ -27,7 +27,7 @@
   t)
 
 (deftest open-stream-p.4
-  (let ((s (open "sample-files/open-stream-p.txt" :direction :input)))
+  (let ((s (open "open-stream-p.txt" :direction :input)))
     (close s)
     (open-stream-p s))
   nil)
