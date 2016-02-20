@@ -154,3 +154,14 @@
      (setf (defsetf.6-accessor x) 'c)
      x))
   c (c . b))
+
+
+
+;;; Test that defsetf works with places
+(deftest defsetf.7a
+    (progn
+      (defsetf access-fn (x) (val-1 val-2)
+        `(list ,x ,val-1 ,val-2))
+      (eval (read-from-string
+             "(setf (access-fn 1) (values 2 3))")))
+  (1 2 3))
