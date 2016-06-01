@@ -308,3 +308,11 @@
             (declare (special x))
             y))))
   :good)
+
+(deftest restart-case.37
+    (progn
+      (define-condition x () ((y :initarg :y)))
+      (handler-bind ((x (lambda (c) (slot-value c 'y))))
+        (restart-case
+            (signal 'x :y 1))))
+  nil)
