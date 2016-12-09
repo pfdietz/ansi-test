@@ -27,7 +27,8 @@
 (def-read-suppress-test read-suppress.12 "(...)")
 
 (defparameter *non-macro-chars*
-  "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-=+_~!@$%^&*{}[]<>/?.")
+  (coerce "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-=+_~!@$%^&*{}[]<>/?."
+          'simple-base-string))
 
 (declaim (type simple-base-string *non-macro-chars*))
 
