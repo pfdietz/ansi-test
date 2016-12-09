@@ -6,6 +6,11 @@
 
 #+allegro (setq *enclose-printer-errors* nil)
 
+(let ((wd (or *compile-file-pathname* *load-pathname*)))
+  (when wd
+    (setf *default-pathname-defaults*
+          (make-pathname :name nil :type nil :version nil :defaults wd))))
+
 ;;; Remove compiled files
 (let* ((fn (compile-file-pathname "doit.lsp"))
        (type (pathname-type fn))
