@@ -17,7 +17,7 @@
        (dir-pathname (make-pathname :name :wild :type type))
        (subdir-pathname (make-pathname :directory '(:relative :wild)
                                        :name :wild :type type))
-       (format-pathname (make-pathname :directory '(:relative "printer/format")
+       (format-pathname (make-pathname :directory '(:relative "printer" "format")
                                        :name :wild :type type))
        (files (append (directory dir-pathname)
                       (directory subdir-pathname)
