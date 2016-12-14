@@ -15,12 +15,12 @@
 #+clisp (setq custom::*warn-on-floating-point-contagion* nil)
 
 ;;; Configure logical pathnames
-(setf (logical-pathname-translations "ansi-tests")
-      `(("aux;*.*" ,(merge-pathnames
-                     "auxiliary/"
-                     (make-pathname
-                      :directory
-                      (pathname-directory *load-truename*))))))
+(setf (logical-pathname-translations "ANSI-TESTS")
+      `(("AUX;*.*.*"
+         ,(merge-pathnames "auxiliary/"
+                           (make-pathname
+                            :directory
+                            (pathname-directory *load-truename*))))))
 
 (let (*load-verbose* *load-print* *compile-verbose* *compile-print*)
   (load "compile-and-load.lsp"))

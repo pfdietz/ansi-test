@@ -2,6 +2,11 @@
 *.out
 *.dat
 *.fas
+*.fasl
+*.lx64fsl
+*.lx32fsl
+*.bc
+sandbox/
 ansi-aux-macros.fas
 ansi-aux.fas
 array-aux.fas
