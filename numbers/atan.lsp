@@ -128,31 +128,23 @@
 
 ;;; ieee-fp tests
 (deftest atan.ieee.1 :description "Verify if atan handles 0.0 correctly"
-  (flet ((pip (a b)
-           ;; we are not testing accuracy, so this simplified
-           ;; predicate would be sufficient for our needs. We are also
-           ;; not interested in sign of the result, because we don't
-           ;; know whenever zero is signed or not.
-           (<= (abs (- (abs a) (abs b))) 0.01)))
+  (flet ((+pi-p (elt) (< (abs (- pi elt)) 0.01))
+         (+pi/2-p (elt) (< (abs (+ (/ pi 2) elt)) 0.01))
+         (-pi/2-p (elt) (< (abs (- (/ pi 2) elt)) 0.01)))
+    ;; (atan +-0 +(anything-but-nan))  -> +-0
+    ;; (atan +-0 -(anything-but-nan))  -> +-pi
+    ;; (atan +-(anything-but-0/nan) 0) -> +-pi/2
     (every #'identity
-           (append
-            ;; (atan +-0 +(anything-but-nan))  -> +-0
-            ;; (atan +-0 -(anything-but-nan))  -> +-pi
-            (map 'list (lambda (n)
-                         ;; notice, that we don't test a case, where
-                         ;; both arguments are 0.0, because if
-                         ;; implementation doesn't support signed 0
-                         ;; result is undefined.
-                         (and (zerop (atan -0.0 n))
-                              (zerop (atan +0.0 n))
-                              (pip pi (atan +0.0 (- n)))
-                              (pip pi (atan -0.0 (- n)))))
-                 (remove-if-not #'plusp *floats*))
-            ;; (atan +-(anything-but-0/nan) 0) -> +-pi/2
-            (map 'list (lambda (n)
-                         (and (pip (* +1/2 pi) (atan n +0.0))
-                              (pip (* -1/2 pi) (atan n -0.0))))
-                 (remove-if #'zerop *floats*)))))
+           (map 'list (lambda (n)
+                        ;; notice, that we don't test a case, where
+                        ;; both arguments are 0.0, because if
+                        ;; implementation doesn't support signed 0
+                        ;; result is undefined.
+                        (and (zerop (atan 0.0 n))
+                             (+pi-p (atan 0.0 (- n)))
+                             (+pi/2-p (atan n 0.0))
+                             (-pi/2-p (atan (- n) 0.0))))
+                (remove-if-not #'plusp *floats*))))
   T)
 
 (deftest atan.ieee.2 :description "Verify ATAN handling signed zero"
