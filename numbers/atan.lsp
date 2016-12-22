@@ -128,16 +128,16 @@
 
 ;;; ieee-fp tests
 (deftest atan.ieee.1 :description "Verify if atan handles 0.0 correctly"
-  ;; (atan +-0 +(anything-but-nan))  -> +-0
-  ;; (atan +-0 -(anything-but-nan))  -> +-pi
   (flet ((pip (a b)
            ;; we are not testing accuracy, so this simplified
-           ;; precdicate would be sufficient for our needs. We are
-           ;; also not interested in sign of the result, because we
-           ;; don't know whenever zero is signed or not.
+           ;; predicate would be sufficient for our needs. We are also
+           ;; not interested in sign of the result, because we don't
+           ;; know whenever zero is signed or not.
            (<= (abs (- (abs a) (abs b))) 0.01)))
     (every #'identity
            (append
+            ;; (atan +-0 +(anything-but-nan))  -> +-0
+            ;; (atan +-0 -(anything-but-nan))  -> +-pi
             (map 'list (lambda (n)
                          ;; notice, that we don't test a case, where
                          ;; both arguments are 0.0, because if
