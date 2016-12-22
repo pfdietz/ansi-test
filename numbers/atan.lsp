@@ -129,8 +129,8 @@
 ;;; ieee-fp tests
 (deftest atan.ieee.1 :description "Verify if atan handles 0.0 correctly"
   (flet ((+pi-p (elt) (< (abs (- pi elt)) 0.01))
-         (+pi/2-p (elt) (< (abs (+ (/ pi 2) elt)) 0.01))
-         (-pi/2-p (elt) (< (abs (- (/ pi 2) elt)) 0.01)))
+         (+pi/2-p (elt) (< (abs (- (/ pi 2) elt)) 0.01))
+         (-pi/2-p (elt) (< (abs (+ (/ pi 2) elt)) 0.01)))
     ;; (atan +-0 +(anything-but-nan))  -> +-0
     ;; (atan +-0 -(anything-but-nan))  -> +-pi
     ;; (atan +-(anything-but-0/nan) 0) -> +-pi/2
