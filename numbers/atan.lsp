@@ -175,13 +175,18 @@
 ;;; no portable ieee-fp, we could put it in ansi-beyond test suite
 ;;; though:
 ;;;
-;;;   (atan (anything) nan)                 -> nan
-;;;   (atan nan (anything))                 -> nan
-;;;   (atan +-inf +inf)                     -> +-pi/4
-;;;   (atan +-inf -inf)                     -> +-3pi/4
-;;;   (atan +-(anything-but-inf/nan), +inf) -> +-0
-;;;   (atan +-(anything-but-inf/nan), -inf) -> +-pi
-;;;   (atan +-inf (anything-but-0/nan/inf)) -> +-pi/2
+;;;   (atan (anything) nan)                -> nan
+;;;   (atan nan (anything))                -> nan
+;;;   (atan +inf +inf)                     -> +pi/4
+;;;   (atan -inf +inf)                     -> -pi/4
+;;;   (atan +inf -inf)                     -> +3pi/4
+;;;   (atan -inf -inf)                     -> -3pi/4
+;;;   (atan -(anything-but/inf+nan), +inf) -> -0
+;;;   (atan +(anything-but/inf+nan), +inf) -> +0
+;;;   (atan +(anything-but/inf+nan), -inf) -> +pi
+;;;   (atan -(anything-but/inf+nan), -inf) -> -pi
+;;;   (atan +inf (anything-but/0+inf+nan)) -> +pi/2
+;;;   (atan -inf (anything-but/0+inf+nan)) -> -pi/2
 ;;;
 
 ;;; Error tests
