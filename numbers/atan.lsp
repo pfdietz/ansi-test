@@ -126,6 +126,55 @@
 ;;; FIXME
 ;;; More accuracy tests here
 
+;;; ieee-fp tests
+(deftest atan.ieee.1 :description "Verify if atan handles 0.0 correctly"
+  ;; (atan +-0 +(anything-but-nan))  -> +-0
+  ;; (atan +-0 -(anything-but-nan))  -> +-pi
+  (flet ((pip (a b)
+           ;; we are not testing accuracy, so this simplified
+           ;; precdicate would be sufficient for our needs. We are
+           ;; also not interested in sign of the result, because we
+           ;; don't know whenever zero is signed or not.
+           (<= (abs (- (abs a) (abs b))) 0.01)))
+    (every #'identity
+           (append
+            (map 'list (lambda (n)
+                         ;; notice, that we don't test a case, where
+                         ;; both arguments are 0.0, because if
+                         ;; implementation doesn't support signed 0
+                         ;; result is undefined.
+                         (and (zerop (atan -0.0 n))
+                              (zerop (atan +0.0 n))
+                              (pip pi (atan +0.0 (- n)))
+                              (pip pi (atan -0.0 (- n)))))
+                 (remove-if-not #'plusp *floats*))
+            ;; (atan +-(anything-but-0/nan) 0) -> +-pi/2
+            (map 'list (lambda (n)
+                         (and (pip (* +1/2 pi) (atan n +0.0))
+                              (pip (* -1/2 pi) (atan n -0.0))))
+                 (remove-if #'zerop *floats*)))))
+  T)
+
+;;; We could have tested also for infinities and signed 0, but there
+;;; is no portable ieee-fp, we could put it in ansi-beyond test suite
+;;; though:
+;;;
+;;;   (atan +0.0 -anything-but-0/nan/inf)   -> +pi
+;;;   (atan -0.0 -anything-but-0/nan/inf)   -> -pi
+;;;   (atan +0.0 +0.0)                      -> +0.0
+;;;   (atan -0.0 +0.0)                      -> -0.0
+;;;   (atan +0.0 -0.0)                      -> +pi
+;;;   (atan -0.0 -0.0)                      -> -pi
+;;;   (atan (anything) nan)                 -> nan
+;;;   (atan nan (anything))                 -> nan
+;;;   (atan +-inf +inf)                     -> +-pi/4
+;;;   (atan +-inf -inf)                     -> +-3pi/4
+;;;   (atan +-(anything-but-inf/nan), +inf) -> +-0
+;;;   (atan +-(anything-but-inf/nan), -inf) -> +-pi
+;;;   (atan +-inf (anything-but-0/nan/inf)) -> +-pi/2
+;;;
+;;; (deftest atan.ieee.2 t t)
+
 ;;; Error tests
 
 (deftest atan.error.1
@@ -147,7 +196,3 @@
 (deftest atan.error.5
   (check-type-error #'(lambda (x) (atan 1 x)) #'realp)
   nil)
-
-
-
-
