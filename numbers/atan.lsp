@@ -155,16 +155,34 @@
                  (remove-if #'zerop *floats*)))))
   T)
 
-;;; We could have tested also for infinities and signed 0, but there
-;;; is no portable ieee-fp, we could put it in ansi-beyond test suite
+(deftest atan.ieee.2 :description "Verify ATAN handling signed zero"
+  (or (plusp (float-sign -0.0))
+      (flet ((-zerop (elt)
+               (and (zerop elt)
+                    (minusp (float-sign elt))))
+             (+zerop (elt)
+               (and (zerop elt)
+                    (plusp (float-sign elt))))
+             (-pi-p (elt) (< (abs (+ pi elt)) 0.01))
+             (+pi-p (elt) (< (abs (- pi elt)) 0.01)))
+        (and
+         (+zerop (atan +0.0 +0.0))
+         (-zerop (atan -0.0 +0.0))
+         (+pi-p  (atan +0.0 -0.0))
+         (-pi-p  (atan -0.0 -0.0))
+         (every #'identity
+                (map 'list (lambda (n)
+                             (and (-zerop (atan -0.0 n))
+                                  (+zerop (atan +0.0 n))
+                                  (+pi-p  (atan +0.0 (- n)))
+                                  (-pi-p  (atan -0.0 (- n)))))
+                     (remove-if-not #'plusp *floats*))))))
+  T)
+
+;;; We could have tested also for infinities and nan's, but there is
+;;; no portable ieee-fp, we could put it in ansi-beyond test suite
 ;;; though:
 ;;;
-;;;   (atan +0.0 -anything-but-0/nan/inf)   -> +pi
-;;;   (atan -0.0 -anything-but-0/nan/inf)   -> -pi
-;;;   (atan +0.0 +0.0)                      -> +0.0
-;;;   (atan -0.0 +0.0)                      -> -0.0
-;;;   (atan +0.0 -0.0)                      -> +pi
-;;;   (atan -0.0 -0.0)                      -> -pi
 ;;;   (atan (anything) nan)                 -> nan
 ;;;   (atan nan (anything))                 -> nan
 ;;;   (atan +-inf +inf)                     -> +-pi/4
@@ -173,7 +191,6 @@
 ;;;   (atan +-(anything-but-inf/nan), -inf) -> +-pi
 ;;;   (atan +-inf (anything-but-0/nan/inf)) -> +-pi/2
 ;;;
-;;; (deftest atan.ieee.2 t t)
 
 ;;; Error tests
 
