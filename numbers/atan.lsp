@@ -134,17 +134,16 @@
     ;; (atan +-0 +(anything-but-nan))  -> +-0
     ;; (atan +-0 -(anything-but-nan))  -> +-pi
     ;; (atan +-(anything-but-0/nan) 0) -> +-pi/2
-    (every #'identity
-           (map 'list (lambda (n)
-                        ;; notice, that we don't test a case, where
-                        ;; both arguments are 0.0, because if
-                        ;; implementation doesn't support signed 0
-                        ;; result is undefined.
-                        (and (zerop (atan 0.0 n))
-                             (+pi-p (atan 0.0 (- n)))
-                             (+pi/2-p (atan n 0.0))
-                             (-pi/2-p (atan (- n) 0.0))))
-                (remove-if-not #'plusp *floats*))))
+    (every (lambda (n)
+             ;; notice, that we don't test a case, where
+             ;; both arguments are 0.0, because if
+             ;; implementation doesn't support signed 0
+             ;; result is undefined.
+             (and (zerop (atan 0.0 n))
+                  (+pi-p (atan 0.0 (- n)))
+                  (+pi/2-p (atan n 0.0))
+                  (-pi/2-p (atan (- n) 0.0))))
+           (remove-if-not #'plusp *floats*)))
   T)
 
 (deftest atan.ieee.2 :description "Verify ATAN handling signed zero"
@@ -162,13 +161,12 @@
          (-zerop (atan -0.0 +0.0))
          (+pi-p  (atan +0.0 -0.0))
          (-pi-p  (atan -0.0 -0.0))
-         (every #'identity
-                (map 'list (lambda (n)
-                             (and (-zerop (atan -0.0 n))
-                                  (+zerop (atan +0.0 n))
-                                  (+pi-p  (atan +0.0 (- n)))
-                                  (-pi-p  (atan -0.0 (- n)))))
-                     (remove-if-not #'plusp *floats*))))))
+         (every (lambda (n)
+                  (and (-zerop (atan -0.0 n))
+                       (+zerop (atan +0.0 n))
+                       (+pi-p  (atan +0.0 (- n)))
+                       (-pi-p  (atan -0.0 (- n)))))
+                (remove-if-not #'plusp *floats*)))))
   T)
 
 ;;; We could have tested also for infinities and nan's, but there is
