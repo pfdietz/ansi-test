@@ -149,14 +149,14 @@
 
 (deftest atan.ieee.2 :description "Verify ATAN handling signed zero"
   (or (plusp (float-sign -0.0))
-      (flet ((-zerop (elt)
-               (and (zerop elt)
-                    (minusp (float-sign elt))))
-             (+zerop (elt)
+      (flet ((+zerop (elt)
                (and (zerop elt)
                     (plusp (float-sign elt))))
-             (-pi-p (elt) (< (abs (+ pi elt)) 0.01))
-             (+pi-p (elt) (< (abs (- pi elt)) 0.01)))
+             (-zerop (elt)
+               (and (zerop elt)
+                    (minusp (float-sign elt))))
+             (+pi-p (elt) (< (abs (- pi elt)) 0.01))
+             (-pi-p (elt) (< (abs (+ pi elt)) 0.01)))
         (and
          (+zerop (atan +0.0 +0.0))
          (-zerop (atan -0.0 +0.0))
