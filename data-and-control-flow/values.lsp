@@ -71,3 +71,6 @@
             i a b c))
   (1 2 3) 3 1 2 3)
 
+(deftest values.order.2
+  ((lambda (a) (lcm (values a (setq a 1)))) 10)
+  10)
