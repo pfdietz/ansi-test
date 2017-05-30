@@ -485,6 +485,15 @@
 (defstruct-with-tests (struct-test-68 (:include struct-test-67))
   c d)
 
+;;; Structure isn't named, but type is specified. No predicate is
+;;; allowed *or* predicate must be NIL.
+(defstruct-with-tests (struct-test-69 (:type (vector single-float))
+                                      (:predicate nil)))
+
+(defstruct-with-tests (struct-test-70 (:type list)
+                                      (:predicate struct-test-70)
+                                      :named))
+
 ;;; Error tests
 
 (deftest copy-structure.error.1
@@ -495,3 +504,10 @@
   (signals-error (copy-structure (make-s-2) nil) program-error)
   t)
 
+(deftest defstruct.error.3
+  (signals-error
+   (eval (read-from-string
+          "(defstruct (struct-test.error.3 (:type (vector single-float))
+                                           (:predicate struct-test.error.3)))"))
+   simple-error)
+  t)
