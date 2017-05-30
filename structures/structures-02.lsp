@@ -511,3 +511,14 @@
                                            (:predicate struct-test.error.3)))"))
    simple-error)
   t)
+
+;;; If named option is supplied, then 0th element is vector type (a
+;;; symbol), not the 1st one.
+(deftest defstruct.error.4
+  (signals-error
+   (eval (read-from-string
+          "(defstruct (struct-test.error.4 (:type (vector single-float))
+                                           (:predicate struct-test.error.4)
+                                           :named))"))
+   simple-error)
+  t)
