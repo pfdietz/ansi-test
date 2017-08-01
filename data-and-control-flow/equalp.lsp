@@ -282,6 +282,16 @@
                   (not (equalp ht1 ht2))))))
   (0 0 0 0))
 
+(defclass equalp-class-36 () ((slot1 :initarg :slot1) (slot2 :initarg :slot2)))
+
+;;; If structure is baked up by an instance, it may happen that
+;;; instances are compared like structures for `equalp' - slot by
+;;; slot. This was a problem in ECL 16.1.3.
+(deftest equalp.36
+    (equalp (make-instance 'test-object :slot1 1 :slot2 2)
+            (make-instance 'test-object :slot1 1 :slot2 2))
+  nil)
+
 (deftest equalp.order.1
   (let ((i 0) x y)
     (values
