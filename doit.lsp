@@ -44,7 +44,7 @@
 
 #+cmu
 (progn
-  (setf ext:*ignore-extra-right-parentheses* nil)
+  (setf ext:*ignore-extra-close-parentheses* nil)
   (rt:disable-note :nil-vectors-are-strings))
 
 #+gcl(si::use-fast-links nil)
