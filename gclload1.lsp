@@ -4,7 +4,15 @@
             c:*suppress-compiler-notes*    t
             c:*suppress-compiler-messages* t)
 #+:armedbear (require 'pprint)
-#+cmu (setq ext:*gc-verbose* nil)
+#+cmu
+(progn
+  (setq ext:*gc-verbose* nil)
+  ;; Set *default-pathname-defaults* to include the full path to this
+  ;; file.  This is needed for the tests so that they'll be loaded
+  ;; correctly from the subdirectories.
+  (setf *default-pathname-defaults*
+	(make-pathname :name nil :type nil :defaults *load-truename*)))
+
 #+gcl (setq compiler:*suppress-compiler-notes* t
             compiler:*suppress-compiler-warnings* t
             compiler:*compile-verbose* nil
