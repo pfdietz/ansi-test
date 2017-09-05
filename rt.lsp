@@ -53,6 +53,12 @@
 (defvar *expected-failures* nil
   "A list of test names that are expected to fail.")
 
+(defvar *unexpected-successes* nil
+  "A list of tests that passed but were expected to fail.")
+
+(defvar *unexpected-failures* nil
+  "A list of tests that failed but were not expected to fail.")
+
 (defvar *notes* (make-hash-table :test 'equal)
   "A mapping from names of notes to note objects.")
 
@@ -380,6 +386,7 @@
           (if (null new-failures)
               (format s "~&No unexpected failures.")
             (when *expected-failures*
+              (setf *unexpected-failures* new-failures)
               (format s "~&~A unexpected failures: ~
                    ~:@(~{~<~%   ~1:;~S~>~
                          ~^, ~}~)."
@@ -393,11 +400,13 @@
                      (loop :for ex :in *expected-failures*
                        :unless (gethash ex pending-table) :collect ex)))
                 (if unexpected-successes
-                    (format t "~&~:D unexpected successes: ~
+                    (progn
+                      (setf *unexpected-successes* unexpected-successes)
+                      (format t "~&~:D unexpected successes: ~
                    ~:@(~{~<~%   ~1:;~S~>~
                          ~^, ~}~)."
-                            (length unexpected-successes)
-                            unexpected-successes)
+                              (length unexpected-successes)
+                              unexpected-successes))
                     (format t "~&No unexpected successes.")))))
           ))
       (finish-output s)

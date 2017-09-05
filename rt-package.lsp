@@ -52,7 +52,10 @@
                                #:*catch-errors*
                                #:*passed-tests*
                                #:*failed-tests*
-                               #:disable-note))))))
+                               #:disable-note
+                               #:*expected-failures*
+                               #:*unexpected-failures*
+                               #:*unexpected-successes*))))))
 ;;  )
 
 ;; (in-package :regression-test)
