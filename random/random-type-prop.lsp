@@ -6,8 +6,9 @@
 (in-package :cl-test)
 
 (eval-when (:compile-toplevel :load-toplevel)
-  (compile-and-load "random-aux.lsp")
-  (compile-and-load "random-int-form.lsp"))
+  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
+  ;; (compile-and-load "random-int-form.lsp")
+  )
 
 (defvar *print-random-type-prop-input* nil)
 (defparameter *random-type-prop-result* nil)
@@ -509,6 +510,18 @@ use the value in MEMBER or EQL type specifiers."))
   (declare (ignore v1 other))
   (let ((d (length v2))) `(integer 0 ,d)))
 
+(defun start-type-for-v1 (v1 v2 &rest other)
+  (declare (ignore v2))
+  (let* ((d (length v1))
+         (end1 (or (cadr (member :end1 other)) d)))
+    `(integer 0 ,end1)))
+
+(defun start-type-for-v2 (v1 v2 &rest other)
+  (declare (ignore v1))
+  (let* ((d (length v2))
+         (end2 (or (cadr (member :end2 other)) d)))
+    `(integer 0 ,end2)))
+
 (defun end-type-for-v1 (v1 v2 &rest other)
   (declare (ignore v2))
   (let ((d (length v1))
@@ -520,6 +533,18 @@ use the value in MEMBER or EQL type specifiers."))
   (let ((d (length v2))
         (start2 (or (cadr (member :start2 other)) 0)))
     `(integer ,start2 ,d)))
+
+(defun start-end-type (v1 v2 &rest other)
+  ;; General case of the above
+  (assert other)
+  (let ((s (car (last other))))
+    (apply
+     (ecase s
+       (:start1 #'start-type-for-v1)
+       (:start2 #'start-type-for-v2)
+       (:end1 #'end-type-for-v1)
+       (:end2 #'end-type-for-v2))
+     v1 v2 other)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
