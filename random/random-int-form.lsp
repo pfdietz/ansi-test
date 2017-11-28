@@ -5,7 +5,7 @@
 
 (in-package :cl-test)
 
-(compile-and-load "random-aux.lsp")
+(compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
 
 ;;;
 ;;; This file contains a routine for generating random legal Common Lisp functions
@@ -91,14 +91,75 @@
          do (incf (aref vec i) (aref vec (1- i))))
    vec))
 
+(defstruct symbol-distribution
+  pdf ;; Alist of positive integers . symbols
+  symbols ;; Vector of the symbols in PDF
+  cdf ;; CDF derived from the integers in the cars of the alist pdf
+)
+
+(defun choose-from-symbol-distribution (sd)
+  (assert (typep sd 'symbol-distribution))
+  (let ((a (symbol-distribution-cdf sd)))
+    (unless a
+      (let* ((pdf (symbol-distribution-pdf sd))
+             (len (length pdf))
+             (syms (mapcar #'cdr pdf)))
+        (dolist (x pdf) (assert (typep x '(cons (integer 0) symbol))))
+        (setf a (make-array (list len) :initial-contents (mapcar #'cdr pdf)))
+        (cumulate a)
+        (setf (symbol-distribution-cdf sd) a)
+        (setf (symbol-distribution-symbols sd) syms)))
+    (let* ((len (length a))
+           (max (aref a (1- len)))
+           (r (random max)))
+      ;; Maybe do binary search, but too lazy now
+      (loop for i from 0
+         do (when (< r (aref a i))
+              (aref (symbol-distribution-symbols sd) i))))))
+
 (defparameter *default-make-random-integer-form-cdf*
-  (cumulate (copy-seq #(10 5 40 4 5 4 2 2 10 1 1 #-armedbead 1 #-armedbear 1
-                       #-allegro 5 5 5 #-(or gcl ecl armedbear) 2
-                       2 #-(or cmu allegro poplog) 5 4 30
-                       4 20 3 2 2 1 1 5 30 #-poplog 5
-                       #-(or allegro poplog) 10
-                       50 4 4 10 20 10 10 3
-                       20 5 #-(or armedbear) 20
+  (cumulate (copy-seq #(10 ;; flet call
+                        5 ;; aref
+                        40 ;; unary ops
+                        4 ;; unwind-protect
+                        #+random-mapping-forms 5  ;; mapping forms
+                        4 ;; prog1, multiple-value-prog1
+                        2 ;; prog2
+                        2 ;;isqrt
+                        10 ;; (the integer ...)
+                        1 ;; handler-bind
+                        1 ;; restart-bind 
+                        #-armedbear 1 ;; macrolet
+                        #-armedbear 1;; symbol-macrolet
+                        #-allegro 5 ;; dotimes
+                        5 ;; loop
+                        5 ;; count
+                        #-(or gcl ecl armedbear) 2 ;; load-time-value
+                        2 ;; eval
+                        #-(or cmu allegro poplog) 5  ;; ash
+                        4 ;; floor, ceiling, truncate, round (binary)
+                        30 ;; general binary ops
+                        4 ;; boole
+                        20 ;; n-ary ops
+                        3 ;; expt
+                        2 ;; coerce
+                        2 ;; complex (degenerate case)
+                        1 ;; quotient (1)
+                        1 ;; quotient (-1)
+                        5 ;; tagbody
+                        30 ;; conditional
+                        #-poplog 5 ;; deposit-field, dpb
+                        #-(or allegro poplog) 10 ;; ldb, mask-field
+                        50 ;; binding form
+                        4 ;; progv
+                        4 ;; (let () ...)
+                        10 ;; block
+                        20 ;; catch
+                        10 ;; setq and similar
+                        10 ;; case form
+                        3 ;; return-from
+                        20 ;; catch
+                        5 #-(or armedbear) 20
                        2 2 2))))
 
 (defparameter *make-random-integer-form-cdf*
@@ -106,6 +167,7 @@
 
 (eval-when
  (:compile-toplevel :load-toplevel :execute)
+  ;; Create random weight instead of using the default ones
  (defmacro with-random-integer-form-params (&body forms)
    (let ((len (gensym "LEN"))
          (vec (gensym "VEC")))
@@ -215,7 +277,7 @@
                      (*go-tags* nil)
                      )
                  (with-random-integer-form-params
-                  (make-random-integer-form (1+ (random size))))))
+                   (make-random-integer-form (1+ (random size))))))
          (vals-list
           (loop repeat *random-vals-list-bound*
                 collect
@@ -357,6 +419,10 @@
         `(,op ,(make-random-integer-form (1- size))))
 
      (make-random-integer-unwind-protect-form size)
+
+     ;; These were causing timeouts in some large functions,
+     ;; so I've conditionalized it
+     #+random-mapping-forms
      (make-random-integer-mapping-form size)
 
      ;; prog1, multiple-value-prog1
@@ -497,28 +563,28 @@
             (else-part (make-random-integer-form else-size)))
        `(if ,pred ,then-part ,else-part))
      #-poplog
-      (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
-        `(,(random-from-seq '(deposit-field dpb))
+     (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
+       `(,(random-from-seq '(deposit-field dpb))
           ,(make-random-integer-form s1)
           ,(make-random-byte-spec-form s2)
           ,(make-random-integer-form s3)))
-
+     
      #-(or allegro poplog)
-      (destructuring-bind (s1 s2) (random-partition (1- size) 2)
-          `(,(random-from-seq '(ldb mask-field))
-            ,(make-random-byte-spec-form s1)
-            ,(make-random-integer-form s2)))
-
+     (destructuring-bind (s1 s2) (random-partition (1- size) 2)
+       `(,(random-from-seq '(ldb mask-field))
+          ,(make-random-byte-spec-form s1)
+          ,(make-random-integer-form s2)))
+     
      (make-random-integer-binding-form size)
-
+     
      ;; progv
      (make-random-integer-progv-form size)
 
      `(let () ,(make-random-integer-form (1- size)))
 
-      (let* ((name (random-from-seq #(b1 b2 b3 b4 b5 b6 b7 b8)))
-             (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
-        `(block ,name ,(make-random-integer-form (1- size))))
+     (let* ((name (random-from-seq #(b1 b2 b3 b4 b5 b6 b7 b8)))
+            (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
+       `(block ,name ,(make-random-integer-form (1- size))))
 
       (let* ((tag (list 'quote (random-from-seq #(ct1 ct2 ct2 ct4 ct5 ct6 ct7 ct8))))
              (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
@@ -1820,7 +1886,8 @@
             (cl:handler-bind
              (#+sbcl (sb-ext::compiler-note #'muffle-warning)
                      (warning #'muffle-warning)
-                     ((or error serious-condition)
+                     ((and (or error serious-condition)
+                          #+sbcl (not sb-sys:interactive-interrupt))
                       #'(lambda (c)
                                 (format t "Compilation failure~%~A~%"
                                         (format nil "~S" form))
@@ -1866,7 +1933,10 @@
             (unoptimized-compiled-fn
              (if *compile-unoptimized-form*
                  (%compile unoptimized-fn-src *name-to-use-in-unoptimized-defun*)
-               (eval `(function ,unoptimized-fn-src)))))
+                 (cl:handler-bind
+                     (#+sbcl (sb-ext::compiler-note #'muffle-warning)
+                             (warning #'muffle-warning))
+                   (eval `(function ,unoptimized-fn-src))))))
         (declare (type function optimized-compiled-fn unoptimized-compiled-fn))
         (dolist (vals vals-list)
           (setq *int-form-vals* vals)
@@ -1893,6 +1963,8 @@
                              (warning #'muffle-warning))
                      (identity ;; multiple-value-list
                       (apply unoptimized-compiled-fn vals)))
+                    #+sbcl
+                    (sb-sys:interactive-interrupt (e) (error e))
                     ((or error serious-condition)
                      (c)
                      (%eval-error (list :unoptimized-form-error
@@ -1905,6 +1977,8 @@
                              (warning #'muffle-warning))
                      (identity ;; multiple-value-list
                       (apply optimized-compiled-fn vals)))
+                    #+sbcl
+                    (sb-sys:interactive-interrupt (e) (error e))
                     ((or error serious-condition)
                      (c)
                      (%eval-error (list :optimized-form-error
@@ -2574,6 +2648,21 @@
                                    (append (subseq list 0 i)
                                            (list form)
                                            (subseq list (1+ i))))))))
+#|
+(defun prune-eval (args try-fn)
+  (flet ((try (e) (funcall try-fn e)))
+    (try 0)
+    (let ((arg (first args)))
+      (cond
+        ((consp arg)
+         (cond
+           ((eql (car arg) 'quote)
+            (prune (cadr arg) #'(lambda (form) (try `(eval ',form)))))
+           (t
+            (try arg)
+            (prune arg #'(lambda (form) `(eval ,form))))))
+        (t (try arg))))))
+|#
 
 (defun prune-case (form try-fn)
   (declare (type function try-fn))
@@ -2769,16 +2858,27 @@
                       (has-binding-to-var (first binding) body)
                       (has-assignment-to-var (first binding) body)
                       )
-            (funcall try-fn `(let ()
-                               ,@(subst (second binding)
-                                        (first binding)
-                                        (remove-if #'(lambda (x) (and (consp x) (eq (car x) 'declare)))
-                                                   body)
-                                        ))))))
+            (let ((newbody
+                   (subst-except-for-eval
+                    (second binding)
+                    (first binding)
+                    (remove-if #'(lambda (x) (and (consp x) (eq (car x) 'declare)))
+                               body))))
+              (unless (find-in-tree (first binding) newbody)
+                (funcall try-fn `(let () ,@newbody)))))))
+
       (prune (car (last body))
              #'(lambda (form2)
                  (funcall try-fn
                           `(,@(butlast form) ,form2)))))))
+
+(defun subst-except-for-eval (e var body)
+  "Like SUBST, but don't descend into EVAL forms"
+  (cond
+    ((eql body var) e)
+    ((not (consp body)) body)
+    ((eql (car body) 'eval) body)
+    (t (mapcar #'(lambda (b) (subst-except-for-eval e var b)) body))))
 
 (defun has-assignment-to-var (var form)
   (find-if-subtree
