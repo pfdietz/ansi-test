@@ -42,8 +42,8 @@
 (defparameter *condition-objects*
   (locally (declare (optimize safety))
            (loop for tp in *condition-types* append
-                 (handler-case (list (make-condition tp))
-                               (error () nil)))))
+                 (cl:handler-case (list (make-condition tp))
+		               (error () nil)))))
 
 (defparameter *standard-package-names*
   '("COMMON-LISP" "COMMON-LISP-USER" "KEYWORD"))
@@ -51,7 +51,7 @@
 (defparameter *package-objects*
   (locally (declare (optimize safety))
            (loop for pname in *standard-package-names* append
-                 (handler-case (let ((pkg (find-package pname)))
+                 (cl:handler-case (let ((pkg (find-package pname)))
                                  (and pkg (list pkg)))
                                (error () nil)))))
 
@@ -160,7 +160,7 @@
   (declare (optimize safety))
   (loop
     for name in namelist append
-        (handler-case
+        (cl:handler-case
             (list (read-from-string
                    (concatenate 'string "\#\\" name)))
           (error () nil))))
@@ -357,7 +357,7 @@
 
      ;; The ever-popular NIL array
      (locally (declare (optimize safety))
-              (handler-case
+              (cl:handler-case
                (list (make-array '(0) :element-type nil))
                (error () nil)))
 
