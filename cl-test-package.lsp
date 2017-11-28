@@ -7,6 +7,7 @@
        (pkg (find-package name)))
   (unless pkg (setq pkg (make-package name :use '(:cl :regression-test))))
   (let ((*package* pkg))
+    ;; These are shadowed to avoid annoying SBCL notes
     (shadow '(#:handler-case #:handler-bind))
     (import '(common-lisp-user::compile-and-load)
             pkg)
