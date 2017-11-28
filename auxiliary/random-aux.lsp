@@ -302,3 +302,7 @@
                          method-list)))
   `(loop (catch 'fail (return (rcase ,@clauses))))))
 
+(defun init-random-state ()
+  "Initialize random state to some arbitrary nondeterministic value, to make fresh runs of random testing different"
+  (setf *random-state* (make-random-state t))
+  (values))
