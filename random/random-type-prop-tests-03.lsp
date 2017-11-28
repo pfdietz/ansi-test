@@ -36,10 +36,12 @@
 (def-type-prop-test /.4 '/ '((and complex (not (satisfies zerop)))) 1 :ignore 'arithmetic-error)
 (def-type-prop-test /.5 '/ '(integer) 2 :maxargs 6 :rest-type '(and integer (not (satisfies zerop))))
 (def-type-prop-test /.6 '/ '(rational) 2 :maxargs 6 :rest-type '(and rational (not (satisfies zerop))))
+#|
 (def-type-prop-test /.7 '/ '(real) 2 :maxargs 6 :rest-type '(and real (not (satisfies zerop)))
  :test #'approx= :ignore 'arithmetic-error)
 (def-type-prop-test /.8 '/ '(number) 2 :maxargs 6 :rest-type '(and number (not (satisfies zerop)))
-  :test #'approx= :ignore 'arithmetic-error)
+  :test #'(lambda (x y) (approx= x y (* 100 (epsilon x)))) :ignore 'arithmetic-error)
+|#
 
 (def-type-prop-test 1+.1 '1+ '(integer) 1)
 (def-type-prop-test 1+.2 '1+ '(rational) 1)
@@ -93,6 +95,8 @@
 (def-type-prop-test complex.5 'complex '(real real) 2)
 
 (def-type-prop-test complexp 'complexp '(t) 1)
+(def-type-prop-test complexp.2 '(lambda (x y) (complexp (complex x y)))
+  '(real real) 2)
 
 (def-type-prop-test conjugate 'conjugate '(number) 1)
 
