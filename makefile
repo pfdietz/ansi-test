@@ -137,6 +137,8 @@ rt_1000_8:
 
 clean:
 	@rm -f */*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
+	@rm -f */*.fasl
+	@rm -f */*/*.fasl
 	@rm -f */*/*.{out,fas,cls,fasl,o,so,~,fn,x86f,ufsl,abcl,lib}
 	@rm -f test*.out *.cls *.fasl *.o *.so *~ *.fn *.x86f *.fasl *.ufsl *.abcl *.fas *.lib \#*\#
 	@rm -f *.dfsl *.d64fsl
