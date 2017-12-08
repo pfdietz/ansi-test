@@ -219,3 +219,8 @@
                            nil nil)
                  program-error)
   t)
+
+(deftest destructuring-bind.error.10
+  (signals-error (destructuring-bind (foo nil bar) (list 1 2 3) nil)
+                 program-error)
+  t)
