@@ -69,6 +69,9 @@
 (def-random-suppress-test read-suppress.15 :prefix "#(" :suffix ")")
 (def-random-suppress-test read-suppress.16 :chars "0123456789.eEfFsSdDlL+-")
 
+;; Undefined macro dispatch characters should not signal an error
+(def-read-suppress-test read-suppress.17 "#garbage")
+
 (def-read-suppress-test read-suppress.sharp-slash.1 "#\\boguscharname")
 (def-read-suppress-test read-suppress.sharp-slash.2 "#\\:x")
 (def-read-suppress-test read-suppress.sharp-slash.3 "#\\::::")
