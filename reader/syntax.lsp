@@ -419,7 +419,18 @@
 (def-syntax-unintern-test syntax.sharp-colon.5 "NIL")
 (def-syntax-unintern-test syntax.sharp-colon.6 "T")
 (def-syntax-unintern-test syntax.sharp-colon.7 ".")
-
+;;; Uninterned symbols must not contain a package prefix (see CLHS 2.4.8.5)
+(def-syntax-test syntax.sharp-colon.error.1
+  (signals-error (read-from-string "#:a:b") reader-error)
+  t)
+(def-syntax-test syntax.sharp-colon.8
+  (let ((s (read-from-string "#:|a:b|")))
+    (values (symbol-package s) (symbol-name s)))
+  nil "a:b")
+(def-syntax-test syntax.sharp-colon.9
+  (let ((s (read-from-string "#:a\\:b")))
+    (values (symbol-package s) (symbol-name s)))
+  nil "A:B")
 
 ;;; Tests of #.
 

@@ -59,6 +59,11 @@
             (list (list type s n)))))
   nil)
 
+;;; All numbers must contain at least one digit (see CLHS 2.3.1)
+(def-syntax-test syntax.number-token.5
+  (values (eql (read-from-string "-.") (intern "-."))
+          (eql (read-from-string "+.") (intern "+.")))
+  t t)
 
 ;;; Dot tokens
 

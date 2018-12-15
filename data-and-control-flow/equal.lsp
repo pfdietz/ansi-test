@@ -99,6 +99,13 @@
     (values (equalt #*01100 b) (equalt #*01100 b)))
   t t)
 
+(deftest equal.18b
+    (let* ((l '(0 1 0 1 0))
+           (a (make-array 5 :element-type 'bit :initial-contents l)))
+      (equalt (make-array 4 :element-type 'bit :displaced-to a :displaced-index-offset 1)
+              (make-array 4 :element-type 'bit :initial-contents (rest l))))
+  t)
+
 (deftest equal.19
   (let ((s (make-array '(10) :element-type 'base-char
                        :initial-contents "0123456789"
