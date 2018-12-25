@@ -8,7 +8,7 @@
 (declaim (special +standard-chars+ *cl-symbols-vector*))
 
 (defvar *maximum-random-int-bits*
-  (max 36 (1+ (integer-length most-positive-fixnum))))
+  (max 36 (+ 4 (integer-length most-positive-fixnum))))
 
 (defun random-from-seq (seq)
   "Generate a random member of a sequence."
