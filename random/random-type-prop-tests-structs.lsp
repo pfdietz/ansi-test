@@ -70,3 +70,17 @@
 
 (def-type-prop-test structure-ref.2 'rtpt-2-a '(rtpt-2) 1)
 
+;;; Structures with typed fields
+
+(defstruct rtpt-3
+  (n 0 :type fixnum))
+
+(defmethod make-random-element-of-type ((type (eql 'rtpt-3)))
+  (let ((n (make-random-element-of-type 'fixnum)))
+    (make-rtpt-3 :n n)))
+
+(defmethod replicate ((obj rtpt-3))
+  (replicate-with (obj x (make-rtpt-3 :n (rtpt-3-n obj)))))
+
+(def-type-prop-test structure-ref.3 'rtpt-3-n '(rtpt-3) 1)
+(def-type-prop-test structure-assign.3 '(lambda (obj x) (setf (rtpt-3-n obj) x) (values obj (rtpt-3-n obj)))  '(rtpt-3 fixnum) 2)
