@@ -101,7 +101,7 @@
 (def-type-prop-test both-case-p 'both-case-p '(character) 1)
 (def-type-prop-test char-code 'char-code '(character) 1)
 (def-type-prop-test char-int 'char-int '(character) 1)
-(def-type-prop-test code-char 'code-char '((integer 0 #.char-code-limit)) 1)
+(def-type-prop-test code-char 'code-char '((integer 0 (#.char-code-limit))) 1)
 (def-type-prop-test char-name 'char-name '(character) 1)
 (def-type-prop-test name-char 'name-char '(string) 1)
 
