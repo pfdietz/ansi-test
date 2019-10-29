@@ -5,9 +5,9 @@
 
 (in-package :cl-test)
 
-(compile-and-load "types-aux.lsp")
-(compile-and-load "random-aux.lsp")
-(compile-and-load "random-int-form.lsp")
+;; (compile-and-load "types-aux.lsp")
+;; (compile-and-load "random-aux.lsp")
+;; (compile-and-load "random-int-form.lsp")
 
 (defparameter *random-types* nil)
 
@@ -30,6 +30,25 @@
                (lo (min x y))
                (hi (max x y)))
           `(integer ,lo ,hi)))
+       (1 ;; sequences and arrays
+        (rcase
+          (1 'sequence)
+          (1 'list)
+          (1 'array)
+          (1 (let ((tp (make-random-type 1)))
+               (if (coin 3)
+                   `(and (array ,tp) (not simple-array))
+                   `(array ,tp))))
+          (1 'simple-array)
+          (1 (let ((tp (make-random-type 1)))
+               `(simple-array ,tp)))
+          (1 (rcase
+               (1 'string)
+               (1 '(and string (not simple-string)))
+               (1 'simple-string)
+               (1 'base-string)
+               (1 '(and base-string (not simple-base-string)))
+               (1 'simple-base-string)))))
        (1 (make-random-real-type))
        ;; (1 (make-random-complex-type))
        )
@@ -74,7 +93,6 @@
         (complex (1+ (size-of-type (cadr type))))
         ((array simple-array) (1+ (size-of-type (cadr type))))
         (vector (1+ (size-of-type (cadr type))))
-        (complex (1+ (size-of-type (cadr type))))
         ((cons or and not) (reduce #'+ (cdr type) :initial-value 1
                                    :key #'size-of-type))
         (t 1))
