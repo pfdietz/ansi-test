@@ -59,6 +59,7 @@
 (defvar *max-compile-term* nil)
 
 (defvar *print-immediately* nil)
+(defvar *innocuous-failures* nil)
 
 (defvar *compile-unoptimized-form*
   #+(or allegro sbcl) t
@@ -105,6 +106,11 @@ structures used in random tests.")
 
 (defmethod is-int-struct-constructor? ((sym symbol))
   (get sym 'int-struct-constructor-of))
+
+
+(defmethod is-int-struct-constructor? ((op cons))
+  ;; For lambda exprs
+  nil)
 
 (eval-when (:load-toplevel)
   (def-int-struct int integer)
@@ -286,6 +292,8 @@ in the thing being tested.  Should not count as a test failure."))
                         #+sbcl
                         20 ;; Example of sb ffi call
                         10 ;; m-v-b-if
+                        5 ;; inlined lambda
+                        20 ;; stacked comparisons
                         ))))
 
 (defparameter *make-random-integer-form-cdf*
@@ -362,7 +370,10 @@ in the thing being tested.  Should not count as a test failure."))
        `(min ,hi (max ,lo ,form))))
     (t (error "Cannot handle this type in int-restrict: ~A" tp))))
 
-(define-condition require-failure (simple-condition) ()
+(define-condition innocuous-failure (simple-condition) ()
+  (:documentation "Failures that, when they occur, do not indicate the test failed"))
+
+(define-condition require-failure (innocuous-failure) ()
   (:documentation "Error signalled by REQUIRE-TYPE when the value is not of the specified
 type.  This is intended to indicate that the test is bogus, not failed."))
 
@@ -588,8 +599,6 @@ the check."
 (declaim (special *flet-names*))
 (defparameter *flet-names* nil)
 
-
-
 (defun random-var-desc ()
   (loop
    (let* ((pos (random (length *vars*)))
@@ -637,7 +646,10 @@ the check."
                          (v2 (make-random-integer)))
                      `(if ,name ,v1 ,v2)))
                   (t nil)))
-             nil))
+               nil))
+        (1 (if *innocuous-failures*
+               `(error 'innocuous-failure)
+               nil))
         (1 (if *go-tags* `(go ,(random-from-seq *go-tags*)) nil))
         (2 (if *flet-names*
                (let* ((flet-entry (random-from-seq *flet-names*))
@@ -906,6 +918,12 @@ the check."
       ;; mvb-if
       (make-random-mvb-if-form size)
 
+      ;; inlined lambda
+      (make-random-inline-lambda-form size)
+
+      ;; Stacked comparisons
+      (make-stacked-comparison-form size)
+
      )))
 
 (defun make-random-aref-form (size)
@@ -1120,6 +1138,63 @@ the check."
                            (3 nil))
                   ,e2))
          (2 `(multiple-value-bind (,var) ,e1 ,e2)))))))
+
+(defun make-random-inline-lambda-form (size)
+  (destructuring-bind (sform svars) (random-partition (1- size) 2)
+    (let* ((nvars (random 4))
+           (vars (let ((seq '(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10)))
+                   (assert (<= nvars (length seq)))
+                   (loop repeat nvars
+                      collect (let ((x (random-from-seq seq)))
+                                (setf seq (remove x seq))
+                                x))))
+           (var-sizes (when (> nvars 0) (random-partition svars nvars)))
+           (arg-exprs (mapcar #'make-random-integer-form var-sizes))
+           (e1 (let ((*vars*
+                      (append (mapcar (lambda (v) (make-var-desc :name v :type 'integer)) vars)
+                              *vars*)))
+                 (make-random-integer-form sform)))
+           (rest? (coin 2)))
+      `((lambda (,@vars ,@(when rest? '(&rest args)))
+          ,e1)
+        ,@arg-exprs))))
+
+(defun make-stacked-comparison-form (size)
+  "This exercises compiler optimizations that remove redundant comparisons
+of the same values"
+  (let* ((sizes (random-partition (max 5 (1- size)) 5))
+         (vars '#(v1 v2 v3 v4 v5 v6 v7 v8 v9))
+         (v1 (random-from-seq vars))
+         (v2 (loop (let ((x (random-from-seq vars)))
+                     (unless (eql v1 x) (return x)))))
+         (op1 (random-from-seq #(= /= < <= > >=)))
+         (op2 (random-from-seq #(= /= < <= > >=)))
+         (f1 (make-random-integer-form (car sizes)))
+         (f2 (make-random-integer-form (cadr sizes)))
+         (forms (let ((*vars*
+                       (list* (make-var-desc :name v1 :type 'integer)
+                              (make-var-desc :name v2 :type 'integer)
+                              *vars*)))
+                  (mapcar #'make-random-integer-form (cddr sizes)))))
+    (flet ((%c (op)
+             (if (coin)
+                 `(,op ,v1 ,v2)
+                 `(,op ,v2 ,v1))))
+      (destructuring-bind (f3 f4 f5)
+          forms
+        (if (coin 2)
+            `(let ((,v1 ,f1)
+                   (,v2 ,f2))
+               (if ,(%c op1)
+                   (if ,(%c op2)
+                       ,f3 ,f4)
+                   ,f5))
+            `(let ((,v1 ,f1)
+                   (,v2 ,f2))
+               (if ,(%c op1)
+                   ,f3
+                   (if ,(%c op2)
+                       ,f4 ,f5))))))))
 
 (defun make-random-integer-progv-form (size)
   (let* ((num-vars (random 4))
@@ -1509,8 +1584,7 @@ the check."
       (block done
         (loop for i from 0 below len
            do (let ((tp (elt type-args i))
-                    (rest (append (subseq type-args 0 i)
-                                  (subseq type-args (1+ i)))))
+                    (rest (remove-nth type-args i)))
                 (loop for x = (make-random-element-of-type tp)
                    repeat 100
                    do (when (typep x (cons 'and rest))
@@ -1642,7 +1716,7 @@ the check."
            (apply #'make-random-element-of-float-type type-op type-args))
 
   (:method ((type-op (eql 'mod)) type-args)
-           (let ((modulus (second type-args)))
+    (let ((modulus (first type-args)))
              (assert (integerp modulus))
              (assert (plusp modulus))
              (make-random-element-of-compound-type 'integer `(0 (,modulus)))))
@@ -2344,7 +2418,8 @@ the check."
                         (apply unoptimized-compiled-fn vals))))
                     #+sbcl
                     (sb-sys:interactive-interrupt (e) (error e))
-                    (require-failure () :bogus)
+                    (innocuous-failure () :bogus)
+                    ;; (require-failure () :bogus)
                     ((or error serious-condition)
                      (c)
                      (%eval-error (list :unoptimized-form-error
@@ -2360,7 +2435,8 @@ the check."
                         (apply optimized-compiled-fn vals))))
                     #+sbcl
                     (sb-sys:interactive-interrupt (e) (error e))
-                    (require-failure () :bogus)
+                    (innocuous-failure () :bogus)
+                    ;; (require-failure () :bogus)
                     ((or error serious-condition)
                      (c)
                      (%eval-error (list :optimized-form-error
@@ -2376,6 +2452,21 @@ the check."
                   (%eval-error (list :different-results
                                      opt-result
                                      unopt-result)))))))))))
+
+(defun remove-nth (seq n)
+  (assert (listp seq) () "remove-nth only handles lists for now")
+  (assert (<= 0 n))
+  (assert (< n (length seq)))
+  (append (subseq seq 0 n)
+          (subseq seq (1+ n))))
+
+(defun replace-nth (seq val n)
+  (assert (listp seq) () "replace-nth only handles lists for now")
+  (assert (<= 0 n))
+  (assert (< n (length seq)))
+  (append (subseq seq 0 n)
+          (list val)
+          (subseq seq (1+ n))))
 
 ;;; Interface to the form pruner
 
@@ -2442,14 +2533,14 @@ the check."
             ((and or)
              (mapc #'try args)
              (loop for i from 0 below nargs
-                do (let ((s (append (subseq args 0 i)
-                                    (subseq args (1+ i)))))
+                do (let ((s (remove-nth args i)))
                      (try `(,op ,@s))))
              (loop for i from 0 below nargs
                   for e in args
                 do (prune-boolean e
                                   (lambda (form)
-                                    (try `(,op ,@(subseq args 0 i) ,form ,@(subseq args (1+ i))))))))
+                                    (try `(,op ,@(replace-nth args form i)
+                                           ))))))
             ((not)
              (try (car args))
              (prune-boolean (car args) (lambda (form) (try `(not ,form)))))
@@ -2519,18 +2610,14 @@ the check."
                           #'(lambda (form)
                               (try `(mvb-if ,vars ,pred
                                         ,true-exprs
-                                        ,(append (subseq false-exprs 0 i)
-                                                 (list form)
-                                                 (nthcdr (1+ i) false-exprs))
+                                        ,(replace-nth false-exprs form i)
                                       ,body-expr)))))
              (loop for i from 0
                 for e in true-exprs
                 do (prune e
                           #'(lambda (form)
                               (try `(mvb-if ,vars ,pred
-                                        ,(append (subseq true-exprs 0 i)
-                                                 (list form)
-                                                 (nthcdr (1+ i) true-exprs))
+                                        ,(replace-nth true-exprs form i)
                                         ,false-exprs
                                       ,body-expr)))))
              ))
@@ -2624,7 +2711,9 @@ the check."
           (let ((len (length args)))
             (loop for i from 1 below len
                do (prune (elt args i)
-                         #'(lambda (form) (try `(symbol-macrolet ,@(subseq args 0 (1- i)) ,form ,@(subseq args (1+ i) len))))))))
+                         #'(lambda (form) (try `(symbol-macrolet
+                                                    ,@(replace-nth args form i)
+                                                    )))))))
 
          ((boole)
           (try (second args))
@@ -2644,9 +2733,9 @@ the check."
               (when (cdr rest)
                 (loop for i from 0 below (length rest)
                       do
-                      (try `(unwind-protect ,val
-                              ,@(subseq rest 0 i)
-                              ,@(subseq rest (1+ i))))))))
+                     (try `(unwind-protect ,val
+                             ,@(remove-nth rest i)
+                              ))))))
           (prune-fn form try-fn))
 
          ((prog2)
@@ -2665,9 +2754,9 @@ the check."
               (when (cdr rest)
                 (loop for i from 0 below (length rest)
                       do
-                      (try `(prog2 ,val1 ,arg2
-                              ,@(subseq rest 0 i)
-                              ,@(subseq rest (1+ i)))))))))
+                     (try `(prog2 ,val1 ,arg2
+                             ,@(remove-nth rest i)
+                             )))))))
 
          ((typep)
           (try (car args))
@@ -3113,16 +3202,15 @@ the check."
               (try (car (last args))))
           (loop for i from 0 below (1- (length args))
                 for a in args
-                do (try `(progn ,@(subseq args 0 i)
-                                ,@(subseq args (1+ i))))
-                do (when (and (consp a)
-                              (or
-                               (eq (car a) 'progn)
-                               (and (eq (car a) 'tagbody)
-                                    (every #'consp (cdr a)))))
-                     (try `(progn ,@(subseq args 0 i)
-                                  ,@(copy-list (cdr a))
-                                  ,@(subseq args (1+ i))))))
+             do (try `(progn ,@(remove-nth args i)))
+             do (when (and (consp a)
+                           (or
+                            (eq (car a) 'progn)
+                            (and (eq (car a) 'tagbody)
+                                 (every #'consp (cdr a)))))
+                  (try `(progn ,@(subseq args 0 i)
+                               ,@(copy-list (cdr a))
+                               ,@(subseq args (1+ i))))))
           (prune-fn form try-fn))
 
          ((loop)
@@ -3156,6 +3244,8 @@ the check."
                  (try `(,op ,(car args) 0)))
                (prune (cadr args)
                       #'(lambda (form) (try `(,op ,(car args) ,form))))))
+            ((and (consp op) (eql (car op) 'lambda))
+             (prune-inline-lambda-form form try-fn))
             (t
              (try 0)
              (prune-fn form try-fn))))
@@ -3163,6 +3253,31 @@ the check."
          )))))
   (setf (gethash form *prune-table*) t)
   nil)
+
+(defun prune-inline-lambda-form (form try-fn)
+  (prune-fn form try-fn)
+  (flet ((try (x) (funcall try-fn x)))
+    (let* ((lam (car form))
+           (args (cdr form))
+           (lam-list (cadr lam))
+           (lam-expr (caddr lam)))
+      (assert (eql (car lam) 'lambda))
+      ;; Argument prunes are handled by the call to prune-fn
+      ;; Here, attempt prunes inside the lambda form
+      (when (and (>= (length lam-list) 2)
+                 (eql (car (last lam-list 2)) '&rest))
+        (try `((lambda ,(butlast lam-list 2) ,lam-expr) ,@args)))
+      (loop for i from 0 below (length args)
+         for v in lam-list
+         for lam-rest on lam-list
+         do (unless (or (not (symbolp v))
+                        (find-in-tree v (cdr lam-rest))
+                        (find-in-tree v lam-expr))
+              (try `((lambda ,(remove-nth lam-list i)
+                       ,lam-expr)
+                     ,@(remove-nth args i)
+                     ))))
+      (prune lam-expr (lambda (x) (try `((lambda ,lam-list ,x) ,@args)))))))
 
 (defun find-in-tree (value tree)
   "Return true if VALUE is eql to a node in TREE."
@@ -3191,9 +3306,8 @@ the check."
                  e
                  #'(lambda (form)
                      (funcall list-try-fn
-                              (append (subseq list 0 i)
-                                      (list form)
-                                      (subseq list (1+ i))))))))
+                              (replace-nth list form i)
+                              )))))
 #|
 (defun prune-eval (args try-fn)
   (flet ((try (e) (funcall try-fn e)))
@@ -3237,9 +3351,7 @@ the check."
       ;; Try deleting individual cases
       (format t "prune-case deleting cases~%")
       (loop for i from 0 below (1- (length cases))
-            do (try `(,op ,expr
-                          ,@(subseq cases 0 i)
-                          ,@(subseq cases (1+ i)))))
+         do (try `(,op ,expr ,@(remove-nth cases i))))
 
       ;; Try simplifying the cases
       ;; Assume each case has a single form
@@ -3254,8 +3366,7 @@ the check."
                            do (format t "prune-case remove ~a~%"
                                       (elt (car case) i))
                            do (funcall try-fn
-                                       `((,@(subseq (car case) 0 i)
-                                            ,@(subseq (car case) (1+ i)))
+                                       `((,@(remove-nth (car case) i))
                                          ,@(cdr case)))))
                       (when (eql (length case) 2)
                         (prune (cadr case)
@@ -3276,21 +3387,20 @@ the check."
            ((atom e)
             ;; A tag
             (unless (find-in-tree e (subseq body 0 i))
-              (funcall try-fn `(tagbody ,@(subseq body 0 i)
-                                        ,@(subseq body (1+ i))))))
+              (funcall try-fn `(tagbody ,@(remove-nth body i)
+                                  ))))
            (t
             (funcall try-fn
-                     `(tagbody ,@(subseq body 0 i)
-                               ,@(subseq body (1+ i))))
+                     `(tagbody ,@(remove-nth body i)
+                         ))
             (prune e
                    #'(lambda (form)
                        ;; Don't put an atom here.
                        (when (consp form)
                          (funcall
                           try-fn
-                          `(tagbody ,@(subseq body 0 i)
-                                    ,form
-                                    ,@(subseq body (1+ i))))))))))))
+                          `(tagbody ,@(replace-nth body form i)
+                              ))))))))))
 
 (defun prune-progv (form try-fn)
   (declare (type function try-fn))
@@ -3331,9 +3441,8 @@ the check."
          (args (cdr form))
          (nargs (length args)))
     (when (> nargs 1)
-      (loop for i from 1 to nargs
-            do (funcall try-fn `(,op ,@(subseq args 0 (1- i))
-                                     ,@(subseq args i)))))))
+      (loop for i from 0 below nargs
+         do (funcall try-fn `(,op ,@(remove-nth args i)))))))
 
 (defun prune-fn (form try-fn &optional top? (prune-fn #'prune))
   "Attempt to simplify a function call form.  It is considered
