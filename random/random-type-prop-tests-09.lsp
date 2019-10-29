@@ -450,6 +450,10 @@
               'equal #'equal 'eql #'eql))
   6)
 
+(def-type-prop-test position.11 'position
+  (list 'bit #'make-random-sequence-type-containing)
+  2)
+
 ;;; POSITION-IF
 
 (def-type-prop-test position-if.1 'position-if
