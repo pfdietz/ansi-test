@@ -14,6 +14,10 @@
 (def-type-prop-test string-downcase 'string-downcase '(string) 1)
 (def-type-prop-test string-capitalize 'string-capitalize '(string) 1)
 
+(def-type-prop-test nstring-upcase 'nstring-upcase '(string) 1 :replicate '(t))
+(def-type-prop-test nstring-downcase 'nstring-downcase '(string) 1 :replicate '(t))
+(def-type-prop-test nstring-capitalize 'nstring-capitalize '(string) 1 :replicate '(t))
+
 (def-type-prop-test string-trim.1 'string-trim '(string string) 2)
 (def-type-prop-test string-trim.2 'string-trim (list #'(lambda () (make-list-type (random 10) 'null 'character))
                                                      'string)
