@@ -470,14 +470,26 @@
 (defun read-defuns-from-stream (s &key (sym 'defun))
   ;; Reads the top level DEFUNs from a stream.
   ;; :SYM keyword allows other forms to be found instead
-  (handler-case
-      (loop for x = (handler-case (read s nil s) (reader-error () nil))
-         until (eql x s)
-         when (and (consp x) (eql (car x) sym))
-         collect (progn
-                   (format t "~A~%" (cadr x))
-                   x))
-    (error () nil)))
+  ;; Do not respect in-package forms, and if undefined
+  ;; packages are found use *package* instead (in SBCL)
+  (let ((*package* *package*)
+        (*read-eval* nil))
+    (handler-case
+        (loop for x = (handler-case
+                          ;; Recent SBCLs have been provided with a restart
+                          ;; when a package is not found.  Use *package* instead
+                          ;; for these cases.
+                          (handler-bind (#+sbcl
+                                         (sb-int:simple-reader-package-error
+                                          (lambda (e) (use-value *package* e))))
+                            (read s nil s))
+                        (reader-error () nil))
+           until (eql x s)
+           when (and (consp x) (eql (car x) sym))
+           collect (progn
+                     ;; (format t "~A~%" (cadr x))
+                     x))
+      (error () nil))))
 
 (defun read-defuns (filename &rest args)
   "Read DEFUNS from a file, returning them.  :SYM argument allows
