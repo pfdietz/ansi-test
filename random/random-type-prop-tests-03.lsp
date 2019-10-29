@@ -147,6 +147,30 @@
 
 (def-type-prop-test lognot 'lognot '(integer) 1)
 
+;; Combined integer tests
+(def-type-prop-test logand.lognot.1 '(lambda (x y) (logand x (lognot y))) '(integer integer) 2)
+(def-type-prop-test logand.lognot.2 '(lambda (x y) (logand (lognot x) y)) '(integer integer) 2)
+(def-type-prop-test logand.lognot.3 '(lambda (x y) (logand (lognot x) (lognot y))) '(integer integer) 2)
+(def-type-prop-test logand.lognot.4 '(lambda (x y) (lognot (logand x y))) '(integer integer) 2)
+
+(def-type-prop-test logior.lognot.1 '(lambda (x y) (logior x (lognot y))) '(integer integer) 2)
+(def-type-prop-test logior.lognot.2 '(lambda (x y) (logior (lognot x) y)) '(integer integer) 2)
+(def-type-prop-test logior.lognot.3 '(lambda (x y) (logior (lognot x) (lognot y))) '(integer integer) 2)
+(def-type-prop-test logior.lognot.4 '(lambda (x y) (lognot (logior x y))) '(integer integer) 2)
+
+(def-type-prop-test logxor.lognot.1 '(lambda (x y) (logxor x (lognot y))) '(integer integer) 2)
+(def-type-prop-test logxor.lognot.2 '(lambda (x y) (logxor (lognot x) y)) '(integer integer) 2)
+(def-type-prop-test logxor.lognot.3 '(lambda (x y) (logxor (lognot x) (lognot y))) '(integer integer) 2)
+(def-type-prop-test logxor.lognot.4 '(lambda (x y) (lognot (logxor x y))) '(integer integer) 2)
+
+(def-type-prop-test logand.logior.1 '(lambda (x y z) (logand x (logior y z))) '(integer integer integer) 3)
+(def-type-prop-test logand.logior.2 '(lambda (x y z) (logand (logior x y) z)) '(integer integer integer) 3)
+(def-type-prop-test logand.logior.3 '(lambda (x y z w) (logand (logior x y) (logior z w))) '(integer integer integer integer) 4)
+
+(def-type-prop-test logior.logand.1 '(lambda (x y z) (logior x (logand y z))) '(integer integer integer) 3)
+(def-type-prop-test logior.logand.2 '(lambda (x y z) (logior (logand x y) z)) '(integer integer integer) 3)
+(def-type-prop-test logior.logand.3 '(lambda (x y z w) (logior (logand x y) (logand z w))) '(integer integer integer integer) 4)
+
 (def-type-prop-test logbitp.1 'logbitp '((integer 0 32) integer) 2)
 (def-type-prop-test logbitp.2 'logbitp '((integer 0 100) integer) 2)
 ; (def-type-prop-test logbitp.3 'logbitp '((integer 0) integer) 2)
@@ -187,4 +211,102 @@
          `(integer 0 (,(length x)))))
   3)
 
+(def-type-prop-test parse-integer.3 'parse-integer
+  `((and (vector (member #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))
+         (satisfies has-nonzero-length))
+    (eql :end)
+    ,#'(lambda (x &rest rest) (declare (ignore rest))
+         `(integer 1 ,(length x))))
+  3)
+
+(def-type-prop-test parse-integer.4 'parse-integer
+  `((and (vector (member #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))
+         (satisfies has-nonzero-length))
+    (eql :junk-allowed)
+    (member nil t))
+  3)
+
+(def-type-prop-test parse-integer.5 'parse-integer
+  `(string (eql :junk-allowed) (and t (not null)))
+  3)
+
+(def-type-prop-test parse-integer.6 'parse-integer
+  `((and (vector (member #\0 #\1))
+         (satisfies has-nonzero-length))
+    (eql :radix)
+    (integer 2 36))
+  3)
+
+(def-type-prop-test parse-integer.7 'parse-integer
+  `((and (vector (member #\0 #\1 #\2 #\3))
+         (satisfies has-nonzero-length))
+    (eql :radix)
+    (integer 4 36))
+  3)
+
+(def-type-prop-test parse-integer.8 'parse-integer
+  `((and (vector (member #\0 #\1 #\2 #\3 #\4 #\5))
+         (satisfies has-nonzero-length))
+    (eql :radix)
+    (integer 6 36))
+  3)
+
+(def-type-prop-test parse-integer.9 'parse-integer
+  `((and (vector (member ,@(map 'list #'identity
+                                "0123456789abcdefghijklmnopqrstuvwxyz")))
+         (satisfies has-nonzero-length))
+    (eql :radix)
+    (integer 36 36))
+  3)
+
 (def-type-prop-test sxhash 'sxhash '(t) 1)
+(def-type-prop-test sxhash.2 'sxhash '(string) 1)
+(def-type-prop-test sxhash.3 '(lambda (s) (unless (= (sxhash s) (sxhash (map 'string #'identity s))) (error "Bad sxhash: ~a" s))) '(string) 1)
+
+(def-type-prop-test boole.1 'boole `(,(list 'member boole-1 boole-2 boole-andc1
+                                      boole-andc2 boole-and boole-c1 boole-c2
+                                      boole-clr boole-eqv boole-ior
+                                      boole-nand boole-nor boole-orc1
+                                      boole-orc2 boole-set boole-xor)
+                                     integer integer) 3)
+
+;; (def-type-prop-test byte.1 'byte '((integer 0) (integer 0)) 2)
+;; (def-type-prop-test byte.2 'byte '((integer 0 10) (integer 0)) 2)
+
+(def-type-prop-test byte.3 'byte '((integer 0 1000) (integer 0 1000)) 2)
+(def-type-prop-test deposit-field.1
+  '(lambda (m s p n)
+    (deposit-field m (byte s p) n))
+  '(integer (integer 0 100) (integer 0 100) integer)
+  4)
+(def-type-prop-test dpb.1
+  '(lambda (m s p n)
+    (dpb m (byte s p) n))
+  '(integer (integer 0 100) (integer 0 100) integer)
+  4)
+(def-type-prop-test ldb.1
+  '(lambda (s p n)
+    (ldb (byte s p) n))
+  '((integer 0 100) (integer 0 100) integer)
+  3)
+(def-type-prop-test ldb.2
+  '(lambda (s p n x)
+    (values (setf (ldb (byte s p) n) x)
+     n))
+  '((integer 0 100) (integer 0 100) integer integer)
+  4)
+(def-type-prop-test ldb-test.1
+  '(lambda (s p n) (ldb-test (byte s p) n))
+  '((integer 0 100) (integer 0 100) integer)
+  3)
+(def-type-prop-test mask-field.1
+  '(lambda (s p n)
+    (mask-field (byte s p) n))
+  '((integer 0 100) (integer 0 100) integer)
+  3)
+(def-type-prop-test mask-field.2
+  '(lambda (s p n x)
+    (values (setf (mask-field (byte s p) n) x)
+     n))
+  '((integer 0 100) (integer 0 100) integer integer)
+  4)
