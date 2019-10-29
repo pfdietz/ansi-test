@@ -17,7 +17,7 @@
                                           (setf (gethash x h) y)
                                           h))
   '(t t)
-  2                  
+  2
   :test #'equalp)
 
 (def-type-prop-test make-hash-table.4 '(lambda (x y z w)
@@ -26,7 +26,7 @@
                                           (setf (gethash z h) w)
                                           h))
   '(t t t t)
-  4         
+  4
   :test #'equalp)
 
 (def-type-prop-test make-hash-table.5 '(lambda (x y z w tst)
@@ -35,8 +35,8 @@
                                           (setf (gethash z h) w)
                                           h))
   `(t t t t
-    (member eq eql equal equalp ,#'eq ,#'eql ,#'equal ,#'equalp))
-  5         
+    (member eql equal equalp ,#'eql ,#'equal ,#'equalp))
+  5
   :test #'equalp)
 
 (def-type-prop-test make-hash-table.6 '(lambda (x y z w s)
@@ -46,7 +46,19 @@
                                           h))
   `(t t t t
     (integer 0 10000))
-  5         
+  5
+  :test #'equalp)
+
+;;; Must test EQ hash tables separately, because they can misbehave
+;;; on number or character keys due to possibility of copying
+(def-type-prop-test make-hash-table.7 '(lambda (x y z w tst)
+                                        (let ((h (make-hash-table :test tst)))
+                                          (setf (gethash x h) y)
+                                          (setf (gethash z h) w)
+                                          h))
+  `((not (or number character)) t (not (or number character)) t
+    (member eq ,#'eq))
+  5
   :test #'equalp)
 
 (def-type-prop-test hash-table-p.1 'hash-table-p '(t) 1)
