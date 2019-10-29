@@ -38,13 +38,13 @@
   (compile-and-load "rt.lsp")
   (load "cl-test-package.lsp")
   (in-package :cl-test)
-  (compile-and-load "ANSI-TESTS:AUX;ansi-aux-macros.lsp")
+  (compile-and-load "auxiliary/ansi-aux-macros.lsp")
   (handler-bind
    #-sbcl ()
    #+sbcl ((sb-ext:code-deletion-note #'muffle-warning))
    (load "universe.lsp"))
-  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
-  (compile-and-load "ANSI-TESTS:AUX;ansi-aux.lsp")
+  (compile-and-load "auxiliary/random-aux.lsp")
+  (compile-and-load "auxiliary/ansi-aux.lsp")
   
   (load "cl-symbol-names.lsp")
   (load "notes.lsp"))
