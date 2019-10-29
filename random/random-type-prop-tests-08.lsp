@@ -58,6 +58,95 @@
 
 ;;; make-sequence tests here
 
+(def-type-prop-test make-sequence.1 'make-sequence
+  (list '(member list vector) '(integer 0 10))
+  2)
+
+(def-type-prop-test make-sequence.2 'make-sequence
+  (list '(member list vector) '(integer 0 10)
+        '(eql :initial-element) t)
+  4)
+
+(def-type-prop-test make-sequence.3 'make-sequence
+  (list '(cons (eql vector)
+          (cons (cons (eql unsigned-byte) (cons (integer 1 64) null))
+           null))
+        '(integer 0 10))
+  2)
+
+(def-type-prop-test make-sequence.4 'make-sequence
+  (list '(cons (eql vector)
+          (cons (cons (eql unsigned-byte) (cons (integer 1 64) null))
+           null))
+        '(integer 0 10)
+        '(eql :initial-element)
+        #'(lambda (tp size k) (declare (ignore size k))
+                  (cadr tp)))
+  4)
+
+(def-type-prop-test make-sequence.5 'make-sequence
+  (list '(cons (eql vector)
+          (cons (member base-char character) null)) '(integer 0 10))
+  2)
+
+(def-type-prop-test make-sequence.6 'make-sequence
+  (list '(cons (eql vector) (cons (member base-char character) null))
+        '(integer 0 10)
+        '(eql :initial-element)
+        #'(lambda (tp size k) (declare (ignore size k)) (cadr tp)))
+  4)
+
+(def-type-prop-test make-sequence.7 'make-sequence
+  (list '(eql simple-vector)
+        '(integer 0 10))
+  2)
+
+(def-type-prop-test make-sequence.8 'make-sequence
+  (list '(eql simple-vector)
+        '(integer 0 10)
+        '(eql :initial-element)
+        t)
+  4)
+
+(def-type-prop-test make-sequence.9 'make-sequence
+  (list '(cons (eql simple-vector) (cons (integer 0 10) null))
+        #'(lambda (tp) `(eql ,(cadr tp))))
+  2)
+
+(def-type-prop-test make-sequence.10 'make-sequence
+  (list '(cons (eql simple-vector) (cons (integer 0 10) null))
+        #'(lambda (tp) `(eql ,(cadr tp)))
+        '(eql :initial-element)
+        t)
+  4)
+
+(def-type-prop-test make-sequence.11 'make-sequence
+  (list '(cons (eql vector) (cons (member * t) (cons (integer 0 10) null)))
+        #'(lambda (tp) `(eql ,(caddr tp))))
+  2)
+
+(def-type-prop-test make-sequence.12 'make-sequence
+  (list '(cons (eql vector) (cons (member * t) (cons (integer 0 10) null)))
+        #'(lambda (tp) `(eql ,(caddr tp)))
+        '(eql :initial-element)
+        t)
+  4)
+
+(def-type-prop-test make-sequence.13 'make-sequence
+  (list '(cons (eql vector) (cons (member base-char character)
+                             (cons (integer 0 10) null)))
+        #'(lambda (tp) `(eql ,(caddr tp))))
+  2)
+
+(def-type-prop-test make-sequence.14 'make-sequence
+  (list '(cons (eql vector) (cons (member base-char character)
+                             (cons (integer 0 10) null)))
+        #'(lambda (tp) `(eql ,(caddr tp)))
+        '(eql :initial-element)
+        #'(lambda (tp size k) (declare (ignore size k))
+                  `(eql ,(make-random-element-of-type (cadr tp)))))
+  4)
+
 (def-type-prop-test subseq.1 'subseq
   (list 'sequence #'(lambda (s) `(integer 0 ,(length s))))
   2)
@@ -66,6 +155,16 @@
   (list 'sequence #'(lambda (s) `(integer 0 ,(length s)))
         #'(lambda (s start) `(integer ,start ,(length s))))
   3)
+
+(def-type-prop-test length.subseq.1 '(lambda (s pos) (length (subseq s pos)))
+  (list 'sequence #'(lambda (s) `(integer 0 ,(length s))))
+  2)
+
+(def-type-prop-test length.subseq.2 '(lambda (s pos len) (length (subseq s pos len)))
+  (list 'sequence #'(lambda (s) `(integer 0 ,(length s)))
+        #'(lambda (s start) `(integer ,start ,(length s))))
+  3)
+
 
 ;;; map tests here
 
@@ -197,6 +296,11 @@
 
 
 (def-type-prop-test length.1 'length '(sequence) 1)
+(def-type-prop-test length.2 '(lambda (s l) (<= (length s) l)) '(sequence integer) 2)
+(def-type-prop-test length.3 '(lambda (s l) (< (length s) l)) '(sequence integer) 2)
+(def-type-prop-test length.4 '(lambda (s l) (= (length s) l)) '(sequence integer) 2)
+(def-type-prop-test length.5 '(lambda (s l) (> (length s) l)) '(sequence integer) 2)
+(def-type-prop-test length.6 '(lambda (s l) (>= (length s) l)) '(sequence integer) 2)
 
 (def-type-prop-test reverse.1 'reverse '(sequence) 1)
 (def-type-prop-test nreverse.1 'nreverse '(sequence) 1 :replicate '(t))
