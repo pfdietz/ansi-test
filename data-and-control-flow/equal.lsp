@@ -113,6 +113,48 @@
     (values (equalt s "012") (equalt "012" s)))
   t t)
 
+(deftest equal.20
+    (let ((fn '(lambda (x y)
+                (declare
+                 (type (simple-array bit (*)) x)
+                 (type (and (array bit (*)) (not simple-array)) y))
+                (equal x y)))
+          (v1 (coerce #*10110 'simple-bit-vector))
+          (v2 (make-array '(5) :element-type 'bit
+                          :initial-contents '(1 0 1 1 0)
+                          :adjustable t)))
+      (values (not (not (equal v1 v2)))
+              (funcall (compile nil fn) v1 v2)))
+  t t)
+
+(deftest equal.21
+    (let ((fn '(lambda (x y)
+                (declare
+                 (type (simple-array base-char (*)) x)
+                 (type (simple-array character (*)) y))
+                (equal x y)))
+          (v1 (coerce "acndaa" 'simple-base-string))
+          (v2 (make-array '(6) :element-type 'character
+                          :initial-contents '(#\a #\c #\n #\d #\a #\a))))
+      (let ((cfn (compile nil fn)))
+        (values (not (not (equal v1 v2)))
+                (funcall cfn v1 v2))))
+  t t)
+
+(deftest equal.22
+    (let ((fn '(lambda (x y)
+                (declare
+                 (type (simple-array base-char (*)) x)
+                 (type (and base-string (not simple-array)) y))
+                (equal x y)))
+          (v1 (coerce "acndaa" 'simple-base-string))
+          (v2 (make-array '(6) :element-type 'base-char
+                          :adjustable t
+                          :initial-contents '(#\a #\c #\n #\d #\a #\a))))
+      (values (not (not (equal v1 v2)))
+              (funcall (compile nil fn) v1 v2)))
+  t t)
+
 ;;; Should add more pathname equality tests
 
 (deftest equal.order.1
