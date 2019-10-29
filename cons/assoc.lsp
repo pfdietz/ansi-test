@@ -163,6 +163,21 @@
                  :test #'eq))
   (nil . e))
 
+
+;;; No match, but with key, test, test-not
+
+(deftest assoc.32
+  (assoc 1 (list (cons 1 2)) :key #'1+)
+  nil)
+
+(deftest assoc.33
+  (assoc 1 (list (cons 1 2)) :test #'/=)
+  nil)
+
+(deftest assoc.34
+  (assoc 1 (list (cons 1 2)) :test-not #'=)
+  nil)
+
 ;;; :test & :test-not together are harmless
 
 (defharmless assoc.test-and-test-not.1
