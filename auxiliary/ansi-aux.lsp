@@ -1185,3 +1185,14 @@ the condition to go uncaught if it cannot be classified."
 
 (defmacro expand-in-current-env (macro-form &environment env)
   (macroexpand macro-form env))
+
+;;; LOAD does not necessarily behave correctly in some lisps.
+;;; Manually merge *default-pathname-defaults*
+
+(defun load-merge (pathspec)
+  (load (merge-pathnames (pathname pathspec) *default-pathname-defaults*)))
+
+(defun load-here (pathspec)
+  (let ((*default-pathname-defaults*
+         (make-pathname :directory (pathname-directory *load-pathname*))))
+    (load-merge pathspec)))
