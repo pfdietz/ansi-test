@@ -40,6 +40,7 @@
 (defvar *in-test* nil "Used by TEST")
 (defvar *debug* nil "For debugging")
 (defvar *catch-errors* t "When true, causes errors in a test to be caught.")
+(defvar *stop-on-failure* nil "When true, causes DO-TESTS to stop on the first failure.")
 (defvar *print-circle-on-failure* nil
   "Failure reports are printed with *PRINT-CIRCLE* bound to this value.")
 
@@ -340,6 +341,7 @@
       (do-entries *standard-output*)))
 
 (defun do-tests (&key (out *standard-output*)
+                      ((:stop-on-failure *stop-on-failure*) *stop-on-failure*)
                       ((:catch-errors *catch-errors*) *catch-errors*)
                       ((:compile *compile-tests*) *compile-tests*))
   (setq *failed-tests* nil
@@ -352,6 +354,12 @@
           (stream out :direction :output)
         (do-entries stream))))
 
+(defun do-tests-with-names (names &rest args)
+  (let ((*entries*
+         (cons (car *entries*)
+               (remove-if-not (lambda (e) (member (name e) names)) (cdr *entries*)))))
+    (apply #'do-tests args)))
+
 (defun do-entries (s)
   (format s "~&Doing ~A pending test~:P ~
              of ~A tests total.~%"
@@ -362,12 +370,15 @@
     (when (and (pend entry)
                (not (has-disabled-note entry)))
       (let ((success? (do-entry entry s)))
+        (format s "~@[~<~%~:; ~:@(~S~)~>~]" success?)
+        (finish-output s)
         (if success?
-          (push (name entry) *passed-tests*)
-          (push (name entry) *failed-tests*))
-        (format s "~@[~<~%~:; ~:@(~S~)~>~]" success?))
-      (finish-output s)
-      ))
+            (push (name entry) *passed-tests*)
+            (progn
+              (push (name entry) *failed-tests*)
+              (when *stop-on-failure*
+                (finish-output s)
+                (return-from do-entries nil)))))))
   (let ((pending (pending-tests))
         (expected-table (make-hash-table :test #'equal)))
     (dolist (ex *expected-failures*)
