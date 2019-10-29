@@ -6,21 +6,101 @@
 (in-package :cl-test)
 
 (eval-when (:compile-toplevel :load-toplevel)
-  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
+  ;; (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
   ;; (compile-and-load "random-int-form.lsp")
   )
 
 (defvar *print-random-type-prop-input* nil)
 (defparameter *random-type-prop-result* nil)
 
-(declaim (special *param-types* *params* *is-var?* *form*))
+(declaim (special *param-types* *params* *is-var?* *form* *eval-form*))
 (declaim (special *replicate-type*))
 
 (defparameter *default-reps* 1000)
+(defparameter *default-test-reps* 1)
+(defparameter *default-enclosing-the* nil)
 (defparameter *default-cell* nil)
-(defparameter *default-ignore* 'arithmetic-error)
+(defparameter *default-ignore* '(or arithmetic-error internal-test-failure))
 (defparameter *default-arg-the* t)
+(defparameter *with-satisfies-eval* nil) ;; when true, can generate (satisfies eval) types in make-random-type-containing
 
+(defparameter *default-special-param-fn* #'(lambda (p v) (declare (ignore v)) p)
+  "Function called on parameter names to possibly enrich them before
+using them as actual parameters to the function call")
+
+(defparameter *spfg* 0 "Dummy variable for SPECIAL-PARAM-FN1 code")
+
+(declaim (notinline my-identity))
+(defun my-identity (x) x)
+
+(defun special-param-fn1 (p v)
+  (if (coin)
+      p
+      (let ((tp (make-random-type-containing v)))
+        `(labels ((%f () (the ,tp ,p))) ;; (my-identity ,p))))
+           (declare (dynamic-extent (function %f)))
+           (multiple-value-call #'%f (values))))))
+
+(defparameter *spf1a-counter* 0)
+
+(defun special-param-fn1a (p v)
+  (if (eql (mod (incf *spf1a-counter*) 2) 0)
+      (if (coin)
+          p
+          (let ((tp (make-random-type-containing v)))
+            `(labels ((%f () (the ,tp ,p))) ;; (my-identity ,p))))
+               (declare (dynamic-extent (function %f)))
+               (multiple-value-call #'%f (values)))))
+      p))
+
+(defparameter *spf2* t)
+
+(defun special-param-fn2 (p v)
+  (if (coin)
+      p
+      (let* ((tp (make-random-type-containing v))
+             (z (handler-case (make-random-element-of-type tp)
+                  (error () nil))))
+        (if (typep z tp)
+            `(flet ((%f (x) (the ,tp x)))
+               (if *spf2* (%f ,p) (%f ',z)))
+            p))))
+
+(defun special-param-fn3 (p v)
+  (if (coin)
+      p
+      (let ((z (make-random-element-of-type (type-of v)))
+            (tp (make-random-type-containing v)))
+        (if (typep z (type-of p))
+            `(flet ((%f (x) ,(if (coin) 'x `(the ,tp x))))
+               (if *spf2* (%f ,p) (%f ',z)))
+            p))))
+
+(defparameter *spf3* 0)
+
+(defun special-param-fn4 (p v)
+  (if (coin)
+      p
+      (let ((z1 (make-random-element-of-type (type-of v)))
+            (z2 (make-random-element-of-type (type-of v)))
+            (tp (make-random-type-containing v)))
+        (if (and (typep z1 (type-of p))
+                 (typep z2 (type-of p)))
+            `(flet ((%f (x) ,(if (coin) 'x `(the ,tp x))))
+               (case *spf3*
+                 (0 (%f ,p))
+                 (1 (%f ',z1))
+                 (t (%f ',z2))))
+            p))))
+
+(defun special-param-fn5 (p v)
+  (if (coin)
+      p
+      (let ((tp1 (make-random-type-containing v))
+            (tp2 (make-random-type-containing v)))
+        `(labels ((%f () (the ,tp1 (the ,tp2 ,p))))
+           (declare (dynamic-extent (function %f)))
+           (multiple-value-call #'%f (values))))))
 ;;;
 ;;; The random type prop tester takes three required arguments:
 ;;;
@@ -71,6 +151,11 @@
 ;;;  reps        *default-reps*  Number of repetitions to try before stopping.
 ;;;                              The default is controlled by a special variable that
 ;;;                              is initially 1000.
+;;;  test-reps   *default-test-reps*
+;;;                              Execute each test TEST-REPS times (default 1).
+;;;                              This is intended to help track down failures due to
+;;;                              insideous memory corruption that show up some time
+;;;                              after the actual bad input.
 ;;;  enclosing-the nil           If true, with prob 1/2 randomly generate an enclosing
 ;;;                              (THE ...) form around the form invoking the operator.
 ;;;  arg-the     *default-arg-the*   If true (which is the initial value of the default
@@ -95,16 +180,19 @@
 (defun do-random-type-prop-tests
   (operator arg-types minargs
             &key
+            (special-param-fn *default-special-param-fn*)
             (maxargs minargs)
             (rest-type t)
             (reps *default-reps*)
-            (enclosing-the nil)
+            (test-reps *default-test-reps*)
+            (enclosing-the *default-enclosing-the*)
             (arg-the *default-arg-the*)
             (cell *default-cell*)
             (ignore *default-ignore*)
             (test #'regression-test::equalp-with-case)
             (replicate nil replicate-p))
   (assert (<= 1 minargs maxargs 20))
+  (assert (typep test-reps '(integer 1)))
 (prog1
   (dotimes (i reps)
     again
@@ -125,21 +213,20 @@
           ; (vals (mapcar #'make-random-element-of-type types))
           (vals (setq *params*
                       (or (make-random-arguments types) (go again))))
-          (vals
-           (if replicate
-               (mapcar #'replicate vals)
-             vals))
+          (vals (mapcar #'(lambda (r v) (if r (replicate v) v)) replicate vals))
           (is-var? (if (consp replicate)
+                        ;; Do not directly include values that are to be replicated
                        (progn
                          (assert (= (length replicate) (length vals)))
                          (loop for x in replicate collect (or x (coin))))
-                     (loop repeat (length vals) collect (coin))))
+                       (loop repeat (length vals) collect (coin))))
           (*is-var?* is-var?)
           (params (loop for x in is-var?
                         for p in param-names
                         when x collect p))
           (param-types (mapcar #'make-random-type-containing vals replicate))
-          (*param-types* param-types)
+          (*param-types* (progn (finish-output *trace-output*)
+                                 param-types))
           (type-decls (loop for x in is-var?
                             for p in param-names
                             for tp in param-types
@@ -148,11 +235,12 @@
           (rval (cl:handler-bind
                  (#+sbcl (sb-ext::compiler-note #'muffle-warning)
                          (warning #'muffle-warning))
-                 (let* ((vals (if replicate (mapcar #'replicate vals) vals))
-                        (eval-form (cons operator (loop for v in vals
-                                                        collect `(quote ,v)))))
+                  (let* ((vals (mapcar #'(lambda (r v) (if r (replicate v) v)) replicate vals))
+                         (eval-form (cons operator (loop for v in vals
+                                                      collect `(quote ,v)))))
                    ;; (print eval-form) (terpri)
-                   ;; (dotimes (i 100) (eval eval-form))
+                    ;; (dotimes (i 100) (eval eval-form))
+                    (setf *eval-form* eval-form)
                    (eval eval-form))))
           (result-type (if (and enclosing-the (integerp rval))
                            (make-random-type-containing rval)
@@ -161,11 +249,12 @@
                                     for v in vals
                                     for r in replicate
                                     for p in param-names
+                                    for p-arg = (if r p (funcall special-param-fn p v))
                                     collect (if x
                                                 (if (and arg-the (coin))
                                                     (let ((tp (make-random-type-containing v r)))
-                                                      `(the ,tp ,p))
-                                                  p)
+                                                      `(the ,tp ,p-arg))
+                                                  p-arg)
                                               (if (or (consp v)
                                                       (and (symbolp v) (not (or (keywordp v)
                                                                                 (member v '(nil t))))))
@@ -196,19 +285,21 @@
              (*print-case* :downcase))
          (print (list :form form :vals vals))))
      (finish-output)
-     (let* ((param-vals (loop for x in is-var?
-                              for v in vals
-                              when x collect v))
-            (fn (cl:handler-bind
-                 (#+sbcl (sb-ext::compiler-note #'muffle-warning)
-                         (warning #'muffle-warning))
-                 (compile nil form)))
-            (result
-             (if store-into-cell?
-                 (let ((r (make-array nil :element-type upgraded-result-type)))
-                   (apply fn r param-vals)
-                   (aref r))
-               (apply fn param-vals))))
+     (let ((result nil))
+       (loop repeat test-reps
+            do (when *print-random-type-prop-input* (princ #\.))
+            do (let ((param-vals (loop for x in is-var?
+                                    for v in vals
+                                    when x collect v))
+                     (fn (cl:handler-bind
+                             (#+sbcl (sb-ext::compiler-note #'muffle-warning)
+                                     (warning #'muffle-warning))
+                           (compile nil form))))
+                 (setf result (if store-into-cell?
+                                  (let ((r (make-array nil :element-type upgraded-result-type)))
+                                    (apply fn r param-vals)
+                                    (aref r))
+                                  (apply fn param-vals)))))
        (setq *random-type-prop-result*
              (list :upgraded-result-type upgraded-result-type
                    :form form
@@ -246,7 +337,11 @@
 variable *REPLICATE-TYPE* is true, and the value is mutable, then do not
 use the value in MEMBER or EQL type specifiers."))
 
-(defun make-random-type-containing (type &optional *replicate-type*)
+(defvar *replicate-type* nil
+  "When true, the type is for a parameter that will be replicated, so don't
+generate types that depend on its object identity like EQL or MEMBER")
+
+(defun make-random-type-containing (type &optional (*replicate-type* *replicate-type*))
   (declare (special *replicate-type*))
   (make-random-type-containing* type))
 
@@ -255,9 +350,31 @@ use the value in MEMBER or EQL type specifiers."))
      (declare (special *replicate-type*))
      (rcase
       (1 t)
+      (1 (if (and *with-satisfies-eval* (not (or (symbolp val)
+                                                 (listp val))))
+             '(satisfies eval)
+             (throw 'fail nil)))
       (1 (if (consp val) 'cons 'atom))
       (1 (if *replicate-type* (make-random-type-containing* val)
            `(eql ,val)))
+      (1 ; (when (or (listp val) (symbolp val)) (throw 'fail nil))
+         (let* ((e (make-random-element-of-type t)) ;; '(and t (not list) (not symbol))))
+                (t2 (make-random-type-containing e))
+                (t1 (make-random-type-containing val)))
+           (rcase
+             (1 `(or ,t1 ,t2))
+             (1 `(or ,t2 ,t1)))))
+      (1 (let* ((e1 (make-random-element-of-type t))
+                (e2 (make-random-element-of-type t))
+                (t1 (make-random-type-containing e1))
+                (t2 (make-random-type-containing e2))
+                (t3 (make-random-type-containing val))
+                (t4 (make-random-type-containing val)))
+           (rcase
+             (1 `(and (or ,t1 ,t3) (or ,t2 ,t4)))
+             (1 `(and (or ,t1 ,t3) (or ,t4 ,t2)))
+             (1 `(and (or ,t3 ,t1) (or ,t2 ,t4)))
+             (1 `(and (or ,t3 ,t1) (or ,t4 ,t2))))))
       (1
        (if *replicate-type* (make-random-type-containing* val)
          (let* ((n1 (random 4))
@@ -295,6 +412,11 @@ use the value in MEMBER or EQL type specifiers."))
       (4 (let ((lo (abs (make-random-integer)))
                (hi (abs (make-random-integer))))
            `(integer ,(- val lo) ,(+ val hi))))
+      (1 (let ((len (max 1 (integer-length val)))
+               (r (min (random 80) (random 80))))
+           (if (and (>= val 0) (coin))
+               `(unsigned-byte ,(+ len r))
+               `(signed-byte ,(+ len (max 1 r))))))
       (1 (if (>= val 0) 'unsigned-byte (throw 'fail nil)))))
 
   (2 ((val character))
@@ -352,6 +474,8 @@ use the value in MEMBER or EQL type specifiers."))
                `(,name ,(coerce 0 name) ,val)
              `(,name ,val ,(coerce 0 name)))))))
   )
+
+
 
 (defun float-types-containing (val)
   (loop for n in '(short-float single-float double-float long-float float)
@@ -462,8 +586,7 @@ use the value in MEMBER or EQL type specifiers."))
 ;;; Macro for defining random type prop tests
 
 (defmacro def-type-prop-test (name &body args)
-  `(deftest ,(intern (concatenate 'string "RANDOM-TYPE-PROP."
-                                  (string name))
+  `(deftest ,(intern (concatenate 'string "RTP." (string name))
                      (find-package :cl-test))
      (do-random-type-prop-tests ,@args)
      nil))
@@ -483,8 +606,11 @@ use the value in MEMBER or EQL type specifiers."))
    (1 `(simple-array ,element-type (,length)))
    (2 (make-list-type length 'null element-type))))
 
+(defvar *random-sequence-type* nil)
+
 (defun make-random-sequence-type-containing (element &optional *replicate-type*)
-  (make-sequence-type (random 10) (make-random-type-containing* element)))
+  (setf *random-sequence-type*
+        (make-sequence-type (random 10) (make-random-type-containing* element))))
 
 (defun same-set-p (set1 set2 &rest args &key key test test-not)
   (declare (ignorable key test test-not))
@@ -510,6 +636,11 @@ use the value in MEMBER or EQL type specifiers."))
   (declare (ignore v1 other))
   (let ((d (length v2))) `(integer 0 ,d)))
 
+(defun start-type-for-v (v &rest other)
+  (let* ((d (length v))
+         (end (or (cadr (member :end other)) d)))
+    `(integer 0 ,end)))
+
 (defun start-type-for-v1 (v1 v2 &rest other)
   (declare (ignore v2))
   (let* ((d (length v1))
@@ -521,6 +652,11 @@ use the value in MEMBER or EQL type specifiers."))
   (let* ((d (length v2))
          (end2 (or (cadr (member :end2 other)) d)))
     `(integer 0 ,end2)))
+
+(defun end-type-for-v (v &rest other)
+  (let ((d (length v))
+        (start (or (cadr (member :start other)) 0)))
+    `(integer ,start ,d)))
 
 (defun end-type-for-v1 (v1 v2 &rest other)
   (declare (ignore v2))
@@ -687,3 +823,35 @@ use the value in MEMBER or EQL type specifiers."))
 (defun equalp-and-eql-elements (s1 s2)
   (and (equalp s1 s2)
        (every #'eql s1 s2)))
+
+;;; Bag equality of lists
+(defun bag-equal (b1 b2 &key (test #'eql))
+  (and
+   (= (length b1) (length b2))
+   (cond
+     ((or (member test '(eq eql equal equalp))
+          (member test (mapcar #'symbol-function '(eq eql equal equalp))))
+      (let ((tab (make-hash-table :test test)))
+        (dolist (x b1) (incf (gethash x tab 0)))
+        (dolist (x b2) (decf (gethash x tab 0)))
+        (maphash (lambda (k v) (declare (ignore k))
+                         (unless (eql v 0)
+                           (return-from bag-equal nil)))
+                 tab)
+        t))
+     (t
+      ;; Cannot use hash tables
+      ;; Be quadratically slow
+      (setf b2 (copy-list b2))
+      (loop for x in b1
+         always (cond
+                  ((funcall test x (car b2))
+                   (pop b2)
+                   t)
+                  (t
+                   (loop for e on b2
+                      do (when (and (cdr e)
+                                (funcall test x (cadr e)))
+                           (setf (cdr e) (cddr e))
+                           (return t))
+                      finally (return nil)))))))))
