@@ -7,16 +7,8 @@
 
 (in-package :cl-test)
 
-(load "random-type-prop-tests-01.lsp")
-(load "random-type-prop-tests-02.lsp")
-(load "random-type-prop-tests-03.lsp")
-(load "random-type-prop-tests-04.lsp")
-(load "random-type-prop-tests-05.lsp")
-(load "random-type-prop-tests-06.lsp")
-(load "random-type-prop-tests-07.lsp")
-(load "random-type-prop-tests-08.lsp")
-(load "random-type-prop-tests-09.lsp")
-(load "random-type-prop-tests-10.lsp")
+(loop for i from 1 to 17
+   do (load (format nil "random/random-type-prop-tests-~2,vD.lsp" #\0 i)))
 
-(load "random-type-prop-tests-structs.lsp")
+(load "random/random-type-prop-tests-structs.lsp")
 
