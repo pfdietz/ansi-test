@@ -454,6 +454,10 @@
   (list 'bit #'make-random-sequence-type-containing)
   2)
 
+(def-type-prop-test position.12 'position
+  (list 'symbol '(vector symbol))
+  2)
+
 ;;; POSITION-IF
 
 (def-type-prop-test position-if.1 'position-if

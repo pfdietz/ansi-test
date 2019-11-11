@@ -78,6 +78,9 @@
 
 (declaim (notinline fn-with-state))
 
+(defgeneric make-random-element-of-type (type)
+  (:documentation "Create a random element of a lisp type."))
+
 ;; Structure type(s) used in tests
 
 (defparameter *int-structs* nil
@@ -95,7 +98,10 @@ structures used in random tests.")
          (setf (get ',constructor 'int-struct-constructor-of) ',name)
          (pushnew '(,name ,constructor (:n ,accessor ,type)) *int-structs* :test #'equal))
        (defstruct ,name
-         (n ,initform :type ,type)))))
+         (n ,initform :type ,type))
+       (defmethod make-random-element-of-type ((type (eql ',name)))
+         (,constructor :n (make-random-element-of-type ',type)))
+       )))
 
 (defmethod is-int-struct-type? ((sym symbol))
   (get sym 'is-int-struct-type))
@@ -112,12 +118,25 @@ structures used in random tests.")
   ;; For lambda exprs
   nil)
 
-(eval-when (:load-toplevel)
-  (def-int-struct int integer)
-  (loop for i from 1 to 64
-     do (eval `(def-int-struct ,i (unsigned-byte ,i))))
-  (loop for i from 2 to 64
-     do (eval `(def-int-struct ,(format nil "~AS" i) (signed-byte ,i)))))
+(def-int-struct int integer)
+(progn . #.(loop for i from 1 to 64
+              collect `(def-int-struct ,i (unsigned-byte ,i))))
+(progn . #.(loop for i from 2 to 64
+              collect `(def-int-struct ,(format nil "~AS" i) (signed-byte ,i))))
+
+;;; Class used for data
+
+(defclass rif-class-1 ()
+  ((foo :initarg :foo :initform 0 :type integer))
+  (:documentation "Class used for data in random-int-form"))
+
+(defclass rif-class-2 (rif-class-1)
+  ((bar :initarg :bar :initform 0 :type integer))
+  (:documentation "Another class used for data in random-int-form"))
+
+(defclass rif-class-3 (rif-class-1)
+  ((baz :initarg :baz :initform 0 :type integer))
+  (:documentation "Yet another class used for data in random-int-form"))
 
 ;;; Execution of tests in multiple threads
 
@@ -333,15 +352,21 @@ in the thing being tested.  Should not count as a test failure."))
 ;;; Run the random tester, collecting failures into the special
 ;;; variable $y.
 
-(defun loop-random-int-forms (&optional (size 200) (nvars 3)
+(defun loop-random-int-forms (&optional (size 200) (nvars 3) (max-iter nil)
                                 (int-form-fn #'make-random-integer-form))
   (unless (boundp '$x) (setq $x nil))
   (unless (boundp '$y) (setq $y nil))
   (loop
-   for i from 1 do
+     for i from 1
+     while (or (null max-iter) (>= max-iter i))
+     do
        (when *random-int-form-progress-output*
          (format t "~:[ ~;*~]~6D | " $x i)
          (finish-output *standard-output*))
+       ;; Under WSL, interrupts sometimes become disabled.
+       ;; Throwing and catching an error clears this.
+       #+sbcl
+       (handler-case (error "foo") (error ()))
        (let ((x (test-random-integer-forms
                  size nvars *loop-random-int-form-period*
                  :index (* (1- i) *loop-random-int-form-period*)
@@ -1327,7 +1352,10 @@ of the same values"
 
 
 (defun make-random-integer-case-form (size)
-  (let ((ncases (1+ (random 10))))
+  (let ((ncases (1+ (random 10)))
+        (non-int-rate  (rcase (1 0.0) (1 (min (random 1.0) (random 1.0)))))
+        (non-int-type (random-from-seq #(base-char character symbol float complex
+                                         (or base-char character symbol float complex)))))
     (if (< (+ size size) (+ ncases 2))
         ;; Too small, give up
         (make-random-integer-form size)
@@ -1341,8 +1369,11 @@ of the same values"
               (loop
                for case-size in (cddr sizes)
                for vals = (loop repeat (1+ (min (random 10) (random 10)))
-                                collect (random-from-interval
-                                         upper-bound lower-bound))
+                             collect (if (>= (random 1.0) non-int-rate)
+                                         (random-from-interval
+                                          upper-bound lower-bound)
+                                         (make-random-element-of-type
+                                          non-int-type)))
                for result = (make-random-integer-form case-size)
                repeat ncases
                collect `(,vals ,result)))
@@ -1562,9 +1593,6 @@ of the same values"
   (let* ((pform (random 33))
          (sform (1+ (random 33))))
     `(byte ,sform ,pform)))
-
-(defgeneric make-random-element-of-type (type)
-  (:documentation "Create a random element of a lisp type."))
 
 (defgeneric make-random-element-of-compound-type (type-op type-args)
   (:documentation "Create a random element of type `(,TYPE-OP ,@TYPE-ARGS)")
@@ -2094,6 +2122,8 @@ of the same values"
 (defmethod make-random-element-of-type ((type class))
   (make-random-element-of-type (class-name type)))
 
+(defmethod make-random-element-of-type ((type (eql 'package)))
+  (find-package (random-from-seq #(:keyword :cl-user :cl :cl-test))))
 (defmethod make-random-element-of-type ((type (eql 'bit))) (random 2))
 (defmethod make-random-element-of-type ((type (eql 'boolean)))
   (random-from-seq #(nil t)))
@@ -2184,19 +2214,54 @@ of the same values"
    ((atom t *) (make-random-element-of-type
                 (random-from-seq #(real symbol boolean integer unsigned-byte
                                         #-ecl complex character
-                                        (string 1) (bit-vector 1)))))
+                                   (string 1) (bit-vector 1)))))
    (t (call-next-method type))
    ))
 
+(defmethod make-random-element-of-type ((type (eql 'structure-object)))
+  (make-random-element-of-type (car (random-from-seq *int-structs*))))
+
 (defmethod make-random-element-of-type ((type (eql t)))
   (make-random-element-of-type
-   (random-from-seq #(real symbol boolean integer unsigned-byte
-                      #-ecl complex
-                      character (string 1) (bit-vector 1)
-                      (or (cons t null)
-                       (cons t (cons t null))
-                       (cons t (cons t (cons t null))))
-                      (vector t 1)))))
+   (rcase
+     (10 'real)
+     (10 'symbol)
+     (10 'boolean)
+     (10 (rcase
+          (1 'integer)
+          (1 '(integer 0))
+          (1 `(unsigned-byte ,(1+ (random 32))))
+          (1 `(signed-byte ,(1+ (random 32))))))
+     #-ecl
+     (3 (rcase
+          (1 'complex)
+          (1 '(complex single-float))
+          (1 '(complex double-float))))
+     (3 'base-char)
+     (2 'character)
+     (3 `(base-string ,(random 10)))
+     (2 `(string ,(random 10)))
+     (5 `(bit-vector ,(random 10)))
+     (10 '(or (cons t null)
+           (cons t (cons t null))
+           (cons t (cons t (cons t null)))))
+     (5 '(vector t 1))
+     (2 'package)
+     (3 (car (random-from-seq *int-structs*))))))
+  
+#+sbcl
+(defmethod make-random-element-of-type ((type (eql 'sb-kernel:simple-character-string)))
+  (make-random-element-of-type 'simple-string))
+#+sbcl
+(defmethod make-random-element-of-type ((type (eql 'sb-kernel:complex-single-float)))
+  (make-random-element-of-type '(complex single-float)))
+#+sbcl
+(defmethod make-random-element-of-type ((type (eql 'sb-kernel:complex-double-float)))
+  (make-random-element-of-type '(complex double-float)))
+#+sbcl
+(defmethod make-random-element-of-type ((type (eql 'sb-kernel::character-string)))
+  (make-random-element-of-type 'string))
+
 
 (defun make-random-character ()
   (loop

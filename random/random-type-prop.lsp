@@ -375,6 +375,7 @@ generate types that depend on its object identity like EQL or MEMBER")
              (1 `(and (or ,t1 ,t3) (or ,t4 ,t2)))
              (1 `(and (or ,t3 ,t1) (or ,t2 ,t4)))
              (1 `(and (or ,t3 ,t1) (or ,t4 ,t2))))))
+      (1 (class-of val))
       (1
        (if *replicate-type* (make-random-type-containing* val)
          (let* ((n1 (random 4))
