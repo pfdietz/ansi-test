@@ -6,6 +6,7 @@
 (in-package :cl-test)
 
 (def-type-prop-test list.1 'list nil 1 :rest-type 't :maxargs 10)
+(def-type-prop-test list.1a 'list nil 1 :rest-type 't :maxargs 20)
 (def-type-prop-test list.2 '(lambda (x) (car (list x))) '(t) 1)
 (def-type-prop-test list.3 '(lambda (x y) (cdr (list x y))) '(t t) 2)
 (def-type-prop-test list.4 '(lambda (x y z) (cadr (list x y z))) '(t t t) 3)
