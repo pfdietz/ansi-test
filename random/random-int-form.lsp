@@ -84,7 +84,7 @@
 ;; Structure type(s) used in tests
 
 (defparameter *int-structs* nil
-  "List of descriptors (name constructor (initarg accessor type)*) for the 
+  "List of descriptors (name constructor (initarg accessor type)*) for the
 structures used in random tests.")
 
 (defmacro def-int-struct (tag type &optional (initform 0))
@@ -187,13 +187,38 @@ structures used in random tests.")
 ;;; (g i) runs the ith collected unoptimized test
 ;;; (p i) prints the ith test (forms, input values, and other information)
 
+(declaim (special *file-lam*))
+
+(defparameter *in-file* nil
+  "When true, COMPILE* defaults to file compilation")
+
+(defun compile* (lam &key (in-file *in-file*))
+  (if in-file
+      (let ((name "tmp.lsp"))
+        (with-open-file (s name :direction :output
+                           :if-exists :supersede
+                           :if-does-not-exist :create)
+          (let ((*package* (find-package :cl-test))
+                (*print-readably* t) (*print-circle* t))
+            (format s "~s~%" '(in-package :cl-test))
+            (format s "(defparameter *file-lam* ~s)~%" lam)
+            (finish-output s)))
+        (multiple-value-bind (fasl warning-p error-p)
+            (compile-file name)
+          (declare (ignore warning-p))
+          (when error-p
+            (error "Error when file compiling ~s" lam))
+          (load fasl)
+          *file-lam*))
+      (compile nil lam)))
+
 (defun f (i) (let ((plist (elt $y i)))
-               (apply (compile nil (getf plist :optimized-lambda-form))
+               (apply (compile* (getf plist :optimized-lambda-form))
                       (getf plist :vals))))
 
 (defun g (i) (let ((plist (elt $y i)))
                (if *compile-unoptimized-form*
-                   (apply (compile nil (getf plist :unoptimized-lambda-form))
+                   (apply (compile* (getf plist :unoptimized-lambda-form))
                           (getf plist :vals))
                  (apply (the function (eval `(function ,(getf plist :unoptimized-lambda-form))))
                         (getf plist :vals)))))
@@ -271,13 +296,13 @@ in the thing being tested.  Should not count as a test failure."))
                         4 ;; prog1, multiple-value-prog1
                         2 ;; prog2
                         2 ;;isqrt
-                        40 ;; (the integer ...)
+                        10 ;; (the integer ...)
                         1 ;; handler-bind
-                        1 ;; restart-bind 
+                        1 ;; restart-bind
                         #-armedbear 1 ;; macrolet
                         #-armedbear 1;; symbol-macrolet
                         #-allegro 5 ;; dotimes
-                        5 ;; loop
+                        50 ;; loop
                         5 ;; count
                         #-(or cclasp mutation gcl ecl armedbear) 2 ;; load-time-value
                         2 ;; eval
@@ -291,7 +316,7 @@ in the thing being tested.  Should not count as a test failure."))
                         #-cclasp 2 ;; complex (degenerate case)
                         1 ;; quotient (1)
                         1 ;; quotient (-1)
-                        5 ;; tagbody
+                        50 ;; tagbody
                         60 ;; conditional
                         #-(or mutation poplog) 5 ;; deposit-field, dpb
                         #-(or mutation allegro poplog) 10 ;; ldb, mask-field
@@ -309,10 +334,10 @@ in the thing being tested.  Should not count as a test failure."))
                         5 ;; identity-notinline
                         4 ;; fn-with-state
                         #+sbcl
-                        20 ;; Example of sb ffi call
+                        2 ;; Example of sb ffi call
                         10 ;; m-v-b-if
                         5 ;; inlined lambda
-                        20 ;; stacked comparisons
+                        10 ;; stacked comparisons
                         ))))
 
 (defparameter *make-random-integer-form-cdf*
@@ -675,7 +700,7 @@ the check."
         (1 (if *innocuous-failures*
                `(error 'innocuous-failure)
                nil))
-        (1 (if *go-tags* `(go ,(random-from-seq *go-tags*)) nil))
+        (5 (if *go-tags* `(go ,(random-from-seq *go-tags*)) nil))
         (2 (if *flet-names*
                (let* ((flet-entry (random-from-seq *flet-names*))
                       (flet-name (car flet-entry))
@@ -859,15 +884,15 @@ the check."
           ,(make-random-integer-form s1)
           ,(make-random-byte-spec-form s2)
           ,(make-random-integer-form s3)))
-     
+
      #-(or mutation allegro poplog)
      (destructuring-bind (s1 s2) (random-partition (1- size) 2)
        `(,(random-from-seq '(ldb mask-field))
           ,(make-random-byte-spec-form s1)
           ,(make-random-integer-form s2)))
-     
+
      (make-random-integer-binding-form size)
-     
+
      ;; progv
      (make-random-integer-progv-form size)
 
@@ -1114,7 +1139,7 @@ the check."
        (if ,pred
            (values ,@true-exprs)
            (values ,@false-exprs))
-     ,@body))           
+     ,@body))
 
 (defun make-random-mvb-if-form (size)
   (let* ((nvars (+ 2 (random 3)))
@@ -1464,7 +1489,7 @@ of the same values"
                     ,form2))))))))
 
 (defun make-random-tagbody (size)
-  (let* ((num-forms (random 6))
+  (let* ((num-forms (random 12))
          (tags nil))
     (loop for i below num-forms
           do (loop for tag = (rcase
@@ -2437,7 +2462,7 @@ of the same values"
                               ,@(cdr clf)))
                      (compile opt-defun-name)
                      (symbol-function opt-defun-name))
-                    (t (compile nil lambda-form)))
+                    (t (compile* lambda-form)))
                  (let* ((stop-time (get-universal-time))
                         (total-time (- stop-time start-time)))
                    (when (> total-time *max-compile-time*)
@@ -2537,16 +2562,18 @@ of the same values"
 
 (declaim (special *prune-table*))
 
-(defun prune-int-form (input-form vars var-types vals-list opt-decls-1 opt-decls-2)
+(defun prune-int-form (input-form vars var-types vals-list opt-decls-1 opt-decls-2
+                       &key (test-fn #'test-int-form))
   "Conduct tests on selected simplified versions of INPUT-FORM.  Return the
    minimal form that still causes some kind of failure."
   (loop do
         (let ((form input-form))
           (flet ((%try-fn (new-form)
-                          (when (test-int-form new-form vars var-types vals-list
-                                               opt-decls-1 opt-decls-2)
-                            (setf form new-form)
-                            (throw 'success nil))))
+                   (when (funcall test-fn
+                                  new-form vars var-types vals-list
+                                  opt-decls-1 opt-decls-2)
+                     (setf form new-form)
+                     (throw 'success nil))))
             (let ((*prune-table* (make-hash-table :test #'eq)))
               (loop
                (catch 'success
@@ -2584,8 +2611,8 @@ of the same values"
    (when (gethash form *prune-table*)
      (return-from prune-boolean nil))
    (flet ((try (x)
-           (format t "try ~A~%" x)
-           (funcall try-fn x)))
+            (format t "try ~A~%" x)
+            (funcall try-fn x)))
      (typecase form
        ((member nil t) nil)
        (cons
@@ -2625,7 +2652,7 @@ of the same values"
        (otherwise
         (try t)
         (try nil)))))
-    
+
 ;;;
 ;;; The call (PRUNE form try-fn) attempts to simplify the lisp form
 ;;; so that it still satisfies TRY-FN.  The function TRY-FN should
@@ -2686,7 +2713,7 @@ of the same values"
                                         ,false-exprs
                                       ,body-expr)))))
              ))
-             
+
 
           ((quote) nil)
 
@@ -2878,6 +2905,10 @@ of the same values"
           (prune-nary-fn form try-fn)
           (prune-fn form try-fn))
 
+         ((complex)
+          (when args
+            (try (car args))))
+
          ((- + * min max logand logior logxor logeqv gcd lcm values)
           (when (every #'constantp args)
             (try (eval form)))
@@ -2929,6 +2960,12 @@ of the same values"
           (when (= (length args) 2)
             (let ((arg1 (car args))
                   (arg2 (cadr args)))
+              (when (vectorp arg1)
+                (map nil try-fn arg1))
+              (when (and (consp arg1)
+                         (eql (car arg1) 'quote)
+                         (listp (cadr arg1)))
+                (mapc try-fn (cadr arg1)))
               (when (and (consp arg2)
                          (eql (car arg2) 'min)
                          (integerp (cadr arg2)))
@@ -3553,7 +3590,7 @@ of the same values"
 
     (when (>= len 1)
       (let ((val-form (cadar binding-list)))
-        (when (consp val-form)
+        (if (consp val-form)
           (case (car val-form)
             ((make-array)
              (let ((init (getf (cddr val-form) :initial-element)))
@@ -3561,7 +3598,10 @@ of the same values"
                  (funcall try-fn init))))
             ((cons)
              (funcall try-fn (cadr val-form))
-             (funcall try-fn (caddr val-form)))))))
+             (funcall try-fn (caddr val-form)))
+            (t
+             (funcall try-fn val-form)))
+          (funcall try-fn val-form))))
 
     ;; Try to simplify the forms in the RHS of the bindings
     (prune-list binding-list
@@ -3575,15 +3615,26 @@ of the same values"
                 #'(lambda (bindings)
                     (funcall try-fn `(,op ,bindings ,@body))))
 
-    ;; Prune off unused variable
+    ;; Prune off unused variable -- just one binding
+    #+(or)
     (when (and binding-list
                (not (rest binding-list))
                (let ((name (caar binding-list)))
                  (and (symbolp name)
-                      (not (find-if-subtree #'(lambda (x) (eq x name)) body)))))
+                      (not (find-if-subtree (lambda (x) (eq x name)) body)))))
       (funcall try-fn `(progn ,@body)))
 
+    ;; Prune off unused variable -- more than one binding
+    (when (and binding-list
+               ;; (rest binding-list)
+               (let ((name (caar binding-list)))
+                 (and (symbolp name)
+                      (not (find-if-subtree (lambda (x) (eq x name))
+                                            (cons (cdr binding-list) body))))))
+        (funcall try-fn `(let ,(rest binding-list) ,@body)))
+
     ;; Try to simplify the body of the LET form
+    ;; Bug in this?
     (when body
       (unless binding-list
         (funcall try-fn (car (last body))))
@@ -3798,8 +3849,8 @@ of the same values"
                (let* ((fn1 ',optimized-lambda-form)
                       (fn2 ',unoptimized-lambda-form)
                       (vals ',vals)
-                      (v1 (apply (compile nil fn1) vals))
-                      (v2 (apply (compile nil fn2) vals)))
+                      (v1 (apply (compile* fn1) vals))
+                      (v2 (apply (compile* fn2) vals)))
                  (if (eql v1 v2)
                      :good
                    (list v1 v2)))
