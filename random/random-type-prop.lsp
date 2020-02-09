@@ -101,6 +101,7 @@ using them as actual parameters to the function call")
         `(labels ((%f () (the ,tp1 (the ,tp2 ,p))))
            (declare (dynamic-extent (function %f)))
            (multiple-value-call #'%f (values))))))
+
 ;;;
 ;;; The random type prop tester takes three required arguments:
 ;;;
@@ -241,7 +242,9 @@ using them as actual parameters to the function call")
                    ;; (print eval-form) (terpri)
                     ;; (dotimes (i 100) (eval eval-form))
                     (setf *eval-form* eval-form)
-                   (eval eval-form))))
+                    ;; (format t "Calling EVAL on ~s~%" eval-form)
+                    (eval eval-form))))
+           ;; (_ (format t "EVAL returned ~s~%" rval))
           (result-type (if (and enclosing-the (integerp rval))
                            (make-random-type-containing rval)
                          t))
@@ -294,7 +297,17 @@ using them as actual parameters to the function call")
                      (fn (cl:handler-bind
                              (#+sbcl (sb-ext::compiler-note #'muffle-warning)
                                      (warning #'muffle-warning))
-                           (compile nil form))))
+                           ;; (format t "Compiling...") (finish-output)
+                           (multiple-value-bind (fn warning-p failure-p)
+                               (compile nil form)
+                             (declare (ignore warning-p))
+                             ;; (format t "...done~%") (finish-output)
+                             (when failure-p
+                               (return
+                                 (setf *random-type-prop-result*
+                                       (list :form form
+                                             :compile-error t))))
+                             fn))))
                  (setf result (if store-into-cell?
                                   (let ((r (make-array nil :element-type upgraded-result-type)))
                                     (apply fn r param-vals)
@@ -307,7 +320,9 @@ using them as actual parameters to the function call")
                    :result result
                    :rval rval))
        (unless (funcall test result rval)
-         (return *random-type-prop-result*))))
+         (return *random-type-prop-result*))
+       ;; (format t "p") (finish-output)
+       ))
     ;; #+allegro (excl::gc t)
   ))))
 
