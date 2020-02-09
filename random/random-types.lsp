@@ -194,8 +194,10 @@
 
 (defun test-random-mutated-types (n size &key (reps 1))
   (loop for t1 = (make-random-type size)
-        for t2 = (let ((x t1)) (loop repeat reps
-                                     do (setq x (mutate-type x))) x)
+     for t2 = (let ((x t1))
+                (loop repeat reps
+                   do (setq x (mutate-type x)))
+                x)
         for i from 0 below n
         ;; do (print (list t1 t2))
         do (setf *random-types* (list t1 t2))
@@ -206,6 +208,8 @@
         finally (terpri)))
 
 (defun test-types (t1 t2)
+  "Return true if a bug in subtypep has been found related
+to types T1 and T2."
   (multiple-value-bind (sub success)
       (subtypep t1 t2)
     (when success
@@ -213,6 +217,9 @@
           (check-all-subtypep t1 t2)
         (let ((nt1 `(not ,t1))
               (nt2 `(not ,t2)))
+          ;; Here, subtypep thinks t1 is not a subtype of t1,
+          ;; so confirm subtypep does not also think
+          ;; (not t2) is a subtype of (not t1)
           (subtypep nt2 nt1))))))
 
 (defun prune-type (tp try-fn)
@@ -291,10 +298,16 @@
   (values))
 
 (defun prune-type-pair (pair &optional (fn #'test-types))
+  "PAIR is a list of two types, and FN is a function that,
+when called on two types, returns T if the pair succeeds
+at demonstrating some bug.  Reduce the pair to a minimal
+pair that still shows the bug."
   (declare (type function fn))
+  (assert (typep pair '(cons t (cons t null))))
   (let ((t1 (first pair))
         (t2 (second pair))
         changed)
+    (assert (funcall fn t1 t2))
     (loop
      do (flet ((%try2 (new-tp)
                       (when (funcall fn t1 new-tp)
@@ -344,12 +357,14 @@
         collect (list t1 t2 t3)
         finally (terpri)))
 
-(defun prune-type-triple (pair &optional (fn #'test-type-triple))
+(defun prune-type-triple (triple &optional (fn #'test-type-triple))
   (declare (type function fn))
-  (let ((t1 (first pair))
-        (t2 (second pair))
-        (t3 (third pair))
+  (assert (typep triple '(cons t (cons t (cons t null)))))
+  (let ((t1 (first triple))
+        (t2 (second triple))
+        (t3 (third triple))
         changed)
+    (assert (funcall fn t1 t2 t3))
     (loop
      do (flet ((%try2 (new-tp)
                       (when (funcall fn t1 new-tp t3)
@@ -371,7 +386,7 @@
             (prune-type t1 #'%try1)))
      do (flet ((%try3 (new-tp)
                       (when (funcall fn t1 t2 new-tp)
-                        (print "Success in second loop")
+                        (print "Success in third loop")
                         (print new-tp)
                         (setq t3 new-tp
                               changed t)
