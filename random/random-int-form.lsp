@@ -668,14 +668,30 @@ the check."
        (or (eql (caddr type) 0)
            (null (caddr type)))))
 
+(defparameter *make-error-forms* nil
+  "When true, cause MAKE-RANDOM-INTEGER-FORM to sometimes
+generate (COMPILE-TIME-ERROR) form.  The presence of this form
+causes the compiler to abort, so the pruner should simplify
+the form to just it.  If this does not happen, the pruner could
+be improved.  If this variable is a real in the range [0,1] then
+use it as a probability for actually generating an error
+form, multiplied by the base probability.")
+
+(defmacro compile-time-error (&rest args)
+  (apply #'error args))
+
 (defun make-random-integer-form (size)
   "Generate a random legal lisp form of size SIZE (roughly)."
-
   (if (<= size 1)
       ;; Leaf node -- generate a variable, constant, or flet function call
       (loop
        when
        (rcase
+        ;; Generate error forms to test the pruner
+        (1 (when (and *make-error-forms*
+                      (or (not (typep *make-error-forms* '(real 0 1)))
+                          (<= (random 1.0) *make-error-forms*)))
+             '(compile-time-error)))
         (10 (make-random-integer))
         (9 (if *vars*
                (let* ((desc (random-var-desc))
@@ -1099,6 +1115,7 @@ the check."
                                      ,@(rcase (1 nil) (1 '(:adjustable t)))))
                `(array integer (,size1 ,size2))))
           |#
+          #+(or)
           (1 (setq e1 `(make-rif-struct-int :n ,e1))
              'rif-struct-int)
           (1 (let* ((struct-descriptor (random-from-seq *int-structs*))
@@ -1407,11 +1424,16 @@ of the same values"
            ,@cases
            (t ,(make-random-integer-form (second sizes))))))))
 
+(defparameter +flet-symbols+ #(%f1 %f2 %f3 %f4 %f5 %f6 %f7 %f8 %f9 %f10
+                               %f11 %f12 %f13 %f14 %f15 %f16 %f17 %f18))
+
+(defun is-flet-symbol (sym)
+  (find sym +flet-symbols+))
+
 (defun make-random-flet-form (size)
   "Generate random flet, labels forms, for now with no arguments
    and a single binding per form."
-  (let ((fname (random-from-seq #(%f1 %f2 %f3 %f4 %f5 %f6 %f7 %f8 %f9 %f10
-                                  %f11 %f12 %f13 %f14 %f15 %f16 %f17 %f18))))
+  (let ((fname (random-from-seq +flet-symbols+)))
     (if (assoc fname *flet-names*)
         ;; Fail if the name is in use
         (make-random-integer-form size)
@@ -2273,7 +2295,7 @@ of the same values"
      (5 '(vector t 1))
      (2 'package)
      (3 (car (random-from-seq *int-structs*))))))
-  
+
 #+sbcl
 (defmethod make-random-element-of-type ((type (eql 'sb-kernel:simple-character-string)))
   (make-random-element-of-type 'simple-string))
@@ -2611,7 +2633,7 @@ of the same values"
    (when (gethash form *prune-table*)
      (return-from prune-boolean nil))
    (flet ((try (x)
-            (format t "try ~A~%" x)
+            ;; (format t "try ~A~%" x)
             (funcall try-fn x)))
      (typecase form
        ((member nil t) nil)
@@ -2642,12 +2664,29 @@ of the same values"
                (try `(not ,e))))
             ((case)
              (prune-case form try-fn))
-            ((= /= < > <= >= evenp oddp minusp logbitp)
+            ((= /= < > <= >= evenp oddp minusp logbitp zerop equal eql eq
+                min max fn-with-state)
+             (mapc #'try args)
              (prune-fn form try-fn))
+            ((block)
+             (assert (>= nargs 1))
+             (when (> nargs 1)
+               (let ((tag (car args)))
+                 (unless (find-in-tree tag (cdr args))
+                   (try (cadr args)))
+                 (prune (cadr args)
+                        (lambda (form) `(block ,tag ,form))))))
             (typep
              (try (car args))
              (prune (car args)
                     #'(lambda (form) (try `(,op ,form ,@(cdr args))))))
+            (position
+             (assert (>= nargs 2))
+             (try (car args))
+             (prune (car args) (lambda (form) (try `(,op ,form ,@(cdr args))))))
+            (otherwise
+             (when (and (consp (car form)) (eql (caar form) 'lambda))
+               (prune-inline-lambda-form form try-fn)))
             )))
        (otherwise
         (try t)
@@ -2666,7 +2705,7 @@ of the same values"
   (when (gethash form *prune-table*)
     (return-from prune nil))
   (flet ((try (x)
-           (format t "try ~A~%" x)
+           ;; (format t "try ~A~%" x)
            (funcall try-fn x)))
     (cond
      ((keywordp form) nil)
@@ -2676,12 +2715,20 @@ of the same values"
       (let* ((op (car form))
              (args (cdr form))
              (nargs (length args)))
-        (format t "OP: ~A~%" op)
+        ;; (format t "OP: ~A~%" op)
         (case op
 
           #+sbcl
           ((sb-alien:alien-funcall)
            (try 0))
+
+          ((count)
+           (assert (>= nargs 2))
+           (try 0)
+           (try (car args))
+           (prune (car args)
+                  (lambda (form)
+                    (try `(,op ,form ,@(cdr args))))))
 
           ((mvb-if)
            (try 0)
@@ -2693,6 +2740,8 @@ of the same values"
                             #'(lambda (p) (try `(mvb-if ,vars ,p
                                                     ,true-exprs ,false-exprs
                                                   ,body-expr))))
+             (unless (find-any-in-tree vars pred)
+               (try `(if ,pred 0 0)))
              (prune body-expr
                     #'(lambda (form)
                         (try `(mvb-if ,vars ,pred ,true-exprs ,false-exprs ,form))))
@@ -2735,7 +2784,7 @@ of the same values"
           (prune-fn form try-fn))
 
          ((int-restrict require-type)
-          (assert (= (length args) 2))
+          (assert (= nargs 2))
           (let ((form (car args))
                 (tp (cadr args)))
             (when (typep 0 tp) (try 0))
@@ -2778,6 +2827,8 @@ of the same values"
             (prune result #'(lambda (form)
                               (try `(dotimes (,var ,count-form ,form) ,@body))))
             (when (= (length body) 1)
+              (unless (find-in-tree var (car body))
+                (try (car body)))
               (prune (first body)
                      #'(lambda (form)
                          (when (consp form)
@@ -2831,7 +2882,7 @@ of the same values"
           (prune-fn form try-fn))
 
          ((prog2)
-          (assert (>= (length args) 2))
+          (assert (>= nargs 2))
           (let ((val1 (first args))
                 (arg2 (second args))
                 (rest (cddr args)))
@@ -2875,8 +2926,9 @@ of the same values"
             (cond
              ((consp arg)
               (cond
-               ((eql (car arg) 'quote)
-                (prune (cadr arg) #'(lambda (form) (try `(eval ',form)))))
+                ((eql (car arg) 'quote)
+                 (try (cadr arg))
+                 (prune (cadr arg) #'(lambda (form) (try `(eval ',form)))))
                (t
                 (try arg)
                 (prune arg #'(lambda (form) (try `(eval ,form)))))))
@@ -2905,7 +2957,7 @@ of the same values"
           (prune-nary-fn form try-fn)
           (prune-fn form try-fn))
 
-         ((complex)
+         ((complex conjugate)
           (when args
             (try (car args))))
 
@@ -2925,7 +2977,7 @@ of the same values"
           (when (cadr args)
             (prune (car args) #'(lambda (form) (try `(/ ,form ,(second args)))))))
 
-         ((expt rationalize rational numberator denominator)
+         ((expt rationalize rational numerator denominator)
           (try 0)
           (mapc try-fn args)
           (prune-fn form try-fn))
@@ -2985,17 +3037,18 @@ of the same values"
           (try 1))
 
          ((if)
-          (format t "prune if~%")
+          ;; (format t "prune if~%")
           (let ((pred (first args))
                 (then (second args))
                 (else (third args)))
-            (format t "prune if then~%")
+            (when top? (try pred))
+            ;; (format t "prune if then~%")
             (try then)
-            (format t "prune if else~%")
+            ;; (format t "prune if else~%")
             (try else)
             (when (every #'constantp args)
               (try (eval form)))
-            (format t "prune if pred~%")
+            ;; (format t "prune if pred~%")
             (prune-boolean pred
                            #'(lambda (e)
                               (try `(if ,e ,then ,else))))
@@ -3112,6 +3165,13 @@ of the same values"
                        #'(lambda (x)
                            (try `(block ,name ,x))))))))
 
+         ((return-from)
+          (try 0)
+          (when (= nargs 2)
+            (try (second args))
+            (prune (second args) (lambda (form) `(return-from ,(first args) ,form)))))
+
+
          ((catch)
           (let* ((tag (second form))
                  (name (if (consp tag) (cadr tag) tag))
@@ -3156,7 +3216,7 @@ of the same values"
             (assert (null (cddr form)))
             (assert (consp arg))
             (assert (eq (first arg) 'abs))
-            (format t "Trying...~%")
+            ;; (format t "Trying...~%")
             (let ((arg2 (second arg)))
               (try arg2)
               ;; Try to fold
@@ -3331,6 +3391,8 @@ of the same values"
                                  (try `(loop for ,var below ,count sum ,form)))))
                 (count
                  (unless (or (eql form t) (eql form nil))
+                   (when (and top? (not (find-in-tree var form)))
+                     (try form))
                    (try `(loop for ,var below ,count count t))
                    (try `(loop for ,var below ,count count nil))
                    (prune form
@@ -3346,12 +3408,14 @@ of the same values"
                  (try `(,op ,(car args) 0)))
                (prune (cadr args)
                       #'(lambda (form) (try `(,op ,(car args) ,form))))))
+            ((is-flet-symbol op)
+             (dolist (e args)
+               (unless (keywordp e) (try e))))
             ((and (consp op) (eql (car op) 'lambda))
              (prune-inline-lambda-form form try-fn))
             (t
              (try 0)
-             (prune-fn form try-fn))))
-
+             (prune-fn form try-fn top?))))
          )))))
   (setf (gethash form *prune-table*) t)
   nil)
@@ -3362,8 +3426,26 @@ of the same values"
     (let* ((lam (car form))
            (args (cdr form))
            (lam-list (cadr lam))
+           (lam-list-vars
+            (loop for v in lam-list
+               when (and (symbolp v) (not (member v lambda-list-keywords)))
+               collect v
+               when (and (consp v)
+                         (symbolp (car v)))
+               collect (car v)
+               when (and (consp v) (consp (cdr v)) (consp (cddr v))
+                         (third v) (symbolp (third v)))
+               collect (third v)))
            (lam-expr (caddr lam)))
       (assert (eql (car lam) 'lambda))
+      ;; If the body of the lambda does not use any argument, try
+      ;; to eliminate the call
+      (mapc try-fn args)
+      (let ((e (third lam)))
+        (when (and e (not (stringp e))
+                   (not (and (consp e) (eql (car e) 'declare)))
+                   (not (find-any-in-tree lam-list-vars e)))
+          (try `(progn ,@args ,e))))
       ;; Argument prunes are handled by the call to prune-fn
       ;; Here, attempt prunes inside the lambda form
       (when (and (>= (length lam-list) 2)
@@ -3387,6 +3469,13 @@ of the same values"
       (and (consp tree)
            (or (find-in-tree value (car tree))
                (find-in-tree value (cdr tree))))))
+
+(defun find-any-in-tree (vals tree)
+  "Return true if any element of the list VALS is EQL to a node in TREE"
+  (or (member tree vals)
+      (and (consp tree)
+           (or (find-any-in-tree vals (car tree))
+               (find-any-in-tree vals (cdr tree))))))
 
 (defun count-in-tree (value tree)
   "Return the number of occurrence of things EQL to VALUE in TREE.
@@ -3429,35 +3518,35 @@ of the same values"
 (defun prune-case (form try-fn)
   (declare (type function try-fn))
   (flet ((try (e)
-           (format t "prune-case try ~a~%" e)
+           ;; (format t "prune-case try ~a~%" e)
            (funcall try-fn e)))
     (let* ((op (first form))
            (expr (second form))
            (cases (cddr form)))
 
       ;; Try just the top expression
-      (format t "prune-case just top expr~%")
+      ;; (format t "prune-case just top expr~%")
       (try expr)
 
       ;; Try simplifying the expr
-      (format t "prune-case simplify top expr~%")
+      ;; (format t "prune-case simplify top expr~%")
       (prune expr
              #'(lambda (form)
                  (try `(,op ,form ,@cases))))
 
       ;; Try individual cases
-      (format t "prune-case individual cases~%")
+      ;; (format t "prune-case individual cases~%")
       (loop for case in cases
             do (try (first (last (rest case)))))
 
       ;; Try deleting individual cases
-      (format t "prune-case deleting cases~%")
+      ;; (format t "prune-case deleting cases~%")
       (loop for i from 0 below (1- (length cases))
          do (try `(,op ,expr ,@(remove-nth cases i))))
 
       ;; Try simplifying the cases
       ;; Assume each case has a single form
-      (format t "prune-case simplifying cases~%")
+      ;; (format t "prune-case simplifying cases~%")
       (prune-list cases
                   #'(lambda (case try-fn)
                       (declare (type function try-fn))
@@ -3465,8 +3554,7 @@ of the same values"
                                  (> (length (car case)) 1))
                         ;; try removing constants
                         (loop for i below (length (car case))
-                           do (format t "prune-case remove ~a~%"
-                                      (elt (car case) i))
+                           ;; do (format t "prune-case remove ~a~%" (elt (car case) i))
                            do (funcall try-fn
                                        `((,@(remove-nth (car case) i))
                                          ,@(cdr case)))))
@@ -3480,8 +3568,9 @@ of the same values"
 
 (defun prune-tagbody (form try-fn)
   (declare (type function try-fn))
-  (let (;; (op (car form))
-        (body (cdr form)))
+  (let* (;; (op (car form))
+         (body (cdr form))
+         (tags (remove-if-not #'atom body)))
     (loop for i from 0
           for e in body
           do
@@ -3492,6 +3581,8 @@ of the same values"
               (funcall try-fn `(tagbody ,@(remove-nth body i)
                                   ))))
            (t
+            (unless (find-any-in-tree tags e)
+              (funcall try-fn e))
             (funcall try-fn
                      `(tagbody ,@(remove-nth body i)
                          ))
@@ -3566,6 +3657,7 @@ of the same values"
          (body (cddr form))
          (body-len (length body))
          (len (length binding-list))
+         (vars (mapcar (lambda (b) (if (consp b) (car b) b)) binding-list))
          )
 
     (when top?
@@ -3587,6 +3679,10 @@ of the same values"
                      (eql (car val-form) 'make-array))
           (funcall try-fn val-form))))
     |#
+    (when (and (>= len 1)
+               (= body-len 1)
+               (not (find-any-in-tree vars (car body))))
+      (funcall try-fn (car body)))
 
     (when (>= len 1)
       (let ((val-form (cadar binding-list)))
@@ -3602,6 +3698,17 @@ of the same values"
             (t
              (funcall try-fn val-form)))
           (funcall try-fn val-form))))
+
+    ;; Try to split into multiple bindings
+    (when (and (> len 1) body)
+      (let ((body body))
+        (loop while (and (cdr body)
+                         (consp (car body))
+                         (eql (caar body) 'declare))
+           do (pop body))
+        (loop for binding in (reverse binding-list)
+           do (setf body `((let (,binding) ,@body))))
+        (funcall try-fn (car body))))
 
     ;; Try to simplify the forms in the RHS of the bindings
     (prune-list binding-list
@@ -3684,6 +3791,15 @@ of the same values"
    #'(lambda (form)
        (and (consp form)
             (case (car form)
+              ((lambda)
+               (loop for b in (cadr form)
+                  thereis (or (eql b var)
+                              (and (consp b)
+                                   (or (eql (car b) var)
+                                       (and (consp (cdr p))
+                                            (consp (cddr p))
+                                            (eql var (caddr p))))))))
+
               ((let let*)
                (loop for binding in (cadr form)
                   thereis (eq (car binding) var)))
@@ -3694,6 +3810,11 @@ of the same values"
                     (eq (caadr form) 'quote)
                     (consp (second (cadr form)))
                     (member var (second (cadr form)))))
+              ((loop)
+               (loop for e on (cdr form)
+                   thereis (and (eql (car e) 'for) (eql (cadr e) var))))
+              ((mvb-if)
+               (find-in-tree var (second form)))
               (t nil))))
    form))
 
