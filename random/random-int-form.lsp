@@ -2891,7 +2891,7 @@ of the same values"
             (try (eval form)))
           (try 0)
           (try (car args))
-          (when (cddr args)
+          (when (cadr args)
             (prune (car args) #'(lambda (form) (try `(/ ,form ,(second args)))))))
 
          ((expt rationalize rational numberator denominator)
