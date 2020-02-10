@@ -231,6 +231,12 @@
                                           (my-row-major-aref y i))))))
    ((typep x 'pathname)
     (equal x y))
+   ((and (numberp x)
+         (zerop x)
+         (numberp y)
+         (zerop y)
+         (eql (class-of x) (class-of y)))
+    t)
    (t (eql x y))))
 
 (defun do-entry (entry &optional

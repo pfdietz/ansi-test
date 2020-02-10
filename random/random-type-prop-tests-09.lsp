@@ -458,6 +458,14 @@
   (list 'symbol '(vector symbol))
   2)
 
+(def-type-prop-test position.13 'position
+  (list 'base-char 'base-string)
+  2)
+
+(def-type-prop-test position.14 'position
+  (list 'character 'string)
+  2)
+
 ;;; POSITION-IF
 
 (def-type-prop-test position-if.1 'position-if
