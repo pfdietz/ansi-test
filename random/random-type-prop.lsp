@@ -241,7 +241,8 @@ using them as actual parameters to the function call")
                    ;; (print eval-form) (terpri)
                     ;; (dotimes (i 100) (eval eval-form))
                     (setf *eval-form* eval-form)
-                   (eval eval-form))))
+                        (eval eval-form)
+                        )))
           (result-type (if (and enclosing-the (integerp rval))
                            (make-random-type-containing rval)
                          t))
@@ -293,7 +294,12 @@ using them as actual parameters to the function call")
                                     when x collect v))
                      (fn (cl:handler-bind
                              (#+sbcl (sb-ext::compiler-note #'muffle-warning)
-                                     (warning #'muffle-warning))
+                                     (warning #'muffle-warning)
+                                     (error
+                                      (lambda (e)
+                                        (declare (special *error-lambda*)
+                                                 (ignore e))
+                                        (setf *error-lambda* form))))
                            (compile nil form))))
                  (setf result (if store-into-cell?
                                   (let ((r (make-array nil :element-type upgraded-result-type)))
@@ -609,9 +615,13 @@ generate types that depend on its object identity like EQL or MEMBER")
 
 (defvar *random-sequence-type* nil)
 
+(defvar *random-sequence-type-size* 10
+  "(Exclusive) upper bound on size for randomly generated sequences.")
+
 (defun make-random-sequence-type-containing (element &optional *replicate-type*)
   (setf *random-sequence-type*
-        (make-sequence-type (random 10) (make-random-type-containing* element))))
+        (make-sequence-type (random *random-sequence-type-size*)
+                            (make-random-type-containing* element))))
 
 (defun same-set-p (set1 set2 &rest args &key key test test-not)
   (declare (ignorable key test test-not))
