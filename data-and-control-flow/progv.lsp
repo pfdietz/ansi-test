@@ -133,3 +133,12 @@
    ((%m (z) z))
    (progv nil nil (expand-in-current-env (%m :good))))
   :good)
+
+(deftest progv.18
+  (progv () ())
+  nil)
+
+(deftest progv.19
+  (progv '(x) '(1))
+  nil)
+
