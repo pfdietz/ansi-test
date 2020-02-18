@@ -338,6 +338,7 @@ in the thing being tested.  Should not count as a test failure."))
                         10 ;; m-v-b-if
                         5 ;; inlined lambda
                         10 ;; stacked comparisons
+                        20 ;; Non-integer forms (only when TOP? is true)
                         ))))
 
 (defparameter *make-random-integer-form-cdf*
@@ -378,7 +379,7 @@ in the thing being tested.  Should not count as a test failure."))
 ;;; variable $y.
 
 (defun loop-random-int-forms (&optional (size 200) (nvars 3) (max-iter nil)
-                                (int-form-fn #'make-random-integer-form))
+                                (int-form-fn #'make-random-form))
   (unless (boundp '$x) (setq $x nil))
   (unless (boundp '$y) (setq $y nil))
   (loop
@@ -678,10 +679,16 @@ use it as a probability for actually generating an error
 form, multiplied by the base probability.")
 
 (defmacro compile-time-error (&rest args)
-  (apply #'error args))
+  (declare (ignore args))
+  (error "Compile time error"))
 
-(defun make-random-integer-form (size)
-  "Generate a random legal lisp form of size SIZE (roughly)."
+(defun make-random-form (size)
+  (make-random-integer-form size t))
+
+(defun make-random-integer-form (size &optional top?)
+  "Generate a random legal lisp form of size SIZE (roughly).
+If TOP? is true the value needn't be an integer, so relax
+the constraints a bit."
   (if (<= size 1)
       ;; Leaf node -- generate a variable, constant, or flet function call
       (loop
@@ -748,7 +755,7 @@ form, multiplied by the base probability.")
                                      locally))))
         `(,op ,(make-random-integer-form (1- size))))
 
-     (make-random-integer-unwind-protect-form size)
+     (make-random-integer-unwind-protect-form size top?)
 
      ;; These were causing timeouts in some large functions,
      ;; so I've conditionalized it
@@ -759,25 +766,28 @@ form, multiplied by the base probability.")
      (let* ((op (random-from-seq #(prog1 multiple-value-prog1)))
             (nforms (random 4))
             (sizes (random-partition (1- size) (1+ nforms)))
-            (args (mapcar #'make-random-integer-form sizes)))
-       `(,op ,@args))
+            (arg1 (make-random-integer-form (first sizes) top?))
+            (other-args (mapcar #'make-random-form (cdr sizes))))
+       `(,op ,arg1 ,@other-args))
 
      ;; prog2
      (let* ((nforms (random 4))
             (sizes (random-partition (1- size) (+ nforms 2)))
-            (args (mapcar #'make-random-integer-form sizes)))
-       `(prog2 ,@args))
+            (arg1 (make-random-form (first sizes)))
+            (arg2 (make-random-integer-form (second sizes) top?))
+            (other-args (mapcar #'make-random-form (cddr sizes))))
+       `(prog2 ,arg1 ,arg2 ,@other-args))
 
      `(isqrt (abs ,(make-random-integer-form (- size 2))))
 
      `(the integer ,(make-random-integer-form (1- size)))
 
-     `(cl:handler-bind nil ,(make-random-integer-form (1- size)))
-     `(restart-bind nil ,(make-random-integer-form (1- size)))
+     `(cl:handler-bind nil ,(make-random-integer-form (1- size) top?))
+     `(restart-bind nil ,(make-random-integer-form (1- size) top?))
      #-armedbear
-     `(macrolet () ,(make-random-integer-form (1- size)))
+     `(macrolet () ,(make-random-integer-form (1- size) top?))
      #-armedbear
-     `(symbol-macrolet () ,(make-random-integer-form (1- size)))
+     `(symbol-macrolet () ,(make-random-integer-form (1- size) top?))
 
      ;; dotimes
      #-allegro
@@ -786,13 +796,13 @@ form, multiplied by the base probability.")
             (sizes (random-partition (1- size) 2))
             (body (let ((*vars* (cons (make-var-desc :name var :type nil)
                                       *vars*)))
-                    (make-random-integer-form (first sizes))))
-            (ret-form (make-random-integer-form (second sizes))))
+                    (make-random-form (first sizes))))
+            (ret-form (make-random-integer-form (second sizes) top?)))
        (unless (consp body) (setq body `(progn ,body)))
        `(dotimes (,var ,count ,ret-form) ,body))
 
      ;; loop
-     (make-random-loop-form (1- size))
+     (make-random-loop-form (1- size) top?)
 
      (make-random-count-form size)
 
@@ -810,7 +820,7 @@ form, multiplied by the base probability.")
         (2 `(load-time-value ,arg nil))))
 
      ;; eval
-     (make-random-integer-eval-form size)
+     (make-random-integer-eval-form size top?)
 
      #-(or mutation cmu allegro poplog)
      (destructuring-bind (s1 s2)
@@ -884,15 +894,15 @@ form, multiplied by the base probability.")
      `(/ ,(make-random-integer-form (1- size)) -1)
 
      ;; tagbody
-     (make-random-tagbody-and-progn size)
+     (make-random-tagbody-and-progn size top?)
 
      ;; conditionals
      (let* ((cond-size (random (max 1 (floor size 2))))
             (then-size (random (- size cond-size)))
             (else-size (- size 1 cond-size then-size))
             (pred (make-random-pred-form cond-size))
-            (then-part (make-random-integer-form then-size))
-            (else-part (make-random-integer-form else-size)))
+            (then-part (make-random-integer-form then-size top?))
+            (else-part (make-random-integer-form else-size top?)))
        `(if ,pred ,then-part ,else-part))
      #-(or poplog mutation)
      (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
@@ -907,52 +917,52 @@ form, multiplied by the base probability.")
           ,(make-random-byte-spec-form s1)
           ,(make-random-integer-form s2)))
 
-     (make-random-integer-binding-form size)
+     (make-random-integer-binding-form size top?)
 
      ;; progv
-     (make-random-integer-progv-form size)
+     (make-random-integer-progv-form size top?)
 
      `(let () ,(make-random-integer-form (1- size)))
 
      (let* ((name (random-from-seq #(b1 b2 b3 b4 b5 b6 b7 b8)))
             (*random-int-form-blocks* (adjoin name *random-int-form-blocks*)))
-       `(block ,name ,(make-random-integer-form (1- size))))
+       `(block ,name ,(make-random-integer-form (1- size) top?)))
 
       (let* ((tag (list 'quote (random-from-seq #(ct1 ct2 ct2 ct4 ct5 ct6 ct7 ct8))))
              (*random-int-form-catch-tags* (cons tag *random-int-form-catch-tags*)))
-        `(catch ,tag ,(make-random-integer-form (1- size))))
+        `(catch ,tag ,(make-random-integer-form (1- size) top?)))
 
       ;; setq and similar
       (make-random-integer-setq-form size)
 
-      (make-random-integer-case-form size)
+      (make-random-integer-case-form size top?)
 
       (if *random-int-form-blocks*
           (let ((name (random-from-seq *random-int-form-blocks*))
                 (form (make-random-integer-form (1- size))))
             `(return-from ,name ,form))
         ;; No blocks -- try again
-        (make-random-integer-form size))
+        (make-random-integer-form size top?))
 
       (if *random-int-form-catch-tags*
           (let ((tag (random-from-seq *random-int-form-catch-tags*))
                 (form (make-random-integer-form (1- size))))
             `(throw ,tag ,form))
         ;; No catch tags -- try again
-        (make-random-integer-form size))
+        (make-random-integer-form size top?))
 
       (if *random-int-form-blocks*
           (destructuring-bind (s1 s2 s3) (random-partition (1- size) 3)
             (let ((name (random-from-seq *random-int-form-blocks*))
                   (pred (make-random-pred-form s1))
                   (then (make-random-integer-form s2))
-                  (else (make-random-integer-form s3)))
+                  (else (make-random-integer-form s3 top?)))
               `(if ,pred (return-from ,name ,then) ,else)))
         ;; No blocks -- try again
-        (make-random-integer-form size))
+        (make-random-integer-form size top?))
 
      #-(or armedbear)
-     (make-random-flet-form size)
+     (make-random-flet-form size top?)
 
       (let* ((nbits (1+ (min (random 20) (random 20))))
              (bvec (coerce (loop repeat nbits collect (random 2)) 'simple-bit-vector))
@@ -971,7 +981,7 @@ form, multiplied by the base probability.")
              (op 'elt))
         `(,op ',vals (min ,(1- nvals) (max 0 ,(make-random-integer-form (- size 3 nvals))))))
 
-      `(identity-notinline ,(make-random-integer-form (1- size)))
+      `(identity-notinline ,(make-random-integer-form (1- size) top?))
 
       `(fn-with-state ,(make-random-integer-form (1- size)))
 
@@ -982,15 +992,26 @@ form, multiplied by the base probability.")
           (make-random-integer-form size))
 
       ;; mvb-if
-      (make-random-mvb-if-form size)
+      (make-random-mvb-if-form size top?)
 
       ;; inlined lambda
-      (make-random-inline-lambda-form size)
+      (make-random-inline-lambda-form size top?)
 
       ;; Stacked comparisons
-      (make-stacked-comparison-form size)
+      (make-stacked-comparison-form size top?)
 
-     )))
+      ;; Non-integer forms
+      (if top? (make-possibly-non-integer-form size)
+          (make-random-integer-form size))
+
+      )))
+
+(defun make-possibly-non-integer-form (size)
+  (let* ((cond-size (random (max 1 (floor size 2))))
+         (cond (make-random-pred-form cond-size))
+         (body-form (make-random-form (- size cond-size)))
+         (op (rcase (1 'when) (1 'unless))))
+    `(,op ,cond ,body-form)))
 
 (defun make-random-aref-form (size)
   (or
@@ -1057,11 +1078,11 @@ form, multiplied by the base probability.")
          (t (make-random-integer-form size))))
     (make-random-integer-form size)))
 
-(defun make-random-integer-unwind-protect-form (size)
+(defun make-random-integer-unwind-protect-form (size top?)
   (let* ((op 'unwind-protect)
          (nforms (random 4))
          (sizes (random-partition (1- size) (1+ nforms)))
-         (arg (make-random-integer-form (first sizes)))
+         (arg (make-random-integer-form (first sizes) top?))
          (unwind-forms
           ;; We have to be careful not to generate code that will
           ;; illegally transfer control to a dead location
@@ -1069,10 +1090,10 @@ form, multiplied by the base probability.")
                 (*go-tags* nil)
                 (*random-int-form-blocks* nil)
                 (*random-int-form-catch-tags* nil))
-            (mapcar #'make-random-integer-form (rest sizes)))))
+            (mapcar #'make-random-form (rest sizes)))))
     `(,op ,arg ,@unwind-forms)))
 
-(defun make-random-integer-eval-form (size)
+(defun make-random-integer-eval-form (size top?)
   (flet ((%arg (size)
                (let ((*flet-names* nil)
                      (*vars* (remove-if-not #'(lambda (s)
@@ -1081,7 +1102,7 @@ form, multiplied by the base probability.")
                                             *vars*))
                      (*random-int-form-blocks* nil)
                      (*go-tags* nil))
-                 (make-random-integer-form size))))
+                 (make-random-integer-form size top?))))
     (rcase
      (2 `(eval ',(%arg (1- size))))
      (2 (let* ((nargs (1+ (random 4)))
@@ -1158,7 +1179,7 @@ form, multiplied by the base probability.")
            (values ,@false-exprs))
      ,@body))
 
-(defun make-random-mvb-if-form (size)
+(defun make-random-mvb-if-form (size top?)
   (let* ((nvars (+ 2 (random 3)))
          (vars (let ((var-list '(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10)))
                  (loop repeat nvars
@@ -1178,10 +1199,10 @@ form, multiplied by the base probability.")
                                          (loop for v in vars
                                             collect (make-var-desc :name v :type 'integer))
                                          *vars*)))
-                            (make-random-integer-form sb))))
+                            (make-random-integer-form sb top?))))
           `(mvb-if ,vars ,pred ,true-exprs ,false-exprs ,body-expr))))))
 
-(defun make-random-integer-binding-form (size)
+(defun make-random-integer-binding-form (size top?)
   (destructuring-bind (s1 s2) (random-partition (1- size) 2)
     (let* ((var (random-from-seq2 (rcase
                                    (2 #(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10))
@@ -1194,7 +1215,7 @@ form, multiplied by the base probability.")
                    type2))
            (e2 (let ((*vars* (cons (make-var-desc :name var :type type)
                                    *vars*)))
-                 (make-random-integer-form s2)))
+                 (make-random-integer-form s2 top?)))
            (op (random-from-seq #(let let*))))
       ;; for now, avoid shadowing
       (if (member var *vars* :key #'var-desc-name)
@@ -1206,7 +1227,7 @@ form, multiplied by the base probability.")
                   ,e2))
          (2 `(multiple-value-bind (,var) ,e1 ,e2)))))))
 
-(defun make-random-inline-lambda-form (size)
+(defun make-random-inline-lambda-form (size top?)
   (destructuring-bind (sform svars) (random-partition (1- size) 2)
     (let* ((nvars (random 4))
            (vars (let ((seq '(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10)))
@@ -1220,13 +1241,13 @@ form, multiplied by the base probability.")
            (e1 (let ((*vars*
                       (append (mapcar (lambda (v) (make-var-desc :name v :type 'integer)) vars)
                               *vars*)))
-                 (make-random-integer-form sform)))
+                 (make-random-integer-form sform top?)))
            (rest? (coin 2)))
       `((lambda (,@vars ,@(when rest? '(&rest args)))
           ,e1)
         ,@arg-exprs))))
 
-(defun make-stacked-comparison-form (size)
+(defun make-stacked-comparison-form (size top?)
   "This exercises compiler optimizations that remove redundant comparisons
 of the same values"
   (let* ((sizes (random-partition (max 5 (1- size)) 5))
@@ -1242,7 +1263,8 @@ of the same values"
                        (list* (make-var-desc :name v1 :type 'integer)
                               (make-var-desc :name v2 :type 'integer)
                               *vars*)))
-                  (mapcar #'make-random-integer-form (cddr sizes)))))
+                  (mapcar (lambda (s) (make-random-integer-form s top?))
+                          (cddr sizes)))))
     (flet ((%c (op)
              (if (coin)
                  `(,op ,v1 ,v2)
@@ -1263,7 +1285,7 @@ of the same values"
                    (if ,(%c op2)
                        ,f4 ,f5))))))))
 
-(defun make-random-integer-progv-form (size)
+(defun make-random-integer-progv-form (size top?)
   (let* ((num-vars (random 4))
          (possible-vars *random-special-vars*)
          (vars nil))
@@ -1283,7 +1305,7 @@ of the same values"
                (*vars* (append (loop for v in vars collect
                                      (make-var-desc :name v :type '(integer * *)))
                                *vars*))
-               (body-form (make-random-integer-form s2)))
+               (body-form (make-random-integer-form s2 top?)))
           `(progv ',vars (list ,@var-forms) ,body-form))))))
 
 (defun make-random-integer-mapping-form (size)
@@ -1393,7 +1415,7 @@ of the same values"
     (make-random-integer-form size)))
 
 
-(defun make-random-integer-case-form (size)
+(defun make-random-integer-case-form (size top?)
   (let ((ncases (1+ (random 10)))
         (non-int-rate  (rcase (1 0.0) (1 (min (random 1.0) (random 1.0)))))
         (non-int-type (random-from-seq #(base-char character symbol float complex
@@ -1416,13 +1438,13 @@ of the same values"
                                           upper-bound lower-bound)
                                          (make-random-element-of-type
                                           non-int-type)))
-               for result = (make-random-integer-form case-size)
+               for result = (make-random-integer-form case-size top?)
                repeat ncases
                collect `(,vals ,result)))
              (expr (make-random-integer-form (first sizes))))
         `(case ,expr
            ,@cases
-           (t ,(make-random-integer-form (second sizes))))))))
+           (t ,(make-random-integer-form (second sizes) top?)))))))
 
 (defparameter +flet-symbols+ #(%f1 %f2 %f3 %f4 %f5 %f6 %f7 %f8 %f9 %f10
                                %f11 %f12 %f13 %f14 %f15 %f16 %f17 %f18))
@@ -1430,7 +1452,7 @@ of the same values"
 (defun is-flet-symbol (sym)
   (find sym +flet-symbols+))
 
-(defun make-random-flet-form (size)
+(defun make-random-flet-form (size top?)
   "Generate random flet, labels forms, for now with no arguments
    and a single binding per form."
   (let ((fname (random-from-seq +flet-symbols+)))
@@ -1468,7 +1490,7 @@ of the same values"
                     (make-random-integer-form s1)))
                  (form2 (let ((*flet-names* (cons (list fname minargs maxargs keyarg-p)
                                                   *flet-names*)))
-                          (make-random-integer-form s2)))
+                          (make-random-integer-form s2 top?)))
                  (decl-forms
                   (append
                    (rcase
@@ -1528,16 +1550,16 @@ of the same values"
                   for i below num-forms
                   for size in sizes
                   collect (let ((*go-tags* (append tag-list *go-tags*)))
-                            (make-random-integer-form size)))))
+                            (make-random-form size)))))
       `(tagbody ,@(loop for tag in tags
                         for form in forms
                         when (atom form) do (setq form `(progn ,form))
                         append `(,form ,tag))))))
 
-(defun make-random-tagbody-and-progn (size)
+(defun make-random-tagbody-and-progn (size top?)
   (let* ((final-size (random (max 1 (floor size 5))))
          (tagbody-size (- size final-size)))
-    (let ((final-form (make-random-integer-form final-size))
+    (let ((final-form (make-random-integer-form final-size top?))
           (tagbody-form (make-random-tagbody tagbody-size)))
       `(progn ,tagbody-form ,final-form))))
 
@@ -1623,9 +1645,9 @@ of the same values"
          `(typep ,subform ',type)))
       )))
 
-(defun make-random-loop-form (size)
+(defun make-random-loop-form (size top?)
   (if (<= size 2)
-      (make-random-integer-form size)
+      (make-random-integer-form size top?)
     (let* ((var (random-from-seq #(lv1 lv2 lv3 lv4)))
            (count (random 4))
            (*vars* (cons (make-var-desc :name var :type nil)
@@ -2868,7 +2890,7 @@ of the same values"
 
          ((unwind-protect prog1 multiple-value-prog1)
           (try (first args))
-          (when top? (mapc try-fn (rest args)))
+          ;; (when top? (mapc try-fn (rest args)))
           (let ((val (first args))
                 (rest (rest args)))
             (when rest
@@ -2879,7 +2901,7 @@ of the same values"
                      (try `(unwind-protect ,val
                              ,@(remove-nth rest i)
                               ))))))
-          (prune-fn form try-fn))
+          (prune-fn form try-fn top?))
 
          ((prog2)
           (assert (>= nargs 2))
@@ -3206,7 +3228,7 @@ of the same values"
 
          ((flet labels)
           (try 0)
-          (prune-flet form try-fn))
+          (prune-flet form try-fn top?))
 
          ((case)
           (prune-case form try-fn))
@@ -3463,9 +3485,9 @@ of the same values"
                      ))))
       (prune lam-expr (lambda (x) (try `((lambda ,lam-list ,x) ,@args)))))))
 
-(defun find-in-tree (value tree)
+(defun find-in-tree (value tree &key (test #'eql))
   "Return true if VALUE is eql to a node in TREE."
-  (or (eql value tree)
+  (or (funcall test value tree)
       (and (consp tree)
            (or (find-in-tree value (car tree))
                (find-in-tree value (cdr tree))))))
@@ -3577,7 +3599,8 @@ of the same values"
           (cond
            ((atom e)
             ;; A tag
-            (unless (find-in-tree e (subseq body 0 i))
+            (unless (find-in-tree `(go ,e) (subseq body 0 i)
+                                  :test #'equal)
               (funcall try-fn `(tagbody ,@(remove-nth body i)
                                   ))))
            (t
@@ -3796,9 +3819,9 @@ of the same values"
                   thereis (or (eql b var)
                               (and (consp b)
                                    (or (eql (car b) var)
-                                       (and (consp (cdr p))
-                                            (consp (cddr p))
-                                            (eql var (caddr p))))))))
+                                       (and (consp (cdr b))
+                                            (consp (cddr b))
+                                            (eql var (caddr b))))))))
 
               ((let let*)
                (loop for binding in (cadr form)
@@ -3827,7 +3850,7 @@ of the same values"
         (find-if-subtree pred (cdr tree))))
    (t nil)))
 
-(defun prune-flet (form try-fn)
+(defun prune-flet (form try-fn top?)
   "Attempt to simplify a FLET form."
   (declare (type function try-fn))
 
@@ -3910,12 +3933,12 @@ of the same values"
             (funcall try-fn (first (last body))))
         ))
 
-
       ;; Try to simplify (the last form in) the body.
       (prune (first (last body))
              #'(lambda (form2)
                  (funcall try-fn
-                          `(,@(butlast form) ,form2)))))))
+                          `(,@(butlast form) ,form2)))
+             top?))))
 
 ;;; Routine to walk form, applying a function at each form
 ;;; The fn is applied in preorder.  When it returns :stop, do
