@@ -4,4 +4,5 @@
   :depends-on (:regression-test)
   :serial t
   :components
+  :license "MIT"
   ((:file "packages")))
