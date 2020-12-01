@@ -78,6 +78,9 @@
 
 (declaim (notinline fn-with-state))
 
+(defparameter *previous-constants* nil
+  "A list of constants previously generated in generating these forms")
+
 (defgeneric make-random-element-of-type (type)
   (:documentation "Create a random element of a lisp type."))
 
@@ -336,7 +339,7 @@ in the thing being tested.  Should not count as a test failure."))
                         #+sbcl
                         2 ;; Example of sb ffi call
                         10 ;; m-v-b-if
-                        5 ;; inlined lambda
+                        #-abcl 5 ;; inlined lambda
                         10 ;; stacked comparisons
                         20 ;; Non-integer forms (only when TOP? is true)
                         ))))
@@ -513,7 +516,8 @@ the check."
 (defun test-random-integer-form
     (size nvars &key (index 0) (file-prefix "b")
                   (int-form-fn #'make-random-integer-form))
-  (let* ((vars (make-vars nvars))
+  (let* ((*previous-constants* nil)
+         (vars (make-vars nvars))
          (var-types (make-var-types nvars))
          #|(vars (subseq '(a b c d e f g h i j k l m
                          n o p q r s u v w x y z)
@@ -699,7 +703,12 @@ the constraints a bit."
                       (or (not (typep *make-error-forms* '(real 0 1)))
                           (<= (random 1.0) *make-error-forms*)))
              '(compile-time-error)))
-        (10 (make-random-integer))
+         (10
+          (if (and *previous-constants* (coin 3))
+              (random-from-seq *previous-constants*)
+              (let ((i (make-random-integer)))
+                (push i *previous-constants*)
+                i)))
         (9 (if *vars*
                (let* ((desc (random-var-desc))
                       (type (var-desc-type desc))
@@ -995,6 +1004,7 @@ the constraints a bit."
       (make-random-mvb-if-form size top?)
 
       ;; inlined lambda
+      #-abcl
       (make-random-inline-lambda-form size top?)
 
       ;; Stacked comparisons
@@ -1727,7 +1737,8 @@ of the same values"
                     (hi (cadr type-args))
                     lo= hi=)
                 (cond
-                 ((consp lo) nil)
+                  ((consp lo)
+                   (setq lo (car lo)))
                  ((member lo '(* nil))
                   (setq lo nil)
                   (setq lo= nil))
@@ -1735,7 +1746,8 @@ of the same values"
                   (assert (typep lo 'rational))
                   (setq lo= t)))
                 (cond
-                 ((consp hi) nil)
+                  ((consp hi)
+                   (setq hi (car hi)))
                  ((member hi '(* nil))
                   (setq hi nil)
                   (setq hi= nil))
@@ -1744,18 +1756,22 @@ of the same values"
                   (setq hi= t)))
                 (assert (or (null lo) (null hi) (<= lo hi)))
                 (assert (or (null lo) (null hi) (< lo hi) (and lo= hi=)))
-                (cond
-                 ((null lo)
-                  (cond
-                   ((null hi) (make-random-rational))
-                   (hi= (- hi (make-random-nonnegative-rational)))
-                   (t (- hi (make-random-positive-rational)))))
-                 ((null hi)
-                  (cond
-                   (lo= (+ lo (make-random-nonnegative-rational)))
-                   (t (+ lo (make-random-positive-rational)))))
-                 (t
-                  (+ lo (make-random-bounded-rational (- hi lo) lo= hi=))))))))
+                (let ((result
+                        (cond
+                          ((null lo)
+                           (cond
+                             ((null hi) (make-random-rational))
+                             (hi= (- hi (make-random-nonnegative-rational)))
+                             (t (- hi (make-random-positive-rational)))))
+                          ((null hi)
+                           (cond
+                             (lo= (+ lo (make-random-nonnegative-rational)))
+                             (t (+ lo (make-random-positive-rational)))))
+                          (t
+                           (+ lo (make-random-bounded-rational (- hi lo) lo= hi=))))))
+                  (if (typep result `(rational ,@type-args))
+                      result
+                      (make-random-element-of-compound-type type-op type-args)))))))
 
   (:method ((type-op (eql 'ratio)) type-args)
            (let ((r 0))
@@ -2319,17 +2335,24 @@ of the same values"
      (3 (car (random-from-seq *int-structs*))))))
 
 #+sbcl
-(defmethod make-random-element-of-type ((type (eql 'sb-kernel:simple-character-string)))
-  (make-random-element-of-type 'simple-string))
-#+sbcl
-(defmethod make-random-element-of-type ((type (eql 'sb-kernel:complex-single-float)))
-  (make-random-element-of-type '(complex single-float)))
-#+sbcl
-(defmethod make-random-element-of-type ((type (eql 'sb-kernel:complex-double-float)))
-  (make-random-element-of-type '(complex double-float)))
-#+sbcl
-(defmethod make-random-element-of-type ((type (eql 'sb-kernel::character-string)))
-  (make-random-element-of-type 'string))
+(progn
+  (defmethod make-random-element-of-type ((type (eql 'sb-kernel:simple-character-string)))
+    (make-random-element-of-type 'simple-string))
+  (defmethod make-random-element-of-type ((type (eql 'sb-kernel:complex-single-float)))
+    (make-random-element-of-type '(complex single-float)))
+  (defmethod make-random-element-of-type ((type (eql 'sb-kernel:complex-double-float)))
+    (make-random-element-of-type '(complex double-float)))
+  (defmethod make-random-element-of-type ((type (eql 'sb-kernel::character-string)))
+    (make-random-element-of-type 'string)))
+
+#+ccl
+(progn
+  (defmethod make-random-element-of-type ((type (eql 'ccl::complex-single-float)))
+    (make-random-element-of-type '(complex single-float)))
+  (defmethod make-random-element-of-type ((type (eql 'ccl::complex-double-float)))
+    (make-random-element-of-type '(complex double-float)))
+  (defmethod make-random-element-of-type ((type (eql 'ccl::general-vector)))
+    (make-random-vector '* '*)))
 
 
 (defun make-random-character ()
