@@ -5,6 +5,49 @@
 (defparameter *lambdas* #())
 (defparameter *dump-stream* nil)
 
+;;; Include some standard packages in CL-TEST to make randomly
+;;; read code more understandable
+
+(defparameter *standard-packages-to-include*
+  '(:alexandria :iterate :serapeum :named-readtables
+    :curry-compose-reader-macros :closer-mop
+    :cl-ppcre :split-sequence :trivial-features
+    :trivial-gray-streams :bordeaux-threads
+    :anaphora :let-plus :fiveam :lift :trivial-garbage
+    :flexi-streams :nibbles :ironclad
+    :puri :usocket :trivial-backtrace
+    :more-conditions :chunga :cl-fad
+    :cl+ssl :cl-base64 :esrap :chipz
+    :drakma :local-time
+    :parse-number :cl-json
+    ))
+
+(defun include-std-packages (&aux (cltp (find-package "CL-TEST")))
+  (assert cltp)
+  (when (find-package :ql)
+    (ql:quickload :named-readtables)
+    (ql:quickload :curry-compose-reader-macros)
+    (loop for e in *standard-packages-to-include*
+          do (let ((system (if (symbolp e) e (car e)))
+                   #+nil (package-name (if (symbolp e) e (cadr e)))
+                   )
+               (funcall (intern "QUICKLOAD" :QL) system)
+               (unless (eql (find-package "CL-TEST") cltp)
+                 (error "Reading ~a redefined CL-TEST" system))
+               #+nil
+               (let ((package (find-package package-name)))
+                 (if package
+                     (handler-bind
+                         ((package-error
+                            (lambda (e)
+                              (let ((r (or (find-restart 'sb-impl::shadowing-import-it e)
+                                           (find-restart 'sb-impl::take-new))))
+                                (when r
+                                  (invoke-restart r))))))
+                       (use-package (list package) :cl-test))
+                     (warn "Could not find package ~a"
+                           (string package-name))))))))
+
 ;;; Mutation testing of Lisp functions to find compiler bugs
 ;;; Assumes we can recognize 'abnormal' errors thrown by the compiler
 
@@ -110,13 +153,17 @@
 
 (defun size-tree-of-sexpr* (sexpr)
   (if (consp sexpr)
-      (let ((car-node (size-tree-of-sexpr* (car sexpr)))
-            (cdr-node (size-tree-of-sexpr* (cdr sexpr))))
-        (make-size-tree-node
-         :size (+ (size-tree-node-size car-node)
-                  (size-tree-node-size cdr-node)
-                  1)
-         :children (list car-node cdr-node)))
+      (let ((reversed nil))
+        (loop while (consp sexpr)
+              do (push (pop sexpr) reversed))
+        (let ((node (size-tree-of-sexpr* sexpr)))
+          (loop while reversed
+                do (let ((car-node (size-tree-of-sexpr* (pop reversed))))
+                     (setf node (make-size-tree-node
+                                 :size (+ (size-tree-node-size car-node)
+                                          (size-tree-node-size node))
+                                 :children (list car-node node)))))
+          node))
       (make-size-tree-node :size 1 :children nil)))
 
 ;;; Attempt to get a SB-INT:BUG condition from mutated lambda exprs
@@ -169,6 +216,13 @@
                                                 `(quote ,y)
                                                 y)))
                                     (if (listp e) (list x) x)))))
+
+(defun mutate-sexpr-error (sexpr ignored-fn)
+  (declare (ignore ignored-fn))
+  (default-mutate-sexpr sexpr #'(lambda (e)
+                                  (declare (ignore e))
+                                  (let ((x `(error ,(format nil "~a" (random 1000)))))
+                                    x))))
 
 (defvar *cl-syms* nil)
 
@@ -250,6 +304,10 @@
                                    (car (last (cadr e)))))
                   (let ((len (safe-length e)))
                     (rcase
+                      (1 (if (proper-listp e)
+                             (random-permute e)
+                             (append (random-permute (subseq e 0 len))
+                                     (cdr (last e)))))
                       (1 (cdr e))
                       ;; (1 (if (not (stringp (car e))) (car e) (cdr e)))
                       (1 (list (nthcdr (1+ (random len)) e)))
@@ -276,7 +334,13 @@
                                             (proper-listp se))
                                     se)))))
 
+(defun mutate-sexpr-n-random-lambda (sexpr ignored-fn n)
+  (loop repeat n
+     do (setf sexpr (mutate-sexpr-random-lambda sexpr ignored-fn)))
+  sexpr)
+
 (defun mutation-test-lambda-expr (lambda-expr &key (n 100) (do? nil)
+                                                (reps 1)
                                                 (mutate-sexpr #'default-mutate-sexpr)
                                                 &allow-other-keys)
   (assert (eql (car lambda-expr) 'lambda))
@@ -285,69 +349,75 @@
         (lambda-body (cddr lambda-expr))
         (*error-output* (make-broadcast-stream)))
     (loop repeat n
-       do (let* ((subexpr (if do? '(do)
-                              (random-subexpr-of-sexpr lambda-body)))
-                 (mutated-body (funcall
-                                mutate-sexpr
-                                lambda-body
-                                #'(lambda (e)
-                                    (when (or (not (listp e))
-                                              (proper-listp subexpr))
-                                      subexpr))))
-                 (mutated-lambda (append lambda-prefix mutated-body)))
-            (setf *current-lambda* mutated-lambda)
-            (when *dump-stream*
-              (format *dump-stream* "~A~%" mutated-lambda)
-              (finish-output *dump-stream*))
-            (unless (is-bad-mutated-form mutated-lambda)
-              (handler-case
-                  #+sbcl
+       do (let ((mutated-body lambda-body))
+            (loop repeat reps
+               do  (let* ((subexpr (if do? '(do)
+                                       (random-subexpr-of-sexpr lambda-body))))
+                     (setf mutated-body (funcall
+                                         mutate-sexpr
+                                         lambda-body
+                                         #'(lambda (e)
+                                             (when (or (not (listp e))
+                                                       (proper-listp subexpr))
+                                               subexpr))))))
+            (let ((mutated-lambda (append lambda-prefix mutated-body)))
+              (setf *current-lambda* mutated-lambda)
+              (when *dump-stream*
+                (format *dump-stream* "~A~%" mutated-lambda)
+                (finish-output *dump-stream*))
+              (unless (is-bad-mutated-form mutated-lambda)
+                (handler-case
+                    #+sbcl
                   (sb-ext:with-timeout 10
                     (compile nil mutated-lambda))
                   #-sbcl
-                    (compile nil mutated-lambda)
-                #+sbcl (sb-int:bug () (return mutated-lambda))
-                #+sbcl (sb-ext:timeout () nil)
-                ;; (storage-condition () nil)
-                ;; (error () nil)
-                #+sbcl
-                (sb-int:simple-program-error (e)
-                  (unless (equal (car (simple-condition-format-arguments e))
-                                 "Required argument")
-                    (return mutated-lambda)))
-                #+sbcl
-                (sb-kernel::arg-count-error (e)
-                  (unless (or (eql (sb-kernel::defmacro-lambda-list-bind-error-kind e)
-                                   'destructuring-bind)
-                              (eql (sb-kernel::defmacro-lambda-list-bind-error-name e) 'lambda)
-                              )
-                    (return mutated-lambda)))
-                #+sbcl
-                (sb-sys:interactive-interrupt (c) (error c))
-                #+sbcl
-                (sb-sys:system-condition ()
-                  (return mutated-lambda))
-                #|
-                (simple-error (e)
+                  (compile nil mutated-lambda)
+                  #+sbcl (sb-int:bug () (return mutated-lambda))
+                  #+sbcl (sb-ext:timeout () nil)
+                  ;; (storage-condition () nil)
+                  ;; (error () nil)
+                  #+sbcl
+                  (sb-int:simple-program-error (e)
+                    (unless (equal (car (simple-condition-format-arguments e))
+                                   "Required argument")
+                      (return mutated-lambda)))
+                  #+sbcl
+                  (sb-kernel::arg-count-error (e)
+                    (unless (or (eql (sb-kernel::defmacro-lambda-list-bind-error-kind e)
+                                     'destructuring-bind)
+                                (eql (sb-kernel::defmacro-lambda-list-bind-error-name e) 'lambda)
+                                )
+                      (return mutated-lambda)))
+                  #+sbcl
+                  (sb-sys:interactive-interrupt (c) (error c))
+                  #+sbcl
+                  (sb-sys:system-condition ()
+                    (return mutated-lambda))
+                  #+sbcl
+                  (simple-type-error (e)
+                    (unless (eql (type-error-expected-type e) 'sb-impl::function-name)
+                      (return mutated-lambda)))
+                  #|
+                  (simple-error (e)
                   (unless (equal (simple-condition-format-arguments e)
-                                 '((NOT #1=(EQL (SB-C::LAMBDA-KIND SB-C::CLAMBDA) :DELETED)) ((#1# T))))
-                    (return mutated-lambda)))
-                |#
-                    
-                #|
-                (type-error (e)
-                (unless (eql (sb-kernel::type-error-context e) 'sb-impl::x)
-                (return mutated-lambda)))
-                |#
-                #+clisp
-                (system::simple-source-program-error () nil)
-                #+clisp
-                (system::simple-program-error () nil)
-                #-clisp
-                (error () (return mutated-lambda))
-                #+clisp
-                (error () nil)
-                ))))))
+                  '((NOT #1=(EQL (SB-C::LAMBDA-KIND SB-C::CLAMBDA) :DELETED)) ((#1# T))))
+                  (return mutated-lambda)))
+                  |#
+                  
+                  #|
+                  (type-error (e)
+                  (unless (eql (sb-kernel::type-error-context e) 'sb-impl::x)
+                  (return mutated-lambda)))
+                  |#
+                  #+clisp
+                  (system::simple-source-program-error () nil)
+                  #+clisp
+                  (system::simple-program-error () nil)
+                  #-clisp
+                  (error () (return mutated-lambda))
+                  #+clisp
+                  (error () nil)
+                  )))))))
 
 (defparameter *results* nil)
 (defparameter *dump-stream* nil)
@@ -366,16 +436,24 @@
          (terpri)
          (push result *results*))))
 
-(defun loop-mt2 ()
+(defun loop-mt2 (&optional (reps 1))
   (loop-mt :lambda-expr-fn #'make-random-from-lambdas
+     :mutate-sexpr #'mutate-sexpr-random-lambda
+     :reps reps))
+
+#|
+(defun loop-mt2-n (&optional (n 2))
+  (loop-mt :lambda-expr-fn #'make-random-from-lambdas
+     :mutate-sexpr #'(lambda (sexpr ignored-fn)
+                       (mutate-sexpr-n-random-lambda sexpr ignored-fn n))))
+|#
+
+(defun loop-mt3 (&key (size 25) (n 20) (reps 1))
+  (loop-mt :size size :n n :reps reps
      :mutate-sexpr #'mutate-sexpr-random-lambda))
 
-(defun loop-mt3 ()
-  (loop-mt :size 25 :n 20
-     :mutate-sexpr #'mutate-sexpr-random-lambda))
-
-(defun loop-mt4 ()
-  (loop-mt :n 20
+(defun loop-mt4 (&optional (reps 1))
+  (loop-mt :n 20 :reps reps
      :lambda-expr-fn #'make-random-from-lambdas
      :mutate-sexpr #'mutate-sexpr-reot))
 
@@ -425,12 +503,25 @@
      :lambda-expr-fn #'make-random-from-lambdas
      :mutate-sexpr #'mutate-sexpr-misc))
 
-(defun loop-mt13 ()
-  (loop-mt :n 20
+(defun loop-mt13 (&key (n 20) (reps 1))
+  (loop-mt :n n :reps reps
      :lambda-expr-fn #'make-random-from-lambdas
      :mutate-sexpr #'mutate-sexpr-class-of))
 
+(defun loop-mt14 (&key (n 20) (reps 1))
+  (loop-mt :n n :reps reps
+     :lambda-expr-fn #'make-random-from-lambdas
+           :mutate-sexpr #'mutate-sexpr-error))
+
+#|
+(defun loop-mt15 (&key (reps 1))
+  (loop-mt :lambda-expr-fn #'make-random-from-lambdas
+           :mutate-sexper #'mutate-sexpr-random-permute
+           :reps reps))
+|#
+
 (defun loop-mutation-test (&rest args &key (n 100) (size 50)
+                                        (reps 1)
                                         (lambda-expr-fn #'make-random-int-lambda-expr)
                                         cache?
                                         &allow-other-keys)
@@ -438,7 +529,7 @@
         result)
     (loop for i from 1
        do (setf result (let ((lambda-expr (funcall lambda-expr-fn size)))
-                         (apply #'mutation-test-lambda-expr lambda-expr :n n args)))
+                         (apply #'mutation-test-lambda-expr lambda-expr :n n :reps reps args)))
        do (when result (return result))
        do (when (eql (mod i 10) 0)
             (unless cache? (size-tree-of-sexpr-cache-clear))
@@ -453,17 +544,42 @@
 ;;; Utility functions to read the defuns of a file
 
 (defun read-exprs-from-file (fn)
-  (with-open-file (s fn :direction :input)
-    (read-exprs-from-stream s)))
+  (handler-case
+      (with-open-file (s fn :direction :input)
+        (read-exprs-from-stream s))
+    (file-error () nil)))
 
-(defun read-exprs-from-stream (s)
+(defun read-exprs-from-stream (s &key (named-readtables t))
   "Read exprs from stream until all are done or there is an irrecoverable error.  Return the list of exprs."
   (let ((forms nil)
-        (*read-eval* nil))
+        (*read-eval* nil)
+        (*readtable* *readtable*)
+        (*package* *package*))
     (handler-case
         (loop for x = (handler-case (read s nil s) (reader-error () nil))
            until (eql x s)
-           do (push x forms))
+           do (cond
+                ((and named-readtables (consp x) (symbolp (car x))
+                      (equal (symbol-name (car x)) "IN-READTABLE"))
+                 (handler-case (eval (cons (find-symbol "IN-READTABLE"
+                                                        :named-readtables)
+                                           (cdr x)))
+                   (error () nil)))
+                ((and (consp x) (eql (car x) 'in-package))
+                 (let ((n (cadr x)))
+                   (let ((p (find-package n)))
+                     (when p (setf *package* p)))))
+                ((and (consp x) (eql (car x) 'defpackage)
+                      (not (find-package (cadr x))))
+                 ;; :LOCK was causing spurious failures in tests
+                 ;; derived from ESRAP
+                 (setf x
+                       (remove-if (lambda (c)
+                                    (and (consp c) (eql (car c) :lock)))
+                                  x))
+                 (handler-case (eval x) (error () nil)))
+                (t
+                 (push x forms))))
       (error () nil))
     (nreverse forms)))
 
@@ -562,7 +678,17 @@ forms starting with other symbols to be found instead."
 (defmethod lambdas-of-def-expr ((expr cons))
   (lambdas-of-def-expr-cons (car expr) expr))
 
+(defparameter *all-exprs-to-lambdas* nil
+  "When true, convert every form to a lambda")
+
 (defmethod lambdas-of-def-expr (expr) nil)
+#|
+  (if (and *all-exprs-to-lambdas*
+           (consp expr)
+           (not (eql (car expr) 'quote)))
+      `(lambda () ,expr)
+      nil)
+|#
 
 (defgeneric lambdas-of-def-expr-cons (car-of-expr expr))
 
@@ -578,28 +704,48 @@ forms starting with other symbols to be found instead."
 (defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'defgeneric)) expr)
   (lambdas-of-defgeneric expr))
 
+(defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'def)) expr)
+  (when (consp (cdr expr))
+    (cond
+      ((or (member (cadr expr) '(function test partial-eval-test))
+           (and (consp (cadr expr))
+                (eql (caadr expr) 'function)))
+       (lambdas-of-def-expr `(defun ,(caddr expr) ,@(cdddr expr))))
+      ((eql (cadr expr) 'method)
+       (lambdas-of-defmethod `(defmethod ,@(cddr expr)))))))
+
+(defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'quote)) (expr t)) nil)
+(defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'defclass)) (expr t)) nil)
+
 ;; (defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'defmacro)) expr)
 ;;  (lambdas-of-defmacro expr))
 
+(defun safe-mapcan (fn arg)
+  (loop while (consp arg)
+        append (funcall fn (pop arg))))
+
 (defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'eval-when)) expr)
-  (let ((body (cddr expr)))
-    (mapcan #'lambdas-of-def-expr body)))
+  (when (consp (cdr expr))
+    (let ((body (cddr expr)))
+      (safe-mapcan #'lambdas-of-def-expr body))))
 
 (defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'let)) expr)
-  (let ((body (cddr expr)))
-    (mapcan #'lambdas-of-def-expr body)))
+  (when (consp (cdr expr))
+    (let ((body (cddr expr)))
+      (safe-mapcan #'lambdas-of-def-expr body))))
 
 (defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'let*)) expr)
-  (let ((body (cddr expr)))
-    (mapcan #'lambdas-of-def-expr body)))
+  (when (consp (cdr expr))
+    (let ((body (cddr expr)))
+      (safe-mapcan #'lambdas-of-def-expr body))))
 
 (defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'progn)) expr)
   (let ((body (cdr expr)))
-    (mapcan #'lambdas-of-def-expr body)))
+    (safe-mapcan #'lambdas-of-def-expr body)))
 
 (defmethod lambdas-of-def-expr-cons ((car-of-expr (eql 'locally)) expr)
   (let ((body (cdr expr)))
-    (mapcan #'lambdas-of-def-expr body)))
+    (safe-mapcan #'lambdas-of-def-expr body)))
 
 (defmethod lambdas-of-def-expr-cons ((x (eql 'in-package)) y) nil)
 (defmethod lambdas-of-def-expr-cons ((x (eql 'defconstant)) y) nil)
@@ -609,11 +755,11 @@ forms starting with other symbols to be found instead."
 (defparameter *failed-defs* nil)
 
 (defmethod lambdas-of-def-expr-cons ((x symbol) y)
-  (let ((failed-defs *failed-defs*))
-    (let ((p (assoc x *failed-defs*)))
-      (if p (incf (cdr p))
-          (setf *failed-defs* (cons (cons x 1) failed-defs)))))
-  nil)
+  (cond
+    ((equal (symbol-name x) "DEF")
+     (lambdas-of-def-expr-cons 'def (cons 'def (cdr y))))
+    (t
+     `((lambda () ,y)))))
 
 (defmethod lambdas-of-def-expr-cons (x y)
   nil) ;; default method
@@ -698,11 +844,14 @@ forms starting with other symbols to be found instead."
   (let ((dirs (lisp-paths-for-root-dir root-dir)))
     (make-lambdas-from-files dirs)))
 
+(defvar *ql-dirs*
+  '("~/quicklisp/**/*.lisp"
+    "~/quicklisp/**/*.lsp"
+    "~/quicklisp/**/*.cl"
+    "~/quicklisp/**/*.l"))
+
 (defun make-ql-lams ()
-  (let ((dirs '("~/quicklisp/**/*.lisp"
-                "~/quicklisp/**/*.lsp"
-                "~/quicklisp/**/*.cl")))
-    ;; "~/g/ansi-test/**/*.lsp"
+  (let ((dirs *ql-dirs*))
     (make-lambdas-from-files dirs)))
 
 (defun make-sel-lams ()
@@ -711,21 +860,22 @@ forms starting with other symbols to be found instead."
                 "~/quicklisp/local-projects/sel/**/*.cl")))
     (make-lambdas-from-files dirs)))
 
+(defvar *ansi-test-dirs* '("~/g/ansi-test/**/*.lsp"))
+
+(defvar *other-dirs* '("~/public-lisp/**/*.lisp"
+                       "~/public-lisp/**/*.lsp"
+                       "~/public-lisp/**/*.cl"
+                       "~/public-lisp/**/*.l"
+                       ))
+
 (defun make-ansi-test-lams ()
-  (let ((dirs '("~/g/ansi-test/**/*.lsp")))
+  (let ((dirs *ansi-test-dirs*))
     (make-lambdas-from-files dirs)))
 
-;; #+sbcl
-#+nil
 (defun make-all-lams ()
-  (let ((sb-impl::*use-sane-package-on-undefined-package* t))
-    (make-qa-lams)
-    (make-lams "/pdietz/ccl")
-    ;; (make-lams "/sandbox/sunny/dietz/acl2-8.0")
-    ;; (make-lams "/sandbox/sunny/dietz/PVS")
-    ;; (make-lams "/sandbox/sunny/dietz/lisp-stuff")
-    ;; (make-lams "/home/dietz/lisp-examples")
-    ))
+  (make-lambdas-from-files
+   (append *ansi-test-dirs* *ql-dirs*
+           *other-dirs*)))
 
 (defun properize (x)
   (cons (loop while (consp x)
@@ -758,6 +908,7 @@ forms starting with other symbols to be found instead."
   (let ((dirs '("~/quicklisp/**/*.lisp"
                 "~/quicklisp/**/*.lsp"
                 "~/quicklisp/**/*.cl"
+                "~/quicklisp/**/*.l"
                 "~/ansi-test/**/*.lsp")))
     (make-lambdas-from-files dirs)))
 
@@ -867,6 +1018,8 @@ out forms that report useless error due to this."
   (flet ((%is-bad (y)
            (and (consp y)
                 (or
+                 (and (eql (car y) 'aref)
+                      (>= (length (cdr y)) 8))
                  (and (eql (car y) 'make-array)
                       (consp (cdr y))
                       (let ((d (second y)))
@@ -901,3 +1054,12 @@ out forms that report useless error due to this."
            (handler-case
                (compile nil test-lambda))))))
              
+(defun tree-find (val tree)
+  (cond
+    ((eql val tree) t)
+    ((consp tree)
+     (or (tree-find val (car tree))
+         (tree-find val (cdr tree))))))
+
+(defun tree-findf (val)
+  (lambda (tree) (tree-find val tree)))
