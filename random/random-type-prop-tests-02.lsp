@@ -113,3 +113,17 @@
 (def-type-prop-test fround.1 'fround '(real) 1)
 (def-type-prop-test fround.2 'fround '(real (and integer (not (satisfies zerop)))) 2)
 (def-type-prop-test fround.3 'fround '(real (and real (not (satisfies zerop)))) 2)
+
+(def-type-prop-test floor/first-value.1 '(lambda (x y) (values (floor x y))) '(integer (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test floor/first-value.2 '(lambda (x y) (values (floor x y))) '(real (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test floor/first-value.3 '(lambda (x y) (values (floor x y))) '(real (and real (not (satisfies zerop)))) 2)
+(def-type-prop-test floor/second-value.1 '(lambda (x y) (nth-value 1 (floor x y))) '(integer (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test floor/second-value.2 '(lambda (x y) (nth-value 1 (floor x y))) '(real (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test floor/second-value.3 '(lambda (x y) (nth-value 1 (floor x y))) '(real (and real (not (satisfies zerop)))) 2)
+
+(def-type-prop-test truncate/first-value.1 '(lambda (x y) (values (truncate x y))) '(integer (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test truncate/first-value.2 '(lambda (x y) (values (truncate x y))) '(real (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test truncate/first-value.3 '(lambda (x y) (values (truncate x y))) '(real (and real (not (satisfies zerop)))) 2)
+(def-type-prop-test truncate/second-value.1 '(lambda (x y) (nth-value 1 (truncate x y))) '(integer (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test truncate/second-value.2 '(lambda (x y) (nth-value 1 (truncate x y))) '(real (and integer (not (satisfies zerop)))) 2)
+(def-type-prop-test truncate/second-value.3 '(lambda (x y) (nth-value 1 (truncate x y))) '(real (and real (not (satisfies zerop)))) 2)
