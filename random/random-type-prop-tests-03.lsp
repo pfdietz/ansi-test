@@ -63,6 +63,16 @@
 
 ;;; exp, expt here
 
+(def-type-prop-test exp.1 'exp '((integer -100 100)) 1)
+(def-type-prop-test exp.2 'exp '((real -100 100)) 1)
+(def-type-prop-test exp.3 'exp '((complex (real -100 100))) 1)
+
+(def-type-prop-test expt.1 'expt '((integer 1 1000) (integer -1000 1000)) 2)
+(def-type-prop-test expt.2 'expt '((integer -1000 -1) (integer -1000 1000)) 2)
+(def-type-prop-test expt.3 'expt '((rational (0) 1000) (integer -1000 1000)) 2)
+(def-type-prop-test expt.4 'expt '((real -1000 (0)) (real -100 100)) 2)
+(def-type-prop-test expt.5 'expt '((real -1000 (0)) (eql 1/2)) 2)
+
 (def-type-prop-test gcd 'gcd nil 1 :maxargs 6 :rest-type 'integer)
 (def-type-prop-test lcm 'lcm nil 1 :maxargs 6 :rest-type 'integer)
 
