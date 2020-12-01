@@ -201,7 +201,7 @@
         #'(lambda (type fun)
             (declare (ignore fun))
             (let ((i (cadadr type)))
-              `(or ,@(loop for j from i to 32 collect `(vector (integer 0 ,(- (ash 1 i) 2))))))))
+              `(or ,@(loop for j from 1 to i collect `(vector (integer 0 ,(min (1- (ash 1 j)) (- (ash 1 i) 2)))))))))
   3)
 
 
