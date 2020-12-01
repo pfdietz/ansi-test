@@ -81,7 +81,10 @@
   t)
 
 (deftest logical-pathname.error.9
-  (signals-error (with-output-to-string (s) (logical-pathname s)) type-error)
+    (block done
+      (with-output-to-string (s)
+        (when (signals-error (logical-pathname s) type-error)
+          (return-from done t))))
   t)
 
 (deftest logical-pathname.error.10
