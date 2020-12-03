@@ -1,12 +1,4 @@
-# LISP=gcl
-# LISP=../unixport/saved_ansi_gcl
-# LISP=sbcl --noinform
-# LISP=~/sbcl/src/runtime/sbcl --core ~/sbcl/output/sbcl.core --noinform
-# LISP=clisp -ansi -q
-# LISP=abcl
-LISP=ecl
-# LISP=/usr/local/lib/LispWorks/nongraphic-lispworks-4450
-# LISP=acl
+LISP ?= sbcl --noinform
 
 MAKE=make
 
