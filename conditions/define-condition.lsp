@@ -288,6 +288,7 @@
     (with-output-to-string (s) (print-object c s)))
   "The report for condition-16")
 
+(declaim (ftype (function (t) *) condition-17/s))
 (defun condition-17-report (c s)
   (format s "condition-17: ~A" (condition-17/s c)))
 

@@ -427,11 +427,10 @@
    :good)
 
 (define-compiler-macro labels.52 (&whole form)
-   :bad)
+  (declare (ignorable form))
+  :bad)
 
 (deftest labels.52
    (labels ((labels.52 () :good))
      (labels.52))
    :good)
-
-   

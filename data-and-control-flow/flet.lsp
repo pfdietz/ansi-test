@@ -577,7 +577,8 @@
    :good)
 
 (define-compiler-macro flet.74 (&whole form)
-   :bad)
+  (declare (ignorable form))
+  :bad)
 
 (deftest flet.74
    (flet ((flet.74 () :good))

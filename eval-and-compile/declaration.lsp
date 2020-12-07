@@ -30,7 +30,9 @@
 ;;; Declare these only if bad declarations produce warnings.
 
 (when (block done
-        (handler-bind ((warning #'(lambda (c) (return-from done t))))
+        (handler-bind ((warning #'(lambda (c)
+                                    (declare (ignore c))
+                                    (return-from done t))))
                       (eval `(let () (declare (,(gensym))) nil))))
 
 (deftest declaration.4

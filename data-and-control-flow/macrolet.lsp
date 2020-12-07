@@ -464,6 +464,7 @@
    :good)
 
 (define-compiler-macro macrolet.52 (&whole form)
+  (declare (ignorable form))
   :bad)
 
 (deftest macrolet.52

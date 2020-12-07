@@ -140,6 +140,11 @@
 ;; structure definition and the tests.
 ;;
 
+(declaim (ftype (function (t t) (values cons &optional))
+                defstruct-with-tests-fun)
+         (ftype (function (t t &optional t) (values t t &optional))
+                defstruct-maketemp))
+
 (defmacro defstruct-with-tests
     (name-and-options &body slot-descriptions-and-documentation)
 "Construct standardized tests for a defstruct, and also

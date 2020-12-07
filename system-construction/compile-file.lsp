@@ -18,6 +18,7 @@
                               (compile-file-pathname file)))
          (actual-warnings-p nil)
          (actual-style-warnings-p nil))
+    (declare (ignorable actual-style-warnings-p))
     (when (probe-file target-pathname)
       (delete-file target-pathname))
     (fmakunbound funname)
