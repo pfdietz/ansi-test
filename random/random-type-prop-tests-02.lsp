@@ -78,6 +78,28 @@
                                                     (1 `(eql ,y)))))
   3)
 
+(def-type-prop-test comparisons.1 '(lambda (c x y) (funcall c x y))
+  (list '(member = /= < > <= >=)
+        'integer
+        #'(lambda (c x)
+            (declare (ignore c))
+            (rcase (10 'integer)
+              (1 `(eql ,(1- x)))
+              (1 `(eql ,x))
+              (1 `(eql ,(1+ x))))))
+  3)
+(def-type-prop-test comparisons.2 '(lambda (c x y) (when (funcall c x y) (- x y)))
+  (list '(member = /= < > <= >=)
+        'integer
+        #'(lambda (c x)
+            (declare (ignore c))
+            (rcase (10 'integer)
+              (1 `(eql ,(1- x)))
+              (1 `(eql ,x))
+              (1 `(eql ,(1+ x))))))
+  3)
+
+
 (def-type-prop-test min.1 'min nil 2 :maxargs 6 :rest-type 'integer)
 (def-type-prop-test min.2 'min nil 2 :maxargs 6 :rest-type 'rational)
 (def-type-prop-test min.3 'min nil 2 :maxargs 6 :rest-type 'real)
