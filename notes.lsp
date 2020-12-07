@@ -50,3 +50,4 @@ If negative zeros are distinct this is probably not good, since it makes (defcon
 #+clisp (rt::disable-note :result-type-element-type-by-subtype)
 #+(or openmcl gcl ecl) (rt::disable-note :nil-vectors-are-strings)
 #+gcl (rt::disable-note :allow-nil-arrays)
+#+sbcl (rt::disable-note :nil-vectors-are-strings)
