@@ -614,14 +614,15 @@
 
 ;;; Defining new methods for DOCUMENTATION
 
+(defgeneric documentation-test-class-1-doc-accessor (obj))
+(defgeneric (setf documentation-test-class-1-doc-accessor) (newdoc obj))
+
+(eval-when (:compile-toplevel :load-toplevel)
+   (defclass documentation-test-class-1 () ((my-doc :accessor documentation-test-class-1-doc-accessor
+                                                    :type (or null string)
+                                                    :initform nil))))
+
 (ignore-errors
-  (defgeneric documentation-test-class-1-doc-accessor (obj))
-  (defgeneric (setf documentation-test-class-1-doc-accessor) (newdoc obj))
-
-  (defclass documentation-test-class-1 () ((my-doc :accessor documentation-test-class-1-doc-accessor
-                                                 :type (or null string)
-                                                 :initform nil)))
-
   (defmethod documentation-test-class-1-doc-accessor ((obj documentation-test-class-1) )
     (slot-value obj 'my-doc))
   (defmethod (setf documentation-test-class-1-doc-accessor) ((newdoc string) (obj documentation-test-class-1))
