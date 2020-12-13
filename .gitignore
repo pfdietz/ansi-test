@@ -6,7 +6,12 @@
 *.lx64fsl
 *.lx32fsl
 *.bc
+*.abcl
+*.data
+*.c
+*.eclh
 sandbox/
+bug*.lisp
 ansi-aux-macros.fas
 ansi-aux.fas
 array-aux.fas
@@ -68,3 +73,5 @@ tmp.txt
 tmp2.dat
 truncate-aux.fas
 types-aux.fas
+
+
