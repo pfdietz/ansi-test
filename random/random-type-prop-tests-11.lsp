@@ -112,3 +112,90 @@
             (let ((len (length s2)))
               `(integer 0 ,len))))
   4)
+
+(def-type-prop-test mismatch.13
+  '(lambda (seq1 seq2 s1) (mismatch seq1 seq2 :start1 s1))
+  (list 'sequence 'sequence
+        #'(lambda (seq1 seq2)
+            (declare (ignore seq2))
+            `(integer 0 ,(length seq1))))
+  3)
+
+(def-type-prop-test mismatch.14
+  '(lambda (seq1 seq2 e1) (mismatch seq1 seq2 :end1 e1))
+  (list 'sequence 'sequence
+        #'(lambda (seq1 seq2)
+            (declare (ignore seq2))
+            `(or null (integer 0 ,(length seq1)))))
+  3)
+
+(def-type-prop-test mismatch.15
+  '(lambda (seq1 seq2 s1 e1) (mismatch seq1 seq2
+                              :start1 s1 :end1 e1))
+  (list 'sequence 'sequence
+        #'(lambda (seq1 seq2)
+            (declare (ignore seq2))
+            `(integer 0 ,(length seq1)))
+        #'(lambda (seq1 seq2 s1)
+            (declare (ignore seq2))
+            `(or null (integer ,s1 ,(length seq1)))))
+  4)
+
+(def-type-prop-test mismatch.16
+  '(lambda (seq1 seq2 s1 e1 s2) (mismatch seq1 seq2
+                                 :start1 s1 :end1 e1
+                                 :start2 s2))
+  (list 'sequence 'sequence
+        #'(lambda (seq1 seq2)
+            (declare (ignore seq2))
+            `(integer 0 ,(length seq1)))
+        #'(lambda (seq1 seq2 s1)
+            (declare (ignore seq2))
+            `(or null (integer ,s1 ,(length seq1))))
+        #'(lambda (seq1 seq2 s1 e1)
+            (declare (ignore seq1 s1 e1))
+            `(integer 0 ,(length seq2))))
+  5)
+
+(def-type-prop-test mismatch.17
+  '(lambda (seq1 seq2 s1 e1 e2) (mismatch seq1 seq2
+                                 :start1 s1 :end1 e1
+                                 :end2 e2))
+  (list 'sequence 'sequence
+        #'(lambda (seq1 seq2)
+            (declare (ignore seq2))
+            `(integer 0 ,(length seq1)))
+        #'(lambda (seq1 seq2 s1)
+            (declare (ignore seq2))
+            `(or null (integer ,s1 ,(length seq1))))
+        #'(lambda (seq1 seq2 s1 e1)
+            (declare (ignore seq1 s1 e1))
+            `(or null (integer 0 ,(length seq2)))))
+  5)
+
+(def-type-prop-test mismatch.18
+  '(lambda (seq1 seq2 s1 e1 s2 e2) (mismatch seq1 seq2
+                                    :start1 s1 :end1 e1
+                                    :start2 s2 :end2 e2))
+  (list 'sequence 'sequence
+        #'(lambda (seq1 seq2)
+            (declare (ignore seq2))
+            `(integer 0 ,(length seq1)))
+        #'(lambda (seq1 seq2 s1)
+            (declare (ignore seq2))
+            `(or null (integer ,s1 ,(length seq1))))
+        #'(lambda (seq1 seq2 s1 e1)
+            (declare (ignore seq1 s1 e1))
+            `(integer 0 ,(length seq2)))
+        #'(lambda (seq1 seq2 s1 e1 s2)
+            (declare (ignore seq1 s1 e1))
+            `(or null (integer ,s2 ,(length seq2)))))
+  6)
+
+
+
+
+
+
+
+
