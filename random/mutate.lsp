@@ -860,7 +860,7 @@ forms starting with other symbols to be found instead."
                 "~/quicklisp/local-projects/sel/**/*.cl")))
     (make-lambdas-from-files dirs)))
 
-(defvar *ansi-test-dirs* '("~/g/ansi-test/**/*.lsp"))
+(defvar *ansi-test-dirs* '("~/ansi-test/**/*.lsp"))
 
 (defvar *other-dirs* '("~/public-lisp/**/*.lisp"
                        "~/public-lisp/**/*.lsp"
