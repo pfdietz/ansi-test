@@ -14,7 +14,7 @@
     (or
      (loop
       repeat 20
-      nconc (randomly-check-readability y :test #'is-similar))
+      nconc (randomly-check-readability y :test #'equalp))
      (and (not (equal x y)) (list :modified x y))))
   nil)
 
@@ -24,7 +24,7 @@
     (or
      (loop
       repeat 20
-      nconc (randomly-check-readability y :test #'is-similar))
+      nconc (randomly-check-readability y :test #'equalp))
      (and (not (is-similar x y)) (list :modified x y))))
   nil)
 
@@ -34,7 +34,7 @@
     (or
      (loop
       repeat 20
-      nconc (randomly-check-readability y :test #'is-similar))
+      nconc (randomly-check-readability y :test #'equalp))
      (and (not (is-similar x y)) (list :modified x y))))
   nil)
 
@@ -44,7 +44,7 @@
     (or
      (loop
       repeat 20
-      nconc (randomly-check-readability y :test #'is-similar))
+      nconc (randomly-check-readability y :test #'equalp))
      (and (not (is-similar x y)) (list :modified x y))))
   nil)
 
@@ -54,7 +54,7 @@
     (or
      (loop
       repeat 20
-      nconc (randomly-check-readability y :test #'is-similar))
+      nconc (randomly-check-readability y :test #'equalp))
      (and (not (is-similar x y)) (list :modified x y))))
   nil)
 
@@ -64,7 +64,7 @@
          (symbolp (car x))
          (loop
           repeat 20
-          nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
+          nconc (randomly-check-readability (list (car x)) :test #'equalp))))
   nil)
 
 (deftest print.backquote.random.7
@@ -73,7 +73,7 @@
          (symbolp (car x))
          (loop
           repeat 20
-          nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
+          nconc (randomly-check-readability (list (car x)) :test #'equalp))))
   nil)
 
 (deftest print.backquote.random.8
@@ -82,7 +82,7 @@
          (symbolp (car x))
          (loop
           repeat 20
-          nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
+          nconc (randomly-check-readability (list (car x)) :test #'equalp))))
   nil)
 
 (deftest print.backquote.random.9
@@ -91,21 +91,21 @@
          (symbolp (car x))
          (loop
           repeat 20
-          nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
+          nconc (randomly-check-readability (list (car x)) :test #'equalp))))
   nil)
 
 (deftest print.backquote.random.10
   (let ((x '`#(,a , .b)))
     (loop
      repeat 20
-     nconc (randomly-check-readability x :test #'is-similar)))
+     nconc (randomly-check-readability x :test #'equalp)))
   nil)
 
 (deftest print.backquote.random.11
   (let ((x '`#(,a , @b)))
     (loop
      repeat 20
-     nconc (randomly-check-readability x :test #'is-similar)))
+     nconc (randomly-check-readability x :test #'equalp)))
   nil)
 
 (deftest print.backquote.random.12
@@ -114,7 +114,7 @@
          (symbolp (car x))
          (loop
           repeat 20
-          nconc (randomly-check-readability (list (car x)) :test #'is-similar))))
+          nconc (randomly-check-readability (list (car x)) :test #'equalp))))
   nil)
 
 (deftest print.backquote.random.13
@@ -123,12 +123,12 @@
     (or
      (loop
       repeat 20
-      nconc (randomly-check-readability x :test #'is-similar))
+      nconc (randomly-check-readability x :test #'equalp))
      (and (not (is-similar x y)) (list :modified x y))))
   nil)
 
 (deftest print.backquote.random.14
   (loop for x = (make-random-backquoted-form 100)
         repeat 500
-        nconc (randomly-check-readability x :test #'is-similar))
+        nconc (randomly-check-readability x :test #'equalp))
   nil)
