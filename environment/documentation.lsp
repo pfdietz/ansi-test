@@ -617,10 +617,9 @@
 (defgeneric documentation-test-class-1-doc-accessor (obj))
 (defgeneric (setf documentation-test-class-1-doc-accessor) (newdoc obj))
 
-(eval-when (:compile-toplevel :load-toplevel)
-   (defclass documentation-test-class-1 () ((my-doc :accessor documentation-test-class-1-doc-accessor
-                                                    :type (or null string)
-                                                    :initform nil))))
+(defclass documentation-test-class-1 () ((my-doc :accessor documentation-test-class-1-doc-accessor
+                                                 :type (or null string)
+                                                 :initform nil)))
 
 (ignore-errors
   (defmethod documentation-test-class-1-doc-accessor ((obj documentation-test-class-1) )
