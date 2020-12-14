@@ -36,6 +36,10 @@ please contact me and I will add code to do so.
 
 --------------------------------
 
+To run random tests, see random/README.
+
+--------------------------------
+
 NOTE!!!
 
 This test suite is not intended to rank Common Lisp implementations.

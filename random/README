@@ -1,0 +1,74 @@
+Instructions for running random tests
+
+In the ansi-test directory, start a lisp and load the file run.lsp.
+
+1. Random Type Prop Tests
+
+These are tests designed to test type inference in the compiler.
+They are defined using RT:DEFTEST, and have names of the form
+RTP.<something>.  The tests are defined by the DEF-TYPE-PROP-TEST
+macro in the files random/random-type-prop-tests-*.lsp.
+
+Each test specifies types for each argument to some function
+and generates random values of that type.   The type of some
+value may be dependent on the previous values, in which case
+a function is specified for computing the type.  Example:
+
+(def-type-prop-test array-dimension 'array-dimension
+  (list 'array #'(lambda (x)
+                   (let ((r (array-rank x)))
+                      (and (> r 0) `(integer 0 (,r))))))
+  2)
+
+defines the test RTP.ARRAY-DIMENSION.  Each iteration of the
+test generates a random array, then generates a value whose type
+is a valid axis number of the array (which depends on the dimension
+of the array.)
+
+The test performs *DEFAULT-REPS* iterations (default 1000). On each
+iteration, the function is evaluated "bare" on the generated arguments,
+producing a list of return values.   Then, a lambda form is generated
+in which random consistent type declarations are produced for the arguments,
+which may or may not be inlined or give as lambda parameters.   This is
+compiled and called on the relevant values, and the results compared to
+the previous return values.   Any error in evaluation, compilation, or
+discrepancy in the results is a test failure.
+
+2. Random integer form tests
+
+These tests are invoked by (loop-random-int-forms <size> <nargs>).
+This repeatedly generates a random integer-values Lisp form in a
+lambda form with <nargs> arguments (all integers, which are also
+randomly generated). This form is customized into two variants: an
+unoptimized form in which all functions are declared NOTINLINE, and an
+optimized form with random type declarations for the parameters and
+random OPTIMIZE settings.  If evaluation or compilation of either form
+causes an error, or if the results differ, a bug has been found.
+
+This form iterates indefinitely, printing progress numbers.  If a bug
+is found the progress line is preceeded by a * character. Ctrl-C out
+of the loop to inspect the results.
+
+When a bug is found, a list describing the generated form is added
+to the end of the list in the variable $x.   The form is then reduced
+to a minimal form ("pruned") and the minimized failing form is stored
+in the list $y.
+
+3. Mutational testing
+
+The file random/mutate.lsp contains code for extracting expressions
+from Lisp source files.  To use it, modify the variables *ansi-test-dir*,
+*ql-dirs*, and *other-dirs* to give pathnames to lisp sources, then
+invoke (make-all-lams) to extract forms from these files.
+
+There are various mutational testers that splice or mutate these forms
+to try to expose compiler bugs.  These really only work on SBCL now,
+since SBCL has the policy of never throwing an actual error from the compiler,
+even on defective code.   The functions LOOP-MT2 through LOOP-MT4
+perform mutations of various kinds until interrupted.  Any lambda forms
+that caused a compiler error are stored into the variable *RESULTS*.
+
+4. Various speciall purpose random testers
+
+There are other specialized random testers in random/, which I will
+not describe further.
