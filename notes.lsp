@@ -51,3 +51,5 @@ If negative zeros are distinct this is probably not good, since it makes (defcon
 #+(or openmcl gcl ecl) (rt::disable-note :nil-vectors-are-strings)
 #+gcl (rt::disable-note :allow-nil-arrays)
 #+sbcl (rt::disable-note :nil-vectors-are-strings)
+(unless (eql 0.0 -0.0)
+  (rt::disable-note :negative-zero-is-similar-to-positive-zero))
