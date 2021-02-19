@@ -11,6 +11,23 @@
 
 (defparameter *random-types* nil)
 
+(defun make-random-real-type ()
+  (rcase
+   (1 (random-from-seq '(integer unsigned-byte short-float single-float
+                                 double-float long-float rational real)))
+   (1 (destructuring-bind (lo hi)
+          (make-random-integer-range)
+        (rcase
+         (4 `(integer ,lo ,hi))
+         (1 `(integer ,lo))
+         (1 `(integer ,lo *))
+         (2 `(integer * ,hi)))))
+   (1 (let ((r1 (random-real))
+            (r2 (random-real)))
+        `(real ,(min r1 r2) ,(max r2 r2))))
+   ;;; Add more cases here
+   ))
+
 (defun make-random-type (size)
   (if (<= size 1)
       (rcase
@@ -61,23 +78,6 @@
      (1 `(not ,(make-random-type (1- size))))
      ; (1 (make-random-function-type size))
      )))
-
-(defun make-random-real-type ()
-  (rcase
-   (1 (random-from-seq '(integer unsigned-byte short-float single-float
-                                 double-float long-float rational real)))
-   (1 (destructuring-bind (lo hi)
-          (make-random-integer-range)
-        (rcase
-         (4 `(integer ,lo ,hi))
-         (1 `(integer ,lo))
-         (1 `(integer ,lo *))
-         (2 `(integer * ,hi)))))
-   (1 (let ((r1 (random-real))
-            (r2 (random-real)))
-        `(real ,(min r1 r2) ,(max r2 r2))))
-   ;;; Add more cases here
-   ))
 
 (defun make-random-complex-type ()
   `(complex ,(make-random-real-type)))
@@ -180,6 +180,23 @@
 
             (t (%f)))))))
 
+(defun test-types (t1 t2)
+  "Return true if a bug in subtypep has been found related
+to types T1 and T2."
+  (handler-case
+      (multiple-value-bind (sub success)
+          (subtypep t1 t2)
+        (when success
+          (if sub
+              (check-all-subtypep t1 t2)
+              (let ((nt1 `(not ,t1))
+                    (nt2 `(not ,t2)))
+                ;; Here, subtypep thinks t1 is not a subtype of t1,
+                ;; so confirm subtypep does not also think
+                ;; (not t2) is a subtype of (not t1)
+                (subtypep nt2 nt1)))))
+    (error (e) e)))
+
 (defun test-random-types (n size)
   (loop for t1 = (make-random-type size)
         for t2 = (make-random-type size)
@@ -206,21 +223,6 @@
         when (test-types t1 t2)
         collect (list t1 t2)
         finally (terpri)))
-
-(defun test-types (t1 t2)
-  "Return true if a bug in subtypep has been found related
-to types T1 and T2."
-  (multiple-value-bind (sub success)
-      (subtypep t1 t2)
-    (when success
-      (if sub
-          (check-all-subtypep t1 t2)
-        (let ((nt1 `(not ,t1))
-              (nt2 `(not ,t2)))
-          ;; Here, subtypep thinks t1 is not a subtype of t1,
-          ;; so confirm subtypep does not also think
-          ;; (not t2) is a subtype of (not t1)
-          (subtypep nt2 nt1))))))
 
 (defun prune-type (tp try-fn)
   (declare (type function try-fn))

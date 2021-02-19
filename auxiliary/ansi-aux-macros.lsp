@@ -3,7 +3,7 @@
 ;;;; Created:  Wed Jul  2 07:05:41 2003
 ;;;; Contains: Macros used in ansi-aux and elsewhere.
 
-
+(in-package :cl-test)
 
 (declaim (optimize (safety 3)))
 

@@ -7,6 +7,10 @@
 
 (declaim (special +standard-chars+ *cl-symbols-vector*))
 
+(defun coin (&optional (n 2))
+  "Flip an n-sided coin."
+  (eql (random n) 0))
+
 (defvar *maximum-random-int-bits*
   (max 36 (+ 4 (integer-length most-positive-fixnum))))
 
@@ -163,15 +167,6 @@
   (+ (random (1+ (- most-positive-fixnum most-negative-fixnum)))
      most-negative-fixnum))
 
-(defun random-thing (n)
-  (if (<= n 1)
-      (random-leaf)
-    (rcase
-     (1 (apply #'cons (mapcar #'random-thing (random-partition (1- n) 2))))
-     (1 (apply #'vector (mapcar #'random-thing
-                                (random-partition (1- n) (max 10 (1- n))))))
-     )))
-
 (defparameter *use-random-byte* t)
 (defparameter *random-readable* nil)
 
@@ -218,6 +213,9 @@
 
     s))
 
+(defun random-from-interval (upper &optional (lower (- upper)))
+  (+ (random (- upper lower)) lower))
+
 (defun random-leaf ()
   (rcase
    (1 (let ((k (ash 1 (1+ (random 40)))))
@@ -228,13 +226,6 @@
    (1 (gensym))
    (1 (make-symbol (make-random-string (random 20))))
    (1 (random-from-seq *cl-symbols-vector*))))
-
-(defun random-from-interval (upper &optional (lower (- upper)))
-  (+ (random (- upper lower)) lower))
-
-(defun coin (&optional (n 2))
-  "Flip an n-sided coin."
-  (eql (random n) 0))
 
 ;;; Randomly permute a sequence
 (defun random-permute (seq)
@@ -306,3 +297,12 @@
   "Initialize random state to some arbitrary nondeterministic value, to make fresh runs of random testing different"
   (setf *random-state* (make-random-state t))
   (values))
+
+(defun random-thing (n)
+  (if (<= n 1)
+      (random-leaf)
+    (rcase
+     (1 (apply #'cons (mapcar #'random-thing (random-partition (1- n) 2))))
+     (1 (apply #'vector (mapcar #'random-thing
+                                (random-partition (1- n) (max 10 (1- n))))))
+     )))

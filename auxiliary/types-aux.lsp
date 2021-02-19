@@ -3,15 +3,21 @@
 ;;;; Created:  Mon Jun 21 20:14:38 2004
 ;;;; Contains: Aux. functions for types tests
 
-(defun classes-are-disjoint (c1 c2)
-  "If either c1 or c2 is a builtin class or the name of a builtin
-   class, then check for disjointness.  Return a non-NIL list
-   of failed subtypep relationships, if any."
-  (and (or (is-builtin-class c1)
-           (is-builtin-class c2))
-       (check-disjointness c1 c2)))
+(in-package :cl-test)
 
 (declaim (special *subtype-table*))
+
+(defun check-subtypep (type1 type2 is-sub &optional should-be-valid)
+  (multiple-value-bind
+      (sub valid)
+      (subtypep type1 type2)
+    (unless (constantp type1) (setq type1 (list 'quote type1)))
+    (unless (constantp type2) (setq type2 (list 'quote type2)))
+    (if (or (and valid sub (not is-sub))
+            (and valid (not sub) is-sub)
+            (and (not valid) should-be-valid))
+        `(((SUBTYPEP ,type1 ,type2) :==> ,sub ,valid))
+      nil)))
 
 (defun types.6-body ()
   (loop
@@ -106,18 +112,6 @@
          (condition (c) (format t "Error ~S occured: ~S~%" c tp)
                     1))))))))
 
-(defun check-subtypep (type1 type2 is-sub &optional should-be-valid)
-  (multiple-value-bind
-      (sub valid)
-      (subtypep type1 type2)
-    (unless (constantp type1) (setq type1 (list 'quote type1)))
-    (unless (constantp type2) (setq type2 (list 'quote type2)))
-    (if (or (and valid sub (not is-sub))
-            (and valid (not sub) is-sub)
-            (and (not valid) should-be-valid))
-        `(((SUBTYPEP ,type1 ,type2) :==> ,sub ,valid))
-      nil)))
-
 ;;; Check that the subtype relationships implied
 ;;; by disjointness are not contradicted.  Return NIL
 ;;; if ok, or a list of error messages if not.
@@ -184,3 +178,11 @@
 (deftype even-array (&optional type size)
   `(and (array ,type ,size)
         (satisfies even-size-p)))
+
+(defun classes-are-disjoint (c1 c2)
+  "If either c1 or c2 is a builtin class or the name of a builtin
+   class, then check for disjointness.  Return a non-NIL list
+   of failed subtypep relationships, if any."
+  (and (or (is-builtin-class c1)
+           (is-builtin-class c2))
+       (check-disjointness c1 c2)))

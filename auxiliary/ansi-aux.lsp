@@ -3,7 +3,7 @@
 ;;;; Created:  Sat Mar 28 17:10:18 1998
 ;;;; Contains: Aux. functions for CL-TEST
 
-
+(in-package :cl-test)
 
 (declaim (optimize (safety 3)))
 
