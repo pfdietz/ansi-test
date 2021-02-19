@@ -25,29 +25,30 @@
 (defun include-std-packages (&aux (cltp (find-package "CL-TEST")))
   (assert cltp)
   (when (find-package :ql)
-    (ql:quickload :named-readtables)
-    (ql:quickload :curry-compose-reader-macros)
-    (loop for e in *standard-packages-to-include*
-          do (let ((system (if (symbolp e) e (car e)))
-                   #+nil (package-name (if (symbolp e) e (cadr e)))
-                   )
-               (funcall (intern "QUICKLOAD" :QL) system)
-               (unless (eql (find-package "CL-TEST") cltp)
-                 (error "Reading ~a redefined CL-TEST" system))
-               #+nil
-               (let ((package (find-package package-name)))
-                 (if package
-                     (handler-bind
-                         ((package-error
-                            (lambda (e)
-                              (let ((r (or (find-restart 'sb-impl::shadowing-import-it e)
-                                           (find-restart 'sb-impl::take-new))))
-                                (when r
-                                  (invoke-restart r))))))
-                       (use-package (list package) :cl-test))
-                     (warn "Could not find package ~a"
-                           (string package-name))))))))
-
+    (let ((qlfn (intern "QUICKLOAD" "QL")))
+      (funcall qlfn :named-readtables)
+      (funcall qlfn :curry-compose-reader-macros)
+      (loop for e in *standard-packages-to-include*
+            do (let ((system (if (symbolp e) e (car e)))
+                     #+nil (package-name (if (symbolp e) e (cadr e)))
+                     )
+                 (funcall qlfn system)
+                 (unless (eql (find-package "CL-TEST") cltp)
+                   (error "Reading ~a redefined CL-TEST" system))
+                 #+nil
+                 (let ((package (find-package package-name)))
+                   (if package
+                       (handler-bind
+                           ((package-error
+                              (lambda (e)
+                                (let ((r (or (find-restart 'sb-impl::shadowing-import-it e)
+                                             (find-restart 'sb-impl::take-new))))
+                                  (when r
+                                    (invoke-restart r))))))
+                         (use-package (list package) :cl-test))
+                       (warn "Could not find package ~a"
+                             (string package-name)))))))))
+  
 ;;; Mutation testing of Lisp functions to find compiler bugs
 ;;; Assumes we can recognize 'abnormal' errors thrown by the compiler
 
