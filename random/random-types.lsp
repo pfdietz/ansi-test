@@ -335,16 +335,18 @@ pair that still shows the bug."
 
 (defun test-type-triple (t1 t2 t3)
   ;; Returns non-nil if a problem is found
-  (catch 'problem
-    (multiple-value-bind (sub1 success1)
-        (subtypep t1 t2)
-      (when success1
-        (if sub1
-            (append
-             (check-all-subtypep t1 `(or ,t2 ,t3))
-             (check-all-subtypep `(and ,t1 ,t3) t2))
-            (or (subtypep `(or ,t1 ,t3) t2)
-                (subtypep t1 `(and ,t2 ,t3))))))))
+  (handler-case
+      (catch 'problem  ;; why
+        (multiple-value-bind (sub1 success1)
+            (subtypep t1 t2)
+          (when success1
+            (if sub1
+                (append
+                 (check-all-subtypep t1 `(or ,t2 ,t3))
+                 (check-all-subtypep `(and ,t1 ,t3) t2))
+                (or (subtypep `(or ,t1 ,t3) t2)
+                    (subtypep t1 `(and ,t2 ,t3)))))))
+    (error (e) e)))
 
 (defun test-random-types3 (n size)
   (loop for t1 = (make-random-type (1+ (random size)))
