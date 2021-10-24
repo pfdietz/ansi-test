@@ -1002,7 +1002,6 @@ out forms that report useless error due to this."
                            load-time-value
                            #+sbcl sb-int:named-lambda
                            #+sbcl sb-sys:%primitive
-                           #+sbcl sb-kernel:layout-of
                            #+sbcl sb-kernel:widetag-of
                            #+sbcl sb-kernel:%other-pointer-widetag
                            #+(and sbcl (not x86)) sb-vm::swap-complex
