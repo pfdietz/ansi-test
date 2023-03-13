@@ -14,12 +14,16 @@
 (def-type-prop-test *.3 '* nil 2 :rest-type 'integer :maxargs 10)
 (def-type-prop-test *.4 '* '(real real) 2  :test #'approx=)
 (def-type-prop-test *.5 '* '(number number) 2 :test #'approx=)
+(def-type-prop-test zerop.*.1 '(lambda (x y) (zerop (* x y))) '(integer integer) 2)
+(def-type-prop-test zerop.*.2 '(lambda (x y) (zerop (* x y))) '(rational rational) 2)
 
 (def-type-prop-test \+.1 '+ '(integer integer) 2)
 (def-type-prop-test \+.2 '+ nil 1 :rest-type 'integer :maxargs 4)
 (def-type-prop-test \+.3 '+ nil 2 :rest-type 'integer :maxargs 10)
 (def-type-prop-test \+.4 '+ '(real real) 2 :test #'approx=)
 (def-type-prop-test \+.5 '+ '(number number) 2 :test #'approx=)
+(def-type-prop-test zerop.+.1 '(lambda (x y) (zerop (+ x y))) '(integer integer) 2)
+(def-type-prop-test zerop.+.2 '(lambda (x y) (zerop (+ x y))) '(rational rational) 2)
 
 (def-type-prop-test \-.1 '- '(integer integer) 2)
 (def-type-prop-test \-.2 '- nil 1 :rest-type 'integer :maxargs 4)
@@ -27,6 +31,8 @@
 (def-type-prop-test \-.4 '- '(real real) 2 :test #'approx=)
 (def-type-prop-test \-.5 '- '(number number) 2 :test #'approx=)
 (def-type-prop-test \-.6 '- '(number) 1)
+(def-type-prop-test zerop.-.1 '(lambda (x y) (zerop (- x y))) '(integer integer) 2)
+(def-type-prop-test zerop.-.2 '(lambda (x y) (zerop (- x y))) '(rational rational) 2)
 
 ;;; WARNING -- these tests may cause floating point overflow/underflow
 ;;; Ignore those failures
@@ -47,16 +53,21 @@
 (def-type-prop-test 1+.2 '1+ '(rational) 1)
 (def-type-prop-test 1+.3 '1+ '(real) 1)
 (def-type-prop-test 1+.4 '1+ '(number) 1)
+(def-type-prop-test zerop.1+.1 '(lambda (x) (zerop (1+ x))) '(integer) 1)
+(def-type-prop-test zerop.1+.2 '(lambda (x) (zerop (1+ x))) '(rational) 1)
 
 (def-type-prop-test 1-.1 '1- '(integer) 1)
 (def-type-prop-test 1-.2 '1- '(rational) 1)
 (def-type-prop-test 1-.3 '1- '(real) 1)
 (def-type-prop-test 1-.4 '1- '(number) 1)
+(def-type-prop-test zerop.1-.1 '(lambda (x) (zerop (1- x))) '(integer) 1)
+(def-type-prop-test zerop.1-.2 '(lambda (x) (zerop (1- x))) '(rational) 1)
 
 (def-type-prop-test abs.1 'abs '(integer) 1)
 (def-type-prop-test abs.2 'abs '(rational) 1)
 (def-type-prop-test abs.3 'abs '(real) 1)
 (def-type-prop-test abs.4 'abs '(number) 1)
+(def-type-prop-test zerop.abs '(lambda (x) (zerop (abs x))) '(rational) 1)
 
 (def-type-prop-test evenp 'evenp '(integer) 1)
 (def-type-prop-test oddp 'oddp '(integer) 1)
@@ -74,15 +85,19 @@
 (def-type-prop-test expt.5 'expt '((real -1000 (0)) (eql 1/2)) 2)
 
 (def-type-prop-test gcd 'gcd nil 1 :maxargs 6 :rest-type 'integer)
+(def-type-prop-test zerop.gcd '(lambda (x y) (zerop (gcd x y))) '(integer integer) 2)
 (def-type-prop-test lcm 'lcm nil 1 :maxargs 6 :rest-type 'integer)
+(def-type-prop-test zerop.lcm '(lambda (x y) (zerop (lcm x y))) '(integer integer) 2)
 
 (def-type-prop-test log.1 'log '((and real (not (satisfies zerop)))) 1 :test #'approx=)
 (def-type-prop-test log.2 'log '((and number (not (satisfies zerop)))) 1 :test #'approx=)
 
 (def-type-prop-test mod.1 'mod '(integer (and integer (not (satisfies zerop)))) 2)
 (def-type-prop-test mod.2 'mod '(real (and real (not (satisfies zerop)))) 2 :test #'approx=)
+(def-type-prop-test zerop.mod '(lambda (x y) (zerop (mod x y))) '(integer (and integer (not (satisfies zerop)))) 2)
 (def-type-prop-test rem.1 'rem '(integer (and integer (not (satisfies zerop)))) 2)
 (def-type-prop-test rem.2 'rem '(real (and real (not (satisfies zerop)))) 2 :test #'approx=)
+(def-type-prop-test zerop.rem '(lambda (x y) (zerop (rem x y))) '(integer (and integer (not (satisfies zerop)))) 2)
 
 (def-type-prop-test signum.1 'signum '(integer) 1)
 (def-type-prop-test signum.2 'signum '(rational) 1)
@@ -130,32 +145,43 @@
 
 (def-type-prop-test ash.1 'ash '(integer (integer -32 32)) 2)
 (def-type-prop-test ash.2 'ash '(integer (integer -100 100)) 2)
+(def-type-prop-test zerop.ash '(lambda (x y) (zerop (ash x y)))
+  '(integer (or (integer -32 32) (integer -100 100)))
+  2)
 
 (def-type-prop-test integer-length 'integer-length '(integer) 1)
 (def-type-prop-test integerp 'integerp '(t) 1)
 
 (def-type-prop-test logand.1 'logand '(integer integer) 2)
 (def-type-prop-test logand.2 'logand nil 2 :rest-type 'integer :maxargs 6)
+(def-type-prop-test zerop.logand '(lambda (x y) (zerop (logand x y))) '(integer integer) 2)
 
 (def-type-prop-test logandc1 'logandc1 '(integer integer) 2)
 (def-type-prop-test logandc2 'logandc2 '(integer integer) 2)
+(def-type-prop-test zerop.logandc1 '(lambda (x y) (zerop (logandc1 x y))) '(integer integer) 2)
 
 (def-type-prop-test lognand 'lognand '(integer integer) 2)
 (def-type-prop-test lognor 'lognor '(integer integer) 2)
+(def-type-prop-test zerop.lognor '(lambda (x y) (zerop (lognor x y))) '(integer integer) 2)
 
 (def-type-prop-test logeqv.1 'logeqv '(integer integer) 2)
 (def-type-prop-test logeqv.2 'logeqv nil 2 :rest-type 'integer :maxargs 6)
+(def-type-prop-test zerop.logeqv '(lambda (x y) (zerop (logeqv x y))) '(integer integer) 2)
 
 (def-type-prop-test logior.1 'logior '(integer integer) 2)
 (def-type-prop-test logior.2 'logior nil 2 :rest-type 'integer :maxargs 6)
+(def-type-prop-test zerop.logior '(lambda (x y) (zerop (logior x y))) '(integer integer) 2)
 
 (def-type-prop-test logxor.1 'logxor '(integer integer) 2)
 (def-type-prop-test logxor.2 'logxor nil 2 :rest-type 'integer :maxargs 6)
+(def-type-prop-test zerop.logxor '(lambda (x y) (zerop (logxor x y))) '(integer integer) 2)
 
 (def-type-prop-test logorc1 'logorc1 '(integer integer) 2)
 (def-type-prop-test logorc2 'logorc2 '(integer integer) 2)
+(def-type-prop-test zerop.logorc2 '(lambda (x y) (zerop (logorc2 x y))) '(integer integer) 2)
 
 (def-type-prop-test lognot 'lognot '(integer) 1)
+(def-type-prop-test zerop.lognot '(lambda (x) (zerop (lognot x))) '(integer) 1)
 
 ;; Combined integer tests
 (def-type-prop-test logand.lognot.1 '(lambda (x y) (logand x (lognot y))) '(integer integer) 2)
@@ -183,7 +209,7 @@
 
 (def-type-prop-test logbitp.1 'logbitp '((integer 0 32) integer) 2)
 (def-type-prop-test logbitp.2 'logbitp '((integer 0 100) integer) 2)
-; (def-type-prop-test logbitp.3 'logbitp '((integer 0) integer) 2)
+;; (def-type-prop-test logbitp.3 'logbitp '((integer 0) integer) 2)
 
 (def-type-prop-test logcount 'logcount '(integer) 1)
 (def-type-prop-test logtest 'logtest '(integer integer) 2)
@@ -200,7 +226,6 @@
 (def-type-prop-test integer-decode-float.1 'integer-decode-float '(float) 1)
 (def-type-prop-test integer-decode-float.2 '(lambda (x) (nth-value 1 (integer-decode-float x))) '(float) 1)
 (def-type-prop-test integer-decode-float.3 '(lambda (x) (nth-value 2 (integer-decode-float x))) '(float) 1)
-
 
 (def-type-prop-test float.1 'float '(real) 1)
 (def-type-prop-test float.2 'float '(real float) 2)

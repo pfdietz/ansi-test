@@ -94,6 +94,19 @@
               'equal #'equal 'eql #'eql))
   6)
 
+(def-type-prop-test find.11 'find
+  (list 'character
+        #'(lambda (x) (declare (ignore x))
+            (make-sequence-type
+             (random 10)
+             (random-from-seq #(character base-char standard-char))))
+        '(member :test :test-not)
+        '(member eql equal equal char= char-equal
+          char/= char< char<= char> char>=
+          #.#'eql #.#'equal #.#'equal #.#'char= #.#'char-equal
+          #.#'char/= #.#'char< #.#'char<= #.#'char> #.#'char>=))
+  4)
+
 ;;; FIND-IF
 
 (def-type-prop-test find-if.1 'find-if

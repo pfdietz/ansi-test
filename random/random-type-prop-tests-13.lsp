@@ -136,7 +136,7 @@
   (list t #'make-random-sequence-type-containing
         '(eql :start) #'start-type-for-v2
         '(eql :end) #'(lambda (v1 v2 sk si ek) (declare (ignore v1 sk ek))
-                              `(integer ,si ,(length v2))))
+                              `(integer ,si ,(max si (length v2)))))
   6)
 
 (def-type-prop-test remove.10
@@ -187,7 +187,7 @@
   (list t #'make-random-sequence-type-containing
         '(eql :start) #'start-type-for-v2
         '(eql :end) #'(lambda (v1 v2 sk si ek) (declare (ignore v1 sk ek))
-                              `(integer ,si ,(length v2)))
+                              `(integer ,si ,(max si (length v2))))
         '(eql :count) '(integer 0 3)
         '(eql :from-end) '(eql t))
   10)
