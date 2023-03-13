@@ -455,11 +455,12 @@
 (defun meaningless-user-function-for-universe (x y z)
   (list (+ x 1) (+ y 2) (+ z 3)))
 
-(defgeneric meaningless-user-generic-function-for-universe (x y z)
-  #+(or (not :gcl) :ansi-cl) (:method ((x integer) (y integer) (z integer)) (+ x y z)))
+(defgeneric meaningless-user-generic-function-for-universe (x y z))
+(defmethod meaningless-user-generic-function-for-universe ((x integer) (y integer) (z integer)) (+ x y z))
 
 (eval-when (:load-toplevel :execute)
   (compile 'meaningless-user-function-for-universe)
+  (assert (typep (symbol-function 'meaningless-user-generic-function-for-universe) 'generic-function))
   ;; Conditionalize to avoid a cmucl bug
   #-(or cmu gcl ecl) (compile 'meaningless-user-generic-function-for-universe)
   )
