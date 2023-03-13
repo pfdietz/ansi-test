@@ -622,10 +622,15 @@ generate types that depend on its object identity like EQL or MEMBER")
 
 (defun make-sequence-type (length &optional (element-type t))
   (rcase
-   (1 `(vector ,element-type ,length))
-   (1 `(array ,element-type (,length)))
-   (1 `(simple-array ,element-type (,length)))
-   (2 (make-list-type length 'null element-type))))
+    (1 `(vector ,element-type ,length))
+    (1 `(array ,element-type (,length)))
+    (1 `(simple-array ,element-type (,length)))
+    (2 (make-list-type length 'null element-type))))
+
+(defun make-simple-sequence-type (length &optional (element-type t))
+  (rcase
+    (1 `(simple-array ,element-type (,length)))
+    (2 (make-list-type length 'null element-type))))
 
 (defvar *random-sequence-type* nil)
 
@@ -636,6 +641,12 @@ generate types that depend on its object identity like EQL or MEMBER")
   (setf *random-sequence-type*
         (make-sequence-type (random *random-sequence-type-size*)
                             (make-random-type-containing* element))))
+
+(defun make-random-type-not-containing (element &optional (*replicate-type* *replicate-type*))
+  (rcase
+    (1 (loop (let ((tp (make-random-type-containing (make-random-element-of-type t))))
+               (unless (typep element tp) (return tp)))))
+    (1 `(not ,(make-random-type-containing element)))))
 
 (defun same-set-p (set1 set2 &rest args &key key test test-not)
   (declare (ignorable key test test-not))
@@ -880,3 +891,25 @@ generate types that depend on its object identity like EQL or MEMBER")
                            (setf (cdr e) (cddr e))
                            (return t))
                       finally (return nil)))))))))
+
+;;; Equality for specialized arrays
+
+(defun array-equal (a1 a2)
+  (and (arrayp a1)
+       (arrayp a2)
+       (equal (array-element-type a1) (array-element-type a2))
+       (equal (array-dimensions a1) (array-dimensions a2))
+       (eql (not (adjustable-array-p a1)) (not (adjustable-array-p a2)))
+       (eql (not (array-has-fill-pointer-p a1)) (not (array-has-fill-pointer-p a2)))
+       (eql (array-rank a1) (array-rank a2))
+       (or (not (array-has-fill-pointer-p a1))
+           (eql (fill-pointer a1) (fill-pointer a2)))
+       (equal (multiple-value-list (array-displacement a1))
+              (multiple-value-list (array-displacement a2)))
+       (eql (array-total-size a1)
+            (array-total-size a2))
+       ;; Contents
+       (loop for i from 0 below (array-total-size a1)
+             always (eql (row-major-aref a1 i)
+                         (row-major-aref a2 i)))
+       ))
