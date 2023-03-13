@@ -55,11 +55,13 @@
 (defun default-mutate-sexpr (sexpr &optional (point-mutate-fn #'default-point-mutate-fn))
   ;; Finds a random point in an s-expression, then mutates it using
   ;; point-mutate-fn
-  (let ((new-sexpr nil))
-    (loop do (setf new-sexpr (let ((random-point (find-random-point-in-sexpr sexpr)))
-                               (mutate-point-in-sexpr sexpr random-point point-mutate-fn)))
-       while (equal sexpr new-sexpr))
-    new-sexpr))
+  (if sexpr
+      (let ((new-sexpr nil))
+        (loop do (setf new-sexpr (let ((random-point (find-random-point-in-sexpr sexpr)))
+                                   (mutate-point-in-sexpr sexpr random-point point-mutate-fn)))
+              while (equal sexpr new-sexpr))
+        new-sexpr)
+      (funcall point-mutate-fn nil)))
 
 (defun default-point-mutate-fn (e)
   (declare (ignore e))
@@ -521,21 +523,22 @@
            :reps reps))
 |#
 
-(defun loop-mutation-test (&rest args &key (n 100) (size 50)
+(defun loop-mutation-test (&rest args &key (n 100) (size 50) (report 1000)
                                         (reps 1)
                                         (lambda-expr-fn #'make-random-int-lambda-expr)
                                         cache?
                                         &allow-other-keys)
   (let ((*vars* nil)
-        result)
+        result
+        (report-terpri (* 20 report)))
     (loop for i from 1
        do (setf result (let ((lambda-expr (funcall lambda-expr-fn size)))
                          (apply #'mutation-test-lambda-expr lambda-expr :n n :reps reps args)))
        do (when result (return result))
-       do (when (eql (mod i 10) 0)
+       do (when (eql (mod i report) 0)
             (unless cache? (size-tree-of-sexpr-cache-clear))
             (format t "~A " i)
-            (when (eql (mod i 200) 0) (terpri))
+            (when (eql (mod i report-terpri) 0) (terpri))
             (finish-output)))))
 
 (defun make-random-int-lambda-expr (size)
@@ -1000,6 +1003,7 @@ out forms that report useless error due to this."
                            signed-byte
                            invoke-debugger
                            load-time-value
+                           defstruct
                            #+sbcl sb-int:named-lambda
                            #+sbcl sb-sys:%primitive
                            #+sbcl sb-kernel:widetag-of
@@ -1009,10 +1013,13 @@ out forms that report useless error due to this."
                            #+sbcl sb-alien:make-alien
                            #+sbcl sb-alien:deref
                            #+sbcl sb-alien:cast
+                           #+sbcl sb-alien:define-alien-routine
                            ash step symbol-macrolet
                            macrolet defun expt defmacro)
                           t)
-                       (t nil)))))
+                       (t (and (symbolp y)
+                               (equal (symbol-name y) "DEFINTERFACE"))
+                        )))))
 
 (defun is-bad-mutated-form (x)
   (flet ((%is-bad (y)
