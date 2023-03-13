@@ -8,7 +8,8 @@
 (defun dxf (x i) (elt x i))
 (declaim (notinline dxf))
 
-(defun make-top-level-dynamic-extent-form (size)
+(defun make-top-level-dynamic-extent-form (size &optional top?)
+  (declare (ignore top?))
   (let* ((list-form (make-random-list-form-for-dynamic-extent size))
          (tag ''c)
          (*random-int-form-catch-tags*

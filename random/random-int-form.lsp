@@ -342,6 +342,7 @@ in the thing being tested.  Should not count as a test failure."))
                         #-abcl 5 ;; inlined lambda
                         10 ;; stacked comparisons
                         20 ;; Non-integer forms (only when TOP? is true)
+                        5 ; Special case from a bug
                         ))))
 
 (defparameter *make-random-integer-form-cdf*
@@ -689,6 +690,38 @@ form, multiplied by the base probability.")
 (defun make-random-form (size)
   (make-random-integer-form size t))
 
+(defun make-random-form-with-two-subforms (fn size)
+  (rcase
+   (10 (apply fn (mapcar #'make-random-integer-form (random-partition size 2))))
+   (2
+    (let ((e (make-random-integer-form (max 1 (floor size 2)))))
+      (funcall fn e e)))))
+
+(defun make-random-form-with-n-subforms (fn n size)
+  "Partition SIZE into N parts, and generate a list of integer subforms
+   of these sizes.  With some probability, repeat one expression instead
+   of generating all independently."
+  (block nil
+    (rcase
+      (10 (apply fn (mapcar #'make-random-integer-form (random-partition size n))))
+      (2
+       (let ((p1 (random n))
+             (p2 (random n)))
+         (when (> p1 p2) (rotatef p1 p2))
+         (when (= p1 p2) (return (make-random-form-with-n-subforms fn n size)))
+         (let* ((sizes (random-partition size n))
+                (l1 (subseq sizes 0 p1))
+                (l2 (subseq sizes (1+ p1) p2))
+                (l3 (subseq sizes (1+ p2)))
+                (s (floor (+ (elt sizes p1) (elt sizes p2)) 2))
+                (e (make-random-integer-form s)))
+           (apply fn
+                  (append (mapcar #'make-random-integer-form l1)
+                          (list e)
+                          (mapcar #'make-random-integer-form l2)
+                          (list e)
+                          (mapcar #'make-random-integer-form l3)))))))))
+
 (defun make-random-integer-form (size &optional top?)
   "Generate a random legal lisp form of size SIZE (roughly).
 If TOP? is true the value needn't be an integer, so relax
@@ -860,31 +893,29 @@ the constraints a bit."
                       logorc1
                       logorc2
                       logxor
-                      ))))
-        (destructuring-bind (leftsize rightsize)
-            (random-partition (1- size) 2)
-          (let ((e1 (make-random-integer-form leftsize))
-                (e2 (make-random-integer-form rightsize)))
-            `(,op ,e1 ,e2))))
+                    ))))
+       (make-random-form-with-two-subforms
+        #'(lambda (e1 e2) `(,op ,e1 ,e2))
+        (1- size)))
 
      ;; boole
      (let* ((op (random-from-seq
                   #(boole-1 boole-2 boole-and boole-andc1 boole-andc2
                     boole-c1 boole-c2 boole-clr boole-eqv boole-ior boole-nand
                     boole-nor boole-orc1 boole-orc2 boole-set boole-xor))))
-        (destructuring-bind (leftsize rightsize)
-            (random-partition (- size 2) 2)
-          (let ((e1 (make-random-integer-form leftsize))
-                (e2 (make-random-integer-form rightsize)))
-            `(boole ,op ,e1 ,e2))))
+       (make-random-form-with-two-subforms
+        #'(lambda (e1 e2) `(boole ,op ,e1 ,e2))
+        (- size 2)))
 
      ;; n-ary ops
      (let* ((op (random-from-seq #(+ - * logand min max
                                       logior values lcm gcd logxor)))
-             (nmax (case op ((* lcm gcd) 4) (t (1+ (random 40)))))
-             (nargs (1+ (min (random nmax) (random nmax))))
-             (sizes (random-partition (1- size) nargs))
-             (args (mapcar #'make-random-integer-form sizes)))
+            (nmax (case op ((* lcm gcd) 4) (t (1+ (random 40)))))
+            (nargs (1+ (min (random nmax) (random nmax))))
+            ;; (sizes (random-partition (1- size) nargs))
+            ;; (args (mapcar #'make-random-integer-form sizes))
+            (args (make-random-form-with-n-subforms #'list nargs (1- size)))
+            )
         `(,op ,@args))
 
      ;; expt
@@ -1014,7 +1045,21 @@ the constraints a bit."
       (if top? (make-possibly-non-integer-form size)
           (make-random-integer-form size))
 
+      ;; Special case from a bug
+      (make-special-case-bug052 size top?)
+
       )))
+
+(defun make-special-case-bug052 (size top?)
+  (if *random-int-form-blocks*
+      (destructuring-bind (s1 s2) (random-partition (1- size) 2)
+        (let ((name (random-from-seq *random-int-form-blocks*))
+              (e1 (make-random-integer-form s1 nil))
+              (e2 (make-random-integer-form s2 top?)))
+          (rcase
+           (1 `(ignore-errors (if t (return-from ,name ,e1) ,e2)))
+           (1 `(ignore-errors (if nil ,e2 (return-from ,name ,e1)))))))
+      (make-random-integer-form size top?)))
 
 (defun make-possibly-non-integer-form (size)
   (let* ((cond-size (random (max 1 (floor size 2))))
@@ -2599,7 +2644,7 @@ of the same values"
                      (%eval-error (list :optimized-form-error
                                         (with-output-to-string
                                           (s) (prin1 c s))))))))
-              (if (equal opt-result unopt-result)
+              (if (equalp opt-result unopt-result)
                   nil
                 (progn
                   (format t "Different results: ~A, ~A~%"
@@ -2668,6 +2713,7 @@ of the same values"
               :var-types ,var-types
               :vals ,(first vals-list)
               :form ,pruned-form
+              :unpruned-form ,form
               :decls1 ,opt-decl-1
               :decls2 ,opt-decl-2
               :optimized-lambda-form ,optimized-lambda-form
@@ -3455,7 +3501,14 @@ of the same values"
                       #'(lambda (form) (try `(,op ,(car args) ,form))))))
             ((is-flet-symbol op)
              (dolist (e args)
-               (unless (keywordp e) (try e))))
+               (unless (keywordp e) (try e)))
+             (prune-list (cdr form)
+                         #'prune
+                         #'(lambda (args)
+                             (funcall try-fn (cons (car form) args)))
+                         :exclude
+                         (mapcar #'keywordp args)))
+
             ((and (consp op) (eql (car op) 'lambda))
              (prune-inline-lambda-form form try-fn))
             (t
@@ -3512,8 +3565,8 @@ of the same values"
   "Return true if VALUE is eql to a node in TREE."
   (or (funcall test value tree)
       (and (consp tree)
-           (or (find-in-tree value (car tree))
-               (find-in-tree value (cdr tree))))))
+           (or (find-in-tree value (car tree) :test test)
+               (find-in-tree value (cdr tree) :test test)))))
 
 (defun find-any-in-tree (vals tree)
   "Return true if any element of the list VALS is EQL to a node in TREE"
@@ -3533,17 +3586,18 @@ of the same values"
          sum (count-in-tree value (pop tree)))
       (if (eql value tree) 1 0)))))
 
-(defun prune-list (list element-prune-fn list-try-fn)
+(defun prune-list (list element-prune-fn list-try-fn &key (exclude nil exclude-p))
   (declare (type function element-prune-fn list-try-fn))
   "Utility function for pruning in a list."
   (loop for i from 0
-     for e in list
-     do (funcall element-prune-fn
-                 e
-                 #'(lambda (form)
-                     (funcall list-try-fn
-                              (replace-nth list form i)
-                              )))))
+        for e in list
+        unless (and exclude-p (elt exclude i))
+        do (funcall element-prune-fn
+                    e
+                    #'(lambda (form)
+                        (funcall list-try-fn
+                                 (replace-nth list form i)
+                                 )))))
 #|
 (defun prune-eval (args try-fn)
   (flet ((try (e) (funcall try-fn e)))
@@ -3733,17 +3787,19 @@ of the same values"
     (when (>= len 1)
       (let ((val-form (cadar binding-list)))
         (if (consp val-form)
-          (case (car val-form)
-            ((make-array)
-             (let ((init (getf (cddr val-form) :initial-element)))
-               (when init
-                 (funcall try-fn init))))
-            ((cons)
-             (funcall try-fn (cadr val-form))
-             (funcall try-fn (caddr val-form)))
-            (t
-             (funcall try-fn val-form)))
-          (funcall try-fn val-form))))
+            (let ((carv (car val-form)))
+              (case carv
+                ((make-array)
+                 (let ((init (getf (cddr val-form) :initial-element)))
+                   (when init
+                     (funcall try-fn init))))
+                ((cons)
+                 (funcall try-fn (cadr val-form))
+                 (funcall try-fn (caddr val-form)))
+                (t
+                 (unless (is-int-struct-constructor? carv)
+                   (funcall try-fn val-form)))))
+            (funcall try-fn val-form))))
 
     ;; Try to split into multiple bindings
     (when (and (> len 1) body)
