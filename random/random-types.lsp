@@ -67,7 +67,7 @@
                (1 '(and base-string (not simple-base-string)))
                (1 'simple-base-string)))))
        (1 (make-random-real-type))
-       ;; (1 (make-random-complex-type))
+        ;; (1 (make-random-complex-type))
        )
     (rcase
      (2 (let* ((op (random-from-seq #(cons cons and or)))
@@ -197,19 +197,19 @@ to types T1 and T2."
                 (subtypep nt2 nt1)))))
     (error (e) e)))
 
-(defun test-random-types (n size)
+(defun test-random-types (n size &key (display-step 1000))
   (loop for t1 = (make-random-type size)
         for t2 = (make-random-type size)
         for i from 0 below n
         ;; do (print (list t1 t2))
         do (setf *random-types* (list t1 t2))
-        do (when (and (= (mod i 100) 0) (> i 0))
+        do (when (and (= (mod i display-step) 0) (> i 0))
              (format t "~A " i) (finish-output *standard-output*))
         when (test-types t1 t2)
         collect (list t1 t2)
         finally (terpri)))
 
-(defun test-random-mutated-types (n size &key (reps 1))
+(defun test-random-mutated-types (n size &key (reps 1) (display-step 1000))
   (loop for t1 = (make-random-type size)
      for t2 = (let ((x t1))
                 (loop repeat reps
@@ -218,7 +218,7 @@ to types T1 and T2."
         for i from 0 below n
         ;; do (print (list t1 t2))
         do (setf *random-types* (list t1 t2))
-        do (when (and (= (mod i 100) 0) (> i 0))
+        do (when (and (= (mod i display-step) 0) (> i 0))
              (format t "~A " i) (finish-output *standard-output*))
         when (test-types t1 t2)
         collect (list t1 t2)
@@ -348,14 +348,14 @@ pair that still shows the bug."
                     (subtypep t1 `(and ,t2 ,t3)))))))
     (error (e) e)))
 
-(defun test-random-types3 (n size)
+(defun test-random-types3 (n size &key (display-step 1000))
   (loop for t1 = (make-random-type (1+ (random size)))
         for t2 = (make-random-type (1+ (random size)))
         for t3 = (make-random-type (1+ (random size)))
         for i from 1 to n
         ;; do (print (list t1 t2))
         do (setf *random-types* (list t1 t2 t3))
-        do (when (and (= (mod i 100) 0) (> i 0))
+        do (when (and (= (mod i display-step) 0) (> i 0))
              (format t "~A " i) (finish-output *standard-output*))
         when (test-type-triple t1 t2 t3)
         collect (list t1 t2 t3)
@@ -401,6 +401,13 @@ pair that still shows the bug."
      do (setq changed nil))
     (list t1 t2 t3)))
 
+;;;; Test of type hashing in SBCL
 
-
-
+(defun test-sbcl-type-hashing (&optional (n 1000))
+  (dotimes (i n)
+    (let* ((x (make-random-element-of-type '(cons (cons (cons (cons integer bit-vector) package) t) (complex fixnum))))
+           (tp (make-random-type-containing x)))
+      (handler-case
+          (assert (typep x tp))
+        (error (e)
+          (return (list e x tp)))))))
