@@ -1,0 +1,5 @@
+(defun s ()
+  (let ((x (sb-kernel:specifier-type '(or (and (not integer) (rational * 1)) (integer * 0)))))
+    (format t "~a~%" x)
+    (format t "~a~%" (sb-kernel:type-negation x))
+    (values)))
